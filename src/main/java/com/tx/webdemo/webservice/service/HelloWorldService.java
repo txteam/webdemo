@@ -23,7 +23,7 @@ import javax.jws.soap.SOAPBinding;
   */
 @WebService(name = "HelloWorld", targetNamespace = "tx")
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.BARE)
-public interface HelloWorld {
+public interface HelloWorldService {
     
     /** <默认构造函数> */
     @WebMethod(operationName = "getHelloWorld")

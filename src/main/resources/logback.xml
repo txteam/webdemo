@@ -48,7 +48,7 @@
 	<!-- springMVC答应日志级别 -->
 	<logger name="org.springframework.web" level="ERROR" />
 	<!-- cxf日志级别 -->
-	<logger name="org.apache.cxf" level="ERROR" />
+	<logger name="org.apache.cxf" level="INFO" />
 	<!-- ehcache日志级别 -->
 	<logger name="net.sf.ehcache" level="ERROR" />
 	<!-- mybatis日志级别 -->

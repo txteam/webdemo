@@ -18,7 +18,7 @@ import com.tx.webdemo.demo.model.Demo;
 
 
  /**
-  * <功能简述>
+  * <demo对象持久层>
   * <功能详细描述>
   * 
   * @author  PengQingyang

@@ -117,7 +117,11 @@
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		</dependency>
+		
 		<!-- aop -->
 		<dependency>
 			<!-- aop联盟制定的aop规范 -->

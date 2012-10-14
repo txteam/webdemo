@@ -7,11 +7,8 @@
     	http://www.springframework.org/schema/beans/spring-beans.xsd
     	http://www.springframework.org/schema/tx 
     	http://www.springframework.org/schema/tx/spring-tx.xsd">
-
-    <!--Transaction Controll  18283005045 -->  
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-
-	<bean id="demo.TransactionManager" 
+    	
+    <bean id="demo.TransactionManager" 
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
 	     <property name="dataSource" ref="datasource"/>
 	</bean>
@@ -21,6 +18,7 @@
         <property name="transactionManager" ref="demo.TransactionManager" />
     </bean>
 
+    <tx:annotation-driven transaction-manager="transactionManager"/>
     <!-- if there multi trans
     <bean id="transactionManager2" class="org.springframework.jdbc.DataSourceTransactionManager">
     <qualifier value="account"/>

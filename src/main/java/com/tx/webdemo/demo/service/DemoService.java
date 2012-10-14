@@ -6,6 +6,8 @@
  */
 package com.tx.webdemo.demo.service;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.apache.cxf.common.util.StringUtils;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.commons.exceptions.ParameterIsEmptyException;
+import com.tx.webdemo.demo.annotation.DemoAnotation;
 import com.tx.webdemo.demo.dao.DemoDao;
 import com.tx.webdemo.demo.model.Demo;
 
@@ -41,6 +44,7 @@ public class DemoService {
     }
     
     @Transactional
+    @DemoAnotation
     public void insertDemo(Demo demo) {
         //验证参数: demo.name  password 不能为空
         if (demo == null || StringUtils.isEmpty(demo.getName())
@@ -49,6 +53,6 @@ public class DemoService {
                     "demo.name or password is not empty.");
         }
         
-        
+        this.demoDao.insertDemo(demo);
     }
 }
