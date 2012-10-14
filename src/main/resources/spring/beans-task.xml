@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/task 
+		http://www.springframework.org/schema/task/spring-task-3.1.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+<!--     <task:annotation-driven executor="uniview.Executor" scheduler="uniview.Scheduler"/> -->
+<!--     <task:executor id="uniview.Executor" pool-size="5"/> -->
+<!--     <task:scheduler id="uniview.Scheduler" pool-size="10"/>  -->
+    
+<!--     快捷菜单刷新 -->
+<!--     <bean id="unitview.ShortCutMenuList.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="uniView.SystemService" /> -->
+<!--         <property name="targetMethod" value="refreshShortCutMenuList" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--     </bean> -->
+    
+<!--     工具栏菜单刷新 -->
+<!--     <bean id="unitview.ToolBarMenuList.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="uniView.SystemService" /> -->
+<!--         <property name="targetMethod" value="refreshToolbarItemList" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--     </bean> -->
+    
+<!--     话务菜单刷新 -->
+<!--     <bean id="unitview.CallMenuList.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="uniView.SystemService" /> -->
+<!--         <property name="targetMethod" value="refreshCallMenuItemList" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--     </bean> -->
+    
+<!--      系统参数刷新 -->
+<!--     <bean id="unitview.SystemParamList.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="uniView.SystemService" /> -->
+<!--         <property name="targetMethod" value="refreshSystemParamList" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--     </bean> -->
+    
+<!--     通用字典数据刷新 -->
+<!--     <bean id="unitview.SysDictList.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="uniView.SystemService" /> -->
+<!--         <property name="targetMethod" value="refreshSysDictList" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--     </bean> -->
+    
+<!--      其他配置信息刷新 -->
+<!--      <bean id="unitview.OtherCfgList.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="uniView.SystemService" /> -->
+<!--         <property name="targetMethod" value="refreshOtherCfgList" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--      </bean> -->
+     
+<!--      排队数刷新 -->
+<!--      <bean id="unitview.queueCountList.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="uniview.queueCountService" /> -->
+<!--         <property name="targetMethod" value="refreshQueueContainer" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--      </bean> -->
+     
+<!--      临时文件夹清理 -->
+<!--      <bean id="multiMedia.clearTempFile.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="upOrDowFileUtils" /> -->
+<!--         <property name="targetMethod" value="clearUploadTempFolderJob" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--      </bean> -->
+     
+<!--      技能变更加载 -->
+<!--      <bean id="uniView.loadSkillMapping.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="unitview.SkillDimInfoService" /> -->
+<!--         <property name="targetMethod" value="loadSkillMapping" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--      </bean> -->
+     
+<!--      刷新人工转自动节点 -->
+<!--      <bean id="unitview.transAutoNode.RefreshJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--         <property name="targetObject" ref="webagent.TransferToAutoService" /> -->
+<!--         <property name="targetMethod" value="refreshNodeTree" /> -->
+<!--         <property name="concurrent" value="true" /> -->
+<!--      </bean> -->
+    
+<!--     <bean id="uniView.ShortCutMenuList.RefreshTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> -->
+<!--         <property name="jobDetail" ref="unitview.ShortCutMenuList.RefreshJob" /> -->
+<!--         <property name="startDelay" value="0" /> -->
+<!--         <property name="repeatInterval" value="3600000" /> -->
+<!--     </bean> -->
+    
+<!--     <bean id="uniView.ToolBarMenuList.RefreshTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> -->
+<!--         <property name="jobDetail" ref="unitview.ToolBarMenuList.RefreshJob" /> -->
+<!--         <property name="startDelay" value="0" /> -->
+<!--         <property name="repeatInterval" value="3600000" /> -->
+<!--     </bean> -->
+    
+<!--     <bean id="uniView.CallMenuList.RefreshTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> -->
+<!--         <property name="jobDetail" ref="unitview.CallMenuList.RefreshJob" /> -->
+<!--         <property name="startDelay" value="0" /> -->
+<!--         <property name="repeatInterval" value="3600000" /> -->
+<!--     </bean> -->
+    
+<!--     <bean id="uniView.SystemParamList.RefreshTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> -->
+<!--         <property name="jobDetail" ref="unitview.SystemParamList.RefreshJob" /> -->
+<!--         <property name="startDelay" value="0" /> -->
+<!--         <property name="repeatInterval" value="3600000" /> -->
+<!--     </bean> -->
+    
+<!--     <bean id="uniView.OtherCfgList.RefreshTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> -->
+<!--         <property name="jobDetail" ref="unitview.OtherCfgList.RefreshJob" /> -->
+<!--         <property name="startDelay" value="0" /> -->
+<!--         <property name="repeatInterval" value="3600000" /> -->
+<!--     </bean> -->
+    
+<!--     <bean id="uniView.queueCountList.RefreshTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> -->
+<!--         <property name="jobDetail" ref="unitview.queueCountList.RefreshJob" /> -->
+<!--         <property name="startDelay" value="0" /> -->
+<!--         <property name="repeatInterval" value="5000" /> -->
+<!--     </bean> -->
+    
+<!--      <bean id="uniView.SysDictList.RefreshTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> -->
+<!--         <property name="jobDetail" ref="unitview.SysDictList.RefreshJob" /> -->
+<!--         <property name="startDelay" value="0" /> -->
+<!--         <property name="repeatInterval" value="3600000" /> -->
+<!--     </bean>    -->
+    
+<!--     <bean id="multiMedia.clearTempFile.RefreshTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+<!--         <property name="jobDetail" ref="multiMedia.clearTempFile.RefreshJob" /> -->
+<!--         <property name="cronExpression" value="0 0/10 * * * ?" />每日3:30执行  "0 30 3 * * ?"  -->
+<!--     </bean> -->
+    
+<!--     <bean id="uniView.loadSkillMapping.RefreshTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+<!-- 		<property name="jobDetail" ref="uniView.loadSkillMapping.RefreshJob" /> -->
+<!-- 		<property name="cronExpression" value="0 0/10 * * * ?" />每2小时执行一次   "0 0 0/2 * * ?"  -->
+<!-- 	</bean> -->
+    
+<!--     <bean id="uniView.transAutoNode.RefreshTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> -->
+<!--         <property name="jobDetail" ref="unitview.transAutoNode.RefreshJob" /> -->
+<!--         <property name="startDelay" value="0" /> -->
+<!--         <property name="repeatInterval" value="3600000" /> -->
+<!--     </bean> -->
+    
+<!--     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> -->
+<!--         <property name="triggers"> -->
+<!--             <list> -->
+<!--                 <ref bean="uniView.ShortCutMenuList.RefreshTrigger" /> -->
+<!--                 <ref bean="uniView.ToolBarMenuList.RefreshTrigger" /> -->
+<!--                 <ref bean="uniView.CallMenuList.RefreshTrigger" /> -->
+<!--                 <ref bean="uniView.SystemParamList.RefreshTrigger" /> -->
+<!--                 <ref bean="uniView.OtherCfgList.RefreshTrigger" />                -->
+<!--                 <ref bean="uniView.queueCountList.RefreshTrigger" />  -->
+<!--                 <ref bean="uniView.SysDictList.RefreshTrigger" />               -->
+<!--                 <ref bean="multiMedia.clearTempFile.RefreshTrigger" /> -->
+<!--                 <ref bean="uniView.loadSkillMapping.RefreshTrigger" /> -->
+<!--                 <ref bean="uniView.transAutoNode.RefreshTrigger" /> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--         <property name="quartzProperties"> -->
+<!--             <props> -->
+<!--                 <prop key="org.quartz.threadPool.threadCount">2</prop> -->
+<!--             </props> -->
+<!--         </property> -->
+<!--     </bean> -->
+
+</beans>

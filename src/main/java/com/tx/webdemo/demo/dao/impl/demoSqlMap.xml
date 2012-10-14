@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="demo">
+
+    <!-- 查询学生，根据id -->  
+    <select id="findDemo"
+    	parameterType="demo" 
+    	resultType="demo">  
+        <![CDATA[ 
+            SELECT name,password,email,createDate 
+              FROM t_test_demo 
+             WHERE name = #{name}  
+        ]]>   
+    </select>  
+     
+    <!-- 插入 -->
+	<insert id="insertDemo" parameterType="demo">
+		insert into t_test_demo(name,password,email,createDate )
+			values(#{name},#{password},#{email},#{createDate})
+	</insert>
+      
+</mapper>  
