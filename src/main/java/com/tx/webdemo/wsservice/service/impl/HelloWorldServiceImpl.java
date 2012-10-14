@@ -4,7 +4,7 @@
  * 修改时间:  2012-10-14
  * <修改描述:>
  */
-package com.tx.webdemo.webservice.service.impl;
+package com.tx.webdemo.wsservice.service.impl;
 
 import javax.jws.WebMethod;
 import javax.jws.WebResult;
@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.tx.webdemo.webservice.service.HelloWorldService;
+import com.tx.webdemo.wsservice.service.HelloWorldService;
 
 
  /**
@@ -27,7 +27,7 @@ import com.tx.webdemo.webservice.service.HelloWorldService;
   * @since  [产品/模块版本]
   */
 @Component("helloWorld")
-@WebService(name = "HelloWorld", targetNamespace = "tx", endpointInterface = "com.tx.webdemo.webservice.service.HelloWorldService")
+@WebService(name = "HelloWorld", targetNamespace = "tx", endpointInterface = "com.tx.webdemo.wsservice.service.HelloWorldService")
 public class HelloWorldServiceImpl implements HelloWorldService {
     
     /* 是否需要引入日志记录，根据具体业务定，这里是为了打印启动加载情况才加入的  */

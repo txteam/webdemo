@@ -4,7 +4,7 @@
  * 修改时间:  2012-10-14
  * <修改描述:>
  */
-package com.tx.webdemo.webservice.service;
+package com.tx.webdemo.wsservice.service;
 
 import javax.jws.WebMethod;
 import javax.jws.WebResult;
