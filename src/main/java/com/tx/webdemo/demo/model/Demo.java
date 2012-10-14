@@ -6,6 +6,8 @@
  */
 package com.tx.webdemo.demo.model;
 
+import java.util.Date;
+
 
  /**
   * <demo模型>
@@ -24,7 +26,7 @@ public class Demo {
     
     private String email;
     
-    private String createDate;
+    private Date createDate;
 
     /**
      * @return 返回 name
@@ -71,14 +73,14 @@ public class Demo {
     /**
      * @return 返回 createDate
      */
-    public String getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
     /**
      * @param 对createDate进行赋值
      */
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 }
