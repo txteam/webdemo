@@ -7,6 +7,7 @@
 	<property name="maxLogFileSize" value="10MB"></property>
 	<property name="maxLogFileNum" value="3"></property>
 	<timestamp key="date" datePattern="yyyy-MM-dd HH:mm:ss"/>
+	<property name="sqlPattern" value=" %msg%n" />
 
 	<contextName>${contentName}</contextName>
 
@@ -34,13 +35,23 @@
 		</encoder>
 	</appender>
 	
-	<appender name="SQL_FILE" class="ch.qos.logback.core.FileAppender">  
+	<appender name="sql_file" class="ch.qos.logback.core.FileAppender">  
 	    <file>${logfile}.sql.log</file>  
 	    <append>false</append>  
 	    <encoder>  
 	      <pattern>${date}${commonPattern}</pattern>  
 	    </encoder>  
-	</appender>  
+	</appender>
+	
+	<appender name="spy_sql_file" class="ch.qos.logback.core.FileAppender">  
+	    <file>${logfile}.spy.sql.log</file>  
+	    <append>false</append>  
+	    <encoder>  
+	      <pattern>${date}${p6spySqlPattern}</pattern>  
+	    </encoder>  
+	</appender>    
+	
+	com.tx.core.log.p6spy
 
 
 	<!-- spring框架打印日志级别 -->
@@ -55,8 +66,11 @@
 	<logger name="org.apache.ibatis" level="ERROR" />
 	<logger name="org.mybais" level="ERROR" />
 	<!-- sql日志级别 -->
-	<logger name="java.sql.Connection" level="ERROR">
-		<appender-ref ref="SQL_FILE"/>
+	<logger name="java.sql" level="ERROR">
+		<appender-ref ref="sql_file"/>
+	</logger>
+	<logger name="com.tx.core.log.p6spy" level="DEBUG">
+		<appender-ref ref="spy_sql_file"/>
 	</logger>
 
 	<root level="INFO">
