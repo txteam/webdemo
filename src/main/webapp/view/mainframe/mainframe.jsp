@@ -6,21 +6,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>mainframe</title>
-<link rel="stylesheet" type="text/css" href="/webdemo/css/default/om-default.css" />
+<link rel="stylesheet" type="text/css" href="/webdemo/css/commons.css" />
+<script type="text/javascript" src="/webdemo/js/jquery.min.js"></script>
+<script type="text/javascript" src="/webdemo/operamasks/js/operamasks-ui.min.js"></script>
+
 <style type="text/css">
-html,body,div{
-	margin:0px;
-	border:0px;
-	height: 100%
-}
-.om-panel-body{
-	padding: 0;
+#navigatorTabs .om-panel-body{
+    padding: 0px;
 }
 </style>
-
-<script type="text/javascript" src="/webdemo/js/jquery.min.js"></script>
-<script type="text/javascript" src="/webdemo/js/operamasks-ui.min.js"></script>
-
 <script type="text/javascript" >
 $(document).ready(function() {
 	/*
@@ -33,12 +27,15 @@ $(document).ready(function() {
         closable: false //渲染关闭按钮
     });
 	*/
+	
+	//生成页面布局
     $('#page').omBorderLayout({
 	    panels:[{ 
 	       id:"top-tools-panel", 
 	       title:"工具栏",
 	       region:"north",
-	       height:60,
+	       height:70,
+	       header:false,
 	       collapsible:true 
 	   },{ 
 	       id:"main-panel", 
@@ -56,13 +53,29 @@ $(document).ready(function() {
 	   spacing:1,
 	   fit:true
     });	
+	
+	var navigatorTabsElement = $('#navigatorTabs').omTabs({
+    	lazyLoad : true,
+    	border : false,
+    	scrollable : false,
+    	tabHeight : 22,
+        height : "fit"
+    });
+	
+	//生成左侧菜单抽屉效果
+	$('#make-accordion').omAccordion({
+		height:"fit"
+	});
     
     var tabElement = $('#tabs').omTabs({
+    	lazyLoad : true,
+    	border : false,
+    	scrollable : false,
+    	tabHeight : 22,
         height : "fit"
     });
     
     var ifh = tabElement.innerHeight() - tabElement.find(".om-tabs-headers").outerHeight() - 2;
-    
     $('#tab1iframe').height(ifh);
     
     var navData = [{id:"n1",text:"menu1",expanded:true},
@@ -90,25 +103,42 @@ $(document).ready(function() {
         	}
         }
     });
-    
-   
 });
 </script>
 </head>
 <body>
 <div id="page">
-	<div id="top-tools-panel"></div>
+	<div id="top-tools-panel">
+		<div id="navigatorTabs">
+			<ul>
+				<li><a href="#tab1">常用菜单</a></li>
+				<li><a href="#tab2">常用菜单</a></li>
+				<li><a href="#tab3">常用菜单</a></li>
+			</ul>
+			<div id="tab1">
+				菜单项一            ||      ${contextPath }
+			</div>
+			<div id="tab2">
+				菜单项一            ||      菜单项目二                    ||          菜单项三
+			</div>
+			<div id="tab3">
+				菜单项一            ||      菜单项目二                    ||          菜单项三
+			</div>
+		</div>
+	</div>
 	<div id="main-panel">
 		<div id="tabs">
 			<ul>
 				<li><a href="#tab1">tab1</a></li>
 			</ul>
 			<div id="tab1">
-				<iframe id='tab1iframe' border=0 frameBorder='no' src='http://www.baidu.com' width='100%'></iframe>
+				<iframe id="tab1iframe" border=0 frameBorder='no' src='http://www.baidu.com' width='100%'></iframe>
 			</div>
 		</div>
 	</div>
 	<div id="navigator-panel">
+
+	
 		<div id="navTree"></div>
 	</div>
 	<div id="east-panel"></div>

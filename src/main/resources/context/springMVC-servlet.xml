@@ -16,9 +16,11 @@
 		<mvc:resources/ >自动注册的 SimpleUrlHandlerMapping的order属性值是： 2147483646 <mvc:default-servlet-handler/>自动注册 
 		的SimpleUrlHandlerMapping 的order属性值是： 2147483647 -->
 	<!-- 静态资源映射 -->
-	<mvc:resources mapping="/images/**" location="/resources/images/" />
-	<mvc:resources mapping="/css/**" location="/resources/css/" />
-	<mvc:resources mapping="/js/**" location="/resources/js/" />
+	<mvc:resources mapping="/images/**" location="/resources/images/"/>
+	<mvc:resources mapping="/css/**" location="/resources/css/"/>
+	<mvc:resources mapping="/js/**" location="/resources/js/"/>
+	<mvc:resources mapping="/operamasks/**" location="/resources/operamasks/"/>
+	<mvc:resources mapping="/bootstrapui/**" location="/resources/bootstrapui/"/>
 	<mvc:default-servlet-handler />
 
 	<!-- 配置扫描 -->
@@ -30,6 +32,18 @@
 
 	<!--添加拦截器，类级别的处理器映射 -->
 	<mvc:interceptors>
+		<bean class="com.tx.core.springmvc.interceptor.StaticResourceSkipInterceptor">
+			<property name="skipResourcePath">
+				<array>
+					<value>^.+\.js$</value>
+					<value>^.+\.css$</value>
+					<value>^.+\.swf$</value>
+					<value>^.+\.jpg$</value>
+					<value>^.+\.gif$</value>
+					<value>^.+\.png$</value>
+				</array>
+			</property>
+		</bean>
 		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
 	</mvc:interceptors>
 
