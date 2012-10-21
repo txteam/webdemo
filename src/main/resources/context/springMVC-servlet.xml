@@ -12,16 +12,21 @@
 
 	<!-- 当在web.xml 中 DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 
 		defaultServlet在不同服务器中不太相同 -->
-	<!-- 补充说明：多个HandlerMapping的执行顺序问题： DefaultAnnotationHandlerMapping的order属性值是：0 
+	<!-- 
+		补充说明：多个HandlerMapping的执行顺序问题： DefaultAnnotationHandlerMapping的order属性值是：0 
 		<mvc:resources/ >自动注册的 SimpleUrlHandlerMapping的order属性值是： 2147483646 <mvc:default-servlet-handler/>自动注册 
-		的SimpleUrlHandlerMapping 的order属性值是： 2147483647 -->
+		的SimpleUrlHandlerMapping 的order属性值是： 2147483647 
+		HandlerMapping转到org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler处理
+	 -->
 	<!-- 静态资源映射 -->
-	<mvc:resources mapping="/images/**" location="/resources/images/"/>
-	<mvc:resources mapping="/css/**" location="/resources/css/"/>
-	<mvc:resources mapping="/js/**" location="/resources/js/"/>
-	<mvc:resources mapping="/operamasks/**" location="/resources/operamasks/"/>
-	<mvc:resources mapping="/bootstrapui/**" location="/resources/bootstrapui/"/>
-	<mvc:default-servlet-handler />
+	<mvc:resources mapping="/images/**" location="/resources/images/"
+		cache-period="31556926" />
+	<mvc:resources mapping="/css/**" location="/resources/css/" />
+	<mvc:resources mapping="/js/**" location="/resources/js/" />
+	<mvc:resources mapping="/operamasks/**" location="/resources/operamasks/" />
+	<mvc:resources mapping="/bootstrapui/**" location="/resources/bootstrapui/" />
+
+	<!-- <mvc:default-servlet-handler /> -->
 
 	<!-- 配置扫描 -->
 	<context:component-scan base-package="com.tx.webdemo"
@@ -47,21 +52,36 @@
 		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
 	</mvc:interceptors>
 
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"></bean>
+
 	<!-- 映射请求申明 -->
 	<bean id="handlerAdapter"
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="messageConverters">
-			<list>
-				<bean
-					class="org.springframework.http.converter.StringHttpMessageConverter">
-					<property name="supportedMediaTypes">
-						<list>
-							<value>text/plain;charset=UTF-8</value>
-						</list>
-					</property>
-				</bean>
-			</list>
+		<!-- <property name="messageConverters"> -->
+		<!-- <list> -->
+		<!-- <bean -->
+		<!-- class="org.springframework.http.converter.StringHttpMessageConverter"> -->
+		<!-- <property name="supportedMediaTypes"> -->
+		<!-- <list> -->
+		<!-- <value>text/plain;charset=UTF-8</value> -->
+		<!-- </list> -->
+		<!-- </property> -->
+		<!-- </bean> -->
+		<!-- </list> -->
+		<!-- </property> -->
+	</bean>
+
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="order" value="2147483645"></property>
+		<property name="urlMap">
+			<map>
+				<entry key="/view/**" value="jspFileController" />
+			</map>
 		</property>
+	</bean>
+	<bean id="jspFileController"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
 	</bean>
 
 	<!-- 异常处理 -->
@@ -93,50 +113,66 @@
 		<property name="maxUploadSize" value="5000000" />
 	</bean>
 
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/view/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
 	<!-- ==================================== 以下是restful 内容协商的配置 ================================ -->
 	<!-- 根据客户端的不同的请求决定不同的view进行响应, 如 /blog/1.json /blog/1.xml -->
-	<bean
-		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<!-- 设置为true以忽略对Accept Header的支持 -->
-		<property name="ignoreAcceptHeader" value="true" />
-		<!-- 在没有扩展名时即:"/user/1" 时的默认展现形式 -->
-		<property name="defaultContentType" value="text/html" />
-		<!-- 扩展名至mimeType的映射,即 /user.json => application/json -->
-		<property name="mediaTypes">
-			<map>
-				<entry key="html" value="text/html" />
-				<entry key="json" value="application/json" />
-				<entry key="xml" value="application/xml" />
-			</map>
-		</property>
-		<!-- 用于开启 /userinfo/123?format=json 的支持 -->
-		<property name="favorParameter" value="false" />
-		<property name="viewResolvers">
-			<list>
-				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
-				<bean
-					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-					<property name="viewClass"
-						value="org.springframework.web.servlet.view.JstlView" />
-					<property name="prefix" value="/view" />
-					<property name="suffix" value=".jsp" />
-				</bean>
-			</list>
-		</property>
-		<property name="defaultViews">
-			<list>
-				<!-- for application/json -->
-				<bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"></bean>
-				<!-- for application/xml -->
-				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
-					<property name="modelKey" value="toBeMarshalled" />
-					<property name="marshaller">
-						<bean class="org.springframework.oxm.xstream.XStreamMarshaller">
-						</bean>
-					</property>
-				</bean>
-			</list>
-		</property>
-	</bean>
+	<!-- 设置为true以忽略对Accept Header的支持 -->
+	<!-- 在没有扩展名时即:"/user/1" 时的默认展现形式 -->
+	<!-- 扩展名至mimeType的映射,即 /user.json => application/json -->
+	<!-- 用于开启 /userinfo/123?format=json 的支持 -->
+	<!--<bean name="freeMarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"> -->
+	<!-- <property name="cache" value="true"/> -->
+	<!-- <property name="prefix" value=""/> -->
+	<!-- <property name="suffix" value=".ftl"/> -->
+	<!-- <property name="order" value="2"/> NOTICE THE ORDER -->
+	<!-- </bean> -->
+	<!-- for application/json -->
+	<!-- for application/xml -->
+	<!-- <bean -->
+	<!-- class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"> -->
+	<!-- <property name="ignoreAcceptHeader" value="true" /> -->
+	<!-- <property name="defaultContentType" value="text/html" /> -->
+	<!-- <property name="mediaTypes"> -->
+	<!-- <map> -->
+	<!-- <entry key="json" value="application/json" /> -->
+	<!-- <entry key="xml" value="application/xml" /> -->
+	<!-- </map> -->
+	<!-- </property> -->
+	<!-- <property name="favorParameter" value="false" /> -->
+	<!-- <property name="viewResolvers"> -->
+	<!-- <list> -->
+	<!-- <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" 
+		/> -->
+	<!-- <bean -->
+	<!-- class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
+	<!-- <property name="viewClass" -->
+	<!-- value="org.springframework.web.servlet.view.JstlView" /> -->
+	<!-- <property name="prefix" value="/view" /> -->
+	<!-- <property name="suffix" value=".jsp" /> -->
+	<!-- <property name="order" value="1" /> NOTICE THE ORDER -->
+	<!-- </bean> -->
+	<!-- </list> -->
+	<!-- </property> -->
+	<!-- <property name="defaultViews"> -->
+	<!-- <list> -->
+	<!-- <bean -->
+	<!-- class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"></bean> -->
+
+	<!-- <bean class="org.springframework.web.servlet.view.xml.MarshallingView"> -->
+	<!-- <property name="modelKey" value="toBeMarshalled" /> -->
+	<!-- <property name="marshaller"> -->
+	<!-- <bean class="org.springframework.oxm.xstream.XStreamMarshaller"></bean> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+	<!-- </list> -->
+	<!-- </property> -->
+	<!-- </bean> -->
 
 </beans>

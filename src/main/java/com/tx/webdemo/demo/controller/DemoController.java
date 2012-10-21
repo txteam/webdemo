@@ -45,6 +45,15 @@ public class DemoController {
         logger.info("Instance DemoController............................");
     }
     
+    @RequestMapping(value="/toAddDemo")
+    public ModelAndView toAddDemo(){
+        ModelAndView mv = new ModelAndView();
+        
+        mv.setViewName("/demo/addDemo");
+        return mv;
+    }
+    
+    
     @RequestMapping(value="/addDemo1")
     public ModelAndView addDemo1(@RequestParam("name") String name,
             @RequestParam("passowrd") String passowrd,

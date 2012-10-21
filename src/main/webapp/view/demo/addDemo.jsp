@@ -6,9 +6,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>add demo</title>
-<link rel="stylesheet" type="text/css" href="/webdemo/css/commons.css" />
-<script type="text/javascript" src="/webdemo/js/jquery.min.js"></script>
-<script type="text/javascript" src="/webdemo/operamasks/js/operamasks-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${contextPath }/css/commons.css" />
+<script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>
+<script type="text/javascript" src="${contextPath }/operamasks/js/operamasks-ui.min.js"></script>
 
 <script type="text/javascript" >
 $(document).ready(function() {

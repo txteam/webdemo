@@ -57,7 +57,7 @@
 	<!-- spring框架打印日志级别 -->
 	<logger name="org.springframework" level="INFO" />
 	<!-- springMVC答应日志级别 -->
-	<logger name="org.springframework.web" level="ERROR" />
+	<logger name="org.springframework.web" level="DEBUG" />
 	<!-- cxf日志级别 -->
 	<logger name="org.apache.cxf" level="INFO" />
 	<!-- ehcache日志级别 -->

@@ -6,9 +6,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>mainframe</title>
-<link rel="stylesheet" type="text/css" href="/webdemo/css/commons.css" />
-<script type="text/javascript" src="/webdemo/js/jquery.min.js"></script>
-<script type="text/javascript" src="/webdemo/operamasks/js/operamasks-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${contextPath }/css/commons.css" />
+<script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>
+<script type="text/javascript" src="${contextPath }/operamasks/js/operamasks-ui.min.js"></script>
 
 <style type="text/css">
 #navigatorTabs .om-panel-body{
@@ -80,7 +80,7 @@ $(document).ready(function() {
     
     var navData = [{id:"n1",text:"menu1",expanded:true},
                    {id:"n2",text:"menu2",expanded:true},
-                   {id:"n11",pid:"n1",text:"toAddDemo",url:"/webdemo/view/demo/addDemo.jsp"},
+                   {id:"n11",pid:"n1",text:"toAddDemo",url:"${contextPath}/view/demo/addDemo"},
                    {id:"n21",pid:"n2",text:"menu1-subm1",url:"http://www.baidu.com"},
 			       {id:"n22",pid:"n2",text:"menu2-subm2",url:"http://www.taobao.com"}];
     
