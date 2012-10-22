@@ -6,17 +6,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>add demo</title>
-<link rel="stylesheet" type="text/css" href="/webdemo/css/default/om-default.css" />
-<style type="text/css">
-html,body,div{
-	margin:0px;
-	border:0px;
-	height: 100%
-}
-</style>
-
-<script type="text/javascript" src="/webdemo/js/jquery.min.js"></script>
-<script type="text/javascript" src="/webdemo/js/operamasks-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${contextPath }/css/commons.css" />
+<script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>
+<script type="text/javascript" src="${contextPath }/operamasks/js/operamasks-ui.min.js"></script>
 
 <script type="text/javascript" >
 $(document).ready(function() {
@@ -36,6 +28,7 @@ $(document).ready(function() {
 	});
 
 	 $('#submitButton').omButton({});
+	 $('#test').button();
 });
 </script>
 </head>
@@ -44,7 +37,7 @@ $(document).ready(function() {
 <div id="bodyDiv">
 	<table>
 		<tr>
-			<td>username</td>
+			<td>username${contextPath }</td>
 			<td><input type="text" name="username"/></td>
 		</tr>
 		<tr>
@@ -61,6 +54,7 @@ $(document).ready(function() {
 		</tr>
 	</table>
 	<input type="submit" id="submitButton" value="提交">
+	<input type="button" id="test" value="提交">
 </div>
 </form>
 </body>

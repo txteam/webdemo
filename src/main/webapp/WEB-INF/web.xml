@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns="http://java.sun.com/xml/ns/javaee" 
-	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
-		http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
-		id="webdemo" version="2.5">
+		http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="webdemo" version="2.5">
 	<display-name>sso server</display-name>
 
 	<context-param>
@@ -15,7 +13,24 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-  
+
+	<filter>
+		<filter-name>rejectAccessJspFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetBeanName</param-name>
+			<param-value>rejectAccessJspFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>rejectAccessJspFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+
 	<servlet>
 		<servlet-name>cxf</servlet-name>
 		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
@@ -23,22 +38,22 @@
 	</servlet>
 	<servlet>
 		<servlet-name>springMVC</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>    
-            <param-name>contextConfigLocation</param-name>    
-            <param-value>/WEB-INF/classes/context/springMVC-servlet.xml</param-value>    
-        </init-param>    
+		<servlet-class>com.tx.core.springmvc.servlet.ExtendDispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/classes/context/springMVC-servlet.xml</param-value>
+		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
 
-	<servlet-mapping>   
-        <servlet-name>cxf</servlet-name>    
-        <url-pattern>/services/*</url-pattern>    
-    </servlet-mapping> 
-	<servlet-mapping>    
-        <servlet-name>cxf</servlet-name>    
-        <url-pattern>/services/cxf/*</url-pattern>    
-    </servlet-mapping> 
+	<servlet-mapping>
+		<servlet-name>cxf</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>cxf</servlet-name>
+		<url-pattern>/services/cxf/*</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>springMVC</servlet-name>
 		<url-pattern>/</url-pattern>
