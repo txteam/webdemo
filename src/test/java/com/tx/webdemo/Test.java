@@ -6,6 +6,9 @@
  */
 package com.tx.webdemo;
 
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.util.UrlPathHelper;
+
 
  /**
   * <功能简述>
@@ -20,7 +23,13 @@ public class Test {
     
     /** <默认构造函数> */
     public Test() {
+        
         // TODO Auto-generated constructor stub
+    }
+    
+    public static void main(String[] args) {
+        UrlPathHelper t = new UrlPathHelper();
+        MockHttpServletRequest request = new MockHttpServletRequest();
     }
     
 }

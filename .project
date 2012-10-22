@@ -3,6 +3,8 @@
 	<name>webdemo</name>
 	<comment></comment>
 	<projects>
+		<project>JavaScript</project>
+		<project>jQuery</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
