@@ -29,6 +29,7 @@ $(document).ready(function() {
 
 	 $('#submitButton').omButton({});
 	 $('#test').button();
+	 	 
 });
 </script>
 </head>
