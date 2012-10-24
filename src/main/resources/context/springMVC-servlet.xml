@@ -25,6 +25,7 @@
 	<mvc:resources mapping="/js/**" location="/resources/js/" />
 	<mvc:resources mapping="/operamasks/**" location="/resources/operamasks/" />
 	<mvc:resources mapping="/bootstrapui/**" location="/resources/bootstrapui/" />
+	<mvc:resources mapping="/jquery-ui/**" location="/resources/jquery-ui/" />
 
 	<!-- <mvc:default-servlet-handler /> -->
 
@@ -117,7 +118,7 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/view/" />
+		<property name="prefix" value="/WEB-INF/view/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 
