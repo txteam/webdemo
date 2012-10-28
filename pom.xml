@@ -188,17 +188,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz-commonj</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz-weblogic</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz-oracle</artifactId>
 		</dependency>
-
 
 		<!-- log -->
 		<dependency>
@@ -250,6 +241,70 @@
 	</dependencies>
 
 	<build>
-		<finalName>webdemo</finalName>
+		<plugins>
+			<!-- 编译 -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<!-- The -source argument for the Java compiler.Default value is: 1.5. -->
+					<source>1.6</source>
+					<!-- The -target argument for the Java compiler.Default value is: 1.5. -->
+					<target>1.6</target>
+					<!-- The -encoding argument for the Java compiler.Default value is: ${project.build.sourceEncoding}. -->
+					<encoding>UTF-8</encoding>
+					<!-- Set to true to show compilation warnings. Default value is: false. -->
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+			<!-- 生成war包 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<!-- The directory for the generated WAR. -->
+					<!-- Default value is: ${project.build.directory}.-->
+					<outputDirectory>${basedir}/target/war</outputDirectory>
+					<!-- The name of the generated WAR. -->
+					<!-- Default value is: ${project.build.finalName}. -->
+					<warName>webdemo</warName>
+					<!-- Single directory for extra files to include in the WAR. This is where you place your JSP files.-->
+					<!-- Default value is: ${basedir}/src/main/webapp. -->
+					<warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+					<!-- The directory where the webapp is built. -->
+					<!-- Default value is: ${project.build.directory}/${project.build.finalName}. -->
+					<webappDirectory>${basedir}/target/war/webapp</webappDirectory>
+					<!--Directory to unpack dependent WARs into if needed.-->
+					<!--Default value is: ${project.build.directory}/war/work.-->
+					<workDirectory>${basedir}/target/war/work</workDirectory>
+					<!-- The archive configuration to use -->
+					<archive>
+						<!-- Maven 打包 jar 、war 文件时，不将 pom.xml 等打包进包中 -->
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+					<packagingExcludes>
+						**/jquery-ui/development-bundle/**,
+						**/operamasks/development-bundle/**,
+						**/spy.properties
+					</packagingExcludes>
+					<!-- The comma separated list of tokens to exclude when copying the content of the warSourceDirectory. -->
+					<warSourceExcludes>
+						**/jquery-ui/development-bundle/**,
+						**/operamasks/development-bundle/**,
+						**/spy.properties
+					</warSourceExcludes>
+					<!-- The path to the web.xml file to use.  -->
+					<!-- User property is: maven.war.webxml. -->
+					<webXml>${basedir}/src/main/webapp/WEB-INF/web.xml</webXml>
+					<webResources>
+						<resource>
+							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
+							<filtering>false</filtering>
+							<targetPath>WEB-INF</targetPath>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+		</plugins>
 	</build>
 </project>
