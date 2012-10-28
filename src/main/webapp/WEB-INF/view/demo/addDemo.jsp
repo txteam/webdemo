@@ -28,13 +28,11 @@ $(document).ready(function() {
 		showTime : true
 	});
 
-	 $('#submitButton').omButton().click(function(){
-		 return false;
-	 });
+	 $('#submitButton').button();
 	 $('#test').button();
 
 	 	 
-	 $("form").omForm();
+	 //$("form").omForm();
 });
 </script>
 </head>
