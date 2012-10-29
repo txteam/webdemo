@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="${contextPath }/css/commons.css" />
 <script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>
 <script type="text/javascript" src="${contextPath }/operamasks/js/operamasks-ui.min.js"></script>
+<script type="text/javascript" src="${contextPath }/jquery-ui/js/jquery-ui.js"></script>
 
 <script type="text/javascript" >
 $(document).ready(function() {
@@ -27,9 +28,11 @@ $(document).ready(function() {
 		showTime : true
 	});
 
-	 $('#submitButton').omButton({});
+	 $('#submitButton').button();
 	 $('#test').button();
+
 	 	 
+	 //$("form").omForm();
 });
 </script>
 </head>
@@ -54,7 +57,7 @@ $(document).ready(function() {
 			<td><input type="text" name="createDate"/></td>
 		</tr>
 	</table>
-	<input type="submit" id="submitButton" value="提交">
+	<input type="button" id="submitButton" value="提交">
 	<input type="button" id="test" value="提交">
 </div>
 </form>

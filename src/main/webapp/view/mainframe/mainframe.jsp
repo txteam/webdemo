@@ -1,40 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>mainframe</title>
 <link rel="stylesheet" type="text/css" href="${contextPath }/css/commons.css" />
+<link rel="stylesheet" type="text/css" href="${contextPath }/css/mainframe.css" />
 <script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>
 <script type="text/javascript" src="${contextPath }/operamasks/js/operamasks-ui.min.js"></script>
+<script type="text/javascript" src="${contextPath }/jquery-ui/js/jquery-ui.js"></script>
+
+
 
 <style type="text/css">
-#navigatorTabs .om-panel-body{
-    padding: 0px;
+#navigatorTabs .om-panel-body {
+	padding: 0px;
 }
 </style>
-<script type="text/javascript" >
-$(document).ready(function() {
-	/*
-	$("#bodyDiv").omPanel({
-        width: 'fit',
-        height: 'fit',
-        title: 'webdemo mainframe',
-        collapsed: false,//组件创建后为收起状态
-        collapsible: false,//渲染收起与展开按钮
-        closable: false //渲染关闭按钮
-    });
-	*/
-	
+
+<script type="text/javascript">
+$(document).ready(function() {	
 	//生成页面布局
     $('#page').omBorderLayout({
 	    panels:[{ 
 	       id:"top-tools-panel", 
 	       title:"工具栏",
 	       region:"north",
-	       height:70,
+	       height:76,
 	       header:false,
 	       collapsible:true 
 	   },{ 
@@ -48,20 +42,32 @@ $(document).ready(function() {
 	       region:"west", 
 	       resizable:false, 
 	       collapsible:true, 
-	       width:150 
+	       width:200 
+	   },{ 
+	       id:"bottom-panel", 
+	       title:"菜单", 
+	       region:"south", 
+	       header:false,
+	       resizable:false, 
+	       collapsible:false,
+	       height:32
 	   }], 
-	   spacing:1,
+	   
+	   spacing:0,
 	   fit:true
-    });	
-	
-	var navigatorTabsElement = $('#navigatorTabs').omTabs({
-    	lazyLoad : true,
-    	border : false,
-    	scrollable : false,
-    	tabHeight : 22,
-        height : "fit"
     });
 	
+	//顶部菜单
+     $('#menu').omMenu({
+         minWidth : 100,
+         maxWidth : 150
+      });
+	$("#showMenuBtn").click(function(){
+		$('#menu').omMenu('show',this);
+	});
+     //显示menu菜单
+
+		
 	//生成左侧菜单抽屉效果
 	$('#make-accordion').omAccordion({
 		height:"fit"
@@ -81,8 +87,8 @@ $(document).ready(function() {
     var navData = [{id:"n1",text:"menu1",expanded:true},
                    {id:"n2",text:"menu2",expanded:true},
                    {id:"n11",pid:"n1",text:"toAddDemo",url:"${contextPath}/view/demo/addDemo"},
-                   {id:"n21",pid:"n2",text:"menu1-subm1",url:"http://www.baidu.com"},
-			       {id:"n22",pid:"n2",text:"menu2-subm2",url:"http://www.taobao.com"}];
+                   {id:"n21",pid:"n2",text:"menu1-subm1",url:"${contextPath}/view/demo/addDemo"},
+			       {id:"n22",pid:"n2",text:"menu2-subm2",url:"${contextPath}/view/demo/addDemo"}];
     
     $("#navTree").omTree({
         dataSource : navData,
@@ -107,41 +113,111 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<div id="page">
-	<div id="top-tools-panel">
-		<div id="navigatorTabs">
-			<ul>
-				<li><a href="#tab1">常用菜单</a></li>
-				<li><a href="#tab2">常用菜单</a></li>
-				<li><a href="#tab3">常用菜单</a></li>
-			</ul>
-			<div id="tab1">
-				菜单项一            ||      ${contextPath }
+	<div id="page">
+		<div id="top-tools-panel">
+			<div id="navigatorTabs" class="layoutTop">
+				<div class="menuButtonWrapper">
+		    		<a id="showMenuBtn" href="javascript:void(0); return false;">
+		            	<span>菜单</span>
+		          </a>
+		    	</div>
+				
+				<ul class="toolbar">
+					<li class="leftCorner"></li>
+		            <li id="passwordDown">
+						<a href="javascript:void(0); return false;" title="修改密码">
+							<img alt="修改密码" src="${contextPath}/images/iconPWvalidate.gif">
+						</a>
+		                <ul class="passwordSelect absLayer" style="display: none; ">
+		                    <li><a href="javascript:void(0); return false;" title="修改密码">修改密码</a></li>
+		                    <li><a href="javascript:void(0); return false;" title="重置密码">重置密码</a></li>
+		                </ul>
+			    	</li>
+					<li class="spliter"></li>
+		            <li id="consult">
+						<a href="javascript:void(0); return false;" title="修改个人信息">
+							<img alt="修改个人信息" src="${contextPath}/images/iconConsultation.gif">
+						</a>
+					</li>
+		            <li class="spliter"></li>
+					<li id="noteBook">
+						<a href="javascript:void(0); return false;" title="记事本">
+							<img alt="记事本" src="${contextPath}/images/iconNotebook.gif">
+						</a>
+					</li>
+					<li class="spliter"></li>
+					<li>
+						<a href="javascript:void(0); return false;" title="计算器">
+							<img alt="计算器" src="${contextPath}/images/iconCalculator.gif">
+						</a>
+					</li>
+		            <li class="spliter"></li>
+					<li>
+						<a id="calendar" href="javascript:void(0);" title="行事历">
+							<img alt="行事历" src="${contextPath}/images/iconCalendar.gif">
+						</a>
+					</li>
+					<li class="rightCorner"></li>
+				</ul>
 			</div>
-			<div id="tab2">
-				菜单项一            ||      菜单项目二                    ||          菜单项三
-			</div>
-			<div id="tab3">
-				菜单项一            ||      菜单项目二                    ||          菜单项三
+			<div class="layoutRibbon">
+				<div class="ribbon-content-wrpper"></div>
 			</div>
 		</div>
-	</div>
-	<div id="main-panel">
-		<div id="tabs">
-			<ul>
-				<li><a href="#tab1">tab1</a></li>
-			</ul>
-			<div id="tab1">
-				<iframe id="tab1iframe" border=0 frameBorder='no' src='http://www.baidu.com' width='100%'></iframe>
+		<div id="main-panel">
+			<div id="tabs">
+				<ul>
+					<li><a href="#tab1">tab1</a></li>
+				</ul>
+				<div id="tab1" style="z-index: -999">
+					<iframe id="tab1iframe" border=0 frameBorder='no' style="z-index:100"
+						src='${contextPath}/view/demo/addDemo' width='100%'></iframe>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div id="navigator-panel">
+		<div id="navigator-panel">
 
-	
-		<div id="navTree"></div>
+
+			<div id="navTree"></div>
+		</div>
+		<div id="east-panel"></div>
+
+		<div id="bottom-panel">
+			<div class="layoutBottom">
+				<div id="oper-info" style="float: left">xxxx:xxx:xx</div>
+
+				<div id="x1" style="float: right;">公告：xxxx</div>
+				<div id="x2" style="float: right;">未处理信息</div>
+			</div>
+		</div>
 	</div>
-	<div id="east-panel"></div>
-</div>
+
+	<div id="menu" style="display: none;">
+		<ul>
+			<li>
+				<a href="#"> <img class="icon" src="${contextPath }/images/blank.png"><span>节点0</span></a>
+			</li>
+			<li>
+				<a href="#"> <img src="${contextPath }/images/blank.png"> <span>节点一</span></a>
+			</li>
+			<li>
+				<a href="#"> <img class="icon" src="${contextPath }/images/calendar.gif"><span>节点二</span><span role="popup"></span></a>
+				<ul>
+					<li class="">
+						<a href="#"><img class="icon" src="i${contextPath }/mages/calendar.gif"><span>节点一一</span></a>
+					</li>
+					<li class="">
+						<a href="#"> <img src="${contextPath }/images/calendar.gif"><span>节点一二</span></a>
+					</li>
+					<li class="">
+						<a href="#"> <img src="${contextPath }/images/calendar.gif"><span>节点一三</span></a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a href="#"><img class="icon" src="${contextPath }/images/blank.png"><span>节点3</span></a>
+			</li>
+		</ul>
+	</div>
 </body>
 </html>
