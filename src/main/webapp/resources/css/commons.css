@@ -9,6 +9,7 @@
 
 /* 重写jqueryui样式*/
 input.ui-button{height:28px}
+input.button{height:28px}
 
 /* 定义样式表单 */
 * {

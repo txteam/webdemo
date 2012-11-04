@@ -11,9 +11,6 @@
 <script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>
 <script type="text/javascript" src="${contextPath }/operamasks/js/operamasks-ui.min.js"></script>
 <script type="text/javascript" src="${contextPath }/jquery-ui/js/jquery-ui.js"></script>
-
-
-
 <style type="text/css">
 #navigatorTabs .om-panel-body {
 	padding: 0px;
@@ -171,7 +168,7 @@ $(document).ready(function() {
 				</ul>
 				<div id="tab1" style="z-index: -999">
 					<iframe id="tab1iframe" border=0 frameBorder='no' style="z-index:100"
-						src='${contextPath}/view/demo/addDemo' width='100%'></iframe>
+						src='${contextPath}/view/calendar/calendar' width='100%'></iframe>
 				</div>
 			</div>
 		</div>

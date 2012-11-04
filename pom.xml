@@ -2,14 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<properties>
-		<tx_jar_version>1.0.0</tx_jar_version>
-	</properties>
-
 	<parent>
 		<groupId>com.tx</groupId>
 		<artifactId>tx-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>webdemo</artifactId>
@@ -21,12 +17,6 @@
 		<dependency>
 			<groupId>com.tx</groupId>
 			<artifactId>tx-core</artifactId>
-			<version>${tx_jar_version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tx</groupId>
-			<artifactId>tx-commons</artifactId>
-			<version>${tx_jar_version}</version>
 		</dependency>
 
 		<!-- commons -->
@@ -120,17 +110,39 @@
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+		</dependency>
+
+		<!-- xfire -->
 
 		<!-- ajax -->
+		
+		<!-- json xml -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 		</dependency>
-
-		<!-- 序列化，反序列化 -->
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+		</dependency>
+		
+		<!-- dom4j -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<optional>true</optional>
 		</dependency>
 
 		<!-- aop -->
@@ -152,7 +164,16 @@
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib-nodep</artifactId>
-			<version>2.2</version>
+		</dependency>
+
+		<!-- hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-ehcache</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
 		</dependency>
 
 		<!-- mybatis -->
@@ -229,6 +250,16 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- jdbc -->
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
 		<!-- junit -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -250,7 +281,8 @@
 					<source>1.6</source>
 					<!-- The -target argument for the Java compiler.Default value is: 1.5. -->
 					<target>1.6</target>
-					<!-- The -encoding argument for the Java compiler.Default value is: ${project.build.sourceEncoding}. -->
+					<!-- The -encoding argument for the Java compiler.Default value is: 
+						${project.build.sourceEncoding}. -->
 					<encoding>UTF-8</encoding>
 					<!-- Set to true to show compilation warnings. Default value is: false. -->
 					<showWarnings>true</showWarnings>
@@ -262,19 +294,20 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<!-- The directory for the generated WAR. -->
-					<!-- Default value is: ${project.build.directory}.-->
+					<!-- Default value is: ${project.build.directory}. -->
 					<outputDirectory>${basedir}/target/war</outputDirectory>
 					<!-- The name of the generated WAR. -->
 					<!-- Default value is: ${project.build.finalName}. -->
 					<warName>webdemo</warName>
-					<!-- Single directory for extra files to include in the WAR. This is where you place your JSP files.-->
+					<!-- Single directory for extra files to include in the WAR. This is 
+						where you place your JSP files. -->
 					<!-- Default value is: ${basedir}/src/main/webapp. -->
 					<warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
 					<!-- The directory where the webapp is built. -->
 					<!-- Default value is: ${project.build.directory}/${project.build.finalName}. -->
 					<webappDirectory>${basedir}/target/war/webapp</webappDirectory>
-					<!--Directory to unpack dependent WARs into if needed.-->
-					<!--Default value is: ${project.build.directory}/war/work.-->
+					<!--Directory to unpack dependent WARs into if needed. -->
+					<!--Default value is: ${project.build.directory}/war/work. -->
 					<workDirectory>${basedir}/target/war/work</workDirectory>
 					<!-- The archive configuration to use -->
 					<archive>
@@ -286,13 +319,14 @@
 						**/operamasks/development-bundle/**,
 						**/spy.properties
 					</packagingExcludes>
-					<!-- The comma separated list of tokens to exclude when copying the content of the warSourceDirectory. -->
+					<!-- The comma separated list of tokens to exclude when copying the 
+						content of the warSourceDirectory. -->
 					<warSourceExcludes>
 						**/jquery-ui/development-bundle/**,
 						**/operamasks/development-bundle/**,
 						**/spy.properties
 					</warSourceExcludes>
-					<!-- The path to the web.xml file to use.  -->
+					<!-- The path to the web.xml file to use. -->
 					<!-- User property is: maven.war.webxml. -->
 					<webXml>${basedir}/src/main/webapp/WEB-INF/web.xml</webXml>
 					<webResources>

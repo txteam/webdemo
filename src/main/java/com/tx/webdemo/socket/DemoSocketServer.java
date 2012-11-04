@@ -13,8 +13,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.apache.cxf.common.util.StringUtils;
-
 import com.tx.core.TxConstants;
 
 /**
