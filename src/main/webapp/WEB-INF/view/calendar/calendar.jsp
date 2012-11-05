@@ -177,9 +177,9 @@ $(document).ready(function(){
         },
         allDayText: message.allDay,
         titleFormat: {
-            month: clientLocale == "zh-CN" ? "yyyy'" + message.year + "'MMM'" + message.month + "'" : "MMMM yyyy" ,
-            week: clientLocale == "zh-CN" ? "yyyy'" + message.year + "'MMM'" + message.month + "'d'" + message.day + "'{ '&#8212;' yyyy'" + message.year + "'MMM'" + message.month + "'d'" + message.day + "'}" : "MMMM d[ yyyy]{ '&#8212;'[ MMMM] d yyyy}",
-            day: clientLocale == "zh-CN" ? "yyyy'" + message.year + "'MMM'" + message.month + "'d'" + message.day + "' dddd" : "dddd, MMMM d, yyyy"
+            month: "yyyy'" + message.year + "'MMM'" + message.month + "'",
+            week: "yyyy'" + message.year + "'MMM'" + message.month + "'d'" + message.day + "'{ '&#8212;' yyyy'" + message.year + "'MMM'" + message.month + "'d'" + message.day + "'}",
+            day: "yyyy'" + message.year + "'MMM'" + message.month + "'d'" + message.day + "' dddd"
         },
         columnFormat: {
             month: 'ddd',
@@ -201,25 +201,27 @@ $(document).ready(function(){
             right: 'month,agendaWeek,agendaDay'
         },
         defaultView:'agendaWeek',
-        events: function(start, end, callback){
-        	$.ajax(function(){
-        		
-        	});
-            calendarDWRBean.queryCalendarEventList({
-                startdate: "" + start.getTime(),
-                enddate: "" + end.getTime(),
-                operid: operId
-            }, {
-                callback: function(data){
+        events:function(start, end, callback){
+        	jQuery.ajax( {  
+            	type : "POST",
+            	cache : false,
+            	contentType : "application/json",  
+                url : "${contextPath}/canlendar/queryCalendarEventList",  
+                dataType : 'json', 
+                data:{
+                    startdate: "2012-11-04",
+                    enddate: "2012-11-09"
+                },
+                success : function(data) {  
                 	for (var i = 0; i < result.length; i++){
                         result[i].start = new Date(result[i].start);
                         result[i].end = new Date(result[i].end);
                     }
                     callback(result);
-                },
-                errorHandler: function(){
-                    dialogUtils.openTip(message.queryCalendarError, 2)
-                }
+                },  
+                error : function() {  
+                  alert("error");  
+                }  
             });
         },
         eventMouseover: function(ev){

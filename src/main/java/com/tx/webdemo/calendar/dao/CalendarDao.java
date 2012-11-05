@@ -9,6 +9,7 @@ package com.tx.webdemo.calendar.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.tx.core.paged.model.PagedList;
 import com.tx.webdemo.calendar.model.CalendarEvent;
 
 /**
@@ -20,35 +21,55 @@ import com.tx.webdemo.calendar.model.CalendarEvent;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface CalendarDAO {
+public interface CalendarDao {
     
     /**
      * 插入日历事件
      * @param calEvent
      * @return
      */
-    int insertCalendarEvent(CalendarEvent calEvent);
+    void insertCalendarEvent(CalendarEvent calEvent);
     
     /**
-     * 此方法用于在修改时查询
+     * 删除
+     * @param eventid
+     * @return
+     */
+    int deleteCalendarEvent(CalendarEvent calEvent);
+    
+    /**
+     * 查询行事历实体
      * @param eventId
      * @return
      */
-    CalendarEvent findCalendarEventById(String eventId);
+    CalendarEvent findCalendarEvent(CalendarEvent calEvent);
+    
+    /**
+     * 查询日历事件
+     * @param params 
+     * operid-工号 startdate-开始时间 enddate-结束时间
+     * @return
+     */
+    List<CalendarEvent> queryCalendarEventList(Map<String, Object> params);
+    
+    /**
+      *<分页查询日历事件>
+      *<功能详细描述>
+      * @param params
+      * @return [参数说明]
+      * 
+      * @return PagedList<CalendarEvent> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    PagedList<CalendarEvent> queryCalendarEventPagedList(Map<String, Object> params);
     
     /**
      * 修改日历事件
      * @param calEvent
      * @return
      */
-    int updateCalendarEvent(CalendarEvent calEvent);
-    
-    /**
-     * 查询日历事件
-     * @param params operid-工号 startdate-开始时间 enddate-结束时间
-     * @return
-     */
-    List<CalendarEvent> queryCalendarEventList(Map<String, Object> params);
+    int updateCalendarEvent(Map<String, Object> params);
     
     /**
      * 插入公共事件的目标工号
@@ -57,14 +78,7 @@ public interface CalendarDAO {
      * @param vcid vcid
      * @return
      */
-    int insertCalendarSubscriber(String eventId, String[] operators, int vcid);
-    
-    /**
-     * 删除
-     * @param eventid
-     * @return
-     */
-    int deleteCalendarEvent(String eventid);
+    int insertCalendarSubscriber(String eventId, String[] operators);
     
     /**
      * 用于修改/删除时删除原有的记录
@@ -72,21 +86,6 @@ public interface CalendarDAO {
      * @return
      */
     int deleteCalendarSubscriber(String eventId);
-    
-    /**
-     * 管理界面，查询事件的总行数
-     * @param params
-     * @return
-     */
-    Integer queryCalendarEventListForUpdateCount(Map<String, Object> params);
-    
-    /**
-     * 管理界面分页数据
-     * @param params
-     * @return
-     */
-    List<CalendarEvent> queryCalendarEventListForUpdate(
-            Map<String, Object> params);
     
     /**
      * 查找提醒信息
@@ -105,7 +104,6 @@ public interface CalendarDAO {
     
     /**
      * 查找提醒阅读记录
-     * 
      * @param eventInstanceId事件实例ID
      * @param operId操作员ID
      * @return 提醒阅读记录
@@ -114,7 +112,6 @@ public interface CalendarDAO {
     
     /**
      * 更新提醒阅读记录
-     * 
      * @param eventInstanceId事件实例ID
      * @param operId操作员ID
      * @param notifyCount提醒次数

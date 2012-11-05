@@ -24,10 +24,7 @@ function addToolTip()
 }
 
 jQuery(function()
-{
-//    dialogUtils.setLocale(clientLocale);
-//    ZS.use("dialog");
-    
+{   
 //    jQuery("#butMng").click(function()
 //    {
 //        location.href = "calendarList.jsp";

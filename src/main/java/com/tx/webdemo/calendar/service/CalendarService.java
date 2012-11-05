@@ -6,10 +6,7 @@
  */
 package com.tx.webdemo.calendar.service;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,19 +14,15 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.codehaus.jackson.JsonGenerator;
+import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 
-import com.tx.webdemo.calendar.dao.CalendarDAO;
+import com.tx.core.exceptions.parameter.ParameterIsEmptyException;
+import com.tx.core.exceptions.parameter.ParameterIsInvalidException;
+import com.tx.webdemo.calendar.dao.CalendarDao;
 import com.tx.webdemo.calendar.model.CalendarEvent;
 
 /**
@@ -49,53 +42,49 @@ public class CalendarService {
     
     /** 日期格式化的格式 */
     private static final String[] PARSE_FMT = { "yyyy-MM-dd HH:mm:ss",
-            "yyyy-MM-dd", };
+            "yyyy-MM-dd" };
+    
+    /** 行事历数据访问层对象 */
+    @Resource(name = "calendar.calendarDao")
+    private CalendarDao calendarDao;
     
     /**
-     * 行事历数据访问层对象
-     */
-    private CalendarDAO calendarDAO;
-    
-    /**
-      *<功能简述>
+      *<根据当前操作人员id查询日历事件>
       *<功能详细描述>
-      * @param calEvent
-      * @param operaters [参数说明]
+      * @param operId
+      * @param startDateStr
+      * @param endDateStr
+      * @return [参数说明]
       * 
-      * @return void [返回类型说明]
+      * @return List<CalendarEvent> [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public void saveCalendarEvent(CalendarEvent calEvent, String[] operaters) {
-        Map<String, Object> result = new HashMap<String, Object>();
-        
-        final Date currDate = new Date();
-        
-        if (StringUtils.isEmpty(calEvent.getId())) {
-            // this is Insert
-            if(StringUtils.isEmpty(calEvent.getCreateOperId())){
-                calEvent.setCreateOperId(calEvent.getUpdateOperId());
-            }
-            calEvent.setCreateDate(currDate);
-            calEvent.setUpdateDate(currDate);
-            CalendarService.this.calendarDAO.insertCalendarEvent(calEvent);
+    public List<CalendarEvent> queryCalendarEventByOperIdAndDate(String operId,
+            String startDateStr, String endDateStr) {
+        if (StringUtils.isEmpty(operId) || StringUtils.isEmpty(startDateStr)
+                || StringUtils.isEmpty(endDateStr)) {
+            throw new ParameterIsEmptyException(
+                    "operId or startDateStr or endDateStr is empty.");
         }
-        else {
-            //如果有id执行更新操作
-            calEvent.setUpdateDate(currDate);
-            CalendarService.this.calendarDAO.updateCalendarEvent(calEvent);
-            CalendarService.this.calendarDAO.deleteCalendarSubscriber(calEvent.getId());
+        Date startDate;
+        Date endDate;
+        try {
+            startDate = DateUtils.parseDate(startDateStr, PARSE_FMT);
+            endDate = DateUtils.parseDate(endDateStr, PARSE_FMT);
+        }
+        catch (ParseException e) {
+            throw new ParameterIsInvalidException(
+                    "startDateStr or endDateStr is invalid.");
         }
         
-        if (CalendarEvent.EVENT_TYPE_PUBLIC == calEvent.getEventType()) {
-            // if eventtype==1 如果为公共事件
-            if (!ArrayUtils.isEmpty(operaters)) {
-//                this.calendarDAO.insertCalendarSubscriber(calEvent.getId(),
-//                        operaters,
-//                        calEvent.getVcid());
-            }
-        }
+        Map<String, Object> queryParams = new HashMap<String, Object>();
+        queryParams.put("operId", operId);
+        queryParams.put("startDate", startDate);
+        queryParams.put("endDate", endDate);
+        List<CalendarEvent> eventList = this.calendarDao.queryCalendarEventList(queryParams);
+        
+        return eventList;
     }
-    
     
 }

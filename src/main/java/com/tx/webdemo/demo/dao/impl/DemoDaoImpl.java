@@ -8,11 +8,11 @@ package com.tx.webdemo.demo.dao.impl;
 
 import javax.annotation.Resource;
 
-import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.tx.core.mybatis.support.MyBatisDaoSupport;
 import com.tx.webdemo.demo.dao.DemoDao;
 import com.tx.webdemo.demo.model.Demo;
 
@@ -32,8 +32,8 @@ public class DemoDaoImpl implements DemoDao {
     /* 是否需要引入日志记录，根据具体业务定，这里是为了打印启动加载情况才加入的  */
     private static Logger logger = LoggerFactory.getLogger(DemoDaoImpl.class);
     
-    @Resource(name="mybatisDaoSupport")
-    private SqlSessionTemplate mybatisDaoSupport;
+    @Resource(name="myBatisDaoSupport")
+    private MyBatisDaoSupport mybatisDaoSupport;
     
     /** <默认构造函数> */
     public DemoDaoImpl() {

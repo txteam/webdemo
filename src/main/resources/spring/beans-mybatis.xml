@@ -10,7 +10,6 @@
 	<bean id="sqlSessionFactory" 
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="datasource"></property>
-		<property name="transactionFactory" ref="transactionManager"></property>
 		<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
 		<property name="mapperLocations" value="classpath*:/com/tx/demo/**/*SqlMap.xml" />	
 		<property name="typeAliasesPackage" value="com.tx.webdemo,com.tx.component.calendar"></property>
@@ -25,8 +24,14 @@
 		</property>
 	</bean>
 
-	<bean id="mybatisDaoSupport" class="org.mybatis.spring.SqlSessionTemplate">
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+	
+	<bean id="myBatisDaoSupport" class="com.tx.core.mybatis.support.MyBatisDaoSupport">
+		<property name="sqlSessionTemplate">
+			<ref bean="sqlSessionTemplate"/>
+		</property>
 	</bean>
 	
 </beans>

@@ -9,6 +9,8 @@ package com.tx.webdemo.calendar.model;
 import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * <日历事件实体>
@@ -21,31 +23,38 @@ import org.apache.ibatis.type.Alias;
  * @since  [产品/模块版本]
  */
 @Alias("calendarEvent")
+@JsonAutoDetect
 public class CalendarEvent {
     
     /** 个人事件 */
+    @JsonIgnore
     public static final int EVENT_TYPE_PRIVATE = 0;
     
     /** 公共事件 */
+    @JsonIgnore
     public static final int EVENT_TYPE_PUBLIC = 1;
     
     /** 是否提醒， 1-提醒 */
+    @JsonIgnore
     public static final int NOTIFY_TYPE_YES = 1;
     
     /** 是否提醒， 0-不提醒 */
+    @JsonIgnore
     public static final int NOTIFY_TYPE_NO = 0;
     
     /** 行事历 事件 是否是全天 是-1  */
+    @JsonIgnore
     public static final int ALLDAY_YES = 1;
     
     /** 行事历 事件 是否是全天 否-0  */
+    @JsonIgnore
     public static final int ALLDAY_NO = 0;
     
     /** 事件唯一id */
     private String id;
     
-    /** 虚中心id,对应公共事件  */
-    private String vcid;
+    /** 事件标题 */
+    private String title;
     
     /**0-个人事件 1-公共事件*/
     private int eventType = EVENT_TYPE_PRIVATE;
@@ -57,13 +66,13 @@ public class CalendarEvent {
     private Date startDate;
     
     /** 创建人id */
-    private String createOperId;
+    private String createOper;
     
     /** 创建时间 */
     private Date createDate;
     
     /** 最后修改人 */
-    private String updateOperId;
+    private String updateOper;
     
     /** 最后修改时间 */
     private Date updateDate;
@@ -94,20 +103,6 @@ public class CalendarEvent {
      */
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * @return 返回 vcid
-     */
-    public String getVcid() {
-        return vcid;
-    }
-
-    /**
-     * @param 对vcid进行赋值
-     */
-    public void setVcid(String vcid) {
-        this.vcid = vcid;
     }
 
     /**
@@ -153,17 +148,17 @@ public class CalendarEvent {
     }
 
     /**
-     * @return 返回 createOperId
+     * @return 返回 createOper
      */
-    public String getCreateOperId() {
-        return createOperId;
+    public String getCreateOper() {
+        return createOper;
     }
 
     /**
-     * @param 对createOperId进行赋值
+     * @param 对createOper进行赋值
      */
-    public void setCreateOperId(String createOperId) {
-        this.createOperId = createOperId;
+    public void setCreateOper(String createOper) {
+        this.createOper = createOper;
     }
 
     /**
@@ -181,17 +176,17 @@ public class CalendarEvent {
     }
 
     /**
-     * @return 返回 updateOperId
+     * @return 返回 updateOper
      */
-    public String getUpdateOperId() {
-        return updateOperId;
+    public String getUpdateOper() {
+        return updateOper;
     }
 
     /**
-     * @param 对updateOperId进行赋值
+     * @param 对updateOper进行赋值
      */
-    public void setUpdateOperId(String updateOperId) {
-        this.updateOperId = updateOperId;
+    public void setUpdateOper(String updateOper) {
+        this.updateOper = updateOper;
     }
 
     /**
@@ -237,6 +232,20 @@ public class CalendarEvent {
     }
 
     /**
+     * @return 返回 allDay
+     */
+    public int getAllDay() {
+        return allDay;
+    }
+
+    /**
+     * @param 对allDay进行赋值
+     */
+    public void setAllDay(int allDay) {
+        this.allDay = allDay;
+    }
+
+    /**
      * @return 返回 days
      */
     public String getDays() {
@@ -251,16 +260,16 @@ public class CalendarEvent {
     }
 
     /**
-     * @return 返回 allDay
+     * @return 返回 title
      */
-    public int getAllDay() {
-        return allDay;
+    public String getTitle() {
+        return title;
     }
 
     /**
-     * @param 对allDay进行赋值
+     * @param 对title进行赋值
      */
-    public void setAllDay(int allDay) {
-        this.allDay = allDay;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

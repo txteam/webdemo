@@ -6,17 +6,21 @@
  */
 package com.tx.webdemo.calendar.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.tx.core.exceptions.SILException;
+import com.tx.webdemo.calendar.model.CalendarEvent;
 import com.tx.webdemo.calendar.service.CalendarService;
 
 /**
@@ -28,7 +32,7 @@ import com.tx.webdemo.calendar.service.CalendarService;
  * @since  [产品/模块版本]
  */
 @RequestMapping("/canlendar")
-@Component("canlendar.controller")
+@Controller("canlendar.controller")
 public class CalendarController {
     
     private static final Logger logger = LoggerFactory.getLogger(CalendarController.class);
@@ -51,16 +55,27 @@ public class CalendarController {
      */
     @ResponseBody()
     @RequestMapping("/queryCalendarEventList")
-    public ModelAndView queryCalendarEventList(Map<String, String> paraMap){
+    public List<CalendarEvent> queryCalendarEventList(
+            @SuppressWarnings("rawtypes") @RequestBody HashMap paraMap) {
         //判断请求是否合法
-        if(paraMap == null || paraMap.containsKey("startDate") || paraMap.containsKey("endDate")){
-            
+        if (paraMap == null || paraMap.containsKey("startDate")
+                || paraMap.containsKey("endDate")) {
+            return null;
+        }
+        String startDate = (String)paraMap.get("startDate");
+        String endDate = (String)paraMap.get("endDate");
+        List<CalendarEvent> resList = null;
+        try {
+            resList = this.calendarService.queryCalendarEventByOperIdAndDate("888",
+                    startDate,
+                    endDate);
+        }
+        catch (SILException e) {
+            e.printStackTrace();
         }
         
         //查询并返回数据
-        
-        
-        return null;
+        return resList;
     }
     
 }

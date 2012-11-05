@@ -28,6 +28,8 @@
 	<mvc:resources mapping="/js/**" location="/resources/js/" />
 	<!-- <mvc:default-servlet-handler /> -->
 
+	<!-- 需要添加该驱动，支持多个convertor的添 -->
+	<!--  mvc:annotation-driven/-->
 	<!-- 配置扫描 -->
 	<context:component-scan base-package="com.tx.webdemo"
 		use-default-filters="false">
@@ -79,6 +81,13 @@
 					<property name="supportedMediaTypes">
 						<list>
 							<value>text/plain;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>application/json;charset=UTF-8</value>
 						</list>
 					</property>
 				</bean>
