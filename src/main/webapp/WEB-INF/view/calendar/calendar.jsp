@@ -159,6 +159,40 @@ function addToolTip()
     });
 }
 
+jQuery.extend({
+    ajaxPostRequest: function(url, datamap, successCallback,errorCallback){
+    	jQuery.ajax({  
+        	type : "POST",
+        	cache : false,
+            url : url,  
+            dataType : "json",
+            data: jQuery.param(datamap),
+            success : function(data) {  
+                successCallback(data);
+            },  
+            error : function(xmlHttpRequest, textStatus, errorThrown) {  
+            	errorCallback(xmlHttpRequest, textStatus, errorThrown);
+            }  
+        });
+    },
+    ajaxGetRequest: function(url, data, successCallback,errorCallback){ 
+    	jQuery.ajax( {  
+        	type : "GET",
+        	cache : false,
+        	contentType : "application/json",  
+            url : url,  
+            dataType : "json",
+            data: jQuery.param(data),
+            success : function(data) {  
+                successCallback(data);
+            },  
+            error : function(xmlHttpRequest, textStatus, errorThrown) {  
+            	errorCallback(xmlHttpRequest, textStatus, errorThrown);
+            }  
+        });
+    }
+});
+
 $(document).ready(function(){
     $.fullCalendar.setDefaults({
         monthNames: [message.months.january, message.months.february, message.months.march, message.months.april, message.months.may, message.months.june, message.months.july, message.months.august, message.months.september, message.months.octorber, message.months.november, message.months.december],
@@ -202,27 +236,15 @@ $(document).ready(function(){
         },
         defaultView:'agendaWeek',
         events:function(start, end, callback){
-        	jQuery.ajax( {  
-            	type : "POST",
-            	cache : false,
-            	contentType : "application/json",  
-                url : "${contextPath}/canlendar/queryCalendarEventList",  
-                dataType : 'json', 
-                data:{
-                    startdate: "2012-11-04",
-                    enddate: "2012-11-09"
-                },
-                success : function(data) {  
-                	for (var i = 0; i < result.length; i++){
-                        result[i].start = new Date(result[i].start);
-                        result[i].end = new Date(result[i].end);
-                    }
-                    callback(result);
-                },  
-                error : function() {  
-                  alert("error");  
-                }  
-            });
+            jQuery.ajaxPostRequest("${contextPath}/canlendar/queryCalendarEventList",
+                    {startDate:"2012-11-04",endDate:"2012-11-09"},
+                    function(data){
+                        for (var i = 0; i < result.length; i++){
+                            result[i].start = new Date(result[i].start);
+                            result[i].end = new Date(result[i].end);
+                        }
+                        callback(result);
+                  	});
         },
         eventMouseover: function(ev){
             if (ev.eventtype == 1){
@@ -267,14 +289,14 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-<div style="float: left;margin-top: 5px">
+<div style="margin-top: 10px">
     <input id="managerCalendar"
     	type="button" class="button" value="<spring:message code='calendar.page.manage' />" 
     	onClick="window.location='calendarList.jsp'"/>
     &nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
-<div id="clendarContent" style="width: 50%;float: left;">
+<div id="clendarContent" style="width: 80%">
 	<div id='calendar'></div>
 </div>
 

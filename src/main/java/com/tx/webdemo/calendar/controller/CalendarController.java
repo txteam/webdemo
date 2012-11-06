@@ -6,17 +6,15 @@
  */
 package com.tx.webdemo.calendar.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.core.exceptions.SILException;
@@ -53,24 +51,17 @@ public class CalendarController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @ResponseBody()
     @RequestMapping("/queryCalendarEventList")
+    @ResponseBody()
     public List<CalendarEvent> queryCalendarEventList(
-            @SuppressWarnings("rawtypes") @RequestBody HashMap paraMap) {
+            @RequestParam String startDate, @RequestParam String endDate) {
         //判断请求是否合法
-        if (paraMap == null || paraMap.containsKey("startDate")
-                || paraMap.containsKey("endDate")) {
-            return null;
-        }
-        String startDate = (String)paraMap.get("startDate");
-        String endDate = (String)paraMap.get("endDate");
         List<CalendarEvent> resList = null;
         try {
             resList = this.calendarService.queryCalendarEventByOperIdAndDate("888",
                     startDate,
                     endDate);
-        }
-        catch (SILException e) {
+        } catch (SILException e) {
             e.printStackTrace();
         }
         

@@ -36,5 +36,16 @@
 		username="postgres"
 		password="sys" driverClassName="org.postgresql.Driver"
 		url="jdbc:postgresql://127.0.0.1/postgres" />
-
+		
+	<Resource name="db_webdemo"
+		      url="jdbc:mysql://127.0.0.1:3306/db_webdemo"
+		      type="org.apache.commons.dbcp.BasicDataSource"
+		      driverClassName="com.mysql.jdbc.Driver"
+		      username="db_webdemo"
+		      password="db_webdemo"
+		      maxActive="20"
+		      maxIdle="5"
+		      maxWait="1000"
+		      auth="Container"
+		      />
 </Context>
