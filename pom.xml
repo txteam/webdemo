@@ -137,12 +137,10 @@
 		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>jaxen</groupId>
 			<artifactId>jaxen</artifactId>
-			<optional>true</optional>
 		</dependency>
 
 		<!-- aop -->

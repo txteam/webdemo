@@ -1,6 +1,6 @@
 @charset "utf-8";
-@import url("../operamasks/css/default/om-default.css");
 @import url("../jquery-ui/css/smoothness/jquery-ui.min.css");
+@import url("../wijmo/css/jquery.wijmo-complete.all.2.2.2.min.css");
 /*@import url("../jquery-ui/css/cupertino/jquery-ui.min.css");*/
 /*@import url("../jquery-ui/css/smoothness/jquery-ui.min.css");*/
 /*@import url("../jquery-ui/css/redmond/jquery-ui-1.9.1.custom.min.css");*/
@@ -8,8 +8,6 @@
 /* 重写operamasks样式*/
 
 /* 重写jqueryui样式*/
-input.ui-button{height:28px}
-input.button{height:28px}
 
 /* 定义样式表单 */
 * {
@@ -42,9 +40,6 @@ frame{
     border: 0px;
     border-style: none;
 }
-#tabs .om-panel-body{
-    padding: 0px;
-}
 img,form{
     border:none;
 }
@@ -53,6 +48,3 @@ a {
     text-align: center;
     text-decoration: none;
 }
-
-
-
