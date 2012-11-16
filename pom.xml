@@ -118,7 +118,7 @@
 		<!-- xfire -->
 
 		<!-- ajax -->
-		
+
 		<!-- json xml -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -132,7 +132,7 @@
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
 		</dependency>
-		
+
 		<!-- dom4j -->
 		<dependency>
 			<groupId>dom4j</groupId>
@@ -258,6 +258,37 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<!-- struts -->
+		<dependency>
+			<!-- struts2的核心包 -->
+			<!-- freemarker.jar:FreeMarker是一个模板引擎，一个基于模板生成文本输出的通用工具 -->
+			<!-- ognl.jar:支持ognl表达式 -->
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+		</dependency>
+		<dependency>
+			<!-- xwork的包 由于Struts2是由xwork的延伸 有些类依然关联着 xwork的类 -->
+			<groupId>org.apache.struts.xwork</groupId>
+			<artifactId>xwork-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-spring-plugin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
 		</dependency>
 
 		<!-- junit -->
