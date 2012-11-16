@@ -45,6 +45,15 @@ public class DemoController {
         logger.info("Instance DemoController............................");
     }
     
+    /**
+      *<页面跳转到>/demo/addDemo
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return ModelAndView [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     @RequestMapping(value="/toAddDemo")
     public ModelAndView toAddDemo(){
         ModelAndView mv = new ModelAndView();
