@@ -9,9 +9,8 @@
 <link rel="stylesheet" type="text/css" href="${contextPath }/css/commons.css" />
 <script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>
 <script type="text/javascript" src="${contextPath }/js/commons.js"></script>
-
 <script type="text/javascript">
-$.onLoad(function(){
+$.loadReady(function(){
 	alert("test");
 });
 </script>
