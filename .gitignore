@@ -1,6 +1,5 @@
 /target
+/.settings
 /.classpath
 /.project
-/.gitignore
 /.springBeans
-/.settings
