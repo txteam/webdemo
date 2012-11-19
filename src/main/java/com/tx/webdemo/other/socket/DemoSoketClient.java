@@ -4,7 +4,7 @@
  * 修改时间:  2012-10-29
  * <修改描述:>
  */
-package com.tx.webdemo.socket;
+package com.tx.webdemo.other.socket;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

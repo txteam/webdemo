@@ -4,7 +4,7 @@
  * 修改时间:  2012-11-5
  * <修改描述:>
  */
-package com.tx.webdemo.refelection;
+package com.tx.webdemo.other.reflect;
 
 
  /**
@@ -16,22 +16,20 @@ package com.tx.webdemo.refelection;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public class TestC extends TestB {
-    private String ccc;
+public class TestA {
+    private String aaa;
 
     /**
-     * @return 返回 ccc
+     * @return 返回 aaa
      */
-    public String getCcc() {
-        return ccc;
+    public String getAaa() {
+        return aaa;
     }
 
     /**
-     * @param 对ccc进行赋值
+     * @param 对aaa进行赋值
      */
-    public void setCcc(String ccc) {
-        this.ccc = ccc;
+    public void setAaa(String aaa) {
+        this.aaa = aaa;
     }
-    
-    
 }

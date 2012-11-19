@@ -4,7 +4,7 @@
  * 修改时间:  2012-11-5
  * <修改描述:>
  */
-package com.tx.webdemo.refelection;
+package com.tx.webdemo.other.reflect;
 
 import com.tx.core.datasource.DataSourceFactoryBean;
 
