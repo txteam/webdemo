@@ -1,0 +1,37 @@
+@charset "utf-8";
+/* 重写operamasks样式*/
+
+/* 重写jqueryui样式*/
+
+/* 定义样式表单 */
+* {
+    margin: 0px;
+    padding: 0px;
+    font-size: 12px;
+    font-family: "Verdana", "Arial","宋体","Helvetica", "sans-serif";
+}
+html,body{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+frameset{
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    border: 0px;
+    border-style: none;
+}
+frame{
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    border: 0px;
+    border-style: none;
+}
+img,form{
+    border:none;
+}
+a {
+    color: black;
+    text-align: center;
+    text-decoration: none;
+}
