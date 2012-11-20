@@ -32,7 +32,10 @@ $(document).ready(function () {
 				<button id="menuBtn">菜单</button>
 			</span>
 			<span>
-				tabHandleccccccccccccccccccccccc
+				待我处理
+			</span>
+			<span>
+				快捷菜单
 			</span>
 			<span class="choose-skin">
 				<select id="skinSwitcher">
