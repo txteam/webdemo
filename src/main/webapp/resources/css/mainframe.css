@@ -1,8 +1,7 @@
 @charset "utf-8";
 .container {
-    min-height:100%;
-    height: auto !important;
-    height: 100%; /*IE6不识别min-height*/
+    height: 100%;
+    width: 100%;
     overflow: hidden;
 }
 /*top部分样式表单*/
@@ -20,15 +19,32 @@
 	height:60px;
 }
 .menu{
-    margin-left: 5px;
-    width:200px;
+    margin-left:5px;
+    width:400px;
+}
+/*改变显示的菜单的默认的padding*/
+#menuLink a{
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+#menuItems a{
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 .menu-itmes-container{
 	position: absolute ;
-	top:28px;
+	top:0px;
 	left:5px;
 	z-index: 999;
-	display: none;
+}
+.menu-tool{
+    
+}
+.menu-tool-itmes-container{
+    
+}
+.menu-tool-itmes{
+    
 }
 .choose-skin{
     margin-top:4px;
@@ -38,12 +54,19 @@
 .top-spliter{
     position: absolute;
     width: 100%;
-    height: 1px;
-    top: 87px;
+    height: 2px;
+    top: 86px;
 }
 /* center */
 .center{
-	position: relative;
+	width: 100%;
+    height: 100%;
+}
+.center-left{
+    
+}
+.center-main{
+    
 }
 /*footer部分样式表单*/
 .footer{
@@ -51,5 +74,4 @@
     bottom:0;
     width: 100%;
     height: 25px;/*脚部的高度*/
-
 }

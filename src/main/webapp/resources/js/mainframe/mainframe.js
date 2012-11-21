@@ -1,153 +1,80 @@
 /*
- * 定义菜单对象
- * config{id:"menuItemsContainerId"}
+ * 定义布局器
  */
-var Menu = function(config)
-{
-    // 获取参数
-    this.menuBtnId = config.menuBtnId ? config.menuBtnId : this.menuBtnId;
-    this.menuItemsContainerId = config.menuItemsContainerId ? config.menuItemsContainerId
-            : this.menuItemsContainerId;
-
-    this.init();
+var Layout = function(){
+    this.$center = $(".center");
+    this.$centerMain = $(".center-main");
+    this.$top = $(".top");
+    this.$footer = $(".footer");
 };
 /*
- * param: 菜单按钮id
+ * 布局器初始化
  */
-Menu.prototype.menuBtnId = "menuBtn";
-/*
- * param: 菜单对象对应容器id
- */
-Menu.prototype.menuItemsContainerId = "menuItmesContainer";
-/*
- * public: 菜单对象容器jquery对象
- */
-Menu.prototype.$menuBtn = null;
-/*
- * public: 菜单对象容器jquery对象
- */
-Menu.prototype.$menuItemsContainer = null;
-/*
- * public: 菜单对象jquery对象
- */
-Menu.prototype.$menuItems = null;
-/*
- * private: 关闭延时器
- */
-Menu.prototype._closeTimer = null;
-/*
- * 菜单对象初始化方法
- */
-Menu.prototype.init = function()
-{
-    this.$menuBtn = jQuery("#" + this.menuBtnId);
-    this.$menuItemsContainer = jQuery("#" + this.menuItemsContainerId);
-    this.$menuItems = this.$menuItemsContainer.children("ul");
-
-    // 初始化菜单按钮
-    this._menuBtnInit();
-    // 初始化容器
-    this._menuContainerInit();
-};
-/*
- * 私有方法清除关闭句柄
- */
-Menu.prototype._clearTimer = function()
-{
+Layout.prototype.init = function(config){
+    this._resetCenterHeight();
+    this._initSpliter();
+    var resizeTimer = null;
     var _this = this;
-    if (_this._closeTimer != null)
-    {
-        clearTimeout(_this._closeTimer);
-    }
-};
-/*
- * 私有方法显示
- */
-Menu.prototype._show = function()
-{
-    var _this = this;
-    if (_this._closeTimer != null)
-    {
-        clearTimeout(_this._closeTimer);
-    }
-    _this.$menuItemsContainer.show();
-    _this._hide();
-};
-/*
- * 私有方法隐藏
- */
-Menu.prototype._hide = function()
-{
-    var _this = this;
-    if (_this._closeTimer != null)
-    {
-        clearTimeout(_this._closeTimer);
-    }
-    this._closeTimer = setTimeout(function()
-    {
-        _this.$menuItemsContainer.hide();
-    }, 1000);
-}
-/*
- * 菜单初始化
- */
-Menu.prototype._menuBtnInit = function()
-{
-    var _this = this;
-    this.$menuBtn.button(
-    {
-        icons :
-        {
-            secondary : "ui-icon-triangle-1-s"
+    $(window).resize(function(){
+        if(resizeTimer != null){
+            clearTimeout(resizeTimer,100);
         }
-    });
-
-    this.$menuBtn.click(function(event)
-    {
-        // 这里this作用域发生了变化，所以不能用this
-        _this._show();
-        event.preventDefault();
-        event.stopPropagation();
+        resizeTimer = setTimeout(function(){
+            _this._resetCenterHeight();
+            _this.$center.wijsplitter("refresh");
+            _this.$centerMain.wijsplitter("refresh");
+        },100);
     });
 };
 /*
- * 容器初始化
+ * public: top容器句柄
  */
-Menu.prototype._menuContainerInit = function()
-{
-    var _this = this;
-    this.$menuItems.wijmenu(
-    {
+Layout.prototype.$top = null;
+/*
+ * public: footer容器句柄
+ */
+Layout.prototype.$footer = null;
+/*
+ * public: center容器句柄
+ */
+Layout.prototype.$center = null;
+/*
+ * public: centerMain容器句柄
+ */
+Layout.prototype.$centerMain = null;
+/*
+ * 设置layout高度
+ */
+Layout.prototype._resetCenterHeight = function(){
+    var $document = $(document),
+        _dh = $document.innerHeight(),
+        _th = this.$top.outerHeight(),
+        _fh = this.$footer.outerHeight(),
+        _ch = _dh - _th - _fh;
+    this.$center.height(_ch);
+};
+/*
+ * private: 初始化spliter
+ */
+Layout.prototype._initSpliter = function() {
+    this.$center.wijsplitter({
+        panel1 : {collapsed : true},
         orientation : "vertical",
-        blur : function()
-        {
-            _this._hide();
+        fullSplit : false,
+        expanded : function(e) {
+            this.$centerMain.wijsplitter("refresh");
         },
-        focus : function()
-        {
-            _this._clearTimer();
+        collapsed : function(e) {
+            this.$centerMain.wijsplitter("refresh");
         },
-        select : function()
-        {
-            _this.$menuItemsContainer.hide();
+        sized : function(e) {
+            this.$centerMain.wijsplitter("refresh");
         }
     });
-
-    this.$menuItemsContainer.hover(function()
-    {
-        if (_this._closeTimer != null)
-        {
-            clearTimeout(_this._closeTimer);
-        }
-    }, function()
-    {
-        if (_this._closeTimer != null)
-        {
-            clearTimeout(_this._closeTimer);
-        }
-        this._closeTimer = setTimeout(function()
-        {
-            _this.$menuItemsContainer.hide();
-        }, 500);
+    this.$centerMain.wijsplitter({
+        orientation : "horizontal",
+        collapsingPanel: "panel2",
+        panel2:{collapsed: true},
+        fullSplit : true
     });
 };
