@@ -18,9 +18,9 @@ $(document).ready(function() {
 	layout.init();
 	
 	$(".center-main-tabs").wijtabs();
-	$(".center-main-tools").wijtabs({
-	    alignment: "left"}
-	);
+	//$(".center-main-tools").wijtabs({
+	//    alignment: "left"}
+	//);
 });
 </script>
 <style type="text/css">
@@ -79,12 +79,13 @@ $(document).ready(function() {
 		</div>
 		<div>
 			<div class="center-main">
+				<div>
 				<div class="center-main-tabs">
 					<ul> 
 	                    <li><a href="#tabs-1">Nunc tincidunt</a></li> 
 	                    <li><a href="#tabs-2">Proin dolor</a></li>
 	                </ul> 
-	                <div id="tabs-1" class="main_tab_item"> 
+	                <div id="tabs-1"> 
 	                    <p> 
 	                        Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec 
 	                        arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. 
@@ -95,11 +96,14 @@ $(document).ready(function() {
 	                        Nunc tristique tempus lectus.
 	                    </p> 
 	                </div> 
-	                <div id="tabs-2" style="margin:0px;padding:0px"> 
-	                    <iframe id="test" src="http://www.baidu.com" height="500" width="500 "></iframe>
-	                </div> 
+	                <div id="tabs-2"> 
+	                    dddddddddddddddddd
+	                </div>
+	           	</div> 
 				</div>
 				<div class="center-main-tools">
+				ddd
+					<!--  
 					<ul> 
 	                    <li><a href="#tabs2-1">记事本</a></li> 
 	                    <li><a href="#tabs2-2">行事历</a></li>
@@ -118,6 +122,7 @@ $(document).ready(function() {
 	                <div id="tabs2-2" style="margin:0px;padding:0px"> 
 	                    <iframe id="test" src="http://www.baidu.com" height="500" width="500"></iframe>
 	                </div>
+	                -->
 				</div>
 			</div>
 		</div>
