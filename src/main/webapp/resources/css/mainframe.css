@@ -4,19 +4,26 @@
     width: 100%;
     overflow: hidden;
 }
+
 /*top部分样式表单*/
 .top{
     width: 100%;
-    height: 88px;
+    height: 78px;
     top: 0px;
 }
 .top-header{
     width: 100%;
     height: 28px;
 }
+.top-spliter{
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    top: 76px;
+}
 .top-content{
 	width:100%;
-	height:60px;
+	height:50px;
 }
 .menu{
     margin-left:5px;
@@ -51,23 +58,32 @@
     margin-right:5px;
     float: right;
 }
-.top-spliter{
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    top: 86px;
-}
+
+
+
 /* center */
 .center{
 	width: 100%;
     height: 100%;
 }
 .center-left{
-    
+    width: 100%;
 }
 .center-main{
-    
+    width: 100%;
 }
+.center-main-tabs{
+	width:100%;
+	height:100%;	
+}
+.main_tab_item{
+	width:100%;
+	height:100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+
 /*footer部分样式表单*/
 .footer{
     position:absolute;

@@ -27,11 +27,17 @@ frame{
     border: 0px;
     border-style: none;
 }
+iframe{
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    border: 0px;
+    border-style: none;
+}
 img,form{
     border:none;
 }
 a {
     color: black;
-    text-align: center;
+    text-align: left;
     text-decoration: none;
 }

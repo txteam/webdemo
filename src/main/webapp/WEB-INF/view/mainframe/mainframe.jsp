@@ -6,32 +6,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>mainframe</title>
-<link rel="stylesheet" type="text/css" href="${contextPath }/css/commons_redmond.css" />
-<script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>
-<script type="text/javascript" src="${contextPath }/js/commons.js"></script>
-<script type="text/javascript" src="${contextPath }/jquery-ui/js/jquery-ui-1.9.1.custom.min.js"></script>
-<script type="text/javascript" src="${contextPath }/wijmo/js/jquery.wijmo-complete.all.2.2.2.min.js"></script>
-<script type="text/javascript" src="${contextPath }/wijmo/js/jquery.wijmo-open.all.2.2.2.min.js"></script>
+<%@include file="../includes/commonHead.jsp" %>
 
 <link rel="stylesheet" type="text/css" href="${contextPath }/css/mainframe.css" />
 <script type="text/javascript" src="${contextPath }/js/mainframe/mainframe.js"></script>
-<style type="text/css">
-#splitter{
-	height: 300px; 
-} 
-</style>
 <script type="text/javascript">
-
-
 $(document).ready(function() {
 	$("#menu").wijmenu();
 
 	var layout = new Layout();
 	layout.init();
-
+	
+	$(".center-main-tabs").wijtabs();
 });
 </script>
-
 <body>
 <div class=".container">
 	<!-- top -->
@@ -48,23 +36,66 @@ $(document).ready(function() {
 	
 	<!-- center -->
 	<div class="center">
-	    <div class="center-left">
-	        	自定义常用菜单
-	   
-	    </div>
-	    <div>
-	        <div class="center-main">
-	            <div>
-	            	tabs
+		<div class="center-left">
+	        <li> 
+	            <h3><a href="#">常用菜单</a></h3> 
+	            <div style="margin:0px;padding:0px"> 
+	               Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. 
+	                    Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a 
+	                    nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. 
+	                    Vestibulum a velit eu ante scelerisque vulputate. 
 	            </div>
-	            <div>
-	                	行事历，记事本，公告，便签
-	            </div>
-	        </div>
-	    </div>
+	        </li> 
+	        <li> 
+	            <h3> 
+	                <a href="#">Second</a></h3> 
+	            <div> 
+	                <p> 
+	                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus 
+	                    hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum 
+	                    tellus libero ac justo. Vivamus non quam. In suscipit faucibus urna. 
+	                </p> 
+	            </div> 
+	        </li> 
+	        <li> 
+	            <h3> 
+	                <a href="#">Second33</a></h3> 
+	            <div> 
+	                <p> 
+	                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus 
+	                    hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum 
+	                    tellus libero ac justo. Vivamus non quam. In suscipit faucibus urna. 
+	                </p> 
+	            </div> 
+	        </li> 
+		</div>
+		<div>
+			<div class="center-main">
+				<div class="center-main-tabs">
+					<ul> 
+	                    <li><a href="#tabs-1">Nunc tincidunt</a></li> 
+	                    <li><a href="#tabs-2">Proin dolor</a></li>
+	                </ul> 
+	                <div id="tabs-1" class="main_tab_item"> 
+	                    <p> 
+	                        Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec 
+	                        arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. 
+	                        Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper 
+	                        leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales 
+	                        tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel 
+	                        pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. 
+	                        Nunc tristique tempus lectus.</p> 
+	                </div> 
+	                <div id="tabs-2" style="margin:0px;padding:0px"> 
+	                    <iframe id="test" src="http://www.baidu.com" height="500" width="500 "></iframe>
+	                </div> 
+				</div>
+				<div>行事历，记事本，公告，便签</div>
+			</div>
+		</div>
 	</div>
-	
-	<!-- footer -->
+
+		<!-- footer -->
 	<div class="footer ui-widget-header ui-corner-bottom">
 		
 	</div>
