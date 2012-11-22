@@ -2,7 +2,7 @@
  * 定义布局器
  */
 var Layout = function(){
-    this.leftCenterDefaultWidth = 230;
+    this.leftCenterDefaultWidth = 180;
     this.$top = $(".top");
     this.$footer = $(".footer");
     
@@ -18,7 +18,7 @@ Layout.prototype.init = function(config){
     this._initSpliter();
     var resizeTimer = null;
     var _this = this;
-    _this._accordingHeight = _this.$centerLeft.innerHeight() - (_this.$centerLeft.find("h3").size() * 30) - 25;
+    _this._accordingHeight = _this.$centerLeft.innerHeight() - (_this.$centerLeft.find("h3").size() * 30);
     if(_this._accordingHeight < 0){
         _this._accordingHeight = 0;
     }
@@ -31,7 +31,7 @@ Layout.prototype.init = function(config){
             _this.$center.wijsplitter("refresh");
             _this.$centerMain.wijsplitter("refresh");
             
-            _this._accordingHeight = _this.$centerLeft.innerHeight() - (_this.$centerLeft.find("h3").size() * 30) - 25;
+            _this._accordingHeight = _this.$centerLeft.innerHeight() - (_this.$centerLeft.find("h3").size() * 30);
             if(_this._accordingHeight < 0){
                 _this._accordingHeight = 0;
             }

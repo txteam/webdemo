@@ -18,8 +18,16 @@ $(document).ready(function() {
 	layout.init();
 	
 	$(".center-main-tabs").wijtabs();
+	$(".center-main-tools").wijtabs({
+	    alignment: "left"}
+	);
 });
 </script>
+<style type="text/css">
+.ui-tabs-left .ui-tabs-nav{
+	width: 100px;
+}	
+</style>
 <body>
 <div class=".container">
 	<!-- top -->
@@ -49,7 +57,7 @@ $(document).ready(function() {
 	        <li> 
 	            <h3> 
 	                <a href="#">Second</a></h3> 
-	            <div> 
+	            <div style="margin:0px;padding:0px"> 
 	                <p> 
 	                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus 
 	                    hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum 
@@ -60,7 +68,7 @@ $(document).ready(function() {
 	        <li> 
 	            <h3> 
 	                <a href="#">Second33</a></h3> 
-	            <div> 
+	            <div style="margin:0px;padding:0px"> 
 	                <p> 
 	                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus 
 	                    hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum 
@@ -84,13 +92,33 @@ $(document).ready(function() {
 	                        leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales 
 	                        tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel 
 	                        pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. 
-	                        Nunc tristique tempus lectus.</p> 
+	                        Nunc tristique tempus lectus.
+	                    </p> 
 	                </div> 
 	                <div id="tabs-2" style="margin:0px;padding:0px"> 
 	                    <iframe id="test" src="http://www.baidu.com" height="500" width="500 "></iframe>
 	                </div> 
 				</div>
-				<div>行事历，记事本，公告，便签</div>
+				<div class="center-main-tools">
+					<ul> 
+	                    <li><a href="#tabs2-1">记事本</a></li> 
+	                    <li><a href="#tabs2-2">行事历</a></li>
+	                </ul> 
+	                <div id="tabs2-1" class="main_tab_item"> 
+	                    <p> 
+	                        Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec 
+	                        arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. 
+	                        Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper 
+	                        leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales 
+	                        tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel 
+	                        pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. 
+	                        Nunc tristique tempus lectus.
+	                    </p> 
+	                </div> 
+	                <div id="tabs2-2" style="margin:0px;padding:0px"> 
+	                    <iframe id="test" src="http://www.baidu.com" height="500" width="500"></iframe>
+	                </div>
+				</div>
 			</div>
 		</div>
 	</div>
