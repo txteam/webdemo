@@ -110,7 +110,7 @@ Layout.prototype._initSpliter = function() {
     });
     this.$centerMain.wijsplitter({
         panel1 : {scrollBars:"hidden"},
-        panel2 : {scrollBars:"hidden"},
+        //panel2 : {scrollBars:"hidden"},
         splitterDistance:_this._centerHeight * 3/5,
         orientation : "horizontal",
         collapsingPanel: "panel2",

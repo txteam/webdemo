@@ -17,16 +17,14 @@ $(document).ready(function() {
 	var layout = new Layout();
 	layout.init();
 	
-	$(".center-main-tabs").wijtabs();
+	$("#main-tabs").wijtabs();
 	//$(".center-main-tools").wijtabs({
 	//    alignment: "left"}
 	//);
 });
 </script>
 <style type="text/css">
-.ui-tabs-left .ui-tabs-nav{
-	width: 100px;
-}	
+
 </style>
 <body>
 <div class=".container">
@@ -80,12 +78,12 @@ $(document).ready(function() {
 		<div>
 			<div class="center-main">
 				<div>
-				<div class="center-main-tabs">
+				<div class="center-main-tabs" id="main-tabs">
 					<ul> 
-	                    <li><a href="#tabs-1">Nunc tincidunt</a></li> 
-	                    <li><a href="#tabs-2">Proin dolor</a></li>
+	                    <li><a href="#main-tabs-1">Nunc tincidunt</a></li> 
+	                    <li><a href="#main-tabs-2">Proin dolor</a></li>
 	                </ul> 
-	                <div id="tabs-1"> 
+	                <div id="main-tabs-1"> 
 	                    <p> 
 	                        Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec 
 	                        arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. 
@@ -96,8 +94,14 @@ $(document).ready(function() {
 	                        Nunc tristique tempus lectus.
 	                    </p> 
 	                </div> 
-	                <div id="tabs-2"> 
-	                    dddddddddddddddddd
+	                <div id="main-tabs-2" class="main-tab-content-1"> 
+	                    Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec 
+	                        arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. 
+	                        Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper 
+	                        leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales 
+	                        tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel 
+	                        pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. 
+	                        Nunc tristique tempus lectus.
 	                </div>
 	           	</div> 
 				</div>

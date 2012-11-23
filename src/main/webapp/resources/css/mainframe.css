@@ -72,6 +72,10 @@
 .center-main{
     width: 100%;
 }
+.center-main .ui-widget-content{
+	overflow: hidden;
+	padding-right: 6px;
+}
 .center-main-tabs{
 	width:100%;
 	height:100%;	
@@ -81,6 +85,11 @@
 	height:100%;
 	margin: 0px;
 	padding: 0px;
+}
+.center-main-tabs .ui-widget-content{
+	overflow: hidden;
+	padding: 0px;
+	padding-right: 0px;
 }
 .center-main-tools{
 	
