@@ -12,27 +12,66 @@
 <script type="text/javascript" src="${contextPath }/js/mainframe/mainframe.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#menu").wijmenu();
-
-	var layout = new Layout();
-	layout.init();
+	$("#menu").wijmenu({
+	    //position : {my: "top right", at: "buttom right"}
+	});
+	$("#menuItems").find("li").not($("#menuItems").find("li").has("ul")).draggable({ opacity: 0.7, helper: "clone" });
 	
-	$("#mainTabs").wijtabs();
+	var layout = new Layout();
+
+	var customerMenu = new Menu({
+	    $menu:$("#customer-menus"),
+	    initHeight:layout._accordingHeight - 10
+	});
+	layout.$customerMenuAccordion.bind("accordionResized",function(){
+	    customerMenu.menuResize(layout._accordingWidth - 10,layout._accordingHeight - 10);
+	});
+    $( "#cart ol" ).droppable({
+        activeClass: "ui-state-default",
+        hoverClass: "ui-state-hover",
+        accept: ":not(.ui-sortable-helper)",
+        drop: function( event, ui ) {
+            $( this ).find( ".placeholder" ).remove();
+            $( "<li></li>" ).text( ui.draggable.text() ).appendTo( this );
+        }
+    }).sortable({
+        items: "li:not(.placeholder)",
+        sort: function() {
+            // gets added unintentionally by droppable interacting with sortable
+            // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+            $( this ).removeClass( "ui-state-default" );
+        }
+    });
+
+	
+	var $tabs = $("#mainTabs").wijtabs();
 	$("#mainToolTabs").wijtabs({
 	    alignment: "left"
 	});
+	
+	
+	
 });
 </script>
 <style type="text/css">
-
+.customer-menus{
+	width:96%;
+	height:100;
+	overflow:auto;
+}
 </style>
 <body>
 <div class=".container">
 	<!-- top -->
 	<div class="top">
 		<div class="top-header ui-widget-header ui-corner-top">
-			<!-- menu显示占位符 -->
+			<!-- menu显示占位符 
 			<span class="menu"></span>
+			<!--
+			<li> 
+	            <h3><a href="#">常用菜单</a></h3> 
+	        </li> 
+	        -->
 		</div>
 		<div class="top-content ui-widget-content">
 			
@@ -45,11 +84,13 @@ $(document).ready(function() {
 		<div class="center-left">
 	        <li> 
 	            <h3><a href="#">常用菜单</a></h3> 
-	            <div style="margin:0px;padding:0px"> 
-	               Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. 
-	                    Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a 
-	                    nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. 
-	                    Vestibulum a velit eu ante scelerisque vulputate. 
+	            <div style="margin:0px;padding:0px;overflow:hidden;"> 
+	               <ul id="customer-menus" class="customer-menus">
+					    <li><a href="#">禅道</a></li>
+					    <li><a href="#">Wiki</a></li>
+					    <li><a href="#">hudson</a></li>
+					    <li><a href="#">sonar</a></li>
+					</ul>
 	            </div>
 	        </li> 
 	        <li> 
@@ -119,7 +160,7 @@ $(document).ready(function() {
 		</div>
 	</div>
 
-		<!-- footer -->
+	<!-- footer -->
 	<div class="footer ui-widget-header ui-corner-bottom">
 		
 	</div>
@@ -130,8 +171,9 @@ $(document).ready(function() {
 	<ul id="menu">
 	    <li id="menuLink"><a>&nbsp;菜&nbsp;单&nbsp;</a>
 	        <ul id="menuItems">
-	           <li><a>menuitem1</a></li>
-	           <li><a>menuitem2</a>
+	           <li><a>禅道</a></li>
+	           <li><a>wiki</a></li>
+	           <li><a>menuitem1</a>
 		           	<ul>
 		           		<li><a>menuitem21</a></li>
 				        <li><a>menuitem22</a></li>
@@ -144,7 +186,24 @@ $(document).ready(function() {
 				        </li>
 			   		</ul>
 	           </li>
-	           <li><a>menuitem3</a></li>
+	           <li><a>hudson</a></li>
+	           <li><a>sonar</a></li>
+	           <li><a>wiki</a>
+		           	<ul>
+		           		<li><a>menuitem21</a></li>
+				        <li><a>menuitem22</a></li>
+				        <li><a>menuitem23</a>
+				        	<ul>
+				        		<li><a>menuitem231</a></li>
+				        		<li><a>menuitem232</a></li>
+				        		<li><a>menuitem233</a></li>
+				        	</ul>
+				        </li>
+			   		</ul>
+	           </li>
+	           <li></li>
+	           <li><a>修改密码</a></li>
+	           <li><a>退          出</a></li>
 	        </ul>
 	    </li>
 	</ul>

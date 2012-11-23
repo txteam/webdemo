@@ -29,14 +29,21 @@
     margin-left:5px;
     width:400px;
 }
+.choose-skin{
+    margin-top:4px;
+    margin-right:5px;
+    float: right;
+}
+
+/************** menu ************/
 /*改变显示的菜单的默认的padding*/
 #menuLink a{
     padding-top: 0px;
     padding-bottom: 0px;
 }
 #menuItems a{
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 .menu-itmes-container{
 	position: absolute ;
@@ -53,42 +60,33 @@
 .menu-tool-itmes{
     
 }
-.choose-skin{
-    margin-top:4px;
-    margin-right:5px;
-    float: right;
-}
-
-
 
 /* center */
 .center{
 	width: 100%;
     height: 100%;
 }
+
 .center-left{
     width: 100%;
 }
+
+/* center-main */
 .center-main{
     width: 100%;
 }
+.center-main .ui-widget-content,.center-main-tools{
+	height:100%;
+	overflow: hidden;
+	padding-right: 3px;
+	padding-bottom: 4px;
+}
+
+/* center-main-tabs */
 .center-main-tabs{
 	width:100%;
 	height:100%;
 	overflow: hidden;	
-}
-.center-main-tools{
-	width:100%;
-	height:100%;
-	overflow: hidden;
-}
-
-/* center-main-tabs */
-.center-main .ui-widget-content,.center-main-tabs{
-	height:100%;
-	overflow: hidden;
-	padding-right: 7px;
-	padding-bottom: 3px;
 }
 .center-main-tabs .ui-widget-content{
 	overflow: hidden;
@@ -96,12 +94,18 @@
 	padding-right: 0px;
 	padding-bottom: 0px;
 }
+
 /* center-main-tools */
-.center-main .ui-widget-content,.center-main-tools{
+.center-main-tools{
+	width:100%;
 	height:100%;
 	overflow: hidden;
-	padding-right: 3px;
-	padding-bottom: 4px;
+}
+.center-main-tools .ui-widget-content{
+	overflow: hidden;
+	padding: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
 }
 .center-main-tools .ui-tabs-left .ui-tabs-nav{
 	width: 6%;
@@ -109,14 +113,6 @@
 .center-main-tools .ui-tabs-left .wijmo-wijtabs-content{
 	width: 93%;
 }
-
-.center-main-tools .ui-widget-content{
-	overflow: hidden;
-	padding: 0px;
-	padding-right: 0px;
-	padding-bottom: 0px;
-}
-
 
 
 /*footer部分样式表单*/
