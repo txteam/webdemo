@@ -72,28 +72,51 @@
 .center-main{
     width: 100%;
 }
-.center-main .ui-widget-content{
-	overflow: hidden;
-	padding-right: 6px;
-}
 .center-main-tabs{
 	width:100%;
-	height:100%;	
+	height:100%;
+	overflow: hidden;	
 }
-.main_tab_item{
+.center-main-tools{
 	width:100%;
 	height:100%;
-	margin: 0px;
-	padding: 0px;
+	overflow: hidden;
+}
+
+/* center-main-tabs */
+.center-main .ui-widget-content,.center-main-tabs{
+	height:100%;
+	overflow: hidden;
+	padding-right: 7px;
+	padding-bottom: 3px;
 }
 .center-main-tabs .ui-widget-content{
 	overflow: hidden;
 	padding: 0px;
 	padding-right: 0px;
+	padding-bottom: 0px;
 }
-.center-main-tools{
-	
+/* center-main-tools */
+.center-main .ui-widget-content,.center-main-tools{
+	height:100%;
+	overflow: hidden;
+	padding-right: 3px;
+	padding-bottom: 4px;
 }
+.center-main-tools .ui-tabs-left .ui-tabs-nav{
+	width: 6%;
+}
+.center-main-tools .ui-tabs-left .wijmo-wijtabs-content{
+	width: 93%;
+}
+
+.center-main-tools .ui-widget-content{
+	overflow: hidden;
+	padding: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+}
+
 
 
 /*footer部分样式表单*/
