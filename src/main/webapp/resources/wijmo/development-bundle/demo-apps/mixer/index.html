@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Wijmo Web Audio Mixer</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=590">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript"></script>
+    <!-- Wijmo CSS and script -->
+    <link href="http://cdn.wijmo.com/themes/metro/jquery-wijmo.css" rel="stylesheet" title="metro-jqueryui" type="text/css" />
+    <link href="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.0.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="http://cdn.wijmo.com/jquery.wijmo-open.all.2.2.0.min.js" type="text/javascript"></script>
+    <script src="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.0.min.js" type="text/javascript"></script>
+    <!-- KnockoutJS for MVVM-->
+    <script src="http://cdn.wijmo.com/external/knockout-2.1.0.js" type="text/javascript"></script>
+    <script src="http://cdn.wijmo.com/external/knockout.wijmo.js" type="text/javascript"></script>
+    <style type="text/css">
+        body
+        {
+            font-family: "Segoe UI Light", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            background: #000;
+        }
+
+        h1
+        {
+            font-size: 2.4em;
+            font-weight: normal;
+            color: #fff;
+            padding: 20px 0 0 6px;
+            margin: 0;
+        }
+
+        h2
+        {
+            font-weight: normal;
+        }
+
+        .container
+        {
+            margin: 0 auto;
+            width: 590px;
+        }
+
+        .app
+        {
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .gauge-holder
+        {
+            float: left;
+            padding: 20px;
+        }
+        .audio-holder
+        {
+            clear: left;
+            text-align:center;
+        }
+    </style>
+    <script type="text/javascript">
+        // when document loads, create ViewModel, and apply bindings
+        //Create ViewModel
+        var viewModel = function () {
+            var self = this;
+            self.analyser = null;
+            self.frequencyByteData = ko.observableArray();
+            self.frequencyByteDataLimited = ko.observableArray();
+            self.freq200 = ko.observable(0);
+            self.freq400 = ko.observable(0);
+            self.freq600 = ko.observable(0);
+            self.freq800 = ko.observable(0);
+            self.freq1000 = ko.observable(0);
+
+            // Wire up the <audio> element with the Web Audio analyser (currently Webkit only)
+            self.setupWebAudio = function () {
+                // Get our <audio> element
+                var audio = document.getElementById('music');
+                // Create a new audio context (that allows us to do all the Web Audio stuff)
+                var audioContext;
+                if (typeof AudioContext === 'function') {
+                    audioContext = new AudioContext();
+                }
+                else {
+                    audioContext = new webkitAudioContext();
+                }
+                // Create a new analyser
+                self.analyser = audioContext.createAnalyser();
+                // Create a new audio source from the <audio> element
+                var source = audioContext.createMediaElementSource(audio);
+                // Connect up the output from the audio source to the input of the analyser
+                source.connect(self.analyser);
+                // Connect up the audio output of the analyser to the audioContext destination i.e. the speakers (The analyser takes the output of the <audio> element and swallows it. If we want to hear the sound of the <audio> element then we need to re-route the analyser's output to the speakers)
+                self.analyser.connect(audioContext.destination);
+
+                // Get the <audio> element started	
+                audio.play();
+            }
+
+            // Draw the audio frequencies to screen
+            self.draw = function () {
+                // Setup the next frame of the drawing
+                if (typeof requestAnimationFrame === 'function') {
+                    requestAnimationFrame(self.draw);
+                }
+                else {
+                    webkitRequestAnimationFrame(self.draw);
+                }
+
+                // Create a new array that we can copy the frequency data into
+                var freqByteData = new Uint8Array(self.analyser.frequencyBinCount);
+                var freqByteLimited = [];
+                // Copy the frequency data into our new array
+                self.analyser.getByteFrequencyData(freqByteData);
+                //console.log(freqByteData[500]);
+                //self.frequencyByteData(freqByteData);
+                self.freq200(freqByteData[200]);
+                self.freq400(freqByteData[400]);
+                self.freq600(freqByteData[600]);
+                self.freq800(freqByteData[800]);
+                self.freq1000(freqByteData[1000]);
+
+                //for (var i = 0; i < freqByteData.length; i+32) {
+                //    freqByteLimited.push(freqByteData[i]);
+                //}
+                //self.frequencyByteDataLimited(freqByteLimited);
+            }
+
+        };
+
+
+        function init() {
+            var vm = new viewModel();
+            ko.applyBindings(vm);
+            vm.setupWebAudio();
+            //setInterval(vm.draw, 100);
+            vm.draw();
+        }
+
+
+
+        window.addEventListener('load', init, false);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Mixer</h1>
+        <div class="app">
+            <div>
+                <div class="gauge-holder">
+                    <div data-bind="wijlineargauge: {value: freq200, min: 0, max: 128, orientation: 'vertical', animation: { enabled: false }, ranges: [ { startValue: 0, endValue: freq200, startWidth: 0.4, endWidth: 0.4, startDistance: 0.6, endDistance: 0.6, style: { fill: '#0c0', stroke: 'none', opacity: 0.8 } } ], face: { style: { fill: 'none', stroke: 'none' } }, tickMajor: { interval: 16, style: { fill: '#000', stroke: 'none' } }, tickMinor: { interval: 4, visible: true, style: { fill: '#000', stroke: 'none' } }, pointer: { style: { fill: '#000', stroke: 'none', length: 0.6 } }, labels: { visible: false, style: { fill: '#000', 'font-family': 'Segoe UI Light' } } }">
+                    </div>
+                </div>
+                <div class="gauge-holder">
+                    <div data-bind="wijlineargauge: {value: freq400, min: 0, max: 128, orientation: 'vertical', animation: { enabled: false }, ranges: [ { startValue: 0, endValue: freq400, startWidth: 0.4, endWidth: 0.4, startDistance: 0.6, endDistance: 0.6, style: { fill: '#0c0', stroke: 'none', opacity: 0.8 } } ], face: { style: { fill: 'none', stroke: 'none' } }, tickMajor: { interval: 16, style: { fill: '#000', stroke: 'none' } }, tickMinor: { interval: 4, visible: true, style: { fill: '#000', stroke: 'none' } }, pointer: { style: { fill: '#000', stroke: 'none', length: 0.6 } }, labels: { visible: false, style: { fill: '#000', 'font-family': 'Segoe UI Light' } } }">
+                    </div>
+                </div>
+                <div class="gauge-holder">
+                    <div data-bind="wijlineargauge: {value: freq600, min: 0, max: 128, orientation: 'vertical', animation: { enabled: false }, ranges: [ { startValue: 0, endValue: freq600, startWidth: 0.4, endWidth: 0.4, startDistance: 0.6, endDistance: 0.6, style: { fill: '#0c0', stroke: 'none', opacity: 0.8 } } ], face: { style: { fill: 'none', stroke: 'none' } }, tickMajor: { interval: 16, style: { fill: '#000', stroke: 'none' } }, tickMinor: { interval: 4, visible: true, style: { fill: '#000', stroke: 'none' } }, pointer: { style: { fill: '#000', stroke: 'none', length: 0.6 } }, labels: { visible: false, style: { fill: '#000', 'font-family': 'Segoe UI Light' } } }">
+                    </div>
+                </div>
+                <div class="gauge-holder">
+                    <div data-bind="wijlineargauge: {value: freq800, min: 0, max: 128, orientation: 'vertical', animation: { enabled: false }, ranges: [ { startValue: 0, endValue: freq800, startWidth: 0.4, endWidth: 0.4, startDistance: 0.6, endDistance: 0.6, style: { fill: '#0c0', stroke: 'none', opacity: 0.8 } } ], face: { style: { fill: 'none', stroke: 'none' } }, tickMajor: { interval: 16, style: { fill: '#000', stroke: 'none' } }, tickMinor: { interval: 4, visible: true, style: { fill: '#000', stroke: 'none' } }, pointer: { style: { fill: '#000', stroke: 'none', length: 0.6 } }, labels: { visible: false, style: { fill: '#000', 'font-family': 'Segoe UI Light' } } }">
+                    </div>
+                </div>
+                <div class="gauge-holder">
+                    <div data-bind="wijlineargauge: {value: freq1000, min: 0, max: 128, orientation: 'vertical', animation: { enabled: false }, ranges: [ { startValue: 0, endValue: freq1000, startWidth: 0.4, endWidth: 0.4, startDistance: 0.6, endDistance: 0.6, style: { fill: '#0c0', stroke: 'none', opacity: 0.8 } } ], face: { style: { fill: 'none', stroke: 'none' } }, tickMajor: { interval: 16, style: { fill: '#000', stroke: 'none' } }, tickMinor: { interval: 4, visible: true, style: { fill: '#000', stroke: 'none' } }, pointer: { style: { fill: '#000', stroke: 'none', length: 0.6 } }, labels: { visible: false, style: { fill: '#000', 'font-family': 'Segoe UI Light' } } }">
+                    </div>
+                </div>
+                
+               <!-- <div class="chart-holder">
+                    <div data-bind="wijbarchart: { animation: { enabled:false }, axis: { x: { }, y: { min: 0, max: 128, autoMin: false, autoMax: false } }, seriesTransition: { enabled:false }, seriesList: [{ legendEntry: false, data: { x: frequencyByteDataLimited, y: frequencyByteDataLimited } }] }">
+                    </div>
+                </div>-->
+                <div class="audio-holder">
+                    <audio id="music" src="http://soundcloud.com/filter-magazine/fidlar-cheap-beer/download" preload="auto" controls="controls"></audio>
+                    <p><a href="http://itunes.apple.com/album/cheap-beer-single/id562911102?v0=9988&ign-mpt=uo%3D1">"Cheap Beer"</a> by FIDLAR</p>
+                </div>
+            </div>
+            <p>
+                Made with <a href="http://knockoutjs.com">KnockoutJS</a>, <a href="http://wijmo.com">Wijmo</a> and Web Audio (currently works in Chrome)
+            </p>
+        </div>
+    </div>
+</body>
+</html>

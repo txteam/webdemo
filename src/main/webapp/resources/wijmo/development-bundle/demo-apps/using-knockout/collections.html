@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Getting Started with Wijmo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=960">
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <!-- Wijmo CSS and script -->
+    <link type="text/css" href="http://cdn.wijmo.com/themes/metro/jquery-wijmo.css" rel="stylesheet" title="metro-jqueryui" />
+    <link type="text/css" href="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.0.min.css" rel="stylesheet" />
+    <style type="text/css">
+        body
+        {
+            font-family: "Segoe UI Light", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            background: #000;
+        }
+
+        h1
+        {
+            font-size: 2.4em;
+            font-weight: normal;
+            color: #fff;
+            padding: 20px 0 0 6px;
+            margin: 0;
+        }
+
+        h2
+        {
+            font-weight: normal;
+        }
+
+        .container
+        {
+            margin: 0 auto;
+            width: 960px;
+        }
+
+        .app
+        {
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .toolbar
+        {
+            text-align: right;
+        }
+
+        #dataGrid
+        {
+            width: 100%;
+        }
+    </style>
+    <script type="text/javascript" src="http://cdn.wijmo.com/jquery.wijmo-open.all.2.2.0.min.js"></script>
+    <script type="text/javascript" src="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.0.min.js"></script>
+    <!-- KnockoutJS for MVVM-->
+    <script type="text/javascript" src="http://cdn.wijmo.com/external/knockout-2.1.0.js"></script>
+    <script type="text/javascript" src="http://cdn.wijmo.com/external/knockout.wijmo.js"></script>
+    <script type="text/javascript">
+        // when document loads, create ViewModel, and apply bindings
+        //Person class
+        function Person(data) {
+            this.ID = ko.observable(data.ID);
+            this.Company = ko.observable(data.Company);
+            this.Name = ko.observable(data.Name);
+            this.Sales = ko.observable(data.Sales);
+        };
+
+        //Create ViewModel
+        var viewModel = {
+            list: ko.observableArray([
+                  new Person({ ID: "ANATR", Company: "Ana Trujillo Emparedados y helados", Name: "Ana Trujillo", Sales: 8900 }),
+                  new Person({ ID: "ANTON", Company: "Antonio Moreno Taqueria", Name: "Antonio Moreno", Sales: 4500 }),
+                  new Person({ ID: "AROUT", Company: "Around the Horn", Name: "Thomas Hardy", Sales: 7600 }),
+                  new Person({ ID: "BERGS", Company: "Berglunds snabbkop", Name: "Christina Berglund", Sales: 3200 })
+            ]),
+        };
+
+        //Bind ViewModel
+        $(document).ready(function () {
+            ko.applyBindings(viewModel);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Getting Started with Wijmo</h1>
+        <div class="app">
+            <div>
+                <h2>Chart</h2>
+                <div id="dataChart" data-bind="wijbarchart: { dataSource: list, seriesList: [{ label: 'Sales', data: { x: { bind: 'Name' }, y: { bind: 'Sales'} } }] }" style="width: 600px; height: 300px;">
+                </div>
+                <h2>Grid</h2>
+                <table id="dataGrid" data-bind="wijgrid: { data: list, allowEditing: true, columns: [{},{},{},{ dataType: 'number' }] }" style="width: 600px;">
+                </table>
+                <h2>Table</h2>
+                <table>
+                    <tbody id="dataTable" data-bind="foreach: list">
+                        <tr>
+                            <td data-bind="text: ID"></td>
+                            <td data-bind="text: Company"></td>
+                            <td data-bind="text: Name"></td>
+                            <td data-bind="text: Sales"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                Made with <a href="http://knockoutjs.com">KnockoutJS</a> and <a href="http://wijmo.com">Wijmo</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

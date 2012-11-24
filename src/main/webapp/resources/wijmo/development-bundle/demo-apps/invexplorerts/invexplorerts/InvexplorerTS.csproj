@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{02F82304-8368-48D2-B918-AFE2135F6DF6}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>InvexplorerTS</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="default.htm" />
+    <TypeScriptCompile Include="scripts\company.ts" />
+    <None Include="readme.txt" />
+    <Content Include="scripts\company.js">
+      <DependentUpon>company.ts</DependentUpon>
+    </Content>
+    <None Include="scripts\knockout.jquery.js">
+      <DependentUpon>scripts\knockout.jquery.ts</DependentUpon>
+    </None>
+    <TypeScriptCompile Include="scripts\portfolio.ts" />
+    <Content Include="scripts\portfolio.js">
+      <DependentUpon>portfolio.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="scripts\portfolioItem.ts" />
+    <Content Include="scripts\portfolioItem.js">
+      <DependentUpon>portfolioItem.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="scripts\view-model.ts" />
+    <Content Include="scripts\view-model.js">
+      <DependentUpon>view-model.ts</DependentUpon>
+    </Content>
+    <Content Include="web.config" />
+    <Content Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </Content>
+    <Content Include="StockInfo.ashx" />
+    <None Include="styles\style.css" />
+    <None Include="resources\InvExplorerLogo.png" />
+    <None Include="resources\symbolNames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="StockInfo.ashx.cs">
+      <DependentUpon>StockInfo.ashx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1235</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="BeforeBuild">
+    <Exec Command="&quot;$(PROGRAMFILES)\Microsoft SDKs\TypeScript\0.8.0.0\tsc&quot; @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
+  </Target>
+</Project>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Knockout Grid</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=660">
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <!-- Wijmo CSS and script -->
+    <link type="text/css" href="http://cdn.wijmo.com/themes/aristo/jquery-wijmo.css" rel="stylesheet" title="metro-jqueryui" />
+    <link type="text/css" href="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.1.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="http://cdn.wijmo.com/jquery.wijmo-open.all.2.2.1.min.js"></script>
+    <script type="text/javascript" src="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.1.min.js"></script>
+    <!-- KnockoutJS for MVVM-->
+    <script type="text/javascript" src="http://cdn.wijmo.com/external/knockout-2.1.0.js"></script>
+    <script type="text/javascript" src="http://cdn.wijmo.com/external/knockout.wijmo.js"></script>
+    <script type="text/javascript">
+        //Class constructor for grid row. Returns observable properties.
+        function rando() {
+            return Math.floor(Math.random() * 51);
+        }
+
+        var product = function (data) {
+            return {
+                ProductID: ko.observable(data.ProductID),
+                ProductName: ko.observable(data.ProductName),
+                UnitPrice: ko.observable(data.UnitPrice),
+                UnitsInStock: ko.observable(data.UnitsInStock),
+                Sales: ko.observableArray([{ OrderID: 1, Units: rando(), Year: "2009" }, { OrderID: 2, Units: rando(), Year: "2010" }, { OrderID: 3, Units: rando(), Year: "2011" }, { OrderID: 4, Units: rando(), Year: "2012" }])
+            };
+        };
+
+        //Create ViewModel
+        var ViewModel = function () {
+            var self = this;
+            self.selectedIndex = ko.observable(0);
+            self.pageSize = ko.observable(10);
+            self.pageIndex = ko.observable(0);
+            self.sortCommand = ko.observable("ProductID asc");
+            self.dataRows = ko.observableArray([]);
+            self.totalRows = ko.observable(0);
+            self.selectedRow = ko.computed(function () {
+                if (self.dataRows().length > 0) {
+                    return self.dataRows()[self.selectedIndex()];
+                }
+                else {
+                    return new product({ ProductID: 1, ProductName: "ASDF", UnitPrice: 10, UnitsInStock: 1 });
+                }
+            });
+            self.formatPieChartData = ko.computed(function () {
+                var seriesList = [];
+                for (var i = 0; i < self.selectedRow().Sales().length; i++) {
+                    seriesList.push({
+                        label: self.selectedRow().Sales()[i].Year,
+                        data: self.selectedRow().Sales()[i].Units
+                    });
+                }
+                return seriesList;
+            });
+            self.sorted = function (e, data) {
+                self.sortCommand(data.sortCommand);
+            };
+            self.paged = function (e, data) {
+                self.pageIndex(data.newPageIndex);
+            };
+            self.selectionChanged = function (e, args) {
+                self.selectedIndex($(e.target).wijgrid("currentCell").rowIndex());
+            };
+
+            self.load = function () {
+                $.ajax({
+                    url: "http://services.odata.org/Northwind/Northwind.svc/Products",
+                    dataType: "jsonp",
+                    jsonp: "$callback",
+                    data: {
+                        $format: "json",
+                        $inlinecount: "allpages",
+                        $select: "ProductID,ProductName,UnitPrice,UnitsInStock",
+                        $orderby: self.sortCommand(),
+                        $top: self.pageSize(),
+                        $skip: self.pageIndex() * self.pageSize(),
+                        "paging[pageIndex]": self.pageIndex(),
+                        "paging[pageSize]": self.pageSize()
+                    },
+                    success: function (result) {
+                        var data = result.d.results;
+                        var arr = [];
+
+                        for (var i = 0; i < data.length; i++) {
+                            arr.push(new product(data[i]));
+                        }
+                        self.totalRows(result.d.__count);
+                        self.dataRows(arr);
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+            };
+            self.cellFormatter = function cellFormatter(args) {
+                var $rt = $.wijmo.wijgrid.rowType;
+
+                if ((args.row.type & $rt.data)) {
+                    var tmpl = document.getElementById("chartTemplate");
+
+                    if (tmpl) {
+                        args.$container.append(tmpl.text);
+                        var bindingContext = args.$container.get(0); //get Grid cell element
+                        ko.applyBindings(self.dataRows()[args.row.dataItemIndex], bindingContext); //apply bindings to cell
+                        return true;
+                    }
+                }
+
+                return false; // use default formatting
+            }
+
+        self.hilocellFormatter = function hilocellFormatter(args) {
+            var $rt = $.wijmo.wijgrid.rowType;
+
+            if ((args.row.type & $rt.data)) {
+                var tmpl = document.getElementById("HiLowTemplate");
+
+                if (tmpl) {
+                    args.$container.append(tmpl.text);
+                    var bindingContext = args.$container.get(0); //get Grid cell element
+                    ko.applyBindings(self.dataRows()[args.row.dataItemIndex], bindingContext); //apply bindings to cell
+                    return true;
+                }
+            }
+
+            return false; // use default formatting
+        }
+
+        };
+
+        var viewModel = new ViewModel();
+        //Bind ViewModel and Event Handlers
+        $(document).ready(function () {
+            ko.applyBindings(viewModel);
+            viewModel.load();
+            viewModel.sortCommand.subscribe(function (newValue) {
+                viewModel.load();
+            });
+            viewModel.pageIndex.subscribe(function (newValue) {
+                viewModel.load();
+            });
+            viewModel.pageSize.subscribe(function (newValue) {
+                if (viewModel.pageIndex() === 0) {
+                    viewModel.load();
+                } else {
+                    viewModel.pageIndex(0);
+                }
+                $("#dataGrid").wijgrid("currentCell", 0, 0);
+
+                $(":wijmo-wijdropdown").wijdropdown("refresh");
+            });
+
+
+
+        });
+
+    </script>
+    <style type="text/css">
+        body
+        {
+            font-family: "Segoe UI Light", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            background: #000;
+        }
+
+        h1
+        {
+            font-size: 2.4em;
+            color: #fff;
+            padding: 20px 0 0 6px;
+            margin: 0;
+        }
+
+        .container
+        {
+            margin: 0 auto;
+            width: 660px;
+        }
+
+        .app
+        {
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .pane
+        {
+            float: left;
+            position: relative;
+        }
+
+        .labeltext
+        {
+            position: absolute;
+            top: 158px;
+            left: 98px;
+            text-align: center;
+            font-size: 36px;
+            width: 40px;
+        }
+
+        .toolbar
+        {
+            text-align: right;
+            clear: left;
+        }
+
+        #dataGrid
+        {
+            width: 100%;
+            clear: left;
+        }
+        .hilo{
+            font-size:.8em;
+        }
+        .high 
+        {
+
+            color:#090;
+        }
+            .high span
+            {
+                font-weight:800;
+            }
+        .low 
+        {
+
+            color:#900;
+        }
+            .low span
+            {
+                font-weight:800;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Knockout Grid</h1>
+        <div class="app">
+            <div>
+                <!-- ko if: selectedRow().Sales().length > 0 -->
+                <div class="pane">
+                    <h2>Sales</h2>
+                    <div data-bind="wijpiechart: { 
+                      seriesList: formatPieChartData,
+                      innerRadius: 40,
+                      width:300,
+                      height:240
+                  }">
+                    </div>
+                    <div class="labeltext" data-bind="text: selectedRow().UnitsInStock"></div>
+                </div>
+                <!-- /ko -->
+                <div class="toolbar">
+                    <label>
+                        Display:
+                    </label>
+                    <select data-bind="value: pageSize, wijdropdown: {}">
+                        <option value="5">5</option>
+                        <option value="10" selected="selected">10</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+                <table id="dataGrid" data-bind="
+                      wijgrid: { 
+                          selectionMode: 'singleRow',
+                          data: dataRows, 
+                          pageSize: pageSize, 
+                          pageIndex: pageIndex, 
+                          totalRows: totalRows, 
+                          allowPaging: true, 
+                          allowSorting: true, 
+                          sorted: sorted, 
+                          pageIndexChanged: paged,
+                          selectionChanged: selectionChanged,
+                          columns: [
+                              { dataKey: 'ProductID', sortDirection: 'ascending', dataType: 'number', dataFormatString: 'n0', headerText: 'ID', width: 60 }, 
+                              { dataKey: 'ProductName', headerText: 'Product' }, 
+                              { dataKey: 'UnitPrice', dataType: 'currency', headerText: 'Price', width: 100}, 
+                              { cellFormatter: hilocellFormatter, headerText: 'Units', width: 100},
+                              { visible: true, cellFormatter: cellFormatter, width: 100 }]
+                      }">
+                </table>
+                <script type="text/html" id="chartTemplate">
+                    <div data-bind="
+                          wijlinechart: { 
+                              dataSource: Sales, 
+                              legend: { visible: false }, 
+                              marginLeft: 0,
+                              marginRight:0,
+                              marginTop:0,
+                              marginBottom:0,
+                              height: 20, 
+                              width:100, 
+                              showChartLabels: false,
+                              axis: { 
+                                  x: { 
+                                      visible: false, 
+                                      textVisible: false, 
+                                      gridMajor: { visible: false }, 
+                                      gridMinor: { visible: false } 
+                                  }, 
+                                  y: { 
+                                      visible: false, 
+                                      textVisible: false, 
+                                      gridMajor: { visible: false }, 
+                                      gridMinor: { visible: false }
+                                  } 
+                              },
+                              seriesList: [{ 
+                                  data: { 
+                                      x: { bind: 'OrderID' }, 
+                                      y: { bind: 'Units'} } 
+                          }] }">
+                    </div>
+                </script>
+                
+                <script type="text/html" id="HiLowTemplate">
+                    <div class="hilo">
+                        <div class="high">High: <span data-bind="text: UnitsInStock"></span>
+                        </div>
+                        <div class="low">Low: <span data-bind="text: UnitsInStock"></span>
+                        </div>
+                    </div>
+                </script>
+            </div>
+            <p>
+                Made with <a href="http://knockoutjs.com">KnockoutJS</a>, <a href="http://wijmo.com">Wijmo</a> and <a href="http://www.odata.org">OData</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+F:\Work\TFSDEVEL\All-Tfs-User-Info\Personal\Bernardo\KnockoutJS\InvexplorerJS\InvexplorerJS\bin\InvexplorerJS.dll
+F:\Work\TFSDEVEL\All-Tfs-User-Info\Personal\Bernardo\KnockoutJS\InvexplorerJS\InvexplorerJS\bin\InvexplorerJS.pdb
+F:\Work\TFSDEVEL\All-Tfs-User-Info\Personal\Bernardo\KnockoutJS\InvexplorerJS\InvexplorerJS\obj\Debug\InvexplorerJS.dll
+F:\Work\TFSDEVEL\All-Tfs-User-Info\Personal\Bernardo\KnockoutJS\InvexplorerJS\InvexplorerJS\obj\Debug\InvexplorerJS.pdb

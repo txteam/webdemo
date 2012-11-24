@@ -1,0 +1,116 @@
+﻿.wijmo-wijaccordion .wijmo-wijaccordion-header
+{
+    display: block;
+    cursor: pointer;
+    position: relative;
+    margin-top: 2px;
+    zoom: 1;
+    padding: .5em .5em .5em .7em;
+}
+
+.wijmo-wijaccordion .wijmo-wijaccordion-icons
+{
+    padding-left: 2.2em;
+}
+
+.wijmo-wijaccordion .wijmo-wijaccordion-noicons
+{
+    padding-left: .7em;
+}
+
+.wijmo-wijaccordion .wijmo-wijaccordion-header a
+{
+    padding-left: 1.2em;
+    font-size: 1em;
+    display: block;
+}
+
+.wijmo-wijaccordion .wijmo-wijaccordion-header .ui-icon
+{
+    position: absolute;
+    left: .5em;
+    top: 50%;
+    margin-top: -8px;
+}
+
+.wijmo-wijaccordion .wijmo-wijaccordion-content
+{
+    overflow: auto;
+    zoom: 1;
+    padding: 1em 2.2em;
+    display: none;
+}
+.wijmo-wijaccordion .wijmo-wijaccordion-content.wijmo-wijaccordion-content-active
+{   
+    display: block;
+}
+
+.wijmo-wijaccordion a
+{
+    outline: none;
+}
+
+.wijmo-wijaccordion-bottom .wijmo-wijaccordion-content-active
+{
+    border-top: none;
+ }
+
+.wijmo-wijaccordion-right .wijmo-wijaccordion-header
+{
+    margin-top: 0;
+    margin-left: 1px;
+    height: 12em;
+    overflow: hidden;
+    padding: .7em .5em .5em;
+}
+
+.wijmo-wijaccordion-right .wijmo-wijaccordion-content-active
+{
+    border-left: none;
+}
+
+.wijmo-wijaccordion-left .wijmo-wijaccordion-header
+{
+    margin-top: 0;
+    margin-right: 1px;
+    height: 12em;
+    overflow: hidden;
+    padding: .7em .5em .5em;
+}
+
+.wijmo-wijaccordion-left .wijmo-wijaccordion-content-active
+{
+    border-right: none;
+}
+
+.wijmo-wijaccordion-top .wijmo-wijaccordion-header
+{
+    margin: 0 0 1px;
+}
+
+.wijmo-wijaccordion-top .wijmo-wijaccordion-content-active
+{
+    border-bottom: none;
+}
+
+.wijmo-wijaccordion-right .wijmo-wijaccordion-content, .wijmo-wijaccordion-left .wijmo-wijaccordion-content
+{
+    width: 36em;
+    height: 12em;
+    margin: 0;
+    padding: .7em 2.2em .5em;
+}
+
+.wijmo-wijaccordion-right .wijmo-wijaccordion-header a, .wijmo-wijaccordion-left .wijmo-wijaccordion-header a
+{
+    text-align: center;
+    padding: 1.2em .5em .5em;
+}
+
+.wijmo-wijaccordion-right .wijmo-wijaccordion-header .ui-icon, .wijmo-wijaccordion-left .wijmo-wijaccordion-header .ui-icon
+{
+    top: .5em;
+    left: 50%;
+    margin-left: -9px;
+    margin-top: 0;
+}

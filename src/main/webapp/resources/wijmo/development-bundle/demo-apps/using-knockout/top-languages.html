@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Top Programming Languages</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=960">
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <!-- Wijmo CSS and script -->
+    <link type="text/css" href="http://cdn.wijmo.com/themes/metro/jquery-wijmo.css" rel="stylesheet" title="metro-jqueryui" />
+    <link type="text/css" href="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.1.min.css" rel="stylesheet" />
+    <style type="text/css">
+        body
+        {
+            font-family: "Segoe UI Light", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            background: #000;
+        }
+
+        h1
+        {
+            font-size: 2.4em;
+            font-weight: normal;
+            color: #fff;
+            padding: 20px 0 0 6px;
+            margin: 0;
+        }
+
+        h2
+        {
+            font-weight: normal;
+        }
+
+        .container
+        {
+            margin: 0 auto;
+            width: 960px;
+        }
+
+        .app
+        {
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .toolbar
+        {
+            text-align: right;
+        }
+
+        #dataGrid
+        {
+            width: 100%;
+        }
+    </style>
+    <script type="text/javascript" src="http://cdn.wijmo.com/jquery.wijmo-open.all.2.2.1.min.js"></script>
+    <script type="text/javascript" src="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.1.min.js"></script>
+    <!-- KnockoutJS for MVVM-->
+    <script type="text/javascript" src="http://cdn.wijmo.com/external/knockout-2.1.0.js"></script>
+    <script type="text/javascript" src="http://cdn.wijmo.com/external/knockout.wijmo.js"></script>
+    <script type="text/javascript">
+        // when document loads, create ViewModel, and apply bindings
+        //Person class
+        function Person(data) {
+            this.ID = ko.observable(data.ID);
+            this.Company = ko.observable(data.Company);
+            this.Name = ko.observable(data.Name);
+            this.Sales = ko.observable(data.Sales);
+        };
+
+        //Create ViewModel
+        var viewModel = {
+            list: [
+                { Language: "javascript", GitRank: 56, StackTags: 63573, StackRank: 54 },
+                { Language: "ruby", GitRank: 54, StackTags: 16183, StackRank: 48 },
+                { Language: "python", GitRank: 53, StackTags: 41609, StackRank: 52 },
+                { Language: "perl", GitRank: 52, StackTags: 8046, StackRank: 47 },
+                { Language: "c", GitRank: 51, StackTags: 23089, StackRank: 49 },
+                { Language: "php", GitRank: 50, StackTags: 72743, StackRank: 55 },
+                { Language: "shell", GitRank: 49, StackTags: 3470, StackRank: 45 },
+                { Language: "java", GitRank: 48, StackTags: 82923, StackRank: 56 },
+                { Language: "c++", GitRank: 47, StackTags: 50503, StackRank: 53 },
+                { Language: "viml", GitRank: 46, StackTags: 0, StackRank: 1 },
+                { Language: "objective-c", GitRank: 45, StackTags: 24338, StackRank: 51 },
+                { Language: "c#", GitRank: 44, StackTags: 23089, StackRank: 49 },
+                { Language: "emacs lisp", GitRank: 43, StackTags: 521, StackRank: 30 },
+                { Language: "actionscript", GitRank: 42, StackTags: 2470, StackRank: 42 },
+                { Language: "haskell", GitRank: 41, StackTags: 1896, StackRank: 40 },
+                { Language: "lua", GitRank: 40, StackTags: 715, StackRank: 33 },
+                { Language: "scala", GitRank: 39, StackTags: 2614, StackRank: 43 },
+                { Language: "clojure", GitRank: 38, StackTags: 1104, StackRank: 35 },
+                { Language: "asp", GitRank: 37, StackTags: 1407, StackRank: 36 },
+                { Language: "erlang", GitRank: 36, StackTags: 1057, StackRank: 34 },
+                { Language: "common lisp", GitRank: 35, StackTags: 394, StackRank: 29 },
+                { Language: "groovy", GitRank: 34, StackTags: 1458, StackRank: 37 },
+                { Language: "scheme", GitRank: 33, StackTags: 694, StackRank: 31 },
+                { Language: "d", GitRank: 32, StackTags: 216, StackRank: 24 },
+                { Language: "visual basic", GitRank: 31, StackTags: 1771, StackRank: 39 },
+                { Language: "r", GitRank: 30, StackTags: 2712, StackRank: 44 },
+                { Language: "assembly", GitRank: 29, StackTags: 2000, StackRank: 41 },
+                { Language: "tcl", GitRank: 28, StackTags: 312, StackRank: 26 },
+                { Language: "ocaml", GitRank: 27, StackTags: 328, StackRank: 27 },
+                { Language: "go", GitRank: 26, StackTags: 227, StackRank: 25 },
+                { Language: "coldfusion", GitRank: 25, StackTags: 1618, StackRank: 38 },
+                { Language: "fortran", GitRank: 24, StackTags: 381, StackRank: 28 },
+                { Language: "coffeescript", GitRank: 23, StackTags: 22, StackRank: 11 },
+                { Language: "supercollider", GitRank: 22, StackTags: 1, StackRank: 8 },
+                { Language: "smalltalk", GitRank: 21, StackTags: 189, StackRank: 23 },
+                { Language: "delphi", GitRank: 20, StackTags: 7009, StackRank: 46 },
+                { Language: "f#", GitRank: 19, StackTags: 0, StackRank: 1 },
+                { Language: "verilog", GitRank: 18, StackTags: 94, StackRank: 19 },
+                { Language: "objective-j", GitRank: 17, StackTags: 31, StackRank: 15 },
+                { Language: "haxe", GitRank: 16, StackTags: 72, StackRank: 17 },
+                { Language: "pure data", GitRank: 15, StackTags: 0, StackRank: 1 },
+                { Language: "vhdl", GitRank: 14, StackTags: 95, StackRank: 20 },
+                { Language: "ooc", GitRank: 13, StackTags: 0, StackRank: 1 },
+                { Language: "boo", GitRank: 12, StackTags: 65, StackRank: 16 },
+                { Language: "vala", GitRank: 11, StackTags: 28, StackRank: 14 },
+                { Language: "racket", GitRank: 10, StackTags: 179, StackRank: 22 },
+                { Language: "eiffel", GitRank: 9, StackTags: 11, StackRank: 10 },
+                { Language: "io", GitRank: 8, StackTags: 702, StackRank: 32 },
+                { Language: "arc", GitRank: 7, StackTags: 25, StackRank: 13 },
+                { Language: "nu", GitRank: 6, StackTags: 3, StackRank: 9 },
+                { Language: "ada", GitRank: 5, StackTags: 128, StackRank: 21 },
+                { Language: "self", GitRank: 4, StackTags: 89, StackRank: 18 },
+                { Language: "duby", GitRank: 3, StackTags: 0, StackRank: 1 },
+                { Language: "factor", GitRank: 2, StackTags: 23, StackRank: 12 },
+                { Language: "sclang", GitRank: 1, StackTags: 0, StackRank: 1 }
+            ]
+        };
+
+        //Bind ViewModel
+        $(document).ready(function () {
+            ko.applyBindings(viewModel);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Top Programming Languages</h1>
+        <div class="app">
+            <div>
+                <h2>Chart</h2>
+                <div id="dataChart" data-bind="wijbarchart: { horizontal: false, showChartLabels: false, dataSource: list, data: { x: { bind: 'Language' } }, seriesList: [{ label: 'GitHub Rank',  data: { y: { bind: 'GitRank'} } },{ label: 'StackOverflow Rank',  data: { y: { bind: 'StackRank'} } } ], hint: { content: function () { return this.x + '(' + this.data.label + '): ' + this.y + ''; } } }" style="width: 100%; height: 300px;">
+                </div>
+                <h2>Grid</h2>
+                <table id="dataGrid" data-bind="wijgrid: { data: list, allowPaging: true, allowSorting: true, columns: [{},{ sortDirection: 'descending',  dataType: 'number', dataFormatString: 'n0' },{ dataType: 'number', dataFormatString: 'n0' },{ dataType: 'number', dataFormatString: 'n0' }] }" style="width: 100%;">
+                </table>
+            </div>
+            <p>
+                Made with <a href="http://knockoutjs.com">KnockoutJS</a> and <a href="http://wijmo.com">Wijmo</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
