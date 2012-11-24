@@ -8,7 +8,7 @@
 <title>mainframe</title>
 <%@include file="../includes/commonHead.jsp" %>
 
-<link rel="stylesheet" type="text/css" href="${contextPath }/css/mainframe.css" />
+<link  rel="stylesheet" type="text/css" href="${contextPath }/css/mainframe.css" />
 <script type="text/javascript" src="${contextPath }/js/mainframe/mainframe.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -26,22 +26,6 @@ $(document).ready(function() {
 	layout.$customerMenuAccordion.bind("accordionResized",function(){
 	    customerMenu.menuResize(layout._accordingWidth - 10,layout._accordingHeight - 10);
 	});
-    $( "#cart ol" ).droppable({
-        activeClass: "ui-state-default",
-        hoverClass: "ui-state-hover",
-        accept: ":not(.ui-sortable-helper)",
-        drop: function( event, ui ) {
-            $( this ).find( ".placeholder" ).remove();
-            $( "<li></li>" ).text( ui.draggable.text() ).appendTo( this );
-        }
-    }).sortable({
-        items: "li:not(.placeholder)",
-        sort: function() {
-            // gets added unintentionally by droppable interacting with sortable
-            // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
-            $( this ).removeClass( "ui-state-default" );
-        }
-    });
 
 	
 	var $tabs = $("#mainTabs").wijtabs();
@@ -49,7 +33,27 @@ $(document).ready(function() {
 	    alignment: "left"
 	});
 	
-	
+	$.widget("tx.styleswitch",{
+	    // default options
+	    options: {
+	    	styles : []
+	    },
+
+	    _create: function() {
+	        var progress = this.options.value + "%";
+	        this.element
+	            .addClass( "progressbar" )
+	            .text( progress );
+	    },
+	    
+	    _init: function(){
+	    	
+	    },
+	    
+	    destroy: function(){
+	    	
+	    }
+	});
 	
 });
 </script>

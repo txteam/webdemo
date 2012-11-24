@@ -252,7 +252,8 @@ Menu.prototype._init = function(){
             //alert("drop:" + ui.draggable.text());
             //alert(ui.draggable.html());
             $(this).find( ".placeholder" ).remove();
-            $("<li class='ui-menu-item' role='menuItem'></li>").html( ui.draggable.html()).appendTo( this );
+            $("<li></li>").html( ui.draggable.html()).appendTo( this );
+            _this._$menuContainer.menu("refresh");
         }
     });
 };
