@@ -15,46 +15,23 @@ $(document).ready(function() {
 	$("#menu").wijmenu({
 	    //position : {my: "top right", at: "buttom right"}
 	});
-	$("#menuItems").find("li").not($("#menuItems").find("li").has("ul")).draggable({ opacity: 0.7, helper: "clone" });
+	$("#menuItems").find("li").not($("#menuItems").find("li").has("ul")).draggable({ 
+		opacity: 0.8, 
+		helper: "clone",
+		start: function(){
+			$("#menuItems").addClass("opacity");
+		},
+		stop: function(){
+			$("#menuItems").removeClass("opacity",500);
+		}
+	});
 	
 	var layout = new Layout();
-
-	var customerMenu = new Menu({
-	    $menu:$("#customer-menus"),
-	    initHeight:layout._accordingHeight - 10
-	});
-	layout.$customerMenuAccordion.bind("accordionResized",function(){
-	    customerMenu.menuResize(layout._accordingWidth - 10,layout._accordingHeight - 10);
-	});
-
 	
-	var $tabs = $("#mainTabs").wijtabs();
+	//var $tabs = $("#mainTabs").wijtabs();
 	$("#mainToolTabs").wijtabs({
 	    alignment: "left"
-	});
-	
-	$.widget("tx.styleswitch",{
-	    // default options
-	    options: {
-	    	styles : []
-	    },
-
-	    _create: function() {
-	        var progress = this.options.value + "%";
-	        this.element
-	            .addClass( "progressbar" )
-	            .text( progress );
-	    },
-	    
-	    _init: function(){
-	    	
-	    },
-	    
-	    destroy: function(){
-	    	
-	    }
-	});
-	
+	});	
 });
 </script>
 <style type="text/css">
@@ -140,7 +117,7 @@ $(document).ready(function() {
 		                    </p> 
 		                </div> 
 		                <div id="mainTabs-2"> 
-		                		tabs2Content
+		                	<iframe src="${contextPath}/view/demo/addDemo"></iframe>
 		                </div>
 		           	</div> 
 				</div>
