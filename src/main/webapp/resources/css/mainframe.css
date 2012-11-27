@@ -14,8 +14,14 @@
 /*top部分样式表单*/
 .top{
     width: 100%;
-    height: 78px;
+    height: 80px;
     top: 0px;
+}
+.top .ui-tabs .ui-tabs-panel{
+    padding-top: 3px;
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-bottom: 5px;
 }
 .top-header{
     width: 100%;
@@ -26,13 +32,13 @@
     position: absolute;
     width: 100%;
     height: 2px;
-    top: 76px;
+    top: 78px;
 }
 .top-content{
 	width:100%;
 	height:50px;
-	padding-top: 2px;
-	padding-bottom: 10px;
+	padding-top: 1px;
+	padding-bottom: 3px;
 }
 .top-content-menuitem{
     display:-moz-inline-box;
