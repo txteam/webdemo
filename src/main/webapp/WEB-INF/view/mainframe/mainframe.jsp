@@ -15,14 +15,27 @@ $(document).ready(function() {
 	$("#menu").wijmenu({
 	    //position : {my: "top right", at: "buttom right"}
 	});
+	var _removeClassTimer = null;
+	function _removeOpacity(){
+		if(_removeClassTimer != null){
+			clearTimeout(_removeClassTimer);
+		}
+		_removeClassTimer = setTimeout(function(){
+			$("#menuItems").removeClass("opacity_20");
+		},500);
+	}
 	$("#menuItems").find("li").not($("#menuItems").find("li").has("ul")).draggable({ 
 		opacity: 0.8, 
 		helper: "clone",
 		start: function(){
-			$("#menuItems").addClass("opacity");
+			$("#menuItems").addClass("opacity_20");
+			_removeOpacity();
+		},
+		drag: function(){
+			_removeOpacity();
 		},
 		stop: function(){
-			$("#menuItems").removeClass("opacity",500);
+			_removeOpacity();
 		}
 	});
 	
@@ -32,6 +45,10 @@ $(document).ready(function() {
 	$("#mainToolTabs").wijtabs({
 	    alignment: "left"
 	});	
+	
+	$(".top").txtabs({
+		tabsHandleContainerId:"topHeader"
+	});
 });
 </script>
 <style type="text/css">
@@ -45,7 +62,7 @@ $(document).ready(function() {
 <div class=".container">
 	<!-- top -->
 	<div class="top">
-		<div class="top-header ui-widget-header ui-corner-top">
+		<div id="topHeader" class="top-header ui-widget-header ui-corner-top">
 			<!-- menu显示占位符 
 			<span class="menu"></span>
 			<!--
@@ -53,9 +70,50 @@ $(document).ready(function() {
 	            <h3><a href="#">常用菜单</a></h3> 
 	        </li> 
 	        -->
+	        <ul> 
+	        	<li><a href="#menuTabs-1">菜单一</a></li> 
+		        <li><a href="#menuTabs-2">菜单二</a></li>
+		    </ul> 
 		</div>
-		<div class="top-content ui-widget-content">
-			
+		<div id="menuTabs-1">
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>快捷菜单一</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>aa</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>aa</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>aa</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>aa</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>aa</a>
+			</span>
+		</div>
+		<div id="menuTabs-2">
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>11111</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>222222</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>333333</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>444444</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>aa</a>
+			</span>
+			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+				<a>aa</a>
+			</span>
 		</div>
 		<div id="topSpliter" class="ui-widget-header top-spliter"></div>
 	</div>

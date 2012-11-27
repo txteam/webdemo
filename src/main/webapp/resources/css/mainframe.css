@@ -19,7 +19,8 @@
 }
 .top-header{
     width: 100%;
-    height: 28px;
+    height: 30px;
+    padding-left: 90px;    
 }
 .top-spliter{
     position: absolute;
@@ -30,6 +31,20 @@
 .top-content{
 	width:100%;
 	height:50px;
+	padding-top: 2px;
+	padding-bottom: 10px;
+}
+.top-content-menuitem{
+    display:-moz-inline-box;
+    display:inline-block;
+    margin-left: 1px;
+    width:40px;
+    height:35px;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 .menu{
     margin-left:5px;
@@ -47,10 +62,15 @@
     padding-top: 0px;
     padding-bottom: 0px;
 }
-.opacity{
-     filter:alpha(opacity=10);
-     -moz-opacity: 0.1;
-     opacity: 0.1;
+.opacity_0{
+     filter:alpha(opacity=0);
+     -moz-opacity: 0;
+     opacity: 0;
+}
+.opacity_20{
+     filter:alpha(opacity=20);
+     -moz-opacity: 0.2;
+     opacity: 0.2;
 }
 #menuItems a{
     padding-top: 4px;
@@ -58,7 +78,7 @@
 }
 .menu-itmes-container{
 	position: absolute ;
-	top:0px;
+	top:4px;
 	left:5px;
 	z-index: 999;
 }
@@ -97,7 +117,8 @@
 .center-main-tabs{
 	width:100%;
 	height:100%;
-	overflow: hidden;	
+	overflow: hidden;
+	z-index: 10;	
 }
 .center-main-tabs .ui-widget-content{
 	overflow: hidden;
@@ -125,7 +146,6 @@
 .center-main-tools .ui-tabs-left .wijmo-wijtabs-content{
 	width: 93%;
 }
-
 
 /*footer部分样式表单*/
 .footer{

@@ -24,12 +24,14 @@ frameset{
     padding: 0px 0px 0px 0px;
     border: 0px;
     border-style: none;
+    z-index: 0;
 }
 frame{
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
     border: 0px;
     border-style: none;
+    z-index: 0;
 }
 iframe{
     margin: 0px 0px 0px 0px;
@@ -37,6 +39,7 @@ iframe{
     border: 0px;
     border-style: none;
     overflow: auto;
+    z-index: 0;
 }
 img,form{
     border:none;

@@ -123,11 +123,11 @@ Layout.prototype._initCenterSpliter = function() {
             $centerSpliter.trigger("refresh");
         }, 100);
     });
+    //阻止左边边线的mousedown事件不再发生resize
     _this.$centerLeft.next("div.ui-resizable-handle").mousedown(function() {
         return false;
     });
 };
-
 /*
  * private: 初始化main上的spliter
  */
@@ -142,6 +142,7 @@ Layout.prototype._initCenterMainSpliter = function() {
             scrollBars : "hidden",
             collapsed : true
         },
+        resizeSettings: { ghost :false},
         splitterDistance : _this._centerHeight * 3 / 5,
         orientation : "horizontal",
         collapsingPanel : "panel2",
@@ -150,7 +151,7 @@ Layout.prototype._initCenterMainSpliter = function() {
     $centerMainSpliter.bind("refresh", function(event) {
         _this.$centerMain.wijsplitter("refresh");
         _this.$centerMain.trigger("centerMainSpliterResized");
-        
+
         event.stopPropagation();
         event.preventDefault();
         return false;
@@ -169,7 +170,6 @@ Layout.prototype._initCenterMainSpliter = function() {
             $centerMainSpliter.trigger("refresh");
         }
     });
-    
     this._initMainTabs();
 };
 /*
@@ -250,7 +250,6 @@ Layout.prototype._initMainTabs = function() {
     var $mainTabs = this.$centerMainTabs.wijtabs();
     
     $mainTabs.bind("tabsResize",function(event){
-        alert("tabsResize");
         event.stopPropagation();
         event.preventDefault();
         
