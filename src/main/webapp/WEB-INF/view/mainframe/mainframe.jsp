@@ -26,7 +26,9 @@ $(document).ready(function() {
 	}
 	$("#menuItems").find("li").not($("#menuItems").find("li").has("ul")).draggable({ 
 		opacity: 0.8, 
-		helper: "clone",
+		helper: function(event){
+			return $( "<div class='ui-widget-header'>I'm a custom helper</div>" );
+		},
 		start: function(){
 			$("#menuItems").addClass("opacity_20");
 			_removeOpacity();

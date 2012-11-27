@@ -1,4 +1,5 @@
-<link rel="stylesheet" type="text/css" href="${contextPath }/jquery-ui/css/redmond/jquery-ui-1.9.1.custom.min.css" />
+<!--link rel="stylesheet" type="text/css" href="${contextPath }/jquery-ui/css/redmond/jquery-ui-1.9.1.custom.min.css" /-->
+<link rel="stylesheet" type="text/css" href="${contextPath }/wijmo/themes/midnight/jquery-wijmo.css" />
 
 <link rel="stylesheet" type="text/css" href="${contextPath }/wijmo/css/jquery.wijmo-complete.all.2.3.1.min.css" />
 <link rel="stylesheet" type="text/css" href="${contextPath }/wijmo/css/jquery.wijmo-open.2.3.1.css" />
