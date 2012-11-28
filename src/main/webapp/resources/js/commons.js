@@ -1,49 +1,3 @@
-/*
- * 切换皮肤方法
- */
-jQuery.fn.extend({
-    skinSwitcher : function() {
-        var skinNames = [];
-        var skinValues = {};
-        var isInit = false;
-        //初始化
-        function _init() {
-            $.each(skins, function(index, skinTemp) {
-                skinNames[index] = skinTemp.key;
-                skinValues[skinTemp.key] = skinTemp.value;
-                return true;
-            });
-            isInit = true;
-        }
-
-        //选择皮肤
-        function _switchSkins(skinName) {
-            var chooseSkin = skinValues[skinName];
-            if (chooseSkin != null) {
-                $.loadScript(function() {
-                    window.location.reload();
-                }, chooseSkin);
-            }
-        }
-
-        //如果没有初始化，这里进行初始化
-        if (!isInit) {
-            _init();
-        }
-        $this = $(this);
-        $this.change(function() {
-            _switchSkins($this.val());
-        });
-        //$this.wijdropdown();
-        //var skinNames = _querySupportSkins();
-        $.each(skinNames, function(index, skinNameTemp) {
-            $this.append($("<option/>").val(skinNameTemp).text(skinNameTemp));
-        });
-
-        return $this;
-    },
-});
-
 /**************** date start*********************/
 /*
  * 给事件对象添加format方法，用以将事件对象格式化为字符串
@@ -106,6 +60,7 @@ Date.parseToDate = function(str, format) {
 };
 /**************** date end*********************/
 
+/**************** tabs start*********************/
 /*
  * 定义tab
  */
@@ -135,6 +90,45 @@ Date.parseToDate = function(str, format) {
         // allow overriding how to find the list for rare usage scenarios (#7715)
         _getList : function() {
             return this.element.find("#" + this.options.tabsHandleContainerId).find("ol,ul").eq(0);
+        }
+    });
+})(jQuery);
+/**************** tabs end*********************/
+
+/*
+ * 定义tab
+ */
+(function($, undefined) {
+    $(document).ready(function(){
+        
+    });
+    $.extend({
+        switchcheme: function(id,contextPath,template){
+            var $themes = $(document).find("link[title=theme]");
+            if($themes.filter("#"+id).size() > 0){
+                $themes.not("#"+id).attr("disabled","disabled");
+                $themes.filter("#"+id).removeAttr("disabled");
+            }else{
+                $themes.attr("disabled","disabled");
+                $themes.last().after(
+                    $("<link/>").attr({
+                        rel:"stylesheet",
+                        type:"text/css",
+                        title:"theme",
+                        id:id,
+                        href:template.replace("{contextPath}",contextPath).replace("{id}",id)
+                    })
+                );
+            }
+        }    
+    });
+    $.widget("tx.chemeswitcher",{
+        options : {
+            contextPath : ".",
+            skins:null
+        },
+        _create : function() {
+            
         }
     });
 })(jQuery);

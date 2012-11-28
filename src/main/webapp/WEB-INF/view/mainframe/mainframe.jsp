@@ -51,6 +51,8 @@ $(document).ready(function() {
 	$(".top").txtabs({
 		tabsHandleContainerId:"topHeader"
 	});
+	
+	$.switchcheme("cupertino","${contextPath}","{contextPath}/jquery-ui/themes/{id}/jquery-ui.css");
 });
 </script>
 <style type="text/css">
