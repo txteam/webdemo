@@ -71,7 +71,8 @@ $(document).ready(function() {
     });
 	
 	$("#skinSwitcher").chemeswitcher({
-	    contextPath:"${contextPath}"
+	    contextPath:"${contextPath}",
+	    themeCookieName:"tx_theme"
 	});
 });
 </script>

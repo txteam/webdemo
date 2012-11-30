@@ -14,4 +14,6 @@
 <script type="text/javascript" src="${contextPath }/js/commons.js"></script>
 <script type="text/javascript">
 var _contextPath = "${contextPath}";
+var _default_theme = "tx_theme";
+$.inittheme(_default_theme,_contextPath);
 </script>

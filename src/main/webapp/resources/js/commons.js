@@ -1,4 +1,4 @@
-/** ********** EventManager end ************** */
+/************ EventManager end ************** */
 /**
  * 客户端统一事件管理器
  */
@@ -335,8 +335,8 @@ var _default_skins =
             hrefTemplate : "{contextPath}/wijmo/themes/{id}/jquery-wijmo.css",
             ids :
             [
-                    "arctic", "aristo", "cobalt", "metro",
-                    "metro-dark", "midnight", "rocket", "sterling"
+                    "arctic", "aristo", "cobalt", "metro", "metro-dark",
+                    "midnight", "rocket", "sterling"
             ]
         }
 ];
@@ -344,10 +344,41 @@ var _default_skins =
  * 定义chemeswitcher
  */
 (function($, undefined)
-{
+{   
     $.extend(
     {
-        switchcheme : function(id, contextPath, template, themeCookieName)
+        inittheme: function(themeCookieName,contextPath,skins){
+            var _skins = skins != null ? skins : _default_skins;
+            
+            var tempalteMap = {};
+
+            $.each(_skins, function(i, skingroup)
+            {
+                $.each(skingroup.ids, function(index, skin)
+                {
+                    tempalteMap[skin] =
+                    {
+                        id : skin, contextPath : _contextPath,
+                        hrefTemplate : skingroup.hrefTemplate
+                    };
+                });
+            });
+            
+            var cookieparamStr = $.cookie(themeCookieName);
+            var paramObj = null;
+            if (cookieparamStr != null)
+            {
+                paramObj = $.parseJSON(cookieparamStr);
+            }
+            
+            if (paramObj && paramObj.id)
+            {
+                $.switchtheme(paramObj.id, _contextPath,
+                                tempalteMap[paramObj.id].hrefTemplate,
+                                themeCookieName);
+            }
+        },
+        switchtheme : function(id, contextPath, template, themeCookieName)
         {
             var paramObj =
             {
@@ -369,25 +400,24 @@ var _default_skins =
                                     type : "text/css",
                                     title : "theme",
                                     id : id,
-                                    href : template.replace("{contextPath}",contextPath).replace("{id}", id)
+                                    href : template.replace("{contextPath}",
+                                            contextPath).replace("{id}", id)
                                 }));
             }
             $.cookie(themeCookieName, "" + $.toJsonString(paramObj),
             {
+                path: '/',
                 expires : 365
             });
         }
     });
-})(jQuery);
 
-(function($, undefined)
-{
     $.widget("tx.chemeswitcher",
     {
         options :
         {
-            themeCookieName : "tx_cheme",
-            contextPath : ".", 
+            themeCookieName : "tx_cheme", 
+            contextPath : ".",
             skins : _default_skins
         },
         _create : function()
@@ -397,41 +427,40 @@ var _default_skins =
             var options = this.options;
             var _contextPath = options.contextPath;
             var _themeCookieName = options.themeCookieName;
-            
-            var cookieparamStr = $.cookie(_themeCookieName);
-            var paramObj = null;
-            if(cookieparamStr  != null){
-                paramObj = $.parseJSON(cookieparamStr);
-            }
-            
+            var _skins = options.skins != null ? options.skins : _default_skins;
+
             element.empty();
             var $select = $("<select/>").appendTo($(element));
             var tempalteMap = {};
 
-            $.each(_default_skins, function(i, skingroup)
+            $.each(_skins, function(i, skingroup)
             {
                 var $selectGroup = $("<optgroup/>").attr("label",
-                        skingroup.group).appendTo($select).
-                            attr("id",skingroup.group).attr("hrefTemplate",skingroup.hrefTemplate);
+                        skingroup.group).appendTo($select).attr("id",
+                        skingroup.group).attr("hrefTemplate",
+                        skingroup.hrefTemplate);
                 $.each(skingroup.ids, function(index, skin)
                 {
                     $("<option/>").attr("id", skin).val(skin).text(skin)
                             .appendTo($selectGroup).chan;
-                    tempalteMap[skin] = {id:skin,contextPath:_contextPath,hrefTemplate:skingroup.hrefTemplate};
+                    tempalteMap[skin] =
+                    {
+                        id : skin, contextPath : _contextPath,
+                        hrefTemplate : skingroup.hrefTemplate
+                    };
                 });
             });
-            $select.change(function(){
+            $select.change(function()
+            {
                 var _$self = $(this);
                 var _id = _$self.val();
-                $.switchcheme(_id,_contextPath,tempalteMap[_id].hrefTemplate,_themeCookieName);
+                $.switchtheme(_id, _contextPath, tempalteMap[_id].hrefTemplate,
+                        _themeCookieName);
             });
-            if(paramObj && paramObj.id){
-                $.switchcheme(paramObj.id,_contextPath,tempalteMap[paramObj.id].hrefTemplate,_themeCookieName);
-            }
         }, _init : function()
         {
             $(this.element).find("select").wijdropdown({
-                
+
             });
         }, destroy : function()
         {
@@ -439,5 +468,6 @@ var _default_skins =
         }
     });
 })(jQuery);
+
 /** ********** chemeswitcher end ************** */
 
