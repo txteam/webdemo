@@ -18,7 +18,7 @@ public class MenuItem implements Cloneable, TreeAble<List<MenuItem>, MenuItem> {
     /** ID */
     private String id;
     
-    /** 父级权限id */
+    /** 父级菜单id */
     private String parentId;
     
     /** 菜单项文本 */
@@ -42,7 +42,9 @@ public class MenuItem implements Cloneable, TreeAble<List<MenuItem>, MenuItem> {
     /** 是否在主菜单上显示 */
     private boolean isVisible = true;
     
-    /** 权限项 */
+    /** 
+     * 权限项 ：如果指定多个权限，需同时含有多个权限才能访问该菜单
+     */
     private List<String> authIds = new ArrayList<String>();
     
     /** 子菜单项 */
@@ -189,6 +191,20 @@ public class MenuItem implements Cloneable, TreeAble<List<MenuItem>, MenuItem> {
     public void setChilds(List<MenuItem> childs) {
         this.childs = childs;
     }
+
+    /**
+     * @return 返回 authIds
+     */
+    public List<String> getAuthIds() {
+        return authIds;
+    }
+
+    /**
+     * @param 对authIds进行赋值
+     */
+    public void setAuthIds(List<String> authIds) {
+        this.authIds = authIds;
+    }
     
     /*
      * (non-Javadoc)
@@ -226,19 +242,4 @@ public class MenuItem implements Cloneable, TreeAble<List<MenuItem>, MenuItem> {
         
         return cloned;
     }
-
-    /**
-     * @return 返回 authIds
-     */
-    public List<String> getAuthIds() {
-        return authIds;
-    }
-
-    /**
-     * @param 对authIds进行赋值
-     */
-    public void setAuthIds(List<String> authIds) {
-        this.authIds = authIds;
-    }
-    
 }

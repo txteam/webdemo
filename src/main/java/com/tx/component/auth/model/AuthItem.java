@@ -64,6 +64,7 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
     /** 子权限列表 */
     private Set<AuthItem> childs;
     
+    /** 权限类型 */
     private String authType;
     
     /**

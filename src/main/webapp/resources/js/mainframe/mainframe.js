@@ -4,12 +4,7 @@
 var Layout = function(config) {
     this.leftCenterDefaultWidth = 180;
     this.$top = $(".top");
-    this.$footer = $(".footer");
     this.$center = $(".center");
-
-    this.$centerLeft = $(".center-left");
-    this.$centerMain = $(".center-main");
-    this.$centerMainTabs = $("#mainTabs");
 
     this.init();
     return this;
