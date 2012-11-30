@@ -4,7 +4,12 @@
 var Layout = function(config) {
     this.leftCenterDefaultWidth = 180;
     this.$top = $(".top");
+    this.$footer = $(".footer");
     this.$center = $(".center");
+
+    this.$centerLeft = $(".center-left");
+    this.$centerMain = $(".center-main");
+    this.$centerMainTabs = $("#mainTabs");
 
     this.init();
     return this;
@@ -73,6 +78,9 @@ Layout.prototype._resetCenterHeight = function() {
     this._centerHeight = _ch;
     this._centerWidth = $document.innerWidth();
     this.$center.height(_ch);
+    this.$center.height(_ch);
+    this.$centerLeft.height(_ch);
+    this.$centerMain.height(_ch);
 };
 /*
  * 初始化主splite(center元素上的spliter)
@@ -172,7 +180,7 @@ Layout.prototype._initCenterMainSpliter = function() {
  */
 Layout.prototype._initCenterAccordion = function() {
     var _this = this;
-    _this._accordingHeight = _this.$centerLeft.innerHeight() - (_this.$centerLeft.find("h3").size() * 32);
+    _this._accordingHeight = _this._centerHeight - (_this.$centerLeft.find("h3").size() * 32);
     _this._accordingWidth = _this.$centerLeft.innerWidth();
     if (_this._accordingHeight < 0) {
         _this._accordingHeight = 0;
@@ -190,7 +198,7 @@ Layout.prototype._initCenterAccordion = function() {
             clearTimeout(resizeTimer);
         }
         resizeTimer = setTimeout(function() {
-            _this._accordingHeight = _this.$centerLeft.innerHeight() - (_this.$centerLeft.find("h3").size() * 32);
+            _this._accordingHeight = _this._centerHeight - (_this.$centerLeft.find("h3").size() * 32);
             _this._accordingWidth = _this.$centerLeft.innerWidth();
             if (_this._accordingHeight < 0) {
                 _this._accordingHeight = 0;
@@ -243,6 +251,10 @@ Layout.prototype._initMainTabs = function() {
     var _this = this;
     this.$centerMainTabs.children("div").attr("roleType","tabpanel");
     var $mainTabs = this.$centerMainTabs.wijtabs();
+    var newHeight = _this.$centerMainTabs.find("div[roleType=tabpanel]").height();
+    
+    var oldHeight = _this.$centerMainTabs.find("div[roleType=tabpanel]").height();
+    _this.$centerMainTabs.find("div[roleType=tabpanel]").height(_this._accordingHeight - 35);
     
     $mainTabs.bind("tabsResize",function(event){
         event.stopPropagation();
@@ -251,6 +263,7 @@ Layout.prototype._initMainTabs = function() {
         var $visiblePanel = _this.$centerMainTabs.find("div[roleType=tabpanel]:visible");
         var _height = $visiblePanel.innerHeight();
         var _width = $visiblePanel.innerWidth();
+        
         $.each(_this.$centerMainTabs.find("div[roleType=tabpanel]"),function(index,div){
             
             if($(div).children("iframe").size() > 0){

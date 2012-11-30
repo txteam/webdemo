@@ -35,10 +35,18 @@ $(document).ready(function() {
 	        <li> 
 	            <h3><a href="#">菜单一</a></h3> 
 	            <div style="margin:0px;padding:0px;"> 
-	               <ul id="customer-menus" class="customer-menus">
+	               <ul class="center-left-menu">
 					    <li><a href="#">禅道</a></li>
 					    <li><a href="#">Wiki</a></li>
 					    <li><a href="#">hudson</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
 					    <li><a href="#">sonar</a></li>
 					</ul>
 	            </div>
@@ -46,11 +54,42 @@ $(document).ready(function() {
 	        <li> 
 	            <h3><a href="#">菜单二</a></h3> 
 	            <div style="margin:0px;padding:0px"> 
-	                <ul id="customer-menus" class="customer-menus">
+	                <ul class="center-left-menu">
 					    <li><a href="#">禅道</a></li>
 					    <li><a href="#">Wiki</a></li>
 					    <li><a href="#">hudson</a></li>
 					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">Wiki</a></li>
+					    <li><a href="#">hudson</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">禅道</a></li>
+					    <li><a href="#">Wiki</a></li>
+					    <li><a href="#">hudson</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">禅道</a></li>
+					    <li><a href="#">Wiki</a></li>
+					    <li><a href="#">hudson</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar22222</a></li>
 					</ul>
 	            </div> 
 	        </li> 
@@ -58,18 +97,62 @@ $(document).ready(function() {
 	            <h3> 
 	                <a href="#">菜单三</a></h3> 
 	            <div style="margin:0px;padding:0px"> 
-	                <ul id="customer-menus" class="customer-menus">
+	                <ul class="center-left-menu">
 					    <li><a href="#">禅道</a></li>
 					    <li><a href="#">Wiki</a></li>
 					    <li><a href="#">hudson</a></li>
 					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">禅道</a></li>
+					    <li><a href="#">Wiki</a></li>
+					    <li><a href="#">hudson</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">禅道</a></li>
+					    <li><a href="#">Wiki</a></li>
+					    <li><a href="#">hudson</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">禅道</a></li>
+					    <li><a href="#">Wiki</a></li>
+					    <li><a href="#">hudson</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">禅道</a></li>
+					    <li><a href="#">Wiki</a></li>
+					    <li><a href="#">hudson</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar</a></li>
+					    <li><a href="#">sonar11111</a></li>
 					</ul>
 	            </div> 
 	        </li> 
 		</div>
 		<div>
 			<div class="center-main">
-				<iframe src="${contextPath}/view/event/testGlobalEvent2"></iframe>
+				<iframe id="main" src="${contextPath}/view/event/testGlobalEvent2"></iframe>
 			</div>
 		</div>
 	</div>

@@ -31,6 +31,8 @@
     <!--
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
+    
+    <!--
 	<Resource name="test_postgresql_db" auth="Container" type="javax.sql.DataSource"
 		maxActive="10" maxIdle="30" maxWait="10000" 
 		username="postgres"
@@ -43,6 +45,18 @@
 		      driverClassName="com.mysql.jdbc.Driver"
 		      username="db_webdemo"
 		      password="db_webdemo"
+		      maxActive="20"
+		      maxIdle="5"
+		      maxWait="1000"
+		      auth="Container"
+		      />
+	-->
+	<Resource name="db_webdemo"
+		      url="jjdbc:oracle:thin:@127.0.0.1:1521:txdb"
+		      type="org.apache.commons.dbcp.BasicDataSource"
+		      driverClassName="oracle.jdbc.driver.OracleDriver"
+		      username="txadmin"
+		      password="txadmin"
 		      maxActive="20"
 		      maxIdle="5"
 		      maxWait="1000"

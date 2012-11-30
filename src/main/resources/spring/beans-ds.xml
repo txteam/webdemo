@@ -10,7 +10,7 @@
 
 	<bean id="test_postgresql_datasource" 
 		class="com.tx.core.datasource.DataSourceFactoryBean">
-		<property name="jndiName" value="test_postgresql_db"></property>
+		<property name="jndiName" value="db_webdemo"></property>
 		<property name="supportP6spy" value="true"></property>
 	</bean>
 	<alias name="test_postgresql_datasource" alias="datasource" />

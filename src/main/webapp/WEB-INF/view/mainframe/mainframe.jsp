@@ -77,11 +77,7 @@ $(document).ready(function() {
 });
 </script>
 <style type="text/css">
-.customer-menus{
-	width:96%;
-	height:100;
-	overflow:auto;
-}
+
 </style>
 <body>
 <div class="container">
