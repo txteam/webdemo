@@ -16,12 +16,28 @@
     width: 100%;
     height: 80px;
     top: 0px;
+    padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+}
+.ui-tabs .ui-tabs-nav{
+	border-left-width:0px;
+	border-top-width:0px;
+	border-right-width:0px;
+	border-bottom-width:0px;
 }
 .top .ui-tabs .ui-tabs-panel{
     padding-top: 3px;
     padding-left: 1px;
     padding-right: 1px;
     padding-bottom: 5px;
+}
+.ui-tabs-nav .ui-state-focus{
+	border-left-width:0px;
+	border-top-width:0px;
+	border-right-width:0px;
+	border-bottom-width:0px;
 }
 .top-header{
     width: 100%;
@@ -33,21 +49,39 @@
     width: 100%;
     height: 2px;
     top: 78px;
+    left: -1px;
 }
 .top-content{
 	width:100%;
-	height:50px;
+	height:46px;
 	padding-top: 1px;
 	padding-bottom: 3px;
+}
+.top-content-left{
+	width:100%;
+	height:46px;
+	padding-top: 1px;
+	padding-bottom: 3px;
+}
+.top-content-right{
+	width:70%;
+	height:46px;
+	padding-top: 1px;
+	padding-bottom: 3px;
+}
+.top-content-left .ui-tabs-panel{
+	width:100%;
+	height:47px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 .top-content-menuitem{
     display:-moz-inline-box;
     display:inline-block;
-    margin-left: 1px;
-    width:40px;
+    margin-left: 0px;
     height:35px;
-    text-align: center;
-    vertical-align: middle;
     padding-top: 5px;
     padding-left: 3px;
     padding-right: 3px;
@@ -77,6 +111,12 @@
      filter:alpha(opacity=20);
      -moz-opacity: 0.2;
      opacity: 0.2;
+}
+.skin-switcher{
+	position: absolute ;
+	top:4px;
+	right:5px;
+	z-index: 999;
 }
 #menuItems a{
     padding-top: 4px;

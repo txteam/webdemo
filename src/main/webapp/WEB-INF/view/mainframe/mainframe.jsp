@@ -52,7 +52,27 @@ $(document).ready(function() {
 		tabsHandleContainerId:"topHeader"
 	});
 	
-	$.switchcheme("cupertino","${contextPath}","{contextPath}/jquery-ui/themes/{id}/jquery-ui.css");
+	var topContentWidth = $(".top-content").innerWidth();
+	var splitterDistanceWidth = topContentWidth > 270 ? topContentWidth - 270 : 0;
+	$(".top-content").wijsplitter({
+	    showExpander: false,
+	    collapsingPanel : "panel2",
+	    splitterDistance : splitterDistanceWidth,
+	    resizeSettings: { ghost :false},
+	    panel1 : {
+            scrollBars : "hidden"
+        },
+        panel2 : {
+            scrollBars : "hidden"
+        }
+	});
+	$(".top-content").find(".top-content-left").next("div.ui-resizable-handle").mousedown(function() {
+        return false;
+    });
+	
+	$("#skinSwitcher").chemeswitcher({
+	    contextPath:"${contextPath}"
+	});
 });
 </script>
 <style type="text/css">
@@ -63,7 +83,7 @@ $(document).ready(function() {
 }
 </style>
 <body>
-<div class=".container">
+<div class="container">
 	<!-- top -->
 	<div class="top">
 		<div id="topHeader" class="top-header ui-widget-header ui-corner-top">
@@ -79,46 +99,60 @@ $(document).ready(function() {
 		        <li><a href="#menuTabs-2">菜单二</a></li>
 		    </ul> 
 		</div>
-		<div id="menuTabs-1">
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>快捷菜单一</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>aa</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>aa</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>aa</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>aa</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>aa</a>
-			</span>
+		<div class="top-content">
+			<div class="top-content-left">
+				<div id="menuTabs-1" class="">
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<span><center><span class="ui-icon ui-icon-gear"></span></center></span>
+						<a>快捷菜单一</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<span><span class="ui-icon ui-icon-gear"></span></span>
+						<a>aa</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<span><span class="ui-icon ui-icon-gear"></span></span>
+						<a>aa</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<span><span class="ui-icon ui-icon-gear"></span></span>
+						<a>aa</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<span><span class="ui-icon ui-icon-gear"></span></span>
+						<a>aa</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<span><center><span class="ui-icon ui-icon-gear"></span></center></span>
+						<a>aaaaaaaaaaaaaaaa</a>
+					</span>
+				</div>
+				<div id="menuTabs-2" class="top-content">
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<a>11111</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<a>222222</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<a>333333</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<a>444444</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<a>aa</a>
+					</span>
+					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
+						<a>aa</a>
+					</span>
+				</div>
+			</div>
+			<div class="top-content-right">
+				xxx
+			</div>
 		</div>
-		<div id="menuTabs-2">
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>11111</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>222222</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>333333</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>444444</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>aa</a>
-			</span>
-			<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-				<a>aa</a>
-			</span>
-		</div>
+
 		<div id="topSpliter" class="ui-widget-header top-spliter"></div>
 	</div>
 	
@@ -164,8 +198,11 @@ $(document).ready(function() {
 				<div class="center-main-tabs">
 					<div id="mainTabs">
 						<ul> 
-		                    <li><a href="#mainTabs-1">Nunc tincidunt</a></li> 
-		                    <li><a href="#mainTabs-2">Proin dolor</a></li>
+		                    <li><a href="#mainTabs-1">个人面板</a></li> 
+		                    <li><a href="#mainTabs-2">行事历</a></li>
+		                    <li><a href="#mainTabs-3">记事本</a></li>
+		                    <li><a href="#mainTabs-4">testGlobalEvent1</a></li>
+		                    <li><a href="#mainTabs-5">testGlobalEvent2</a></li>
 		                </ul> 
 		                <div id="mainTabs-1"> 
 		                    <p> 
@@ -179,7 +216,16 @@ $(document).ready(function() {
 		                    </p> 
 		                </div> 
 		                <div id="mainTabs-2"> 
-		                	<iframe src="${contextPath}/view/demo/addDemo"></iframe>
+		                	<iframe src="${contextPath}/view/calendar/calendar"></iframe>
+		                </div>
+		                <div id="mainTabs-3"> 
+		                	<iframe src="${contextPath}/view/notepad/notepad"></iframe>
+		                </div>
+		                <div id="mainTabs-4"> 
+		                	<iframe src="${contextPath}/view/event/testGlobalEvent1"></iframe>
+		                </div>
+		                <div id="mainTabs-5"> 
+		                	<iframe src="${contextPath}/view/event/testGlobalEvent2"></iframe>
 		                </div>
 		           	</div> 
 				</div>
@@ -208,6 +254,9 @@ $(document).ready(function() {
 		
 	</div>
 </div>
+
+<!-- skinSwitcher -->
+<div id="skinSwitcher" class="skin-switcher"></div>	
 
 <!-- menu -->
 <div id="menuItmesContainer" class="menu-itmes-container" style="height: 100px">

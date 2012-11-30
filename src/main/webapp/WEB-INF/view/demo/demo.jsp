@@ -10,31 +10,11 @@
 
 <script type="text/javascript" >
 $(document).ready(function() {
-	$("#bodyDiv").omPanel({
-		header:false,
-        width: 'fit',
-        height: 'fit',
-        title: 'webdemo mainframe',
-        collapsed: false,//组件创建后为收起状态
-        collapsible: false,//渲染收起与展开按钮
-        closable: false //渲染关闭按钮
-    });
 	
-	$('input[name=createDate]').omCalendar({
-		editable : false,
-		showTime : true
-	});
-
-	 $('#submitButton').button();
-	 $('#test').button();
-
-	 	 
-	 //$("form").omForm();
 });
 </script>
 </head>
 <body>
-<form id="demo" action="/demo/addDemo1" method="post">
 <div id="bodyDiv">
 	<table>
 		<tr>
@@ -57,6 +37,5 @@ $(document).ready(function() {
 	<input type="button" id="submitButton" value="提交">
 	<input type="button" id="test" value="提交">
 </div>
-</form>
 </body>
 </html>
