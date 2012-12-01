@@ -8,6 +8,7 @@ package com.tx.component.auth.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.tx.core.tree.model.TreeAble;
@@ -27,17 +28,26 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
     /** 注释内容 */
     private static final long serialVersionUID = -5205952448154970380L;
     
+    /** 权限类型：操作权限父节类型，抽象权限，不是真是的权限  */
+    public final static String TYPE_ABS_OPERATE = "TYPE_ABS_OPERATE";
+    
     /** 权限类型：操作权限 */
-    public final static String AUTH_TYPE_OPERATE = "operate";
+    public final static String TYPE_OPERATE = "TYPE_OPERATE";
     
     /** 权限类型：数据权限 */
-    public final static String AUTH_TYPE_DATA = "data";
+    public final static String TYPE_ABS_DATA = "TYPE_ABS_DATA";
+    
+    /** 权限类型：数据列权限父节类型，抽象权限，不是真是的权限 */
+    public final static String TYPE_ABS_DATA_COLUMN = "TYPE_ABS_DATA_COLUMN";
     
     /** 权限类型：数据列权限 */
-    public final static String AUTH_TYPE_DATA_COLUMN = "data_column";
+    public final static String TYPE_DATA_COLUMN = "TYPE_DATA_COLUMN";
     
-    /** 权限类型行权限 */
-    public final static String AUTH_TYPE_DATA_ROW = "data_row";
+    /** 权限类型: 数据行权限父节类型，抽象权限，不是真是的权限 */
+    public final static String TYPE_ABS_DATA_ROW = "TYPE_ABS_DATA_ROW";
+    
+    /** 权限类型: 数据行权限 */
+    public final static String TYPE_DATA_ROW = "TYPE_DATA_ROW";
     
     /** 权限版本：用以支持权限升级 */
     private String version;
@@ -58,14 +68,26 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
     /** 权限项目描述 */
     private String description;
     
+    /** 权限类型 */
+    private String authType;
+    
+    /**
+     * 无权限的处理方式：提供集中默认方式
+     * showEmpty : 显示为空
+     * maskInfo ：遮罩信息   方式通过注入权限容器中可自定义添加
+     */
+    private String noAuthDeal;
+    
+    /**
+     * 权限的纬度检查映射
+     */
+    private Map<String, String> dimensionChecherMapping;
+    
     /** 权限列表 */
     private List<String> dimensionList;
     
     /** 子权限列表 */
     private Set<AuthItem> childs;
-    
-    /** 权限类型 */
-    private String authType;
     
     /**
      * @return 返回 version
@@ -171,5 +193,34 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
      */
     public void setAuthType(String authType) {
         this.authType = authType;
+    }
+
+    /**
+     * @return 返回 noAuthDeal
+     */
+    public String getNoAuthDeal() {
+        return noAuthDeal;
+    }
+
+    /**
+     * @param 对noAuthDeal进行赋值
+     */
+    public void setNoAuthDeal(String noAuthDeal) {
+        this.noAuthDeal = noAuthDeal;
+    }
+
+    /**
+     * @return 返回 dimensionChecherMapping
+     */
+    public Map<String, String> getDimensionChecherMapping() {
+        return dimensionChecherMapping;
+    }
+
+    /**
+     * @param 对dimensionChecherMapping进行赋值
+     */
+    public void setDimensionChecherMapping(
+            Map<String, String> dimensionChecherMapping) {
+        this.dimensionChecherMapping = dimensionChecherMapping;
     }
 }

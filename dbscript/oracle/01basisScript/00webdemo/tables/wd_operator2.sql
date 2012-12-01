@@ -9,6 +9,6 @@ create table wd_operator2
   password varchar2(64),
   createdate date,
   updatedate date,
-  description varchar2(2000)
+  description varchar2(2000),
   primary key(id)
 );

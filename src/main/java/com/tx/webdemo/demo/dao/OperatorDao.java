@@ -23,16 +23,77 @@ import com.tx.webdemo.demo.model.Operator;
  */
 public interface OperatorDao {
     
+    /**
+      *<查找当前操作人员>
+      *<功能详细描述>
+      * @param condition
+      * @return [参数说明]
+      * 
+      * @return Operator [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     Operator findOperator(Operator condition);
     
+    /**
+      *<增加操作人员>
+      *<功能详细描述>
+      * @param operator [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     void addOperator(Operator operator);
     
+    /**
+      *<查询操作人员列表>
+      *<功能详细描述>
+      * @param queryCondition
+      * @return [参数说明]
+      * 
+      * @return List<Operator> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     List<Operator> queryOperatorList(Map<String, Object> queryCondition);
     
+    /**
+      *<分页查询操作人员列表>
+      *<功能详细描述>
+      * @param paraObj
+      * @param pageIndex
+      * @param pageSize
+      * @return [参数说明]
+      * 
+      * @return PagedList<Operator> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     PagedList<Operator> queryOperatorPagedList(Map<String, Object> paraObj,
             int pageIndex, int pageSize);
     
+    /**
+      *<删除操作人员>
+      *<功能详细描述>
+      * @param condition
+      * @return [参数说明]
+      * 
+      * @return int [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     int delOperator(Operator condition);
     
+    /**
+      *<更新操作人员>
+      *<功能详细描述>
+      * @param condition
+      * @return [参数说明]
+      * 
+      * @return int [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     int updateOperator(Operator condition);
 }

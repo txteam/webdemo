@@ -52,8 +52,8 @@
 		      />
 	-->
 	<Resource name="db_webdemo"
-		      url="jjdbc:oracle:thin:@127.0.0.1:1521:txdb"
-		      type="org.apache.commons.dbcp.BasicDataSource"
+		      url="jdbc:oracle:thin:@127.0.0.1:1521:txdb"
+		      type="javax.sql.DataSource"
 		      driverClassName="oracle.jdbc.driver.OracleDriver"
 		      username="txadmin"
 		      password="txadmin"

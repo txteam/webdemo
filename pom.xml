@@ -118,7 +118,7 @@
 		<!-- xfire -->
 
 		<!-- ajax -->
-		
+
 		<!-- json xml -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -132,7 +132,7 @@
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
 		</dependency>
-		
+
 		<!-- dom4j -->
 		<dependency>
 			<groupId>dom4j</groupId>
@@ -256,6 +256,10 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc14</artifactId>
 		</dependency>
 
 		<!-- junit -->

@@ -1,17 +1,16 @@
-prompt EXECUTE 02.鍒涘缓鐢ㄦ埛.orasql...
+prompt EXECUTE 02_create_user.sql...
 
--- 鍒涘缓鐢ㄦ埛
-CREATE USER fnimsadmin IDENTIFIED BY fnimsadmin
-  DEFAULT TABLESPACE FNIMS_DAT
-  TEMPORARY TABLESPACE FNIMS_TEMP;
+-- 创建用户
+CREATE USER wdadmin IDENTIFIED BY wdadmin
+  DEFAULT TABLESPACE WD_DAT
+  TEMPORARY TABLESPACE WD_TEMP;
+GRANT DBA TO wdadmin;
 
-GRANT DBA TO fnimsadmin;
-
---鎺堟潈
-GRANT ALL PRIVILEGE TO fnimsadmin;
+-- 授权
+GRANT ALL PRIVILEGE TO wdadmin;
 ALTER USER fnimsadmin DEFAULT ROLE ALL;
 
-prompt EXECUTE 02.鍒涘缓鐢ㄦ埛.orasql...DONE.
+prompt EXECUTE 02_create_user.sql...DONE.
 
 EXIT;
 

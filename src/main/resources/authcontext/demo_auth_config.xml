@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<auths>
+	<!-- 操作权限 -->
+	<auth type="TYPE_ABS_OPERATE">
+		
+		<!-- demo的编辑权限，拥有该权限才能查询demo的列表，为增加，删除，修改的父权限 -->
+		<!-- 此处不指定类型，则默认为操作权限 -->
+		<auth key="demo_modify" name="demo的编辑权限"
+			description="">	
+		</auth>		
+		
+		<auth key="demo_modify_add" name="demo的编辑权限">		
+		</auth>	
+	</auth>
+	
+	<!-- 数据权限  -->
+	<auth type="TYPE_ABS_DATA">
+		<!-- 数据列权限  -->
+		<auth type="TYPE_ABS_DATA_COLUMN">
+			
+		</auth>
+		
+		<!-- 数据列权限  -->
+		<auth type="TYPE_ABS_DATA_ROW">
+			
+		</auth>
+	</auth>
+</auths>
