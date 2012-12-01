@@ -40,5 +40,5 @@ public interface AuthChecker {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public boolean checkAuth(String authKey);
+    public boolean isHasAuth(String authKey,Object... objects);
 }

@@ -11,7 +11,10 @@ import java.util.Date;
 
 
  /**
-  * <功能简述>
+  * <权限引用项>
+  *     可以是： 角色权限
+  *             职位权限
+  *             ...可以赋予权限的主体
   * <功能详细描述>
   * 
   * @author  PengQingyang
@@ -37,13 +40,6 @@ public abstract class AuthItemRef implements Serializable{
      * 权限引用对应的权限id
      */
     private String authId;
-    
-    /**
-     * 应用项id 
-     * 可以是角色的id,
-     * 可以是只为的id
-     */
-    private String refId;
 
     /** 权限引用项的创建(授予)时间 */
     private Date createDate;
@@ -62,6 +58,15 @@ public abstract class AuthItemRef implements Serializable{
      * @return 返回 authRefType
      */
     public abstract String getAuthRefType();
+    
+    /**
+     * 权限关联项id 
+     * 可以是角色的id,
+     * 可以是职位的id
+     * ....
+     * @return 返回 refId
+     */
+    public abstract String getRefId();
 
     /**
      * @return 返回 createDate
@@ -89,20 +94,6 @@ public abstract class AuthItemRef implements Serializable{
      */
     public void setAuthId(String authId) {
         this.authId = authId;
-    }
-
-    /**
-     * @return 返回 refId
-     */
-    public String getRefId() {
-        return refId;
-    }
-
-    /**
-     * @param 对refId进行赋值
-     */
-    public void setRefId(String refId) {
-        this.refId = refId;
     }
 
     /**

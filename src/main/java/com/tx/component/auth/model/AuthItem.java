@@ -15,7 +15,7 @@ import com.tx.core.tree.model.TreeAble;
  * <权限项>
  * <功能详细描述>
  * 
- * @author  brady
+ * @author  PengQingyang
  * @version  [版本号, 2012-11-30]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
@@ -75,13 +75,6 @@ public class AuthItem implements Serializable,
      *      通过多个纬度的权限交叉可以达到多纬度的授权体系
      */
     private String authType;
-    
-    /**
-     * 无权限的处理方式：提供集中默认方式
-     * showEmpty : 显示为空
-     * maskInfo ：遮罩信息   方式通过注入权限容器中可自定义添加
-     */
-    private String noAuthDeal;
     
     /** 子权限列表 */
     private Set<AuthItem> childs;
@@ -176,20 +169,6 @@ public class AuthItem implements Serializable,
      */
     public void setAuthType(String authType) {
         this.authType = authType;
-    }
-    
-    /**
-     * @return 返回 noAuthDeal
-     */
-    public String getNoAuthDeal() {
-        return noAuthDeal;
-    }
-    
-    /**
-     * @param 对noAuthDeal进行赋值
-     */
-    public void setNoAuthDeal(String noAuthDeal) {
-        this.noAuthDeal = noAuthDeal;
     }
     
     /**

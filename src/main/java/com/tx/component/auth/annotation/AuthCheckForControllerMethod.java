@@ -13,16 +13,18 @@ import java.lang.annotation.Target;
 
 
  /**
-  * <支持数据权限声明>
+  * <操作权限检测>
   * <功能详细描述>
   * 
-  * @author  brady
+  * @author  PengQingyang
   * @version  [版本号, 2012-11-30]
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface SupportDataAuth {
+@Target(ElementType.METHOD)
+public @interface AuthCheckForControllerMethod {
     
+    /** 需检测的权限项 */
+    String keys();
 }
