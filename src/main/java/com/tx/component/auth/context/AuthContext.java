@@ -18,4 +18,5 @@ package com.tx.component.auth.context;
   */
 public class AuthContext {
     
+    
 }

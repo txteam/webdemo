@@ -1,4 +1,4 @@
-package com.tx.component.menu.model;
+package com.tx.component.mainframe.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -191,14 +191,14 @@ public class MenuItem implements Cloneable, TreeAble<List<MenuItem>, MenuItem> {
     public void setChilds(List<MenuItem> childs) {
         this.childs = childs;
     }
-
+    
     /**
      * @return 返回 authIds
      */
     public List<String> getAuthIds() {
         return authIds;
     }
-
+    
     /**
      * @param 对authIds进行赋值
      */

@@ -4,7 +4,8 @@
  * 修改时间:  2012-12-1
  * <修改描述:>
  */
-package com.tx.component.menu.context;
+package com.tx.component.auth.context;
+
 
 
  /**
@@ -16,7 +17,7 @@ package com.tx.component.menu.context;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public class MenuContext {
+public interface ViewContextSupport {
     
     
 }

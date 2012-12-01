@@ -4,7 +4,7 @@
  * 修改时间:  2012-11-30
  * <修改描述:>
  */
-package com.tx.component.tabs.service;
+package com.tx.component.mainframe.context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import org.dom4j.io.SAXReader;
 import org.quartz.Scheduler;
 import org.springframework.core.io.Resource;
 
-import com.tx.component.tabs.model.TabConfig;
+import com.tx.component.mainframe.model.TabConfig;
 
 /**
  * <tab的业务逻辑层>

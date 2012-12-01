@@ -6,6 +6,7 @@
  */
 package com.tx.component.auth.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -18,27 +19,49 @@ import java.util.Date;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public class AuthItemRef extends AuthItem{
+public abstract class AuthItemRef implements Serializable{
     
     /** 注释内容 */
     private static final long serialVersionUID = -7928952142014599323L;
+    
+    /** 操作员权限 */
+    public String AUTHREFTYPE_OPERATOR = "AUTHREFTYPE_OPERATOR";
+    
+    /** 操作员临时权限 */
+    public String AUTHREFTYPE_OPERATOR_TEMP = "AUTHREFTYPE_OPERATOR_TEMP"; 
+    
+    /** 角色权限 */
+    public String AUTHREFTYPE_ROLE = "AUTHREFTYPE_ROLE";
+    
+    /** 
+     * 权限引用对应的权限id
+     */
+    private String authId;
+    
+    /**
+     * 应用项id 
+     * 可以是角色的id,
+     * 可以是只为的id
+     */
+    private String refId;
 
     /** 权限引用项的创建(授予)时间 */
     private Date createDate;
     
-    /** 权限引用项的授予人 */
-    private String operId;
-    
-    /** 
-     * 权限引用项的类型
-     * 利用该类型实现临时权限 
-     */
-    private Date authRefType;
+    /** 权限引用项的失效时间 */
+    private String endDate;
     
     /**
-     * 权限失效时间
+     * 权限引用项的类型
+     * 利用该类型
+     * 实现            人员权限   AUTHREFTYPE_OPERATOR
+     *         临时权限   AUTHREFTYPE_OPERATOR_TEMP
+     *         角色权限   AUTHREFTYPE_ROLE
+     *         职位权限   ...
+     * 这里用String虽没有int查询快，但能让sql可读性增强
+     * @return 返回 authRefType
      */
-    private Date inValidDate;
+    public abstract String getAuthRefType();
 
     /**
      * @return 返回 createDate
@@ -55,44 +78,44 @@ public class AuthItemRef extends AuthItem{
     }
 
     /**
-     * @return 返回 operId
+     * @return 返回 authId
      */
-    public String getOperId() {
-        return operId;
+    public String getAuthId() {
+        return authId;
     }
 
     /**
-     * @param 对operId进行赋值
+     * @param 对authId进行赋值
      */
-    public void setOperId(String operId) {
-        this.operId = operId;
+    public void setAuthId(String authId) {
+        this.authId = authId;
     }
 
     /**
-     * @return 返回 authRefType
+     * @return 返回 refId
      */
-    public Date getAuthRefType() {
-        return authRefType;
+    public String getRefId() {
+        return refId;
     }
 
     /**
-     * @param 对authRefType进行赋值
+     * @param 对refId进行赋值
      */
-    public void setAuthRefType(Date authRefType) {
-        this.authRefType = authRefType;
+    public void setRefId(String refId) {
+        this.refId = refId;
     }
 
     /**
-     * @return 返回 inValidDate
+     * @return 返回 endDate
      */
-    public Date getInValidDate() {
-        return inValidDate;
+    public String getEndDate() {
+        return endDate;
     }
 
     /**
-     * @param 对inValidDate进行赋值
+     * @param 对endDate进行赋值
      */
-    public void setInValidDate(Date inValidDate) {
-        this.inValidDate = inValidDate;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

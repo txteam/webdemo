@@ -1,4 +1,4 @@
-package com.tx.component.tabs.model;
+package com.tx.component.mainframe.model;
 
 import java.util.HashSet;
 import java.util.Map;

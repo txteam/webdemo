@@ -23,7 +23,7 @@ $(document).ready(function() {
 <body>
 <div class="container">
 	<!-- top -->
-	<div class="top">
+	<div class="top ui-widget-content">
 		<div>log</div>
 		
 		<div id="topSpliter" class="ui-widget-header top-spliter"></div>
@@ -152,7 +152,7 @@ $(document).ready(function() {
 		</div>
 		<div>
 			<div class="center-main">
-				<iframe id="main" src="${contextPath}/view/event/testGlobalEvent2"></iframe>
+				<iframe id="main" src="${contextPath}/view/event/testGlobalEvent2" scrolling="auto"></iframe>
 			</div>
 		</div>
 	</div>

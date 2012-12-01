@@ -7,23 +7,21 @@
 package com.tx.component.auth.model;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.tx.core.tree.model.TreeAble;
 
-
- /**
-  * <权限项>
-  * <功能详细描述>
-  * 
-  * @author  brady
-  * @version  [版本号, 2012-11-30]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
-public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
+/**
+ * <权限项>
+ * <功能详细描述>
+ * 
+ * @author  brady
+ * @version  [版本号, 2012-11-30]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
+public class AuthItem implements Serializable,
+        TreeAble<Set<AuthItem>, AuthItem> {
     
     /** 注释内容 */
     private static final long serialVersionUID = -5205952448154970380L;
@@ -68,7 +66,14 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
     /** 权限项目描述 */
     private String description;
     
-    /** 权限类型 */
+    /** 
+     * 权限类型
+     * 后续根据需要可以扩展相应的权限大类
+     * 比如 
+     *      产品权限
+     *      流程环节权限
+     *      通过多个纬度的权限交叉可以达到多纬度的授权体系
+     */
     private String authType;
     
     /**
@@ -77,14 +82,6 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
      * maskInfo ：遮罩信息   方式通过注入权限容器中可自定义添加
      */
     private String noAuthDeal;
-    
-    /**
-     * 权限的纬度检查映射
-     */
-    private Map<String, String> dimensionChecherMapping;
-    
-    /** 权限列表 */
-    private List<String> dimensionList;
     
     /** 子权限列表 */
     private Set<AuthItem> childs;
@@ -95,21 +92,21 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
     public String getVersion() {
         return version;
     }
-
+    
     /**
      * @param 对version进行赋值
      */
     public void setVersion(String version) {
         this.version = version;
     }
-
+    
     /**
      * @return 返回 id
      */
     public String getId() {
         return id;
     }
-
+    
     /**
      * @param 对id进行赋值
      * 
@@ -117,7 +114,7 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
     public void setId(String id) {
         this.id = id;
     }
-
+    
     /**
      * @return 返回 parentId
      */
@@ -131,21 +128,21 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
     public String getName() {
         return name;
     }
-
+    
     /**
      * @param 对name进行赋值
      */
     public void setName(String name) {
         this.name = name;
     }
-
+    
     /**
      * @return 返回 description
      */
     public String getDescription() {
         return description;
     }
-
+    
     /**
      * @param 对description进行赋值
      */
@@ -159,68 +156,78 @@ public class AuthItem implements Serializable,TreeAble<Set<AuthItem>,AuthItem>{
     public Set<AuthItem> getChilds() {
         return childs;
     }
-
+    
     /**
      * @param 对childs进行赋值
      */
     public void setChilds(Set<AuthItem> childs) {
         this.childs = childs;
     }
-
-    /**
-     * @return 返回 dimensionList
-     */
-    public List<String> getDimensionList() {
-        return dimensionList;
-    }
-
-    /**
-     * @param 对dimensionList进行赋值
-     */
-    public void setDimensionList(List<String> dimensionList) {
-        this.dimensionList = dimensionList;
-    }
-
+    
     /**
      * @return 返回 authType
      */
     public String getAuthType() {
         return authType;
     }
-
+    
     /**
      * @param 对authType进行赋值
      */
     public void setAuthType(String authType) {
         this.authType = authType;
     }
-
+    
     /**
      * @return 返回 noAuthDeal
      */
     public String getNoAuthDeal() {
         return noAuthDeal;
     }
-
+    
     /**
      * @param 对noAuthDeal进行赋值
      */
     public void setNoAuthDeal(String noAuthDeal) {
         this.noAuthDeal = noAuthDeal;
     }
-
+    
     /**
-     * @return 返回 dimensionChecherMapping
+     * @param obj
+     * @return
      */
-    public Map<String, String> getDimensionChecherMapping() {
-        return dimensionChecherMapping;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        else if (obj instanceof AuthItem) {
+            AuthItem other = (AuthItem) obj;
+            if (this.id == null && other.getId() == null) {
+                //这里认为两者ID均为空时无法进行详细判断
+                //仅以两者是否是同一个对象的链接进行判断
+                return this == other;
+            }
+            else if (this.getId() == null) {
+                return false;
+            }
+            else {
+                return this.getId().equals(other.getId());
+            }
+        }
+        else {
+            return false;
+        }
     }
-
+    
     /**
-     * @param 对dimensionChecherMapping进行赋值
+     * @return
      */
-    public void setDimensionChecherMapping(
-            Map<String, String> dimensionChecherMapping) {
-        this.dimensionChecherMapping = dimensionChecherMapping;
+    @Override
+    public int hashCode() {
+        if (this.getId() == null) {
+            return super.hashCode();
+        }
+        return this.getId().hashCode() + this.getClass().hashCode();
     }
 }

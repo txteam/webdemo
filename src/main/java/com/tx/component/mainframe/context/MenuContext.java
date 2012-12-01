@@ -4,7 +4,7 @@
  * 修改时间:  2012-12-1
  * <修改描述:>
  */
-package com.tx.component.auth.model;
+package com.tx.component.mainframe.context;
 
 
  /**
@@ -16,6 +16,7 @@ package com.tx.component.auth.model;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public interface HasAuthAble {
+public class MenuContext {
+    
     
 }

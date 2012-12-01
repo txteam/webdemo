@@ -13,8 +13,8 @@ $(document).ready(function() {
 });
 </script>
 </head>
-<body>
-<textarea id="wijeditor" style="width: 756px; height: 475px;">
+<body class="ui-widget-content">
+<textarea id="wijeditor" style="width: 756px; height: 475px;" >
 <h2>History</h2>
 <p>
 	JavaScript was originally developed by Brendan Eich 

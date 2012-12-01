@@ -8,7 +8,7 @@ GRANT DBA TO wdadmin;
 
 -- ÊÚÈ¨
 GRANT ALL PRIVILEGE TO wdadmin;
-ALTER USER fnimsadmin DEFAULT ROLE ALL;
+ALTER USER wdadmin DEFAULT ROLE ALL;
 
 prompt EXECUTE 02_create_user.sql...DONE.
 

@@ -71,16 +71,29 @@ Layout.prototype._accordingHeight = 0;
  */
 Layout.prototype._accordingWidth = 0;
 /*
+ * according的高度
+ */
+Layout.prototype._tabPanelHeight = 0;
+/*
+ * according的高度
+ */
+Layout.prototype._tabPanelWidth = 0;
+/*
  * 设置layout高度
  */
 Layout.prototype._resetCenterHeight = function() {
-    var $document = $(document), _dh = $document.innerHeight(), _th = this.$top.outerHeight(), _fh = this.$footer.outerHeight(), _ch = _dh - _th - _fh;
+    var $document = $(document);
+    var  _dh = $document.innerHeight();
+    var _th = this.$top.outerHeight();
+    var _fh = this.$footer.outerHeight();
+    var _ch = _dh - _th - _fh;
     this._centerHeight = _ch;
     this._centerWidth = $document.innerWidth();
     this.$center.height(_ch);
-    this.$center.height(_ch);
-    this.$centerLeft.height(_ch);
-    this.$centerMain.height(_ch);
+    this.$center.width(this._centerWidth);
+    
+    this.$centerLeft.height(this._centerHeight);
+    this.$centerMain.height(this._centerHeight);
 };
 /*
  * 初始化主splite(center元素上的spliter)
@@ -105,13 +118,14 @@ Layout.prototype._initCenterSpliter = function() {
         fullSplit : false
     });
     $centerSpliter.bind("refresh", function(event) {
+        //这里由于已经调用了refresh方法，所以不会发生事件重复绑定的问题，这里不会出现重复绑定
         _this.$center.wijsplitter("refresh");
-        //触发客户自定义菜单的resize事件
-        _this.$center.trigger("centerSpliterResized");
-        
         _this.$centerLeft.next("div.ui-resizable-handle").mousedown(function() {
             return false;
         });
+        
+        //触发客户自定义菜单的resize事件
+        _this.$center.trigger("centerSpliterResized");
         event.stopPropagation();
         event.preventDefault();
         return false;
@@ -149,7 +163,7 @@ Layout.prototype._initCenterMainSpliter = function() {
         splitterDistance : _this._centerHeight * 3 / 5,
         orientation : "horizontal",
         collapsingPanel : "panel2",
-        fullSplit : true
+        fullSplit : false
     });
     $centerMainSpliter.bind("refresh", function(event) {
         _this.$centerMain.wijsplitter("refresh");
@@ -211,10 +225,8 @@ Layout.prototype._initCenterAccordion = function() {
         event.preventDefault();
         return false;
     });
-    
     _this.$centerLeft.find("li>div").eq(0).height(_this._accordingHeight);
-    $customerMenuAccordion.trigger("accordionResize");
-    
+    //$customerMenuAccordion.trigger("accordionResize");
     
     _this.$center.bind("centerSpliterResized", function(event) {
         $customerMenuAccordion.trigger("accordionResize");
@@ -251,43 +263,42 @@ Layout.prototype._initMainTabs = function() {
     var _this = this;
     this.$centerMainTabs.children("div").attr("roleType","tabpanel");
     var $mainTabs = this.$centerMainTabs.wijtabs();
-    var newHeight = _this.$centerMainTabs.find("div[roleType=tabpanel]").height();
     
-    var oldHeight = _this.$centerMainTabs.find("div[roleType=tabpanel]").height();
-    _this.$centerMainTabs.find("div[roleType=tabpanel]").height(_this._accordingHeight - 35);
+    _this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
+    _this._tabPanelWidth = _this.$centerMainTabs.width();
+    _this.$centerMainTabs.find("div[roleType=tabpanel]").height(_this._tabPanelHeight);
+    _this.$centerMainTabs.find("div[roleType=tabpanel]").width(_this._tabPanelWidth);
     
-    $mainTabs.bind("tabsResize",function(event){
-        event.stopPropagation();
-        event.preventDefault();
-        
-        var $visiblePanel = _this.$centerMainTabs.find("div[roleType=tabpanel]:visible");
-        var _height = $visiblePanel.innerHeight();
-        var _width = $visiblePanel.innerWidth();
+    $mainTabs.bind("centerMainResize",function(event){
+         _this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
+        _this._tabPanelWidth = _this.$centerMainTabs.width();
         
         $.each(_this.$centerMainTabs.find("div[roleType=tabpanel]"),function(index,div){
-            
             if($(div).children("iframe").size() > 0){
                 var $iframe = $(div).children("iframe")
-                $iframe.attr("height",_height);
-                $iframe.attr("width",_width);
+                $iframe.attr("height",_this._tabPanelHeight);
+                $iframe.attr("width",_this._tabPanelWidth);
             }
         });
+        
+        event.stopPropagation();
+        event.preventDefault();
         return false;
     });
-    $mainTabs.trigger("tabsResize");
+    $mainTabs.trigger("centerMainResize");
     
     _this.$centerMain.bind("centerMainSpliterResized",function(event){
-        $mainTabs.trigger("tabsResized");
+        $mainTabs.trigger("centerMainResize");
     });
     this.$centerMain.wijsplitter({
         expanded : function(e) {
-            $mainTabs.trigger("tabsResize");
+            $mainTabs.trigger("centerMainResize");
         },
         collapsed : function(e) {
-            $mainTabs.trigger("tabsResize");
+            $mainTabs.trigger("centerMainResize");
         },
         sized : function(e) {
-            $mainTabs.trigger("tabsResize");
+            $mainTabs.trigger("centerMainResize");
         }
     });
 };

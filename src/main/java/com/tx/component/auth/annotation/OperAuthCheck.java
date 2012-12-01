@@ -11,8 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.commons.lang.ArrayUtils;
-
 
  /**
   * <操作权限检测>
@@ -28,7 +26,5 @@ import org.apache.commons.lang.ArrayUtils;
 public @interface OperAuthCheck {
     
     /** 需检测的权限项 */
-    String key();
-    
-    
+    String keys();
 }

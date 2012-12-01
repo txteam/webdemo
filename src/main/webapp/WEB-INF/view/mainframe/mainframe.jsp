@@ -82,7 +82,7 @@ $(document).ready(function() {
 <body>
 <div class="container">
 	<!-- top -->
-	<div class="top">
+	<div class="top ui-widget-content">
 		<div id="topHeader" class="top-header ui-widget-header ui-corner-top">
 			<!-- menu显示占位符 
 			<span class="menu"></span>
@@ -213,16 +213,16 @@ $(document).ready(function() {
 		                    </p> 
 		                </div> 
 		                <div id="mainTabs-2"> 
-		                	<iframe src="${contextPath}/view/calendar/calendar"></iframe>
+		                	<iframe src="${contextPath}/view/calendar/calendar" scrolling="auto"></iframe>
 		                </div>
 		                <div id="mainTabs-3"> 
-		                	<iframe src="${contextPath}/view/notepad/notepad"></iframe>
+		                	<iframe src="${contextPath}/view/notepad/notepad" scrolling="auto"></iframe>
 		                </div>
 		                <div id="mainTabs-4"> 
-		                	<iframe src="${contextPath}/view/event/testGlobalEvent1"></iframe>
+		                	<iframe src="${contextPath}/view/event/testGlobalEvent1" scrolling="auto"></iframe>
 		                </div>
 		                <div id="mainTabs-5"> 
-		                	<iframe src="${contextPath}/view/event/testGlobalEvent2"></iframe>
+		                	<iframe src="${contextPath}/view/event/testGlobalEvent2" scrolling="auto"></iframe>
 		                </div>
 		           	</div> 
 				</div>

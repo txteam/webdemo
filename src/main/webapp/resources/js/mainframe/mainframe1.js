@@ -69,8 +69,10 @@ Layout.prototype._resetCenterHeight = function() {
     this._centerHeight = _ch;
     this._centerWidth = $document.innerWidth();
     this.$center.height(_ch);
-    this.$centerLeft.height(_ch);
-    this.$centerMain.height(_ch);
+    this.$center.width(this._centerWidth);
+    
+    this.$centerLeft.height(this._centerHeight);
+    this.$centerMain.height(this._centerHeight);
 };
 /*
  * 初始化主splite(center元素上的spliter)
@@ -229,6 +231,6 @@ Layout.prototype._initMainFrame = function() {
     _this.$centerMain.trigger("centerMainResize");
     
     _this.$center.bind("centerSpliterResized",function(event){
-        _this.$centerLeft.trigger("centerMainResize");
+        _this.$centerMain.trigger("centerMainResize");
     });
 };
