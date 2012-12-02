@@ -28,18 +28,23 @@ public abstract class AuthItemRef implements Serializable{
     private static final long serialVersionUID = -7928952142014599323L;
     
     /** 操作员权限 */
-    public String AUTHREFTYPE_OPERATOR = "AUTHREFTYPE_OPERATOR";
+    public static final String AUTHREFTYPE_OPERATOR = "AUTHREFTYPE_OPERATOR";
     
     /** 操作员临时权限 */
-    public String AUTHREFTYPE_OPERATOR_TEMP = "AUTHREFTYPE_OPERATOR_TEMP"; 
+    public static final  String AUTHREFTYPE_OPERATOR_TEMP = "AUTHREFTYPE_OPERATOR_TEMP"; 
     
     /** 角色权限 */
-    public String AUTHREFTYPE_ROLE = "AUTHREFTYPE_ROLE";
+    public static final  String AUTHREFTYPE_ROLE = "AUTHREFTYPE_ROLE";
     
     /** 
      * 权限引用对应的权限id
      */
     private String authId;
+    
+    /**
+     * 权限授予人
+     */
+    private String createOperId;
 
     /** 权限引用项的创建(授予)时间 */
     private Date createDate;
@@ -108,5 +113,19 @@ public abstract class AuthItemRef implements Serializable{
      */
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    /**
+     * @return 返回 createOperId
+     */
+    public String getCreateOperId() {
+        return createOperId;
+    }
+
+    /**
+     * @param 对createOperId进行赋值
+     */
+    public void setCreateOperId(String createOperId) {
+        this.createOperId = createOperId;
     }
 }

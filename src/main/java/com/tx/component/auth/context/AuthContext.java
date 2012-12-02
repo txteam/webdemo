@@ -12,7 +12,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tx.component.auth.model.AuthItem;
+import com.tx.component.auth.AuthConstant;
 import com.tx.component.auth.service.AuthChecker;
 import com.tx.component.auth.service.AuthService;
 
@@ -89,7 +89,7 @@ public class AuthContext {
       * @see [类、类#方法、类#成员]
      */
     public static boolean isHasOperateAuth(String authKey) {
-        return isHasAuth(authKey, AuthItem.TYPE_OPERATE);
+        return isHasAuth(authKey, AuthConstant.TYPE_OPERATE);
     }
     
     /**
@@ -103,7 +103,7 @@ public class AuthContext {
       * @see [类、类#方法、类#成员]
      */
     public static boolean isHasDataColumnAuth(String authKey) {
-        return isHasAuth(authKey, AuthItem.TYPE_DATA_COLUMN);
+        return isHasAuth(authKey, AuthConstant.TYPE_DATA_COLUMN);
     }
     
     /**
@@ -117,6 +117,6 @@ public class AuthContext {
       * @see [类、类#方法、类#成员]
      */
     public static boolean isHasDataRowAuth(String authKey) {
-        return isHasAuth(authKey, AuthItem.TYPE_DATA_ROW);
+        return isHasAuth(authKey, AuthConstant.TYPE_DATA_ROW);
     }
 }

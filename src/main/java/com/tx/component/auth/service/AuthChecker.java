@@ -20,8 +20,10 @@ package com.tx.component.auth.service;
 public interface AuthChecker {
     
     /**
-      *<权限核查器，支持类型>
-      *<功能详细描述>
+      * <权限核查器，支持类型>
+      * 1、权限容器会根据该权限类型，寻址权限鉴权器
+      * 2、后期扩展准备支持authChecker自动扫描注入，实现了该接口并含有注解的类将被注入
+      * 3、注入先后顺序：后进入的如果authType相同将会覆盖系统默认的
       * @return [参数说明]
       * 
       * @return String [返回类型说明]

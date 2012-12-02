@@ -6,6 +6,11 @@
  */
 package com.tx.component.auth.dao;
 
+import java.util.List;
+import java.util.Map;
+
+import com.tx.component.auth.model.AuthItemRef;
+
 
  /**
   * <权限的持久层>
@@ -18,5 +23,49 @@ package com.tx.component.auth.dao;
   */
 public interface AuthDao {
     
+    /**
+      * 根据用户id查询用户权限引用项列表
+      * <功能详细描述>
+      * @param operator
+      * @return [参数说明]
+      * 
+      * @return List<AuthItemRef> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<AuthItemRef> queryItemAuthRefListByOperId(String opeId);
     
+    /**
+      * 根据用户id已经权限类型查询用户权限引用项列表
+      *<功能详细描述>
+      * @param operId
+      * @return [参数说明]
+      * 
+      * @return List<AuthItemRef> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<AuthItemRef> queryItemAuthRefList(Map<String,Object> params);
+    
+    /**
+      * 插入权限引用项
+      * <功能详细描述>
+      * @param authItemRef [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public void addAuthItemRefList(List<AuthItemRef> authItemRef);
+    
+    /**
+      * 删除权限引用项列表
+      * <功能详细描述>
+      * @param authItemRef [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public void delAuthItemRefList(List<AuthItemRef> authItemRef);
 }

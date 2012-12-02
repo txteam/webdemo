@@ -7,8 +7,13 @@
 package com.tx.component.auth.model;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.cxf.common.util.StringUtils;
+import org.apache.ibatis.type.Alias;
+
+import com.tx.component.auth.AuthConstant;
 import com.tx.core.tree.model.TreeAble;
 
 /**
@@ -20,35 +25,12 @@ import com.tx.core.tree.model.TreeAble;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@Alias("authItem")
 public class AuthItem implements Serializable,
-        TreeAble<Set<AuthItem>, AuthItem> {
+        TreeAble<List<AuthItem>, AuthItem> {
     
     /** 注释内容 */
     private static final long serialVersionUID = -5205952448154970380L;
-    
-    /** 权限类型：操作权限父节类型，抽象权限，不是真是的权限  */
-    public final static String TYPE_ABS_OPERATE = "TYPE_ABS_OPERATE";
-    
-    /** 权限类型：操作权限 */
-    public final static String TYPE_OPERATE = "TYPE_OPERATE";
-    
-    /** 权限类型：数据权限 */
-    public final static String TYPE_ABS_DATA = "TYPE_ABS_DATA";
-    
-    /** 权限类型：数据列权限父节类型，抽象权限，不是真是的权限 */
-    public final static String TYPE_ABS_DATA_COLUMN = "TYPE_ABS_DATA_COLUMN";
-    
-    /** 权限类型：数据列权限 */
-    public final static String TYPE_DATA_COLUMN = "TYPE_DATA_COLUMN";
-    
-    /** 权限类型: 数据行权限父节类型，抽象权限，不是真是的权限 */
-    public final static String TYPE_ABS_DATA_ROW = "TYPE_ABS_DATA_ROW";
-    
-    /** 权限类型: 数据行权限 */
-    public final static String TYPE_DATA_ROW = "TYPE_DATA_ROW";
-    
-    /** 权限版本：用以支持权限升级 */
-    private String version;
     
     /** 
      * 权限项唯一键key 
@@ -74,24 +56,13 @@ public class AuthItem implements Serializable,
      *      流程环节权限
      *      通过多个纬度的权限交叉可以达到多纬度的授权体系
      */
-    private String authType;
+    private String authType = "";
     
     /** 子权限列表 */
-    private Set<AuthItem> childs;
+    private List<AuthItem> childs = new ArrayList<AuthItem>();
     
-    /**
-     * @return 返回 version
-     */
-    public String getVersion() {
-        return version;
-    }
-    
-    /**
-     * @param 对version进行赋值
-     */
-    public void setVersion(String version) {
-        this.version = version;
-    }
+    /** 是否为抽象权限：默认为非抽象权限，抽象权限不建立权限列表映射 */
+    private boolean isAbstract = false;
     
     /**
      * @return 返回 id
@@ -146,14 +117,14 @@ public class AuthItem implements Serializable,
     /**
      * @return 返回 childs
      */
-    public Set<AuthItem> getChilds() {
+    public List<AuthItem> getChilds() {
         return childs;
     }
     
     /**
      * @param 对childs进行赋值
      */
-    public void setChilds(Set<AuthItem> childs) {
+    public void setChilds(List<AuthItem> childs) {
         this.childs = childs;
     }
     
@@ -169,6 +140,27 @@ public class AuthItem implements Serializable,
      */
     public void setAuthType(String authType) {
         this.authType = authType;
+    }
+    
+    /**
+     * @param 对parentId进行赋值
+     */
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+    
+    /**
+     * @return 返回 isAbstract
+     */
+    public boolean isAbstract() {
+        return isAbstract;
+    }
+    
+    /**
+     * @param 对isAbstract进行赋值
+     */
+    public void setAbstract(boolean isAbstract) {
+        this.isAbstract = isAbstract;
     }
     
     /**
@@ -208,5 +200,49 @@ public class AuthItem implements Serializable,
             return super.hashCode();
         }
         return this.getId().hashCode() + this.getClass().hashCode();
+    }
+    
+    /**
+      * 创建权限列表
+      * 1、根据父级权限创建子权限
+      * 2、如果父权限为抽象权限，子权限如果没有指定权限类型，则可根据父权限设定权限类型
+      * @param key
+      * @param authType
+      * @param name
+      * @param description
+      * @return [参数说明]
+      * 
+      * @return List<AuthItem> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public AuthItem createChildAuthItem(String id, String authType,
+            String name, boolean isAbstract, String description) {
+        
+        AuthItem authItem = new AuthItem();
+        authItem.setId(id);
+        authItem.setDescription(description);
+        authItem.setParentId(this.id);
+        
+        if (StringUtils.isEmpty(authType)) {
+            //如果没有指定的权限类型，判断当前权限是否为抽象权限
+            if (this.isAbstract
+                    && this.authType.endsWith(AuthConstant.ABSTRACT_AUTH_END)) {
+                //如果为抽象权限，则设定权限类型为对应抽象权限的子类型
+                authItem.setAuthType(this.authType.substring(0,
+                        this.authType.length()
+                                - AuthConstant.ABSTRACT_AUTH_END.length()));
+            }
+            else {
+                //如果不为抽象权限，则子权限默认相同于父权限
+                authItem.setAuthType(this.authType);
+            }
+        }
+        else {
+            //如果指定的权限类型，则该权限权限类型为指定的权限类型
+            authItem.setAuthType(authType);
+        }
+        
+        return authItem;
     }
 }

@@ -6,6 +6,8 @@
  */
 package com.tx.component.auth.model;
 
+import java.io.Serializable;
+
 /**
  * <角色定义>
  * 通常角色被认定为权限的集合体，
@@ -16,28 +18,97 @@ package com.tx.component.auth.model;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class Role {
-    
-    private static final long serialVersionUID = -4655371768336413345L;
+@SuppressWarnings("serial")
+public class Role implements Serializable {
     
     /** 缺省的角色 */
-    public final static String DEFAULT_ROLE = "1";
+    public final static String DEFAULT_ROLE = "0";
     
     /** 自定义角色 */
-    public final static String CUSTOM_ROLE = "0";
+    public final static String CUSTOM_ROLE = "1";
+    
+    /** 角色唯一键id */
+    private String id;
     
     /** 角色名 */
-    private String roleName = "";
+    private String name = "";
     
     /** 角色描述 */
-    private String roleDesc = "";
+    private String description = "";
     
     /** 该角色的创建者 */
     private String createUserId;
     
-    /** 组织ID */
-    private String organizeId = "";
+    /** 是否缺省的角色 0：是 1：不是  缺省角色不能被删除*/
+    private String isDefault;
     
-    /** 是否缺省的角色 0：是 1：不是 */
-    private String defaultRole;
+    /**
+     * @return 返回 id
+     */
+    public String getId() {
+        return id;
+    }
+    
+    /**
+     * @param 对id进行赋值
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    /**
+     * @return 返回 name
+     */
+    public String getName() {
+        return name;
+    }
+    
+    /**
+     * @param 对name进行赋值
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    /**
+     * @return 返回 description
+     */
+    public String getDescription() {
+        return description;
+    }
+    
+    /**
+     * @param 对description进行赋值
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    /**
+     * @return 返回 createUserId
+     */
+    public String getCreateUserId() {
+        return createUserId;
+    }
+    
+    /**
+     * @param 对createUserId进行赋值
+     */
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+    
+    /**
+     * @return 返回 isDefault
+     */
+    public String getIsDefault() {
+        return isDefault;
+    }
+    
+    /**
+     * @param 对isDefault进行赋值
+     */
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
+    }
 }
