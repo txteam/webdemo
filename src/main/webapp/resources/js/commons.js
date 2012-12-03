@@ -327,7 +327,7 @@ var _default_skins =
                     "hot-sneaks", "humanity", "le-frog", "mint-choc",
                     "overcast", "pepper-grinder", "redmond", "smoothness",
                     "south-street", "start", "sunny", "swanky-purse",
-                    "trontastic", "vader"
+                    "trontastic", "vader","boda"
             ]
         },
         {

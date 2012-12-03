@@ -23,8 +23,9 @@ import java.lang.annotation.Target;
   */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface AuthCheckForControllerMethod {
+public @interface AuthCheckForOperate {
     
     /** 需检测的权限项 */
     String keys();
+    
 }

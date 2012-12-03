@@ -9,8 +9,12 @@ package com.tx.component.auth.context;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.MessageFormatter;
 
 import com.tx.component.auth.AuthConstant;
 import com.tx.component.auth.service.AuthChecker;
@@ -39,6 +43,8 @@ public class AuthContext {
      */
     private Map<String, AuthChecker> authCheckMapping = new HashMap<String, AuthChecker>();
     
+
+    
     /**
       * <登录时初始化当前登录人的权限容器，权限容器放入session中>
       * 请求进入后将对应的权限容器放入线程中以备后续调用
@@ -51,7 +57,7 @@ public class AuthContext {
       * @see [类、类#方法、类#成员]
      */
     public static void initCurrentUserAuthContextWhenLogin(String operatorId) {
-        
+     
     }
     
     /**
@@ -118,5 +124,68 @@ public class AuthContext {
      */
     public static boolean isHasDataRowAuth(String authKey) {
         return isHasAuth(authKey, AuthConstant.TYPE_DATA_ROW);
+    }
+    
+    /**
+      * 回话权限容器
+      * <功能详细描述>
+      * 
+      * @author  brady
+      * @version  [版本号, 2012-12-3]
+      * @see  [相关类/方法]
+      * @since  [产品/模块版本]
+     */
+    public static class SessionAuthContext{
+        
+        /** request请求的引用 */
+        private HttpServletRequest request;
+        
+        /** response的引用 */
+        private HttpServletResponse response;
+        
+        /** handler */
+        private Object handler;
+
+        /**
+         * @return 返回 request
+         */
+        public HttpServletRequest getRequest() {
+            return request;
+        }
+
+        /**
+         * @param 对request进行赋值
+         */
+        public void setRequest(HttpServletRequest request) {
+            this.request = request;
+        }
+
+        /**
+         * @return 返回 response
+         */
+        public HttpServletResponse getResponse() {
+            return response;
+        }
+
+        /**
+         * @param 对response进行赋值
+         */
+        public void setResponse(HttpServletResponse response) {
+            this.response = response;
+        }
+
+        /**
+         * @return 返回 handler
+         */
+        public Object getHandler() {
+            return handler;
+        }
+
+        /**
+         * @param 对handler进行赋值
+         */
+        public void setHandler(Object handler) {
+            this.handler = handler;
+        }
     }
 }

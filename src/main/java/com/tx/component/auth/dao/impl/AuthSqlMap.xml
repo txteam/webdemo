@@ -53,6 +53,12 @@
 			              where tor.roleid = tr.id
 			                and tor.operid = #{operId}) tura on tar.refid = tura.id
         ]]>   
+        <if test="!@AuthContext@checkAuth('aaa')">
+        	and operId = 'xxx'
+        	<if test="">
+        	
+        	</if>
+        </if>
     </select>
     
     <select id="queryItemAuthRefList"
