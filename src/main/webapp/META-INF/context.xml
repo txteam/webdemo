@@ -31,32 +31,13 @@
     <!--
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
-    
-    <!--
-	<Resource name="test_postgresql_db" auth="Container" type="javax.sql.DataSource"
-		maxActive="10" maxIdle="30" maxWait="10000" 
-		username="postgres"
-		password="sys" driverClassName="org.postgresql.Driver"
-		url="jdbc:postgresql://127.0.0.1/postgres" />
-		
-	<Resource name="db_webdemo"
-		      url="jdbc:mysql://127.0.0.1:3306/db_webdemo"
-		      type="org.apache.commons.dbcp.BasicDataSource"
-		      driverClassName="com.mysql.jdbc.Driver"
-		      username="db_webdemo"
-		      password="db_webdemo"
-		      maxActive="20"
-		      maxIdle="5"
-		      maxWait="1000"
-		      auth="Container"
-		      />
-	-->
-	<Resource name="db_webdemo"
-		      url="jdbc:oracle:thin:@127.0.0.1:1521:txdb"
+
+	<Resource name="db_los"
+		      url="jdbc:oracle:thin:@172.16.18.10:1521:bdlms"
 		      type="javax.sql.DataSource"
 		      driverClassName="oracle.jdbc.driver.OracleDriver"
-		      username="txadmin"
-		      password="txadmin"
+		      username="bdtom"
+		      password="bdtom"
 		      maxActive="20"
 		      maxIdle="5"
 		      maxWait="1000"
