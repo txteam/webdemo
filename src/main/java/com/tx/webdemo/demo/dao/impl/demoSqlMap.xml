@@ -17,6 +17,9 @@
      
     <!-- 插入 -->
 	<insert id="insertDemo" parameterType="demo">
+		<selectKey keyProperty="id" resultType="java.util.String">
+			select ${@java.util.UUID@randomUUID} from dual
+		</selectKey>
 		insert into t_test_demo(name,password,email,createDate )
 			values(#{name},#{password},#{email},#{createDate})
 	</insert>
