@@ -41,52 +41,5 @@ public class DemoController {
     @Resource(name="demoService")
     private DemoService demoService;
     
-    public DemoController(){
-        logger.info("Instance DemoController............................");
-    }
     
-    /**
-      *<页面跳转到>/demo/addDemo
-      *<功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return ModelAndView [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping(value="/toAddDemo")
-    public ModelAndView toAddDemo(){
-        ModelAndView mv = new ModelAndView();
-        
-        mv.setViewName("/demo/addDemo");
-        return mv;
-    }
-    
-    
-    @RequestMapping(value="/addDemo1")
-    public ModelAndView addDemo1(@RequestParam("name") String name,
-            @RequestParam("passowrd") String passowrd,
-            @RequestParam("email") String email,
-            @RequestParam("createDate") String createDate){
-        ModelAndView mv = new ModelAndView();
-        
-        Demo demo = new Demo();
-        demo.setName(name);
-        demo.setPassowrd(passowrd);
-        demo.setEmail(email);
-        Date createDateInfo = null;
-        try {
-            createDateInfo = DateUtils.parseDate(createDate, new String[]{"yyyy-MM-dd HH:mm:ss","yyyy-MM-dd"});
-        }
-        catch (ParseException e) {
-            createDateInfo = new Date();
-        }
-        demo.setCreateDate(createDateInfo);
-        
-        this.demoService.insertDemo(demo);
-        
-        mv.setViewName("demo/addSuccess");
-        mv.addObject("resFlag","success");
-        return mv;
-    }
 }

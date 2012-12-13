@@ -9,6 +9,7 @@ package com.tx.webdemo.demo.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.tx.core.mybatis.model.BatchResult;
 import com.tx.core.mybatis.model.Order;
 import com.tx.core.paged.model.PagedList;
 import com.tx.webdemo.demo.model.Demo;
@@ -25,22 +26,33 @@ import com.tx.webdemo.demo.model.Demo;
 public interface DemoDao {
     
     /**
-      * 插入对象实体
+     * 批量插入demo对象列表，其中错误的插入不会造成插入停止
+     * <功能详细描述>
+     * @param demoList [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+   public BatchResult batchInsertDemo(List<Demo> demoList,boolean isStopWhenException);
+    
+    /**
+      * 插入Demo对象实体
       * 1、auto generate
       * <功能详细描述>
-      * @param demo [参数说明]
+      * @param condition [参数说明]
       * 
       * @return void [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public void insertDemo(Demo demo);
+    public void insertDemo(Demo condition);
     
     /**
-      * 删除demo对象
+      * 删除Demo对象
       * 1、auto generate
-      * 2、生成逻辑为根据主键进行删除
+      * 2、根据入参条件进行删除
       * <功能详细描述>
       * @param condition [参数说明]
       * 
@@ -52,7 +64,8 @@ public interface DemoDao {
     public int deleteDemo(Demo condition);
     
     /**
-      * 查询demo实体
+      * 查询Demo实体
+      * auto generate
       * <功能详细描述>
       * @param condition
       * @return [参数说明]
@@ -65,7 +78,8 @@ public interface DemoDao {
     public Demo findDemo(Demo condition);
     
     /**
-      * 根据条件查询demo列表
+      * 根据条件查询Demo列表
+      * auto generate
       * <功能详细描述>
       * @param params
       * @return [参数说明]
@@ -78,7 +92,8 @@ public interface DemoDao {
     public List<Demo> queryDemoList(Map<String, Object> params);
     
     /**
-      * 根据指定查询条件以及排序列表查询demo列表
+      * 根据指定查询条件以及排序列查询Demo列表
+      * auto generate
       * <功能详细描述>
       * @param params
       * @param orderList
@@ -93,7 +108,8 @@ public interface DemoDao {
             List<Order> orderList);
     
     /**
-      * 根据条件查询demo列表数
+      * 根据条件查询Demo列表总数
+      * auto generated
       * <功能详细描述>
       * @param params
       * @return [参数说明]
@@ -105,7 +121,8 @@ public interface DemoDao {
     public int countDemo(Map<String, Object> params);
     
     /**
-      * 分页查询demo列表
+      * 分页查询Demo列表
+      * auto generate
       * <功能详细描述>
       * @param params
       * @param pageIndex
@@ -121,8 +138,9 @@ public interface DemoDao {
             int pageIndex, int pageSize);
     
     /**
-      * 分页查询demo列表，传入排序字段
-      *<功能详细描述>
+      * 分页查询Demo列表，传入排序字段
+      * auto generate
+      * <功能详细描述>
       * @param params
       * @param pageIndex
       * @param pageSize
@@ -139,8 +157,9 @@ public interface DemoDao {
     
     
     /**
-      * 更新demo实体，
-      * 1、传入demo中主键不能为空
+      * 更新Demo实体，
+      * auto generate
+      * 1、传入Demo中主键不能为空
       * <功能详细描述>
       * @param updateDemoRowMap
       * @return [参数说明]
@@ -149,5 +168,5 @@ public interface DemoDao {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public int updateDemo(Map<String, Object> updateDemoRowMap);
+    public int updateDemo(Map<String, Object> updateRowMap);
 }
