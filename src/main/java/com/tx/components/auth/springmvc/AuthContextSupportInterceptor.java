@@ -17,18 +17,17 @@ import com.tx.components.auth.context.AuthContext;
 import com.tx.components.auth.context.SessionAuthContext;
 import com.tx.core.exceptions.parameter.ParameterIsEmptyException;
 
-
- /**
-  * <功能简述>
-  * <功能详细描述>
-  * 
-  * @author  PengQingyang
-  * @version  [版本号, 2012-12-2]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
-public class AuthContextSupportInterceptor implements HandlerInterceptor{
-
+/**
+ * 权限容器拦截器支持器
+ * <功能详细描述>
+ * 
+ * @author  PengQingyang
+ * @version  [版本号, 2012-12-2]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
+public class AuthContextSupportInterceptor implements HandlerInterceptor {
+    
     /**
      * @param request
      * @param response
@@ -46,10 +45,10 @@ public class AuthContextSupportInterceptor implements HandlerInterceptor{
                     "request.getParameter('operatorId') operatorId is empty.");
         }
         SessionAuthContext.preHandler(request, response);
-    	AuthContext.initCurrentUserAuthContextWhenLogin(operatorId);
-    	return true;
+        AuthContext.initCurrentUserAuthContextWhenLogin(operatorId);
+        return true;
     }
-
+    
     /**
      * @param request
      * @param response
@@ -63,7 +62,7 @@ public class AuthContextSupportInterceptor implements HandlerInterceptor{
             ModelAndView modelAndView) throws Exception {
         
     }
-
+    
     /**
      * @param request
      * @param response
@@ -75,7 +74,7 @@ public class AuthContextSupportInterceptor implements HandlerInterceptor{
     public void afterCompletion(HttpServletRequest request,
             HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
-    	SessionAuthContext.afterHandler();
+        SessionAuthContext.afterHandler();
     }
     
 }
