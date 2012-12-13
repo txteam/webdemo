@@ -6,13 +6,16 @@
  */
 package com.tx.webdemo.demo.dao.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.tx.core.mybatis.model.Order;
 import com.tx.core.mybatis.support.MyBatisDaoSupport;
+import com.tx.core.paged.model.PagedList;
 import com.tx.webdemo.demo.dao.DemoDao;
 import com.tx.webdemo.demo.model.Demo;
 
@@ -29,23 +32,102 @@ import com.tx.webdemo.demo.model.Demo;
 @Component("demoDao")
 public class DemoDaoImpl implements DemoDao {
     
-    /* 是否需要引入日志记录，根据具体业务定，这里是为了打印启动加载情况才加入的  */
-    private static Logger logger = LoggerFactory.getLogger(DemoDaoImpl.class);
-    
     @Resource(name="myBatisDaoSupport")
     private MyBatisDaoSupport mybatisDaoSupport;
-    
-    /** <默认构造函数> */
-    public DemoDaoImpl() {
-        logger.info("Instance DemoDaoImpl............................");
-    }
-    
+
     /**
      * @param demo
      */
     @Override
     public void insertDemo(Demo demo) {
-        this.mybatisDaoSupport.insert("demo.insertDemo",demo);
+        
     }
-    
+
+    /**
+     * @param condition
+     * @return
+     */
+    @Override
+    public int deleteDemo(Demo condition) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    /**
+     * @param condition
+     * @return
+     */
+    @Override
+    public Demo findDemo(Demo condition) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param params
+     * @return
+     */
+    @Override
+    public List<Demo> queryDemoList(Map<String, Object> params) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param params
+     * @param orderList
+     * @return
+     */
+    @Override
+    public List<Demo> queryDemoList(Map<String, Object> params,
+            List<Order> orderList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param params
+     * @return
+     */
+    @Override
+    public int countDemo(Map<String, Object> params) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    /**
+     * @param params
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedList<Demo> queryDemoPagedList(Map<String, Object> params,
+            int pageIndex, int pageSize) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param params
+     * @param pageIndex
+     * @param pageSize
+     * @param orderList
+     * @return
+     */
+    @Override
+    public PagedList<Demo> queryDemoPagedList(Map<String, Object> params,
+            int pageIndex, int pageSize, List<Order> orderList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param updateDemoRowMap
+     * @return
+     */
+    @Override
+    public int updateDemo(Map<String, Object> updateDemoRowMap) {
+        return this.mybatisDaoSupport.update("demo.test", updateDemoRowMap);
+    }
 }

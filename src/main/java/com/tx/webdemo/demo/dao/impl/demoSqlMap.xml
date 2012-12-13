@@ -23,5 +23,16 @@
 		insert into t_test_demo(name,password,email,createDate )
 			values(#{name},#{password},#{email},#{createDate})
 	</insert>
+	
+	<update id="test"
+		parameterType="java.utilMap">
+		UPDATE WE_DEMO
+		<trim prefix="SET" suffixOverrides=",">
+			<foreach collection="entrySet" item="entryTemp">
+				${entryTemp.key} = #{entry.value}
+			</foreach>
+		</trim>
+		WHERE 
+	</update>
       
 </mapper>  
