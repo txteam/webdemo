@@ -8,8 +8,7 @@ package com.tx.components.servicelog.annotation;
 
 
  /**
-  * <功能简述>
-  * <功能详细描述>
+  * 业务日志 类信息
   * 
   * @author  brady
   * @version  [版本号, 2012-12-12]

@@ -4,7 +4,7 @@
  * 修改时间:  2012-12-10
  * <修改描述:>
  */
-package com.tx.components.auth.service.authchecker;
+package com.tx.components.auth.service.impl;
 
 import java.util.List;
 import java.util.Set;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.tx.components.auth.AuthConstant;
-import com.tx.components.auth.context.SessionAuthContext;
+import com.tx.components.auth.context.CurrentSessionContext;
 import com.tx.components.auth.model.AuthItem;
 import com.tx.components.auth.model.AuthItemRef;
 import com.tx.components.auth.service.AuthChecker;
@@ -50,7 +50,7 @@ public class DataRowAuthChecker implements AuthChecker{
 	 */
 	@Override
 	public boolean isHasAuth(String authKey, Object... objects) {
-		HttpServletRequest request = SessionAuthContext.getRequest();
+		HttpServletRequest request = CurrentSessionContext.getRequest();
 		if(request == null || request.getSession() == null){
 			return false;
 		}

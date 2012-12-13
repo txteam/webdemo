@@ -14,12 +14,13 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tx.components.auth.context.AuthContext;
-import com.tx.components.auth.context.SessionAuthContext;
+import com.tx.components.auth.context.CurrentSessionContext;
 import com.tx.core.exceptions.parameter.ParameterIsEmptyException;
 
 /**
- * 权限容器拦截器支持器
- * <功能详细描述>
+ * 权限容器拦截器支持器<br/>
+ * 1、用以提供在请求进入后，将当前会话压入请求线程中<br/>
+ * 2、在请求完成后或发生异常后，将现成中的会话移除
  * 
  * @author  PengQingyang
  * @version  [版本号, 2012-12-2]
@@ -38,14 +39,7 @@ public class AuthContextSupportInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request,
             HttpServletResponse response, Object handler) throws Exception {
-        String operatorId = request.getParameter("operatorId");//得到操作员Id
-        //判断操作员Id是不是为空，为空则抛出异常
-        if (StringUtils.isEmpty(operatorId)) {
-            throw new ParameterIsEmptyException(
-                    "request.getParameter('operatorId') operatorId is empty.");
-        }
-        SessionAuthContext.preHandler(request, response);
-        AuthContext.initCurrentUserAuthContextWhenLogin(operatorId);
+        AuthContext.bindCurrentSessionToThread(request, response);
         return true;
     }
     
@@ -60,7 +54,6 @@ public class AuthContextSupportInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request,
             HttpServletResponse response, Object handler,
             ModelAndView modelAndView) throws Exception {
-        
     }
     
     /**
@@ -74,7 +67,6 @@ public class AuthContextSupportInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request,
             HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
-        SessionAuthContext.afterHandler();
+        AuthContext.removeCurrentSessionFromThread();
     }
-    
 }

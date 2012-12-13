@@ -6,17 +6,19 @@
  */
 package com.tx.components.auth;
 
-
- /**
-  * <权限常量>
-  * <功能详细描述>
-  * 
-  * @author  brady
-  * @version  [版本号, 2012-11-30]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
+/**
+ * <权限常量>
+ * <功能详细描述>
+ * 
+ * @author  brady
+ * @version  [版本号, 2012-11-30]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
 public interface AuthConstant {
+    
+    /** 当前用户权限引用keySet */
+    public final static String SESSION_KEY_CURRENT_USER_AUTHREF_SET = "CURRENT_USER_AUTHREF_SET";
     
     /** 权限类型：抽象权限根，抽象权限不配置权限映射  */
     public final static String ABSTRACT_AUTH_END = "_ABS";
@@ -67,9 +69,9 @@ public interface AuthConstant {
     public static final String AUTHREFTYPE_OPERATOR = "AUTHREFTYPE_OPERATOR";
     
     /** 操作员权限引用项：操作员临时权限引用 */
-    public static final  String AUTHREFTYPE_OPERATOR_TEMP = "AUTHREFTYPE_OPERATOR_TEMP"; 
+    public static final String AUTHREFTYPE_OPERATOR_TEMP = "AUTHREFTYPE_OPERATOR_TEMP";
     
     /** 操作员权限引用项：角色权限引用 */
-    public static final  String AUTHREFTYPE_ROLE = "AUTHREFTYPE_ROLE";
+    public static final String AUTHREFTYPE_ROLE = "AUTHREFTYPE_ROLE";
     
 }

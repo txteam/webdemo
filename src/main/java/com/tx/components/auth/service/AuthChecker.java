@@ -17,7 +17,7 @@ package com.tx.components.auth.service;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface AuthChecker {
+public interface AuthChecker{
     
     /**
       * <权限核查器，支持类型>
@@ -33,14 +33,17 @@ public interface AuthChecker {
     public String getCheckAuthType();
     
     /**
-      *<检查权限>
-      * 在该功能中，能够通过权限容器获取到会话权限容器，
-      * 从而获取到request，session等信息进行检查
+      * 检查权限<br/>
+      * 在该功能中，能够通过权限容器获取到会话权限容器<br/>
+      * 从而获取到request，session等信息进行检查<br/>
+      * @param authKey
+      * @param applicationContext
+      * @param objects
       * @return [参数说明]
       * 
       * @return boolean [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public boolean isHasAuth(String authKey,Object... objects);
+    public boolean isHasAuth(String authKey, Object... objects);
 }

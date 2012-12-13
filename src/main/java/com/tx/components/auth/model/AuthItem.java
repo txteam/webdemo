@@ -64,6 +64,9 @@ public class AuthItem implements Serializable,
     /** 是否为抽象权限：默认为非抽象权限，抽象权限不建立权限列表映射 */
     private boolean isAbstract = false;
     
+    /** 是否有效，默认为true,权限可停用 */
+    private boolean isValid = true;
+    
     /**
      * @return 返回 id
      */
@@ -161,6 +164,20 @@ public class AuthItem implements Serializable,
      */
     public void setAbstract(boolean isAbstract) {
         this.isAbstract = isAbstract;
+    }
+    
+    /**
+     * @return 返回 isValid
+     */
+    public boolean isValid() {
+        return isValid;
+    }
+    
+    /**
+     * @param 对isValid进行赋值
+     */
+    public void setValid(boolean isValid) {
+        this.isValid = isValid;
     }
     
     /**
