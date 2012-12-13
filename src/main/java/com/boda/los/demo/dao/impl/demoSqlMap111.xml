@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="demo">
+
+
+	<!-- 最佳实践部分 ：在项目中利用更加通用的trim功能，不使用可被替换的几个标签 -->
+	<!-- 插入demo subDemo如果可以为空，这里的动态sql可以写得更加合理一些 -->
+	<insert id="insertDemo" 
+		parameterType="demo">
+		insert into wd_demo(
+		   id,
+		   loginname,
+		   isValid,
+	       parentid,
+   		   subdemoid,
+	       name,
+	       password,
+	       createdate,
+	       lastupdatedate,
+	       description
+		)values(
+			#{id},
+			#{loginName},
+			#{isValid},
+			#{parentId},
+		<if test="subDemo != null">
+			#{subDemo.id},
+        </if>
+        <if test="subDemo == null">
+			null,
+        </if>
+			#{name},
+			#{password},
+			sysdate,
+			#{lastUpdateDate},
+			#{description}
+		)
+	</insert>
+	
+	<delete id="deleteDemo" 
+		parameterType="com.boda.los.demo.model.Demo">
+		DELETE FROM WD_DEMO WHERE
+		  <trim prefixOverrides="and | or">
+			<if test="@org.apache.commons.lang.StringUtils@isNotEmpty(id)">  
+	            and wd.id = #{id}
+	        </if>
+	        <if test="@org.apache.commons.lang.StringUtils@isNotEmpty(loginName)">  
+	            and wd.loginName = #{loginName}
+	            <if test="@org.apache.commons.lang.StringUtils@isNotEmpty(password)">  
+		            and wd.password = #{password}
+		        </if>
+	        </if>
+		</trim>
+	</delete>
+	
+	<resultMap id="demoMap" 
+		type="demo" >
+		<result column="subdemoid" property="subDemo.id"/>
+	</resultMap>
+	
+	<!-- 查询demo实例 -->
+	<select id="findDemo" 
+		parameterType="demo"
+		resultMap="demoMap">
+		select wd.id,
+		       wd.parentid,
+		       wd.subdemoid,
+		       wd.name,
+		       wd.loginname,
+		       wd.password,
+		       wd.createdate,
+		       wd.lastupdatedate,
+		       wd.description
+		  from wd_demo wd
+		 where
+		<trim prefixOverrides="and | or">
+			<if test="@org.apache.commons.lang.StringUtils@isNotEmpty(id)">  
+	            and wd.id = #{id}
+	        </if>
+	        <if test="@org.apache.commons.lang.StringUtils@isNotEmpty(loginName)">  
+	            and wd.loginName = #{loginName}
+	            <if test="@org.apache.commons.lang.StringUtils@isNotEmpty(password)">  
+		            and wd.password = #{password}
+		        </if>
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- 查询demo列表 -->
+	<select id="queryDemo" parameterType="java.util.Map">
+		 select wd.id,
+		       wd.parentid,
+		       wd.subdemoid as subDemo.id,
+		       wd.name,
+		       wd.password,
+		       wd.createdate,
+		       wd.lastupdatedate,
+		       wd.description
+		   from wd_demo wd
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="@org.apache.commons.lang.StringUtils@isNotEmpty(id)">  
+	            and wd.id = #{id}
+	        </if>
+			<if test="@org.apache.commons.lang.StringUtils@isNotEmpty(name)">  
+	            and wd.name like '%'||#{id}||'%'
+	        </if>
+	        <if test="@org.apache.commons.lang.StringUtils@isNotEmpty(name)">  
+	            and wd.name like '%'||#{id}||'%'
+	        </if>
+			<if test="@org.apache.commons.lang.StringUtils@isNotEmpty(startCreateDate)">  
+				<![CDATA[ and wd.createdate > #{startCreateDate} ]]>
+	        </if>
+	        <if test="@org.apache.commons.lang.StringUtils@isNotEmpty(endCreateDate)">  
+				<![CDATA[ and wd.createdate < #{endCreateDate} ]]>
+	        </if>
+			<!-- 权限条件的添加 -->
+			<!-- 
+				<choose>  
+			        <when test="!@com.boda.auth.context.AuthContext@isHasAuth('demo_query_all')">  
+			            AND title like #{title}  
+			        </when>  
+			        <when test="!@com.boda.auth.context.AuthContext@isHasAuth('demo_query_area')">  
+			            AND title like #{author.name}  
+			        </when>  
+			        <otherwise>  
+			            AND featured = 1  
+			        </otherwise>  
+			    </choose>
+		     -->
+		</trim>
+		<choose>  
+	        <when test="!@org.apache.commons.lang.StringUtils@isNotEmpty(orderSql)">  
+	            ORDER BY ${orderSql}
+	        </when>
+	        <otherwise>  
+	            ORDER BY CREATEDATE DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+	<!-- 为分页查询提供count语句 -->
+	<select id="queryDemo_Count" parameterType="java.util.Map">
+		 select count(1)
+		   from wd_demo d
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="@org.apache.commons.lang.StringUtils@isNotEmpty(id)">  
+	            and wd.id = #{id}
+	        </if>
+			<if test="@org.apache.commons.lang.StringUtils@isNotEmpty(name)">  
+	            and wd.name like '%'||#{id}||'%'
+	        </if>
+	        <if test="@org.apache.commons.lang.StringUtils@isNotEmpty(name)">  
+	            and wd.name like '%'||#{id}||'%'
+	        </if>
+			<if test="@org.apache.commons.lang.StringUtils@isNotEmpty(startCreateDate)">  
+				<![CDATA[ and wd.createdate > #{startCreateDate} ]]>
+	        </if>
+	        <if test="@org.apache.commons.lang.StringUtils@isNotEmpty(endCreateDate)">  
+				<![CDATA[ and wd.createdate < #{endCreateDate} ]]>
+	        </if>
+			<!-- 权限条件的添加 -->
+			<!-- 
+				<choose>  
+			        <when test="!@com.boda.auth.context.AuthContext@isHasAuth('demo_query_all')">  
+			            AND title like #{title}  
+			        </when>  
+			        <when test="!@com.boda.auth.context.AuthContext@isHasAuth('demo_query_area')">  
+			            AND title like #{author.name}  
+			        </when>  
+			        <otherwise>  
+			            AND featured = 1  
+			        </otherwise>  
+			    </choose>
+		     -->
+		</trim>
+	</select>
+	
+	<!-- 
+		set 元素会动态前置 SET 关键字,
+		而且也会消除任意无关的逗号,
+		那也许在应用条件之后来跟踪定义的值。
+		如果你对和这相等的 trim 元素好奇,它看起来就是这样的: 
+	-->
+	<update id="updateDemoBySet"  
+	    parameterType="java.util.Map">  
+	    update wd_demo wd
+	    <set>  
+	    	lastUpdateDate = #{demo.name},
+	    	username=#{name},
+	        <if test="password != null">
+	        	password=#{demo.password},
+	        </if>
+	        <if test="email != null">
+	        	email=#{demo.email},
+	        </if>  
+	    </set>  
+	    where id=#{id} 
+	</update>  
+	
+	<update id="updateDemo"
+	    parameterType="java.util.HashMap">  
+	    UPDATE WD_DEMO WD
+	    <trim prefix="SET" suffixOverrides=",">
+	    	lastUpdateDate = sysdate,
+	    	<if test="_parameter.containsKey('email')">
+	    		email = #{email,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('name')">
+	    		name = #{name,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('subDemo')">
+				<if test="subDemo != null">
+					#{subDemo.id},
+		        </if>
+		        <if test="subDemo == null">
+					null,
+		        </if>
+	    	</if>
+	    </trim>
+	    WHERE ID = #{id}  
+	</update>  
+	
+	<!-- 几个动态标签的使用方法 -->
+      
+</mapper>  

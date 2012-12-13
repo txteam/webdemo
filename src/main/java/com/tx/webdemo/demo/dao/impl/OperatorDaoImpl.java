@@ -52,10 +52,9 @@ public class OperatorDaoImpl implements OperatorDao{
      * @param queryCondition
      * @return
      */
-    @SuppressWarnings("unchecked")
     @Override
     public List<Operator> queryOperatorList(Map<String, Object> queryCondition) {
-        return (List<Operator>)this.mybatisDaoSupport.queryList("operator.queryOperatorList", queryCondition);
+        return this.mybatisDaoSupport.<Operator>queryList("operator.queryOperatorList", queryCondition);
     }
 
     /**
@@ -64,11 +63,10 @@ public class OperatorDaoImpl implements OperatorDao{
      * @param pageSize
      * @return
      */
-    @SuppressWarnings("unchecked")
     @Override
     public PagedList<Operator> queryOperatorPagedList(
             Map<String, Object> paraObj, int pageIndex, int pageSize) {
-        return (PagedList<Operator>)this.mybatisDaoSupport.queryPagedList("operator.queryOperatorList", paraObj, pageIndex, pageSize);
+        return this.mybatisDaoSupport.<Operator>queryPagedList("operator.queryOperatorList", paraObj, pageIndex, pageSize);
     }
 
     /**
