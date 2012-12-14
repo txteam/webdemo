@@ -1,7 +1,6 @@
 package com.tx.components.servicelog.context;
 
 import java.beans.PropertyDescriptor;
-import java.util.Date;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -17,7 +16,8 @@ import org.springframework.core.io.ResourceLoader;
 public class LoggerContext implements FactoryBean<LoggerContext>,
         InitializingBean {
     
-    private static LoggerContext context = null;
+    /** 懒汉模式获取日志容器句柄 */
+    private static LoggerContext context = new LoggerContext();
     
     private static final String[] loggerInterfacePath = { "com.boda.web.controller" };
     

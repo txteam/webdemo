@@ -7,6 +7,9 @@
 package com.tx.components.auth.context;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,14 +85,18 @@ public class CurrentSessionContext implements Serializable {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public void setCurrentOperatorAuthToSession(Set<AuthItemRef> authItemRefSet) {
+    public void setCurrentOperatorAuthToSession(List<AuthItemRef> authItemRefSet) {
         //如果当前不存在会话，者直接跳过该逻辑
-        if (this.session == null) {
+        if (this.session == null || authItemRefSet == null) {
             return;
         }
         
-        this.session.setAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_SET,
-                authItemRefSet);
+        Map<String, AuthItemRef> authItemRefMap = new HashMap<String, AuthItemRef>();
+        for (AuthItemRef refTemp : authItemRefSet) {
+            authItemRefMap.put(refTemp.getAuthId(), refTemp);
+        }
+        this.session.setAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP,
+                authItemRefMap);
     }
     
     /**
@@ -102,53 +109,53 @@ public class CurrentSessionContext implements Serializable {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public Set<AuthItemRef> getCurrentOperatorAuthFromSession() {
+    public Map<String, AuthItemRef> getCurrentOperatorAuthMapFromSession() {
         if (this.session == null
-                || this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_SET) == null
-                || !(this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_SET) instanceof Set<?>)) {
+                || this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP) == null
+                || !(this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP) instanceof Set<?>)) {
             return null;
         }
         
         @SuppressWarnings("unchecked")
-        Set<AuthItemRef> authItemRefSet = (Set<AuthItemRef>) this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_SET);
-        return authItemRefSet;
+        Map<String, AuthItemRef> authItemRefMap = (Map<String, AuthItemRef>) this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP);
+        return authItemRefMap;
     }
-
+    
     /**
      * @return 返回 request
      */
     public HttpServletRequest getRequest() {
         return request;
     }
-
+    
     /**
      * @param 对request进行赋值
      */
     public void setRequest(HttpServletRequest request) {
         this.request = request;
     }
-
+    
     /**
      * @return 返回 response
      */
     public HttpServletResponse getResponse() {
         return response;
     }
-
+    
     /**
      * @param 对response进行赋值
      */
     public void setResponse(HttpServletResponse response) {
         this.response = response;
     }
-
+    
     /**
      * @return 返回 session
      */
     public HttpSession getSession() {
         return session;
     }
-
+    
     /**
      * @param 对session进行赋值
      */

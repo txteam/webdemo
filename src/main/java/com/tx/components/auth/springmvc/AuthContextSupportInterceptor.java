@@ -9,13 +9,10 @@ package com.tx.components.auth.springmvc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.cxf.common.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tx.components.auth.context.AuthContext;
-import com.tx.components.auth.context.CurrentSessionContext;
-import com.tx.core.exceptions.parameter.ParameterIsEmptyException;
 
 /**
  * 权限容器拦截器支持器<br/>
@@ -39,7 +36,7 @@ public class AuthContextSupportInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request,
             HttpServletResponse response, Object handler) throws Exception {
-        AuthContext.bindCurrentSessionToThread(request, response);
+        AuthContext.getContext().bindCurrentSessionToThread(request, response);
         return true;
     }
     
@@ -67,6 +64,6 @@ public class AuthContextSupportInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request,
             HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
-        AuthContext.removeCurrentSessionFromThread();
+        AuthContext.getContext().removeCurrentSessionFromThread();
     }
 }

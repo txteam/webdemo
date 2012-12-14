@@ -74,6 +74,18 @@
 		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"></bean>
 	<bean id="handlerAdapter"
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean
+				class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+				<property name="validator">
+					<bean
+						class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+				</property>
+				<property name="propertyEditorRegistrars">
+					
+				</property>
+			</bean>
+		</property>
 		<property name="messageConverters">
 			<list>
 				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"></bean>
@@ -84,10 +96,10 @@
 						</list>
 					</property>
 				</bean>
-				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
 				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
 				<bean class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"></bean>
-				<bean class="org.springframework.http.converter.FormHttpMessageConverter"></bean>
+				<!-- <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean> -->
+				<!-- <bean class="org.springframework.http.converter.FormHttpMessageConverter"></bean> -->
 			</list>
 		</property>
 	</bean>

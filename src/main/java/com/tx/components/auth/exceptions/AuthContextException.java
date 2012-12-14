@@ -6,11 +6,12 @@
  */
 package com.tx.components.auth.exceptions;
 
+import com.tx.core.exceptions.ErrorCodeConstant;
 import com.tx.core.exceptions.SILException;
 
 
  /**
-  * 权限容器异常基类
+  * 权限容器异常基类<br/>
   * <功能详细描述>
   * 
   * @author  PengQingyang
@@ -20,5 +21,22 @@ import com.tx.core.exceptions.SILException;
   */
 public class AuthContextException extends SILException{
     
+    /** 注释内容 */
+    private static final long serialVersionUID = -6954158210377121688L;
+
+    /**
+     * <默认构造函数>
+     */
+    public AuthContextException(String errorMessage, Throwable cause,
+            String... parameters) {
+        super(ErrorCodeConstant.AUTH_CONTEXT_EXCEPTION, errorMessage, cause,
+                parameters);
+    }
     
+    /**
+     * <默认构造函数>
+     */
+    public AuthContextException(String errorMessage, String... parameters) {
+        super(ErrorCodeConstant.AUTH_CONTEXT_EXCEPTION, errorMessage, parameters);
+    }
 }

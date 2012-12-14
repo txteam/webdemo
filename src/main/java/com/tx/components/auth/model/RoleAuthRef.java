@@ -2,54 +2,52 @@
  * 描          述:  <描述>
  * 修  改   人:  PengQingyang
  * 修改时间:  2012-12-2
- * <修改描述:>
+ * 修改描述:  
  */
 package com.tx.components.auth.model;
 
 import com.tx.components.auth.AuthConstant;
 
-
-
- /**
-  * 操作员权限项引用
-  * <功能详细描述>
-  * 
-  * @author  PengQingyang
-  * @version  [版本号, 2012-12-2]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
-public class OperatorAuthRef extends DefaultAuthItemRef {
+/**
+ * 角色权限项引用<br/>
+ * <功能详细描述>
+ * 
+ * @author  PengQingyang
+ * @version  [版本号, 2012-12-2]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
+public class RoleAuthRef extends DefaultAuthItemRef {
     
     /** 注释内容 */
     private static final long serialVersionUID = -5225480864798103809L;
     
     /** 操作员id */
-    private String operatorId;
-
+    private String roleId;
+    
     /**
-     * @return 返回 operatorId
+     * @return 返回 roleId
      */
-    public String getOperatorId() {
-        return operatorId;
+    public String getRoleId() {
+        return roleId;
     }
-
+    
     /**
-     * @param 对operatorId进行赋值
+     * @param 对roleId进行赋值
      */
-    public void setOperatorId(String operatorId) {
-        setRefId(operatorId);
-        this.operatorId = operatorId;
+    public void setRoleId(String roleId) {
+        setRefId(roleId);
+        this.roleId = roleId;
     }
-
+    
     /**
      * @return
      */
     @Override
     public String getAuthRefType() {
-        return AuthConstant.AUTHREFTYPE_OPERATOR;
+        return AuthConstant.AUTHREFTYPE_ROLE;
     }
-
+    
     /**
      * @return
      */
@@ -57,7 +55,7 @@ public class OperatorAuthRef extends DefaultAuthItemRef {
     public String getRefId() {
         return super.getRefId();
     }
-
+    
     /**
      * @return
      */
@@ -65,13 +63,13 @@ public class OperatorAuthRef extends DefaultAuthItemRef {
     public String getAuthId() {
         return super.getAuthId();
     }
-
+    
     /**
      * @param authRefType
      */
     @Override
     public void setAuthRefType(String authRefType) {
-        super.setAuthRefType(AuthConstant.AUTHREFTYPE_OPERATOR);
+        super.setAuthRefType(AuthConstant.AUTHREFTYPE_ROLE);
     }
     
 }

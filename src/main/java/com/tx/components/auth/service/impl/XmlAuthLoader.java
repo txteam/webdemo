@@ -22,13 +22,17 @@ import org.apache.ibatis.io.ResolverUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.Resource;
 
 import com.tx.components.auth.AuthConstant;
 import com.tx.components.auth.model.AuthItem;
+import com.tx.components.auth.model.DefaultAuthItem;
 import com.tx.components.auth.service.AuthChecker;
 import com.tx.components.auth.service.AuthLoader;
+import com.tx.components.auth.service.AuthService;
 import com.tx.core.exceptions.resource.ResourceLoadException;
 
 
@@ -43,11 +47,42 @@ import com.tx.core.exceptions.resource.ResourceLoadException;
   */
 public class XmlAuthLoader implements AuthLoader {
     
+    /** 日志记录器 */
+    private static final Logger logger = LoggerFactory.getLogger(XmlAuthLoader.class);
+    
+    /** 权限类型：抽象权限根，抽象权限不配置权限映射  */
+    public final static String ABSTRACT_AUTH_END = "_ABS";
+    
+    /** 权限项名 */
+    public final static String AUTH_ELEMENT_NAME = "Auth";
+    
+    /** 权限节点id */
+    public final static String AUTH_ELEMENT_ATTR_ID = "key";
+    
+    /** 权限节点name */
+    public final static String AUTH_ELEMENT_ATTR_NAME = "name";
+    
+    /** 权限节点authType */
+    public final static String AUTH_ELEMENT_ATTR_AUTHTYPE = "authType";
+    
+    /** 权限节点description */
+    public final static String AUTH_ELEMENT_ATTR_DESCRIPTION = "description";
+    
+    /** 权限类型：根权限名 */
+    public final static String AUTH_ABS_NAME = "权限";
+    
+    /** 权限类型：根权限 */
+    public final static String AUTH_ABS = "AUTH_ABS";
+    
+    
     /** 权限树根节点 */
     private AuthItem authItemTree;
     
     /** 权限项映射 */
     private Map<String, AuthItem> authItemMapping;
+    
+    /** 权限配置地址 */
+    private String[] authConfigLocaions = new String[] { "classpath:authcontext/*_auth_config.xml" };
     
     /**
      * @return
@@ -91,11 +126,11 @@ public class XmlAuthLoader implements AuthLoader {
         }
         
         // 初始化局部权限映射以及，根权限树
-        Map<String, AuthItem> authItemMap = new HashMap<String, AuthItem>();
-        AuthItem authItemTree = new AuthItem();
-        authItemTree.setId(AuthConstant.AUTH_ABS);
-        authItemTree.setAuthType(AuthConstant.AUTH_ABS);
-        authItemTree.setName(AuthConstant.AUTH_ABS_NAME);
+        Map<String, DefaultAuthItem> authItemMap = new HashMap<String, DefaultAuthItem>();
+        DefaultAuthItem authItemTree = new DefaultAuthItem();
+        authItemTree.setId(AUTH_ABS);
+        authItemTree.setAuthType(AUTH_ABS);
+        authItemTree.setName(AUTH_ABS_NAME);
         
         // 配置权限列表
         if (configResourceList == null || configResourceList.size() == 0) {
@@ -138,10 +173,10 @@ public class XmlAuthLoader implements AuthLoader {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private void loadAuthItemConfig(Map<String, AuthItem> authItemMap,
-            AuthItem parentAuthItem, Element parentElement) {
+    private void loadAuthItemConfig(Map<String, DefaultAuthItem> authItemMap,
+            DefaultAuthItem parentAuthItem, Element parentElement) {
         @SuppressWarnings("unchecked")
-        List<Element> authElList = parentElement.elements(AuthConstant.AUTH_ELEMENT_NAME);
+        List<Element> authElList = parentElement.elements(AUTH_ELEMENT_NAME);
         if (CollectionUtils.isEmpty(authElList)) {
             return;
         }
@@ -149,18 +184,18 @@ public class XmlAuthLoader implements AuthLoader {
         // 循环子权限列表
         for (Element authElTemp : authElList) {
             // 读取权限配置的属性值
-            String id = authElTemp.attributeValue(AuthConstant.AUTH_ELEMENT_ATTR_ID);
-            String name = authElTemp.attributeValue(AuthConstant.AUTH_ELEMENT_ATTR_NAME);
-            String authType = authElTemp.attributeValue(AuthConstant.AUTH_ELEMENT_ATTR_AUTHTYPE);
-            String description = authElTemp.attributeValue(AuthConstant.AUTH_ELEMENT_ATTR_DESCRIPTION);
+            String id = authElTemp.attributeValue(AUTH_ELEMENT_ATTR_ID);
+            String name = authElTemp.attributeValue(AUTH_ELEMENT_ATTR_NAME);
+            String authType = authElTemp.attributeValue(AUTH_ELEMENT_ATTR_AUTHTYPE);
+            String description = authElTemp.attributeValue(AUTH_ELEMENT_ATTR_DESCRIPTION);
             boolean isAbstract = false;
             // 如果为抽象权限，则设置权限id为抽象权限的权限type本身
-            if (authType.endsWith(AuthConstant.ABSTRACT_AUTH_END)) {
+            if (authType.endsWith(ABSTRACT_AUTH_END)) {
                 id = authType;
                 isAbstract = true;
             }
             
-            AuthItem newAuthItem = null;
+            DefaultAuthItem newAuthItem = null;
             if (authItemMap.containsKey(id)) {
                 // 如果对应权限已经存在则获取对应权限
                 newAuthItem = authItemMap.get(id);
@@ -211,6 +246,49 @@ public class XmlAuthLoader implements AuthLoader {
         return configResourceList;
     }
     
+    /**
+     * 创建权限列表
+     * 1、根据父级权限创建子权限
+     * 2、如果父权限为抽象权限，子权限如果没有指定权限类型，则可根据父权限设定权限类型
+     * @param key
+     * @param authType
+     * @param name
+     * @param description
+     * @return [参数说明]
+     * 
+     * @return List<AuthItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+   public AuthItem createChildAuthItem(String id, String authType,
+           String name, boolean isAbstract, String description) {
+       
+       AuthItem authItem = new DefaultAuthItem();
+       authItem.setId(id);
+       authItem.setDescription(description);
+       authItem.setParentId(this.id);
+       
+       if (StringUtils.isEmpty(authType)) {
+           //如果没有指定的权限类型，判断当前权限是否为抽象权限
+           if (this.isAbstract
+                   && this.authType.endsWith(ABSTRACT_AUTH_END)) {
+               //如果为抽象权限，则设定权限类型为对应抽象权限的子类型
+               authItem.setAuthType(this.authType.substring(0,
+                       this.authType.length()
+                               - ABSTRACT_AUTH_END.length()));
+           }
+           else {
+               //如果不为抽象权限，则子权限默认相同于父权限
+               authItem.setAuthType(this.authType);
+           }
+       }
+       else {
+           //如果指定的权限类型，则该权限权限类型为指定的权限类型
+           authItem.setAuthType(authType);
+       }
+       
+       return authItem;
+   }
 
     
 }

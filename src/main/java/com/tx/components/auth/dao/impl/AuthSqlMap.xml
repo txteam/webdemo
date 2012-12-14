@@ -7,7 +7,7 @@
     <!-- 根据操作员id查询操作员拥有的权限引用项 -->  
     <select id="queryItemAuthRefListByOperId"
     	parameterType="String" 
-    	resultType="authItemRef">  
+    	resultType="com.tx.components.auth.model.BaseAuthItemRef">  
         <![CDATA[
 			select distinct tar.authid,
 			                tar.refid,
@@ -28,33 +28,29 @@
 			               from t_auth_role tr, t_oper2role tor
 			              where tor.roleid = tr.id
 			                and tor.operid = #{operId}) tura on tar.refid = tura.id
-        ]]>   
-        <if test="!@AuthContext@checkAuth('aaa')">
-        	and operId = 'xxx'
-        	<if test="">
-        	
-        	</if>
-        </if>
+        ]]>
     </select>
     
+    <!-- 查询某权限类型 -->
     <select id="queryItemAuthRefList"
     	parameterType="java.util.Map" 
-    	resultType="authItemRef">  
+    	resultType="com.tx.components.auth.model.BaseAuthItemRef">  
         <![CDATA[ 
-			select distinct tar.authid,
-			                tar.refid,
-			                tar.authreftype,
-			                tar.createdate,
-			                tar.enddate,
-			                tar.createoperid
+			SELECT DISTINCT TAR.AUTHID,
+			                TAR.REFID,
+			                TAR.AUTHREFTYPE,
+			                TAR.CREATEDATE,
+			                TAR.ENDDATE,
+			                TAR.CREATEOPERID
 			  from t_auth_authref tar
 			 where tar.authType = #{authType}
 			   and tar.refid = #{refId}
+			   and tar.operid = #{operId}
         ]]>   
     </select>    
     
     <!-- 插入权限项 -->
-	<insert id="addAuthItemRef" parameterType="authItemRef">
+	<insert id="addAuthItemRef" parameterType="com.tx.components.auth.model.BaseAuthItemRef">
 		insert into t_auth_authref
 		  (authid, refid, authreftype, createdate, enddate, createoperid)
 		values

@@ -7,7 +7,7 @@
 package com.tx.components.auth;
 
 /**
- * <权限常量>
+ * 权限常量
  * <功能详细描述>
  * 
  * @author  brady
@@ -17,33 +17,24 @@ package com.tx.components.auth;
  */
 public interface AuthConstant {
     
+    //----------------session 中获取权限的key --------------
     /** 当前用户权限引用keySet */
-    public final static String SESSION_KEY_CURRENT_USER_AUTHREF_SET = "CURRENT_USER_AUTHREF_SET";
+    public final static String SESSION_KEY_CURRENT_USER_AUTHREF_MAP = "CURRENT_USER_AUTHREF_MAP_!@#$%^&*";
     
-    /** 权限类型：抽象权限根，抽象权限不配置权限映射  */
-    public final static String ABSTRACT_AUTH_END = "_ABS";
     
-    /** 权限项名 */
-    public final static String AUTH_ELEMENT_NAME = "Auth";
+    //start-----------------------权限引用类型----------------------
+    /** 操作员权限引用项：操作员权限引用 */
+    public static final String AUTHREFTYPE_OPERATOR = "AUTHREFTYPE_OPERATOR";
     
-    /** 权限节点id */
-    public final static String AUTH_ELEMENT_ATTR_ID = "key";
+    /** 操作员权限引用项：操作员临时权限引用 */
+    public static final String AUTHREFTYPE_OPERATOR_TEMP = "AUTHREFTYPE_OPERATOR_TEMP";
     
-    /** 权限节点name */
-    public final static String AUTH_ELEMENT_ATTR_NAME = "name";
+    /** 操作员权限引用项：角色权限引用 */
+    public static final String AUTHREFTYPE_ROLE = "AUTHREFTYPE_ROLE";
+    //end-----------------------权限引用类型----------------------
     
-    /** 权限节点authType */
-    public final static String AUTH_ELEMENT_ATTR_AUTHTYPE = "authType";
     
-    /** 权限节点description */
-    public final static String AUTH_ELEMENT_ATTR_DESCRIPTION = "description";
-    
-    /** 权限类型：根权限名 */
-    public final static String AUTH_ABS_NAME = "权限";
-    
-    /** 权限类型：根权限 */
-    public final static String AUTH_ABS = "AUTH_ABS";
-    
+    //start-----------------------权限类型----------------------
     /** 权限类型：操作权限父节类型，抽象权限，不是真是的权限  */
     public final static String TYPE_ABS_OPERATE = "TYPE_OPERATE_ABS";
     
@@ -64,14 +55,5 @@ public interface AuthConstant {
     
     /** 权限类型: 数据行权限 */
     public final static String TYPE_DATA_ROW = "TYPE_DATA_ROW";
-    
-    /** 操作员权限引用项：操作员权限引用 */
-    public static final String AUTHREFTYPE_OPERATOR = "AUTHREFTYPE_OPERATOR";
-    
-    /** 操作员权限引用项：操作员临时权限引用 */
-    public static final String AUTHREFTYPE_OPERATOR_TEMP = "AUTHREFTYPE_OPERATOR_TEMP";
-    
-    /** 操作员权限引用项：角色权限引用 */
-    public static final String AUTHREFTYPE_ROLE = "AUTHREFTYPE_ROLE";
-    
+    //end-----------------------权限类型----------------------
 }

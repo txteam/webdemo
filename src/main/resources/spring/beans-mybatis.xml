@@ -26,9 +26,8 @@
 	</bean>
 	
 	<bean id="myBatisExceptionTranslator" class="org.mybatis.spring.MyBatisExceptionTranslator">
-		<property name="dataSource">
-			<ref bean="datasource"></ref>
-		</property>
+		<constructor-arg name="dataSource" ref="datasource"></constructor-arg>
+		<constructor-arg name="exceptionTranslatorLazyInit" value="true"></constructor-arg>
 	</bean>
 
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">

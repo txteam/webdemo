@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import com.tx.components.auth.AuthConstant;
 import com.tx.components.auth.context.CurrentSessionContext;
 import com.tx.components.auth.model.AuthItem;
-import com.tx.components.auth.model.AuthItemRef;
+import com.tx.components.auth.model.DefaultAuthItemRef;
 import com.tx.components.auth.service.AuthChecker;
 import com.tx.components.auth.service.AuthService;
 
@@ -62,7 +62,7 @@ public class OperateAuthChecker implements AuthChecker{
 		}
 		
 		HttpSession session = request.getSession();
-		List<AuthItemRef> authItemRefList = (List<AuthItemRef>)session.getAttribute("authItemRefList");
+		List<DefaultAuthItemRef> authItemRefList = (List<DefaultAuthItemRef>)session.getAttribute("authItemRefList");
 		if(authItemRefList == null){
 			return false;
 		}

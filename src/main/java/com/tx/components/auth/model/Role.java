@@ -7,6 +7,7 @@
 package com.tx.components.auth.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <角色定义>
@@ -41,6 +42,12 @@ public class Role implements Serializable {
     
     /** 是否缺省的角色 0：是 1：不是  缺省角色不能被删除*/
     private String isDefault;
+    
+    /** 创建时间 */
+    private Date createDate;
+    
+    /** 最后更新时间 */
+    private Date lastUpdateDate;
     
     /**
      * @return 返回 id
@@ -110,5 +117,33 @@ public class Role implements Serializable {
      */
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
+    }
+
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 }
