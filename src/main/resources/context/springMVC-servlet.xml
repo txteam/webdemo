@@ -102,6 +102,10 @@
 				<!-- <bean class="org.springframework.http.converter.FormHttpMessageConverter"></bean> -->
 			</list>
 		</property>
+		<!-- 通过这个来实现行级权限 -->
+		<property name="customModelAndViewResolver">
+			
+		</property>
 	</bean>
 
 	<!-- 支持文件上传 -->
