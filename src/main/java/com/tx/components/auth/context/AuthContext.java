@@ -23,7 +23,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.tx.components.auth.AuthConstant;
 import com.tx.components.auth.exceptions.AuthContextInitException;
 import com.tx.components.auth.model.AuthItem;
 import com.tx.components.auth.model.AuthItemRef;
@@ -98,9 +97,14 @@ public class AuthContext implements FactoryBean<AuthContext>,
     /** 权限加载器 : 默认为通过xml配置加载权限，*/
     private AuthLoader authLoader = new XmlAuthLoader();
     
-    /** 超级管理员开关，默认为关闭，如果超级管理员开关为true,并且当前人员被认定为超级管理员，则该人员默认拥有系统所有权限  */
+    /** 
+     * 超级管理员开关，默认为关闭<br/>
+     * 如果超级管理员开关为true<br/>
+     * 并且当前人员被认定为超级管理员，
+     * 则该人员默认拥有系统所有权限  
+     */
     private boolean superAdministratorSwitch = true;
-
+    
     /** 超级管理员认证器 */
     private SuperAdminChecker superAdminChecker;
     
@@ -174,9 +178,9 @@ public class AuthContext implements FactoryBean<AuthContext>,
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-   public void reLoadAuthConfig(){
-       loadAuthConfig();
-   }
+    public void reLoadAuthConfig() {
+        loadAuthConfig();
+    }
     
     /**
       * 加载权限配置
@@ -186,7 +190,7 @@ public class AuthContext implements FactoryBean<AuthContext>,
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public void loadAuthConfig(){
+    public void loadAuthConfig() {
         //自动加载容器中实现的权限检查器
         logger.info("初始化权限容器start...");
         logger.info("      加载权限检查器...");
@@ -211,14 +215,14 @@ public class AuthContext implements FactoryBean<AuthContext>,
         
         //将权限项压入映射
         Map<String, AuthItem> tempAuthItemMapping = new HashMap<String, AuthItem>();
-        for(AuthItem authItem : authItemSet){
+        for (AuthItem authItem : authItemSet) {
             tempAuthItemMapping.put(authItem.getId(), authItem);
         }
         
         //如果支持超级管理开关打开，这里将申城一份全权限的引用，以便后续人员获取权限
-        if(superAdministratorSwitch){
+        if (superAdministratorSwitch) {
             List<AuthItemRef> tempAllAuthItemRef = new ArrayList<AuthItemRef>();
-            for(AuthItem authItem : authItemSet){
+            for (AuthItem authItem : authItemSet) {
                 tempAllAuthItemRef.add(new DefaultAuthItemRef(authItem));
             }
             superAdminAllAuthItemRef = tempAllAuthItemRef;
@@ -261,7 +265,7 @@ public class AuthContext implements FactoryBean<AuthContext>,
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public Map<String, AuthItem> getAuthItemMapping(){
+    public Map<String, AuthItem> getAuthItemMapping() {
         return authItemMapping;
     }
     
@@ -336,18 +340,21 @@ public class AuthContext implements FactoryBean<AuthContext>,
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<AuthItemRef> getAllAuthRefByOperatorId(String operatorId){
+    public List<AuthItemRef> getAllAuthRefByOperatorId(String operatorId) {
         List<AuthItemRef> authItemRefList = null;
-        if(superAdministratorSwitch && superAdminChecker.isSuperAdmin(operatorId)){
+        if (superAdministratorSwitch
+                && superAdminChecker.isSuperAdmin(operatorId)) {
             authItemRefList = superAdminAllAuthItemRef;
-        }else{
+        }
+        else {
             authItemRefList = authService.queryAuthItemRefSetByOperatorId(operatorId);
         }
         return authItemRefList;
     }
     
     /**
-     * <判断是否具有某权限> authType:除定制的几类权限特性以外， 可以为 业务权限 产品权限
+     * 判断是否具有某权限<br/>
+     * authType:除定制的几类权限特性以外， 可以为 业务权限 产品权限
      * 这里权限验证会根据当前会话以及对应的权限验证器判断是否具有对应权限
      * 
      * @param authKey
@@ -360,51 +367,18 @@ public class AuthContext implements FactoryBean<AuthContext>,
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private boolean isHasAuth(String authKey, String authType,
-            Object... objects) {
-        return authCheckerMapping.get(authType).isHasAuth(authKey, objects);
-    }
-    
-    /**
-     * <判断操作权限> 
-     * <功能详细描述>
-     * 
-     * @param authKey
-     * @return [参数说明]
-     * 
-     * @return boolean [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public boolean isHasOperateAuth(String authKey) {
-        return isHasAuth(authKey, AuthConstant.TYPE_OPERATE);
-    }
-    
-    /**
-     * <判断是否具有某数据列权限> <功能详细描述>
-     * 
-     * @param authKey
-     * @return [参数说明]
-     * 
-     * @return boolean [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public boolean isHasDataColumnAuth(String authKey) {
-        return isHasAuth(authKey, AuthConstant.TYPE_DATA_COLUMN);
-    }
-    
-    /**
-     * <判断是否具有某数据行权限> <功能详细描述>
-     * 
-     * @param authKey
-     * @return [参数说明]
-     * 
-     * @return boolean [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public boolean isHasDataRowAuth(String authKey) {
-        return isHasAuth(authKey, AuthConstant.TYPE_DATA_ROW);
+    public boolean isHasAuth(String authKey, Object... objects) {
+        //检查对应权限的权限类型是否正确
+        AuthItem authItem = getAuthItemMapping().get(authKey);
+        if (authItem == null || !authItem.isValid()) {
+            return false;
+        }
+        if (authCheckerMapping.get(authItem.getAuthType()) == null) {
+            throw new AuthContextInitException(
+                    "The authType:{} authChecker is not exists!",
+                    authItem.getAuthType());
+        }
+        return authCheckerMapping.get(authItem.getAuthType())
+                .isHasAuth(authItem, objects);
     }
 }

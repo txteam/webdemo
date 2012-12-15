@@ -25,7 +25,8 @@ import com.tx.components.auth.model.DefaultAuthItemRef;
 import com.tx.core.exceptions.parameter.ParameterIsEmptyException;
 
 /**
- * <权限处理业务层> <功能详细描述>
+ * 权限处理业务层<br/>
+ * <功能详细描述>
  * 
  * @author brady
  * @version [版本号, 2012-11-30]
@@ -35,6 +36,7 @@ import com.tx.core.exceptions.parameter.ParameterIsEmptyException;
 public class AuthService {
     
     /** 日志记录器 */
+    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     
     /** 业务日志记录器，默认使用logback日志，可注入业务日志记录器记录业务日志 */

@@ -23,15 +23,7 @@ public class LoggerContext implements FactoryBean<LoggerContext>,
     
     /** 用以冲在配置属性使用 */
     private PropertyDescriptor properties;
-    
-    /** 配置文件存储路径 */
-    private Resource configLocation;
-    
-    /** 资源加载工厂  */
-    private FactoryBean<ResourceLoader> resourceLoaderFactory;
-    
-    
-    
+
     /**
      * 私有化构造方法
      */
@@ -76,21 +68,6 @@ public class LoggerContext implements FactoryBean<LoggerContext>,
     @Override
     public boolean isSingleton() {
         return true;
-    }
-    
-    /**
-     * @return the configLocation
-     */
-    public Resource getConfigLocation() {
-        return configLocation;
-    }
-    
-    /**
-     * @param configLocation
-     *            the configLocation to set
-     */
-    public void setConfigLocation(Resource configLocation) {
-        this.configLocation = configLocation;
     }
 
     /**

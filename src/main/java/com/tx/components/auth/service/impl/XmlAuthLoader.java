@@ -17,101 +17,89 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.cxf.common.util.StringUtils;
-import org.apache.ibatis.io.ResolverUtil;
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 
-import com.tx.components.auth.AuthConstant;
+import com.tx.components.auth.exceptions.AuthContextInitException;
 import com.tx.components.auth.model.AuthItem;
 import com.tx.components.auth.model.DefaultAuthItem;
-import com.tx.components.auth.service.AuthChecker;
 import com.tx.components.auth.service.AuthLoader;
-import com.tx.components.auth.service.AuthService;
-import com.tx.core.exceptions.resource.ResourceLoadException;
 
-
- /**
-  * 通过xml配置文件加载权限项
-  * 1、通过指定权限配置的资源，加载权限资源后，生成系统权限集合
-  * 
-  * @author  PengQingyang
-  * @version  [版本号, 2012-12-14]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
-public class XmlAuthLoader implements AuthLoader {
+/**
+ * 通过xml配置文件加载权限项<br/>
+ * 1、通过指定权限配置的资源，加载权限资源后，生成系统权限集合
+ * 
+ * @author  PengQingyang
+ * @version  [版本号, 2012-12-14]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
+public class XmlAuthLoader implements AuthLoader, ApplicationContextAware {
     
     /** 日志记录器 */
     private static final Logger logger = LoggerFactory.getLogger(XmlAuthLoader.class);
     
     /** 权限类型：抽象权限根，抽象权限不配置权限映射  */
-    public final static String ABSTRACT_AUTH_END = "_ABS";
+    private final static String ABSTRACT_AUTH_END = "_ABS";
     
     /** 权限项名 */
-    public final static String AUTH_ELEMENT_NAME = "Auth";
+    private final static String AUTH_ELEMENT_NAME = "Auth";
     
     /** 权限节点id */
-    public final static String AUTH_ELEMENT_ATTR_ID = "key";
+    private final static String AUTH_ELEMENT_ATTR_ID = "key";
     
     /** 权限节点name */
-    public final static String AUTH_ELEMENT_ATTR_NAME = "name";
+    private final static String AUTH_ELEMENT_ATTR_NAME = "name";
     
     /** 权限节点authType */
-    public final static String AUTH_ELEMENT_ATTR_AUTHTYPE = "authType";
+    private final static String AUTH_ELEMENT_ATTR_AUTHTYPE = "authType";
     
     /** 权限节点description */
-    public final static String AUTH_ELEMENT_ATTR_DESCRIPTION = "description";
+    private final static String AUTH_ELEMENT_ATTR_DESCRIPTION = "description";
     
-    /** 权限类型：根权限名 */
-    public final static String AUTH_ABS_NAME = "权限";
-    
-    /** 权限类型：根权限 */
-    public final static String AUTH_ABS = "AUTH_ABS";
-    
-    
-    /** 权限树根节点 */
-    private AuthItem authItemTree;
-    
-    /** 权限项映射 */
-    private Map<String, AuthItem> authItemMapping;
+    private ApplicationContext applicationContext;
     
     /** 权限配置地址 */
     private String[] authConfigLocaions = new String[] { "classpath:authcontext/*_auth_config.xml" };
+    
+    /**
+     * @param applicationContext
+     * @throws BeansException
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext)
+            throws BeansException {
+        this.applicationContext = applicationContext;
+    }
     
     /**
      * @return
      */
     @Override
     public Set<AuthItem> loadAuthItems() {
-        // TODO Auto-generated method stub
-        return null;
+        Set<AuthItem> authItemSet = new HashSet<AuthItem>(
+                loadAuthItemConfig().values());
+        return authItemSet;
     }
     
     /**
-     * 重新加载权限配置 <功能详细描述> [参数说明]
+     * 加载权限项配置<br/>
+     * <功能详细描述><br/> 
+     * [参数说明]
      * 
      * @return void [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public void reloadAuthItemConfig() {
-        loadAuthItemConfig();
-    }
-    
-    /**
-     * 加载权限项配置 <功能详细描述> [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public void loadAuthItemConfig() {
+    private Map<String, DefaultAuthItem> loadAuthItemConfig() {
         // 加载配置资源列表
         List<Resource> configResourceList = null;
         try {
@@ -122,20 +110,15 @@ public class XmlAuthLoader implements AuthLoader {
                     this.authConfigLocaions,
                     e.toString());
             logger.error("加载权限配置失败", e);
-            throw new ResourceLoadException("权限配置加载异常.", e);
+            throw new AuthContextInitException("权限配置加载异常.", e);
         }
         
         // 初始化局部权限映射以及，根权限树
         Map<String, DefaultAuthItem> authItemMap = new HashMap<String, DefaultAuthItem>();
-        DefaultAuthItem authItemTree = new DefaultAuthItem();
-        authItemTree.setId(AUTH_ABS);
-        authItemTree.setAuthType(AUTH_ABS);
-        authItemTree.setName(AUTH_ABS_NAME);
         
         // 配置权限列表
         if (configResourceList == null || configResourceList.size() == 0) {
-            // TODO:
-            return;
+            return authItemMap;
         }
         
         // 加载配置资源集
@@ -147,22 +130,22 @@ public class XmlAuthLoader implements AuthLoader {
                 Document doc = saxReader.read(io);
                 Element rootElement = doc.getRootElement();
                 // 根据配置资源加载权限
-                loadAuthItemConfig(authItemMap, authItemTree, rootElement);
+                loadAuthItemConfig(null, authItemMap, rootElement);
             }
             catch (Exception e) {
-                e.printStackTrace();
+                throw new AuthContextInitException("权限配置加载异常.", e);
             }
             finally {
                 IOUtils.closeQuietly(io);
             }
         }
         
-        this.authItemTree = authItemTree;
-        this.authItemMapping = authItemMap;
+        return authItemMap;
     }
     
     /**
-     * 加载权限配置项 <功能详细描述>
+     * 加载权限配置项<br/>
+     * <功能详细描述><br/>
      * 
      * @param authItemMap
      * @param parentAuthItem
@@ -173,8 +156,8 @@ public class XmlAuthLoader implements AuthLoader {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private void loadAuthItemConfig(Map<String, DefaultAuthItem> authItemMap,
-            DefaultAuthItem parentAuthItem, Element parentElement) {
+    private void loadAuthItemConfig(DefaultAuthItem parentAuthItem,
+            Map<String, DefaultAuthItem> authItemMap, Element parentElement) {
         @SuppressWarnings("unchecked")
         List<Element> authElList = parentElement.elements(AUTH_ELEMENT_NAME);
         if (CollectionUtils.isEmpty(authElList)) {
@@ -202,24 +185,67 @@ public class XmlAuthLoader implements AuthLoader {
             }
             else {
                 // 如果该权限原不存在则新生成
-                newAuthItem = parentAuthItem.createChildAuthItem(id,
+                newAuthItem = createChildAuthItem(parentAuthItem,
+                        id,
                         authType,
                         name,
                         isAbstract,
                         description);
             }
-            
-            // 加入子权限
-            parentAuthItem.getChilds().add(newAuthItem);
             authItemMap.put(id, newAuthItem);
             
             // 迭代生成子权限
-            loadAuthItemConfig(authItemMap, newAuthItem, authElTemp);
+            loadAuthItemConfig(newAuthItem, authItemMap, authElTemp);
         }
     }
     
     /**
-     * 获取权限配置资源列表 1、根据配置路径 authConfigLocaions 加载资源 <功能详细描述>
+     * 创建权限列表<br/>
+     * 1、根据父级权限创建子权限<br/>
+     * 2、如果父权限为抽象权限，子权限如果没有指定权限类型，则可根据父权限设定权限类型<br/>
+     * @param key
+     * @param authType
+     * @param name
+     * @param description
+     * @return [参数说明]
+     * 
+     * @return List<AuthItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    private DefaultAuthItem createChildAuthItem(AuthItem parentAuthItem,
+            String id, String authType, String name, boolean isAbstract,
+            String description) {
+        DefaultAuthItem authItem = new DefaultAuthItem();
+        authItem.setId(id);
+        authItem.setDescription(description);
+        authItem.setAuthType(authType);
+        
+        if (StringUtils.isEmpty(authType) && parentAuthItem != null) {
+            authItem.setParentId(parentAuthItem.getId());
+            
+            //如果当前节点没有指定权限类型，则根据父权限
+            //如果没有指定的权限类型，判断当前权限是否为抽象权限
+            if (parentAuthItem.isAbstract()
+                    && parentAuthItem.getAuthType().endsWith(ABSTRACT_AUTH_END)) {
+                //如果为抽象权限，则设定权限类型为对应抽象权限的子类型
+                authItem.setAuthType(parentAuthItem.getAuthType().substring(0,
+                        parentAuthItem.getAuthType().length()
+                                - ABSTRACT_AUTH_END.length()));
+            }
+            else {
+                //如果不为抽象权限，则子权限默认相同于父权限
+                authItem.setAuthType(parentAuthItem.getAuthType());
+            }
+        }
+        
+        return authItem;
+    }
+    
+    /**
+     * 获取权限配置资源列表<br/>
+     * 1、根据配置路径 authConfigLocaions 加载资源 <br/>
+     * <功能详细描述>
      * 
      * @return
      * @throws IOException
@@ -232,7 +258,7 @@ public class XmlAuthLoader implements AuthLoader {
     private List<Resource> getConfigResourceList() throws IOException {
         List<Resource> configResourceList = new ArrayList<Resource>();
         for (String location : this.authConfigLocaions) {
-            Resource[] resources = this.context.getResources(location);
+            Resource[] resources = this.applicationContext.getResources(location);
             if (resources == null || resources.length == 0) {
                 continue;
             }
@@ -245,50 +271,5 @@ public class XmlAuthLoader implements AuthLoader {
         }
         return configResourceList;
     }
-    
-    /**
-     * 创建权限列表
-     * 1、根据父级权限创建子权限
-     * 2、如果父权限为抽象权限，子权限如果没有指定权限类型，则可根据父权限设定权限类型
-     * @param key
-     * @param authType
-     * @param name
-     * @param description
-     * @return [参数说明]
-     * 
-     * @return List<AuthItem> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-   public AuthItem createChildAuthItem(String id, String authType,
-           String name, boolean isAbstract, String description) {
-       
-       AuthItem authItem = new DefaultAuthItem();
-       authItem.setId(id);
-       authItem.setDescription(description);
-       authItem.setParentId(this.id);
-       
-       if (StringUtils.isEmpty(authType)) {
-           //如果没有指定的权限类型，判断当前权限是否为抽象权限
-           if (this.isAbstract
-                   && this.authType.endsWith(ABSTRACT_AUTH_END)) {
-               //如果为抽象权限，则设定权限类型为对应抽象权限的子类型
-               authItem.setAuthType(this.authType.substring(0,
-                       this.authType.length()
-                               - ABSTRACT_AUTH_END.length()));
-           }
-           else {
-               //如果不为抽象权限，则子权限默认相同于父权限
-               authItem.setAuthType(this.authType);
-           }
-       }
-       else {
-           //如果指定的权限类型，则该权限权限类型为指定的权限类型
-           authItem.setAuthType(authType);
-       }
-       
-       return authItem;
-   }
-
     
 }

@@ -62,11 +62,17 @@ public class DefaultAuthItemRef implements Serializable, AuthItemRef {
     private Date createDate;
     
     /** 权限引用项的失效时间 */
-    private String endDate;
+    private Date endDate;
     
     private String authRefType;
     
     private String refId;
+    
+    /**
+     * 是否支持根据权限引用的引用的结束时间<br/>
+     * 判断权限是否需要根据结束时间验证其有效性
+     */
+    private boolean isValidDependEndDate = false;
     
     /**
      * @return
@@ -133,14 +139,14 @@ public class DefaultAuthItemRef implements Serializable, AuthItemRef {
      * @return
      */
     @Override
-    public String getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
     
     /**
      * @param 对endDate进行赋值
      */
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
     
@@ -159,6 +165,20 @@ public class DefaultAuthItemRef implements Serializable, AuthItemRef {
     }
     
     /**
+     * @return 返回 isValidDependEndDate
+     */
+    public boolean isValidDependEndDate() {
+        return isValidDependEndDate;
+    }
+
+    /**
+     * @param 对isValidDependEndDate进行赋值
+     */
+    public void setValidDependEndDate(boolean isValidDependEndDate) {
+        this.isValidDependEndDate = isValidDependEndDate;
+    }
+
+    /**
      * @param obj
      * @return
      */
@@ -166,11 +186,13 @@ public class DefaultAuthItemRef implements Serializable, AuthItemRef {
     public boolean equals(Object obj) {
         if (obj == null || obj instanceof AuthItemRef) {
             return false;
-        } else {
+        }
+        else {
             AuthItemRef otherAuthItemRef = (AuthItemRef) obj;
             if (this.getAuthId() == null || this.getAuthRefType() == null) {
                 return this == otherAuthItemRef;
-            } else {
+            }
+            else {
                 return this.getAuthId().equals(otherAuthItemRef.getAuthId())
                         && this.getAuthRefType()
                                 .equals(otherAuthItemRef.getAuthRefType());
@@ -185,7 +207,8 @@ public class DefaultAuthItemRef implements Serializable, AuthItemRef {
     public int hashCode() {
         if (this.getAuthId() == null || this.getAuthRefType() == null) {
             return super.hashCode();
-        } else {
+        }
+        else {
             return this.getAuthId().hashCode()
                     + this.getAuthRefType().hashCode()
                     + this.getClass().hashCode();

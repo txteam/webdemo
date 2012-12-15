@@ -6,19 +6,9 @@
  */
 package com.tx.components.auth.service.impl;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import com.tx.components.auth.AuthConstant;
-import com.tx.components.auth.context.CurrentSessionContext;
 import com.tx.components.auth.model.AuthItem;
-import com.tx.components.auth.model.DefaultAuthItemRef;
-import com.tx.components.auth.service.AuthChecker;
-import com.tx.components.auth.service.AuthService;
+import com.tx.components.auth.model.AuthItemRef;
 
 
  /**
@@ -30,10 +20,7 @@ import com.tx.components.auth.service.AuthService;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class OperateAuthChecker implements AuthChecker{
-	
-	@Resource(name="authService")
-	private AuthService authService;
+public class OperateAuthChecker extends BaseAuthChecker{
 
 	/**
 	 * @return
@@ -43,38 +30,15 @@ public class OperateAuthChecker implements AuthChecker{
 		return AuthConstant.TYPE_OPERATE;
 	}
 
-	/**
-	 * @param authKey
-	 * @param objects
-	 * @return
-	 */
-	@Override
-	public boolean isHasAuth(String authKey, Object... objects) {
-		HttpServletRequest request = CurrentSessionContext.getRequest();
-		if(request == null || request.getSession() == null){
-			return false;
-		}
-		
-		//如果对应authKey中系统中不存在对应权限，认为鉴权失败
-		AuthItem item = this.authService.getAuthItemMapping().get(authKey);
-		if(item == null || !AuthConstant.TYPE_OPERATE.equals(item.getAuthType())){
-			return false;
-		}
-		
-		HttpSession session = request.getSession();
-		List<DefaultAuthItemRef> authItemRefList = (List<DefaultAuthItemRef>)session.getAttribute("authItemRefList");
-		if(authItemRefList == null){
-			return false;
-		}
-		
-		for(Object obj : objects){
-			if(authItemRefList.contains(obj)){
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	
+    /**
+     * @param authItem
+     * @param authItemRef
+     * @param objects
+     * @return
+     */
+    @Override
+    public boolean isHasAuth(AuthItem authItem, AuthItemRef authItemRef,
+            Object... objects) {
+        return true;
+    }
 }

@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -112,7 +111,7 @@ public class CurrentSessionContext implements Serializable {
     public Map<String, AuthItemRef> getCurrentOperatorAuthMapFromSession() {
         if (this.session == null
                 || this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP) == null
-                || !(this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP) instanceof Set<?>)) {
+                || !(this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP) instanceof Map<?, ?>)) {
             return null;
         }
         

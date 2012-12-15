@@ -66,15 +66,4 @@ public interface AuthItem extends TreeAble<List<AuthItem>, AuthItem> {
      */
     boolean isValid();
     
-    /**
-      * 是否支持有效时间<br/>
-      * 如果支持有效时间，系统在判断权限时将根据权限的结束时间判断是否权限引用已经失效
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    boolean isValidDependEndDate();
-    
 }

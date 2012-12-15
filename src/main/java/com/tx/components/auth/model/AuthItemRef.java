@@ -14,7 +14,7 @@ public interface AuthItemRef {
      * 这里用String虽没有int查询快，但能让sql可读性增强
      * @return 返回 authRefType
      */
-    public abstract String getAuthRefType();
+    String getAuthRefType();
     
     /**
      * 权限关联项id 
@@ -23,26 +23,30 @@ public interface AuthItemRef {
      * ....
      * @return 返回 refId
      */
-    public abstract String getRefId();
+    String getRefId();
     
     /**
      * @return 返回 authId
      */
-    public abstract String getAuthId();
+    String getAuthId();
     
     /**
      * @return 返回 createOperId
      */
-    public abstract String getCreateOperId();
+    String getCreateOperId();
     
     /**
      * @return 返回 createDate
      */
-    public abstract Date getCreateDate();
+    Date getCreateDate();
     
     /**
      * @return 返回 endDate
      */
-    public abstract String getEndDate();
+    Date getEndDate();
     
+    /**
+     * @return 返回 isValidDependEndDate
+     */
+    boolean isValidDependEndDate();
 }

@@ -62,12 +62,6 @@ public class DefaultAuthItem implements Serializable, AuthItem {
     private boolean isValid = true;
     
     /**
-     * 是否支持根据权限引用的引用的结束时间<br/>
-     * 判断权限是否需要根据结束时间验证其有效性
-     */
-    private boolean isValidDependEndDate = false;
-    
-    /**
      * @return
      */
     @Override
@@ -189,20 +183,6 @@ public class DefaultAuthItem implements Serializable, AuthItem {
     }
     
     /**
-     * @return 返回 isValidDependEndDate
-     */
-    public boolean isValidDependEndDate() {
-        return isValidDependEndDate;
-    }
-
-    /**
-     * @param 对isValidDependEndDate进行赋值
-     */
-    public void setValidDependEndDate(boolean isValidDependEndDate) {
-        this.isValidDependEndDate = isValidDependEndDate;
-    }
-
-    /**
      * @param obj
      * @return
      */
@@ -210,13 +190,15 @@ public class DefaultAuthItem implements Serializable, AuthItem {
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof AuthItem)) {
             return false;
-        } else {
+        }
+        else {
             AuthItem other = (AuthItem) obj;
             if (this.id == null) {
                 //这里认为authType或id为空时，不能按照authItem的设置判断相等，仅仅能根据两者是否是同一个引用判断相等
                 //仅以两者是否是同一个对象的链接进行判断
                 return this == other;
-            } else {
+            }
+            else {
                 return this.getId().equals(other.getId());
             }
         }

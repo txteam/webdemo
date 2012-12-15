@@ -16,17 +16,17 @@ package com.tx.components.auth.service;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public interface NoAuthProcessor {
+public interface NoDataRowAuthProcessor {
     
     /**
      * 显示为空
      */
-    String NAME_SHOWEMPTY = "showEmpty";
+    String TYPE_SHOWEMPTY = "showEmpty";
     
     /**
      * 遮罩部分信息
      */
-    String NAME_MASKINFO = "maskInfo";
+    String TYPE_MASKINFO = "maskInfo";
     
     /**
       * 权限处理器名
@@ -38,7 +38,7 @@ public interface NoAuthProcessor {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    String name();
+    String type();
     
     /**
       * 处理字符串
