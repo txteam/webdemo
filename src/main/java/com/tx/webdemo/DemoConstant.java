@@ -8,7 +8,7 @@ package com.tx.webdemo;
 
 
  /**
-  * <功能简述>
+  * webDemo项目常量
   * <功能详细描述>
   * 
   * @author  PengQingyang
