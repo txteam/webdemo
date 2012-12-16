@@ -16,6 +16,6 @@ package com.tx.webdemo;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public class DemoConstant {
+public class WebDemoConstant {
     
 }

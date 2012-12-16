@@ -32,7 +32,7 @@
 
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
-		<constructor-arg name="executorType" ref="SIMPLE"></constructor-arg>
+		<constructor-arg name="executorType" value="SIMPLE"></constructor-arg>
 		<constructor-arg name="exceptionTranslator" ref="myBatisExceptionTranslator"></constructor-arg>
 	</bean>
 	
