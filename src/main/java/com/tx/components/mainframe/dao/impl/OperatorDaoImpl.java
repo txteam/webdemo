@@ -4,17 +4,17 @@
  * 修改时间:  2012-12-1
  * <修改描述:>
  */
-package com.tx.webdemo.demo.dao.impl;
+package com.tx.components.mainframe.dao.impl;
 
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.tx.components.mainframe.dao.OperatorDao;
+import com.tx.components.mainframe.model.Operator;
 import com.tx.core.mybatis.support.MyBatisDaoSupport;
 import com.tx.core.paged.model.PagedList;
-import com.tx.webdemo.demo.dao.OperatorDao;
-import com.tx.webdemo.demo.model.Operator;
 
 
  /**

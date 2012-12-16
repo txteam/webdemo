@@ -4,7 +4,7 @@
  * 修改时间:  2012-12-1
  * <修改描述:>
  */
-package com.tx.webdemo.demo.model;
+package com.tx.components.mainframe.model;
 
 
  /**

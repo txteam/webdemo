@@ -52,8 +52,10 @@
 				</array>
 			</property>
 		</bean>
-		<bean
-			class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
+		<!-- 向request写入contextPath常量 -->
+		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
+		<!-- 加入权限容器支持 -->
+		<bean class="com.tx.components.auth.springmvc.AuthContextSupportInterceptor"></bean>
 	</mvc:interceptors>
 
 	<!-- 将jsp映射为controller -->

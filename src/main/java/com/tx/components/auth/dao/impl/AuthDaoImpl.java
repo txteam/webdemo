@@ -9,10 +9,6 @@ package com.tx.components.auth.dao.impl;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Component;
-
 import com.tx.components.auth.dao.AuthDao;
 import com.tx.components.auth.model.AuthItemRef;
 import com.tx.core.mybatis.support.MyBatisDaoSupport;
@@ -25,10 +21,8 @@ import com.tx.core.mybatis.support.MyBatisDaoSupport;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@Component("authDao")
 public class AuthDaoImpl implements AuthDao {
 
-	@Resource(name = "myBatisDaoSupport")
 	private MyBatisDaoSupport myBatisDaoSupport;
 
 	/**
@@ -66,4 +60,18 @@ public class AuthDaoImpl implements AuthDao {
 	public void delAuthItemRefList(List<AuthItemRef> authItemRefList) {
 		this.myBatisDaoSupport.batchDelete("delAuthItemRef", authItemRefList, true);
 	}
+
+    /**
+     * @return 返回 myBatisDaoSupport
+     */
+    public MyBatisDaoSupport getMyBatisDaoSupport() {
+        return myBatisDaoSupport;
+    }
+
+    /**
+     * @param 对myBatisDaoSupport进行赋值
+     */
+    public void setMyBatisDaoSupport(MyBatisDaoSupport myBatisDaoSupport) {
+        this.myBatisDaoSupport = myBatisDaoSupport;
+    }
 }

@@ -184,4 +184,18 @@ public class AuthService {
     public void setServiceLogger(Logger serviceLogger) {
         this.serviceLogger = serviceLogger;
     }
+
+    /**
+     * @return 返回 authDao
+     */
+    public AuthDao getAuthDao() {
+        return authDao;
+    }
+
+    /**
+     * @param 对authDao进行赋值
+     */
+    public void setAuthDao(AuthDao authDao) {
+        this.authDao = authDao;
+    }
 }

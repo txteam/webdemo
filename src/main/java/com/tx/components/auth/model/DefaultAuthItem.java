@@ -209,7 +209,7 @@ public class DefaultAuthItem implements Serializable, AuthItem {
      */
     @Override
     public int hashCode() {
-        if (this.getId() == null || this.getAuthType() == null) {
+        if (this.getId() == null) {
             return super.hashCode();
         }
         return this.getId().hashCode();

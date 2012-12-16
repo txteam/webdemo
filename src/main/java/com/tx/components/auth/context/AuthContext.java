@@ -81,7 +81,6 @@ public class AuthContext implements FactoryBean<AuthContext>,
     };
     
     /** 业务日志记录器：默认使用logback日志记录器  */
-    @SuppressWarnings("unused")
     private static Logger serviceLogger = LoggerFactory.getLogger(AuthContext.class);
     
     /** 当前spring容器 */
@@ -325,9 +324,11 @@ public class AuthContext implements FactoryBean<AuthContext>,
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public void initCurrentUserAuthContextWhenLogin(String operatorId) {
+    public List<AuthItemRef> initCurrentUserAuthContextWhenLogin(
+            String operatorId) {
         List<AuthItemRef> authItemRefList = getAllAuthRefByOperatorId(operatorId);
         getCurrentSessionContext().setCurrentOperatorAuthToSession(authItemRefList);
+        return authItemRefList;
     }
     
     /**
@@ -381,4 +382,105 @@ public class AuthContext implements FactoryBean<AuthContext>,
         return authCheckerMapping.get(authItem.getAuthType())
                 .isHasAuth(authItem, objects);
     }
+
+    /**
+     * @return 返回 serviceLogger
+     */
+    public static Logger getServiceLogger() {
+        return serviceLogger;
+    }
+
+    /**
+     * @param 对serviceLogger进行赋值
+     */
+    public static void setServiceLogger(Logger serviceLogger) {
+        AuthContext.serviceLogger = serviceLogger;
+    }
+
+    /**
+     * @return 返回 authService
+     */
+    public AuthService getAuthService() {
+        return authService;
+    }
+
+    /**
+     * @param 对authService进行赋值
+     */
+    public void setAuthService(AuthService authService) {
+        this.authService = authService;
+    }
+
+    /**
+     * @return 返回 authCheckers
+     */
+    public List<AuthChecker> getAuthCheckers() {
+        return authCheckers;
+    }
+
+    /**
+     * @param 对authCheckers进行赋值
+     */
+    public void setAuthCheckers(List<AuthChecker> authCheckers) {
+        this.authCheckers = authCheckers;
+    }
+
+    /**
+     * @return 返回 authLoader
+     */
+    public AuthLoader getAuthLoader() {
+        return authLoader;
+    }
+
+    /**
+     * @param 对authLoader进行赋值
+     */
+    public void setAuthLoader(AuthLoader authLoader) {
+        this.authLoader = authLoader;
+    }
+
+    /**
+     * @return 返回 superAdministratorSwitch
+     */
+    public boolean isSuperAdministratorSwitch() {
+        return superAdministratorSwitch;
+    }
+
+    /**
+     * @param 对superAdministratorSwitch进行赋值
+     */
+    public void setSuperAdministratorSwitch(boolean superAdministratorSwitch) {
+        this.superAdministratorSwitch = superAdministratorSwitch;
+    }
+
+    /**
+     * @return 返回 superAdminChecker
+     */
+    public SuperAdminChecker getSuperAdminChecker() {
+        return superAdminChecker;
+    }
+
+    /**
+     * @param 对superAdminChecker进行赋值
+     */
+    public void setSuperAdminChecker(SuperAdminChecker superAdminChecker) {
+        this.superAdminChecker = superAdminChecker;
+    }
+
+    /**
+     * @return 返回 superAdminAllAuthItemRef
+     */
+    public List<AuthItemRef> getSuperAdminAllAuthItemRef() {
+        return superAdminAllAuthItemRef;
+    }
+
+    /**
+     * @param 对superAdminAllAuthItemRef进行赋值
+     */
+    public void setSuperAdminAllAuthItemRef(
+            List<AuthItemRef> superAdminAllAuthItemRef) {
+        this.superAdminAllAuthItemRef = superAdminAllAuthItemRef;
+    }
+    
+    
 }

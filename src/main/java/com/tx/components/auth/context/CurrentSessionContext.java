@@ -86,13 +86,16 @@ public class CurrentSessionContext implements Serializable {
      */
     public void setCurrentOperatorAuthToSession(List<AuthItemRef> authItemRefSet) {
         //如果当前不存在会话，者直接跳过该逻辑
-        if (this.session == null || authItemRefSet == null) {
+        if (this.session == null) {
             return;
         }
         
+        //如果当前人员不含有权限，也会压入一个空的权限引用map
         Map<String, AuthItemRef> authItemRefMap = new HashMap<String, AuthItemRef>();
-        for (AuthItemRef refTemp : authItemRefSet) {
-            authItemRefMap.put(refTemp.getAuthId(), refTemp);
+        if (authItemRefSet != null) {
+            for (AuthItemRef refTemp : authItemRefSet) {
+                authItemRefMap.put(refTemp.getAuthId(), refTemp);
+            }
         }
         this.session.setAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP,
                 authItemRefMap);
@@ -117,7 +120,8 @@ public class CurrentSessionContext implements Serializable {
         
         @SuppressWarnings("unchecked")
         Map<String, AuthItemRef> authItemRefMap = (Map<String, AuthItemRef>) this.session.getAttribute(AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP);
-        return authItemRefMap;
+        return authItemRefMap == null ? new HashMap<String, AuthItemRef>()
+                : authItemRefMap;
     }
     
     /**

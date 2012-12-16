@@ -271,5 +271,19 @@ public class XmlAuthLoader implements AuthLoader, ApplicationContextAware {
         }
         return configResourceList;
     }
+
+    /**
+     * @return 返回 authConfigLocaions
+     */
+    public String[] getAuthConfigLocaions() {
+        return authConfigLocaions;
+    }
+
+    /**
+     * @param 对authConfigLocaions进行赋值
+     */
+    public void setAuthConfigLocaions(String[] authConfigLocaions) {
+        this.authConfigLocaions = authConfigLocaions;
+    }
     
 }

@@ -4,13 +4,13 @@
  * 修改时间:  2012-12-1
  * <修改描述:>
  */
-package com.tx.webdemo.demo.dao;
+package com.tx.components.mainframe.dao;
 
 import java.util.List;
 import java.util.Map;
 
+import com.tx.components.mainframe.model.Operator;
 import com.tx.core.paged.model.PagedList;
-import com.tx.webdemo.demo.model.Operator;
 
 /**
  * <功能简述>
