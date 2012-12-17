@@ -18,6 +18,18 @@
 			<groupId>com.tx</groupId>
 			<artifactId>tx-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.tx</groupId>
+			<artifactId>tx-component-auth</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tx</groupId>
+			<artifactId>tx-component-servicelog</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tx</groupId>
+			<artifactId>tx-component-config</artifactId>
+		</dependency>
 
 		<!-- commons -->
 		<dependency>
