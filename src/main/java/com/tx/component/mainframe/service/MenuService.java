@@ -12,8 +12,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -46,13 +50,15 @@ import com.tx.core.util.XstreamUtils;
 @Component("menuService")
 public class MenuService implements InitializingBean, ApplicationContextAware {
     
+    private static final Logger logger = LoggerFactory.getLogger(MenuService.class);
+    
     private ApplicationContext context;
     
     /** 菜单配置所在目录 */
-    private String menuConfigLocation = "classpath:/context/menuConfig.xml";
+    private String menuConfigLocation = "classpath:context/menuConfig.xml";
     
     /** menuConfig的读取器 */
-    private XStream xstream = XstreamUtils.getXstream(MenuConfig.class);
+    private static final XStream xstream = XstreamUtils.getXstream(MenuConfig.class);
     
     private List<MenuItem> mainMenuItemList;
     
@@ -163,7 +169,7 @@ public class MenuService implements InitializingBean, ApplicationContextAware {
        
        if (menuConfig == null
                || menuConfig.getToolMenusConfig() == null
-               || menuConfig.getToolMenusConfig().getMenuConfigList().size() == 0) {
+               || CollectionUtils.isEmpty(menuConfig.getToolMenusConfig().getMenuConfigList())) {
            return toolsMenuItemList;
        }
        
@@ -285,6 +291,7 @@ public class MenuService implements InitializingBean, ApplicationContextAware {
             menuConfig = (MenuConfig) xstream.fromXML(io);
         }
         catch (Exception e) {
+            logger.info(e.toString(),e);
             throw new ResourceLoadException("加载菜单配置异常:{}", e, e.toString());
         }
         finally {

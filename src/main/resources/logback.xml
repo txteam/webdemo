@@ -81,6 +81,7 @@
 	<logger name="org.apache.cxf.interceptor" level="DEBUG">
 		<appender-ref ref="cxf_log_file"/>
 	</logger>
+	<logger name="org.springframework.web.servlet.handler" level="DEBUG"></logger>
 	
 	
 

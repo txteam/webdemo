@@ -38,7 +38,7 @@
 	
 	<bean id="authDao" class="com.tx.component.auth.dao.impl.AuthDaoImpl">
 		<property name="myBatisDaoSupport">
-			<ref bean="authCheckers"/>
+			<ref bean="myBatisDaoSupport"/>
 		</property>
 	</bean>
 	<bean id="authService" class="com.tx.component.auth.service.AuthService">

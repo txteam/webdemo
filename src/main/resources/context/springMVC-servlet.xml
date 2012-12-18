@@ -31,7 +31,7 @@
 	<!-- 需要添加该驱动，支持多个convertor的添加 -->
 	<mvc:annotation-driven />
 	<!-- 配置扫描 -->
-	<context:component-scan base-package="com.tx.webdemo"
+	<context:component-scan base-package="com.tx.webdemo,com.tx.component.mainframe"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
@@ -55,7 +55,7 @@
 		<!-- 向request写入contextPath常量 -->
 		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
 		<!-- 加入权限容器支持 -->
-		<bean class="com.tx.components.auth.springmvc.AuthContextSupportInterceptor"></bean>
+		<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"></bean>
 	</mvc:interceptors>
 
 	<!-- 将jsp映射为controller -->
@@ -77,7 +77,28 @@
 		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
 		<property name="converters">
 			<list>
+				<!-- request to object -->
 				<bean class="org.springframework.core.convert.support.StringToBooleanConverter"></bean>
+				<bean class="org.springframework.core.convert.support.StringToCharacterConverter"></bean>
+				<bean class="org.springframework.core.convert.support.StringToNumberConverterFactory"></bean>
+				<bean class="org.springframework.core.convert.support.StringToEnumConverterFactory"></bean>
+				<!-- <bean class="org.springframework.core.convert.support.StringToArrayConverter"></bean> -->
+				<!-- <bean class="org.springframework.core.convert.support.StringToCollectionConverter"></bean> -->
+				<!-- <bean class="org.springframework.core.convert.support.StringToPropertiesConverter"></bean> -->
+				
+				<!-- object to string -->
+				<bean class="org.springframework.core.convert.support.EnumToStringConverter"></bean>
+				<bean class="org.springframework.core.convert.support.ObjectToStringConverter"></bean>
+
+				<!-- <bean class="org.springframework.core.convert.support.PropertiesToStringConverter"></bean> -->
+				
+				<!-- other -->
+				<!-- <bean class="org.springframework.core.convert.support.CharacterToNumberFactory"></bean> -->
+				<!-- <bean class="org.springframework.core.convert.support.NumberToNumberConverterFactory"></bean> -->
+				<!-- <bean class="org.springframework.core.convert.support.NumberToCharacterConverter"></bean> -->
+				
+				<!-- customize -->
+				<bean class="com.tx.core.springmvc.support.StringToDateConverter"></bean>
 			</list>
 		</property>
 	</bean>
@@ -104,21 +125,17 @@
 		</property>
 		<property name="messageConverters">
 			<list>
-				<bean
-					class="org.springframework.http.converter.ByteArrayHttpMessageConverter"></bean>
-				<bean
-					class="org.springframework.http.converter.StringHttpMessageConverter">
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"></bean>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
 					<property name="supportedMediaTypes">
 						<list>
 							<value>text/plain;charset=UTF-8</value>
 						</list>
 					</property>
 				</bean>
-				<bean
-					class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
-				<bean
-					class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"></bean>
-				<!-- <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean> -->
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
+				<bean class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"></bean>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
 				<!-- <bean class="org.springframework.http.converter.FormHttpMessageConverter"></bean> -->
 			</list>
 		</property>
@@ -156,7 +173,7 @@
 		</property>
 	</bean>
 
-	<bean
+	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
@@ -170,16 +187,38 @@
 	<!-- 在没有扩展名时即:"/user/1" 时的默认展现形式 -->
 	<!-- 扩展名至mimeType的映射,即 /user.json => application/json -->
 	<!-- 用于开启 /userinfo/123?format=json 的支持 -->
-	<!-- <bean id="contentNegotiatingViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"> 
-		<property name="ignoreAcceptHeader" value="true" /> <property name="defaultContentType" 
-		value="text/html" /> <property name="mediaTypes"> <map> <entry key="json" 
-		value="application/json" /> <entry key="jsp" value="text/html"/> <entry key="html" 
-		value="text/html"/> </map> </property> <property name="favorParameter" value="false" 
-		/> <property name="viewResolvers"> <list> <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" 
-		/> <property name="prefix" value="/WEB-INF/view/" /> <property name="suffix" 
-		value=".jsp" /> </bean> <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" 
-		/> </list> </property> <property name="defaultViews"> <list> <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"></bean> 
-		</list> </property> </bean> -->
+	<!--  
+	<bean id="contentNegotiatingViewResolver"
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="ignoreAcceptHeader" value="true" />
+		<property name="defaultContentType" value="text/html" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+				<entry key="jsp" value="text/html"/>
+				<entry key="html" value="text/html"/>
+			</map>
+		</property>
+		<property name="favorParameter" value="false" />
+		<property name="viewResolvers">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="viewClass"
+						value="org.springframework.web.servlet.view.JstlView" />
+					<property name="prefix" value="/WEB-INF/view/" />
+					<property name="suffix" value=".jsp" />
+				</bean>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"></bean>
+			</list>
+		</property>
+	</bean>
+	-->
 
 </beans>

@@ -11,7 +11,8 @@
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="datasource"></property>
 		<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
-		<property name="mapperLocations" value="classpath*:/com/tx/demo/**/*SqlMap.xml" />	
+		<property name="mapperLocations" value="classpath*:/com/tx/demo/**/*SqlMap.xml,
+			classpath*:/com/tx/component/mainframe/**/*SqlMap.xml" />	
 		<property name="typeHandlersPackage" value="com.tx.core.mybatis.handler"></property>
 		<property name="failFast" value="true"></property>
 		<property name="plugins">

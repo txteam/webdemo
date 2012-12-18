@@ -159,7 +159,7 @@ Layout.prototype._initCenterMainSpliter = function() {
             scrollBars : "hidden",
             collapsed : true
         },
-        resizeSettings: { ghost :false},
+        resizeSettings: { ghost:false},
         splitterDistance : _this._centerHeight * 3 / 5,
         orientation : "horizontal",
         collapsingPanel : "panel2",

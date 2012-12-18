@@ -6,6 +6,8 @@
  */
 package com.tx.component.mainframe.service;
 
+import org.springframework.stereotype.Component;
+
 import com.tx.component.mainframe.model.Operator;
 
 
@@ -17,6 +19,7 @@ import com.tx.component.mainframe.model.Operator;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
+@Component("operatorService")
 public class OperatorService {
     
     /**
