@@ -162,9 +162,7 @@ $(document).ready(function() {
 	               <ul id="customer-menus" class="customer-menus">
 					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo     列表</a></li>
 					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo ajax列表</a></li>
-					    <li id=""><a href="#">Wiki</a></li>
-					    <li id=""><a href="#">hudson</a></li>
-					    <li id=""><a href="#">sonar</a></li>
+					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo ajax分页列表</a></li>
 					</ul>
 	            </div>
 	        </li> 
