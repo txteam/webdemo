@@ -555,7 +555,8 @@ DialogUtils.openTip = function(config, seconds, yes) {
     }, seconds * 1000);
 }; 
 
-/**Dialog警告
+/**
+ * Dialog警告
  * @param {String} 消息内容
  * @param {Function} 确定按钮回调函数
  * @return {Object} 对话框操控接口
