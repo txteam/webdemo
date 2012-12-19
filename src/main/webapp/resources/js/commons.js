@@ -1,3 +1,9 @@
+$(document).ready(function() {
+	$(".header").prepend('<span class="ui-icon ui-icon-gear" style="float:left;"></span>');
+	$(".header").addClass("ui-state-default ui-corner-all ui-tabs-selected ui-state-active page-title-header");
+	
+	
+});
 /************ EventManager end ************** */
 /**
  * 客户端统一事件管理器

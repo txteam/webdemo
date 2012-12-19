@@ -27,16 +27,19 @@ html,body{
 	padding-top: 0px;
 }
 .ui-tabs .ui-tabs-nav{
+	/*
 	border-left-width:0px;
 	border-top-width:0px;
 	border-right-width:0px;
 	border-bottom-width:0px;
+	*/
 }
 .top .ui-tabs .ui-tabs-panel{
     padding-top: 3px;
     padding-left: 1px;
     padding-right: 1px;
     padding-bottom: 5px;
+    margin-right: -10px;
 }
 .ui-tabs-nav .ui-state-focus{
 	border-left-width:0px;
@@ -182,9 +185,9 @@ html,body{
 }
 .center-main-tabs .ui-widget-content{
 	overflow: hidden;
-	padding: 0px;
-	padding-left: 0px;
-	padding-right: 0px;
+	padding-top: 3px;
+	padding-left: 1px;
+	padding-right: 1px;
 	padding-bottom: 0px;
 }
 

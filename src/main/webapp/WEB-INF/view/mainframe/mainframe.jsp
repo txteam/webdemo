@@ -160,7 +160,8 @@ $(document).ready(function() {
 	            <h3><a href="#">常用菜单</a></h3> 
 	            <div style="margin:0px;padding:0px;overflow:hidden;"> 
 	               <ul id="customer-menus" class="customer-menus">
-					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo列表</a></li>
+					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo     列表</a></li>
+					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo ajax列表</a></li>
 					    <li id=""><a href="#">Wiki</a></li>
 					    <li id=""><a href="#">hudson</a></li>
 					    <li id=""><a href="#">sonar</a></li>

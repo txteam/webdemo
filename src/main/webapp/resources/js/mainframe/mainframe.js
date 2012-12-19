@@ -67,7 +67,7 @@ Layout.prototype._centerWidth = 0;
  */
 Layout.prototype._accordingHeight = 0;
 /*
- * according的高度
+ * according的宽度
  */
 Layout.prototype._accordingWidth = 0;
 /*
@@ -75,7 +75,7 @@ Layout.prototype._accordingWidth = 0;
  */
 Layout.prototype._tabPanelHeight = 0;
 /*
- * according的高度
+ * according的宽度
  */
 Layout.prototype._tabPanelWidth = 0;
 /*
