@@ -79,7 +79,7 @@ $(document).ready(function() {
 <style type="text/css">
 
 </style>
-<body>
+<body class="ui-widget-content">
 <div class="container">
 	<!-- top -->
 	<div class="top ui-widget-content">
@@ -160,9 +160,10 @@ $(document).ready(function() {
 	            <h3><a href="#">常用菜单</a></h3> 
 	            <div style="margin:0px;padding:0px;overflow:hidden;"> 
 	               <ul id="customer-menus" class="customer-menus">
-					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo     列表</a></li>
-					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo ajax列表</a></li>
-					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo ajax分页列表</a></li>
+					    <li id="demoList"><a href="${contextPath}/demo/queryDemoList">demo     列表</a></li>
+					    <li id="demoAjaxList"><a href="${contextPath}/demo/queryDemoList">demo ajax列表</a></li>
+					    <li id="demoAjaxPagedList"><a href="${contextPath}/demo/queryDemoList">demo ajax分页列表</a></li>
+					    <li id="dialogUtils"><a href="${contextPath}/view/demo/dialogUtilsDemo">demo dialogUtils</a></li>
 					</ul>
 	            </div>
 	        </li> 
@@ -262,7 +263,7 @@ $(document).ready(function() {
 <div id="menuItmesContainer" class="menu-itmes-container" style="height: 100px">
 	<ul id="menu">
 	    <li id="menuLink"><a>&nbsp;菜&nbsp;单&nbsp;</a>
-	        <ul id="menuItems">
+	        <ul id="menuItems" class="ui-widget-content">
 	           <li><a>禅道</a></li>
 	           <li><a>wiki</a></li>
 	           <li><a>menuitem1</a>

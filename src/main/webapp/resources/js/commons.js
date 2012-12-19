@@ -481,12 +481,9 @@ var _default_skins =
 //定义dialogUtils对象
 var DialogUtils = function(options){
 };
-//定dialog
-DialogUtils.configs = {
-
-};
 //
 DialogUtils.defaultConfigs = {
+    autoOpen: true,
 	width: 'auto',
 	height: 'auto',
 	zIndex: 10000,
@@ -495,10 +492,107 @@ DialogUtils.defaultConfigs = {
 	draggable: true,
 	position:'center'
 };
-//对话框工具
+//对话框工具:打开一个iframe的独立页面
 DialogUtils.openWin = function(config){
-	
+	config=$.extend({
+	    id:'dialog_',
+	    autoOpen: true,
+	    width: 'auto',
+        height: 'auto',
+        captionButtons: {
+            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
+            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
+            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
+            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
+            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
+            close: {visible: true, iconClassOn: 'ui-icon-close',click: function(){
+                $("#"+this.id).wijdialog("close");
+            }}
+        },
+        contentUrl: ''
+	}, config);
+	var $dialogHandle = $("#"+config.id);
+	if($("#"+config.id).size() == 0){
+	   var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
+	   $(document).append($hiddenDiv);
+	   $hiddenDiv.wijdialog(config);
+	}else{
+	    if(!$dialogHandle.wijdialog("isOpen")){
+	        $dialogHandle.wijdialog("open");
+	    }
+	}
 };
+/**
+ * 打开dialog 提示，并在指定时间后关闭提示
+ */
+DialogUtils._temp_dialog_index = 0;
+DialogUtils.openTip = function(config, seconds, yes) {
+    var openTipId = "openTipDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
+    config=$.extend({
+        id: openTipId,
+        autoOpen: true,
+        width: $(config.content).width() < 300 ? 300 : 'auto',
+        height: $(config.content).height() < 130 ? 130 : 'auto',
+        closeOnEscape: false,
+        captionButtons: {
+            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
+            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
+            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
+            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
+            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
+            close: {visible: false, iconClassOn: 'ui-icon-close'}
+        },
+        content: ''
+    }, config);
+    var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
+    $(document).append($hiddenDiv);
+    $dialogHandle = $hiddenDiv;
+    $dialogHandle.html(config.content);
+    $dialogHandle.wijdialog(config);
+    window.setTimeout(function() {
+        yes && yes.call(this);
+        $("#"+config.id).remove();
+    }, seconds * 1000);
+}; 
+
+/**Dialog警告
+ * @param {String} 消息内容
+ * @param {Function} 确定按钮回调函数
+ * @return {Object} 对话框操控接口
+ */
+DialogUtils.alert = function(msg, yes) {
+    var alertId = "alertDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
+    alert($('<div>' + msg + '</div>').height());
+    var config = {
+        id:alertId,
+        autoOpen: true,
+        width: $('<div>' + msg + '</div>').width() < 300 ? 300 : 'auto',
+        height: $('<div>' + msg + '</div>').height() < 10 ? 150 : 'auto',
+        closeOnEscape: false,
+        modal: true,
+        buttons: [{text:"确定", click: function(){
+            $("#" + alertId).remove();
+        }}],
+        captionButtons: {
+            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
+            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
+            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
+            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
+            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
+            close: {visible: true, iconClassOn: 'ui-icon-close',click: function(){
+                $("#" + alertId).remove();
+            }}
+        },
+        content: ''
+    };
+    var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
+    $(document).append($hiddenDiv);
+    $dialogHandle = $hiddenDiv;
+    //TODO:添加警告的样式
+    $dialogHandle.text(msg);
+    $dialogHandle.wijdialog(config);
+}; 
+
 
 /** ********** dialogUtils end ************** **/
 

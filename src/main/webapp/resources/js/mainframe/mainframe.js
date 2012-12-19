@@ -167,6 +167,8 @@ Layout.prototype._initCenterMainSpliter = function() {
     });
     $centerMainSpliter.bind("refresh", function(event) {
         _this.$centerMain.wijsplitter("refresh");
+        
+        //alert( _this.$centerMain.width());
         _this.$centerMain.trigger("centerMainSpliterResized");
 
         event.stopPropagation();
@@ -178,7 +180,9 @@ Layout.prototype._initCenterMainSpliter = function() {
     });
     this.$center.wijsplitter({
         expanded : function(e) {
+            //alert("expanded");
             $centerMainSpliter.trigger("refresh");
+            return true;
         },
         collapsed : function(e) {
             $centerMainSpliter.trigger("refresh");
@@ -231,15 +235,12 @@ Layout.prototype._initCenterAccordion = function() {
     _this.$center.bind("centerSpliterResized", function(event) {
         $customerMenuAccordion.trigger("accordionResize");
     });
-    this.$center.wijsplitter({
-        expanded : function(e) {
-            $customerMenuAccordion.trigger("accordionResize");
-        },
-        sized : function(e) {
-            $customerMenuAccordion.trigger("accordionResize");
-        }
+    this.$center.bind("wijsplitterexpanded", function () {
+        $customerMenuAccordion.trigger("accordionResize");
     });
-    
+    this.$center.bind("wijsplittersized", function () {
+        $customerMenuAccordion.trigger("accordionResize");
+    });
     //初始化菜单
     this._initLCMenu();
 };
