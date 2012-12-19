@@ -8,6 +8,7 @@ package com.tx.webdemo.demo.controller;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -15,6 +16,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,10 +45,23 @@ public class DemoController {
     @Resource(name="demoService")
     private DemoService demoService;
     
-    @ResponseBody
-    public String test(){
-     
-        return null;
+    /**
+      * 查询demo列表
+      * <功能详细描述>
+      * @param model
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping(value="/queryDemoList")
+    public String queryDemoList(Model model){
+        List<Demo> demoList = this.demoService.queryDemoList();
+        
+        model.addAttribute("demoList", demoList);
+        
+        return "/demo/demoList";
     }
     
     

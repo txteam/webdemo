@@ -160,10 +160,10 @@ $(document).ready(function() {
 	            <h3><a href="#">常用菜单</a></h3> 
 	            <div style="margin:0px;padding:0px;overflow:hidden;"> 
 	               <ul id="customer-menus" class="customer-menus">
-					    <li><a href="#">禅道</a></li>
-					    <li><a href="#">Wiki</a></li>
-					    <li><a href="#">hudson</a></li>
-					    <li><a href="#">sonar</a></li>
+					    <li id="demoMananger"><a href="${contextPath}/demo/queryDemoList">demo列表</a></li>
+					    <li id=""><a href="#">Wiki</a></li>
+					    <li id=""><a href="#">hudson</a></li>
+					    <li id=""><a href="#">sonar</a></li>
 					</ul>
 	            </div>
 	        </li> 
@@ -195,11 +195,11 @@ $(document).ready(function() {
 				<div class="center-main-tabs">
 					<div id="mainTabs">
 						<ul> 
-		                    <li><a href="#mainTabs-1">个人面板</a></li> 
-		                    <li><a href="#mainTabs-2">行事历</a></li>
-		                    <li><a href="#mainTabs-3">记事本</a></li>
-		                    <li><a href="#mainTabs-4">testGlobalEvent1</a></li>
-		                    <li><a href="#mainTabs-5">testGlobalEvent2</a></li>
+		                    <li id="mainTabs_welcome"><a href="#mainTabs-1">个人面板</a></li> 
+		                    <li id="mainTabs_calendar"><a href="#mainTabs-2">行事历</a></li>
+		                    <li id="mainTabs_notepad"><a href="#mainTabs-3">记事本</a></li>
+		                    <li id="mainTabs_test4"><a href="#mainTabs-4">testGlobalEvent1</a><span class="ui-icon ui-icon-close"></span></li>
+		                    <li id="mainTabs_test5"><a href="#mainTabs-5">testGlobalEvent2</a><span class="ui-icon ui-icon-close"></span></li>
 		                </ul> 
 		                <div id="mainTabs-1"> 
 		                    <p> 
@@ -213,13 +213,17 @@ $(document).ready(function() {
 		                    </p> 
 		                </div> 
 		                <div id="mainTabs-2"> 
-		                	<iframe src="${contextPath}/view/calendar/calendar" scrolling="auto"></iframe>
+		                	<iframe src="" scrolling="auto"
+		                		newSrc="${contextPath}/view/calendar/calendar" scrolling="auto"></iframe>
 		                </div>
 		                <div id="mainTabs-3"> 
-		                	<iframe src="${contextPath}/view/notepad/notepad" scrolling="auto"></iframe>
+		                	<iframe src="" scrolling="auto"
+		                		newStr="${contextPath}/view/notepad/notepad" scrolling="auto"
+		                		lazyLoad="true"></iframe>
 		                </div>
 		                <div id="mainTabs-4"> 
-		                	<iframe src="${contextPath}/view/event/testGlobalEvent1" scrolling="auto"></iframe>
+		                	<iframe src="${contextPath}/view/event/testGlobalEvent1" scrolling="auto"
+		                		lazyLoad="true" refreshWhenSelect="true"></iframe>
 		                </div>
 		                <div id="mainTabs-5"> 
 		                	<iframe src="${contextPath}/view/event/testGlobalEvent2" scrolling="auto"></iframe>

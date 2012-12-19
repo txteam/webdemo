@@ -11,15 +11,14 @@
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="datasource"></property>
 		<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
-		<property name="mapperLocations" value="classpath*:/com/tx/demo/**/*SqlMap.xml,
-			classpath*:/com/tx/component/mainframe/**/*SqlMap.xml" />	
+		<property name="mapperLocations" value="classpath*:com/tx/**/*SqlMap.xml" />	
 		<property name="typeHandlersPackage" value="com.tx.core.mybatis.handler"></property>
 		<property name="failFast" value="true"></property>
 		<property name="plugins">
 			<array>
 				<bean class="com.tx.core.mybatis.interceptor.PagedDiclectStatementHandlerInterceptor">
 					<property name="dialect">
-						<bean class="org.hibernate.dialect.PostgreSQLDialect"></bean>
+						<bean class="org.hibernate.dialect.Oracle10gDialect"></bean>
 					</property>
 				</bean>
 			</array>

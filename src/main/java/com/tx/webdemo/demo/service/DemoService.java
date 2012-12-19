@@ -6,19 +6,24 @@
  */
 package com.tx.webdemo.demo.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import com.tx.core.exceptions.parameter.ParameterIsEmptyException;
+import com.tx.core.mybatis.model.BatchResult;
 import com.tx.core.paged.model.PagedList;
 import com.tx.webdemo.demo.dao.DemoDao;
 import com.tx.webdemo.demo.model.Demo;
@@ -224,5 +229,59 @@ public class DemoService {
         
         //TODO:如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
+    }
+    
+    /**
+     * @param demoList
+     */
+    @Transactional
+    public BatchResult batchInsertDemoNotStopWhenException(List<Demo> demoList,boolean testAfterSuccessThrowException) {
+        //验证传入的demo合法性
+        if (CollectionUtils.isEmpty(demoList)) {
+            throw new ParameterIsEmptyException(
+                    "batchInsertDemoNotStopWhenException fail. demoList不能为空");
+        }
+        
+        //处理业务逻辑
+        //加密密码字段
+        for (Demo demoTemp : demoList) {
+            demoTemp.setPassword(DigestUtils.md5DigestAsHex(demoTemp.getPassword()
+                    .getBytes()));
+            demoTemp.setLastUpdateDate(new Date());
+        }
+        this.demoDao.insertDemo(demoList.get(0));
+        BatchResult  res = this.demoDao.batchInsertDemo(demoList, false);
+        demoList.get(0).setLoginName("test"
+                + DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS"));
+        
+        this.demoDao.insertDemo(demoList.get(0));
+        
+        if(testAfterSuccessThrowException){
+            throw new ParameterIsEmptyException("testException");
+        }
+        return res;
+    }
+    
+    /**
+     * @param demoList
+     */
+    @Transactional
+    public BatchResult batchInsertDemoStopWhenException(List<Demo> demoList) {
+        //验证传入的demo合法性
+        if (CollectionUtils.isEmpty(demoList)) {
+            throw new ParameterIsEmptyException(
+                    "batchInsertDemoNotStopWhenException fail. demoList不能为空");
+        }
+        
+        //处理业务逻辑
+        //加密密码字段
+        for (Demo demoTemp : demoList) {
+            demoTemp.setPassword(DigestUtils.md5DigestAsHex(demoTemp.getPassword()
+                    .getBytes()));
+            demoTemp.setLastUpdateDate(new Date());
+        }
+        
+        //持久化
+        return this.demoDao.batchInsertDemo(demoList, true);
     }
 }

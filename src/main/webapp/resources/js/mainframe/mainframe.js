@@ -269,13 +269,14 @@ Layout.prototype._initMainTabs = function() {
     _this.$centerMainTabs.find("div[roleType=tabpanel]").height(_this._tabPanelHeight);
     _this.$centerMainTabs.find("div[roleType=tabpanel]").width(_this._tabPanelWidth);
     
+    //centerMainResize响应页面大小变化
     $mainTabs.bind("centerMainResize",function(event){
          _this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
         _this._tabPanelWidth = _this.$centerMainTabs.width();
         
         $.each(_this.$centerMainTabs.find("div[roleType=tabpanel]"),function(index,div){
             if($(div).children("iframe").size() > 0){
-                var $iframe = $(div).children("iframe")
+                var $iframe = $(div).children("iframe");
                 $iframe.attr("height",_this._tabPanelHeight);
                 $iframe.attr("width",_this._tabPanelWidth);
             }
@@ -286,6 +287,52 @@ Layout.prototype._initMainTabs = function() {
         return false;
     });
     $mainTabs.trigger("centerMainResize");
+    
+    //委托给tab添加remove事件
+    $("li>span.ui-icon-close",_this.$centerMainTabs).live("click",function(){
+    	var index = $("li", _this.$centerMainTabs).index($(this).parent());
+    	_this.$centerMainTabs.wijtabs('remove', index);
+    });
+    
+    //给tab添加添加事件
+    var defaultTabOption = {
+    	id : "",
+    	label : "",
+    	isIframe : true,
+    	iframeHref : "",
+    	content : ""
+    };
+    var newTabOption = defaultTabOption;
+    _this.$centerMainTabs.wijtabs({
+    	tabTemplate: '<li><a href="#{href}">#{label}</a><span class="ui-icon ui-icon-close"></span></li>',
+    	add : function (event, ui) {
+        	$(ui.tab).attr('id',"mainTabs_" + newTabOption.id);
+        	if(newTabOption.isIframe){
+        		_this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
+        	    _this._tabPanelWidth = _this.$centerMainTabs.width();
+        		
+        		$iframe = $('<iframe src="' + newTabOption.iframeHref + '" scrolling="auto"></iframe>');
+                $iframe.attr("height",_this._tabPanelHeight);
+                $iframe.attr("width",_this._tabPanelWidth);
+        		$(ui.panel).append($iframe);
+        	}else{
+        		$(ui.panel).append(newTabOption.content);
+        	}
+        	$(ui.panel).attr("roleType","tabpanel");
+        	_this.$centerMainTabs.wijtabs('select',ui.index);
+        }
+    });
+    _this.$centerMainTabs.bind("addTab",function(event,option){
+    	newTabOption = $.extend({}, defaultTabOption, option);
+    	//查看对应id的tab是否已经存在
+    	var $uitab = $("#mainTabs_" + newTabOption.id, _this.$centerMainTabs);
+    	if($uitab.size()>0){
+    		var index = $("li", _this.$centerMainTabs).index($uitab.parent());
+    		_this.$centerMainTabs.wijtabs('select',index);
+    	}else{
+    		_this.$centerMainTabs.wijtabs('add','#mainTabs-' + newTabOption.id, newTabOption.label);	
+    	}
+    });
     
     _this.$centerMain.bind("centerMainSpliterResized",function(event){
         $mainTabs.trigger("centerMainResize");
@@ -303,7 +350,19 @@ Layout.prototype._initMainTabs = function() {
     });
 };
 
-
+//定义菜单点击响应函数
+var menuClickFunction = function(){
+	var $a = $(this);
+	var $li = $(this).parent();
+	$("#mainTabs").trigger("addTab",{
+    	id : $li.attr("id"),
+    	label : $a.text(),
+    	//isIframe : true,
+    	//content : "",
+    	iframeHref : $a.attr("href")	
+	});
+	return false;
+};
 
 /*
  * 定义菜单对象
@@ -341,28 +400,10 @@ Menu.prototype._init = function() {
             _this._$menuContainer.menu("refresh");
         }
     });
+    
+    this._$menuContainer.find("li > a").live("click",menuClickFunction);
 };
 Menu.prototype.menuResize = function(width, height) {
     this._$menuContainer.height(height);
     this._$menuContainer.width(width);
 };
-
-
-$.widget("tx.styleswitch", {
-    options : {
-        styles : []
-    },
-
-    _create : function() {
-        var progress = this.options.value + "%";
-        this.element.addClass("progressbar").text(progress);
-    },
-
-    _init : function() {
-
-    },
-
-    destroy : function() {
-
-    }
-});

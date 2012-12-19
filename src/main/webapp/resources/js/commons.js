@@ -471,3 +471,29 @@ var _default_skins =
 
 /** ********** chemeswitcher end ************** */
 
+/** ********** dialogUtils end ************** **/
+//定义dialogUtils对象
+var DialogUtils = function(options){
+};
+//定dialog
+DialogUtils.configs = {
+
+};
+//
+DialogUtils.defaultConfigs = {
+	width: 'auto',
+	height: 'auto',
+	zIndex: 10000,
+	maxHeight: 1000,
+	maxWidth: 700,
+	draggable: true,
+	position:'center'
+};
+//对话框工具
+DialogUtils.openWin = function(config){
+	
+};
+
+/** ********** dialogUtils end ************** **/
+
+

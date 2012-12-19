@@ -9,7 +9,6 @@ package com.tx.webdemo.demo.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -47,8 +46,6 @@ public class Demo {
     private String name;
     
     /** 登陆名 */
-    
-    @Column(name="login_name")
     private String loginName;
     
     /** 密码 */

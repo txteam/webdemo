@@ -1,38 +1,244 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper 
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="demo">
 
-    <!-- 查询学生，根据id -->  
-    <select id="findDemo"
-    	parameterType="demo" 
-    	resultType="demo">  
-        <![CDATA[ 
-            SELECT name,password,email,createDate 
-              FROM t_test_demo 
-             WHERE name = #{name}  
-        ]]>   
-    </select>  
-     
-    <!-- 插入 -->
-	<insert id="insertDemo" parameterType="demo">
-		<selectKey keyProperty="id" resultType="java.util.String">
-			select ${@java.util.UUID@randomUUID} from dual
+	<!-- auto generate default resultMap -->
+	<resultMap id="demoMap" 
+		type="com.tx.webdemo.demo.model.Demo">
+		<result column="subDemo_id" property="subDemo.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findDemo" 
+		parameterType="com.tx.webdemo.demo.model.Demo"
+		resultMap="demoMap">
+		SELECT 
+				TW.ID,
+				TW.PARENTID,
+				TW.EMAIL,
+				TW.DESCRIPTION,
+				TW.NAME,
+				TW.SUBDEMOID AS subDemo_id,
+				TW.CREATEDATE,
+				TW.PASSWORD,
+				LOGINNAME AS loginName,
+				TW.LASTUPDATEDATE,
+				TW.ISVALID
+		  FROM WD_DEMO TW
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+	            AND TW.ID = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryDemo" 
+		parameterType="com.tx.webdemo.demo.model.Demo"
+		resultMap="demoMap">
+		SELECT 
+				TW.ID,
+				TW.PARENTID,
+				TW.EMAIL,
+				TW.DESCRIPTION,
+				TW.NAME,
+				TW.SUBDEMOID AS subDemo_id,
+				TW.CREATEDATE,
+				TW.PASSWORD,
+				LOGINNAME AS loginName,
+				TW.LASTUPDATEDATE,
+				TW.ISVALID
+		  FROM WD_DEMO TW
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+	            AND TW.ID = #{id}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
+	            AND TW.PARENTID = #{parentId}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(email)">  
+	            AND TW.EMAIL = #{email}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
+	            AND TW.DESCRIPTION = #{description}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+	            AND TW.NAME = #{name}
+	        </if>
+			<if test="subDemo != null">
+				<if test="@com.tx.core.Ognl@isNotEmpty(subDemo.id)">  
+		            AND TW.SUBDEMOID = #{subDemo.id}
+		        </if>
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(createDate)">  
+	            AND TW.CREATEDATE = #{createDate}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(password)">  
+	            AND TW.PASSWORD = #{password}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(isValid)">  
+	            AND TW.ISVALID = #{isValid}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(loginName)">  
+	            AND TW.LOGINNAME = #{loginName}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(lastUpdateDate)">  
+	            AND TW.LASTUPDATEDATE = #{lastUpdateDate}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.Ognl@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryDemoCount" 
+		parameterType="com.tx.webdemo.demo.model.Demo"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM WD_DEMO TW
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+	            AND TW.ID = #{id}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
+	            AND TW.PARENTID = #{parentId}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(email)">  
+	            AND TW.EMAIL = #{email}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
+	            AND TW.DESCRIPTION = #{description}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+	            AND TW.NAME = #{name}
+	        </if>
+			<if test="subDemo != null">
+				<if test="@com.tx.core.Ognl@isNotEmpty(subDemo.id)">  
+		            AND TW.SUBDEMOID = #{subDemo.id}
+		        </if>
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(createDate)">  
+	            AND TW.CREATEDATE = #{createDate}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(password)">  
+	            AND TW.PASSWORD = #{password}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(isValid)">  
+	            AND TW.ISVALID = #{isValid}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(loginName)">  
+	            AND TW.LOGINNAME = #{loginName}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(lastUpdateDate)">  
+	            AND TW.LASTUPDATEDATE = #{lastUpdateDate}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertDemo" 
+		parameterType="com.tx.webdemo.demo.model.Demo">
+		<selectKey keyProperty="id" resultType="java.lang.String">
+			SELECT SEQ_DEMO.NEXTVAL FROM DUAL
 		</selectKey>
-		insert into t_test_demo(name,password,email,createDate )
-			values(#{name},#{password},#{email},#{createDate})
+		INSERT INTO WD_DEMO
+		(
+			ID,
+			PARENTID,
+			EMAIL,
+			DESCRIPTION,
+			NAME,
+			SUBDEMOID,
+			PASSWORD,
+			ISVALID,
+			LOGINNAME
+		)
+		VALUES
+		(
+			#{id},
+			#{parentId},
+			#{email},
+			#{description},
+			#{name},
+			<if test="subDemo != null">
+				#{subDemo.id},
+	        </if>
+	        <if test="subDemo == null">
+				#{subDemo,javaType=java.lang.String},
+	        </if>
+			#{password},
+			#{isValid},
+			#{loginName}
+		)
 	</insert>
 	
-	<update id="test"
-		parameterType="java.utilMap">
-		UPDATE WE_DEMO
-		<trim prefix="SET" suffixOverrides=",">
-			<foreach collection="entrySet" item="entryTemp">
-				${entryTemp.key} = #{entry.value}
-			</foreach>
+	<!-- auto generate default delete -->
+	<delete id="deleteDemo" 
+		parameterType="com.tx.webdemo.demo.model.Demo">
+		DELETE FROM WD_DEMO TW WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+	            AND TW.ID = #{id}
+	        </if>
 		</trim>
-		WHERE 
-	</update>
-      
-</mapper>  
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updateDemo"
+	    parameterType="java.util.Map">  
+	    UPDATE wd_demo TW
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('parentId')">
+	    		PARENTID = #{parentId,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('email')">
+	    		EMAIL = #{email,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('description')">
+	    		DESCRIPTION = #{description,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('name')">
+	    		NAME = #{name,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('subDemo')">
+				<if test="subDemo != null">
+					SUBDEMOID = #{subDemo.id,javaType=java.lang.S
+					tring},
+		        </if>
+		        <if test="subDemo == null">
+					SUBDEMOID = #{subDemo,javaType=java.lang.String},
+		        </if>
+	    	</if>
+			<if test="_parameter.containsKey('createDate')">
+	    		CREATEDATE = #{createDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('password')">
+	    		PASSWORD = #{password,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('isValid')">
+	    		ISVALID = #{isValid,javaType=int},
+	    	</if>	
+			<if test="_parameter.containsKey('loginName')">
+	    		LOGINNAME = #{loginName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>	
+	    </trim>
+	    WHERE TW.ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->
