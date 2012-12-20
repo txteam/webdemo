@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ import com.tx.component.mainframe.model.MenuItem;
 import com.tx.component.mainframe.model.Operator;
 import com.tx.component.mainframe.service.MenuService;
 import com.tx.component.mainframe.service.OperatorService;
+import com.tx.component.mainframe.xmlmodel.MainMenusConfig;
+import com.tx.core.tree.util.TreeUtils;
 
 /**
  * 登录功能入口

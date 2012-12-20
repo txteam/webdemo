@@ -1,20 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="webdemo">
         <wb-resource deploy-path="/WEB-INF/web.xml" source-path="/src/main/webapp/WEB-INF/web.xml"/>
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-        <dependent-module archiveName="tx-core-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-core/tx-core">
+        <dependent-module archiveName="tx-core-1.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-core/tx-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="tx-component-auth-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-component-auth/tx-component-auth">
+        <dependent-module archiveName="tx-component-auth-1.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-component-auth/tx-component-auth">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="tx-component-servicelog-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-component-servicelog/tx-component-servicelog">
+        <dependent-module archiveName="tx-component-servicelog-1.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-component-servicelog/tx-component-servicelog">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="tx-component-config-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-component-config/tx-component-config">
+        <dependent-module archiveName="tx-component-config-1.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-component-config/tx-component-config">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="webdemo"/>

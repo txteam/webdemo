@@ -211,8 +211,7 @@
 	    	</if>	
 			<if test="_parameter.containsKey('subDemo')">
 				<if test="subDemo != null">
-					SUBDEMOID = #{subDemo.id,javaType=java.lang.S
-					tring},
+					SUBDEMOID = #{subDemo.id,javaType=java.lang.String},
 		        </if>
 		        <if test="subDemo == null">
 					SUBDEMOID = #{subDemo,javaType=java.lang.String},

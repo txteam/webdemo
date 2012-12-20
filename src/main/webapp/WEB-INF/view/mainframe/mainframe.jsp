@@ -164,6 +164,7 @@ $(document).ready(function() {
 					    <li id="demoAjaxList"><a href="${contextPath}/demo/queryDemoList">demo ajax列表</a></li>
 					    <li id="demoAjaxPagedList"><a href="${contextPath}/demo/queryDemoList">demo ajax分页列表</a></li>
 					    <li id="dialogUtils"><a href="${contextPath}/view/demo/dialogUtilsDemo">demo dialogUtils</a></li>
+					    <li id="dialogUtils"><a href="${contextPath}/demo/queryAuthTreeDemo">queryAuthTreeDemo</a></li>
 					</ul>
 	            </div>
 	        </li> 

@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu_config>
 	<main_menus_config>
-		<menu id="auth_mananger" text="系统管理">
-			<menu id="auth_mananger" text="配置管理"></menu>
+		<menu id="system_mananger" text="系统管理">
+			<menu id="config_mananger" text="配置管理">
+				<menu id="1_mananger1" text="111"></menu>
+				<menu id="2_mananger" text="112"></menu>
+				<menu id="3_mananger" text="113"></menu>
+				<menu id="4_mananger" text="114"></menu>
+				<menu id="5_mananger" text="115">
+					<menu id="1_mananger1" text="1151"></menu>
+					<menu id="2_mananger" text="1152"></menu>
+					<menu id="3_mananger" text="1153"></menu>
+					<menu id="4_mananger" text="1154"></menu>
+					<menu id="5_mananger" text="1155"></menu>
+					<menu id="6_mananger" text="1156"></menu>	
+				</menu>
+				<menu id="6_mananger" text="1156"></menu>
+			</menu>
 			<menu id="auth_mananger" text="权限管理"
 				authKey="operateAuth_manangeAuth"></menu>
-			<menu id="auth_mananger" text="人员管理"></menu>
-			<menu id="auth_mananger" text="基础数据管理"></menu>
+			<menu id="user_mananger" text="人员管理"></menu>
+			<menu id="base_data_mananger" text="基础数据管理"></menu>
 		</menu>
 	</main_menus_config>
 	<tool_menus_config>

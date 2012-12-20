@@ -261,7 +261,7 @@ public class MenuService implements InitializingBean, ApplicationContextAware {
         if (menuItemConfig.getChilds() != null
                 && menuItemConfig.getChilds().size() > 0) {
             for (MenuItemConfig childMenuItemConfig : menuItemConfig.getChilds()) {
-                createMenuItem(parentMenuItem,
+                createMenuItem(menu,
                         childMenuItemConfig,
                         mainMenuItemList,
                         menuItemType);
@@ -298,5 +298,19 @@ public class MenuService implements InitializingBean, ApplicationContextAware {
             IOUtils.closeQuietly(io);
         }
         return menuConfig;
+    }
+
+    /**
+     * @return 返回 mainMenuItemList
+     */
+    public List<MenuItem> getMainMenuItemList() {
+        return mainMenuItemList;
+    }
+
+    /**
+     * @param 对mainMenuItemList进行赋值
+     */
+    public void setMainMenuItemList(List<MenuItem> mainMenuItemList) {
+        this.mainMenuItemList = mainMenuItemList;
     }
 }

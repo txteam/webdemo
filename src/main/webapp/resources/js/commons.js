@@ -755,4 +755,71 @@ window.confirm = function(msg, yes , no){
 
 /** ********** dialogUtils end ************** **/
 
+/** ********** tree    start   ************** **/
+(function($, undefined)
+{   
+    //根据项目中树数据的特性定制tree
+    $.widget("tx.txtree",
+    {
+        options :
+        {
+            adapter:{
+                
+            },
+            data:null
+        },
+        _create : function()
+        {
+            //widget常量
+            var element = this.element;
+            var _this = this
+            var options = this.options;
+            
+            //使用到的options中值
+            var _contextPath = options.contextPath;
+            var _themeCookieName = options.themeCookieName;
+            var _skins = options.skins != null ? options.skins : _default_skins;
+
+            //清空element中内容
+            element.empty();
+            
+            var $select = $("<select/>").appendTo($(element));
+            var tempalteMap = {};
+
+            $.each(_skins, function(i, skingroup)
+            {
+                var $selectGroup = $("<optgroup/>").attr("label",
+                        skingroup.group).appendTo($select).attr("id",
+                        skingroup.group).attr("hrefTemplate",
+                        skingroup.hrefTemplate);
+                $.each(skingroup.ids, function(index, skin)
+                {
+                    $("<option/>").attr("id", skin).val(skin).text(skin)
+                            .appendTo($selectGroup).chan;
+                    tempalteMap[skin] =
+                    {
+                        id : skin, contextPath : _contextPath,
+                        hrefTemplate : skingroup.hrefTemplate
+                    };
+                });
+            });$("#a1").chemeswitcher();
+            $select.change(function()
+            {
+                var _$self = $(this);
+                var _id = _$self.val();
+                $.switchtheme(_id, _contextPath, tempalteMap[_id].hrefTemplate,
+                        _themeCookieName);
+            });
+        }, _init : function()
+        {
+            $(this.element).find("select").wijdropdown({
+
+            });
+        }, destroy : function()
+        {
+            $(this.element).find("select").wijdropdown("destroy");
+        }
+    });
+})(jQuery);
+/** ********** tree      end   ************** **/
 
