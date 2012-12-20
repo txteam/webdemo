@@ -383,6 +383,13 @@ var _default_skins =
                                 tempalteMap[paramObj.id].hrefTemplate,
                                 themeCookieName);
             }
+            
+            $.bindge("switch_skin",function(event,chooseThemeId){
+                //alert("switch_skin:" + chooseThemeId);
+                $.switchtheme(chooseThemeId, _contextPath,
+                                tempalteMap[chooseThemeId].hrefTemplate,
+                                themeCookieName);
+            });
         },
         switchtheme : function(id, contextPath, template, themeCookieName)
         {
@@ -424,7 +431,8 @@ var _default_skins =
         {
             themeCookieName : "tx_cheme", 
             contextPath : ".",
-            skins : _default_skins
+            skins : _default_skins,
+            switchSkin : null
         },
         _create : function()
         {
@@ -456,12 +464,15 @@ var _default_skins =
                     };
                 });
             });$("#a1").chemeswitcher();
-            $select.change(function()
+            $select.change(function(event)
             {
                 var _$self = $(this);
                 var _id = _$self.val();
                 $.switchtheme(_id, _contextPath, tempalteMap[_id].hrefTemplate,
                         _themeCookieName);
+                if(options.switchSkin){
+                    options.switchSkin(event,_id)
+                }
             });
         }, _init : function()
         {

@@ -72,7 +72,10 @@ $(document).ready(function() {
 	
 	$("#skinSwitcher").chemeswitcher({
 	    contextPath:"${contextPath}",
-	    themeCookieName:"tx_theme"
+	    themeCookieName:"tx_theme",
+	    switchSkin:function(event,id){
+	    	$.triggerge("switch_skin",id);
+	    }
 	});
 });
 </script>

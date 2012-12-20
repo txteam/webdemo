@@ -28,5 +28,9 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/tx-component-auth"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tx-component-config"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tx-component-servicelog"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tx-core"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
