@@ -25,11 +25,12 @@
 		</property>
 	</bean>
 	
+	<!-- 统一的mybatis异常转换器 -->
 	<bean id="myBatisExceptionTranslator" class="org.mybatis.spring.MyBatisExceptionTranslator">
 		<constructor-arg name="dataSource" ref="datasource"></constructor-arg>
 		<constructor-arg name="exceptionTranslatorLazyInit" value="true"></constructor-arg>
 	</bean>
-
+	
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
 		<constructor-arg name="executorType" value="SIMPLE"></constructor-arg>

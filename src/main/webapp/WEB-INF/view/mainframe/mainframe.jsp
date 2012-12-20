@@ -212,21 +212,21 @@ $(document).ready(function() {
 		                        Nunc tristique tempus lectus.
 		                    </p> 
 		                </div> 
-		                <div id="mainTabs-2"> 
-		                	<iframe src="" scrolling="auto"
-		                		newSrc="${contextPath}/view/calendar/calendar" scrolling="auto"></iframe>
+		                <div id="mainTabs-2">
+		                	<iframe src="" 
+		                		newSrc="${contextPath}/view/calendar/calendar" ></iframe>
 		                </div>
 		                <div id="mainTabs-3"> 
-		                	<iframe src="" scrolling="auto"
-		                		newStr="${contextPath}/view/notepad/notepad" scrolling="auto"
+		                	<iframe src="${contextPath}/view/notepad/notepad" 
+		                		newStr="${contextPath}/view/notepad/notepad" 
 		                		lazyLoad="true"></iframe>
 		                </div>
 		                <div id="mainTabs-4"> 
-		                	<iframe src="${contextPath}/view/event/testGlobalEvent1" scrolling="auto"
+		                	<iframe src="${contextPath}/view/event/testGlobalEvent1" 
 		                		lazyLoad="true" refreshWhenSelect="true"></iframe>
 		                </div>
 		                <div id="mainTabs-5"> 
-		                	<iframe src="${contextPath}/view/event/testGlobalEvent2" scrolling="auto"></iframe>
+		                	<iframe src="${contextPath}/view/event/testGlobalEvent2"></iframe>
 		                </div>
 		           	</div> 
 				</div>

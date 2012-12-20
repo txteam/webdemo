@@ -149,7 +149,8 @@ Layout.prototype._initCenterSpliter = function() {
  * private: 初始化main上的spliter
  */
 Layout.prototype._initCenterMainSpliter = function() {
-    var _this = this;
+    var _this = this;    
+    
     $centerMainSpliter = this.$centerMain.wijsplitter({
         barZIndex: 998,
         panel1 : {
@@ -166,6 +167,7 @@ Layout.prototype._initCenterMainSpliter = function() {
         fullSplit : false
     });
     $centerMainSpliter.bind("refresh", function(event) {
+    	
         _this.$centerMain.wijsplitter("refresh");
         
         //alert( _this.$centerMain.width());
@@ -191,6 +193,8 @@ Layout.prototype._initCenterMainSpliter = function() {
             $centerMainSpliter.trigger("refresh");
         }
     });
+    
+    
     this._initMainTabs();
 };
 /*
@@ -269,13 +273,17 @@ Layout.prototype._initMainTabs = function() {
     _this._tabPanelWidth = _this.$centerMainTabs.width();
     _this.$centerMainTabs.find("div[roleType=tabpanel]").height(_this._tabPanelHeight);
     _this.$centerMainTabs.find("div[roleType=tabpanel]").width(_this._tabPanelWidth);
+    _this.$centerMainTabs.find("div[roleType=tabpanel]").css({"height":_this._tabPanelHeight,"width":_this._tabPanelWidth});
     
     //centerMainResize响应页面大小变化
     $mainTabs.bind("centerMainResize",function(event){
-         _this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
+        _this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
         _this._tabPanelWidth = _this.$centerMainTabs.width();
         
         $.each(_this.$centerMainTabs.find("div[roleType=tabpanel]"),function(index,div){
+        	$(div).attr("height",_this._tabPanelHeight);
+        	$(div).attr("width",_this._tabPanelWidth);
+        	$(div).css({"height":_this._tabPanelHeight,"width":_this._tabPanelWidth});
             if($(div).children("iframe").size() > 0){
                 var $iframe = $(div).children("iframe");
                 $iframe.attr("height",_this._tabPanelHeight);
@@ -308,17 +316,25 @@ Layout.prototype._initMainTabs = function() {
     	tabTemplate: '<li><a href="#{href}">#{label}</a><span class="ui-icon ui-icon-close"></span></li>',
     	add : function (event, ui) {
         	$(ui.tab).attr('id',"mainTabs_" + newTabOption.id);
+        	_this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
+    	    _this._tabPanelWidth = _this.$centerMainTabs.width();
         	if(newTabOption.isIframe){
-        		_this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
-        	    _this._tabPanelWidth = _this.$centerMainTabs.width();
-        		
-        		$iframe = $('<iframe src="' + newTabOption.iframeHref + '" scrolling="auto"></iframe>');
-                $iframe.attr("height",_this._tabPanelHeight);
+        		var $iframe = $('<iframe src="' + newTabOption.iframeHref + '"></iframe>');
+        		$iframe.attr("height",_this._tabPanelHeight);
                 $iframe.attr("width",_this._tabPanelWidth);
         		$(ui.panel).append($iframe);
         	}else{
         		$(ui.panel).append(newTabOption.content);
         	}
+        	
+        	$(ui.panel).attr("height",_this._tabPanelHeight);
+    	    $(ui.panel).attr("width",_this._tabPanelWidth);
+    	    $(ui.panel).css({"height":_this._tabPanelHeight,"width":_this._tabPanelWidth});
+    	    if($(ui.panel).children("iframe").size() > 0){
+    	    	var $iframe = $(ui.panel).children("iframe");
+                $iframe.attr("height",_this._tabPanelHeight);
+                $iframe.attr("width",_this._tabPanelWidth);
+    	    }
         	$(ui.panel).attr("roleType","tabpanel");
         	_this.$centerMainTabs.wijtabs('select',ui.index);
         }

@@ -1,9 +1,11 @@
 @charset "utf-8";
-/* 重写operamasks样式*/
-
+/* 重写wijmo样式*/
+.wijmo-wijdialog .wijmo-wijdialog-hasframe{
+	overflow-x:hidden;
+	overflow-y:auto;
+}
 /* 重写jqueryui样式*/
-.ui-tabs .ui-tabs-hide
-{
+.ui-tabs .ui-tabs-hide {
     display: none !important;
 }
 
@@ -17,7 +19,18 @@
 html,body{
     height: 100%;
     width: 100%;
-    overflow: auto;
+    margin:0px;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    padding: 0px;
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+    overflow-y:auto;
+    overflow-x:hidden;
 }
 frameset{
     margin: 0px 0px 0px 0px;
@@ -36,9 +49,12 @@ frame{
 iframe{
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
+    padding-top:0px;
+    margin-top:0px;
+    position:relative;
     border: 0px;
     border-style: none;
-    overflow: auto;
+    overflow:hidden;
     z-index: 0;
 }
 img,form{

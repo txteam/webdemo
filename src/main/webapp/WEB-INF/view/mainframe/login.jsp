@@ -12,8 +12,7 @@
 <script type="text/javascript" src="${contextPath }/js/mainframe/login.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$(":input[type='text'],:input[type='password'],textarea")
-			.wijtextbox();
+	$(":input[type='text'],:input[type='password'],textarea").wijtextbox();
 	$("select").wijdropdown();
 	$(":button").button();
 	$(":input[type='radio']").wijradio();

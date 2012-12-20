@@ -14,15 +14,15 @@ $(document).ready(function() {
      * 定义全局事件管理器
      */
     var _globalEventManagerWin_ = window;
-    var _$globalEventManager = null;
-    while (!_$globalEventManager)
+    var _globalEventElement = null;
+    while (!_globalEventElement)
     {
         try
         {
             if (!_globalEventManagerWin_.closed
                     && _globalEventManagerWin_.$GlobalEventManager)
             {
-                _$globalEventManager = _globalEventManagerWin_._$globalEventManager;
+            	_globalEventElement = _globalEventManagerWin_._globalEventElement;
                 break;
             }
         }
@@ -48,10 +48,16 @@ $(document).ready(function() {
             /**
              * 事件管理器全局对象
              */
-            _$globalEventManager = $("<globalEventMananger>");
+        	_globalEventElement = window.document.createElement('_global_event_element');
+        	
+        	window._globalEventElement = _globalEventElement;
         }
     }
+    var _$globalEventManager = $(_globalEventElement);
     _globalEventManagerWin_ = null;
+    _globalEventElement = null;
+    
+    
 
     var _globalEventCallbacks = {};
     $.fn.extend(
@@ -76,10 +82,7 @@ $(document).ready(function() {
                 {
                     currentTarget : _self, delegateTarget : _self
                 });
-                _self.call(function()
-                {
-                    _callbacks.fire(arguments);
-                });
+                _callbacks.fire(_self,$.merge(arguments, data));
             });
         }
     });
@@ -109,10 +112,7 @@ $(document).ready(function() {
                 {
                     currentTarget : _self, delegateTarget : _self
                 });
-                _self.call(function()
-                {
-                    _callbacks.fire(arguments);
-                });
+                _callbacks.fire(_self,$.merge(arguments, data));
             });
         }
     });
@@ -455,7 +455,7 @@ var _default_skins =
                         hrefTemplate : skingroup.hrefTemplate
                     };
                 });
-            });
+            });$("#a1").chemeswitcher();
             $select.change(function()
             {
                 var _$self = $(this);
@@ -481,9 +481,12 @@ var _default_skins =
 //定义dialogUtils对象
 var DialogUtils = function(options){
 };
-//
+/**
+ * dialog默认配置
+ */
 DialogUtils.defaultConfigs = {
     autoOpen: true,
+    closeOnEscape: false,
 	width: 'auto',
 	height: 'auto',
 	zIndex: 10000,
@@ -492,8 +495,52 @@ DialogUtils.defaultConfigs = {
 	draggable: true,
 	position:'center'
 };
+/**
+ * 创建或打开dialog
+ * @param config
+ */
+DialogUtils.createOrOpenDiaglog = function(config){
+	var openWinId = "dialog_" + config.id;
+	config=$.extend({id:openWinId},this.defaultConfigs, config);
+	var $dialogHandle = $("#"+openWinId);
+	if($("#"+openWinId).size() == 0){
+	   var $hiddenDiv = $("<div/>").attr("id",openWinId).hide();
+	   $dialogHandle = $hiddenDiv;
+	   $(document).append($dialogHandle);
+	   $dialogHandle.wijdialog(config);
+	}else{
+		$dialogHandle.wijdialog(config);
+	    //if(!$dialogHandle.wijdialog("isOpen")){
+	    //    $dialogHandle.wijdialog("open");
+	    //}
+	}
+};
 //对话框工具:打开一个iframe的独立页面
-DialogUtils.openWin = function(config){
+/**
+ *	打开openWin默认具有dialog所有按钮，未自动添加任何button
+ */
+DialogUtils.openDialog = function(config){
+	config=$.extend({
+	    id:'dialog_',
+	    autoOpen: true,
+	    width: 'auto',
+        height: 'auto',
+        captionButtons: {
+            pin: {visible: true, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
+            refresh: {visible: true, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
+            toggle: {visible: true, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
+            minimize: {visible: true, click: self.minimize, iconClassOn: 'ui-icon-minus'},
+            maximize: {visible: true, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
+            close: {visible: true, iconClassOn: 'ui-icon-close'}
+        },
+        contentUrl: ''
+	}, config);
+	this.createOrOpenDiaglog(config);
+};
+/**
+ *	打开openWin默认具有dialog所有按钮，未自动添加任何button
+ */
+DialogUtils.openSimpleDialog = function(config){
 	config=$.extend({
 	    id:'dialog_',
 	    autoOpen: true,
@@ -505,55 +552,95 @@ DialogUtils.openWin = function(config){
             toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
             minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
             maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close',click: function(){
-                $("#"+this.id).wijdialog("close");
-            }}
+            close: {visible: true, iconClassOn: 'ui-icon-close'}
         },
         contentUrl: ''
 	}, config);
-	var $dialogHandle = $("#"+config.id);
-	if($("#"+config.id).size() == 0){
-	   var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
-	   $(document).append($hiddenDiv);
-	   $hiddenDiv.wijdialog(config);
-	}else{
-	    if(!$dialogHandle.wijdialog("isOpen")){
-	        $dialogHandle.wijdialog("open");
-	    }
+	this.createOrOpenDiaglog(config);
+};
+/**
+ *	打开openWin默认具有dialog所有按钮，未自动添加任何button
+ */
+DialogUtils.dialog = function(id,url,width,height){
+	var config = $.extend({
+	    id: id,
+	    autoOpen: true,
+	    width: width,
+        height: height,
+        contentUrl: url
+	});
+	this.openSimpleDialog(config);
+};
+DialogUtils.modalDialog = function(id,url,width,height){
+	var config = $.extend({
+	    id: id,
+	    autoOpen: true,
+	    modal: true,
+	    width: width,
+        height: height,
+        contentUrl: url
+	});
+	this.openSimpleDialog(config);
+};
+/**
+ * 根据id关闭对话框
+ * @param id
+ */
+DialogUtils.closeDialogById = function(id){
+	var openWinId = "dialog_" + id;
+	var $dialogHandle = $("#" + openWinId);
+	if($dialogHandle.size() > 0){
+	   $dialogHandle.wijdialog("close");
 	}
 };
 /**
- * 打开dialog 提示，并在指定时间后关闭提示
+ * 提示，并在指定时间后关闭提示
  */
 DialogUtils._temp_dialog_index = 0;
-DialogUtils.openTip = function(config, seconds, yes) {
-    var openTipId = "openTipDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
+DialogUtils.openTip = function(config,content,seconds,yes) {
+    var openTipId = "tempDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
+    var autoCloseTimer = null;
+    
     config=$.extend({
-        id: openTipId,
+    	id: openTipId,
         autoOpen: true,
-        width: $(config.content).width() < 300 ? 300 : 'auto',
-        height: $(config.content).height() < 130 ? 130 : 'auto',
         closeOnEscape: false,
+        width: content.length < 50 ? 300 : 'auto',
+        height: content.length < 50 ? 130 : 'auto',
         captionButtons: {
             pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
             refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
             toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
             minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
             maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: false, iconClassOn: 'ui-icon-close'}
+            close: {visible: true, iconClassOn: 'ui-icon-close'}
         },
-        content: ''
+        close : function(){
+        	if(autoCloseTimer){
+        		clearTimeout(autoCloseTimer);
+        	}
+        	removeTempTipHandle();
+        }
     }, config);
+    
     var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
+    function removeTempTipHandle(){
+    	yes && yes.call(this);
+        $hiddenDiv.remove();
+    }
     $(document).append($hiddenDiv);
     $dialogHandle = $hiddenDiv;
-    $dialogHandle.html(config.content);
+    $dialogHandle.html(content);
     $dialogHandle.wijdialog(config);
-    window.setTimeout(function() {
-        yes && yes.call(this);
-        $("#"+config.id).remove();
-    }, seconds * 1000);
-}; 
+    autoCloseTimer = window.setTimeout(removeTempTipHandle, seconds * 1000);
+};
+/**
+ * 提示，并在指定时间后关闭提示
+ */
+DialogUtils._temp_dialog_index = 0;
+DialogUtils.tip = function(content,seconds,yes) {
+    this.openTip({}, content, seconds, yes);
+};
 
 /**
  * Dialog警告
@@ -561,39 +648,110 @@ DialogUtils.openTip = function(config, seconds, yes) {
  * @param {Function} 确定按钮回调函数
  * @return {Object} 对话框操控接口
  */
-DialogUtils.alert = function(msg, yes) {
-    var alertId = "alertDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
-    alert($('<div>' + msg + '</div>').height());
-    var config = {
-        id:alertId,
+DialogUtils.openAlert = function(config, msg, yes) {
+    var openAlertId = "tempDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
+    config=$.extend({
+    	id: openAlertId,
         autoOpen: true,
-        width: $('<div>' + msg + '</div>').width() < 300 ? 300 : 'auto',
-        height: $('<div>' + msg + '</div>').height() < 10 ? 150 : 'auto',
         closeOnEscape: false,
+        width: msg.length < 50 ? 300 : 'auto',
+        height: msg.length < 50 ? 130 : 'auto',
         modal: true,
-        buttons: [{text:"确定", click: function(){
-            $("#" + alertId).remove();
-        }}],
+        dialogClass: "alert",
         captionButtons: {
             pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
             refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
             toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
             minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
             maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close',click: function(){
-                $("#" + alertId).remove();
-            }}
+            close: {visible: true, iconClassOn: 'ui-icon-close'}
         },
-        content: ''
-    };
+        close : function(){
+        	removeTempTipHandle();
+        },
+        buttons: [{text: "确定" , click: function(){
+            removeTempTipHandle();
+        }}]
+    }, config);
+    
     var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
+    function removeTempTipHandle(){
+    	yes && yes.call(this);
+        $hiddenDiv.remove();
+    }
     $(document).append($hiddenDiv);
     $dialogHandle = $hiddenDiv;
     //TODO:添加警告的样式
-    $dialogHandle.text(msg);
+    $dialogHandle.html(msg);
     $dialogHandle.wijdialog(config);
 }; 
-
+/**
+ * Dialog警告
+ * @param {String} 消息内容
+ * @param {Function} 确定按钮回调函数
+ * @return {Object} 对话框操控接口
+ */
+DialogUtils.alert = function(msg, yes) {
+    this.openAlert({}, msg, yes);
+};
+//改写window alert
+window.alert = function(msg){
+	DialogUtils.alert(msg);
+};
+/**
+ * config
+ */
+DialogUtils.openConfirm = function(config, msg, yes , no) {
+    var openConfirmId = "tempDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
+    config=$.extend({
+    	id: openConfirmId,
+        autoOpen: true,
+        closeOnEscape: false,
+        width: msg.length < 50 ? 300 : 'auto',
+        height: msg.length < 50 ? 130 : 'auto',
+        modal: true,
+        captionButtons: {
+            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
+            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
+            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
+            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
+            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
+            close: {visible: true, iconClassOn: 'ui-icon-close'}
+        },
+        close : function(){
+        	no && no.call(this);
+        	removeTempTipHandle();
+        },
+        buttons: [{text: "确定" , click: function(){
+        	yes && yes.call(this);
+            removeTempTipHandle();
+        }},{text: "取消" , click: function(){
+        	no && no.call(this);
+            removeTempTipHandle();
+        }}]
+    }, config);
+    
+    var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
+    function removeTempTipHandle(){
+        $hiddenDiv.remove();
+    }
+    $(document).append($hiddenDiv);
+    $dialogHandle = $hiddenDiv;
+    $dialogHandle.html(msg);
+    $dialogHandle.wijdialog(config);
+}; 
+/**
+ * Dialog警告
+ * @param {String} 消息内容
+ * @param {Function} 确定按钮回调函数
+ * @return {Object} 对话框操控接口
+ */
+DialogUtils.confirm = function(msg, yes , no) {
+    this.openConfirm({},msg,yes,no);
+}; 
+window.confirm = function(msg, yes , no){
+	DialogUtils.confirm(msg, yes , no);
+};;
 
 /** ********** dialogUtils end ************** **/
 
