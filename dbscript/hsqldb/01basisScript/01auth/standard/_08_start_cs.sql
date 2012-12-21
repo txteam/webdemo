@@ -1,1 +1,1 @@
---prompt "权限模块:创建sequence  start..."  
+-- "webdemo模块:创建sequence  start..."  

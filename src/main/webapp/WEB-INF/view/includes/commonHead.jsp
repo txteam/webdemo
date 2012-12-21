@@ -1,6 +1,4 @@
-<skin id="skin">
 <link rel="stylesheet" type="text/css" title="theme" href="${contextPath }/jquery-ui/themes/smoothness/jquery-ui.css" />
-</skin>
 
 <link rel="stylesheet" type="text/css" href="${contextPath }/wijmo/css/jquery.wijmo-complete.all.2.3.2.min.css" />
 <link rel="stylesheet" type="text/css" href="${contextPath }/wijmo/css/jquery.wijmo-open.2.3.2.css" />

@@ -120,6 +120,43 @@ public class MenuService implements InitializingBean, ApplicationContextAware {
     }
     
     /**
+      * 根据权限获取当前人员的工具菜单树
+      * <功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return List<MenuItem> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<MenuItem> getToolMenuTreeListByCurrentSession(){
+        //获取到当前权限引用
+        Map<String, AuthItemRef> authItemRefMap = AuthContext.getContext()
+                .getCurrentSessionContext()
+                .getCurrentOperatorAuthMapFromSession();
+        
+        //根据权限及菜单配置生成最终权限列表
+        List<MenuItem> resList = new ArrayList<MenuItem>();
+        for(MenuItem menuItemTemp: this.toolMenuItemList){
+            if(menuItemTemp.getAuthKeyList() == null ||
+                    menuItemTemp.getAuthKeyList().size() == 0){
+                //如果对应菜单未配置权限，无需鉴权
+                resList.add(menuItemTemp);
+            }else{
+                //根据权限判断是否需要鉴权
+                for(String authKeyTemp : menuItemTemp.getAuthKeyList()){
+                    //一旦拥有其中任一权限即可拥有对应菜单
+                    if(authItemRefMap.containsKey(authKeyTemp)){
+                        resList.add(menuItemTemp);
+                    }
+                }
+            }
+        }
+        
+        List<MenuItem> menuTreeList = TreeUtils.changToTree(resList);
+        return menuTreeList;
+    }
+    
+    /**
       * 重新加载菜单配置项
       * <功能详细描述> [参数说明]
       * 
@@ -247,6 +284,7 @@ public class MenuService implements InitializingBean, ApplicationContextAware {
         
         menu.setType(menuItemType);
         
+       
         if (parentMenuItem != null) {
             menu.setParentId(parentMenuItem.getId());
         }
@@ -256,6 +294,10 @@ public class MenuService implements InitializingBean, ApplicationContextAware {
                     ",")));
         }
         
+        //如果菜单id重复，认为是配置存在问题，这里抛出异常，启动时解决
+        if(mainMenuItemList.contains(menu)){
+            throw new ParameterIsInvalidException("菜单id重复,重复id为：" + menuItemConfig.getId());
+        }
         mainMenuItemList.add(menu);
         
         if (menuItemConfig.getChilds() != null
@@ -313,4 +355,33 @@ public class MenuService implements InitializingBean, ApplicationContextAware {
     public void setMainMenuItemList(List<MenuItem> mainMenuItemList) {
         this.mainMenuItemList = mainMenuItemList;
     }
+
+    /**
+     * @return 返回 menuConfigLocation
+     */
+    public String getMenuConfigLocation() {
+        return menuConfigLocation;
+    }
+
+    /**
+     * @param 对menuConfigLocation进行赋值
+     */
+    public void setMenuConfigLocation(String menuConfigLocation) {
+        this.menuConfigLocation = menuConfigLocation;
+    }
+
+    /**
+     * @return 返回 toolMenuItemList
+     */
+    public List<MenuItem> getToolMenuItemList() {
+        return toolMenuItemList;
+    }
+
+    /**
+     * @param 对toolMenuItemList进行赋值
+     */
+    public void setToolMenuItemList(List<MenuItem> toolMenuItemList) {
+        this.toolMenuItemList = toolMenuItemList;
+    }
+    
 }

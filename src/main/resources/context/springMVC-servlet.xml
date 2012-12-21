@@ -59,6 +59,7 @@
 	</mvc:interceptors>
 
 	<!-- 将jsp映射为controller -->
+	<!-- 为方便权限控制，限制jsp直接访问  -->
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="order" value="2147483645"></property>
 		<property name="urlMap">
@@ -70,7 +71,6 @@
 	<bean id="jspFileController"
 		class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
 	</bean>
-	
 	
 	<!-- 属性转换器 -->
 	<bean id="conversionService"

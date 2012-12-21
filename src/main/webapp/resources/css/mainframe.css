@@ -50,7 +50,7 @@ html,body{
 .top-header{
     width: 100%;
     height: 30px;
-    padding-left: 90px;    
+    padding-left: 80px;    
 }
 .top-spliter{
     position: absolute;
@@ -90,9 +90,11 @@ html,body{
     display:inline-block;
     margin-left: 0px;
     height:35px;
+    min-width: 56px;
     padding-top: 5px;
-    padding-left: 3px;
-    padding-right: 3px;
+    padding-left: 2px;
+    padding-right: 1px;
+    text-align: center;
 }
 .menu{
     margin-left:5px;
@@ -109,16 +111,6 @@ html,body{
 #menuLink a{
     padding-top: 0px;
     padding-bottom: 0px;
-}
-.opacity_0{
-     filter:alpha(opacity=0);
-     -moz-opacity: 0;
-     opacity: 0;
-}
-.opacity_20{
-     filter:alpha(opacity=20);
-     -moz-opacity: 0.2;
-     opacity: 0.2;
 }
 .skin-switcher{
 	position: absolute ;

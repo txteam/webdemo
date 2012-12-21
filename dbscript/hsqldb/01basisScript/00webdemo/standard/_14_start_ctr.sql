@@ -1,1 +1,1 @@
-prompt "webdemo模块:创建触发器   start..."  
+-- "webdemo模块:创建触发器   start..."  

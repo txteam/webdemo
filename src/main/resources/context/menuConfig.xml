@@ -1,29 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu_config>
+	<!-- 主菜单配置 -->
 	<main_menus_config>
-		<menu id="system_mananger" text="系统管理">
-			<menu id="config_mananger" text="配置管理">
+		<!-- 一级别菜单:系统配置   -->
+		<menu id="system_config" text="系统配置"
+			authKey="system_config_manange">
+			<!-- 系统管理子菜单: 权限管理 -->
+			<!-- target可配置为mainTabs,openDialog,openModelDialog,triggerGlobalEvent -->
+			<!-- mainTabs: selectRefresh默认为false,即对应tab点击后是否马上刷新  -->
+			<!-- openModelDialog: 需要配置打开的对话框高和宽 height,width -->
+			<menu id="authCconfig" text="权限管理" href="/auth/authMananger"
+				authKey="auth_config_manage" target="mainTabs" selectRefresh="false"/>
+		</menu>
+		
+		<menu id="bestDemoMananger" text="最佳实践">
+			<!-- dialog最佳实践 -->
+			<menu id="bestDemoDialogUtils" text="dialog" href="/demo/best/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestSimplePage" text="page" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestList" text="列表" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestPagedList" text="分页列表" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestAjaxList" text="ajax列表" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestAjaxPagedList" text="ajax分页" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+		</menu>
+		
+		<menu id="demoMananger" text="参考demo">
+			<!-- dialogUtils使用demo -->
+			<menu id="demoDialogUtils" text="dialogDemo" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<!-- 列表显示 -->
+			<menu id="demoList" text="dialogDemo" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+		</menu>
+	
+		<menu id="system_manangersasdf" text="test">
+			<menu id="config_mananger3333" text="test22">
 				<menu id="1_mananger1" text="111"></menu>
 				<menu id="2_mananger" text="112"></menu>
 				<menu id="3_mananger" text="113"></menu>
 				<menu id="4_mananger" text="114"></menu>
 				<menu id="5_mananger" text="115">
-					<menu id="1_mananger1" text="1151"></menu>
-					<menu id="2_mananger" text="1152"></menu>
-					<menu id="3_mananger" text="1153"></menu>
-					<menu id="4_mananger" text="1154"></menu>
-					<menu id="5_mananger" text="1155"></menu>
-					<menu id="6_mananger" text="1156"></menu>	
+					<menu id="1_mananger51" text="1151"></menu>
+					<menu id="2_mananger52" text="1152"></menu>
+					<menu id="3_mananger53" text="1153"></menu>
+					<menu id="4_mananger54" text="1154"></menu>
+					<menu id="5_mananger55" text="1155"></menu>
+					<menu id="6_mananger56" text="1156"></menu>	
 				</menu>
 				<menu id="6_mananger" text="1156"></menu>
 			</menu>
-			<menu id="auth_mananger" text="权限管理"
-				authKey="operateAuth_manangeAuth"></menu>
+			<menu id="auth_mananger" text="权限管理"></menu>
 			<menu id="user_mananger" text="人员管理"></menu>
 			<menu id="base_data_mananger" text="基础数据管理"></menu>
 		</menu>
 	</main_menus_config>
+	
+	
+	
+	
+	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示  -->
 	<tool_menus_config>
+
+		<!-- 一级别菜单:系统配置   -->
+		<menu id="system_config" text="系统配置"
+			authKey="system_config_manange">
+			<!-- 系统管理子菜单: 权限管理 -->
+			<!-- target可配置为mainTabs,openDialog,openModelDialog,triggerGlobalEvent -->
+			<!-- mainTabs: selectRefresh默认为false,即对应tab点击后是否马上刷新  -->
+			<!-- openModelDialog: 需要配置打开的对话框高和宽 height,width -->
+			<menu id="authCconfig" text="权限管理" href="/auth/authMananger"
+				authKey="auth_config_manage" target="mainTabs" selectRefresh="false"/>
+		</menu>
 		
+		<menu id="bestDemoMananger" text="最佳实践">
+			<!-- dialog最佳实践 -->
+			<menu id="bestDemoDialogUtils" text="dialog" href="/demo/best/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestSimplePage" text="page" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestList" text="列表" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestPagedList" text="分页列表" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestAjaxList" text="ajax列表" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestAjaxPagedList" text="ajax分页" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+		</menu>
+		
+		<menu id="demoMananger" text="参考demo">
+			<!-- dialogUtils使用demo -->
+			<menu id="demoDialogUtils" text="dialogDemo" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+			<!-- 列表显示 -->
+			<menu id="demoList" text="dialogDemo" href="/demo/dialogUtilsDemo"
+				target="mainTabs" selectRefresh="false"/>
+		</menu>
 	</tool_menus_config>
 </menu_config>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -41,36 +42,16 @@ $(document).ready(function() {
 			_removeOpacity();
 		}
 	});
+	//
+	$("#menuItems").find("a").click(menuClickFunction);
 	
+	//页面渲染
 	var layout = new Layout();
 	
 	//var $tabs = $("#mainTabs").wijtabs();
 	$("#mainToolTabs").wijtabs({
 	    alignment: "left"
-	});	
-	
-	$(".top").txtabs({
-		tabsHandleContainerId:"topHeader"
 	});
-	
-	var topContentWidth = $(".top-content").innerWidth();
-	var splitterDistanceWidth = topContentWidth > 270 ? topContentWidth - 270 : 0;
-	$(".top-content").wijsplitter({
-	    showExpander: false,
-	    collapsingPanel : "panel2",
-	    splitterDistance : splitterDistanceWidth,
-	    resizeSettings: { ghost :false},
-	    panel1 : {
-            scrollBars : "hidden"
-        },
-        panel2 : {
-            scrollBars : "hidden"
-        }
-	});
-	$(".top-content").find(".top-content-left").next("div.ui-resizable-handle").mousedown(function() {
-        return false;
-    });
-	
 	$("#skinSwitcher").chemeswitcher({
 	    contextPath:"${contextPath}",
 	    themeCookieName:"tx_theme",
@@ -87,67 +68,29 @@ $(document).ready(function() {
 <div class="container">
 	<!-- top -->
 	<div class="top ui-widget-content">
-		<div id="topHeader" class="top-header ui-widget-header ui-corner-top">
-			<!-- menu显示占位符 
-			<span class="menu"></span>
-			<!--
-			<li> 
-	            <h3><a href="#">常用菜单</a></h3> 
-	        </li> 
-	        -->
-	        <ul> 
-	        	<li><a href="#menuTabs-1">菜单一</a></li> 
-		        <li><a href="#menuTabs-2">菜单二</a></li>
+		<div id="topHeader" class="top-header ui-widget-header ui-helper-reset ui-state-default ui-corner-top">
+	        <ul>
+	        	<c:forEach items="${toolMenuItemTreeList}" var="menuItem">
+	        		<c:if test="${menuItem != null && fn:length(menuItem.childs) > 0}">
+	        		<li><a href="#toolMenuTabs-${menuItem.id}">${menuItem.text }</a></li> 
+	        		</c:if>
+	        	</c:forEach>
 		    </ul> 
 		</div>
 		<div class="top-content">
 			<div class="top-content-left">
-				<div id="menuTabs-1" class="">
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<span><center><span class="ui-icon ui-icon-gear"></span></center></span>
-						<a>快捷菜单一</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<span><span class="ui-icon ui-icon-gear"></span></span>
-						<a>aa</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<span><span class="ui-icon ui-icon-gear"></span></span>
-						<a>aa</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<span><span class="ui-icon ui-icon-gear"></span></span>
-						<a>aa</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<span><span class="ui-icon ui-icon-gear"></span></span>
-						<a>aa</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<span><center><span class="ui-icon ui-icon-gear"></span></center></span>
-						<a>aaaaaaaaaaaaaaaa</a>
-					</span>
-				</div>
-				<div id="menuTabs-2" class="top-content">
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<a>11111</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<a>222222</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<a>333333</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<a>444444</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<a>aa</a>
-					</span>
-					<span class="top-content-menuitem ui-helper-reset ui-state-default ui-corner-all">
-						<a>aa</a>
-					</span>
-				</div>
+				<c:forEach items="${toolMenuItemTreeList}" var="menuItem">
+					<c:if test="${menuItem != null && fn:length(menuItem.childs) > 0}">
+	        		<div id="toolMenuTabs-${menuItem.id}" class="top-content">
+	        			<c:forEach items="${menuItem.childs}" var="childMenuItem">
+	        			<span>
+							<span><center><span class="ui-icon ui-icon-gear"></span></center></span>
+							<a id="${childMenuItem.id }" href="${childMenuItem.href}" configTarget="mainTabs" selectRefresh="false">${childMenuItem.text}</a>
+						</span>
+	        			</c:forEach>
+					</div>
+					</c:if>
+	        	</c:forEach>
 			</div>
 			<div class="top-content-right">
 				xxx
@@ -164,13 +107,12 @@ $(document).ready(function() {
 	            <h3><a href="#">常用菜单</a></h3> 
 	            <div style="margin:0px;padding:0px;overflow:hidden;"> 
 	               <ul id="customer-menus" class="customer-menus">
-					    <li id="demoList"><a href="${contextPath}/demo/queryDemoList">demo     列表</a></li>
-					    <li id="demoAjaxList"><a href="${contextPath}/demo/queryDemoList">demo ajax列表</a></li>
-					    <li id="demoAjaxPagedList"><a href="${contextPath}/demo/queryDemoList">demo ajax分页列表</a></li>
-					    <li id="dialogUtils"><a href="${contextPath}/view/demo/dialogUtilsDemo">demo dialogUtils</a></li>
-					    <li id="dialogUtils"><a href="${contextPath}/demo/queryAuthTreeDemo">queryAuthTreeDemo</a></li>
-					    <li id="test1"><a href="${contextPath}/view/demo/globalevent/testGlobalEvent1">testGlobalEvent1</a></li>
-					    <li id="test2"><a href="${contextPath}/view/demo/globalevent/testGlobalEvent2">testGlobalEvent2</a></li>
+					    <li><a id="demoList" href="${contextPath}/demo/queryDemoList">demo     列表</a></li>
+					    <li><a id="demoAjaxList" href="${contextPath}/demo/queryDemoList">demo ajax列表</a></li>
+					    <li><a id="demoAjaxPagedList" href="${contextPath}/demo/queryDemoList">demo ajax分页列表</a></li>
+					    <li><a id="dialogUtils" href="${contextPath}/view/demo/dialogUtilsDemo">demo dialogUtils</a></li>
+					    <li><a id="dialogUtils" href="${contextPath}/demo/queryAuthTreeDemo">queryAuthTreeDemo</a></li>
+					    <li><a id="test1" href="${contextPath}/view/demo/globalevent/testGlobalEvent1">testGlobalEvent1</a></li>
 					</ul>
 	            </div>
 	        </li> 
@@ -267,40 +209,23 @@ $(document).ready(function() {
 <div id="skinSwitcher" class="skin-switcher"></div>	
 
 <!-- menu -->
-<div id="menuItmesContainer" class="menu-itmes-container" style="height: 100px">
+<div id="menuItmesContainer" class="menu-itmes-container">
 	<ul id="menu">
 	    <li id="menuLink"><a>&nbsp;菜&nbsp;单&nbsp;</a>
-	        <ul id="menuItems" class="ui-widget-content">
-	           <li><a>禅道</a></li>
-	           <li><a>wiki</a></li>
-	           <li><a>menuitem1</a>
-		           	<ul>
-		           		<li><a>menuitem21</a></li>
-				        <li><a>menuitem22</a></li>
-				        <li><a>menuitem23</a>
-				        	<ul>
-				        		<li><a>menuitem231</a></li>
-				        		<li><a>menuitem232</a></li>
-				        		<li><a>menuitem233</a></li>
-				        	</ul>
-				        </li>
-			   		</ul>
-	           </li>
-	           <li><a>hudson</a></li>
-	           <li><a>sonar</a></li>
-	           <li><a>wiki</a>
-		           	<ul>
-		           		<li><a>menuitem21</a></li>
-				        <li><a>menuitem22</a></li>
-				        <li><a>menuitem23</a>
-				        	<ul>
-				        		<li><a>menuitem231</a></li>
-				        		<li><a>menuitem232</a></li>
-				        		<li><a>menuitem233</a></li>
-				        	</ul>
-				        </li>
-			   		</ul>
-	           </li>
+	    	<ul id="menuItems" class="ui-widget-content">
+    			<c:forEach items="${mainMenuItemTreeList}" var="menuItem"><li id="menuLink">
+    				<a id="${menuItem.id }" href="${menuItem.href}" configTarget="mainTabs" selectRefresh="false">${menuItem.text}</a>
+				<c:if test="${fn:length(menuItem.childs) > 0}"><ul>
+        			<c:forEach items="${menuItem.childs}" var="childMenuItem"><li id="menuLink">
+        				<a id="${childMenuItem.id }" href="${childMenuItem.href}" configTarget="mainTabs" selectRefresh="false">${childMenuItem.text}</a>
+        				<c:if test="${fn:length(childMenuItem.childs) > 0}"><ul>
+							<c:forEach items="${childMenuItem.childs}" var="threeChildMenuItem"><li id="menuLink">
+		        				<a id="${threeChildMenuItem.id }" href="${threeChildMenuItem.href}" configTarget="mainTabs" selectRefresh="false">${threeChildMenuItem.text}</a>
+		        			</li></c:forEach>
+						</ul></c:if>
+        			</li></c:forEach>
+				</ul></c:if>
+				</li></c:forEach>
 	           <li></li>
 	           <li><a>修改密码</a></li>
 	           <li><a>退          出</a></li>

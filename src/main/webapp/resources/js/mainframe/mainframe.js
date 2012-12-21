@@ -18,6 +18,8 @@ var Layout = function(config) {
  * 布局器初始化
  */
 Layout.prototype.init = function() {
+    this._initTop();
+    
     this._resetCenterHeight();
 
     //初始化页面布局分割
@@ -78,6 +80,53 @@ Layout.prototype._tabPanelHeight = 0;
  * according的宽度
  */
 Layout.prototype._tabPanelWidth = 0;
+/*
+ * 页面顶部功能渲染
+ */
+Layout.prototype._initTop = function(){
+    //为toolmenu添加样式
+    $(".top-content").find(".top-content-left>div>span")
+    .addClass("top-content-menuitem ui-helper-reset ui-state-default ui-corner-all")
+    .hover(function () {
+            $(this).addClass("ui-state-hover");
+        },
+        function () {
+            $(this).removeClass("ui-state-hover");
+        }
+    );
+    //生成tab
+    $(".top").txtabs({
+        tabsHandleContainerId:"topHeader"
+    });
+    //绑定菜单点击事件
+    $(".top-content").find(".top-content-left>div>span>a").bind("click",menuClickFunction);
+
+    //页面顶部分隔符
+    $(".top-content").wijsplitter({
+        showExpander: false,
+        collapsingPanel : "panel2",
+        splitterDistance : $(".top-content").innerWidth() > 270 ? $(".top-content").innerWidth() - 270 : 0,
+        resizeSettings: { ghost :false},
+        panel1 : {
+            scrollBars : "hidden"
+        },
+        panel2 : {
+            scrollBars : "hidden"
+        }
+    });
+    $(".top-content").find(".top-content-left").next("div.ui-resizable-handle").mousedown(function() {
+        return false;
+    });
+    var resizeTimer = null;
+    $(window).resize(function() {
+        if (resizeTimer != null) {
+            clearTimeout(resizeTimer);
+        }
+        resizeTimer = setTimeout(function() {
+            $(".top-content").wijsplitter("refresh");
+        }, 100);
+    });
+}
 /*
  * 设置layout高度
  */
@@ -367,19 +416,7 @@ Layout.prototype._initMainTabs = function() {
     });
 };
 
-//定义菜单点击响应函数
-var menuClickFunction = function(){
-	var $a = $(this);
-	var $li = $(this).parent();
-	$("#mainTabs").trigger("addTab",{
-    	id : $li.attr("id"),
-    	label : $a.text(),
-    	//isIframe : true,
-    	//content : "",
-    	iframeHref : $a.attr("href")	
-	});
-	return false;
-};
+
 
 /*
  * 定义菜单对象
@@ -423,4 +460,18 @@ Menu.prototype._init = function() {
 Menu.prototype.menuResize = function(width, height) {
     this._$menuContainer.height(height);
     this._$menuContainer.width(width);
+};
+
+//定义菜单点击响应函数
+var menuClickFunction = function(){
+    var $a = $(this);
+    var $li = $(this).parent();
+    $("#mainTabs").trigger("addTab",{
+        id : $a.attr("id"),
+        label : $a.text(),
+        //isIframe : true,
+        //content : "",
+        iframeHref : $a.attr("href")    
+    });
+    return false;
 };

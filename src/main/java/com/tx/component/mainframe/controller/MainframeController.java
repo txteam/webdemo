@@ -10,7 +10,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +22,6 @@ import com.tx.component.mainframe.model.MenuItem;
 import com.tx.component.mainframe.model.Operator;
 import com.tx.component.mainframe.service.MenuService;
 import com.tx.component.mainframe.service.OperatorService;
-import com.tx.component.mainframe.xmlmodel.MainMenusConfig;
-import com.tx.core.tree.util.TreeUtils;
 
 /**
  * 登录功能入口
@@ -36,12 +36,14 @@ import com.tx.core.tree.util.TreeUtils;
 @RequestMapping("/mainframe")
 public class MainframeController {
     
+    @SuppressWarnings("unused")
+    private Logger logger = LoggerFactory.getLogger(MainframeController.class);
+    
     @Resource(name = "operatorService")
     private OperatorService operatorService;
     
     @Resource(name= "menuService")
     private MenuService menuService;
-    
     /**
       * 登录<br/>
       * 1、检查输入的用户名和密码是否正确<br/>
@@ -60,22 +62,23 @@ public class MainframeController {
      */
     @RequestMapping("/login")
     public String login(String loginName, String password, String style,Model model) {
-        
+        //登录人员
         Operator oper = this.operatorService.login(loginName, password);
         
+        //如果登录不成功继续返回登录页面
         if (oper == null) {
             return "/view/mainframe/login";
         }
-        
-        
         
         //初始化用户权限到当前会话中
         AuthContext.getContext()
                 .initCurrentUserAuthContextWhenLogin(oper.getId());
         
         //根据当前用户权限获取当前用户的菜单列表
-        List<MenuItem> menuItemTreeList = this.menuService.getMainMenuTreeListByCurrentSession();
-        model.addAttribute("menuItemTreeList", menuItemTreeList);
+        List<MenuItem> mainMenuItemTreeList = this.menuService.getMainMenuTreeListByCurrentSession();
+        List<MenuItem> toolMenuItemTreeList = this.menuService.getToolMenuTreeListByCurrentSession();
+        model.addAttribute("toolMenuItemTreeList", toolMenuItemTreeList);
+        model.addAttribute("mainMenuItemTreeList", mainMenuItemTreeList);
         
         return "/mainframe/mainframe";
     }
