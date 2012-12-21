@@ -70,12 +70,12 @@ $(document).ready(function() {
         			_self.eventTypeCallbackMapping[eventType] = $.Callbacks("unique");
         			_self.$globalEventHandle.bind(eventType, data, function(event){
         				console.log(Array.prototype.slice.call(arguments));
-        				_self.eventTypeCallbackMapping[eventType].fire(Array.prototype.slice.call(arguments));
+        				_self.eventTypeCallbackMapping[eventType].fireWith(callbackFn,Array.prototype.slice.call(arguments));
         			});
         		}
         		var _whenExceptionRemoveAbleFunction = function(){
         			try{
-        				callbackFn(Array.prototype.slice.call(arguments));
+        				callbackFn.apply(callbackFn,arguments);
         			}catch(e){
         				//console.log('fire bind global event exception: ' + e);
         				_self.eventTypeCallbackMapping[eventType].remove(_whenExceptionRemoveAbleFunction);
@@ -410,10 +410,11 @@ var _default_skins =
                 styleTag.setAttribute('type', 'text/css');
                 styleTag.setAttribute('rel', 'stylesheet');
                 styleTag.setAttribute('href', css_href);
-                $("head")[0].appendChild(styleTag);
+                $("skin")[0].appendChild(styleTag);
                 css_href = null;
                 styleTag = null;
                 
+                //$themes.last().after(styleTag);
                 //$themes.last().after(styleTag);
                 /*$themes.last().after(
                         $("<link/>").attr(
