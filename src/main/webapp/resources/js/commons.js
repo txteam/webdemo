@@ -405,8 +405,19 @@ var _default_skins =
             }
             else
             {
+                var css_href = template.replace("{contextPath}",
+                                            contextPath).replace("{id}", id);
                 $themes.attr("disabled", "disabled");
-                $themes.last().after(
+                var styleTag = document.createElement("link");
+                styleTag.setAttribute('type', 'text/css');
+                styleTag.setAttribute('rel', 'stylesheet');
+                styleTag.setAttribute('href', css_href);
+                $("head")[0].appendChild(styleTag);
+                css_href = null;
+                styleTag = null;
+                
+                //$themes.last().after(styleTag);
+                /*$themes.last().after(
                         $("<link/>").attr(
                                 {
                                     rel : "stylesheet",
@@ -415,7 +426,7 @@ var _default_skins =
                                     id : id,
                                     href : template.replace("{contextPath}",
                                             contextPath).replace("{id}", id)
-                                }));
+                                }));*/
             }
             $.cookie(themeCookieName, "" + $.toJsonString(paramObj),
             {
