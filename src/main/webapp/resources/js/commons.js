@@ -1,8 +1,11 @@
+
+
 $(document).ready(function() {
 	$(".header").prepend('<span class="ui-icon ui-icon-gear" style="float:left;"></span>');
 	$(".header").addClass("ui-state-default ui-corner-all ui-tabs-selected ui-state-active page-title-header");
 	
-	
+	//var test = {};
+	//alert(test['a'] ? "true" : "false");
 });
 /************ EventManager end ************** */
 /**
@@ -14,15 +17,15 @@ $(document).ready(function() {
      * 定义全局事件管理器
      */
     var _globalEventManagerWin_ = window;
-    var _globalEventElement = null;
-    while (!_globalEventElement)
+    var _$globalEventManager = null;
+    while (!_$globalEventManager)
     {
         try
         {
             if (!_globalEventManagerWin_.closed
-                    && _globalEventManagerWin_.$GlobalEventManager)
+                    && _globalEventManagerWin_._$globalEventManager)
             {
-            	_globalEventElement = _globalEventManagerWin_._globalEventElement;
+            	_$globalEventManager = _globalEventManagerWin_._$globalEventManager;
                 break;
             }
         }
@@ -45,75 +48,70 @@ $(document).ready(function() {
         }
         else
         {
+        	//全局事件管理器
+        	var GlobalEventManager = function(config){
+        		
+        	};
+        	//全局事件管理器属性:
+        	GlobalEventManager.prototype.$globalEventHandle = $("<_global_event_handle/>");
+        	//
+        	GlobalEventManager.prototype.eventTypeCallbackMapping = {};
+        	
+        	//全局事件管理器方法:
+        	//添加事件监听器
+        	GlobalEventManager.prototype.bind = function(eventType, data, callbackFn){
+        		var _self = this;
+        		if(!callbackFn && $.isFunction(data)){
+        			callbackFn = data;
+        			data = [];
+        		}
+        		//压入堆栈
+        		if(!_self.eventTypeCallbackMapping[eventType]){
+        			_self.eventTypeCallbackMapping[eventType] = $.Callbacks("unique");
+        			_self.$globalEventHandle.bind(eventType, data, function(event){
+        				console.log(Array.prototype.slice.call(arguments));
+        				_self.eventTypeCallbackMapping[eventType].fire(Array.prototype.slice.call(arguments));
+        			});
+        		}
+        		var _whenExceptionRemoveAbleFunction = function(){
+        			try{
+        				callbackFn(Array.prototype.slice.call(arguments));
+        			}catch(e){
+        				//console.log('fire bind global event exception: ' + e);
+        				_self.eventTypeCallbackMapping[eventType].remove(_whenExceptionRemoveAbleFunction);
+        			}
+        		};
+        		_self.eventTypeCallbackMapping[eventType].add(_whenExceptionRemoveAbleFunction);
+        	};
+        	GlobalEventManager.prototype.trigger = function(eventType, params){
+        		this.$globalEventHandle.trigger(eventType, params)
+        	};
+        	
             /**
              * 事件管理器全局对象
              */
-        	_globalEventElement = window.document.createElement('_global_event_element');
+        	_$globalEventManager = new GlobalEventManager();
         	
-        	window._globalEventElement = _globalEventElement;
+        	_globalEventManagerWin_._$globalEventManager = _$globalEventManager;
+        	//循环调度，用以清理全局事件管理器中，已经被回收的对象
+        	//setInterval(function(){
+        	//	
+        	//},60 * 1000 );
         }
     }
-    var _$globalEventManager = $(_globalEventElement);
+    //释放引用
     _globalEventManagerWin_ = null;
-    _globalEventElement = null;
-    
-    
 
     var _globalEventCallbacks = {};
-    $.fn.extend(
-    {
-        bindGlobalEvent : function(eventType, data, callbackFn)
-        {
-            if (arguments.length == 2 && $.isFunction(data))
-            {
-                callbackFn = data;
-                data = [];
-            }
-            if (_globalEventCallbacks.eventType == null)
-            {
-                _globalEventCallbacks.eventType = $.Callbacks("unique");
-            }
-            var _callbacks = _globalEventCallbacks.eventType;
-            var _self = this;
-            _callbacks.add(callbackFn);
-            _$globalEventManager.bind(eventType, data, function(event, params)
-            {
-                $.extend(event,
-                {
-                    currentTarget : _self, delegateTarget : _self
-                });
-                _callbacks.fire(_self,$.merge(arguments, data));
-            });
-        }
-    });
-    $.fn.bindGE = $.fn.bindge = $.fn.bindGlobalEvent;
     $.extend(
     {
         triggerGlobalEvent : function(eventType, params)
         {
             _$globalEventManager.trigger(eventType, params);
-        }, bindGlobalEvent : function(eventType, data, callbackFn)
+        }, 
+        bindGlobalEvent : function(eventType, data, callbackFn)
         {
-            if (arguments.length == 2 && $.isFunction(data))
-            {
-                callbackFn = data;
-                data = [];
-            }
-            if (_globalEventCallbacks.eventType == null)
-            {
-                _globalEventCallbacks.eventType = $.Callbacks("unique");
-            }
-            var _callbacks = _globalEventCallbacks.eventType;
-            var _self = this;
-            _callbacks.add(callbackFn);
-            _$globalEventManager.bind(eventType, data, function(event, params)
-            {
-                $.extend(event,
-                {
-                    currentTarget : _self, delegateTarget : _self
-                });
-                _callbacks.fire(_self,$.merge(arguments, data));
-            });
+            _$globalEventManager.bind(eventType, data, callbackFn);
         }
     });
     $.triggerGE = $.triggerge = $.triggerGlobalEvent;
@@ -357,7 +355,7 @@ var _default_skins =
             var _skins = skins != null ? skins : _default_skins;
             
             var tempalteMap = {};
-
+            var _themeCookieName = themeCookieName;
             $.each(_skins, function(i, skingroup)
             {
                 $.each(skingroup.ids, function(index, skin)
@@ -370,7 +368,7 @@ var _default_skins =
                 });
             });
             
-            var cookieparamStr = $.cookie(themeCookieName);
+            var cookieparamStr = $.cookie(_themeCookieName);
             var paramObj = null;
             if (cookieparamStr != null)
             {
@@ -381,14 +379,14 @@ var _default_skins =
             {
                 $.switchtheme(paramObj.id, _contextPath,
                                 tempalteMap[paramObj.id].hrefTemplate,
-                                themeCookieName);
+                                _themeCookieName);
             }
             
             $.bindge("switch_skin",function(event,chooseThemeId){
                 //alert("switch_skin:" + chooseThemeId);
                 $.switchtheme(chooseThemeId, _contextPath,
                                 tempalteMap[chooseThemeId].hrefTemplate,
-                                themeCookieName);
+                                _themeCookieName);
             });
         },
         switchtheme : function(id, contextPath, template, themeCookieName)

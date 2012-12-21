@@ -12,6 +12,7 @@
 <script type="text/javascript" src="${contextPath }/js/mainframe/mainframe.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	
 	$("#menu").wijmenu({
 	    //position : {my: "top right", at: "buttom right"}
 	});
@@ -168,6 +169,8 @@ $(document).ready(function() {
 					    <li id="demoAjaxPagedList"><a href="${contextPath}/demo/queryDemoList">demo ajax分页列表</a></li>
 					    <li id="dialogUtils"><a href="${contextPath}/view/demo/dialogUtilsDemo">demo dialogUtils</a></li>
 					    <li id="dialogUtils"><a href="${contextPath}/demo/queryAuthTreeDemo">queryAuthTreeDemo</a></li>
+					    <li id="test1"><a href="${contextPath}/view/demo/globalevent/testGlobalEvent1">testGlobalEvent1</a></li>
+					    <li id="test2"><a href="${contextPath}/view/demo/globalevent/testGlobalEvent2">testGlobalEvent2</a></li>
 					</ul>
 	            </div>
 	        </li> 
@@ -226,11 +229,11 @@ $(document).ready(function() {
 		                		lazyLoad="true"></iframe>
 		                </div>
 		                <div id="mainTabs-4"> 
-		                	<iframe src="${contextPath}/view/event/testGlobalEvent1" 
+		                	<iframe src="${contextPath}/view/demo/globalevent/testGlobalEvent1" 
 		                		lazyLoad="true" refreshWhenSelect="true"></iframe>
 		                </div>
 		                <div id="mainTabs-5"> 
-		                	<iframe src="${contextPath}/view/event/testGlobalEvent2"></iframe>
+		                	<iframe src="${contextPath}/view/demo/globalevent/testGlobalEvent2"></iframe>
 		                </div>
 		           	</div> 
 				</div>
