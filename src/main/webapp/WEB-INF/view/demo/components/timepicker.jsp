@@ -10,7 +10,6 @@
 
 <script type="text/javascript" >
 $(document).ready(function() {
-	$("#textbox1").wijinputdate({dateFormat:'T'}); 
 	$("#datetimepicker").datetimepicker();
 	
 	$('#timepicker').timepicker();
