@@ -10,6 +10,10 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/classes/spring/beans*.xml</param-value>
 	</context-param>
+	<context-param>
+		<param-name>spring.profiles.active</param-name>
+		<param-value>dev</param-value>
+	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
@@ -26,7 +30,7 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/classes/context/springMVC-servlet.xml</param-value>
 		</init-param>
-		<load-on-startup>2</load-on-startup> 
+		<load-on-startup>2</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>

@@ -14,6 +14,14 @@ create table wd_demo
 	lastupdatedate date default sysdate not null,
 	description varchar2(2000),
 	email varchar2(256),
+	testBigDecimal integer,
+	testNullBigDecimal integer,
+	testIntegerObj integer,
+	testNullIntegerObj integer,
+	testBooleanObj integer,
+	testNullBooleanObj integer,
+	testInt integer,
+	testBoolean integer,
 	primary key(id)
 );
 create index idx_demo_01 on wd_demo(lastupdatedate);

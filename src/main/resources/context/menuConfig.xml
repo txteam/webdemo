@@ -70,35 +70,31 @@
 		<menu id="system_config" text="系统配置"
 			authKey="system_config_manange">
 			<!-- 系统管理子菜单: 权限管理 -->
-			<!-- target可配置为mainTabs,openDialog,openModelDialog,triggerGlobalEvent -->
+			<!-- target可配置为mainTabs,openDialog,triggerGlobalEvent -->
 			<!-- mainTabs: selectRefresh默认为false,即对应tab点击后是否马上刷新  -->
 			<!-- openModelDialog: 需要配置打开的对话框高和宽 height,width -->
 			<menu id="authCconfig" text="权限管理" href="/auth/authMananger"
 				authKey="auth_config_manage" target="mainTabs" selectRefresh="false"/>
 		</menu>
 		
-		<menu id="bestDemoMananger" text="最佳实践">
-			<!-- dialog最佳实践 -->
-			<menu id="bestDemoDialogUtils" text="dialog" href="/demo/best/dialogUtilsDemo"
+		<menu id="bestDemoMananger" text="参考demo">				
+			<!-- 根据条件查询数据列表 -->
+			<menu id="bestDemoList" text="列表" href="/bestDemo/queryDemoList"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestSimplePage" text="page" href="/demo/dialogUtilsDemo"
+			<menu id="bestAjaxDemoList" text="ajax列表" href="/bestDemo/ajaxQueryDemoList"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestList" text="列表" href="/demo/dialogUtilsDemo"
+			<menu id="bestPagedList" text="分页列表" href="/bestDemo/queryPagedlist"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestPagedList" text="分页列表" href="/demo/dialogUtilsDemo"
+			<menu id="bestAjaxPagedList" text="ajax分页列表" href="/demo/best/ajaxPagedList"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestAjaxList" text="ajax列表" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestAjaxPagedList" text="ajax分页" href="/demo/dialogUtilsDemo"
+			<menu id="bestDemoInfo" text="for表单" href="/demo/best/ajaxPagedList"
 				target="mainTabs" selectRefresh="false"/>
 		</menu>
 		
-		<menu id="demoMananger" text="参考demo">
-			<!-- dialogUtils使用demo -->
-			<menu id="demoDialogUtils" text="dialogDemo" href="/demo/dialogUtilsDemo"
+		<menu id="demoMananger" text="控件demo">
+			<menu id="components_dialog" text="对话框控件" href="/view/demo/components/dialog"
 				target="mainTabs" selectRefresh="false"/>
-			<!-- 列表显示 -->
-			<menu id="demoList" text="dialogDemo" href="/demo/dialogUtilsDemo"
+			<menu id="components_datetimespicker" text="时间控件" href="/view/demo/components/timepicker"
 				target="mainTabs" selectRefresh="false"/>
 		</menu>
 	</tool_menus_config>

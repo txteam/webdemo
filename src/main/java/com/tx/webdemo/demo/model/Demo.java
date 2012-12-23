@@ -6,12 +6,15 @@
  */
 package com.tx.webdemo.demo.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
  /**
   * <demo模型>
@@ -22,6 +25,8 @@ import javax.persistence.OneToOne;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
+@Entity
+@Table(name="WD_DEMO")
 public class Demo {
     
     /** 是否有效: 有效 */
@@ -64,6 +69,22 @@ public class Demo {
     private int isValid = ISVALID_TRUE;
     
     private String description;
+    
+    private BigDecimal testBigDecimal = BigDecimal.ONE;
+    
+    private BigDecimal testNullBigDecimal;
+    
+    private Integer testIntegerObj = 0;
+    
+    private Integer testNullIntegerObj = 0;
+    
+    private Boolean testBooleanObj = true;
+    
+    private Boolean testNullBooleanObj;
+    
+    private int testInt;
+    
+    private boolean testBoolean;
     
     /** 子节点列表 */
     private List<Demo> childs;
@@ -234,5 +255,117 @@ public class Demo {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @return 返回 testBigDecimal
+     */
+    public BigDecimal getTestBigDecimal() {
+        return testBigDecimal;
+    }
+
+    /**
+     * @param 对testBigDecimal进行赋值
+     */
+    public void setTestBigDecimal(BigDecimal testBigDecimal) {
+        this.testBigDecimal = testBigDecimal;
+    }
+
+    /**
+     * @return 返回 testNullBigDecimal
+     */
+    public BigDecimal getTestNullBigDecimal() {
+        return testNullBigDecimal;
+    }
+
+    /**
+     * @param 对testNullBigDecimal进行赋值
+     */
+    public void setTestNullBigDecimal(BigDecimal testNullBigDecimal) {
+        this.testNullBigDecimal = testNullBigDecimal;
+    }
+
+    /**
+     * @return 返回 testIntegerObj
+     */
+    public Integer getTestIntegerObj() {
+        return testIntegerObj;
+    }
+
+    /**
+     * @param 对testIntegerObj进行赋值
+     */
+    public void setTestIntegerObj(Integer testIntegerObj) {
+        this.testIntegerObj = testIntegerObj;
+    }
+
+    /**
+     * @return 返回 testNullIntegerObj
+     */
+    public Integer getTestNullIntegerObj() {
+        return testNullIntegerObj;
+    }
+
+    /**
+     * @param 对testNullIntegerObj进行赋值
+     */
+    public void setTestNullIntegerObj(Integer testNullIntegerObj) {
+        this.testNullIntegerObj = testNullIntegerObj;
+    }
+
+    /**
+     * @return 返回 testBooleanObj
+     */
+    public Boolean getTestBooleanObj() {
+        return testBooleanObj;
+    }
+
+    /**
+     * @param 对testBooleanObj进行赋值
+     */
+    public void setTestBooleanObj(Boolean testBooleanObj) {
+        this.testBooleanObj = testBooleanObj;
+    }
+
+    /**
+     * @return 返回 testNullBooleanObj
+     */
+    public Boolean getTestNullBooleanObj() {
+        return testNullBooleanObj;
+    }
+
+    /**
+     * @param 对testNullBooleanObj进行赋值
+     */
+    public void setTestNullBooleanObj(Boolean testNullBooleanObj) {
+        this.testNullBooleanObj = testNullBooleanObj;
+    }
+
+    /**
+     * @return 返回 testInt
+     */
+    public int getTestInt() {
+        return testInt;
+    }
+
+    /**
+     * @param 对testInt进行赋值
+     */
+    public void setTestInt(int testInt) {
+        this.testInt = testInt;
+    }
+
+    /**
+     * @return 返回 testBoolean
+     */
+    public boolean isTestBoolean() {
+        return testBoolean;
+    }
+
+    /**
+     * @param 对testBoolean进行赋值
+     */
+    public void setTestBoolean(boolean testBoolean) {
+        this.testBoolean = testBoolean;
     }
 }

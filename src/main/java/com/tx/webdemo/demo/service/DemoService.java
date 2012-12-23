@@ -10,12 +10,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.cxf.common.util.StringUtils;
+import org.hibernate.id.UUIDGenerator;
+import org.hibernate.id.UUIDHexGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -72,6 +75,26 @@ public class DemoService {
     }
     
     /**
+      * 根据loginName查找demo对象
+      * <功能详细描述>
+      * @param loginName
+      * @return [参数说明]
+      * 
+      * @return Demo [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public Demo findDemoByLoginName(String loginName){
+        if(StringUtils.isEmpty(loginName)){
+            return null;
+        }
+        
+        Demo condition = new Demo();
+        condition.setLoginName(loginName);
+        return this.demoDao.findDemo(condition);
+    }
+    
+    /**
       * 根据Demo实体列表
       * TODO:补充说明
       * 
@@ -82,6 +105,7 @@ public class DemoService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    //在具体编码中，自动生成的todo在完成响应任务后对应TOdo一定要去掉
     public List<Demo> queryDemoList(/*TODO:自己定义条件*/) {
         //TODO:判断条件合法性
         
@@ -249,12 +273,12 @@ public class DemoService {
                     .getBytes()));
             demoTemp.setLastUpdateDate(new Date());
         }
-        this.demoDao.insertDemo(demoList.get(0));
+        //this.demoDao.insertDemo(demoList.get(0));
         BatchResult  res = this.demoDao.batchInsertDemo(demoList, false);
         demoList.get(0).setLoginName("test"
                 + DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS"));
         
-        this.demoDao.insertDemo(demoList.get(0));
+        //this.demoDao.insertDemo(demoList.get(0));
         
         if(testAfterSuccessThrowException){
             throw new ParameterIsEmptyException("testException");
@@ -283,5 +307,9 @@ public class DemoService {
         
         //持久化
         return this.demoDao.batchInsertDemo(demoList, true);
+    }
+    
+    public static void main(String[] args) {
+        System.out.println((new UUIDHexGenerator()).generate(null, null));
     }
 }

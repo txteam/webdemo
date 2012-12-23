@@ -97,4 +97,52 @@ public interface MenuItem extends TreeAble<List<MenuItem>, MenuItem> {
      * @return 返回 isVisible
      */
     public boolean isVisible();
+    
+    /**
+     * 打开类型 ： mainTabs,openDialog,triggerGlobalEvent
+     * @return 返回 target
+     */
+    public String getTarget();
+
+    /**
+     * mainTabs时：选中后是否需要刷新
+     * @return 返回 selectRefresh
+     */
+    public boolean isSelectRefresh();
+
+    /**
+     * mainTabs时：是否每次都打开新tab
+     * @return 返回 openNewEveryTime
+     */
+    public boolean isOpenNewEveryTime();
+
+    /**
+     * openDialog: 宽
+     * @return 返回 width
+     */
+    public int getWidth();
+
+    /**
+     * openDialog: 高
+     * @return 返回 height
+     */
+    public int getHeight();
+
+    /**
+     * openDialog: 是否模态
+     * @return 返回 isModal
+     */
+    public boolean isModal();
+
+    /**
+     * triggerGlobalEvent: 事件类型
+     * @return 返回 eventType
+     */
+    public String getEventType();
+
+    /**
+     * triggerGlobalEvent: 传递数据的json字符串
+     * @return 返回 params
+     */
+    public String getParams();
 }

@@ -1,4 +1,16 @@
 @charset "utf-8";
+/* timepicker */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+.ui-timepicker-rtl{ direction: rtl; }
+.ui-timepicker-rtl dl { text-align: right; }
+.ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+
 /* 重写wijmo样式*/
 .wijmo-wijdialog .wijmo-wijdialog-hasframe{
 	overflow-x:hidden;
@@ -8,7 +20,12 @@
 .ui-tabs .ui-tabs-hide {
     display: none !important;
 }
-
+.ui-tabs-nav .ui-state-focus{
+    border-left-width:0px;
+    border-top-width:0px;
+    border-right-width:0px;
+    border-bottom-width:0px;
+}
 /* 定义样式表单 */
 * {
     margin: 0px;
@@ -29,6 +46,10 @@ html,body{
     padding-left: 0px;
     padding-bottom: 0px;
     padding-right: 0px;
+    overflow-y:hidden;
+    overflow-x:hidden;
+}
+body{
     overflow-y:auto;
     overflow-x:hidden;
 }
@@ -73,8 +94,86 @@ a {
     vertical-align: middle;
     padding-left: 6px;
 }
+
+
 /*  table */
-table td{
-	height: 22px;
+table td,th{
+	height: 18px;
+}
+
+
+
+/* ********************************tabForm************************************* */
+.form-table{
+    margin-bottom:5px;
+}
+
+.form-table * {
+    vertical-align:middle;
+}
+
+.form-table input,select {
+    height: 12px;
+    width: 125px;
+}
+
+.form-table .button input,select {
+    height: 28px;
+}
+
+.form-table a {
+    text-decoration:underline;
+}
+
+.form-table table {
+    table-layout:fixed;
+    width:100%;
+    text-overflow:ellipsis;
+    border-collapse:collapse;
+}
+
+.form-table th, .form-table td {
+    line-height:18px;
+    padding:2px 3px;
+}
+
+.form-table th {
+    text-align:left;
+    /*border:1px solid #444;*/
+    font-weight:normal;
+    padding-left:10px;
+}
+
+.narrow {
+    width:100px;
+}
+
+.narrowMin {
+    width:65px;
+}
+
+.form-table td {
+    /*border:1px solid #444;*/
+}
+
+.form-table td.operRow{
+    line-height:20px;
+    border-top:none;
+    text-align:center;
+}
+
+.form-table td.groupRow{
+    line-height:18px;
+    padding-left:27px;
+    cursor:pointer;
+    background: #f2f2f2 url(images/arrow_up.gif) no-repeat 5px center;
+    color:#66B31E;
+    border-bottom:none;
+    border-top:none;
+}
+
+.form-table td.groupRow.fold{
+    background-image: url(images/arrow_down.gif);
+    color:#333;
 }
 

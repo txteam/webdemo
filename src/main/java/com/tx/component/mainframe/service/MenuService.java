@@ -279,6 +279,17 @@ public class MenuService implements InitializingBean, ApplicationContextAware {
         menu.setText(menuItemConfig.getText());
         menu.setTips(menuItemConfig.getTips());
         
+        menu.setTarget(menuItemConfig.getTarget());
+        menu.setSelectRefresh(menuItemConfig.isSelectRefresh());
+        menu.setOpenNewEveryTime(menuItemConfig.isOpenNewEveryTime());
+        
+        menu.setWidth(menuItemConfig.getWidth());
+        menu.setHeight(menuItemConfig.getHeight());
+        menu.setModal(menuItemConfig.isModal());
+        
+        menu.setEventType(menuItemConfig.getEventType());
+        menu.setParams(menuItemConfig.getParams());
+        
         menu.setValid(menuItemConfig.isValid());
         menu.setVisible(menuItemConfig.isVisible());
         

@@ -99,7 +99,7 @@ Layout.prototype._initTop = function(){
         tabsHandleContainerId:"topHeader"
     });
     //绑定菜单点击事件
-    $(".top-content").find(".top-content-left>div>span>a").bind("click",menuClickFunction);
+    $(".top-content").find(".top-content-left>div>span").bind("click",menuClickFunction);
 
     //页面顶部分隔符
     $(".top-content").wijsplitter({
@@ -319,7 +319,7 @@ Layout.prototype._initMainTabs = function() {
     var $mainTabs = this.$centerMainTabs.wijtabs();
     
     _this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
-    _this._tabPanelWidth = _this.$centerMainTabs.width();
+    _this._tabPanelWidth = _this.$centerMainTabs.width() - 3;
     _this.$centerMainTabs.find("div[roleType=tabpanel]").height(_this._tabPanelHeight);
     _this.$centerMainTabs.find("div[roleType=tabpanel]").width(_this._tabPanelWidth);
     _this.$centerMainTabs.find("div[roleType=tabpanel]").css({"height":_this._tabPanelHeight,"width":_this._tabPanelWidth});
@@ -327,7 +327,7 @@ Layout.prototype._initMainTabs = function() {
     //centerMainResize响应页面大小变化
     $mainTabs.bind("centerMainResize",function(event){
         _this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
-        _this._tabPanelWidth = _this.$centerMainTabs.width();
+        _this._tabPanelWidth = _this.$centerMainTabs.width() - 3;
         
         $.each(_this.$centerMainTabs.find("div[roleType=tabpanel]"),function(index,div){
         	$(div).attr("height",_this._tabPanelHeight);
@@ -366,7 +366,7 @@ Layout.prototype._initMainTabs = function() {
     	add : function (event, ui) {
         	$(ui.tab).attr('id',"mainTabs_" + newTabOption.id);
         	_this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
-    	    _this._tabPanelWidth = _this.$centerMainTabs.width();
+    	    _this._tabPanelWidth = _this.$centerMainTabs.width() - 3;
         	if(newTabOption.isIframe){
         		var $iframe = $('<iframe src="' + newTabOption.iframeHref + '"></iframe>');
         		$iframe.attr("height",_this._tabPanelHeight);
@@ -455,7 +455,7 @@ Menu.prototype._init = function() {
         }
     });
     
-    this._$menuContainer.find("li > a").live("click",menuClickFunction);
+    this._$menuContainer.find("li").live("click",menuClickFunction);
 };
 Menu.prototype.menuResize = function(width, height) {
     this._$menuContainer.height(height);
@@ -464,13 +464,11 @@ Menu.prototype.menuResize = function(width, height) {
 
 //定义菜单点击响应函数
 var menuClickFunction = function(){
-    var $a = $(this);
-    var $li = $(this).parent();
+    var $aParent = $(this);
+    var $a = $(this).find("a");
     $("#mainTabs").trigger("addTab",{
         id : $a.attr("id"),
         label : $a.text(),
-        //isIframe : true,
-        //content : "",
         iframeHref : $a.attr("href")    
     });
     return false;

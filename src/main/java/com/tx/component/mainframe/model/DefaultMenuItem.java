@@ -49,8 +49,33 @@ public class DefaultMenuItem implements MenuItem {
     /** 菜单对应权限 */
     private List<String> authKeyList;
     
+    /** 打开类型 ： mainTabs,openDialog,triggerGlobalEvent */
+    private String target = "mainTabs";
+    
+    /** mainTabs时：选中后是否需要刷新  */
+    private boolean selectRefresh = false;
+    
+    /** mainTabs时：是否每次都打开新tab */
+    private boolean openNewEveryTime = false;
+    
+    /** openDialog: 宽 */
+    private int width = 750;
+    
+    /** openDialog: 高 */
+    private int height = 350;
+    
+    /** openDialog: 是否模态 */
+    private boolean isModal = false;
+    
+    /** triggerGlobalEvent: 事件类型 */
+    private String eventType = "";
+    
+    /** triggerGlobalEvent: 传递数据的json字符串 */
+    private String params = "";
+    
     /** 子菜单集合 */
     private List<MenuItem> childs;
+    
     
     /**
      * @return 返回 id
@@ -192,6 +217,118 @@ public class DefaultMenuItem implements MenuItem {
         this.authKeyList = authKeyList;
     }
     
+    /**
+     * @return 返回 target
+     */
+    public String getTarget() {
+        return target;
+    }
+
+    /**
+     * @param 对target进行赋值
+     */
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    /**
+     * @return 返回 selectRefresh
+     */
+    public boolean isSelectRefresh() {
+        return selectRefresh;
+    }
+
+    /**
+     * @param 对selectRefresh进行赋值
+     */
+    public void setSelectRefresh(boolean selectRefresh) {
+        this.selectRefresh = selectRefresh;
+    }
+
+    /**
+     * @return 返回 openNewEveryTime
+     */
+    public boolean isOpenNewEveryTime() {
+        return openNewEveryTime;
+    }
+
+    /**
+     * @param 对openNewEveryTime进行赋值
+     */
+    public void setOpenNewEveryTime(boolean openNewEveryTime) {
+        this.openNewEveryTime = openNewEveryTime;
+    }
+
+    /**
+     * @return 返回 width
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * @param 对width进行赋值
+     */
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    /**
+     * @return 返回 height
+     */
+    public int getHeight() {
+        return height;
+    }
+
+    /**
+     * @param 对height进行赋值
+     */
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    /**
+     * @return 返回 isModal
+     */
+    public boolean isModal() {
+        return isModal;
+    }
+
+    /**
+     * @param 对isModal进行赋值
+     */
+    public void setModal(boolean isModal) {
+        this.isModal = isModal;
+    }
+
+    /**
+     * @return 返回 eventType
+     */
+    public String getEventType() {
+        return eventType;
+    }
+
+    /**
+     * @param 对eventType进行赋值
+     */
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    /**
+     * @return 返回 params
+     */
+    public String getParams() {
+        return params;
+    }
+
+    /**
+     * @param 对params进行赋值
+     */
+    public void setParams(String params) {
+        this.params = params;
+    }
+
     /**
      * @return 返回 childs
      */

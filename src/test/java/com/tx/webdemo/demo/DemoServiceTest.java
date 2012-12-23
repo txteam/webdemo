@@ -18,6 +18,7 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -40,9 +41,9 @@ import com.tx.webdemo.demo.service.DemoService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { 
         "classpath:spring/beans-ds.xml",
-        "classpath:spring/beans-tx.xml", 
-        "classpath:spring/beans-mybatis.xml",
+        "classpath:spring/beans-tx.xml",
         "classpath:spring/beans.xml" })
+@ActiveProfiles("dev")
 public class DemoServiceTest {
     
     /** 设置jndi */
@@ -71,6 +72,7 @@ public class DemoServiceTest {
         newDemo.setLoginName(loginName);
         newDemo.setPassword("test");
         newDemo.setCreateDate(new Date());
+        newDemo.setLastUpdateDate(new Date());
         
         return newDemo;
     }
@@ -83,7 +85,7 @@ public class DemoServiceTest {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    //@Test
+    @Test
     public void testInsertAndFindAndDelete(){
         //
         try {
@@ -155,34 +157,22 @@ public class DemoServiceTest {
         }
     }
     
-    //@Test
+    @Test
     public void testBatchInserDemoNonStop() {
         List<Demo> demoList = new ArrayList<Demo>();
         String loginName = "testBatchInserDemoNonStop"
                 + DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS");
         
-        Demo newDemo1 = new Demo();
-        newDemo1.setName("testName");
-        newDemo1.setLoginName(loginName);
-        newDemo1.setPassword("test");
-        demoList.add(newDemo1);
-        Demo newDemo2 = new Demo();
-        newDemo2.setName("testName");
-        newDemo2.setLoginName(loginName);
-        newDemo2.setPassword("test");
-        demoList.add(newDemo2);
         for (int i = 0; i < 200; i++) {
             Demo newDemo = new Demo();
             newDemo.setName("testName");
             newDemo.setLoginName(loginName + (int) (Math.random() * 10000000));
             newDemo.setPassword("test");
+            newDemo.setCreateDate(new Date());
+            newDemo.setLastUpdateDate(new Date());
+            
             demoList.add(newDemo);
         }
-        Demo newDemo3 = new Demo();
-        newDemo3.setName("testName");
-        newDemo3.setLoginName(loginName);
-        newDemo3.setPassword("test");
-        demoList.add(newDemo3);
         
         try {
             BatchResult result = this.demoService.batchInsertDemoNotStopWhenException(demoList,false);

@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -44,6 +43,7 @@ public class MainframeController {
     
     @Resource(name= "menuService")
     private MenuService menuService;
+    
     /**
       * 登录<br/>
       * 1、检查输入的用户名和密码是否正确<br/>

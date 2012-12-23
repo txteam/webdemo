@@ -142,8 +142,8 @@ public class DemoDaoImpl implements DemoDao {
     @Override
     public BatchResult batchInsertDemo(List<Demo> demoList,
             boolean isStopWhenException) {
-        return this.myBatisDaoSupport.batchInsert("demo.insertDemo",
-                demoList,
+        return this.myBatisDaoSupport.batchInsertUseUUID("demo.insertDemo",
+                demoList,"id",
                 isStopWhenException);
     }
     

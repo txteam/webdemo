@@ -8,8 +8,9 @@
 <script type="text/javascript" src="${contextPath }/jquery-ui/js/jquery-ui-1.9.2.custom.min.js"></script>
 <script type="text/javascript" src="${contextPath }/wijmo/js/jquery.wijmo-complete.all.2.3.2.min.js"></script>
 <script type="text/javascript" src="${contextPath }/wijmo/js/jquery.wijmo-open.all.2.3.2.min.js"></script>
-<script type="text/javascript" src="${contextPath }/wijmo/js/globalize.culture.zh.js"></script>
+<script type="text/javascript" src="${contextPath }/wijmo/js/globalize.culture.zh-CN.js"></script>
 <script type="text/javascript" src="${contextPath }/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="${contextPath }/js/components.js"></script>
 
 <script type="text/javascript" src="${contextPath }/js/commons.js"></script>
 <script type="text/javascript">

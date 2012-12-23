@@ -42,8 +42,8 @@ $(document).ready(function() {
 			_removeOpacity();
 		}
 	});
-	//
-	$("#menuItems").find("a").click(menuClickFunction);
+	//给没有子菜单的，菜单项绑定菜单点击方法
+	$("#menuItems").find("li").not($("#menuItems").find("li").has("ul")).click(menuClickFunction);
 	
 	//页面渲染
 	var layout = new Layout();
@@ -64,11 +64,11 @@ $(document).ready(function() {
 <style type="text/css">
 
 </style>
-<body class="ui-widget-content">
+<body>
 <div class="container">
 	<!-- top -->
 	<div class="top ui-widget-content">
-		<div id="topHeader" class="top-header ui-widget-header ui-helper-reset ui-state-default ui-corner-top">
+		<div id="topHeader" class="top-header ui-widget-header ui-state-default ui-helper-reset ui-corner-top">
 	        <ul>
 	        	<c:forEach items="${toolMenuItemTreeList}" var="menuItem">
 	        		<c:if test="${menuItem != null && fn:length(menuItem.childs) > 0}">
@@ -85,7 +85,10 @@ $(document).ready(function() {
 	        			<c:forEach items="${menuItem.childs}" var="childMenuItem">
 	        			<span>
 							<span><center><span class="ui-icon ui-icon-gear"></span></center></span>
-							<a id="${childMenuItem.id }" href="${childMenuItem.href}" configTarget="mainTabs" selectRefresh="false">${childMenuItem.text}</a>
+							<a id="${childMenuItem.id }" href="${contextPath}${childMenuItem.href}" 
+								configTarget="${childMenuItem.target}" selectRefresh="${childMenuItem.selectRefresh}" openNewEveryTime="${childMenuItem.text}"
+								width="${childMenuItem.width}" height="${childMenuItem.height}" isModal="${childMenuItem.modal}"
+								eventType="${childMenuItem.eventType}" params='${childMenuItem.params}'>${childMenuItem.text}</a>
 						</span>
 	        			</c:forEach>
 					</div>
@@ -147,8 +150,7 @@ $(document).ready(function() {
 		                    <li id="mainTabs_welcome"><a href="#mainTabs-1">个人面板</a></li> 
 		                    <li id="mainTabs_calendar"><a href="#mainTabs-2">行事历</a></li>
 		                    <li id="mainTabs_notepad"><a href="#mainTabs-3">记事本</a></li>
-		                    <li id="mainTabs_test4"><a href="#mainTabs-4">testGlobalEvent1</a><span class="ui-icon ui-icon-close"></span></li>
-		                    <li id="mainTabs_test5"><a href="#mainTabs-5">testGlobalEvent2</a><span class="ui-icon ui-icon-close"></span></li>
+		                    <li id="mainTabs_test4"><a href="#mainTabs-4">globalEvent</a><span class="ui-icon ui-icon-close"></span></li>
 		                </ul> 
 		                <div id="mainTabs-1"> 
 		                    <p> 
@@ -166,16 +168,13 @@ $(document).ready(function() {
 		                		newSrc="${contextPath}/view/calendar/calendar" ></iframe>
 		                </div>
 		                <div id="mainTabs-3"> 
-		                	<iframe src="${contextPath}/view/notepad/notepad" 
+		                	<iframe src="" 
 		                		newStr="${contextPath}/view/notepad/notepad" 
 		                		lazyLoad="true"></iframe>
 		                </div>
 		                <div id="mainTabs-4"> 
-		                	<iframe src="${contextPath}/view/demo/globalevent/testGlobalEvent1" 
+		                	<iframe src="${contextPath}/view/demo/components/testGlobalEvent" 
 		                		lazyLoad="true" refreshWhenSelect="true"></iframe>
-		                </div>
-		                <div id="mainTabs-5"> 
-		                	<iframe src="${contextPath}/view/demo/globalevent/testGlobalEvent2"></iframe>
 		                </div>
 		           	</div> 
 				</div>
@@ -214,17 +213,26 @@ $(document).ready(function() {
 	    <li id="menuLink"><a>&nbsp;菜&nbsp;单&nbsp;</a>
 	    	<ul id="menuItems" class="ui-widget-content">
     			<c:forEach items="${mainMenuItemTreeList}" var="menuItem"><li id="menuLink">
-    				<a id="${menuItem.id }" href="${menuItem.href}" configTarget="mainTabs" selectRefresh="false">${menuItem.text}</a>
-				<c:if test="${fn:length(menuItem.childs) > 0}"><ul>
+   				<a id="${menuItem.id }" href="${contextPath}${menuItem.href}" 
+							configTarget="${menuItem.target}" selectRefresh="${menuItem.selectRefresh}" openNewEveryTime="${menuItem.text}"
+							width="${menuItem.width}" height="${menuItem.height}" isModal="${menuItem.modal}"
+							eventType="${menuItem.eventType}" params='${menuItem.params}'>${menuItem.text}</a>
+					<c:if test="${fn:length(menuItem.childs) > 0}"><ul>
         			<c:forEach items="${menuItem.childs}" var="childMenuItem"><li id="menuLink">
-        				<a id="${childMenuItem.id }" href="${childMenuItem.href}" configTarget="mainTabs" selectRefresh="false">${childMenuItem.text}</a>
-        				<c:if test="${fn:length(childMenuItem.childs) > 0}"><ul>
+        				<a id="${childMenuItem.id }" href="${contextPath}${childMenuItem.href}" 
+								configTarget="${childMenuItem.target}" selectRefresh="${childMenuItem.selectRefresh}" openNewEveryTime="${childMenuItem.text}"
+								width="${childMenuItem.width}" height="${childMenuItem.height}" isModal="${childMenuItem.modal}"
+								eventType="${childMenuItem.eventType}" params='${childMenuItem.params}'>${childMenuItem.text}</a>
+	        				<c:if test="${fn:length(childMenuItem.childs) > 0}"><ul>
 							<c:forEach items="${childMenuItem.childs}" var="threeChildMenuItem"><li id="menuLink">
-		        				<a id="${threeChildMenuItem.id }" href="${threeChildMenuItem.href}" configTarget="mainTabs" selectRefresh="false">${threeChildMenuItem.text}</a>
+		        				<a id="${threeChildMenuItem.id }" href="${contextPath}${threeChildMenuItem.href}" 
+									configTarget="${threeChildMenuItem.target}" selectRefresh="${threeChildMenuItem.selectRefresh}" openNewEveryTime="${threeChildMenuItem.text}"
+									width="${threeChildMenuItem.width}" height="${threeChildMenuItem.height}" isModal="${threeChildMenuItem.modal}"
+									eventType="${threeChildMenuItem.eventType}" params='${threeChildMenuItem.params}'>${threeChildMenuItem.text}</a>
 		        			</li></c:forEach>
-						</ul></c:if>
+							</ul></c:if>
         			</li></c:forEach>
-				</ul></c:if>
+					</ul></c:if>
 				</li></c:forEach>
 	           <li></li>
 	           <li><a>修改密码</a></li>

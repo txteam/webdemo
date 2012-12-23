@@ -2,6 +2,9 @@
 --****************************************************************************
 -- demo信息表
 --****************************************************************************
+--****************************************************************************
+-- demo信息表
+--****************************************************************************
 create table wd_demo
 (
 	id	varchar(64) not null,
@@ -12,9 +15,17 @@ create table wd_demo
 	subDemoId varchar(64),
 	name varchar(64) not null,
 	createdate date default sysdate not null,
-	lastupdatedate date default sysdate not null,
+	lastupdatedate timestamp default sysdate not null,
 	description varchar(2000),
 	email varchar(256),
+	testBigDecimal integer,
+	testNullBigDecimal integer,
+	testIntegerObj integer,
+	testNullIntegerObj integer,
+	testBooleanObj integer,
+	testNullBooleanObj integer,
+	testInt integer,
+	testBoolean integer,
 	primary key(id)
 );
 create index idx_demo_01 on wd_demo(lastupdatedate);

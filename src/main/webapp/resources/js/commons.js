@@ -1,11 +1,38 @@
-
-
 $(document).ready(function() {
-	$(".header").prepend('<span class="ui-icon ui-icon-gear" style="float:left;"></span>');
-	$(".header").addClass("ui-state-default ui-corner-all ui-tabs-selected ui-state-active page-title-header");
-	
-	//var test = {};
-	//alert(test['a'] ? "true" : "false");
+    //如果页面body的样式class没有special标志，则自动渲染页面
+    if($("body.special").size() < 1){
+        //统一页面风格
+        //给body统一加入样式
+        $("body").addClass("ui-widget-content");
+        
+        //统一页面form元素风格
+        $("button,input[type=button],:input[type=submit]").button();
+        $(":input[type=text],:input[type=password],textarea").wijtextbox(); 
+        $("select").wijdropdown(); 
+        $(":radio").wijradio(); 
+        $(":checkbox").wijcheckbox();
+        //阻止button的默认事件
+        //$("button,:input[type=button],:input[type=submit]").click(function(){ return false; });
+        
+        //处理具有header样式的自动渲染
+        if($(".header").size() > 0){
+            $(".header").prepend('<span class="ui-icon ui-icon-gear" style="float:left;"></span>');
+            $(".header").addClass("ui-state-default ui-corner-all ui-tabs-selected ui-state-active page-title-header");
+        }
+        
+        //利用js实现自动长度截取功能
+        if($(".subStr") > 0){
+            $.each($(".subStr"), function(index, $dom) {
+                var maxLength = $dom.attr("maxLength") * 1 > 0 ? $dom.attr("maxLength") * 1 : 10;
+                alert(maxLength);
+                $dom.attr("title",$dom.text());
+                $dom.text($dom.text().substr(0,maxLength));
+            });
+        }
+    }
+
+    
+
 });
 /************ EventManager end ************** */
 /**
@@ -541,9 +568,10 @@ DialogUtils.createOrOpenDiaglog = function(config){
  *	打开openWin默认具有dialog所有按钮，未自动添加任何button
  */
 DialogUtils.openDialog = function(config){
-	config=$.extend({
+	config=$.extend({},{
 	    id:'dialog_',
 	    autoOpen: true,
+	    modal: false,
 	    width: 'auto',
         height: 'auto',
         captionButtons: {
@@ -562,10 +590,11 @@ DialogUtils.openDialog = function(config){
  *	打开openWin默认具有dialog所有按钮，未自动添加任何button
  */
 DialogUtils.openSimpleDialog = function(config){
-	config=$.extend({
+	config=$.extend({},{
 	    id:'dialog_',
 	    autoOpen: true,
 	    width: 'auto',
+	    modal: false,
         height: 'auto',
         captionButtons: {
             pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
@@ -582,26 +611,57 @@ DialogUtils.openSimpleDialog = function(config){
 /**
  *	打开openWin默认具有dialog所有按钮，未自动添加任何button
  */
-DialogUtils.dialog = function(id,url,width,height){
+DialogUtils.dialog = function(id,url,width,height,close){
 	var config = $.extend({
+        id:'dialog_',
+        autoOpen: true,
+        width: 'auto',
+        modal: false,
+        height: 'auto',
+        captionButtons: {
+            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
+            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
+            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
+            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
+            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
+            close: {visible: true, iconClassOn: 'ui-icon-close'}
+        }
+	},{
 	    id: id,
-	    autoOpen: true,
 	    width: width,
         height: height,
-        contentUrl: url
+        contentUrl: url,
+        close : function(){
+            close && close.call(this);
+        }
 	});
-	this.openSimpleDialog(config);
+	this.createOrOpenDiaglog(config);
 };
-DialogUtils.modalDialog = function(id,url,width,height){
+DialogUtils.modalDialog = function(id,url,width,height,close){
 	var config = $.extend({
+        id:'dialog_',
+        autoOpen: true,
+        width: 'auto',
+        modal: true,
+        height: 'auto',
+        captionButtons: {
+            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
+            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
+            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
+            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
+            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
+            close: {visible: true, iconClassOn: 'ui-icon-close'}
+        }
+	},{
 	    id: id,
-	    autoOpen: true,
-	    modal: true,
 	    width: width,
         height: height,
-        contentUrl: url
+        contentUrl: url,
+        close : function(){
+            close && close.call(this);
+        }
 	});
-	this.openSimpleDialog(config);
+	this.createOrOpenDiaglog(config);
 };
 /**
  * 根据id关闭对话框

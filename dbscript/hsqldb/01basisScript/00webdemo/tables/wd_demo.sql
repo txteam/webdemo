@@ -4,7 +4,7 @@
 create table wd_demo
 (
 	id	varchar(64) not null,
-	isValid number(1) not null,
+	isValid integer not null,
 	loginName varchar(64) not null,
 	password varchar(64) not null,
 	parentId varchar(64),
@@ -14,6 +14,14 @@ create table wd_demo
 	lastupdatedate date default sysdate not null,
 	description varchar(2000),
 	email varchar(256),
+	testBigDecimal integer,
+	testNullBigDecimal integer,
+	testIntegerObj integer,
+	testNullIntegerObj integer,
+	testBooleanObj integer,
+	testNullBooleanObj integer,
+	testInt integer,
+	testBoolean integer,
 	primary key(id)
 );
 create index idx_demo_01 on wd_demo(lastupdatedate);

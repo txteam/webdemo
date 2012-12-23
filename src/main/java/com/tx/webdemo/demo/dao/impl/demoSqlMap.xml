@@ -15,78 +15,126 @@
 		parameterType="com.tx.webdemo.demo.model.Demo"
 		resultMap="demoMap">
 		SELECT 
-				TW.ID,
-				TW.PARENTID,
-				TW.EMAIL,
-				TW.DESCRIPTION,
-				TW.NAME,
-				TW.SUBDEMOID AS subDemo_id,
-				TW.CREATEDATE,
-				TW.PASSWORD,
-				LOGINNAME AS loginName,
-				TW.LASTUPDATEDATE,
-				TW.ISVALID
-		  FROM WD_DEMO TW
+				TD.ID,
+				TD.TESTBOOLEANOBJ,
+				TD.TESTNULLBOOLEANOBJ,
+				TD.TESTINT,
+				TD.TESTINTEGEROBJ,
+				TD.TESTBOOLEAN,
+				TD.PASSWORD,
+				TD.LASTUPDATEDATE,
+				TD.PARENTID,
+				TD.EMAIL,
+				TD.DESCRIPTION,
+				TD.NAME,
+				TD.SUBDEMOID AS subDemo_id,
+				TD.TESTNULLINTEGEROBJ,
+				TD.TESTNULLBIGDECIMAL,
+				TD.CREATEDATE,
+				TD.TESTBIGDECIMAL,
+				TD.ISVALID,
+				TD.LOGINNAME
+		  FROM WD_DEMO TD
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
-	            AND TW.ID = #{id}
+	            AND TD.ID = #{id}
+	        </if>
+	        <if test="@com.tx.core.Ognl@isNotEmpty(loginName)">  
+	            AND TD.LOGINNAME = #{loginName}
 	        </if>
 		</trim>
 	</select>
 	
 	<!-- auto generate default query -->
 	<select id="queryDemo" 
-		parameterType="com.tx.webdemo.demo.model.Demo"
+		parameterType="java.util.Map"
 		resultMap="demoMap">
 		SELECT 
-				TW.ID,
-				TW.PARENTID,
-				TW.EMAIL,
-				TW.DESCRIPTION,
-				TW.NAME,
-				TW.SUBDEMOID AS subDemo_id,
-				TW.CREATEDATE,
-				TW.PASSWORD,
-				LOGINNAME AS loginName,
-				TW.LASTUPDATEDATE,
-				TW.ISVALID
-		  FROM WD_DEMO TW
+				TD.ID,
+				TD.TESTBOOLEANOBJ,
+				TD.TESTNULLBOOLEANOBJ,
+				TD.TESTINT,
+				TD.TESTINTEGEROBJ,
+				TD.TESTBOOLEAN,
+				TD.PASSWORD,
+				TD.LASTUPDATEDATE,
+				TD.PARENTID,
+				TD.EMAIL,
+				TD.DESCRIPTION,
+				TD.NAME,
+				TD.SUBDEMOID AS subDemo_id,
+				TD.TESTNULLINTEGEROBJ,
+				TD.TESTNULLBIGDECIMAL,
+				TD.CREATEDATE,
+				TD.TESTBIGDECIMAL,
+				TD.ISVALID,
+				TD.LOGINNAME
+		  FROM WD_DEMO TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+	            AND TD.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(startCreateDate)">
+				<![CDATA[ AND TD.CREATEDATE >= #{startCreateDate,javaType=java.util.Date} ]]>
+	        </if>
+	        <if test="@com.tx.core.Ognl@isNotEmpty(endCreateDate)">
+	        	<![CDATA[ AND TD.CREATEDATE < #{startCreateDate,javaType=java.util.Date} ]]>
+	        </if>
+		
+			<!-- 在编码过程中建议将自动生成部分多余条件删掉 -->
 			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
-	            AND TW.ID = #{id}
+	            AND TD.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testBooleanObj)">  
+	            AND TD.TESTBOOLEANOBJ = #{testBooleanObj,javaType=java.lang.Boolean}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testNullBooleanObj)">  
+	            AND TD.TESTNULLBOOLEANOBJ = #{testNullBooleanObj,javaType=java.lang.Boolean}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testInt)">  
+	            AND TD.TESTINT = #{testInt,javaType=int}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testIntegerObj)">  
+	            AND TD.TESTINTEGEROBJ = #{testIntegerObj,javaType=java.lang.Integer}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testBoolean)">  
+	            AND TD.TESTBOOLEAN = #{testBoolean,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(password)">  
+	            AND TD.PASSWORD = #{password,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(lastUpdateDate)">  
+	            AND TD.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
-	            AND TW.PARENTID = #{parentId}
+	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(email)">  
-	            AND TW.EMAIL = #{email}
+	            AND TD.EMAIL = #{email,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
-	            AND TW.DESCRIPTION = #{description}
-	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
-	            AND TW.NAME = #{name}
+	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
 	        </if>
 			<if test="subDemo != null">
 				<if test="@com.tx.core.Ognl@isNotEmpty(subDemo.id)">  
-		            AND TW.SUBDEMOID = #{subDemo.id}
+		            AND TD.SUBDEMOID = #{subDemo.id,javaType=java.lang.String}
 		        </if>
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(createDate)">  
-	            AND TW.CREATEDATE = #{createDate}
+			<if test="@com.tx.core.Ognl@isNotEmpty(testNullIntegerObj)">  
+	            AND TD.TESTNULLINTEGEROBJ = #{testNullIntegerObj,javaType=java.lang.Integer}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(password)">  
-	            AND TW.PASSWORD = #{password}
+			<if test="@com.tx.core.Ognl@isNotEmpty(testNullBigDecimal)">  
+	            AND TD.TESTNULLBIGDECIMAL = #{testNullBigDecimal,javaType=com.ibm.icu.math.BigDecimal}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testBigDecimal)">  
+	            AND TD.TESTBIGDECIMAL = #{testBigDecimal,javaType=com.ibm.icu.math.BigDecimal}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(isValid)">  
-	            AND TW.ISVALID = #{isValid}
+	            AND TD.ISVALID = #{isValid,javaType=int}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(loginName)">  
-	            AND TW.LOGINNAME = #{loginName}
-	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(lastUpdateDate)">  
-	            AND TW.LASTUPDATEDATE = #{lastUpdateDate}
+	            AND TD.LOGINNAME = #{loginName,javaType=java.lang.String}
 	        </if>
 		</trim>
 		<choose>  
@@ -101,45 +149,77 @@
 	
 		<!-- auto generate default count -->
 	<select id="queryDemoCount" 
-		parameterType="com.tx.webdemo.demo.model.Demo"
+		parameterType="java.util.Map"
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
-		  FROM WD_DEMO TW
+		  FROM WD_DEMO TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+	            AND TD.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(startCreateDate)">
+				<![CDATA[ AND TD.CREATEDATE >= #{startCreateDate,javaType=java.util.Date} ]]>
+	        </if>
+	        <if test="@com.tx.core.Ognl@isNotEmpty(endCreateDate)">
+	        	<![CDATA[ AND TD.CREATEDATE < #{startCreateDate,javaType=java.util.Date} ]]>
+	        </if>
+		
+		
 			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
-	            AND TW.ID = #{id}
+	            AND TD.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testBooleanObj)">  
+	            AND TD.TESTBOOLEANOBJ = #{testBooleanObj,javaType=java.lang.Boolean}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testNullBooleanObj)">  
+	            AND TD.TESTNULLBOOLEANOBJ = #{testNullBooleanObj,javaType=java.lang.Boolean}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testInt)">  
+	            AND TD.TESTINT = #{testInt,javaType=int}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testIntegerObj)">  
+	            AND TD.TESTINTEGEROBJ = #{testIntegerObj,javaType=java.lang.Integer}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testBoolean)">  
+	            AND TD.TESTBOOLEAN = #{testBoolean,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(password)">  
+	            AND TD.PASSWORD = #{password,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(lastUpdateDate)">  
+	            AND TD.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
-	            AND TW.PARENTID = #{parentId}
+	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(email)">  
-	            AND TW.EMAIL = #{email}
+	            AND TD.EMAIL = #{email,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
-	            AND TW.DESCRIPTION = #{description}
-	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
-	            AND TW.NAME = #{name}
+	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
 	        </if>
 			<if test="subDemo != null">
 				<if test="@com.tx.core.Ognl@isNotEmpty(subDemo.id)">  
-		            AND TW.SUBDEMOID = #{subDemo.id}
+		            AND TD.SUBDEMOID = #{subDemo.id,javaType=java.lang.String}
 		        </if>
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(createDate)">  
-	            AND TW.CREATEDATE = #{createDate}
+			<if test="@com.tx.core.Ognl@isNotEmpty(testNullIntegerObj)">  
+	            AND TD.TESTNULLINTEGEROBJ = #{testNullIntegerObj,javaType=java.lang.Integer}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(password)">  
-	            AND TW.PASSWORD = #{password}
+			<if test="@com.tx.core.Ognl@isNotEmpty(testNullBigDecimal)">  
+	            AND TD.TESTNULLBIGDECIMAL = #{testNullBigDecimal,javaType=com.ibm.icu.math.BigDecimal}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(createDate)">  
+	            AND TD.CREATEDATE = #{createDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(testBigDecimal)">  
+	            AND TD.TESTBIGDECIMAL = #{testBigDecimal,javaType=com.ibm.icu.math.BigDecimal}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(isValid)">  
-	            AND TW.ISVALID = #{isValid}
+	            AND TD.ISVALID = #{isValid,javaType=int}
 	        </if>
 			<if test="@com.tx.core.Ognl@isNotEmpty(loginName)">  
-	            AND TW.LOGINNAME = #{loginName}
-	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(lastUpdateDate)">  
-	            AND TW.LASTUPDATEDATE = #{lastUpdateDate}
+	            AND TD.LOGINNAME = #{loginName,javaType=java.lang.String}
 	        </if>
 		</trim>
 	</select>
@@ -147,24 +227,38 @@
     <!-- auto generate default insert -->
     <insert id="insertDemo" 
 		parameterType="com.tx.webdemo.demo.model.Demo">
-		<selectKey keyProperty="id" resultType="java.lang.String">
-			SELECT SEQ_DEMO.NEXTVAL FROM DUAL
-		</selectKey>
 		INSERT INTO WD_DEMO
 		(
 			ID,
+			TESTBOOLEANOBJ,
+			TESTNULLBOOLEANOBJ,
+			TESTINT,
+			TESTINTEGEROBJ,
+			TESTBOOLEAN,
+			PASSWORD,
+			LASTUPDATEDATE,
 			PARENTID,
 			EMAIL,
 			DESCRIPTION,
 			NAME,
 			SUBDEMOID,
-			PASSWORD,
+			TESTNULLINTEGEROBJ,
+			TESTNULLBIGDECIMAL,
+			CREATEDATE,
+			TESTBIGDECIMAL,
 			ISVALID,
 			LOGINNAME
 		)
 		VALUES
 		(
 			#{id},
+			#{testBooleanObj},
+			#{testNullBooleanObj},
+			#{testInt},
+			#{testIntegerObj},
+			#{testBoolean},
+			#{password},
+			#{lastUpdateDate},
 			#{parentId},
 			#{email},
 			#{description},
@@ -175,7 +269,10 @@
 	        <if test="subDemo == null">
 				#{subDemo,javaType=java.lang.String},
 	        </if>
-			#{password},
+			#{testNullIntegerObj},
+			#{testNullBigDecimal},
+			#{createDate},
+			#{testBigDecimal},
 			#{isValid},
 			#{loginName}
 		)
@@ -184,10 +281,10 @@
 	<!-- auto generate default delete -->
 	<delete id="deleteDemo" 
 		parameterType="com.tx.webdemo.demo.model.Demo">
-		DELETE FROM WD_DEMO TW WHERE
+		DELETE FROM WD_DEMO TD WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
-	            AND TW.ID = #{id}
+	            AND TD.ID = #{id}
 	        </if>
 		</trim>
 	</delete>
@@ -195,8 +292,29 @@
 	<!-- auto generate default update -->
 	<update id="updateDemo"
 	    parameterType="java.util.Map">  
-	    UPDATE wd_demo TW
+	    UPDATE WD_DEMO TD
 	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('testBooleanObj')">
+	    		TESTBOOLEANOBJ = #{testBooleanObj,javaType=java.lang.Boolean},
+	    	</if>	
+			<if test="_parameter.containsKey('testNullBooleanObj')">
+	    		TESTNULLBOOLEANOBJ = #{testNullBooleanObj,javaType=java.lang.Boolean},
+	    	</if>	
+			<if test="_parameter.containsKey('testInt')">
+	    		TESTINT = #{testInt,javaType=int},
+	    	</if>	
+			<if test="_parameter.containsKey('testIntegerObj')">
+	    		TESTINTEGEROBJ = #{testIntegerObj,javaType=java.lang.Integer},
+	    	</if>	
+			<if test="_parameter.containsKey('testBoolean')">
+	    		TESTBOOLEAN = #{testBoolean,javaType=boolean},
+	    	</if>	
+			<if test="_parameter.containsKey('password')">
+	    		PASSWORD = #{password,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>	
 			<if test="_parameter.containsKey('parentId')">
 	    		PARENTID = #{parentId,javaType=java.lang.String},
 	    	</if>	
@@ -217,11 +335,17 @@
 					SUBDEMOID = #{subDemo,javaType=java.lang.String},
 		        </if>
 	    	</if>
+			<if test="_parameter.containsKey('testNullIntegerObj')">
+	    		TESTNULLINTEGEROBJ = #{testNullIntegerObj,javaType=java.lang.Integer},
+	    	</if>	
+			<if test="_parameter.containsKey('testNullBigDecimal')">
+	    		TESTNULLBIGDECIMAL = #{testNullBigDecimal,javaType=com.ibm.icu.math.BigDecimal},
+	    	</if>	
 			<if test="_parameter.containsKey('createDate')">
 	    		CREATEDATE = #{createDate,javaType=java.util.Date},
 	    	</if>	
-			<if test="_parameter.containsKey('password')">
-	    		PASSWORD = #{password,javaType=java.lang.String},
+			<if test="_parameter.containsKey('testBigDecimal')">
+	    		TESTBIGDECIMAL = #{testBigDecimal,javaType=com.ibm.icu.math.BigDecimal},
 	    	</if>	
 			<if test="_parameter.containsKey('isValid')">
 	    		ISVALID = #{isValid,javaType=int},
@@ -229,11 +353,8 @@
 			<if test="_parameter.containsKey('loginName')">
 	    		LOGINNAME = #{loginName,javaType=java.lang.String},
 	    	</if>	
-			<if test="_parameter.containsKey('lastUpdateDate')">
-	    		LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date},
-	    	</if>	
 	    </trim>
-	    WHERE TW.ID = #{id} 
+	    WHERE TD.ID = #{id} 
 	</update>  
 
 </mapper>
