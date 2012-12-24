@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -10,6 +11,11 @@
 
 <script type="text/javascript" >
 $(document).ready(function() {
+	
+	$.bindge("dialog_opendialog_event",function(event,id,url,height,width){
+		DialogUtils.dialog(id,url,height,width);
+	});
+	
 	
 	/*
 		常用: 弹出指定链接的对话框<br/>

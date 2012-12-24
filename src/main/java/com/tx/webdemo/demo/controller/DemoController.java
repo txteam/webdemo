@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tx.component.auth.annotation.DependOperateAuth;
 import com.tx.component.mainframe.model.MenuItem;
 import com.tx.component.mainframe.service.MenuService;
 import com.tx.core.paged.model.PagedList;

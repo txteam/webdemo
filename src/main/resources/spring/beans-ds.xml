@@ -77,7 +77,12 @@
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 			<property name="dataSource" ref="datasource"></property>
 			<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
-			<property name="mapperLocations" value="classpath*:com/tx/**/*SqlMap.xml" />
+			<property name="mapperLocations">
+				<array>
+					<value>classpath*:com/tx/component/auth/*SqlMap.xml</value>
+					<value>classpath*:com/boda/**/*SqlMap.xml</value>
+				</array>
+			</property>
 
 			<property name="failFast" value="true"></property>
 			<property name="plugins">

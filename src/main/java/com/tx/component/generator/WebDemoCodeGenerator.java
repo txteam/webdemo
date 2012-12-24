@@ -4,7 +4,7 @@
  * 修改时间:  2012-12-15
  * <修改描述:>
  */
-package com.tx.core.generator;
+package com.tx.component.generator;
 
 
  /**
