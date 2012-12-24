@@ -35,8 +35,14 @@
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 			<property name="dataSource" ref="datasource"></property>
 			<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
-			<property name="mapperLocations" value="classpath*:com/tx/**/*SqlMap.xml" />
-
+			<property name="typeAliasesPackage" value="com.tx.core.mybatis.handler"></property>
+			<property name="mapperLocations">
+				<array>
+					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/webdemo/**/*SqlMap.xml</value>
+					<value>classpath*:com/boda/**/*SqlMap.xml</value>
+				</array>
+			</property>
 			<property name="failFast" value="true"></property>
 			<property name="plugins">
 				<array>
@@ -66,7 +72,7 @@
 		</bean>
 		<alias name="losDatasource" alias="datasource" />
 
-		<jdbc:embedded-database id="hsqldbDataSource">
+		<jdbc:embedded-database id="hsqldbDataSource" type="H2">
 			<jdbc:script location="classpath:hsqldb/02_tables.sql" />
 			<jdbc:script location="classpath:hsqldb/09_initdata.sql" />
 		</jdbc:embedded-database>
@@ -77,8 +83,13 @@
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 			<property name="dataSource" ref="datasource"></property>
 			<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
-			<property name="mapperLocations" value="classpath*:com/tx/**/*SqlMap.xml" />
-
+			<property name="typeAliasesPackage" value="com.tx.core.mybatis.handler"></property>
+			<property name="mapperLocations">
+				<array>
+					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/webdemo/**/*SqlMap.xml</value>
+				</array>
+			</property>
 			<property name="failFast" value="true"></property>
 			<property name="plugins">
 				<array>
@@ -91,7 +102,6 @@
 				</array>
 			</property>
 		</bean>
-
 		<bean id="losDatasource" class="com.tx.core.datasource.DataSourceFactoryBean">
 			<property name="supportP6spy" value="true"></property>
 			<property name="datasourceFinderList">
