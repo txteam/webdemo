@@ -4,7 +4,7 @@
  * 修改时间:  2012-12-16
  * <修改描述:>
  */
-package com.tx.component.mainframe.xmlmodel;
+package com.tx.component.mainframe.config;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 

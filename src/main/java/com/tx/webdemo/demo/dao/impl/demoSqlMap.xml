@@ -37,10 +37,10 @@
 		  FROM WD_DEMO TD
 		 WHERE
 		<trim prefixOverrides="AND | OR">
-			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TD.ID = #{id}
 	        </if>
-	        <if test="@com.tx.core.Ognl@isNotEmpty(loginName)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
 	            AND TD.LOGINNAME = #{loginName}
 	        </if>
 		</trim>
@@ -72,73 +72,73 @@
 				TD.LOGINNAME
 		  FROM WD_DEMO TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TD.NAME = #{name,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(startCreateDate)">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(startCreateDate)">
 				<![CDATA[ AND TD.CREATEDATE >= #{startCreateDate,javaType=java.util.Date} ]]>
 	        </if>
-	        <if test="@com.tx.core.Ognl@isNotEmpty(endCreateDate)">
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(endCreateDate)">
 	        	<![CDATA[ AND TD.CREATEDATE < #{startCreateDate,javaType=java.util.Date} ]]>
 	        </if>
 		
 			<!-- 在编码过程中建议将自动生成部分多余条件删掉 -->
-			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TD.ID = #{id,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testBooleanObj)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testBooleanObj)">  
 	            AND TD.TESTBOOLEANOBJ = #{testBooleanObj,javaType=java.lang.Boolean}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testNullBooleanObj)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testNullBooleanObj)">  
 	            AND TD.TESTNULLBOOLEANOBJ = #{testNullBooleanObj,javaType=java.lang.Boolean}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testInt)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testInt)">  
 	            AND TD.TESTINT = #{testInt,javaType=int}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testIntegerObj)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testIntegerObj)">  
 	            AND TD.TESTINTEGEROBJ = #{testIntegerObj,javaType=java.lang.Integer}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testBoolean)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testBoolean)">  
 	            AND TD.TESTBOOLEAN = #{testBoolean,javaType=boolean}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(password)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
 	            AND TD.PASSWORD = #{password,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(lastUpdateDate)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
 	            AND TD.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(email)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
 	            AND TD.EMAIL = #{email,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
 	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
 	        </if>
 			<if test="subDemo != null">
-				<if test="@com.tx.core.Ognl@isNotEmpty(subDemo.id)">  
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(subDemo.id)">  
 		            AND TD.SUBDEMOID = #{subDemo.id,javaType=java.lang.String}
 		        </if>
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testNullIntegerObj)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testNullIntegerObj)">  
 	            AND TD.TESTNULLINTEGEROBJ = #{testNullIntegerObj,javaType=java.lang.Integer}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testNullBigDecimal)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testNullBigDecimal)">  
 	            AND TD.TESTNULLBIGDECIMAL = #{testNullBigDecimal,javaType=com.ibm.icu.math.BigDecimal}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testBigDecimal)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testBigDecimal)">  
 	            AND TD.TESTBIGDECIMAL = #{testBigDecimal,javaType=com.ibm.icu.math.BigDecimal}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(isValid)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isValid)">  
 	            AND TD.ISVALID = #{isValid,javaType=int}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(loginName)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
 	            AND TD.LOGINNAME = #{loginName,javaType=java.lang.String}
 	        </if>
 		</trim>
 		<choose>  
-	        <when test="@com.tx.core.Ognl@isNotEmpty(orderSql)">  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
 	            ORDER BY #{orderSql}
 	        </when>
 	        <otherwise>  
@@ -154,71 +154,71 @@
 		SELECT COUNT(1)
 		  FROM WD_DEMO TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TD.NAME = #{name,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(startCreateDate)">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(startCreateDate)">
 				<![CDATA[ AND TD.CREATEDATE >= #{startCreateDate,javaType=java.util.Date} ]]>
 	        </if>
-	        <if test="@com.tx.core.Ognl@isNotEmpty(endCreateDate)">
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(endCreateDate)">
 	        	<![CDATA[ AND TD.CREATEDATE < #{startCreateDate,javaType=java.util.Date} ]]>
 	        </if>
 		
 		
-			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TD.ID = #{id,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testBooleanObj)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testBooleanObj)">  
 	            AND TD.TESTBOOLEANOBJ = #{testBooleanObj,javaType=java.lang.Boolean}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testNullBooleanObj)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testNullBooleanObj)">  
 	            AND TD.TESTNULLBOOLEANOBJ = #{testNullBooleanObj,javaType=java.lang.Boolean}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testInt)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testInt)">  
 	            AND TD.TESTINT = #{testInt,javaType=int}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testIntegerObj)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testIntegerObj)">  
 	            AND TD.TESTINTEGEROBJ = #{testIntegerObj,javaType=java.lang.Integer}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testBoolean)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testBoolean)">  
 	            AND TD.TESTBOOLEAN = #{testBoolean,javaType=boolean}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(password)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
 	            AND TD.PASSWORD = #{password,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(lastUpdateDate)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
 	            AND TD.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(email)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
 	            AND TD.EMAIL = #{email,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
 	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
 	        </if>
 			<if test="subDemo != null">
-				<if test="@com.tx.core.Ognl@isNotEmpty(subDemo.id)">  
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(subDemo.id)">  
 		            AND TD.SUBDEMOID = #{subDemo.id,javaType=java.lang.String}
 		        </if>
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testNullIntegerObj)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testNullIntegerObj)">  
 	            AND TD.TESTNULLINTEGEROBJ = #{testNullIntegerObj,javaType=java.lang.Integer}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testNullBigDecimal)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testNullBigDecimal)">  
 	            AND TD.TESTNULLBIGDECIMAL = #{testNullBigDecimal,javaType=com.ibm.icu.math.BigDecimal}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(createDate)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
 	            AND TD.CREATEDATE = #{createDate,javaType=java.util.Date}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(testBigDecimal)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testBigDecimal)">  
 	            AND TD.TESTBIGDECIMAL = #{testBigDecimal,javaType=com.ibm.icu.math.BigDecimal}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(isValid)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isValid)">  
 	            AND TD.ISVALID = #{isValid,javaType=int}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(loginName)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
 	            AND TD.LOGINNAME = #{loginName,javaType=java.lang.String}
 	        </if>
 		</trim>
@@ -283,7 +283,7 @@
 		parameterType="com.tx.webdemo.demo.model.Demo">
 		DELETE FROM WD_DEMO TD WHERE
 		<trim prefixOverrides="AND | OR">
-			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TD.ID = #{id}
 	        </if>
 		</trim>
