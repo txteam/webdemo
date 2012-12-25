@@ -64,7 +64,7 @@ $(document).ready(function() {
 		rownumbers: true,
 		jsonReader: {
 			id: "id",
-			cell: "cell",
+			cell: null,
 			total : "total",
 			page : "page",
 			userdata: "userdata",
