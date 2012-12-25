@@ -23,7 +23,7 @@
 }
 html,body{
     height: 100%;
-    width: 100%;
+    width: 100% - 1000px;
     margin:0px;
     margin-top: 0px;
     margin-left: 0px;
@@ -34,10 +34,10 @@ html,body{
     padding-left: 0px;
     padding-bottom: 0px;
     padding-right: 0px;
-    overflow-y:hidden;
-    overflow-x:hidden;
+    overflow-y:visible;
+    overflow-x:visible;
 }
-body{
+html{
     overflow-y:auto;
     overflow-x:hidden;
 }

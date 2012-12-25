@@ -736,8 +736,8 @@ DialogUtils.openAlert = function(config, msg, yes) {
     	id: openAlertId,
         autoOpen: true,
         closeOnEscape: false,
-        width: msg.length < 50 ? 300 : 'auto',
-        height: msg.length < 50 ? 130 : 'auto',
+        width: (msg && ("" + msg).length < 50) ? 300 : 'auto',
+        height: (msg && ("" + msg).length < 50) ? 130 : 'auto',
         modal: true,
         dialogClass: "alert",
         captionButtons: {
@@ -788,8 +788,8 @@ DialogUtils.openConfirm = function(config, msg, yes , no) {
     	id: openConfirmId,
         autoOpen: true,
         closeOnEscape: false,
-        width: msg.length < 50 ? 300 : 'auto',
-        height: msg.length < 50 ? 130 : 'auto',
+        width: (msg && ("" + msg).length < 50) ? 300 : 'auto',
+        height: (msg && ("" + msg).length < 50) ? 130 : 'auto',
         modal: true,
         captionButtons: {
             pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},

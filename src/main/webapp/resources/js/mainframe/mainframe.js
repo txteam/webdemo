@@ -403,6 +403,7 @@ Layout.prototype._initMainTabs = function() {
     _this.$centerMain.bind("centerMainSpliterResized",function(event){
         $mainTabs.trigger("centerMainResize");
     });
+    
     this.$centerMain.wijsplitter({
         expanded : function(e) {
             $mainTabs.trigger("centerMainResize");
