@@ -552,11 +552,12 @@ DialogUtils.createOrOpenDiaglog = function(config){
 	config=$.extend({id:openWinId},this.defaultConfigs, config);
 	var $dialogHandle = $("#"+openWinId);
 	if($("#"+openWinId).size() == 0){
-	   var $hiddenDiv = $("<div/>").attr("id",openWinId).hide();
-	   $dialogHandle = $hiddenDiv;
-	   $(document).append($dialogHandle);
-	   $dialogHandle.wijdialog(config);
+		$dialogHandle = $("<div/>").attr("id",openWinId).hide();
+		config.title && $dialogHandle.attr("title",config.title);
+		$(document).append($dialogHandle);
+		$dialogHandle.wijdialog(config);
 	}else{
+		config.title && $dialogHandle.attr("title",config.title)
 		$dialogHandle.wijdialog(config);
 	    //if(!$dialogHandle.wijdialog("isOpen")){
 	    //    $dialogHandle.wijdialog("open");
@@ -570,6 +571,7 @@ DialogUtils.createOrOpenDiaglog = function(config){
 DialogUtils.openDialog = function(config){
 	config=$.extend({},{
 	    id:'dialog_',
+	    title:null,
 	    autoOpen: true,
 	    modal: false,
 	    width: 'auto',
@@ -584,7 +586,7 @@ DialogUtils.openDialog = function(config){
         },
         contentUrl: ''
 	}, config);
-	this.createOrOpenDiaglog(config);
+	DialogUtils.createOrOpenDiaglog(config);
 };
 /**
  *	打开openWin默认具有dialog所有按钮，未自动添加任何button
@@ -592,6 +594,7 @@ DialogUtils.openDialog = function(config){
 DialogUtils.openSimpleDialog = function(config){
 	config=$.extend({},{
 	    id:'dialog_',
+	    title:null,
 	    autoOpen: true,
 	    width: 'auto',
 	    modal: false,
@@ -606,18 +609,18 @@ DialogUtils.openSimpleDialog = function(config){
         },
         contentUrl: ''
 	}, config);
-	this.createOrOpenDiaglog(config);
+	DialogUtils.createOrOpenDiaglog(config);
 };
 /**
  *	打开openWin默认具有dialog所有按钮，未自动添加任何button
  */
-DialogUtils.dialog = function(id,url,width,height,close){
+DialogUtils.dialog = function(id,title,url,width,height,close){
 	var config = $.extend({
         id:'dialog_',
         autoOpen: true,
-        width: 'auto',
+        width: width && $.isNumeric(width) ? width : 'auto',
+        height: height && $.isNumeric(height) ? height : 'auto',
         modal: false,
-        height: 'auto',
         captionButtons: {
             pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
             refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
@@ -628,22 +631,21 @@ DialogUtils.dialog = function(id,url,width,height,close){
         }
 	},{
 	    id: id,
-	    width: width,
-        height: height,
+        title: title,
         contentUrl: url,
         close : function(){
             close && close.call(this);
         }
 	});
-	this.createOrOpenDiaglog(config);
+	DialogUtils.createOrOpenDiaglog(config);
 };
-DialogUtils.modalDialog = function(id,url,width,height,close){
+DialogUtils.modalDialog = function(id,title,url,width,height,close){
 	var config = $.extend({
         id:'dialog_',
         autoOpen: true,
-        width: 'auto',
+        width: width && $.isNumeric(width) ? width : 'auto',
+        height: height && $.isNumeric(height) ? height : 'auto',
         modal: true,
-        height: 'auto',
         captionButtons: {
             pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
             refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
@@ -654,14 +656,13 @@ DialogUtils.modalDialog = function(id,url,width,height,close){
         }
 	},{
 	    id: id,
-	    width: width,
-        height: height,
         contentUrl: url,
+        title: title,
         close : function(){
             close && close.call(this);
         }
 	});
-	this.createOrOpenDiaglog(config);
+	DialogUtils.createOrOpenDiaglog(config);
 };
 /**
  * 根据id关闭对话框
@@ -704,13 +705,13 @@ DialogUtils.openTip = function(config,content,seconds,yes) {
         }
     }, config);
     
-    var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
+    var $dialogHandle = $("<div/>").attr("id",config.id).hide();
+    $dialogHandle.attr("title","提醒");
     function removeTempTipHandle(){
     	yes && yes.call(this);
-        $hiddenDiv.remove();
+        $dialogHandle.remove();
     }
-    $(document).append($hiddenDiv);
-    $dialogHandle = $hiddenDiv;
+    $(document).append($dialogHandle);
     $dialogHandle.html(content);
     $dialogHandle.wijdialog(config);
     autoCloseTimer = window.setTimeout(removeTempTipHandle, seconds * 1000);
@@ -755,13 +756,12 @@ DialogUtils.openAlert = function(config, msg, yes) {
         }}]
     }, config);
     
-    var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
+    var $dialogHandle = $("<div/>").attr("id",config.id).hide();
     function removeTempTipHandle(){
     	yes && yes.call(this);
-        $hiddenDiv.remove();
+        $dialogHandle.remove();
     }
-    $(document).append($hiddenDiv);
-    $dialogHandle = $hiddenDiv;
+    $(document).append($dialogHandle);
     //TODO:添加警告的样式
     $dialogHandle.html(msg);
     $dialogHandle.wijdialog(config);
@@ -812,12 +812,11 @@ DialogUtils.openConfirm = function(config, msg, yes , no) {
         }}]
     }, config);
     
-    var $hiddenDiv = $("<div/>").attr("id",config.id).hide();
+    var $dialogHandle = $("<div/>").attr("id",config.id).hide();
     function removeTempTipHandle(){
-        $hiddenDiv.remove();
+        $dialogHandle.remove();
     }
-    $(document).append($hiddenDiv);
-    $dialogHandle = $hiddenDiv;
+    $(document).append($dialogHandle);
     $dialogHandle.html(msg);
     $dialogHandle.wijdialog(config);
 }; 

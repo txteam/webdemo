@@ -52,6 +52,7 @@ $(document).ready(function() {
         });
     }
   	
+  	/*
     if($(".queryResult").size() > 0){
   		$(".queryResult").wijgrid({ 
   			//allowColMoving: true,
@@ -59,6 +60,7 @@ $(document).ready(function() {
   	      	scrollMode: "auto" 
   	    }); 
   	}
+  	*/
     
     $("#calendar").wijcalendar({ 
         popupMode: true, 

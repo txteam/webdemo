@@ -17,6 +17,7 @@
 		timezoneText: '时区',
 		currentText: '现在时间',
 		closeText: '关闭',
+		
 		timeFormat: 'HH:mm',
 		amNames: ['AM', 'A'],
 		pmNames: ['PM', 'P'],

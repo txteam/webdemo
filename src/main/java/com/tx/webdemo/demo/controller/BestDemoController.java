@@ -33,7 +33,7 @@ import com.tx.webdemo.demo.service.DemoService;
   * @since  [产品/模块版本]
   */
 @Controller("bestDemoController")
-@RequestMapping("bestDemo")
+@RequestMapping("/bestDemo")
 public class BestDemoController {
     
     @Resource(name="demoService")
@@ -50,14 +50,14 @@ public class BestDemoController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("batchInsertDemoForUse")
+    @RequestMapping("/batchInsertDemoForUse")
     @ResponseBody()
     public boolean batchInsertDemoForUse(){
         List<Demo> demoList = new ArrayList<Demo>();
         String loginName = "testBatchInserDemoNonStop"
                 + DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS");
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 100; i++) {
             Demo newDemo = new Demo();
             newDemo.setName("testName");
             newDemo.setLoginName(loginName + (int) (Math.random() * 10000000));
@@ -81,7 +81,7 @@ public class BestDemoController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("queryDemoList")
+    @RequestMapping("/queryDemoList")
     public String queryDemoList(HashMap<String, Object> params){
         
         List<Demo> demoList = this.demoService.queryDemoList();
@@ -100,6 +100,7 @@ public class BestDemoController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @RequestMapping("/ajax/ajaxQueryDemoList")
     @ResponseBody()
     public List<Demo> ajaxQueryDemoList(HashMap<String, String> params){
         List<Demo> demoList = this.demoService.queryDemoList();
@@ -116,6 +117,7 @@ public class BestDemoController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @RequestMapping("/ajax/ajaxQueryDemoPagedList")
     @ResponseBody()
     public PagedList<Demo> ajaxQueryDemoPagedList(){
         PagedList<Demo> demoPagedList = this.demoService.queryDemoPagedList(1, 10);

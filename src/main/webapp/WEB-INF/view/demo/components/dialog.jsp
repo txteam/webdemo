@@ -15,7 +15,10 @@ $(document).ready(function() {
 		常用: 弹出指定链接的对话框<br/>
 	*/
 	$("#urlDialog").click(function(){ 
-        DialogUtils.dialog("urlDialog",'${contextPath}/view/demo/demoList',900,300,function(){
+        DialogUtils.dialog("urlDialog","url dialog title",'${contextPath}/view/demo/demo',900,300,function(){
+        	DialogUtils.alert("urlDialog close.");
+        });
+        DialogUtils.dialog("urlDialogNoTitle",null,'${contextPath}/view/demo/demo',900,300,function(){
         	DialogUtils.alert("urlDialog close.");
         });
     });
@@ -29,7 +32,7 @@ $(document).ready(function() {
  		3、div 为隐藏
     */
 	$("#divDialog").click(function(){ 
-        DialogUtils.dialog("testDivDialog",null,900,300,function(){
+		DialogUtils.dialog("testDivDialog",'divDialog divDialog',null,900,300,function(){
         	DialogUtils.alert("testDivDialog close.");
         });
     });
@@ -39,12 +42,15 @@ $(document).ready(function() {
 		模态窗口如果想用当前页面的某隐藏div内容时方法同dialog
 	*/
 	$("#modalDialog").click(function(){ 
-        DialogUtils.modalDialog("modalDialog",'${contextPath}/view/demo/demoList',900,300,function(){
+        DialogUtils.modalDialog("modalDialog",'modalDialog title','${contextPath}/view/demo/demo',900,300,function(){
+        	DialogUtils.alert("这个东东可以不要.");
+        });
+        DialogUtils.modalDialog("modalDialog",null,'${contextPath}/view/demo/demo',900,300,function(){
         	DialogUtils.alert("这个东东可以不要.");
         });
     });
 	$("#divModalDialog").click(function(){ 
-        DialogUtils.modalDialog("testDivDialog",null,900,300);
+        DialogUtils.modalDialog("testDivDialog",null,null,900,300);
     });
 	
 	//常用 alert
@@ -72,7 +78,7 @@ $(document).ready(function() {
         	id:'openDialog',
     	    width: '700',
             height: '300',
-            contentUrl: '${contextPath}/view/demo/demoList'
+            contentUrl: '${contextPath}/view/demo/demo'
         });
     });
 	$("#closeDialog").click(function(){ 
@@ -83,7 +89,7 @@ $(document).ready(function() {
         	id:'openSimpleWin',
     	    width: '900',
             height: '450',
-            contentUrl: '${contextPath}/view/demo/demoList'
+            contentUrl: '${contextPath}/view/demo/demo'
         });
     });
 	$("#openTip").click(function(){ 
@@ -104,7 +110,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<div class="header">最佳实践>dialog</div>
+<div class="header">component>dialog</div>
 <br/>
 弹出指定链接的对话框：<button id="urlDialog" type="button">urlDialog</button>
 <br/>
@@ -143,6 +149,7 @@ http://wijmo.com<br/>
 	1、id 为"dialog_"  <br/>
  	2、url 指定为 null
  	3、div 为隐藏
+ 	4、如果不想通过入参指定title这里可以t
 </div>
 </body>
 </html>

@@ -49,7 +49,7 @@
 					<bean
 						class="com.tx.core.mybatis.interceptor.PagedDiclectStatementHandlerInterceptor">
 						<property name="dialect">
-							<bean class="org.hibernate.dialect.HSQLDialect">
+							<bean class="org.hibernate.dialect.H2Dialect">
 							</bean>
 						</property>
 					</bean>

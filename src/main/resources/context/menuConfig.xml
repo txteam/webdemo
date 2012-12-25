@@ -96,6 +96,9 @@
 				target="mainTabs" selectRefresh="false"/>
 			<menu id="components_datetimespicker" text="时间控件" href="/view/demo/components/timepicker"
 				target="mainTabs" selectRefresh="false"/>
+			<menu id="components_grid" text="表格控件" href="/view/demo/components/grid"
+				target="mainTabs" selectRefresh="false"/>
 		</menu>
+		
 	</tool_menus_config>
 </menu_config>
