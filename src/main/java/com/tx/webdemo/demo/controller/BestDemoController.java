@@ -12,12 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.webdemo.demo.model.Demo;
 import com.tx.webdemo.demo.service.DemoService;
@@ -91,6 +94,26 @@ public class BestDemoController {
     }
     
     /**
+     * 
+      *<功能简述>
+      *<功能详细描述>
+      * @param params
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/ajax/ajaxQueryPagedDemoList")
+    @ResponseBody()
+    public PagedList<Demo> ajaxQueryPagedDemoList(HashMap<String, Object> params) {
+        PagedList<Demo> demoPagedList = this.demoService.queryDemoPagedList(1,
+                10);
+        
+        return demoPagedList;
+    }
+    
+    /**
       * ajax查询demo列表
       * <功能详细描述>
       * @param params
@@ -102,7 +125,7 @@ public class BestDemoController {
      */
     @RequestMapping("/ajax/ajaxQueryDemoList")
     @ResponseBody()
-    public List<Demo> ajaxQueryDemoList(HashMap<String, String> params){
+    public List<Demo> ajaxQueryDemoList(HashMap<String, Object> params){
         List<Demo> demoList = this.demoService.queryDemoList();
         
         return demoList;
@@ -120,7 +143,11 @@ public class BestDemoController {
     @RequestMapping("/ajax/ajaxQueryDemoPagedList")
     @ResponseBody()
     public PagedList<Demo> ajaxQueryDemoPagedList(){
-        PagedList<Demo> demoPagedList = this.demoService.queryDemoPagedList(1, 10);
+        HttpServletRequest request = WebContextUtils.getRequest();
+        int pageIndex = NumberUtils.toInt(request.getParameter("pageIndex"),1);
+        int pageSize = NumberUtils.toInt(request.getParameter("pageSize"),10);
+        
+        PagedList<Demo> demoPagedList = this.demoService.queryDemoPagedList(pageIndex, pageSize);
         
         return demoPagedList;
     }

@@ -207,7 +207,9 @@ $(document).ready(function() {
 	   		{name:'password',index:'amount', align:"right"},
 	   		{name:'testBigDecimal',index:'tax', align:"right"},		
 	   		{name:'email',index:'total', align:"right"},		
-	   		{name:'lastUpdateDate',index:'note',sortable:false}		
+	   		{name:'lastUpdateDate',index:'note',sortable:false,formatter:function(obj){
+	   			return typeof(obj);
+	   		}}		
 	   	],
 	   	//定义翻页用的导航栏，必须是有效的html元素。翻页工具栏可以放置在html页面任意位置
 	   	//pager: 'ajaxTablePager1',
@@ -266,6 +268,71 @@ $(document).ready(function() {
         }, 100);
     });
 	//jQuery("#ajaxTablePager1").jqGrid('navGrid','#ajaxTablePager1',{edit:false,add:false,del:false});
+
+
+	
+	jQuery("#ajaxTable2").jqGrid({
+		//获取数据的地址
+	   	url:'${contextPath}/bestDemo/ajax/ajaxQueryDemoPagedList',
+	   	//autoencode 当为 ture 时对url进行编码
+	   	//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+		datatype: "json",
+		//ajax提交方式。POST或者GET，默认GET
+		mtype:'POST',
+		//列显示名称，是一个数组对象
+	   	colNames:['选择','姓名', '登录名', '密码','BigDecimal','电子邮箱','最后更新时间'],
+	   	//name 列显示的名称,index 传到服务器端用来排序用的列名称,width 列宽度
+	   	//align 对齐方式；sortable  是否可以排序
+	   	colModel:[
+	   		{name:'id',index:'id', width:'40'},
+	   		{name:'name',index:'name'},
+	   		{name:'loginName',index:'name asc, invdate'},
+	   		{name:'password',index:'amount', align:"right"},
+	   		{name:'testBigDecimal',index:'tax', align:"right"},		
+	   		{name:'email',index:'total', align:"right"},		
+	   		{name:'lastUpdateDate',index:'note',sortable:false}		
+	   	],
+	   	//定义翻页用的导航栏，必须是有效的html元素。翻页工具栏可以放置在html页面任意位置
+	   	//pager: 'ajaxTablePager1',
+	   	//rowNum	在grid上显示记录条数，这个参数是要被传递到后台
+	   	rowNum:10,
+	   	//rowList	一个下拉选择框，用来改变显示记录数，当选择时会覆盖rowNum参数传递到后台
+	   	//sortname	默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台
+	   	//viewrecords	定义是否要显示总记录数
+	   	
+	   	//启用或者禁用控制表格显示、隐藏的按钮，只有当caption 属性不为空时起效
+	   	hidegrid: false,
+	   	
+	   	//当执行ajax请求时要干什么。disable禁用ajax执行提示；enable默认，当执行ajax请求时的提示； block启用Loading提示，但是阻止其他操作
+	   	loadui: 'block',
+	   	
+	   	//定义是否可以多选
+	   	multiselect:true,
+	   	//只有当multiselect = true.起作用，当multiboxonly 为ture时只有选择checkbox才会起作用
+	   	multiboxonly:true,
+	   	
+	   	sortorder: "desc",
+	    caption:"pagedlist Example",
+	    //如果为ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度。
+	    //如果父元素宽度改变，为了使表格宽度能够自动调整则需要实现函数：setGridWidth
+	    autowidth: true,
+		//表格高度，可以是数字，像素值或者百分比  height:'auto' default 150
+		//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.default : false
+		rownumbers: true,
+		//是否要显示总记录数 default: false
+		viewrecords: true,
+		height:'auto',
+		pager: 'ajaxTablePager2',
+		jsonReader: {
+			root:'list',
+			page:'pageIndex',
+			repeatitems: false,
+			total: function(){
+				return 10;	
+			},
+			records:'count'
+		}
+	});
 });
 </script>
 </head>
@@ -322,18 +389,29 @@ query c:foreach table 2<br/>
 <br/>
 
 <div>
-ajaxGrid:<br/>
+ajaxGrid1:<br/>
 	<table id="ajaxTable1"></table>
 	<div id="ajaxTablePager1"></div>
 </div>
 <br/>
+<br/>
+
 <div>
+ajaxGrid2:<br/>
+	<table id="ajaxTable2"></table>
+	<div id="ajaxTablePager2"></div>
+</div>
+<br/>
+
+<br/>
+<br/>
 
 <br/>
 <br/>
 参考<br/>
 http://www.trirand.com/blog/jqgrid/jqgrid.html<br/>
 http://www.cnblogs.com/younggun/archive/2012/08/27/2657922.html<br/>
+http://blog.csdn.net/lpy3654321/article/details/7936301<br/>
 
 
 </body>
