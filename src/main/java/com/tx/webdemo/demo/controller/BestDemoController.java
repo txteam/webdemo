@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -146,7 +148,10 @@ public class BestDemoController {
         HttpServletRequest request = WebContextUtils.getRequest();
         int pageIndex = NumberUtils.toInt(request.getParameter("pageIndex"),1);
         int pageSize = NumberUtils.toInt(request.getParameter("pageSize"),10);
-        
+        Map<String, String[]> paramMap = request.getParameterMap();
+        for(Entry<String,String[]> entry : paramMap.entrySet()){
+            System.out.println(entry.getKey());
+        }
         PagedList<Demo> demoPagedList = this.demoService.queryDemoPagedList(pageIndex, pageSize);
         
         return demoPagedList;

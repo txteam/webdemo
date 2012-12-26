@@ -23,7 +23,7 @@
 }
 html,body{
     height: 100%;
-    width: 100% - 1000px;
+    width: 100%;
     margin:0px;
     margin-top: 0px;
     margin-left: 0px;
@@ -37,9 +37,13 @@ html,body{
     overflow-y:visible;
     overflow-x:visible;
 }
+body{
+    height: 99%;
+    width: 99%;
+}
 html{
     overflow-y:auto;
-    overflow-x:hidden;
+    overflow-x:auto;
 }
 frameset{
     margin: 0px 0px 0px 0px;
