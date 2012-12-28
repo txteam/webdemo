@@ -170,7 +170,7 @@ $(document).ready(function() {
 		先弄一个这个功能顶上
 	*/
 	$("#prepare").click(function(){
-		jQuery.post("${contextPath}/bestDemo/batchInsertDemoForUse",function(data){
+		jQuery.post("${contextPath}/demo/batchInsertDemoForUse",function(data){
 			alert(data);
 		},"json")
 		//batchInsertDemoForUse
@@ -218,19 +218,16 @@ $(document).ready(function() {
 	   	//rowList	一个下拉选择框，用来改变显示记录数，当选择时会覆盖rowNum参数传递到后台
 	   	//sortname	默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台
 	   	//viewrecords	定义是否要显示总记录数
-	   	
 	   	//启用或者禁用控制表格显示、隐藏的按钮，只有当caption 属性不为空时起效
 	   	hidegrid: false,
+	   	//datastr:'jsonstring',
 	   	
 	   	//当执行ajax请求时要干什么。disable禁用ajax执行提示；enable默认，当执行ajax请求时的提示； block启用Loading提示，但是阻止其他操作
 	   	loadui: 'block',
-	   	
 	   	//定义是否可以多选
 	   	multiselect:true,
 	   	//只有当multiselect = true.起作用，当multiboxonly 为ture时只有选择checkbox才会起作用
 	   	multiboxonly:true,
-	   	
-	   	
 	   	//ajaxGridOptions	object	对ajax参数进行全局设置，可以覆盖ajax事件：error，complete 和 beforeSend	空值	是
 		//ajaxSelectOptions	object	对ajax的select参数进行全局设置，设置editoptions跟searchoptions 参数的select属性值
 	    sortorder: "desc",
@@ -244,16 +241,21 @@ $(document).ready(function() {
 		rownumbers: true,
 		//是否要显示总记录数 default: false
 		viewrecords: true,
-		
 		jsonReader: {
-			repeatitems: false,
-			id: "id",
+        	root: function(obj){
+				return (obj && $.isArray(obj)) ? obj : [];
+			},
+			page: function(){
+				return 1;
+			},
+			total: function(){
+				return 1;
+			},
 			records : function(obj){
 				return (obj && $.isArray(obj)) ? obj.length : 0;
 			},
-			root: function(obj){
-				return (obj && $.isArray(obj)) ? obj : [];
-			}
+        	repeatitems: false,
+			id: "id"
 		}
 	});
 	
@@ -263,7 +265,6 @@ $(document).ready(function() {
             clearTimeout(resizeTimer);
         }
         resizeTimer = setTimeout(function() {
-        	alert($("body").innerWidth());
         	jQuery("#ajaxTable1").jqGrid('setGridWidth',jQuery("body").innerWidth());
         }, 100);
     });
@@ -324,15 +325,20 @@ $(document).ready(function() {
 		height:'auto',
 		pager: 'ajaxTablePager2',
 		jsonReader: {
-			root:'list',
-			page:'pageIndex',
+			root: 'list',
+			page: 'pageIndex',
+			total: function(obj){
+				return (obj.count / obj.pageSize) + ((obj.count % obj.pageSize) > 0 ? 1 : 0);
+			},
+			records: 'count',
 			repeatitems: false,
 			total: function(){
 				return 10;	
 			},
-			records:'count'
+			id: "id"
 		}
 	});
+	jQuery("#ajaxTable2").jqGrid('navGrid','#ajaxTablePager2',{edit:true,add:true,del:true});
 });
 </script>
 </head>

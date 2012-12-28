@@ -58,6 +58,15 @@
 			<menu id="user_mananger" text="人员管理"></menu>
 			<menu id="base_data_mananger" text="基础数据管理"></menu>
 		</menu>
+		
+		<menu id="component_demo" text="控件demo">
+			<menu id="component_grid_demo" text="表格控件">
+				<menu id="components_grid" text="表格控件" href="/view/demo/components/grid"
+					target="mainTabs" selectRefresh="false"/>
+				<menu id="components_jqgrid" text="jqgrid控件" href="/view/demo/components/jqGrid"
+					target="mainTabs" selectRefresh="false"/>
+			</menu>
+		</menu>
 	</main_menus_config>
 	
 	
