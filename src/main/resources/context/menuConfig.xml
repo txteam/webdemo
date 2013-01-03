@@ -58,15 +58,6 @@
 			<menu id="user_mananger" text="人员管理"></menu>
 			<menu id="base_data_mananger" text="基础数据管理"></menu>
 		</menu>
-		
-		<menu id="component_demo" text="控件demo">
-			<menu id="component_grid_demo" text="表格控件">
-				<menu id="components_grid" text="表格控件" href="/view/demo/components/grid"
-					target="mainTabs" selectRefresh="false"/>
-				<menu id="components_jqgrid" text="jqgrid控件" href="/view/demo/components/jqGrid"
-					target="mainTabs" selectRefresh="false"/>
-			</menu>
-		</menu>
 	</main_menus_config>
 	
 	
@@ -100,14 +91,19 @@
 				target="mainTabs" selectRefresh="false"/>
 		</menu>
 		
-		<menu id="demoMananger" text="控件demo">
-			<menu id="components_dialog" text="对话框控件" href="/view/demo/components/dialog"
+		<menu id="component_mananger" text="控     件">
+			<menu id="component_grid" text="表格控件" href="/view/component/grid/index"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="components_datetimespicker" text="时间控件" href="/view/demo/components/timepicker"
+			<menu id="component_tree" text="树控件" href="/view/component/tree/index"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="components_grid" text="表格控件" href="/view/demo/components/grid"
+			<menu id="component_slider" text="滑块控件" href="/view/component/slider/index"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="component_menu" text="菜单控件" href="/view/component/menu/index"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="component_progressbar" text="滑块控件" href="/view/component/progressbar/index"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="component_tooltip" text="滑块控件" href="/view/component/tooltip/index"
 				target="mainTabs" selectRefresh="false"/>
 		</menu>
-		
 	</tool_menus_config>
 </menu_config>

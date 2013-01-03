@@ -96,7 +96,7 @@ $(document).ready(function() {
         		if(!_self.eventTypeCallbackMapping[eventType]){
         			_self.eventTypeCallbackMapping[eventType] = $.Callbacks("unique");
         			_self.$globalEventHandle.bind(eventType, data, function(event){
-        				console.log(Array.prototype.slice.call(arguments));
+        				//console.log(Array.prototype.slice.call(arguments));
         				_self.eventTypeCallbackMapping[eventType].fireWith(callbackFn,Array.prototype.slice.call(arguments));
         			});
         		}
@@ -1393,4 +1393,116 @@ window.confirm = function(msg, yes , no){
     });
 })(jQuery);
 /** ********** component grid end   ************** **/
+
+
+/** ********** component iframe start ************** **/
+
+(function($, undefined)
+{   
+    //iframe组件空间支持
+    /*
+     *  支持iframe高度动态运算
+     *  如果不添加height,width的网运算
+     *  
+     */
+    $.widget("tx.txiframe",
+    {
+        options : {
+            height: null,
+            width: null
+        },
+        _height: function(){
+            var element = this.element;
+            var _this = this;
+            var options = this.options;
+            
+            var $visibleIframes = element.find("iframe:visible");
+            
+            if(!options.height ||
+                    !$.isFunction(options.height) ||
+                    !$.isNumeric(options.height)){
+                $visibleIframes.height($(element).innerHeight());            
+            }
+            
+            if($.isFunction(options.height)){
+                $.each($visibleIframes,function(index,$iframeTemp){
+                    options.height.apply($iframeTemp,Array.prototype.slice.call(arguments));
+                });
+            }else if($.isNumeric(options.height)){
+                $visibleIframes.height(options.height);
+            }
+        },
+        _width: function(){
+            var element = this.element;
+            var _this = this;
+            var options = this.options;
+            
+            var $visibleIframes = element.find("iframe:visible");
+            
+            if(!options.width ||
+                    !$.isFunction(options.width) ||
+                    !$.isNumeric(options.width)){
+                $visibleIframes.width($(element).innerWidth());            
+            }
+            
+            if($.isFunction(options.width)){
+                $.each($visibleIframes,function(index,$iframeTemp){
+                    options.height.apply($iframeTemp,Array.prototype.slice.call(arguments));
+                });
+            }else if($.isNumeric(options.width)){
+                $visibleIframes.width(options.width);
+            }
+        },
+        _create: function()
+        {
+            //widget常量
+            var element = this.element;
+            var _this = this;
+            var options = this.options;
+            
+            //计算高度与宽度
+            _this._height();
+            _this._width();
+            
+            //如果设置了自动宽度，则自动监听window.resize事件，实现grid的大小随页面变化
+            var resizeTimer = null;
+            $(window).resize(function() {
+                if (resizeTimer != null) {
+                    clearTimeout(resizeTimer);
+                }
+                resizeTimer = setTimeout(function() {
+                    _this._height();
+                    _this._width();
+                }, 100);
+            });
+            
+            //使用到的options中值
+            var _contextPath = options.contextPath;
+            var _themeCookieName = options.themeCookieName;
+            var _skins = options.skins != null ? options.skins : _default_skins;
+
+            //清空element中内容
+            element.empty();
+            
+        }, 
+        _init : function()
+        {
+            //widget常量
+            var element = this.element;
+            var _this = this;
+            var options = this.options;
+            
+            //计算高度与宽度
+            _this._height();
+            _this._width();
+        }, 
+        destroy : function()
+        {
+            
+        }
+    });
+})(jQuery);
+
+/** ********** component iframe end   ************** **/
+
 
