@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -18,44 +19,12 @@ $(document).ready(function() {
 	
     //给body统一加入样式
     $("body").addClass("ui-widget-content");
-	$("form").addClass("formee");
-	$("button,input[type=button],:input[type=submit]").height(26).button();
+	$("button,input[type=button],:input[type=submit]").height(24).button();
 	if($(".form-table").size() > 0){
+		$(".form-table").addClass("formee");
     	$(".form-table table").addClass("ui-widget-content");
     	$(".form-table table td,th").addClass("ui-widget-content");
     }
-	
-    /*
-    //统一页面form元素风格
-    $("button,input[type=button],:input[type=submit]").button();
-    $(":input[type=text],:input[type=password],textarea").wijtextbox(); 
-    $("select").wijdropdown();
-    //阻止button的默认事件
-    //$("button,:input[type=button],:input[type=submit]").click(function(){ return false; });
-    
-    //处理具有header样式的自动渲染
-    if($(".header").size() > 0){
-        $(".header").prepend('<span class="ui-icon ui-icon-gear" style="float:left;"></span>');
-        $(".header").addClass("ui-state-default ui-corner-all ui-tabs-selected ui-state-active page-title-header");
-    }
-    
-    if($(".form-table").size() > 0){
-    	$(".form-table table").addClass("ui-widget-content");
-    	$(".form-table table td,th").addClass("ui-widget-content");
-    }
-    */
-    
-
-  	
-  	/*
-    if($(".queryResult").size() > 0){
-  		$(".queryResult").wijgrid({ 
-  			//allowColMoving: true,
-  			//allowColSizing: true,
-  	      	scrollMode: "auto" 
-  	    }); 
-  	}
-  	*/
     
     $("#calendar").wijcalendar({ 
         popupMode: true, 
@@ -123,13 +92,12 @@ $(document).ready(function() {
             }
         });
     }
+    
 	$("#demoList").txGrid({
-		//定义是否可以多选
+		type:'simple',
 	   	multiselect:true,
-	   	//只有当multiselect = true.起作用，当multiboxonly 为ture时只有选择checkbox才会起作用
 	   	multiboxonly:true,
-	   	//固定表头
-	   	height: 400
+		height: $("#listData").find("tr").size() < 10 ? 'auto' : 255
 	});
 });
 </script>
@@ -153,6 +121,7 @@ $(document).ready(function() {
 		<col/>
 		<col/>
 	</colgroup>
+	<tbody>
 	<tr>
 		<th>姓名:</th>
 		<td><input name="name" type="text" value='<c:out value="${name }"></c:out>'/></td>
@@ -170,6 +139,7 @@ $(document).ready(function() {
 			</select>
 		</td>
 	</tr>
+	</tbody>
 	<tr>
 		<th>最小创建时间:</th>
 		<td>
@@ -194,7 +164,8 @@ $(document).ready(function() {
 </div>
 <br/>
 
-<table id="demoList" class="query-result" style="height:260px;">
+<div class="list-table">
+<table id="demoList">
 	<thead>
 		<th>行号</th>
 		<th>LoginName</th>
@@ -202,7 +173,7 @@ $(document).ready(function() {
 		<th>创建时间</th>
 		<th>最后更新时间</th>
 	</thead>
-	<tbody>
+	<tbody id="listData">
 		<c:forEach items="${demoList}" var="demo" varStatus="status">
 			<tr>
 				<td>${status.index}</td>
@@ -214,12 +185,13 @@ $(document).ready(function() {
 		</c:forEach>
 	</tbody>
 </table>
-<div class="button-div">
+<div class="operRow">
 	<button id="prepare" type="button">prepare</button>
 	&nbsp;&nbsp;
 	<button id="add" type="button">增加</button>
 	&nbsp;&nbsp;
 	<button id="add" type="button">删除</button>
+</div>
 </div>
 </form:form>
 </body>

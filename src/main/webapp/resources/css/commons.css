@@ -1,30 +1,81 @@
 @charset "utf-8";
 /* 重写wijmo样式*/
-.wijmo-wijdialog .wijmo-wijdialog-hasframe{
-	overflow-x:hidden;
-	overflow-y:auto;
+.wijmo-wijdialog .wijmo-wijdialog-hasframe {
+    overflow-x: hidden;
+    overflow-y: auto;
 }
+
 /* 重写jqueryui样式*/
 .ui-tabs .ui-tabs-hide {
     display: none !important;
 }
-.ui-tabs-nav .ui-state-focus{
-    border-left-width:0px;
-    border-top-width:0px;
-    border-right-width:0px;
-    border-bottom-width:0px;
+.ui-tabs-nav .ui-state-focus {
+    border-left-width: 0px;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
 }
+
 /* 定义样式表单 */
 * {
     margin: 0px;
     padding: 0px;
     font-size: 12px;
-    font-family: "Verdana", "Arial","宋体","Helvetica", "sans-serif";
+    font-family: "Verdana", "Arial", "宋体", "Helvetica", "sans-serif";
 }
-html,body{
+
+/* 重写formee样式  */
+/*
+ .formee select,input{
+ padding: 0px;
+ padding-top: 0px;
+ padding-bottom: 0px;
+ margin-top: 0px;
+ margin-bottom: 0px;
+ padding-left: 2px;
+ padding-right: 2px;
+ }
+ .formee .form-table input,button,checkbox,radio,select,option{
+ height: 20px;
+ }
+ .formee .form-table select,option{
+ height: 20px;
+ max-height: 20px;
+ }
+ */
+
+/* 定义frame,iframe样式 */
+frameset {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    border: 0px;
+    border-style: none;
+    z-index: 0;
+}
+frame {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    border: 0px;
+    border-style: none;
+    z-index: 0;
+}
+iframe {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    padding-top: 0px;
+    margin-top: 0px;
+    position: relative;
+    border: 0px;
+    border-style: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* 定义通用页面样式  */
+html, body {
     height: 100%;
     width: 100%;
-    margin:0px;
+    margin: 0px;
     margin-top: 0px;
     margin-left: 0px;
     margin-bottom: 0px;
@@ -34,44 +85,19 @@ html,body{
     padding-left: 0px;
     padding-bottom: 0px;
     padding-right: 0px;
-    overflow-y:visible;
-    overflow-x:visible;
+    overflow-y: visible;
+    overflow-x: visible;
 }
-body{
+body {
     height: 99%;
     width: 99%;
 }
-html{
-    overflow-y:auto;
-    overflow-x:auto;
+html {
+    overflow-y: auto;
+    overflow-x: auto;
 }
-frameset{
-    margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 0px;
-    border: 0px;
-    border-style: none;
-    z-index: 0;
-}
-frame{
-    margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 0px;
-    border: 0px;
-    border-style: none;
-    z-index: 0;
-}
-iframe{
-    margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 0px;
-    padding-top:0px;
-    margin-top:0px;
-    position:relative;
-    border: 0px;
-    border-style: none;
-    overflow:hidden;
-    z-index: 0;
-}
-img,form{
-    border:none;
+img, form {
+    border: none;
 }
 a {
     color: black;
@@ -79,8 +105,8 @@ a {
     text-decoration: none;
 }
 
-/*  page  */
-.page-title-header{
+/*  page header  */
+.page-title-header {
     width: 100%;
     height: 22px;
     padding-top: 8px;
@@ -88,99 +114,105 @@ a {
     padding-left: 6px;
 }
 
-/* ********************************tabForm start************************************* */
+/* form table */
 .form-table{
-    margin-bottom:5px;
+    margin-bottom: 5px;
 }
-
 .form-table table {
-    table-layout:fixed;
-    width:100%;
-    text-overflow:ellipsis;
-    border-collapse:collapse;
+    table-layout: fixed;
+    width: 100%;
+    text-overflow: ellipsis;
+    border-collapse: collapse; 
 }
-
-.form-table table * {
-    vertical-align:middle;
+.form-table * {
+    vertical-align: middle;
 }
-
-.form-table div,span,select,option{
-    vertical-align:middle;
-}
-
-.form-table th, td {
-    line-height:18px;
-    height:22px;
-    max-height:22px;
+.form-table table th,.form-table table td {
+    height: 24px;
+    max-height: 24px;
+    line-height: 24px;
     padding-top: 2px;
-    padding-right: 20px;
     padding-bottom: 2px;
     padding-left: 2px;
+    padding-right: 2px;
 }
-
-.form-table th{
-    height:26px;
-}
-
-.form-table th {
-    text-align:left;
+.form-table table th {
+    text-align: left;
+    font-weight: normal;
+    padding-left: 10px;
     /*border:1px solid #444;*/
-    font-weight:normal;
-    padding-left:10px;
 }
-
-.form-table a {
-    text-decoration:underline;
-}
-/*
-.form-table button,input,select {
-    height: 14px;
-    width: 125px;
-}
-*/
-
 .form-table td {
     /*border:1px solid #444;*/
 }
-
-.form-table td.operRow{
-	line-height:21px;
-    border-top:none;
+.form-table a {
+    text-decoration: underline;
+}
+.form-table td.operRow {
+    line-height: 26px;
+    border-top: none;
     text-align: center;
 }
-
-/*  table */
-.formee .form-table select,input{
-	padding: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	padding-left: 2px;
-	padding-right: 2px;
-}
-.formee .form-table input,button,checkbox,radio,select,option{
-	height: 20px;
-}
-.formee .form-table select,option{
-	height: 20px;
-	max-height: 20px;
+.form-table input[type="text"], .form-table input[type="password"], .form-table input[type="file"], .form-table textarea, .form-table select{
+    height: 20px;
+    max-height: 20px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+    padding-left: 6px;
+    padding-right: 2px;
+    max-width: 157px;
+    font-size: 14px;
 }
 
-/* ********************************tabForm end************************************* */
-
-.narrow {
-    width:100px;
+/* list-table */
+.list-table {
+    
 }
-
-.narrowMin {
-    width:65px;
+.list-table table {
+    text-overflow: ellipsis;
+    border-collapse: collapse; 
 }
-
-div.operRow{
-	width:100%;
-	text-align: right;
-	line-height:24px;
-    border-top:none;
+.list-table * {
+    vertical-align: middle;
+}
+.list-table table th,.list-table table td {
+    height: 20px;
+    max-height: 20px;
+    line-height: 20px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+.list-table table th {
+    height: 24px;
+    text-align: center;
+    font-weight: normal;
+    /*border:1px solid #444;*/
+}
+.list-table td {
+    /*border:1px solid #444;*/
+}
+.list-table a {
+    text-decoration: underline;
+}
+.list-table .operRow {
+    width: 100%;
+    text-align: right;
+    line-height: 26px;
+    border-top: none;
+    padding-right: 200px;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+.list-table input[type="text"], .form-table input[type="password"], .form-table input[type="file"], .form-table textarea, .form-table select{
+    height: 20px;
+    max-height: 20px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+    padding-left: 6px;
+    padding-right: 2px;
+    max-width: 157px;
+    font-size: 14px;
 }
 

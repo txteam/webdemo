@@ -1101,7 +1101,6 @@ window.confirm = function(msg, yes , no){
         	//ajaxList: "对ajax返回List的类型"
         	//ajaxPagedList: "对ajax返回pagedList的类型"
         	type: null,
-        	
         	/*
         	 * 主要属性部分
         	 */
@@ -1125,7 +1124,6 @@ window.confirm = function(msg, yes , no){
         	//如果为ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度。
             //如果父元素宽度改变，为了使表格宽度能够自动调整则需要实现函数：setGridWidth
             autowidth:true,
-        	
             /*
         	 * 次要属性部分
         	 */
@@ -1160,7 +1158,7 @@ window.confirm = function(msg, yes , no){
         	//定义翻页用的导航栏，必须是有效的html元素。翻页工具栏可以放置在html页面任意位置
             pager: null,
             //rowNum	在grid上显示记录条数，这个参数是要被传递到后台
-            rowNum:9999,
+            rowNum: 9999,
             //array 一个下拉选择框，用来改变显示记录数，当选择时会覆盖rowNum参数传递到后台
             rowList:[10,20,50,100,200,500],
             //sortname string 默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台
@@ -1411,21 +1409,14 @@ window.confirm = function(msg, yes , no){
             //widget常量
             var element = this.element;
             var _this = this
-            var options = $.extend({},_this._defaultJqGridOptions,this.options);
+            var options = this.options;
             
-            //如果设置了自动宽度，则自动监听window.resize事件，实现grid的大小随页面变化
-            if(options.autowidth){
-            	$(window).resize(function() {
-			        if (resizeTimer != null) {
-			            clearTimeout(resizeTimer);
-			        }
-			        resizeTimer = setTimeout(function() {
-			        	$(element).jqGrid('setGridWidth',$("body").innerWidth());
-			        }, 100);
-			    });
+            if($.isFunction(options.height)){
+                var heightValue = options.height();
+                options = $.extends(options,{
+                    height: heightValue
+                });
             }
-            var resizeTimer = null;
-
             
             //使用到的options中值
             var _contextPath = options.contextPath;
@@ -1436,10 +1427,21 @@ window.confirm = function(msg, yes , no){
             if(options.type == 'simple'){
             	tableToGrid("#" + $(this.element).attr("id"),options);
             }else{
-            	tableToGrid("#" + $(this.element).attr("id"),options);
+                //options = this.options;$.extend({},_this._defaultJqGridOptions,this.options);
             }
             
-            
+            //如果设置了自动宽度，则自动监听window.resize事件，实现grid的大小随页面变化
+            if(options.autowidth){
+                $(window).resize(function() {
+                    if (resizeTimer != null) {
+                        clearTimeout(resizeTimer);
+                    }
+                    resizeTimer = setTimeout(function() {
+                        $(element).jqGrid('setGridWidth',$("body").innerWidth());
+                    }, 100);
+                });
+            }
+            var resizeTimer = null;
         }, 
         _init : function()
         {
