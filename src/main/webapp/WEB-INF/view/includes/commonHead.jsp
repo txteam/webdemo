@@ -13,12 +13,17 @@
 
 <!-- components start -->
 <!-- 该部分components js待版本稳定后合并入components中 -->
-<script type="text/javascript" src="${contextPath }/js/components/jquery.jqGrid.src.js"></script>
-<script type="text/javascript" src="${contextPath }/js/components/jquery.searchFilter.js"></script>
-<script type="text/javascript" src="${contextPath }/js/components/jquery-ui-sliderAccess.js"></script>
-<script type="text/javascript" src="${contextPath }/js/components/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="${contextPath }/components/js/jquery.jqGrid.src.js"></script>
+<script type="text/javascript" src="${contextPath }/components/js/jquery.searchFilter.js"></script>
+<script type="text/javascript" src="${contextPath }/components/js/jquery-ui-sliderAccess.js"></script>
+<script type="text/javascript" src="${contextPath }/components/js/jquery-ui-timepicker-addon.js"></script>
+<!-- jquery form -->
+<script type="text/javascript" src="${contextPath }/components/js/jquery.form.js"></script>
+<!-- 表格美化 -->
+<script type="text/javascript" src="${contextPath }/components/js/formee.js"></script>
 <!-- 合并加入该js后去掉上面部分引用 -->
 <script type="text/javascript" src="${contextPath }/js/components.js"></script>
+
 <!-- components   end -->
 
 

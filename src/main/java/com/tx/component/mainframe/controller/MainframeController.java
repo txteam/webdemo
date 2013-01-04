@@ -15,8 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.tx.component.auth.context.AuthContext;
+import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.component.mainframe.model.MenuItem;
 import com.tx.component.mainframe.model.Operator;
 import com.tx.component.mainframe.service.MenuService;
@@ -31,6 +33,7 @@ import com.tx.component.mainframe.service.OperatorService;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@SessionAttributes({WebContextUtils.SESSION_CURRENT_AUTHMAP,WebContextUtils.SESSION_CURRENT_OPERATOR})
 @Controller("loginController")
 @RequestMapping("/mainframe")
 public class MainframeController {
@@ -69,6 +72,8 @@ public class MainframeController {
         if (oper == null) {
             return "/view/mainframe/login";
         }
+        
+        model.addAttribute(WebContextUtils.SESSION_CURRENT_OPERATOR, oper);
         
         //初始化用户权限到当前会话中
         AuthContext.getContext()

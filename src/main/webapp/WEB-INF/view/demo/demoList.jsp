@@ -8,16 +8,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>best dialog demo</title>
-<%@include file="../../includes/commonHead.jsp" %>
+<%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
 $(document).ready(function() {
 	/*
 		由于本页面加入了special标志，所以页面需要自己进行渲染
 	*/
+	
     //给body统一加入样式
     $("body").addClass("ui-widget-content");
-    
+	$("form").addClass("formee");
+	$("button,input[type=button],:input[type=submit]").height(26).button();
+	if($(".form-table").size() > 0){
+    	$(".form-table table").addClass("ui-widget-content");
+    	$(".form-table table td,th").addClass("ui-widget-content");
+    }
+	
+    /*
     //统一页面form元素风格
     $("button,input[type=button],:input[type=submit]").button();
     $(":input[type=text],:input[type=password],textarea").wijtextbox(); 
@@ -35,22 +43,9 @@ $(document).ready(function() {
     	$(".form-table table").addClass("ui-widget-content");
     	$(".form-table table td,th").addClass("ui-widget-content");
     }
-    	
+    */
     
-  	
-    
-  	//利用js实现自动长度截取功能
-    if($(".subStr").size() > 0){
-        $.each($(".subStr"), function(index, dom) {
-        	var $dom = $(this);
-            var maxLength = $dom.attr("maxLength") * 1 > 0 ? $dom.attr("maxLength") * 1 : 10;
-            var suffix = $dom.attr("suffix") ? $dom.attr("suffix") : "";
-            if($dom.text().length > maxLength){
-            	$dom.attr("title",$dom.text());
-            	$dom.text($dom.text().substr(0,maxLength) + suffix);
-            }
-        });
-    }
+
   	
   	/*
     if($(".queryResult").size() > 0){
@@ -78,9 +73,7 @@ $(document).ready(function() {
             of: $("#startCreateDate"), 
             offset: '0 2'
         }); 
-    }); 
-
-	
+    });
 	
 	/*
 		为测试准备数据
@@ -88,10 +81,55 @@ $(document).ready(function() {
 		先弄一个这个功能顶上
 	*/
 	$("#prepare").click(function(){
-		jQuery.post("${contextPath}/bestDemo/batchInsertDemoForUse",function(data){
-			alert(data);
-		},"json")
-		//batchInsertDemoForUse
+		$('#demoForm').ajaxSubmit({
+	        dataType: 'json',
+	        url: '${contextPath}/demo/batchInsertDemoForUse',
+	        data: {abc:"abc"},
+	        success: function(data){
+	        	alert(data);
+	        }
+	    });
+	});
+	
+	//查询
+	$("#queryBtn").click(function(){
+		$('#demoForm').attr("action","${contextPath}/bestDemo/queryDemoList");
+		$('#demoForm').submit();
+	});
+	
+	//查询
+	$("#ajaxQueryBtn").click(function(){
+		alert($('#demoForm').size());
+		$('#demoForm').ajaxSubmit({
+	        dataType: 'json',
+	        url: '${contextPath}/bestDemo/queryDemoList',
+	        success: processQuerySuccess
+	    });
+	});
+	//deal query result
+	function processQuerySuccess(data){
+		alert("processQuerySuccess");
+	};
+	
+	//利用js实现自动长度截取功能
+    if($(".subStr").size() > 0){
+        $.each($(".subStr"), function(index, dom) {
+        	var $dom = $(this);
+            var maxLength = $dom.attr("maxLength") * 1 > 0 ? $dom.attr("maxLength") * 1 : 10;
+            var suffix = $dom.attr("suffix") ? $dom.attr("suffix") : "";
+            if($dom.text().length > maxLength){
+            	$dom.attr("title",$dom.text());
+            	$dom.text($dom.text().substr(0,maxLength) + suffix);
+            }
+        });
+    }
+	$("#demoList").txGrid({
+		//定义是否可以多选
+	   	multiselect:true,
+	   	//只有当multiselect = true.起作用，当multiboxonly 为ture时只有选择checkbox才会起作用
+	   	multiboxonly:true,
+	   	//固定表头
+	   	height: 400
 	});
 });
 </script>
@@ -113,34 +151,35 @@ $(document).ready(function() {
 		<col/>
 		<col/>
 		<col/>
-		<col width="25%"/>
+		<col/>
 	</colgroup>
 	<tr>
 		<th>姓名:</th>
-		<td><input name="name" type="text"/></td>
-		<th>数字</th>
-		<td><input name="number" type="text"/></td>
-		<th>选择</th>
+		<td><input name="name" type="text" value='<c:out value="${name }"></c:out>'/></td>
+		<th>数字:</th>
+		<td><input name="number" type="text" value='<c:out value="${number }"></c:out>'/></td>
+		<th>选择:<em class="formee-req">*</em></th>
 		<td>
-				<select name="select">
-					<optgroup label="---请选择---"> 
-						<option>---请选择---</option>
-						<option>---请选择---</option>
-						<option>---请选择---</option>
-						<option>---请选择---</option>
-					</optgroup>
-				</select>
-		
+			<select name="select">
+				<optgroup label="---请选择---"> 
+					<option>---请选择---</option>
+					<option>---请选择---</option>
+					<option>---请选择---</option>
+					<option>---请选择---</option>
+				</optgroup>
+			</select>
 		</td>
 	</tr>
 	<tr>
 		<th>最小创建时间:</th>
 		<td>
 			<div id="calendar"></div> 
-			<input id="startCreateDate" name="startCreateDate" type="text"/>
+			<input id="startCreateDate" name="startCreateDate" type="text"
+				value='<c:out value="${startCreateDate }"></c:out>'/>
 		</td>
-		<th>最大创建时间</th>
-		<td><input name="endCreateDate" type="text"/></td>
+		<th>最大创建时间:</th>
+		<td><input name="endCreateDate" type="text"
+				value='<c:out value="${endCreateDate }"></c:out>'/></td>
 		<th>&nbsp;</th>
 		<td>
 			&nbsp;
@@ -153,13 +192,11 @@ $(document).ready(function() {
 	</tr>
 </table>
 </div>
-
 <br/>
 
-
-<table class="queryResult" style="height:260px;">
+<table id="demoList" class="query-result" style="height:260px;">
 	<thead>
-		<th>选择</th>
+		<th>行号</th>
 		<th>LoginName</th>
 		<th>Name</th>
 		<th>创建时间</th>
@@ -168,9 +205,7 @@ $(document).ready(function() {
 	<tbody>
 		<c:forEach items="${demoList}" var="demo" varStatus="status">
 			<tr>
-				<td>
-					<input name="demoId" type="radio" value="${demo.id }"/>
-				</td>
+				<td>${status.index}</td>
 				<td class="subStr" maxLength="20" suffix="...">${demo.loginName }</td>
 				<td>${demo.name }</td>
 				<td><fmt:formatDate value="${demo.createDate }" pattern="yyyy-MM-dd"></fmt:formatDate></td>

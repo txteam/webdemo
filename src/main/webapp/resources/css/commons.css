@@ -78,6 +78,7 @@ a {
     text-align: left;
     text-decoration: none;
 }
+
 /*  page  */
 .page-title-header{
     width: 100%;
@@ -87,34 +88,9 @@ a {
     padding-left: 6px;
 }
 
-
-/*  table */
-table td,th{
-	height: 18px;
-}
-
-
-
-/* ********************************tabForm************************************* */
+/* ********************************tabForm start************************************* */
 .form-table{
     margin-bottom:5px;
-}
-
-.form-table * {
-    vertical-align:middle;
-}
-
-.form-table input,select {
-    height: 12px;
-    width: 125px;
-}
-
-.form-table .button input,select {
-    height: 28px;
-}
-
-.form-table a {
-    text-decoration:underline;
 }
 
 .form-table table {
@@ -124,9 +100,26 @@ table td,th{
     border-collapse:collapse;
 }
 
-.form-table th, .form-table td {
+.form-table table * {
+    vertical-align:middle;
+}
+
+.form-table div,span,select,option{
+    vertical-align:middle;
+}
+
+.form-table th, td {
     line-height:18px;
-    padding:2px 3px;
+    height:22px;
+    max-height:22px;
+    padding-top: 2px;
+    padding-right: 20px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+}
+
+.form-table th{
+    height:26px;
 }
 
 .form-table th {
@@ -136,6 +129,46 @@ table td,th{
     padding-left:10px;
 }
 
+.form-table a {
+    text-decoration:underline;
+}
+/*
+.form-table button,input,select {
+    height: 14px;
+    width: 125px;
+}
+*/
+
+.form-table td {
+    /*border:1px solid #444;*/
+}
+
+.form-table td.operRow{
+	line-height:21px;
+    border-top:none;
+    text-align: center;
+}
+
+/*  table */
+.formee .form-table select,input{
+	padding: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+.formee .form-table input,button,checkbox,radio,select,option{
+	height: 20px;
+}
+.formee .form-table select,option{
+	height: 20px;
+	max-height: 20px;
+}
+
+/* ********************************tabForm end************************************* */
+
 .narrow {
     width:100px;
 }
@@ -144,28 +177,10 @@ table td,th{
     width:65px;
 }
 
-.form-table td {
-    /*border:1px solid #444;*/
-}
-
-.form-table td.operRow{
-    line-height:20px;
+div.operRow{
+	width:100%;
+	text-align: right;
+	line-height:24px;
     border-top:none;
-    text-align:center;
-}
-
-.form-table td.groupRow{
-    line-height:18px;
-    padding-left:27px;
-    cursor:pointer;
-    background: #f2f2f2 url(images/arrow_up.gif) no-repeat 5px center;
-    color:#66B31E;
-    border-bottom:none;
-    border-top:none;
-}
-
-.form-table td.groupRow.fold{
-    background-image: url(images/arrow_down.gif);
-    color:#333;
 }
 

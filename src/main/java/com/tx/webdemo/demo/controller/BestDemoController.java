@@ -16,7 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.mainframe.context.WebContextUtils;
@@ -33,7 +36,7 @@ import com.tx.webdemo.demo.service.DemoService;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Controller("bestDemoController")   
+@Controller("bestDemoController")
 @RequestMapping("/bestDemo")
 public class BestDemoController {
     
@@ -51,12 +54,29 @@ public class BestDemoController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/queryDemoList")
-    public String queryDemoList(HashMap<String, Object> params) {
+    public String queryDemoList(@RequestParam Map<String, String> queryCondition,
+            @RequestParam MultiValueMap<String, String> queryCondition2,
+            Model requestAttrs) {
+        //不同的逻辑，总有不同的查询条件，查询条件很难用统一的一个bean去处理，规定统一接收参数用 MultiValueMap 去接收
+        //当然如果，条件中，不存在多个入参的条件，这里也可以用Map处理，如果用Map,多选框进入的值将只会接收到第一个
+        for (MultiValueMap.Entry<String, String> entry : queryCondition.entrySet()) {
+            System.out.println(entry.getKey() + " : "
+                    + queryCondition.get(entry.getKey()));
+        }
+        for (MultiValueMap.Entry<String, List<String>> entry : queryCondition2.entrySet()) {
+            System.out.println(entry.getKey() + " : "
+                    + queryCondition2.getFirst(entry.getKey()));
+        }
         
+        //查询demo类表
         List<Demo> demoList = this.demoService.queryDemoList();
         
-        params.put("demoList", demoList);
-        return "/demo/best/demoList";
+        requestAttrs.addAttribute("demoList", demoList);
+        requestAttrs.addAllAttributes(queryCondition);
+        //如果要将queryCondition2压入返回值列表中，需要在这里作特殊处理
+        //如果不处理list返回页面将多一个[]
+        
+        return "/demo/demoList";
     }
     
     /**

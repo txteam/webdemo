@@ -79,8 +79,9 @@
 		
 		<menu id="bestDemoMananger" text="参考demo">				
 			<!-- 根据条件查询数据列表 -->
-			<menu id="bestDemoList" text="列表" href="/bestDemo/queryDemoList"
+			<menu id="bestDemoList" text="简单列表" href="/bestDemo/queryDemoList"
 				target="mainTabs" selectRefresh="false"/>
+			
 			<menu id="bestAjaxDemoList" text="ajax列表" href="/bestDemo/ajaxQueryDemoList"
 				target="mainTabs" selectRefresh="false"/>
 			<menu id="bestPagedList" text="分页列表" href="/bestDemo/queryPagedlist"

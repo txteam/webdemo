@@ -185,7 +185,7 @@ $(document).ready(function() {
 	//foreachTable2
 	tableToGrid("#foreachTable2");
 	
-
+tableToGrid("#foreachTable2");
 	
 	
 	jQuery("#ajaxTable1").jqGrid({

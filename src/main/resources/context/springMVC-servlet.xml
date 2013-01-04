@@ -24,6 +24,8 @@
 		cache-period="31556926" />
 	<mvc:resources mapping="/bootstrap/**" location="/resources/bootstrap/"
 		cache-period="31556926" />
+	<mvc:resources mapping="/components/**" location="/resources/components/"
+		cache-period="1"/>
 	<mvc:resources mapping="/css/**" location="/resources/css/" />
 	<mvc:resources mapping="/js/**" location="/resources/js/" />
 	<!-- <mvc:default-servlet-handler /> -->

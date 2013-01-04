@@ -2,24 +2,17 @@ $(document).ready(function() {
     //如果页面body的样式class没有special标志，则自动渲染页面
     if($("body.special").size() < 1){
         //统一页面风格
-        //给body统一加入样式
-        $("body").addClass("ui-widget-content");
-        
-        //统一页面form元素风格
-        $("button,input[type=button],:input[type=submit]").button();
-        $(":input[type=text],:input[type=password],textarea").wijtextbox(); 
-        $("select").wijdropdown(); 
-        $(":radio").wijradio(); 
-        $(":checkbox").wijcheckbox();
-        //阻止button的默认事件
-        //$("button,:input[type=button],:input[type=submit]").click(function(){ return false; });
-        
+    	$("body").addClass("ui-widget-content");
+		$("form").addClass("formee");
+		$("button,input[type=button],:input[type=submit]").button().height(26);
+		if($(".form-table").size() > 0){
+	    	$(".form-table table").addClass("ui-widget-content").find(td,th).addClass("ui-widget-content");
+	    }
         //处理具有header样式的自动渲染
         if($(".header").size() > 0){
             $(".header").prepend('<span class="ui-icon ui-icon-gear" style="float:left;"></span>');
             $(".header").addClass("ui-state-default ui-corner-all ui-tabs-selected ui-state-active page-title-header");
         }
-        
         //利用js实现自动长度截取功能
         if($(".subStr") > 0){
             $.each($(".subStr"), function(index, $dom) {
@@ -30,9 +23,6 @@ $(document).ready(function() {
             });
         }
     }
-
-    
-
 });
 /************ EventManager end ************** */
 /**
@@ -775,9 +765,73 @@ DialogUtils.openAlert = function(config, msg, yes) {
 DialogUtils.alert = function(msg, yes) {
     this.openAlert({}, msg, yes);
 };
+
 //改写window alert
 window.alert = function(msg){
 	DialogUtils.alert(msg);
+};
+/**
+ * Dialog消息
+ * @param {String} 消息内容
+ * @param {Function} 确定按钮回调函数
+ * @return {Object} 对话框操控接口
+ */
+DialogUtils.openMessage = function(config, msg, type, yes) {
+    var openAlertId = "tempDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
+    config=$.extend({
+    	id: openAlertId,
+        autoOpen: true,
+        closeOnEscape: false,
+        width: (msg && ("" + msg).length < 50) ? 300 : 'auto',
+        height: (msg && ("" + msg).length < 50) ? 130 : 'auto',
+        modal: true,
+        dialogClass: "alert",
+        captionButtons: {
+            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
+            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
+            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
+            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
+            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
+            close: {visible: true, iconClassOn: 'ui-icon-close'}
+        },
+        close : function(){
+        	removeTempTipHandle();
+        },
+        buttons: [{text: "确定" , click: function(){
+            removeTempTipHandle();
+        }}]
+    }, config);
+    
+    var $dialogHandle = $("<div/>").attr("id",config.id).hide();
+    if('info' == type){
+    	$dialogHandle.addClass("formee-msg-info");
+    }else if('warning' == type){
+    	$dialogHandle.addClass("formee-msg-warning");
+    }else if('error' == type){
+    	$dialogHandle.addClass("formee-msg-error");
+    }else if('success' == type){
+    	$dialogHandle.addClass("formee-msg-success");
+    }else{
+    	$dialogHandle.addClass("formee-msg-info");
+    }
+    
+    function removeTempTipHandle(){
+    	yes && yes.call(this);
+        $dialogHandle.remove();
+    }
+    $(document).append($dialogHandle);
+    //TODO:添加警告的样式
+    $dialogHandle.html(msg);
+    $dialogHandle.wijdialog(config);
+};
+/**
+ * Dialog消息
+ * @param {String} 消息内容
+ * @param {Function} 确定按钮回调函数
+ * @return {Object} 对话框操控接口
+ */
+DialogUtils.message = function(msg, type, yes) {
+    this.openAlert({}, msg , type , yes);
 };
 /**
  * config
@@ -1056,14 +1110,14 @@ window.confirm = function(msg, yes , no){
         	//rowNum	在grid上显示记录条数，这个参数是要被传递到后台
             rowNum:9999,
             //数组:列显示名称，是一个数组对象
-            colNames:null,
+            //colNames:[],
             //常用到的属性：
         	//name 列显示的名称,
             //index 传到服务器端用来排序用的列名称,
             //width 列宽度
             //align 对齐方式；
             //sortable  是否可以排序
-            colModel:null,
+            //colModel:[],
             //定义是否可以多选
         	multiselect: false,
             //ajax提交方式。POST或者GET，jq默认GET,在此制定默认的grid为post提交
@@ -1084,7 +1138,7 @@ window.confirm = function(msg, yes , no){
             //editurl string 定义对form编辑时的url 空值 是
             emptyrecords:'无',
             //当为ture时，调整列宽度不会改变表格的宽度。当shrinkToFit 为false时，此属性会被忽略  false 否
-        	forceFit : true,
+        	forceFit : true
         },
         _defaultJqGridOptions : {
         	//获取数据的地址
@@ -1095,14 +1149,14 @@ window.confirm = function(msg, yes , no){
         	//ajax提交方式。POST或者GET，jq默认GET,在此制定默认的grid为post提交
         	mtype: "GET",
         	//数组:列显示名称，是一个数组对象
-            colNames:null,
+            //colNames:[],
             //常用到的属性：
         	//name 列显示的名称,
             //index 传到服务器端用来排序用的列名称,
             //width 列宽度
             //align 对齐方式；
             //sortable  是否可以排序
-            colModel:null,
+            //colModel:[],
         	//定义翻页用的导航栏，必须是有效的html元素。翻页工具栏可以放置在html页面任意位置
             pager: null,
             //rowNum	在grid上显示记录条数，这个参数是要被传递到后台
@@ -1202,7 +1256,7 @@ window.confirm = function(msg, yes , no){
         	//recordtext string 显示记录数信息。{0} 为记录数开始，{1}为记录数结束。 viewrecords为ture时才能起效，且总记录数大于0时才会显示此信息
         	//resizeclass string 定义一个class到一个列上用来显示列宽度调整时的效果 空值 否
         	//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.default : false
-            rownumbers: true,
+            rownumbers: false,
         	//rownumWidth integer 如果rownumbers为true，则可以设置column的宽度 25 否
             //scroll boolean 创建一个动态滚动的表格，当为true时，翻页栏被禁用，使用垂直滚动条加载数据，且在首次访问服务器端时将加载所有数据到客户端。当此参数为数字时，表格只控制可见的几行，所有数据都在这几行中加载 false 否
             //scrollOffset integer 设置垂直滚动条宽度 18 否
@@ -1221,7 +1275,7 @@ window.confirm = function(msg, yes , no){
             	如：[true,”both”] 。工具栏位置可选值：“top”,”bottom”, “both”. 
             	如果工具栏在上面，则工具栏id为“t_”+表格id；如果在下面则为 “tb_”+表格id；如果只有一个工具栏则为 “t_”+表格id [false,''] 否
             */
-            toolbar: [false,''],
+            toolbar: [false,'']
             //mixed 数据类型，通常情况下与datatype相同，不会变 null 否 treedatatype
             //treeGrid boolean 启用或者禁用treegrid模式 false 否
             //treeGridModel string treeGrid所使用的方法 Nested 否
@@ -1357,7 +1411,7 @@ window.confirm = function(msg, yes , no){
             //widget常量
             var element = this.element;
             var _this = this
-            var options = this.options;
+            var options = $.extend({},_this._defaultJqGridOptions,this.options);
             
             //如果设置了自动宽度，则自动监听window.resize事件，实现grid的大小随页面变化
             if(options.autowidth){
@@ -1379,7 +1433,12 @@ window.confirm = function(msg, yes , no){
             var _skins = options.skins != null ? options.skins : _default_skins;
 
             //清空element中内容
-            element.empty();
+            if(options.type == 'simple'){
+            	tableToGrid("#" + $(this.element).attr("id"),options);
+            }else{
+            	tableToGrid("#" + $(this.element).attr("id"),options);
+            }
+            
             
         }, 
         _init : function()
