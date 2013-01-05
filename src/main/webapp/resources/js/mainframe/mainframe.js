@@ -467,10 +467,14 @@ Menu.prototype.menuResize = function(width, height) {
 var menuClickFunction = function(){
     var $aParent = $(this);
     var $a = $(this).find("a");
+    var hrefValue = $a.attr("href");
+    if(hrefValue.indexOf("http://") < 0 || hrefValue.indexOf("http://") > 0){
+    	hrefValue = _contextPath + hrefValue;
+    }
     $("#mainTabs").trigger("addTab",{
         id : $a.attr("id"),
         label : $a.text(),
-        iframeHref : $a.attr("href")    
+        iframeHref : hrefValue 
     });
     return false;
 };

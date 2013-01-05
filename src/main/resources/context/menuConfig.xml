@@ -79,7 +79,9 @@
 		
 		<menu id="bestDemoMananger" text="参考demo">				
 			<!-- 根据条件查询数据列表 -->
-			<menu id="bestDemoList" text="简单列表" href="/bestDemo/queryDemoList"
+			<menu id="hisDemoList" text="历史列表" href="/bestDemo/queryDemoList"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="bestDemoList" text="简单列表" href="/bestDemo/ajaxQueryDemoList"
 				target="mainTabs" selectRefresh="false"/>
 			
 			<menu id="bestAjaxDemoList" text="ajax列表" href="/bestDemo/ajaxQueryDemoList"
@@ -104,6 +106,21 @@
 			<menu id="component_progressbar" text="滑块控件" href="/view/component/progressbar/index"
 				target="mainTabs" selectRefresh="false"/>
 			<menu id="component_tooltip" text="滑块控件" href="/view/component/tooltip/index"
+				target="mainTabs" selectRefresh="false"/>
+		</menu>
+		
+		<menu id="component_see_mananger" text="控件参考">
+			<menu id="see_grid_parameters" text="表格控件参数" 
+				href="http://blog.csdn.net/lpy3654321/article/details/7936301"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="see_grid_demo" text="表格控件demo" 
+				href="http://www.trirand.com/blog/jqgrid/jqgrid.html"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="see_form" text="表单美化及布局" 
+				href="http://www.formee.org/demo/reference.htm"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="see_form_ajax" text="表单ajax提交" 
+				href="http://jquery.malsup.com/form/#xml"
 				target="mainTabs" selectRefresh="false"/>
 		</menu>
 	</tool_menus_config>

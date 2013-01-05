@@ -21,6 +21,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.core.paged.model.PagedList;
@@ -54,7 +55,8 @@ public class BestDemoController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/queryDemoList")
-    public String queryDemoList(@RequestParam Map<String, String> queryCondition,
+    public String queryDemoList(
+            @RequestParam Map<String, String> queryCondition,
             @RequestParam MultiValueMap<String, String> queryCondition2,
             Model requestAttrs) {
         //不同的逻辑，总有不同的查询条件，查询条件很难用统一的一个bean去处理，规定统一接收参数用 MultiValueMap 去接收
@@ -80,6 +82,27 @@ public class BestDemoController {
     }
     
     /**
+     * ajax查询demo列表
+     * <功能详细描述>
+     * @param params
+     * @return [参数说明]
+     * 
+     * @return List<Demo> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/ajax/ajaxQueryDemoList")
+    @ResponseBody()
+    public List<Demo> ajaxQueryDemoList(
+            @RequestParam MultiValueMap<String, String> queryCondition,
+            Model requestAttrs) {
+        
+        List<Demo> demoList = this.demoService.queryDemoList();
+        
+        return demoList;
+    }
+    
+    /**
       *<功能简述>
       *<功能详细描述>
       * @param params
@@ -96,24 +119,6 @@ public class BestDemoController {
                 10);
         
         return demoPagedList;
-    }
-    
-    /**
-      * ajax查询demo列表
-      * <功能详细描述>
-      * @param params
-      * @return [参数说明]
-      * 
-      * @return List<Demo> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/ajax/ajaxQueryDemoList")
-    @ResponseBody()
-    public List<Demo> ajaxQueryDemoList(HashMap<String, Object> params) {
-        List<Demo> demoList = this.demoService.queryDemoList();
-        
-        return demoList;
     }
     
     /**

@@ -15,6 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.DecimalMax;
 
  /**
   * <demo模型>
@@ -25,6 +28,21 @@ import javax.persistence.Table;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
+/*
+AssertFalse.class
+AssertTrue.class
+DecimalMax.class
+DecimalMin.class
+Digits.class
+Future.class
+Max.class
+Min.class
+NotNull.class
+Null.class
+Past.class
+Pattern.class
+Size.class
+ */
 @Entity
 @Table(name="WD_DEMO")
 public class Demo {
@@ -70,6 +88,7 @@ public class Demo {
     
     private String description;
     
+    @DecimalMax(value="5000",message="")
     private BigDecimal testBigDecimal = BigDecimal.ONE;
     
     private BigDecimal testNullBigDecimal;
@@ -78,8 +97,10 @@ public class Demo {
     
     private Integer testNullIntegerObj = 0;
     
+    @AssertFalse
     private Boolean testBooleanObj = true;
     
+    @AssertTrue(message="")
     private Boolean testNullBooleanObj;
     
     private int testInt;

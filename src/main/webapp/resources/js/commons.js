@@ -1106,6 +1106,7 @@ window.confirm = function(msg, yes , no){
         	 */
         	//表格名称
             caption: null,
+            hidegrid: false,
         	//rowNum	在grid上显示记录条数，这个参数是要被传递到后台
             rowNum:9999,
             //数组:列显示名称，是一个数组对象
@@ -1413,7 +1414,7 @@ window.confirm = function(msg, yes , no){
             
             if($.isFunction(options.height)){
                 var heightValue = options.height();
-                options = $.extends(options,{
+                options = $.extend(options,{
                     height: heightValue
                 });
             }

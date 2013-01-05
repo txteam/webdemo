@@ -85,7 +85,7 @@ $(document).ready(function() {
 	        			<c:forEach items="${menuItem.childs}" var="childMenuItem">
 	        			<span>
 							<span><center><span class="ui-icon ui-icon-gear"></span></center></span>
-							<a id="${childMenuItem.id }" href="${contextPath}${childMenuItem.href}" 
+							<a id="${childMenuItem.id }" href="${childMenuItem.href}" 
 								configTarget="${childMenuItem.target}" selectRefresh="${childMenuItem.selectRefresh}" openNewEveryTime="${childMenuItem.text}"
 								width="${childMenuItem.width}" height="${childMenuItem.height}" isModal="${childMenuItem.modal}"
 								eventType="${childMenuItem.eventType}" params='${childMenuItem.params}'>${childMenuItem.text}</a>
@@ -213,19 +213,19 @@ $(document).ready(function() {
 	    <li id="menuLink"><a>&nbsp;菜&nbsp;单&nbsp;</a>
 	    	<ul id="menuItems" class="ui-widget-content">
     			<c:forEach items="${mainMenuItemTreeList}" var="menuItem"><li id="menuLink">
-   				<a id="${menuItem.id }" href="${contextPath}${menuItem.href}" 
+   				<a id="${menuItem.id }" href="${menuItem.href}" 
 							configTarget="${menuItem.target}" selectRefresh="${menuItem.selectRefresh}" openNewEveryTime="${menuItem.text}"
 							width="${menuItem.width}" height="${menuItem.height}" isModal="${menuItem.modal}"
 							eventType="${menuItem.eventType}" params='${menuItem.params}'>${menuItem.text}</a>
 					<c:if test="${fn:length(menuItem.childs) > 0}"><ul>
         			<c:forEach items="${menuItem.childs}" var="childMenuItem"><li id="menuLink">
-        				<a id="${childMenuItem.id }" href="${contextPath}${childMenuItem.href}" 
+        				<a id="${childMenuItem.id }" href="${childMenuItem.href}" 
 								configTarget="${childMenuItem.target}" selectRefresh="${childMenuItem.selectRefresh}" openNewEveryTime="${childMenuItem.text}"
 								width="${childMenuItem.width}" height="${childMenuItem.height}" isModal="${childMenuItem.modal}"
 								eventType="${childMenuItem.eventType}" params='${childMenuItem.params}'>${childMenuItem.text}</a>
 	        				<c:if test="${fn:length(childMenuItem.childs) > 0}"><ul>
 							<c:forEach items="${childMenuItem.childs}" var="threeChildMenuItem"><li id="menuLink">
-		        				<a id="${threeChildMenuItem.id }" href="${contextPath}${threeChildMenuItem.href}" 
+		        				<a id="${threeChildMenuItem.id }" href="${threeChildMenuItem.href}" 
 									configTarget="${threeChildMenuItem.target}" selectRefresh="${threeChildMenuItem.selectRefresh}" openNewEveryTime="${threeChildMenuItem.text}"
 									width="${threeChildMenuItem.width}" height="${threeChildMenuItem.height}" isModal="${threeChildMenuItem.modal}"
 									eventType="${threeChildMenuItem.eventType}" params='${threeChildMenuItem.params}'>${threeChildMenuItem.text}</a>

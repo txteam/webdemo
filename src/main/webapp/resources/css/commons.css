@@ -16,14 +16,6 @@
     border-bottom-width: 0px;
 }
 
-/* 定义样式表单 */
-* {
-    margin: 0px;
-    padding: 0px;
-    font-size: 12px;
-    font-family: "Verdana", "Arial", "宋体", "Helvetica", "sans-serif";
-}
-
 /* 重写formee样式  */
 /*
  .formee select,input{
@@ -72,6 +64,12 @@ iframe {
 }
 
 /* 定义通用页面样式  */
+* {
+    margin: 0px;
+    padding: 0px;
+    font-size: 12px;
+    font-family: "Verdana", "Arial", "宋体", "Helvetica", "sans-serif";
+}
 html, body {
     height: 100%;
     width: 100%;
@@ -201,9 +199,6 @@ a {
     text-align: right;
     line-height: 26px;
     border-top: none;
-    padding-right: 200px;
-    margin-left: 1px;
-    margin-right: 1px;
 }
 .list-table input[type="text"], .form-table input[type="password"], .form-table input[type="file"], .form-table textarea, .form-table select{
     height: 20px;

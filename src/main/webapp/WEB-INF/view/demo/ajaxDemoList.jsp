@@ -4,7 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="ognl" uri="http://com.tx.core/taglib/ognl" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,68 +13,13 @@
 
 <script type="text/javascript" >
 $(document).ready(function() {
-	/*
-		由于本页面加入了special标志，所以页面需要自己进行渲染
-	*/
-	
-    //给body统一加入样式
-    $("body").addClass("ui-widget-content");
-	$("button,input[type=button],:input[type=submit]").height(24).button();
-	if($(".form-table").size() > 0){
-		$(".form-table").addClass("formee");
-    	$(".form-table table").addClass("ui-widget-content");
-    	$(".form-table table td,th").addClass("ui-widget-content");
-    }
-    
-    $("#calendar").wijcalendar({ 
-        popupMode: true, 
-        dateFormat: 'yyyy-MM-dd HH:mm:ss',
-        selectedDatesChanged: function () { 
-            var selDate = $(this).wijcalendar("getSelectedDate"); 
-            if (selDate) { 
-                $("#popdate").val(selDate.toDateString()); 
-            } 
-        } 
-    }); 
-    
-    $("#startCreateDate").click(function () { 
-        $("#calendar").wijcalendar("popup", { 
-            of: $("#startCreateDate"), 
-            offset: '0 2'
-        }); 
-    });
-	
-	/*
-		为测试准备数据
-		由于使用hsql暂不知道怎么把数据持久在文件中的配置
-		先弄一个这个功能顶上
-	*/
-	$("#prepare").click(function(){
-		$('#demoForm').ajaxSubmit({
-	        dataType: 'json',
-	        url: '${contextPath}/demo/batchInsertDemoForUse',
-	        data: {abc:"abc"},
-	        success: function(data){
-	        	alert(data);
-	        }
-	    });
-	});
 	
 	//查询
-	$("#queryBtn").click(function(){
+	$("#ajaxQueryBtn").click(function(){
 		$('#demoForm').attr("action","${contextPath}/bestDemo/queryDemoList");
 		$('#demoForm').submit();
 	});
 	
-	//查询
-	$("#ajaxQueryBtn").click(function(){
-		alert($('#demoForm').size());
-		$('#demoForm').ajaxSubmit({
-	        dataType: 'json',
-	        url: '${contextPath}/bestDemo/queryDemoList',
-	        success: processQuerySuccess
-	    });
-	});
 	//deal query result
 	function processQuerySuccess(data){
 		alert("processQuerySuccess");
@@ -111,7 +55,7 @@ $(document).ready(function() {
 }
 </style>
 </head>
-<body class="special ui-widget-content">
+<body>
 <form:form method="post" id="demoForm" modelAttribute="demoForm">
 <div class="form-table">
 <table>
@@ -168,24 +112,6 @@ $(document).ready(function() {
 
 <div class="list-table">
 <table id="demoList">
-	<thead>
-		<th>行号</th>
-		<th>LoginName</th>
-		<th>Name</th>
-		<th>创建时间</th>
-		<th>最后更新时间</th>
-	</thead>
-	<tbody id="listData">
-		<c:forEach items="${demoList}" var="demo" varStatus="status">
-			<tr>
-				<td>${status.index}</td>
-				<td class="subStr" maxLength="20" suffix="...">${demo.loginName }</td>
-				<td>${demo.name }</td>
-				<td><fmt:formatDate value="${demo.createDate }" pattern="yyyy-MM-dd"></fmt:formatDate></td>
-				<td><fmt:formatDate value="${demo.lastUpdateDate }" pattern="yyyy-MM-dd HH:mm:ss"></fmt:formatDate></td>
-			</tr>
-		</c:forEach>
-	</tbody>
 </table>
 <div class="operRow">
 	<button id="prepare" type="button">prepare</button>
@@ -193,17 +119,6 @@ $(document).ready(function() {
 	<button id="add" type="button">增加</button>
 	&nbsp;&nbsp;
 	<button id="add" type="button">删除</button>
-	<ognl:if test="@com.tx.component.auth.context.AuthContext@getContext().isHasAuth('auth_config_manage')">
-		<button id="add1" type="button">增加1</button>
-	</ognl:if>
-	<c:choose>
-		<ognl:when test="@com.tx.component.auth.context.AuthContext@getContext().isHasAuth('this_not_exist_auth')">
-			<button id="add1" type="button">增加2</button>
-		</ognl:when>
-		<c:otherwise>
-			<button id="add1" type="button">增加3</button>
-		</c:otherwise>
-	</c:choose>
 </div>
 </div>
 </form:form>
