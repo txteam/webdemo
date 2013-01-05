@@ -115,14 +115,6 @@ $(document).ready(function() {
 <form:form method="post" id="demoForm" modelAttribute="demoForm">
 <div class="form-table">
 <table>
-	<colgroup>
-		<col/>
-		<col/>
-		<col/>
-		<col/>
-		<col/>
-		<col/>
-	</colgroup>
 	<tbody>
 	<tr>
 		<th>姓名:</th>

@@ -6,7 +6,9 @@ $(document).ready(function() {
 		$("form").addClass("formee");
 		$("button,input[type=button],:input[type=submit]").button().height(26);
 		if($(".form-table").size() > 0){
-	    	$(".form-table table").addClass("ui-widget-content").find(td,th).addClass("ui-widget-content");
+	    	$(".form-table table").addClass("ui-widget-content").find("td,th").addClass("ui-widget-content");
+	    	//$(".form-table div").filter(".grid-1-12,.grid-2-12,.grid-3-12,.grid-4-12,.grid-5-12,.grid-6-12,.grid-7-12,.grid-8-12,.grid-9-12,.grid-10-12,.grid-11-12,.grid-12-12")
+	    	//  .not(".special").addClass('ui-widget-content');             
 	    }
         //处理具有header样式的自动渲染
         if($(".header").size() > 0){

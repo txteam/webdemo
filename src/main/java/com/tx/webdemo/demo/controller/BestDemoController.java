@@ -82,6 +82,21 @@ public class BestDemoController {
     }
     
     /**
+      * 跳转到ajaxDemo列表
+      * <功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toAjaxQueryDemoList")
+    public String toAjaxQueryDemoList(Model requestAttrs){
+        
+        return "/demo/ajaxDemoList";
+    }
+    
+    /**
      * ajax查询demo列表
      * <功能详细描述>
      * @param params

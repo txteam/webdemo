@@ -60,9 +60,6 @@
 		</menu>
 	</main_menus_config>
 	
-	
-	
-	
 	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示  -->
 	<tool_menus_config>
 
@@ -81,7 +78,7 @@
 			<!-- 根据条件查询数据列表 -->
 			<menu id="hisDemoList" text="历史列表" href="/bestDemo/queryDemoList"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestDemoList" text="简单列表" href="/bestDemo/ajaxQueryDemoList"
+			<menu id="bestDemoList" text="简单列表" href="/bestDemo/toAjaxQueryDemoList"
 				target="mainTabs" selectRefresh="false"/>
 			
 			<menu id="bestAjaxDemoList" text="ajax列表" href="/bestDemo/ajaxQueryDemoList"

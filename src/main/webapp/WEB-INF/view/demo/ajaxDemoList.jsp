@@ -24,19 +24,6 @@ $(document).ready(function() {
 	function processQuerySuccess(data){
 		alert("processQuerySuccess");
 	};
-	
-	//利用js实现自动长度截取功能
-    if($(".subStr").size() > 0){
-        $.each($(".subStr"), function(index, dom) {
-        	var $dom = $(this);
-            var maxLength = $dom.attr("maxLength") * 1 > 0 ? $dom.attr("maxLength") * 1 : 10;
-            var suffix = $dom.attr("suffix") ? $dom.attr("suffix") : "";
-            if($dom.text().length > maxLength){
-            	$dom.attr("title",$dom.text());
-            	$dom.text($dom.text().substr(0,maxLength) + suffix);
-            }
-        });
-    }
     
 	$("#demoList").txGrid({
 		type: 'simple',
@@ -57,70 +44,34 @@ $(document).ready(function() {
 </head>
 <body>
 <form:form method="post" id="demoForm" modelAttribute="demoForm">
-<div class="form-table">
-<table>
-	<colgroup>
-		<col/>
-		<col/>
-		<col/>
-		<col/>
-		<col/>
-		<col/>
-	</colgroup>
-	<tbody>
-	<tr>
-		<th>姓名:</th>
-		<td><input name="name" type="text" value='<c:out value="${name }"></c:out>'/></td>
-		<th>数字:</th>
-		<td><input name="number" type="text" value='<c:out value="${number }"></c:out>'/></td>
-		<th>选择:<em class="formee-req">*</em></th>
-		<td>
-			<select name="select">
-				<optgroup label="---请选择---"> 
-					<option>---请选择---</option>
-					<option>---请选择---</option>
-					<option>---请选择---</option>
-					<option>---请选择---</option>
-				</optgroup>
-			</select>
-		</td>
-	</tr>
-	</tbody>
-	<tr>
-		<th>最小创建时间:</th>
-		<td>
-			<div id="calendar"></div> 
-			<input id="startCreateDate" name="startCreateDate" type="text"
-				value='<c:out value="${startCreateDate }"></c:out>'/>
-		</td>
-		<th>最大创建时间:</th>
-		<td><input name="endCreateDate" type="text"
-				value='<c:out value="${endCreateDate }"></c:out>'/></td>
-		<th>&nbsp;</th>
-		<td>
-			&nbsp;
-		</td>
-	</tr>
-	<tr>
-		<td colspan="6" class="button operRow">
+
+<!-- query condition -->
+<div class="ui-widget-content form-table">
+	<div class="grid-12-12">
+		<div class="grid-1-12">姓名:</div>
+		<div class="grid-3-12"><input name="name" type="text" value='<c:out value="${name }"></c:out>'/></div>
+		<div class="grid-1-12">数字:</div>
+		<div class="grid-3-12"><input name="number" type="text" value='<c:out value="${number }"></c:out>'/></div>
+		<div class="grid-4-12">
 			<button type="button" id="queryBtn">查询</button>
-		</td>
-	</tr>
-</table>
+		</div>
+	</div>
 </div>
 <br/>
 
+<!-- grid -->
 <div class="list-table">
-<table id="demoList">
-</table>
-<div class="operRow">
-	<button id="prepare" type="button">prepare</button>
-	&nbsp;&nbsp;
-	<button id="add" type="button">增加</button>
-	&nbsp;&nbsp;
-	<button id="add" type="button">删除</button>
+	<table id="demoList">
+	</table>
+	<div class="operRow">
+		<button id="prepare" type="button">prepare</button>
+		&nbsp;&nbsp;
+		<button id="add" type="button">增加</button>
+		&nbsp;&nbsp;
+		<button id="add" type="button">删除</button>
+	</div>
 </div>
-</div>
+
 </form:form>
 </body>
 </html>

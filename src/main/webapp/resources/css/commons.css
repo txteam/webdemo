@@ -125,7 +125,7 @@ a {
 .form-table * {
     vertical-align: middle;
 }
-.form-table table th,.form-table table td {
+.form-table table tbody th,.form-table table tbody td {
     height: 24px;
     max-height: 24px;
     line-height: 24px;
@@ -134,19 +134,27 @@ a {
     padding-left: 2px;
     padding-right: 2px;
 }
-.form-table table th {
+.form-table .grid-1-12,.form-table .grid-2-12,.form-table .grid-3-12,.form-table .grid-4-12,.form-table .grid-5-12,.form-table .grid-6-12{
+    height: 24px;
+    max-height: 24px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.form-table .grid-7-12,.form-table .grid-8-12,.form-table .grid-9-12,.form-table .grid-10-12,.form-table .grid-11-12,.form-table .grid-12-12{
+    height: 24px;
+    max-height: 24px;
+}
+.form-table table tbody th {
     text-align: left;
     font-weight: normal;
     padding-left: 10px;
-    /*border:1px solid #444;*/
-}
-.form-table td {
-    /*border:1px solid #444;*/
 }
 .form-table a {
     text-decoration: underline;
 }
-.form-table td.operRow {
+.form-table .operRow {
     line-height: 26px;
     border-top: none;
     text-align: center;
@@ -160,6 +168,11 @@ a {
     padding-right: 2px;
     max-width: 157px;
     font-size: 14px;
+}
+.form-table .operRow {
+    line-height: 26px;
+    border-top: none;
+    text-align: center;
 }
 
 /* list-table */
