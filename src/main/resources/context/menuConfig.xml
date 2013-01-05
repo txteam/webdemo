@@ -122,6 +122,16 @@
 			<menu id="see_form_ajax" text="表单ajax提交" 
 				href="http://jquery.malsup.com/form/#xml"
 				target="mainTabs" selectRefresh="false"/>
+			<menu id="see_date" text="日期控件" 
+				href="http://www.my97.net/dp/demo/index.htm"
+				target="mainTabs" selectRefresh="false"/>
+		</menu>
+		<menu id="infomations_" text="info">
+			<menu id="info_ognl" text="ognl的使用" 
+				href="http://blog.csdn.net/abasen/article/details/5123381"
+				target="mainTabs" selectRefresh="false"/>
+				
+				
 		</menu>
 	</tool_menus_config>
 </menu_config>

@@ -193,17 +193,19 @@ $(document).ready(function() {
 	<button id="add" type="button">增加</button>
 	&nbsp;&nbsp;
 	<button id="add" type="button">删除</button>
-	<ognl:if test="@com.tx.component.auth.context.AuthContext@getContext().isHasAuth('auth_config_manage')">
+	<!--  
+	<--ognl:if test="@com.tx.component.auth.context.AuthContext@getContext().isHasAuth('auth_config_manage')">
 		<button id="add1" type="button">增加1</button>
-	</ognl:if>
-	<c:choose>
-		<ognl:when test="@com.tx.component.auth.context.AuthContext@getContext().isHasAuth('this_not_exist_auth')">
+	<--/ognl:if>
+	<--ognl:choose>
+		<--ognl:when test="@com.tx.component.auth.context.AuthContext@getContext().isHasAuth('this_not_exist_auth')">
 			<button id="add1" type="button">增加2</button>
-		</ognl:when>
-		<c:otherwise>
+		<--/ognl:when>
+		<--ognl:otherwise>
 			<button id="add1" type="button">增加3</button>
-		</c:otherwise>
-	</c:choose>
+		<--/ognl:otherwise>
+	<--/ognl:choose>
+	-->
 </div>
 </div>
 </form:form>
