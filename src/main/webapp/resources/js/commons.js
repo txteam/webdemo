@@ -1210,7 +1210,7 @@ window.confirm = function(msg, yes , no){
         	//hidegrid boolean 启用或者禁用控制表格显示、隐藏的按钮，只有当caption 属性不为空时起效
         	hidegrid: false,
         	//boolean当为false时mouse hovering会被禁用
-        	hoverrows: false,
+        	hoverrows: true,
         	//jsonReader array 描述json 数据格式的数组
         	
         	//loadonce boolean 如果为ture则数据只从服务器端抓取一次，之后所有操作都是在客户端执行，翻页功能会被禁用
@@ -1218,7 +1218,7 @@ window.confirm = function(msg, yes , no){
         	//string 当执行ajax请求时要干什么。disable禁用ajax执行提示；enable默认，当执行ajax请求时的提示； block启用Loading提示，但是阻止其他操作 enable 是
         	loadui: "enable",
         	//string 只有在multiselect设置为ture时起作用，定义使用那个key来做多选。shiftKey，altKey，ctrlKey 空值是
-        	multikey: "ctrlKey",
+        	//multikey: "ctrlKey",
         	//boolean 只有当multiselect = true.起作用，当multiboxonly 为ture时只有选择checkbox才会起作用
         	multiboxonly: true,
         	//定义是否可以多选
@@ -1227,8 +1227,11 @@ window.confirm = function(msg, yes , no){
         	//integer 设置初始的页码 1 是 	
         	page: 1,      
         	//pagerpos string 指定分页栏的位置 center 否
+        	pagerpos: 'center',
         	//pgbuttons boolean 是否显示翻页按钮 true 否
+        	pgbuttons: false,
         	//pginput boolean 是否显示跳转页面的输入框 true 否
+        	pginput: false,
         	//pgtext string 当前页信息 是
         	//Default valuesprmNames: {page:“page”,rows:“rows”, sort: “sidx”,
         	//order: “sord”, search:“_search”, nd:“nd”, npage:null} 当参数为null时不会被发到服务器端
@@ -1440,21 +1443,27 @@ window.confirm = function(msg, yes , no){
             		});
             	}
             	options = $.extend({},_this._defaultJqGridOptions,this.options,{
-            		jsonReader: _this._defaultQueryListJsonReader
+            		jsonReader: _this._defaultQueryListJsonReader,
+            		gridComplete: function(){
+            		    $(element).trigger("gridComplete",this);
+            		}
             	});
             	$(element).jqGrid(options);
             }else{
-                options = $.extend({},_this._defaultJqGridOptions,this.options);
+                options = $.extend({},_this.options);
+                $(element).jqGrid(options);
+                return ;
             }
             
             //如果高度为 function在数据加载完成后，动态运算高度
-            if($.isFunction(options.height)){
-            	heightFunction = options.height;
-                var heightValue = options.height();
-                options = $.extend(options,{
-                    height: heightValue
-                });
-            }
+            $(element).bind("gridComplete",function(event,grid){
+                console.log("gridComplete:" + grid.p.reccount);
+                if(heightFunction && $.isFunction(heightFunction)){
+                    var heightValue = heightFunction(grid.p.reccount);
+                    $(element).jqGrid('setGridHeight',heightValue);
+                }
+            });
+
             
             //如果设置了自动宽度，则自动监听window.resize事件，实现grid的大小随页面变化
             var resizeTimer = null;

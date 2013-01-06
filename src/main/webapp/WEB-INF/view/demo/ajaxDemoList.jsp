@@ -16,8 +16,9 @@ $(document).ready(function() {
 	
 	//查询
 	$("#ajaxQueryBtn").click(function(){
-		$('#demoForm').attr("action","${contextPath}/bestDemo/queryDemoList");
-		$('#demoForm').submit();
+		$('#demoForm').ajaxSubmit({
+			
+		});
 	});
 	
 	//deal query result
@@ -29,10 +30,13 @@ $(document).ready(function() {
 		type: 'ajaxList',
 		caption: 'ajax demo 列表',
 		url:'${contextPath}/bestDemo/ajax/ajaxQueryDemoList',
+		mtype: "GET", //如果查询逻辑与具体当前登录人员信息相关，就建议使用POST
 		rownumbers: true, //显示行号
 	   	multiselect: true, //支持多选
 	   	multiboxonly: true, //显示多选checkbox
-		height: $("#demoList").find("tr").size() < 10 ? 'auto' : 255,
+		height: function(reccount){
+			return reccount < 10 ? 'auto' : 255;
+		},
 		//列显示名称，是一个数组对象
 	   	colNames:['id','自定义行号','登录名', '显示整数','显示为金额','电子邮箱','姓名(+登+截取)','最后更新时间(时间id排序)','自定义格式时间'],
 	   	//name 列显示的名称,index 传到服务器端用来排序用的列名称,width 列宽度
@@ -44,7 +48,7 @@ $(document).ready(function() {
 	   		//小小小
 	   		{name:'rownum',width:'40',formatter:function(cellvalue, options, rowObject){
 					return 'xxx';
-		   		},width: 400},
+		   		}},
 	   		//xxxx：
 	   		{name:'loginName',index:'id asc,loginName',search:true,sortable:true},
 	   		//可排序，显示为整数
@@ -65,8 +69,6 @@ $(document).ready(function() {
 	   		{name:'createDate',formatter:'date',formatoptions: {newformat:'Y-m-d'},width:120}		
 	   	],
 	});
-	
-	
 });
 </script>
 <style type="text/css">
