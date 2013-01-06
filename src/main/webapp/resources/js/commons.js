@@ -1227,11 +1227,11 @@ window.confirm = function(msg, yes , no){
         	//integer 设置初始的页码 1 是 	
         	page: 1,      
         	//pagerpos string 指定分页栏的位置 center 否
-        	pagerpos: 'center',
+        	//pagerpos: 'center',
         	//pgbuttons boolean 是否显示翻页按钮 true 否
-        	pgbuttons: false,
+        	//pgbuttons: false,
         	//pginput boolean 是否显示跳转页面的输入框 true 否
-        	pginput: false,
+        	//pginput: false,
         	//pgtext string 当前页信息 是
         	//Default valuesprmNames: {page:“page”,rows:“rows”, sort: “sidx”,
         	//order: “sord”, search:“_search”, nd:“nd”, npage:null} 当参数为null时不会被发到服务器端
