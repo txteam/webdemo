@@ -150,18 +150,15 @@ $(document).ready(function() {
 {
     jQuery.extend(
     {
-        toJSONString : function(object)
+    	subString: function(oldStr,maxLength,suffix){
+    		if(oldStr.length > maxLength){
+    			oldStr = oldStr.substring(0,maxLength) + suffix;
+    		}
+    		return oldStr;
+    	},
+    	toJSONString: function(object)
         {
-            var type = typeof object;
-            if ('object' == type)
-            {
-                if (Array == object.constructor)
-                    type = 'array';
-                else if (RegExp == object.constructor)
-                    type = 'regexp';
-                else
-                    type = 'object';
-            }
+            var type = jQuery.type(object);
             switch (type)
             {
                 case 'undefined':
@@ -1111,6 +1108,8 @@ window.confirm = function(msg, yes , no){
             hidegrid: false,
         	//rowNum	在grid上显示记录条数，这个参数是要被传递到后台
             rowNum:9999,
+            //如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.default : false
+            rownumbers: false,
             //数组:列显示名称，是一个数组对象
             //colNames:[],
             //常用到的属性：
@@ -1307,6 +1306,7 @@ window.confirm = function(msg, yes , no){
         _defaultJqGridColModel: {
         	//align string left, center, right. left
         	align: "left",
+        	title: false,
         	//classes string 设置列的css。多个class之间用空格分隔，如：'class1 class2' 。表格默认的css属性是ui-ellipsis empty string
         	//datefmt string ”/”, ”-”, and ”.”都是有效的日期分隔符。y,Y,yyyy 年YY, yy 月m,mm for monthsd,dd 日. ISO Date (Y-m-d)
         	//defval string 查询字段的默认值 空
@@ -1414,7 +1414,9 @@ window.confirm = function(msg, yes , no){
             var _this = this
             var options = this.options;
             
+            var heightFunction = null;
             if($.isFunction(options.height)){
+            	heightFunction = options.height;
                 var heightValue = options.height();
                 options = $.extend(options,{
                     height: heightValue
@@ -1428,12 +1430,34 @@ window.confirm = function(msg, yes , no){
 
             //清空element中内容
             if(options.type == 'simple'){
+            	//直接用el标签生成table，将该table转换为grid的方法
             	tableToGrid("#" + $(this.element).attr("id"),options);
+            }else if(options.type = 'ajaxList'){
+            	//改变jqGrid的colModel中的一些默认的情况，如默认允许排序，允许根据该字段进行查询
+            	if(_this.options.colModel){
+            		$.each(_this.options.colModel,function(index,colModelTemp){
+            			_this.options.colModel[index] = $.extend({},_this._defaultJqGridColModel,colModelTemp);
+            		});
+            	}
+            	options = $.extend({},_this._defaultJqGridOptions,this.options,{
+            		jsonReader: _this._defaultQueryListJsonReader
+            	});
+            	$(element).jqGrid(options);
             }else{
-                //options = this.options;$.extend({},_this._defaultJqGridOptions,this.options);
+                options = $.extend({},_this._defaultJqGridOptions,this.options);
+            }
+            
+            //如果高度为 function在数据加载完成后，动态运算高度
+            if($.isFunction(options.height)){
+            	heightFunction = options.height;
+                var heightValue = options.height();
+                options = $.extend(options,{
+                    height: heightValue
+                });
             }
             
             //如果设置了自动宽度，则自动监听window.resize事件，实现grid的大小随页面变化
+            var resizeTimer = null;
             if(options.autowidth){
                 $(window).resize(function() {
                     if (resizeTimer != null) {
@@ -1444,7 +1468,9 @@ window.confirm = function(msg, yes , no){
                     }, 100);
                 });
             }
-            var resizeTimer = null;
+            resizeTimer = setTimeout(function() {
+            	$(element).jqGrid('setGridWidth',$("body").innerWidth());
+            }, 500);
         }, 
         _init : function()
         {
@@ -1455,8 +1481,21 @@ window.confirm = function(msg, yes , no){
             
         }
     });
+    
+
+    jQuery.extend($.fn.fmatter, {
+		currencyFmatter : function(cellvalue, options, rowdata) {
+			return "$" + cellvalue;
+		}
+	});
+	jQuery.extend($.fn.fmatter.currencyFmatter, {
+		unformat : function(cellvalue, options) {
+			return cellvalue.replace("$", "");
+		}
+	});
+	
 })(jQuery);
-/** ********** component grid end   ************** **/
+/** ********** component grid end ************** * */
 
 
 /** ********** component iframe start ************** **/

@@ -6,6 +6,7 @@
  */
 package com.tx.webdemo.demo.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -79,6 +80,10 @@ public class DemoController {
            newDemo.setPassword("test");
            newDemo.setCreateDate(new Date());
            newDemo.setLastUpdateDate(new Date());
+           newDemo.setTestBigDecimal(new BigDecimal("" + (int) (Math.random() * 10000000)));
+           newDemo.setTestInt((int) (Math.random() * 10000000));
+           newDemo.setTestIntegerObj((int) (Math.random() * 10000000));
+           newDemo.setEmail("" + (int) (Math.random() * 10000000) + "@qq.com");
            demoList.add(newDemo);
        }
        

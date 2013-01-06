@@ -19,6 +19,8 @@ import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.DecimalMax;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
  /**
   * <demo模型>
   * <功能详细描述>
@@ -388,5 +390,13 @@ public class Demo {
      */
     public void setTestBoolean(boolean testBoolean) {
         this.testBoolean = testBoolean;
+    }
+    
+    public static void main(String[] args)throws Exception {
+        Demo demo = new Demo();
+        demo.setCreateDate(new Date());
+        ObjectMapper om = new ObjectMapper();
+        System.out.println(om.writeValueAsString(demo));
+        
     }
 }

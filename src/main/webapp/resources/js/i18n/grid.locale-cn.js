@@ -107,7 +107,7 @@ $.extend($.jgrid,{
 			AmPm : ["am","pm","AM","PM"],
 			S: function (j) {return j < 11 || j > 13 ? ['st', 'nd', 'rd', 'th'][Math.min((j - 1) % 10, 3)] : 'th'},
 			srcformat: 'Y-m-d',
-			newformat: 'm-d-Y',
+			newformat: 'Y-m-d H:i:s',
 			masks : {
 				ISO8601Long:"Y-m-d H:i:s",
 				ISO8601Short:"Y-m-d",
@@ -130,4 +130,23 @@ $.extend($.jgrid,{
 		idName : 'id'
 	}
 });
+//自定义
+//根据现有框架改写jqgrid中date
+$.fn.fmatter.date = function (cellval, opts, rwd, act) {
+	if($.isNumeric(cellval) && cellval > 0){
+		cellval = new Date(cellval * 1);
+	}
+	var op = $.extend({},opts.date);
+	if(opts.colModel !== undefined && !$.fmatter.isUndefined(opts.colModel.formatoptions)) {
+		op = $.extend({},op,opts.colModel.formatoptions);
+	}
+	if(!op.reformatAfterEdit && act=='edit'){
+		return $.fn.fmatter.defaultFormat(cellval, opts);
+	} else if(!$.fmatter.isEmpty(cellval)) {
+		return  $.fmatter.util.DateFormat(op.srcformat,cellval,op.newformat,op);
+	} else {
+		return $.fn.fmatter.defaultFormat(cellval, opts);
+	}
+};
+
 })(jQuery);

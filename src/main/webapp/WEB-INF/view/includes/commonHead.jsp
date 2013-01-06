@@ -18,6 +18,7 @@
 <!-- 该部分components js待版本稳定后合并入components中 -->
 <script type="text/javascript" src="${contextPath }/components/js/jquery.jqGrid.src.js"></script>
 <script type="text/javascript" src="${contextPath }/components/js/jquery.searchFilter.js"></script>
+<!-- time -->
 <script type="text/javascript" src="${contextPath }/components/js/jquery-ui-sliderAccess.js"></script>
 <script type="text/javascript" src="${contextPath }/components/js/jquery-ui-timepicker-addon.js"></script>
 <!-- jquery form -->

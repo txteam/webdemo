@@ -137,8 +137,9 @@
 				</bean>
 				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
 				<bean class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"></bean>
-				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
-				<!-- <bean class="org.springframework.http.converter.FormHttpMessageConverter"></bean> -->
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+				</bean>
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter"></bean>
 			</list>
 		</property>
 		<!-- 通过这个来实现行级权限 -->

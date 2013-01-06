@@ -110,9 +110,13 @@
 			<menu id="see_grid_parameters" text="表格控件参数" 
 				href="http://blog.csdn.net/lpy3654321/article/details/7936301"
 				target="mainTabs" selectRefresh="false"/>
+			<menu id="see_grid_col_formatter" text="jqGrid中的formatter" 
+				href="http://mj4d.iteye.com/blog/1634857"
+				target="mainTabs" selectRefresh="false"/>
 			<menu id="see_grid_demo" text="表格控件demo" 
 				href="http://www.trirand.com/blog/jqgrid/jqgrid.html"
 				target="mainTabs" selectRefresh="false"/>
+				
 			<menu id="see_form" text="表单美化及布局" 
 				href="http://www.formee.org/demo/reference.htm"
 				target="mainTabs" selectRefresh="false"/>
