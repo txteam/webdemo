@@ -26,6 +26,10 @@ $(document).ready(function() {
 		alert("processQuerySuccess");
 	};
     
+	var rownumIndex = 1;
+	$("#demoList").bind("gridComplete",function(){
+		rownumIndex = 1;
+	});
 	$("#demoList").txGrid({
 		type: 'ajaxList',
 		caption: 'ajax demo 列表',
@@ -47,9 +51,9 @@ $(document).ready(function() {
 	   		{name:'id',index:'id', width:'40',hidden:true},
 	   		//小小小
 	   		{name:'rownum',width:'40',formatter:function(cellvalue, options, rowObject){
-					return 'xxx';
+					return rownumIndex++;
 		   		}},
-	   		//xxxx：
+	   		//xxxx：	
 	   		{name:'loginName',index:'id asc,loginName',search:true,sortable:true},
 	   		//可排序，显示为整数
 	   		{name:'testIntegerObj',index:'testIntegerObj',align:"right",sortable:true,formatter:"integer",formatoptions:{thousandsSeparator:","}},
