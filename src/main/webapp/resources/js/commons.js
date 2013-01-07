@@ -3,26 +3,16 @@ $(document).ready(function() {
     if($("body.special").size() < 1){
         //统一页面风格
     	$("body").addClass("ui-widget-content");
-		$("form").addClass("formee");
-		$("button,input[type=button],:input[type=submit]").button().height(26);
+		//$("form").addClass("");
+		$("button,:input[type=button],:input[type=submit]").height(26).button();
 		if($(".form-table").size() > 0){
-	    	$(".form-table table").addClass("ui-widget-content").find("td,th").addClass("ui-widget-content");
-	    	//$(".form-table div").filter(".grid-1-12,.grid-2-12,.grid-3-12,.grid-4-12,.grid-5-12,.grid-6-12,.grid-7-12,.grid-8-12,.grid-9-12,.grid-10-12,.grid-11-12,.grid-12-12")
-	    	//  .not(".special").addClass('ui-widget-content');             
+			$(".form-table").addClass("formee");
+	    	$(".form-table table").addClass("ui-widget-content").find("td,th").addClass("ui-widget-content");       
 	    }
         //处理具有header样式的自动渲染
         if($(".header").size() > 0){
             $(".header").prepend('<span class="ui-icon ui-icon-gear" style="float:left;"></span>');
             $(".header").addClass("ui-state-default ui-corner-all ui-tabs-selected ui-state-active page-title-header");
-        }
-        //利用js实现自动长度截取功能
-        if($(".subStr") > 0){
-            $.each($(".subStr"), function(index, $dom) {
-                var maxLength = $dom.attr("maxLength") * 1 > 0 ? $dom.attr("maxLength") * 1 : 10;
-                alert(maxLength);
-                $dom.attr("title",$dom.text());
-                $dom.text($dom.text().substr(0,maxLength));
-            });
         }
     }
 });
@@ -533,6 +523,10 @@ DialogUtils.defaultConfigs = {
 	position:'center'
 };
 /**
+ * 当前页面Dialog关闭句柄
+ */
+DialogUtils.currentPageDialogCloserHandlers = {};
+/**
  * 创建或打开dialog
  * @param config
  */
@@ -551,6 +545,13 @@ DialogUtils.createOrOpenDiaglog = function(config){
 	    //if(!$dialogHandle.wijdialog("isOpen")){
 	    //    $dialogHandle.wijdialog("open");
 	    //}
+	}
+	if(!DialogUtils.currentPageDialogCloserHandlers[openWinId]){
+		DialogUtils.currentPageDialogCloserHandlers[openWinId] = true;
+		$.bindge("dialog_" + openWinId + "_close",function(){
+			//console.log("dialog_" + openWinId + "_close,happend");
+			$("#" + openWinId).wijdialog("close");
+		});
 	}
 };
 //对话框工具:打开一个iframe的独立页面
@@ -662,6 +663,8 @@ DialogUtils.closeDialogById = function(id){
 	var $dialogHandle = $("#" + openWinId);
 	if($dialogHandle.size() > 0){
 	   $dialogHandle.wijdialog("close");
+	}else{
+	   $.triggerge("dialog_" + openWinId + "_close");
 	}
 };
 /**
@@ -1158,7 +1161,7 @@ window.confirm = function(msg, yes , no){
             //sortable  是否可以排序
             //colModel:[],
         	//定义翻页用的导航栏，必须是有效的html元素。翻页工具栏可以放置在html页面任意位置
-            pager: null,
+            //pager: null,
             //rowNum	在grid上显示记录条数，这个参数是要被传递到后台
             rowNum: 9999,
             //array 一个下拉选择框，用来改变显示记录数，当选择时会覆盖rowNum参数传递到后台
@@ -1225,7 +1228,7 @@ window.confirm = function(msg, yes , no){
         	multiselect: false,
         	//multiselectWidth integer 当multiselect为true时设置multiselect列宽度 20 否
         	//integer 设置初始的页码 1 是 	
-        	page: 1,      
+        	//page: 1,      
         	//pagerpos string 指定分页栏的位置 center 否
         	//pagerpos: 'center',
         	//pgbuttons boolean 是否显示翻页按钮 true 否
@@ -1405,9 +1408,6 @@ window.confirm = function(msg, yes , no){
 			},
 			records: 'count',
 			repeatitems: false,
-			total: function(){
-				return 10;	
-			},
 			id: "id"
         },
         _create : function()
@@ -1432,10 +1432,11 @@ window.confirm = function(msg, yes , no){
             var _skins = options.skins != null ? options.skins : _default_skins;
 
             //清空element中内容
+            //console.log("ajaxPagedList：" + options.type);
             if(options.type == 'simple'){
             	//直接用el标签生成table，将该table转换为grid的方法
             	tableToGrid("#" + $(this.element).attr("id"),options);
-            }else if(options.type = 'ajaxList'){
+            }else if(options.type === 'ajaxList'){
             	//改变jqGrid的colModel中的一些默认的情况，如默认允许排序，允许根据该字段进行查询
             	if(_this.options.colModel){
             		$.each(_this.options.colModel,function(index,colModelTemp){
@@ -1449,6 +1450,20 @@ window.confirm = function(msg, yes , no){
             		}
             	});
             	$(element).jqGrid(options);
+            }else if(options.type === 'ajaxPagedList'){
+            	//改变jqGrid的colModel中的一些默认的情况，如默认允许排序，允许根据该字段进行查询
+            	if(_this.options.colModel){
+            		$.each(_this.options.colModel,function(index,colModelTemp){
+            			_this.options.colModel[index] = $.extend({},_this._defaultJqGridColModel,colModelTemp);
+            		});
+            	}
+            	options = $.extend({},_this._defaultJqGridOptions,_this.options,{
+            		jsonReader: _this._defaultQueryPagedListJsonReader,
+            		gridComplete: function(){
+            		    $(element).trigger("gridComplete",this);
+            		}
+            	});
+            	$(element).jqGrid(options);
             }else{
                 options = $.extend({},_this.options);
                 $(element).jqGrid(options);
@@ -1457,7 +1472,7 @@ window.confirm = function(msg, yes , no){
             
             //如果高度为 function在数据加载完成后，动态运算高度
             $(element).bind("gridComplete",function(event,grid){
-                console.log("gridComplete:" + grid.p.reccount);
+                //console.log("gridComplete:" + grid.p.reccount);
                 if(heightFunction && $.isFunction(heightFunction)){
                     var heightValue = heightFunction(grid.p.reccount);
                     $(element).jqGrid('setGridHeight',heightValue);

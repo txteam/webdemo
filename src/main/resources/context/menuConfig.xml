@@ -74,20 +74,16 @@
 				authKey="auth_config_manage" target="mainTabs" selectRefresh="false"/>
 		</menu>
 		
-		<menu id="bestDemoMananger" text="参考demo">				
-			<!-- 根据条件查询数据列表 -->
-			<menu id="hisDemoList" text="历史列表" href="/bestDemo/queryDemoList"
+		<menu id="bestDemoMananger" text="参考demo">	
+			<menu id="hisDemoList" text="简单列表" href="/bestDemo/queryDemoList"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestDemoList" text="简单列表" href="/bestDemo/toAjaxQueryDemoList"
+			<menu id="bestDemoList" text="ajax列表" href="/bestDemo/toAjaxQueryDemoList"
 				target="mainTabs" selectRefresh="false"/>
-			
-			<menu id="bestAjaxDemoList" text="ajax列表" href="/bestDemo/ajaxQueryDemoList"
+			<menu id="bestAjaxDemoList" text="ajax分页列表" href="/bestDemo/toAjaxQueryDemoPagedList"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestPagedList" text="分页列表" href="/bestDemo/queryPagedlist"
+			<menu id="bestForm" text="form表单" href="/bestDemo/toAddDemo"
 				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestAjaxPagedList" text="ajax分页列表" href="/demo/best/ajaxPagedList"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestDemoInfo" text="for表单" href="/demo/best/ajaxPagedList"
+			<menu id="bestView" text="详情页面" href="/bestDemo/toViewDemo"
 				target="mainTabs" selectRefresh="false"/>
 		</menu>
 		
@@ -106,7 +102,7 @@
 				target="mainTabs" selectRefresh="false"/>
 		</menu>
 		
-		<menu id="component_see_mananger" text="控件参考">
+		<menu id="component_see_mananger" text="参考信息">
 			<menu id="see_grid_parameters" text="表格控件参数" 
 				href="http://blog.csdn.net/lpy3654321/article/details/7936301"
 				target="mainTabs" selectRefresh="false"/>
@@ -126,13 +122,10 @@
 			<menu id="see_date" text="日期控件" 
 				href="http://www.my97.net/dp/demo/index.htm"
 				target="mainTabs" selectRefresh="false"/>
-		</menu>
-		<menu id="infomations_" text="info">
+				
 			<menu id="info_ognl" text="ognl的使用" 
 				href="http://blog.csdn.net/abasen/article/details/5123381"
 				target="mainTabs" selectRefresh="false"/>
-				
-				
 		</menu>
 	</tool_menus_config>
 </menu_config>

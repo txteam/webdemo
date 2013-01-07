@@ -6,13 +6,10 @@
  */
 package com.tx.webdemo.demo.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Controller;
@@ -21,9 +18,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.webdemo.demo.model.Demo;
 import com.tx.webdemo.demo.service.DemoService;
@@ -91,9 +86,72 @@ public class BestDemoController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAjaxQueryDemoList")
-    public String toAjaxQueryDemoList(Model requestAttrs){
+    public String toAjaxQueryDemoList(Model requestAttrs) {
         
         return "/demo/ajaxDemoList";
+    }
+    
+    /**
+     * 跳转到ajaxDemo分页列表
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/toAjaxQueryDemoPagedList")
+    public String toAjaxQueryDemoPagedList(Model requestAttrs) {
+        
+        return "/demo/ajaxDemoPagedList";
+    }
+    
+    /**
+      * 增加demo页面
+      * <功能详细描述>
+      * @param requestAttrs
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toAddDemo")
+    public String toAddDemo(Model requestAttrs) {
+        
+        return "/demo/addDemo";
+    }
+    
+    /**
+     * 查看demo详情页面
+     * <功能详细描述>
+     * @param requestAttrs
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/toViewDemo")
+    public String toViewDemo(Model requestAttrs) {
+        
+        return "/demo/viewDemo";
+    }
+    
+    /**
+     * 跳转到更新demo页面
+     * <功能详细描述>
+     * @param requestAttrs
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/toUpdateDemo")
+    public String toUpdateDemo(Model requestAttrs) {
+        
+        return "/demo/updateDemo";
     }
     
     /**
@@ -118,8 +176,8 @@ public class BestDemoController {
     }
     
     /**
-      *<功能简述>
-      *<功能详细描述>
+      * ajax查询demo分页
+      * <功能详细描述>
       * @param params
       * @return [参数说明]
       * 
@@ -127,34 +185,19 @@ public class BestDemoController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/ajax/ajaxQueryPagedDemoList")
-    @ResponseBody()
-    public PagedList<Demo> ajaxQueryPagedDemoList(HashMap<String, Object> params) {
-        PagedList<Demo> demoPagedList = this.demoService.queryDemoPagedList(1,
-                10);
-        
-        return demoPagedList;
-    }
-    
-    /**
-      * ajax查询demo分页列表
-      * <功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return PagedList<Demo> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
     @RequestMapping("/ajax/ajaxQueryDemoPagedList")
     @ResponseBody()
-    public PagedList<Demo> ajaxQueryDemoPagedList() {
-        HttpServletRequest request = WebContextUtils.getRequest();
-        int pageIndex = NumberUtils.toInt(request.getParameter("pageIndex"), 1);
-        int pageSize = NumberUtils.toInt(request.getParameter("pageSize"), 10);
-        Map<String, String[]> paramMap = request.getParameterMap();
-        for (Entry<String, String[]> entry : paramMap.entrySet()) {
-            System.out.println(entry.getKey());
+    public PagedList<Demo> ajaxQueryDemoPagedList(
+            @RequestParam MultiValueMap<String, String> queryCondition) {
+        for (MultiValueMap.Entry<String, List<String>> entry : queryCondition.entrySet()) {
+            System.out.println(entry.getKey() + " : "
+                    + queryCondition.getFirst(entry.getKey()));
         }
+        int pageIndex = NumberUtils.toInt(queryCondition.getFirst("pageIndex"),
+                1);
+        int pageSize = NumberUtils.toInt(queryCondition.getFirst("pageSize"),
+                10);
+        
         PagedList<Demo> demoPagedList = this.demoService.queryDemoPagedList(pageIndex,
                 pageSize);
         

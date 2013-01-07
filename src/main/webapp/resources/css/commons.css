@@ -189,20 +189,16 @@ a {
 .list-table table th,.list-table table td {
     height: 20px;
     max-height: 20px;
+    /*
     line-height: 20px;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 1px;
     padding-right: 1px;
+    */
 }
 .list-table table th {
     height: 24px;
-    text-align: center;
-    font-weight: normal;
-    /*border:1px solid #444;*/
-}
-.list-table td {
-    /*border:1px solid #444;*/
 }
 .list-table a {
     text-decoration: underline;
@@ -213,14 +209,3 @@ a {
     line-height: 26px;
     border-top: none;
 }
-.list-table input[type="text"], .form-table input[type="password"], .form-table input[type="file"], .form-table textarea, .form-table select{
-    height: 20px;
-    max-height: 20px;
-    padding-top: 2px;
-    padding-bottom: 1px;
-    padding-left: 6px;
-    padding-right: 2px;
-    max-width: 157px;
-    font-size: 14px;
-}
-

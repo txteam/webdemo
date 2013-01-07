@@ -332,9 +332,6 @@ tableToGrid("#foreachTable2");
 			},
 			records: 'count',
 			repeatitems: false,
-			total: function(){
-				return 10;	
-			},
 			id: "id"
 		}
 	});
