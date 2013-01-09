@@ -17,6 +17,7 @@ $(document).ready(function() {
 	$("#menu").wijmenu({
 	    //position : {my: "top right", at: "buttom right"}
 	});
+	$("#menuItmesContainer div[role=menubar]").addClass("ui-state-default");
 	var _removeClassTimer = null;
 	function _removeOpacity(){
 		if(_removeClassTimer != null){
@@ -68,7 +69,7 @@ $(document).ready(function() {
 <div class="container">
 	<!-- top -->
 	<div class="top ui-widget-content">
-		<div id="topHeader" class="top-header ui-widget-header ui-state-default ui-helper-reset ui-corner-top">
+		<div id="topHeader" class="top-header ui-widget-header ui-helper-reset ui-corner-top">
 	        <ul>
 	        	<c:forEach items="${toolMenuItemTreeList}" var="menuItem">
 	        		<c:if test="${menuItem != null && fn:length(menuItem.childs) > 0}">

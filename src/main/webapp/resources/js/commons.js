@@ -327,6 +327,15 @@ Date.parseToDate = function(str, format)
 /** ********** chemeswitcher start************** */
 var _default_skins =
 [
+ 		{
+            group : "boda",
+            hrefTemplate : "{contextPath}/css/themes/{id}/jquery.ui.all.css",
+            ids :
+            [
+             	"boda01","boda02","boda03",
+             	"boda11","boda12"
+            ]
+        },
         {
             group : "jqueryui",
             hrefTemplate : "{contextPath}/jquery-ui/themes/{id}/jquery-ui.css",

@@ -86,7 +86,8 @@ Layout.prototype._tabPanelWidth = 0;
 Layout.prototype._initTop = function(){
     //为toolmenu添加样式
     $(".top-content").find(".top-content-left>div>span")
-    .addClass("top-content-menuitem ui-helper-reset ui-state-default ui-corner-all")
+    //ui-state-default 
+    .addClass("top-content-menuitem ui-helper-reset ui-widget-content ui-corner-all")
     .hover(function () {
             $(this).addClass("ui-state-hover");
         },
