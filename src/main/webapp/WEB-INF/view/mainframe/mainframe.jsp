@@ -149,9 +149,8 @@ $(document).ready(function() {
 					<div id="mainTabs">
 						<ul> 
 		                    <li id="mainTabs_welcome"><a href="#mainTabs-1">个人面板</a></li> 
-		                    <li id="mainTabs_calendar"><a href="#mainTabs-2">行事历</a></li>
-		                    <li id="mainTabs_notepad"><a href="#mainTabs-3">记事本</a></li>
-		                    <li id="mainTabs_test4"><a href="#mainTabs-4">globalEvent</a><span class="ui-icon ui-icon-close"></span></li>
+		                    <li id="mainTabs_calendar"><a href="#mainTabs-2">行事历</a><span class="ui-icon ui-icon-close"></span></li>
+		                    <li id="mainTabs_notepad"><a href="#mainTabs-3">记事本</a><span class="ui-icon ui-icon-close"></span></li>
 		                </ul> 
 		                <div id="mainTabs-1"> 
 		                    <p> 
@@ -172,10 +171,6 @@ $(document).ready(function() {
 		                	<iframe src="" 
 		                		newStr="${contextPath}/view/notepad/notepad" 
 		                		lazyLoad="true"></iframe>
-		                </div>
-		                <div id="mainTabs-4"> 
-		                	<iframe src="${contextPath}/view/demo/components/testGlobalEvent" 
-		                		lazyLoad="true" refreshWhenSelect="true"></iframe>
 		                </div>
 		           	</div> 
 				</div>
