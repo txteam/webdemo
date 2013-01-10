@@ -19,28 +19,73 @@ $(document).ready(function() {
 <form id="demo" action="/demo/addDemo1" method="post">
 
 <div id="bodyDiv" class="form-table">
-<div>必填项</div>
+<div class="ui-widget-shadow">必填项</div>
 <div>
 	<table>
 		<tr>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
 			<td>username${contextPath }</td>
 			<td><input type="text" name="username"/></td>
 		</tr>
 		<tr>
 			<td>password</td>
 			<td><input type="password" name="password"/></td>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
 		</tr>
 		<tr>
 			<td>email</td>
 			<td><input type="text" name="email"/></td>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
 		</tr>
 		<tr>
 			<td>createDate</td>
 			<td><input type="text" name="createDate"/></td>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
 		</tr>
 	</table>
 </div>
-<div>选填项</div>
+<div class="ui-widget-overlay">选填项</div>
+<div>
+	<table>
+		<tr>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
+			<td>password</td>
+			<td><input type="password" name="password"/></td>
+		</tr>
+		<tr>
+			<td>password</td>
+			<td><input type="password" name="password"/></td>
+			<td>password</td>
+			<td><input type="password" name="password"/></td>
+		</tr>
+		<tr>
+			<td>email</td>
+			<td><input type="text" name="email"/></td>
+			<td>password</td>
+			<td><input type="password" name="password"/></td>
+		</tr>
+		<tr>
+			<td>createDate</td>
+			<td><input type="text" name="createDate"/></td>
+			<td>password</td>
+			<td><input type="password" name="password"/></td>
+		</tr>
+	</table>
+</div>
+<div>其他</div>
 <div>
 	<table>
 		<tr>
