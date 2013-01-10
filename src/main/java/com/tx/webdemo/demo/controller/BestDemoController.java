@@ -65,6 +65,14 @@ public class BestDemoController {
                     + queryCondition2.getFirst(entry.getKey()));
         }
         
+        List<String> testCheckbox = queryCondition2.get("testCheckbox");
+        if(testCheckbox != null){
+            for (String testCheckboxTemp : testCheckbox) {
+                System.out.println("testCheckbox :" + testCheckboxTemp);
+            }
+        }
+        
+        
         //查询demo类表
         List<Demo> demoList = this.demoService.queryDemoList();
         
@@ -193,6 +201,13 @@ public class BestDemoController {
             System.out.println(entry.getKey() + " : "
                     + queryCondition.getFirst(entry.getKey()));
         }
+        List<String> testCheckbox = queryCondition.get("testCheckbox");
+        if(testCheckbox != null){
+            for (String testCheckboxTemp : testCheckbox) {
+                System.out.println("testCheckbox :" + testCheckboxTemp);
+            }
+        }
+        
         int pageIndex = NumberUtils.toInt(queryCondition.getFirst("pageIndex"),
                 1);
         int pageSize = NumberUtils.toInt(queryCondition.getFirst("pageSize"),

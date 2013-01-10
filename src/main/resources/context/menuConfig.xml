@@ -113,6 +113,10 @@
 				href="http://www.trirand.com/blog/jqgrid/jqgrid.html"
 				target="mainTabs" selectRefresh="false"/>
 				
+			<menu id="see_jquery_cookie" text="jqueryCookie" 
+				href="http://www.nowamagic.net/jquery/jquery_JqueryCookie.php"
+				target="mainTabs" selectRefresh="false"/>
+				
 			<menu id="see_form" text="表单美化及布局" 
 				href="http://www.formee.org/demo/reference.htm"
 				target="mainTabs" selectRefresh="false"/>

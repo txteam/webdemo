@@ -16,15 +16,9 @@ $(document).ready(function() {
 	
 	//查询
 	$("#ajaxQueryBtn").click(function(){
-		$('#demoForm').ajaxSubmit({
-			
-		});
+		//alert($.toJsonString($('#demoForm').serializeObject()));
+		$("#demoList").jqGrid('setGridParam',{postData:$('#demoForm').serializeObject()}).trigger('reloadGrid'); 
 	});
-	
-	//deal query result
-	function processQuerySuccess(data){
-		alert("processQuerySuccess");
-	};
     
 	var rownumIndex = 1;
 	$("#demoList").bind("gridComplete",function(){
@@ -32,11 +26,10 @@ $(document).ready(function() {
 	});
 	$("#demoList").txGrid({
 		type: 'ajaxPagedList',
-		pager: 'demoListPager',
 		caption: 'ajax demo 分页列表',
 		url:'${contextPath}/bestDemo/ajax/ajaxQueryDemoPagedList',
-		mtype: "GET", //如果查询逻辑与具体当前登录人员信息相关，就建议使用POST
-		rownumbers: true, //显示行号
+		mtype: "POST",//如果查询逻辑与具体当前登录人员信息相关，就建议使用POST
+		//rownumbers: true, //显示行号
 		rowNum:10,//默认刚一开始的每页显示条数
 	   	multiselect: true, //支持多选
 	   	multiboxonly: true, //显示多选checkbox
@@ -73,7 +66,6 @@ $(document).ready(function() {
 	   		{name:'createDate',formatter:'date',formatoptions: {newformat:'Y-m-d'},width:120}		
 	   	],
 	});
-	$("#demoList").jqGrid('navGrid','#demoListPager',{edit:true,add:true,del:true});
 });
 </script>
 <style type="text/css">
@@ -124,8 +116,40 @@ $(document).ready(function() {
 			</td>
 		</tr>
 		<tr>
+			<th>单选:</th>
+			<td>
+				<ul class="formee-list">
+				   <li>
+				    <input name="testRadio" type="radio" value="1"/>
+				    Opt. 01
+				   </li>
+				   <li>
+				    <input name="testRadio" type="radio" value="2"/>
+				    Opt. 02
+				   </li>
+				</ul>
+			</td>
+			<th>复选:</th>
+			<td>
+				<ul class="formee-list">
+				   <li>
+				    <input name="testCheckbox" type="checkbox" value="11"/>
+				    Opt. 01
+				   </li>
+				   <li>
+				    <input name="testCheckbox" type="checkbox" value="22"/>
+				    Opt. 02
+				   </li>
+				</ul>
+			</td>
+			<th>&nbsp;</th>
+			<td>
+				&nbsp;
+			</td>
+		</tr>
+		<tr>
 			<td colspan="6" class="button operRow">
-				<button type="button" id="queryBtn">查询</button>
+				<button type="button" id="ajaxQueryBtn" ptype="search">查询</button>
 			</td>
 		</tr>
 		</tbody>
@@ -138,11 +162,13 @@ $(document).ready(function() {
 	</table>
 	<div id="demoListPager"></div>
 	<div class="operRow">
-		<button id="prepare" type="button">prepare</button>
+		<button id="add" type="button" ptype="save">增加</button>
 		&nbsp;&nbsp;
-		<button id="add" type="button">增加</button>
+		<button id="del" type="button" ptype="del">删除</button>
 		&nbsp;&nbsp;
-		<button id="add" type="button">删除</button>
+		<button id="refresh" type="button" ptype="refresh">刷新</button>
+		&nbsp;&nbsp;
+		<button id="modify" type="button" ptype="modify">编辑</button>
 	</div>
 </div>
 

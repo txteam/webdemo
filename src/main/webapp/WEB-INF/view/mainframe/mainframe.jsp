@@ -65,7 +65,7 @@ $(document).ready(function() {
 <style type="text/css">
 
 </style>
-<body>
+<body class="special">
 <div class="container">
 	<!-- top -->
 	<div class="top ui-widget-content">
@@ -164,11 +164,11 @@ $(document).ready(function() {
 		                    </p> 
 		                </div> 
 		                <div id="mainTabs-2">
-		                	<iframe src="" 
+		                	<iframe src="" border="0" frameborder="0"
 		                		newSrc="${contextPath}/view/calendar/calendar" ></iframe>
 		                </div>
 		                <div id="mainTabs-3"> 
-		                	<iframe src="" 
+		                	<iframe src="" border="0" frameborder="0"
 		                		newStr="${contextPath}/view/notepad/notepad" 
 		                		lazyLoad="true"></iframe>
 		                </div>

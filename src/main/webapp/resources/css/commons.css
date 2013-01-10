@@ -169,6 +169,19 @@ a {
     max-width: 157px;
     font-size: 14px;
 }
+.form-table .formee-list{
+    height: 20px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+    padding-left: 6px;
+    padding-right: 2px;
+    max-height: 20px;
+    font-size: 14px;
+}
+.form-table .formee-list li{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
 .form-table .operRow {
     line-height: 26px;
     border-top: none;

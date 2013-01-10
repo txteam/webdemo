@@ -10,32 +10,17 @@
 
 <script type="text/javascript" >
 $(document).ready(function() {
-	$("#bodyDiv").omPanel({
-		header:false,
-        width: 'fit',
-        height: 'fit',
-        title: 'webdemo mainframe',
-        collapsed: false,//组件创建后为收起状态
-        collapsible: false,//渲染收起与展开按钮
-        closable: false //渲染关闭按钮
-    });
-	
-	$('input[name=createDate]').omCalendar({
-		editable : false,
-		showTime : true
-	});
-
-	 $('#submitButton').button();
-	 $('#test').button();
-
-	 	 
+	 //alert($("button,:input[type=button],:input[type=submit]").size());
 	 //$("form").omForm();
 });
 </script>
 </head>
 <body>
 <form id="demo" action="/demo/addDemo1" method="post">
-<div id="bodyDiv">
+
+<div id="bodyDiv" class="form-table">
+<div>必填项</div>
+<div>
 	<table>
 		<tr>
 			<td>username${contextPath }</td>
@@ -54,9 +39,33 @@ $(document).ready(function() {
 			<td><input type="text" name="createDate"/></td>
 		</tr>
 	</table>
+</div>
+<div>选填项</div>
+<div>
+	<table>
+		<tr>
+			<td>username${contextPath }</td>
+			<td><input type="text" name="username"/></td>
+		</tr>
+		<tr>
+			<td>password</td>
+			<td><input type="password" name="password"/></td>
+		</tr>
+		<tr>
+			<td>email</td>
+			<td><input type="text" name="email"/></td>
+		</tr>
+		<tr>
+			<td>createDate</td>
+			<td><input type="text" name="createDate"/></td>
+		</tr>
+	</table>
+</div>
+
 	<input type="button" id="submitButton" value="提交">
 	<input type="button" id="test" value="提交">
 </div>
+
 </form>
 </body>
 </html>

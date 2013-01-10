@@ -16,9 +16,7 @@ $(document).ready(function() {
 	
 	//查询
 	$("#ajaxQueryBtn").click(function(){
-		$('#demoForm').ajaxSubmit({
-			
-		});
+		$("#demoList").jqGrid('setGridParam',{postData:$('#demoForm').serializeObject()}).trigger('reloadGrid'); 
 	});
 	
 	//deal query result
@@ -73,6 +71,37 @@ $(document).ready(function() {
 	   		{name:'createDate',formatter:'date',formatoptions: {newformat:'Y-m-d'},width:120}		
 	   	],
 	});
+	
+	$("#add").click(function(){
+		DialogUtils.openDialog({
+			id : "addDemoDialog",
+			title : "增加demo",
+			contentUrl: "${contextPath}/bestDemo/toAddDemo",
+			modal: true,
+			height: $("body").height(),
+			width: $("body").width(),
+			resizable: false,
+			draggable: false,
+			captionButtons: {
+	            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
+	            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
+	            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
+	            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
+	            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
+	            close: {visible: true, iconClassOn: 'ui-icon-close'}
+	        }
+		});
+		$("addDemoDialog").wijdialog("maximize");
+		var _winResizeForDialogTimer = null;
+		$(window).resize(function(event){
+			if(_winResizeForDialogTimer != null){
+				clearTimeout(_winResizeForDialogTimer);
+			}
+			_winResizeForDialogTimer = setTimeout(function(){
+				$("addDemoDialog").wijdialog("maximize");
+			},100);
+		})
+	});
 });
 </script>
 <style type="text/css">
@@ -94,7 +123,7 @@ $(document).ready(function() {
 		<div class="grid-1-12">数字:</div>
 		<div class="grid-3-12"><input name="number" type="text" value='<c:out value="${number }"></c:out>'/></div>
 		<div class="grid-4-12">
-			<button type="button" id="queryBtn">查询</button>
+			<button type="button" id="ajaxQueryBtn" ptype="query">查询</button>
 		</div>
 	</div>
 </div>
@@ -105,12 +134,15 @@ $(document).ready(function() {
 <div class="list-table">
 	<table id="demoList">
 	</table>
+	<div id="demoListPager"></div>
 	<div class="operRow">
-		<button id="prepare" type="button">prepare</button>
+		<button id="add" type="button" ptype="add">增加</button>
 		&nbsp;&nbsp;
-		<button id="add" type="button">增加</button>
+		<button id="del" type="button" ptype="del">删除</button>
 		&nbsp;&nbsp;
-		<button id="add" type="button">删除</button>
+		<button id="refresh" type="button" ptype="refresh">刷新</button>
+		&nbsp;&nbsp;
+		<button id="modify" type="button" ptype="modify">编辑</button>
 	</div>
 </div>
 

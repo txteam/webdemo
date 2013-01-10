@@ -369,7 +369,7 @@ Layout.prototype._initMainTabs = function() {
         	_this._tabPanelHeight = _this.$centerMainTabs.height() - 35;
     	    _this._tabPanelWidth = _this.$centerMainTabs.width() - 3;
         	if(newTabOption.isIframe){
-        		var $iframe = $('<iframe src="' + newTabOption.iframeHref + '"></iframe>');
+        		var $iframe = $('<iframe frameborder="0" border="0" src="' + newTabOption.iframeHref + '"></iframe>');
         		$iframe.attr("height",_this._tabPanelHeight);
                 $iframe.attr("width",_this._tabPanelWidth);
         		$(ui.panel).append($iframe);

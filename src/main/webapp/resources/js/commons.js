@@ -4,7 +4,7 @@ $(document).ready(function() {
         //统一页面风格
     	$("body").addClass("ui-widget-content");
 		//$("form").addClass("");
-		$("button,:input[type=button],:input[type=submit]").height(26).button();
+		$("button,:input[type=button],:input[type=submit]").txButton();
 		if($(".form-table").size() > 0){
 			$(".form-table").addClass("formee");
 	    	$(".form-table table").addClass("ui-widget-content").find("td,th").addClass("ui-widget-content");       
@@ -138,6 +138,21 @@ $(document).ready(function() {
  */
 (function($, undefined)
 {
+	$.fn.serializeObject = function() {
+		var o = {};
+		var a = this.serializeArray();
+		$.each(a, function() {
+			if (o[this.name]) {
+				if (!o[this.name].push) {
+					o[this.name] = [ o[this.name] ];
+				}
+				o[this.name].push(this.value || '');
+			} else {
+				o[this.name] = this.value || '';
+			}
+		});
+		return o;
+	}
     jQuery.extend(
     {
     	subString: function(oldStr,maxLength,suffix){
@@ -277,52 +292,6 @@ Date.parseToDate = function(str, format)
     return date;
 };
 /** ************** date end********************** */
-
-/** *********** eventmanager start*************** */
-
-/** *********** eventmanager end***************** */
-
-/** ************** tabs start******************** */
-/*
- * 定义tab
- */
-(function($, undefined)
-{
-    $.widget("tx.txtabs", $.ui.tabs,
-    {
-        options :
-        {
-            tabsHandleContainerId : null
-        },
-        _create : function()
-        {
-            this._super();
-
-            var that = this;
-
-            this.element.css(
-            {
-                "padding-bottom" : "0px", "padding-left" : "0px",
-                "padding-right" : "0px", "padding-top" : "0px"
-            });
-            this._getList().css(
-                    {
-                        "border-left-width" : "0px",
-                        "border-top-width" : "0px",
-                        "border-right-width" : "0px",
-                        "border-bottom-width" : "0px"
-                    });
-        },
-        // allow overriding how to find the list for rare usage scenarios
-        // (#7715)
-        _getList : function()
-        {
-            return this.element.find("#" + this.options.tabsHandleContainerId)
-                    .find("ol,ul").eq(0);
-        }
-    });
-})(jQuery);
-/** ************** tabs end******************** */
 
 /** ********** chemeswitcher start************** */
 var _default_skins =
@@ -1134,7 +1103,7 @@ window.confirm = function(msg, yes , no){
             //定义是否可以多选
         	multiselect: false,
             //ajax提交方式。POST或者GET，jq默认GET,在此制定默认的grid为post提交
-        	mtype: "GET",
+        	mtype: "POST",
         	//如果为ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度。
             //如果父元素宽度改变，为了使表格宽度能够自动调整则需要实现函数：setGridWidth
             autowidth:true,
@@ -1150,7 +1119,27 @@ window.confirm = function(msg, yes , no){
             //editurl string 定义对form编辑时的url 空值 是
             emptyrecords:'无',
             //当为ture时，调整列宽度不会改变表格的宽度。当shrinkToFit 为false时，此属性会被忽略  false 否
-        	forceFit : true
+        	forceFit : true,
+        	serializeGridData : function(postData){
+        		//如果数据为纯粹的对象，则将该对象转化为数组
+        		if($.isPlainObject(postData)){
+        			var newArray = [];
+        			var index = 0;
+        			$.each(postData,function(name,value){
+        				if($.isArray(value)){
+        					$.each(value,function(i,o){
+        						newArray[index++] = {name:name,value:o};
+        					});
+        				}else{
+        					newArray[index++] = {name:name,value:value};
+        				}
+        			});
+        			//alert($.toJsonString(newArray));
+        			return newArray;
+        		}else{
+        			return postData;
+        		}
+        	}
         },
         _defaultJqGridOptions : {
         	//获取数据的地址
@@ -1159,7 +1148,7 @@ window.confirm = function(msg, yes , no){
         	//可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
         	datatype: "json",
         	//ajax提交方式。POST或者GET，jq默认GET,在此制定默认的grid为post提交
-        	mtype: "GET",
+        	mtype: "POST",
         	//数组:列显示名称，是一个数组对象
             //colNames:[],
             //常用到的属性：
@@ -1263,10 +1252,10 @@ window.confirm = function(msg, yes , no){
         	},
         	//postData array 此数组内容直接赋值到url上，参数类型：{name1:value1…} 空array 是
         	//利用该参数实现：页面刷新后，保持当前页数，以及每页显示条数
-        	postData: {
+        	//postData: {
         		//pageIndex: ,
         		//pageSize: ,
-        	},
+        	//},
         	//recordpos string 定义了记录信息的位置： left, center, right right 否
         	//recordtext string 显示记录数信息。{0} 为记录数开始，{1}为记录数结束。 viewrecords为ture时才能起效，且总记录数大于0时才会显示此信息
         	//resizeclass string 定义一个class到一个列上用来显示列宽度调整时的效果 空值 否
@@ -1439,9 +1428,56 @@ window.confirm = function(msg, yes , no){
             var _contextPath = options.contextPath;
             var _themeCookieName = options.themeCookieName;
             var _skins = options.skins != null ? options.skins : _default_skins;
+            var _gridElementId = $(element).attr("id");
+            //支持自动添加pager//符合gridId+pager的div将被制定为pagger
+            var _gridPagerId = _gridElementId + "Pager";
+            var _$gridPager = $("#" + _gridPagerId);
 
             //清空element中内容
             //console.log("ajaxPagedList：" + options.type);
+            function toModifyGridHeader(event){
+            	var grid = this;
+            	//alert($.toJsonString(grid.p.colNames));
+            	//alert($.toJsonString(grid.p.colModel));
+            	$parent = $("body");
+            	var modifyGridDivId = _gridPagerId + "ModifyHeaderDiv_";
+            	var $headerModifier = $parent.find("#dialog_" + modifyGridDivId);
+            	if($headerModifier.size() == 0){
+            		$headerModifier = $("<div>").attr("id","dialog_" + modifyGridDivId).addClass("form-table").appendTo($parent);
+            		//创建table
+            		var $headerModifyTable = $("<table>").appendTo($headerModifier);
+            		//逐行创建
+            		var colNames = grid.p.colNames;
+            		$.each(grid.p.colModel,function(index,colNameTemp){
+            			if(!colNameTemp || colNameTemp.name == 'rn' || colNameTemp.name == 'cb'){
+            				return true;
+            			}
+            			var $trTemp = $("<tr>").appendTo($headerModifyTable);
+            			//列名td
+            			$trTemp.append($("<td>").attr("width","80%").text(colNames[index]).addClass("ui-widget-content"));
+            			//是否选中td
+            			var $checkBoxTemp = $('<input type="checkbox"/>').attr("name",_gridPagerId + "Header_");
+            			if(!colNameTemp.hidden){
+            				$checkBoxTemp.attr("checked",true);
+            			}
+            			$checkBoxTemp.click(function(){
+            				if($(this).attr("checked") == "checked"){
+            					$(element).jqGrid("showCol", colNameTemp.name);
+            					$(element).jqGrid("setGridWidth", $("body").innerWidth());
+            				}else{
+            					$(element).jqGrid("hideCol", colNameTemp.name);
+            					$(element).jqGrid("setGridWidth", $("body").innerWidth());
+            				}
+            			});
+            			$trTemp.append($("<td>").attr("width","20%").addClass("ui-widget-content").append($checkBoxTemp));
+            		});
+            		//$headerModifier.hide();
+            		//alert($headerModifier.html());
+            	}
+            	
+            	DialogUtils.dialog(modifyGridDivId,'编辑',null,240,400);
+            }
+            
             if(options.type == 'simple'){
             	//直接用el标签生成table，将该table转换为grid的方法
             	tableToGrid("#" + $(this.element).attr("id"),options);
@@ -1458,7 +1494,33 @@ window.confirm = function(msg, yes , no){
             		    $(element).trigger("gridComplete",this);
             		}
             	});
+            	
+            	options = $.extend(options,{
+	            		pgbuttons: false,
+				        pginput: false,
+				        rowList: []
+	            });
+            	//pager
+            	if(_$gridPager.size() > 0){
+            		options = $.extend(options,{
+	            		pager: _gridPagerId
+	            	});
+            	}
+            	
             	$(element).jqGrid(options);
+            	
+            	//pager
+            	if(_$gridPager.size() > 0){
+            		$(element).jqGrid('navGrid', '#' + _gridPagerId ,{edit:false,add:false,del:false,search:false})
+            			.jqGrid('navButtonAdd', '#' + _gridPagerId , {
+												caption : "",
+												buttonicon : "ui-icon-gear",
+												onClickButton : toModifyGridHeader,
+												position : "last",
+												title : "",
+												cursor : "pointer"
+											});
+            	}
             }else if(options.type === 'ajaxPagedList'){
             	//改变jqGrid的colModel中的一些默认的情况，如默认允许排序，允许根据该字段进行查询
             	if(_this.options.colModel){
@@ -1472,7 +1534,27 @@ window.confirm = function(msg, yes , no){
             		    $(element).trigger("gridComplete",this);
             		}
             	});
+            	
+            	//pager
+            	if(_$gridPager.size() > 0){
+            		options = $.extend(options,{
+	            		pager : _gridPagerId
+	            	});
+            	}
             	$(element).jqGrid(options);
+            	
+            	//pager
+            	if(_$gridPager.size() > 0){
+            		$(element).jqGrid('navGrid', '#' + _gridPagerId ,{edit:false,add:false,del:false,search:false})
+            			.jqGrid('navButtonAdd', '#' + _gridPagerId , {
+												caption : "",
+												buttonicon : "ui-icon-gear",
+												onClickButton : toModifyGridHeader,
+												position : "last",
+												title : "",
+												cursor : "pointer"
+											});
+            	}
             }else{
                 options = $.extend({},_this.options);
                 $(element).jqGrid(options);
@@ -1531,16 +1613,46 @@ window.confirm = function(msg, yes , no){
 /** ********** component grid end ************** * */
 
 
-/** ********** component iframe start ************** **/
+/** ********** component tabs start*************** */
+(function($, undefined) {
+	$.widget("tx.txtabs", $.ui.tabs, {
+		options : {
+			tabsHandleContainerId : null
+		},
+		_create : function() {
+			this._super();
 
+			var that = this;
+
+			this.element.css({
+				"padding-bottom" : "0px",
+				"padding-left" : "0px",
+				"padding-right" : "0px",
+				"padding-top" : "0px"
+			});
+			this._getList().css({
+				"border-left-width" : "0px",
+				"border-top-width" : "0px",
+				"border-right-width" : "0px",
+				"border-bottom-width" : "0px"
+			});
+		},
+		// allow overriding how to find the list for rare usage scenarios
+		// (#7715)
+		_getList : function() {
+			return this.element.find("#" + this.options.tabsHandleContainerId)
+					.find("ol,ul").eq(0);
+		}
+	});
+})(jQuery);
+/** ********** component iframe start ************** * */
 (function($, undefined)
 {   
-    //iframe组件空间支持
+    // iframe组件空间支持
     /*
-     *  支持iframe高度动态运算
-     *  如果不添加height,width的网运算
-     *  
-     */
+	 * 支持iframe高度动态运算 如果不添加height,width的网运算
+	 * 
+	 */
     $.widget("tx.txiframe",
     {
         options : {
@@ -1584,6 +1696,7 @@ window.confirm = function(msg, yes , no){
             if($.isFunction(options.width)){
                 $.each($visibleIframes,function(index,$iframeTemp){
                     options.height.apply($iframeTemp,Array.prototype.slice.call(arguments));
+                    
                 });
             }else if($.isNumeric(options.width)){
                 $visibleIframes.width(options.width);
@@ -1638,7 +1751,52 @@ window.confirm = function(msg, yes , no){
         }
     });
 })(jQuery);
-
-/** ********** component iframe end   ************** **/
+/** ********** component button   ************** **/
+$.widget("tx.txButton", $.ui.button, {
+		options : {
+		},
+		_create : function() {
+			var _this = this;
+			var _element = _this.element;
+			var _options = _this.options;
+			var $element = $(_element);
+			
+			if($element.css("height")){
+				$element.height(22);
+			}
+			
+			var ptype = $element.attr("ptype");
+			var p_type_icon = null;
+			if(ptype){
+				if('save' === ptype){
+					p_type_icon = "ui-icon-disk";
+				}else if('search' === ptype){
+					p_type_icon = "ui-icon-search";
+				}else if('add' === ptype){
+					p_type_icon = "ui-icon-disk";
+				}else if('del' === ptype){
+					p_type_icon = "ui-icon-trash";
+				}else if('modify' === ptype){
+					p_type_icon = "ui-icon-pencil";
+				}else if('cancel' === ptype){
+					p_type_icon = "ui-icon-close";
+				}else if('lock' === ptype){
+					p_type_icon = "ui-icon-locked";
+				}else if('refresh' === ptype){
+					p_type_icon = "ui-icon-arrowrefresh-1-s";
+				}
+			}
+			
+			if(p_type_icon){
+				//改变原对象
+				_this.options = $.extend(_this.options,{
+					icons: {
+				        primary: p_type_icon
+				    }
+				});
+			}
+			this._super();
+		}
+	});
 
 

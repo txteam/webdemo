@@ -1,4 +1,4 @@
-﻿/********************************************************************
+/********************************************************************
 
 Project: Formee - http://www.formeeee.org
 Launched: 
@@ -143,6 +143,7 @@ Structure
 
 
 /* form button  */
+/*
 .formee-button, .formee input[type="submit"], .formee input[type="button"], .formee input[type="reset"] {
   padding:8px 15px 9px;
   cursor: pointer;
@@ -150,6 +151,7 @@ Structure
   display:inline-block;
   border:1px solid #D4D4D4;
 }
+*/
 
 /* lista de chk e rdo */
 .formee-list {
