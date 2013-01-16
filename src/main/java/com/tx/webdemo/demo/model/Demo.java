@@ -6,6 +6,7 @@
  */
 package com.tx.webdemo.demo.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -47,8 +48,11 @@ Size.class
  */
 @Entity
 @Table(name="WD_DEMO")
-public class Demo {
+public class Demo implements Serializable{
     
+    /** 注释内容 */
+    private static final long serialVersionUID = -2968880957648269768L;
+
     /** 是否有效: 有效 */
     public static final int ISVALID_TRUE = 1;
     

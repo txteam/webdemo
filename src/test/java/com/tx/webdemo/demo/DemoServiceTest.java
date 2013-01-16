@@ -74,6 +74,8 @@ public class DemoServiceTest {
         newDemo.setCreateDate(new Date());
         newDemo.setLastUpdateDate(new Date());
         
+        
+        
         return newDemo;
     }
     
@@ -99,9 +101,29 @@ public class DemoServiceTest {
             
             Demo res = this.demoService.findDemoById(pk);
             
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            res = this.demoService.findDemoById(pk);
+            
             Assert.assertNotNull(res);
             
             int count = this.demoService.deleteById(res.getId());
+            
+            res = this.demoService.findDemoById(pk);
             
             Assert.assertTrue(count > 0);
         } catch (Exception e) {
