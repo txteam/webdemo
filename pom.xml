@@ -3,8 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<tx_core_version>1.0.0</tx_core_version>
-		<tx_commons_version>1.0.0</tx_commons_version>
+		<tx_core_version>1.1.0-SNAPSHOT</tx_core_version>
 	</properties>
 
 	<parent>
@@ -23,11 +22,6 @@
 			<groupId>com.tx</groupId>
 			<artifactId>tx-core</artifactId>
 			<version>${tx_core_version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tx</groupId>
-			<artifactId>tx-commons</artifactId>
-			<version>${tx_commons_version}</version>
 		</dependency>
 
 		<!-- commons -->
