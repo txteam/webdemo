@@ -24,6 +24,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
 import com.tx.component.mainframe.config.MenuConfig;
@@ -45,6 +46,7 @@ import com.tx.core.util.XstreamUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@Component("menuContextConfigurator")
 public class MenuContextConfigurator implements InitializingBean,
         ApplicationContextAware {
     
