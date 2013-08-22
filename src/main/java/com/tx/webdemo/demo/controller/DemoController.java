@@ -25,9 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.mainframe.config.MenuItemConfig;
+import com.tx.component.mainframe.context.MenuContext;
 import com.tx.component.mainframe.model.DefaultMenuItem;
 import com.tx.component.mainframe.model.MenuItem;
-import com.tx.component.mainframe.service.MenuService;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.tree.util.TreeUtils;
 import com.tx.webdemo.demo.model.Demo;
@@ -51,9 +51,6 @@ public class DemoController {
     
     @Resource(name = "demoService")
     private DemoService demoService;
-    
-    @Resource(name= "menuService")
-    private MenuService menuService;
     
     /**
      * 出发批量插入demo<br/>
@@ -104,7 +101,7 @@ public class DemoController {
     public String queryAuthTreeDemo(Model model){
         
         //列表向树的转换属于业务逻辑应该写在业务层，这里写这里只是为了显示
-        List<MenuItem> menuItemList = this.menuService.getMainMenuItemList();
+        List<MenuItem> menuItemList = MenuContext.getContext().getMenuItemListFromCurrentSession(MenuItem.TYPE_MAIN_MENU);
         
         List<MenuItem> menuItemTreeList = TreeUtils.changToTree(menuItemList);
         

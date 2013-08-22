@@ -6,7 +6,9 @@
  */
 package com.tx.component.mainframe.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -15,12 +17,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.tx.component.auth.AuthConstant;
 import com.tx.component.auth.context.AuthContext;
+import com.tx.component.mainframe.context.MenuContext;
 import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.component.mainframe.model.MenuItem;
-import com.tx.component.mainframe.service.MenuService;
 import com.tx.component.mainframe.service.OperatorService;
 import com.tx.component.operator.model.Operator;
 
@@ -33,8 +36,8 @@ import com.tx.component.operator.model.Operator;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@SessionAttributes({WebContextUtils.SESSION_CURRENT_AUTHMAP,WebContextUtils.SESSION_CURRENT_OPERATOR})
-@Controller("loginController")
+//@SessionAttributes({WebContextUtils.SESSION_CURRENT_AUTHMAP,WebContextUtils.SESSION_CURRENT_OPERATOR})
+@Controller("mainframeController")
 @RequestMapping("/mainframe")
 public class MainframeController {
     
@@ -44,8 +47,13 @@ public class MainframeController {
     @Resource(name = "operatorService")
     private OperatorService operatorService;
     
-    @Resource(name= "menuService")
-    private MenuService menuService;
+    @Resource(name = "authContext")
+    private AuthContext authContext;
+    
+    @RequestMapping("/toLogin")
+    public String toLogin(){
+        return "/mainframe/login";
+    }
     
     /**
       * 登录<br/>
@@ -64,26 +72,29 @@ public class MainframeController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/login")
-    public String login(String loginName, String password, String style,Model model) {
+    public String login(@RequestParam("loginName")String loginName, @RequestParam("password")String password, Model model) {
         //登录人员
         Operator oper = this.operatorService.login(loginName, password);
         
         //如果登录不成功继续返回登录页面
         if (oper == null) {
-            return "/view/mainframe/login";
+            return "/mainframe/login";
         }
         
         model.addAttribute(WebContextUtils.SESSION_CURRENT_OPERATOR, oper);
         
         //初始化用户权限到当前会话中
-        AuthContext.getContext()
-                .initCurrentUserAuthContextWhenLogin(oper.getId());
+        //authSessionContext.initCurrentUserAuthContextWhenLogin("123456");//初始化用户权限到当前会话中 
+        Map<String, String> refType2RefIdMapping = new HashMap<String, String>();
+        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR, "123456");
+        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR_TEMPORARY, "123456");
+        //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_POST, postId);
+        //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_ORGANIZATION, loginOrganization.getId());
+        authContext.login(refType2RefIdMapping);
         
         //根据当前用户权限获取当前用户的菜单列表
-        List<MenuItem> mainMenuItemTreeList = this.menuService.getMainMenuTreeListByCurrentSession();
-        List<MenuItem> toolMenuItemTreeList = this.menuService.getToolMenuTreeListByCurrentSession();
-        model.addAttribute("toolMenuItemTreeList", toolMenuItemTreeList);
-        model.addAttribute("mainMenuItemTreeList", mainMenuItemTreeList);
+        List<MenuItem> mainMenuItemTreeList = MenuContext.getContext().getMenuItemTreeListFromCurrentSession(MenuItem.TYPE_MAIN_MENU);
+        model.addAttribute("menuItemTreeList", mainMenuItemTreeList);
         
         return "/mainframe/mainframe";
     }

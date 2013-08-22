@@ -14,12 +14,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#skinSwitcher").chemeswitcher({
-		contextPath : "${contextPath}",
-		themeCookieName : "tx_theme"
-	});
 	$("#loginBtn").click(function() {
-		$("#loginForm").submit();
+		$("form").submit();
 	});
 });
 </script>
@@ -32,7 +28,7 @@ $(document).ready(function() {
 			<div class="panel-body panel-body-noheader panel-body-noborder window-body window-body-noheader" title="" style="overflow: hidden; width: 486px; height: 286px;">
 				<div style="display: block; width: 486px;" class="panel">
 					<div style="width: 486px; height: 249px;" class="panel-body panel-body-noheader panel-body-noborder dialog-content" title="">
-						<form id="form-body" style="">
+						<form id="form-body" style="" name="loginForm" action="${contextPath }/mainframe/login.action">
 							<ul>
 								<li>
 									<input class="form-radio-other-input" name="type" value="1" checked="checked" type="radio">
@@ -42,11 +38,13 @@ $(document).ready(function() {
 								</li>
 								<li>
 									<label>账	号 </label>
-									<input class="easyui-validatebox account form-textbox validatebox-text" name="account" value="member" required="required" type="text">
+									<input class="easyui-validatebox account form-textbox validatebox-text" 
+										name="loginName" value="admin" required="required" type="text">
 								</li>
 								<li>
 									<label>密	码 </label>
-									<input class="easyui-validatebox  password form-textbox validatebox-text" name="password" value="123456" required="required" type="password">
+									<input class="easyui-validatebox  password form-textbox validatebox-text" 
+										name="password" value="admin" required="required" type="password">
 								</li>
 							</ul>
 						</form>

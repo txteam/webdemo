@@ -13,8 +13,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.tx.component.auth.AuthConstant;
-
 /**
  * 请求获取请求属性集
  * <功能详细描述>
@@ -27,10 +25,7 @@ import com.tx.component.auth.AuthConstant;
 public class WebContextUtils {
     
     /** 当前登录人员在session中的key */
-    public static final String SESSION_CURRENT_OPERATOR = "CURRENT_OPERATOR";
-    
-    /** 当前人员权限引用的map */
-    public static final String SESSION_CURRENT_AUTHMAP = AuthConstant.SESSION_KEY_CURRENT_USER_AUTHREF_MAP;
+    public static final String SESSION_CURRENT_OPERATOR = "operator";
     
     /**
       * 获取当前请求RequestAttributes

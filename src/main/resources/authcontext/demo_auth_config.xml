@@ -2,7 +2,7 @@
 <auths>
 	<!-- 操作权限 后缀名为"_ABS"的权限，为抽象权限，自己权限即为 去掉_ABS的权限-->
 	<!-- 如果后缀名为_ABS type优先于key作为AuthItem的key -->
-	<auth type="TYPE_OPERATE_ABS" name="操作权限">
+	<authType key="AUTHTYPE_OPERATE" name="操作权限">
 		<!-- demo的编辑权限，拥有该权限才能查询demo的列表，为增加，删除，修改的父权限 -->
 		<!-- 此处不指定类型，则默认为操作权限 -->
 		<auth key="demo_modify" name="demo的编辑权限"
@@ -14,17 +14,5 @@
 			<auth key="demo_modify_update" name="demo的更新权限">		
 			</auth>	
 		</auth>
-	</auth>
-	
-	<!-- 数据权限  -->
-	<auth type="TYPE_DATA_ABS" name="数据权限">
-		<!-- 数据列权限  -->
-		<auth type="TYPE_DATA_COLUMN_ABS" name="数据列权限">
-			
-		</auth>
-		<!-- 数据列权限  -->
-		<auth type="TYPE_DATA_ROW_ABS" name="数据行权限">
-			
-		</auth>
-	</auth>
+	</authType>
 </auths>

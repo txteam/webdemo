@@ -53,6 +53,18 @@ create table wd_operator
 --****************************************************************************
 -- 权限关联表ca为components_auth的简写
 --****************************************************************************
+create table t_auth_authitem
+(
+  id varchar(64) not null,	
+  parentId varchar(64),	
+  name varchar(256),	
+  description varchar(1024),		
+  authType varchar(64) not null, 
+  isViewAble integer default 1,	
+  isEditAble integer default 1,	
+  isValid integer default 1,		
+  primary key(id)
+);
 create table t_auth_authref
 (
   authid varchar(128) not null,

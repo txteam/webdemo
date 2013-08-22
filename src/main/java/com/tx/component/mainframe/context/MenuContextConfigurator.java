@@ -32,7 +32,6 @@ import com.tx.component.mainframe.config.MenusItemConfig;
 import com.tx.component.mainframe.exception.MenuContextInitException;
 import com.tx.component.mainframe.model.DefaultMenuItem;
 import com.tx.component.mainframe.model.MenuItem;
-import com.tx.component.mainframe.service.MenuService;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.exceptions.util.ExceptionWrapperUtils;
 import com.tx.core.util.XstreamUtils;
@@ -49,7 +48,7 @@ import com.tx.core.util.XstreamUtils;
 public class MenuContextConfigurator implements InitializingBean,
         ApplicationContextAware {
     
-    private static final Logger logger = LoggerFactory.getLogger(MenuService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MenuContextConfigurator.class);
     
     private ApplicationContext context;
     
@@ -115,28 +114,51 @@ public class MenuContextConfigurator implements InitializingBean,
         //读取并生成最终的菜单项目
         for (MenusItemConfig menusItemConfigTemp : menuConfig.getMenusConfigList()) {
             String menusItemType = menusItemConfigTemp.getType();
-            List<MenuItem> menuItemList = null;
-            if (!menuType2MenuItemListMap.containsKey(menusItemType)) {
-                menuItemList = new ArrayList<MenuItem>();
-            } else {
-                menuItemList = menuType2MenuItemListMap.get(menusItemType);
-            }
+            List<MenuItem> menuItemList = loadMenusItemList(menuType2MenuItemListMap,
+                    menusItemConfigTemp);
+            
             menuType2MenuItemListMap.put(menusItemType, menuItemList);
-            
-            //迭代menusItemConfig加载对应菜单项目配置
-            if (CollectionUtils.isEmpty(menuItemList)) {
-                continue;
-            }
-            for (MenuItemConfig menuItemConfigTemp : menusItemConfigTemp.getMenuConfigList()) {
-                loadMenuItemConfig(null,
-                        menuItemConfigTemp,
-                        menuItemList,
-                        menusItemType);
-            }
-            
         }
         logger.info("开始加载菜单配置：");
         return null;
+    }
+    
+    /**
+      * 加载菜单menusItemConfig如果对应类型已经存在，则在原Map中获取原Map的list进行返回<br/> 
+      *<功能简述>
+      *<功能详细描述>
+      * @param menuType2MenuItemListMap
+      * @param menusItemConfig
+      * @return [参数说明]
+      * 
+      * @return List<MenuItem> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private List<MenuItem> loadMenusItemList(
+            Map<String, List<MenuItem>> menuType2MenuItemListMap,
+            MenusItemConfig menusItemConfig) {
+        String menusItemType = menusItemConfig.getType();
+        
+        List<MenuItem> menuItemList = null;
+        if (!menuType2MenuItemListMap.containsKey(menusItemType)) {
+            menuItemList = new ArrayList<MenuItem>();
+        }
+        else {
+            menuItemList = menuType2MenuItemListMap.get(menusItemType);
+        }
+        
+        //迭代menusItemConfig加载对应菜单项目配置
+        if (CollectionUtils.isEmpty(menuItemList)) {
+            return menuItemList;
+        }
+        for (MenuItemConfig menuItemConfigTemp : menusItemConfig.getMenuConfigList()) {
+            loadMenuItemConfig(null,
+                    menuItemConfigTemp,
+                    menuItemList,
+                    menusItemType);
+        }
+        return menuItemList;
     }
     
     /**
@@ -228,11 +250,20 @@ public class MenuContextConfigurator implements InitializingBean,
             in = menuConfigResource.getInputStream();
             MenuConfig res = (MenuConfig) menuConfigXstream.fromXML(in);
             return res;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw ExceptionWrapperUtils.wrapperIOException(e,
                     "read menuConfigResource exception.");
-        } finally {
+        }
+        finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    /**
+     * @return 返回 menuType2MenuItemListMap
+     */
+    public Map<String, List<MenuItem>> getMenuType2MenuItemListMap() {
+        return menuType2MenuItemListMap;
     }
 }
