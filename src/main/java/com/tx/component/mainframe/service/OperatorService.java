@@ -8,7 +8,7 @@ package com.tx.component.mainframe.service;
 
 import org.springframework.stereotype.Component;
 
-import com.tx.component.mainframe.model.Operator;
+import com.tx.component.operator.model.Operator;
 
 
  /**

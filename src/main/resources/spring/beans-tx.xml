@@ -17,6 +17,7 @@
     <bean id="demo.TransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
         <property name="transactionManager" ref="demo.TransactionManager" />
     </bean>
+	<alias alias="transactionTemplate" name="demo.TransactionTemplate" />
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
     

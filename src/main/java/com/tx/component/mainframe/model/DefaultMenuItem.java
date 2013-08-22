@@ -7,6 +7,7 @@
 package com.tx.component.mainframe.model;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单项默认实现
@@ -70,8 +71,15 @@ public class DefaultMenuItem implements MenuItem {
     /** triggerGlobalEvent: 事件类型 */
     private String eventType = "";
     
-    /** triggerGlobalEvent: 传递数据的json字符串 */
-    private String params = "";
+    /**
+     * 参数
+     */
+    private String param;
+    
+    /**
+     * data
+     */
+    private Map<String, String> data;
     
     /** 子菜单集合 */
     private List<MenuItem> childs;
@@ -316,17 +324,31 @@ public class DefaultMenuItem implements MenuItem {
     }
 
     /**
-     * @return 返回 params
+     * @return 返回 data
      */
-    public String getParams() {
-        return params;
+    public Map<String, String> getData() {
+        return data;
     }
 
     /**
-     * @param 对params进行赋值
+     * @return 返回 param
      */
-    public void setParams(String params) {
-        this.params = params;
+    public String getParam() {
+        return param;
+    }
+
+    /**
+     * @param 对param进行赋值
+     */
+    public void setParam(String param) {
+        this.param = param;
+    }
+
+    /**
+     * @param 对data进行赋值
+     */
+    public void setData(Map<String, String> data) {
+        this.data = data;
     }
 
     /**

@@ -8,9 +8,11 @@ package com.tx.component.mainframe.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
@@ -85,9 +87,16 @@ public class MenuItemConfig {
     @XStreamAsAttribute
     private String eventType = "";
     
-    /** triggerGlobalEvent: 传递数据的json字符串 */
+    /** 
+     * triggerGlobalEvent: 
+     * 传递数据的json字符串 
+     *     类似width=1680&height=1050这样的一串字符串
+     */
     @XStreamAsAttribute
-    private String params = "";
+    private String param = "";
+    
+    @XStreamConverter(DataMapConverter.class)
+    private Map<String, String> data;
     
     /** 子菜单项 */
     @XStreamImplicit(itemFieldName="menu")
@@ -318,16 +327,30 @@ public class MenuItemConfig {
     }
 
     /**
-     * @return 返回 params
+     * @return 返回 data
      */
-    public String getParams() {
-        return params;
+    public Map<String, String> getData() {
+        return data;
     }
 
     /**
-     * @param 对params进行赋值
+     * @param 对data进行赋值
      */
-    public void setParams(String params) {
-        this.params = params;
+    public void setData(Map<String, String> data) {
+        this.data = data;
+    }
+
+    /**
+     * @return 返回 param
+     */
+    public String getParam() {
+        return param;
+    }
+
+    /**
+     * @param 对param进行赋值
+     */
+    public void setParam(String param) {
+        this.param = param;
     }
 }

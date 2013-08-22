@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.tx.component.auth.context.AuthContext;
 import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.component.mainframe.model.MenuItem;
-import com.tx.component.mainframe.model.Operator;
 import com.tx.component.mainframe.service.MenuService;
 import com.tx.component.mainframe.service.OperatorService;
+import com.tx.component.operator.model.Operator;
 
 /**
  * 登录功能入口

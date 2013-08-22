@@ -32,9 +32,6 @@ import com.tx.component.mainframe.config.MenuConfig;
 import com.tx.component.mainframe.config.MenuItemConfig;
 import com.tx.component.mainframe.model.DefaultMenuItem;
 import com.tx.component.mainframe.model.MenuItem;
-import com.tx.core.exceptions.parameter.ParameterIsEmptyException;
-import com.tx.core.exceptions.parameter.ParameterIsInvalidException;
-import com.tx.core.exceptions.resource.ResourceLoadException;
 import com.tx.core.tree.util.TreeUtils;
 import com.tx.core.util.XstreamUtils;
 

@@ -7,6 +7,7 @@
 package com.tx.component.mainframe.model;
 
 import java.util.List;
+import java.util.Map;
 
 import com.tx.core.tree.model.TreeAble;
 
@@ -141,8 +142,19 @@ public interface MenuItem extends TreeAble<List<MenuItem>, MenuItem> {
     public String getEventType();
 
     /**
-     * triggerGlobalEvent: 传递数据的json字符串
+     * triggerGlobalEvent: getData
      * @return 返回 params
      */
-    public String getParams();
+    public Map<String, String> getData();
+    
+    /**
+      *<功能简述>
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public String getParam();
 }

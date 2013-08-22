@@ -10,14 +10,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.cxf.common.util.StringUtils;
-import org.hibernate.id.UUIDGenerator;
 import org.hibernate.id.UUIDHexGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
-import com.tx.core.exceptions.parameter.ParameterIsEmptyException;
+import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.mybatis.model.BatchResult;
 import com.tx.core.paged.model.PagedList;
 import com.tx.webdemo.demo.dao.DemoDao;
@@ -177,13 +174,8 @@ public class DemoService {
      */
     @Transactional
     public void insertDemo(Demo demo) {
-        //TODO:验证参数是否合法，必填字段是否填写，
-        //如果没有填写抛出parameterIsEmptyException,
-        //如果有参数不合法ParameterIsInvalidException
-        if (demo == null /*TODO:|| 其他参数验证*/) {
-            throw new ParameterIsEmptyException(
-                    "DemoService.insertDemo demo isNull.");
-        }
+        AssertUtils.notNull(demo, "demo is null.");
+        AssertUtils.notEmpty(demo.getName(), "demo.name is emtpy");
         
         this.demoDao.insertDemo(demo);
     }
@@ -202,10 +194,7 @@ public class DemoService {
      */
     @Transactional
     public int deleteById(String id) {
-        if (StringUtils.isEmpty(id)) {
-            throw new ParameterIsEmptyException(
-                    "DemoService.deleteById id isEmpty.");
-        }
+        AssertUtils.notEmpty(id, "id is empty");
         
         Demo condition = new Demo();
         condition.setId(id);
@@ -224,13 +213,8 @@ public class DemoService {
      */
     @Transactional
     public boolean updateById(Demo demo) {
-        //TODO:验证参数是否合法，必填字段是否填写，
-        //如果没有填写抛出parameterIsEmptyException,
-        //如果有参数不合法ParameterIsInvalidException
-        if (demo == null || StringUtils.isEmpty(demo.getId())) {
-            throw new ParameterIsEmptyException(
-                    "DemoService.updateById demo or demo.id is empty.");
-        }
+        AssertUtils.notNull(demo, "demo is null.");
+        AssertUtils.notEmpty(demo.getName(), "demo.name is emtpy");
         
         //TODO:生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
@@ -260,11 +244,7 @@ public class DemoService {
      */
     @Transactional
     public BatchResult batchInsertDemoNotStopWhenException(List<Demo> demoList,boolean testAfterSuccessThrowException) {
-        //验证传入的demo合法性
-        if (CollectionUtils.isEmpty(demoList)) {
-            throw new ParameterIsEmptyException(
-                    "batchInsertDemoNotStopWhenException fail. demoList不能为空");
-        }
+        AssertUtils.notEmpty(demoList, "demoList is empty.");
         
         //处理业务逻辑
         //加密密码字段
@@ -281,7 +261,7 @@ public class DemoService {
         //this.demoDao.insertDemo(demoList.get(0));
         
         if(testAfterSuccessThrowException){
-            throw new ParameterIsEmptyException("testException");
+            //throw new ParameterIsEmptyException("testException");
         }
         return res;
     }
@@ -292,10 +272,7 @@ public class DemoService {
     @Transactional
     public BatchResult batchInsertDemoStopWhenException(List<Demo> demoList) {
         //验证传入的demo合法性
-        if (CollectionUtils.isEmpty(demoList)) {
-            throw new ParameterIsEmptyException(
-                    "batchInsertDemoNotStopWhenException fail. demoList不能为空");
-        }
+        AssertUtils.notEmpty(demoList, "demoList is empty.");
         
         //处理业务逻辑
         //加密密码字段

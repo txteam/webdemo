@@ -5,11 +5,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>mainframe</title>
-<%@include file="../includes/commonHead.jsp"%>
+<title>demo系统</title>
+		
+<link rel="stylesheet" href="${contextPath }/css/easyui/easyui.css" type="text/css" media="screen">
+<link rel="stylesheet" href="${contextPath }/css/mainframe/login.css" type="text/css" media="screen">
+		
+<script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>
 
-<link  rel="stylesheet" type="text/css" href="${contextPath }/css/login.css" />
-<script type="text/javascript" src="${contextPath }/js/mainframe/login.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#skinSwitcher").chemeswitcher({
@@ -24,61 +26,40 @@ $(document).ready(function() {
 <style type="text/css">
 
 </style>
-<body>
-<form id="loginForm" method="post" action="${contextPath}/mainframe/login">
-	<div class="login-container">
-		<div class="login-bar">
-			<div class="login-div ui-widget-header">
-        		<div class="login-info">
-        			欢迎来到本系统,谢谢使用,使用过程中遇到任何疑问,欢迎拨打xxx.
-        		</div>
-        		<div id="skinSwitcher" class="skin-switcher"></div>
-        		<div class="login">
-				<table class="ui-state-default login-table">
-					<colgroup>
-						<col width="30%"/>
-						<col width="40%"/>
-						<col width="30%"/>
-					</colgroup>
-					<tr>
-						<td colspan="3">&nbsp;</td>
-					</tr>
-					<tr>
-						<td align="right">登陆名：</td>
-						<td><input name="loginName" type="text"
-							value="<c:out value='admin'></c:out>" /></td>
-						<td align="right">&nbsp;</td>
-					</tr>
-					<tr>
-						<td align="right">密码：</td>
-						<td><input name="password" type="password"
-							value="<c:out value='admin'></c:out>" /></td>
-						<td align="right">&nbsp;</td>
-					</tr>
 
-					<tr>
-						<td align="right">布局：</td>
-						<td>
-							<lable></lable>
-							<input name="layout" type="radio" value="mainframe1" checked="checked"/><lable>1</lable>
-							<input name="layout" type="radio" value="mainframe" /><lable>2</lable>
-						<td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-						<td align="right"><input id="loginBtn" type="button"
-							value="登陆" /></td>
-						<td align="right">&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="3">&nbsp;</td>
-					</tr>
-				</table>
+<body>
+		<div style="display: block; width: 488px; left: 433px; top: 139.5px; z-index: 9001;" class="panel window">
+			<div class="panel-body panel-body-noheader panel-body-noborder window-body window-body-noheader" title="" style="overflow: hidden; width: 486px; height: 286px;">
+				<div style="display: block; width: 486px;" class="panel">
+					<div style="width: 486px; height: 249px;" class="panel-body panel-body-noheader panel-body-noborder dialog-content" title="">
+						<form id="form-body" style="">
+							<ul>
+								<li>
+									<input class="form-radio-other-input" name="type" value="1" checked="checked" type="radio">
+									<label>普通 </label> &nbsp;&nbsp;&nbsp;
+									<input class="form-radio-other-input" name="type" value="0" type="radio">
+									<label>管理员</label>
+								</li>
+								<li>
+									<label>账	号 </label>
+									<input class="easyui-validatebox account form-textbox validatebox-text" name="account" value="member" required="required" type="text">
+								</li>
+								<li>
+									<label>密	码 </label>
+									<input class="easyui-validatebox  password form-textbox validatebox-text" name="password" value="123456" required="required" type="password">
+								</li>
+							</ul>
+						</form>
+						<div id="logo" style="">
+							<h1>业务系统开发版</h1>
+						</div>
+					</div>
+				</div>
+				<div class="dialog-button">
+					<a id="loginBtn" class="l-btn l-btn-disabled" href="javascript:void(0)"><span class="l-btn-left"><span class="l-btn-text">登陆</span></span></a>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</div>
 			</div>
-			<div class="copy-right">&copy; 版权所有 版本号 V1.00.x</div>
-		</div>
-	</div>
-</form>
-</body>
+		</div><div style="display: block; left: 433px; top: 139.5px; z-index: 9000; width: 500px; height: 300px;" class="window-shadow"></div>
+	</body>
 </html>

@@ -57,7 +57,7 @@
 			</property>
 		</bean>
 
-		<bean id="losDatasource" class="com.tx.core.datasource.DataSourceFactoryBean">
+		<bean id="demoDatasource" class="com.tx.core.datasource.DataSourceFactoryBean">
 			<property name="supportP6spy" value="true"></property>
 			<property name="datasourceFinderList">
 				<list>
@@ -70,11 +70,11 @@
 				</list>
 			</property>
 		</bean>
-		<alias name="losDatasource" alias="datasource" />
+		<alias name="demoDatasource" alias="datasource" />
 
 		<jdbc:embedded-database id="hsqldbDataSource" type="H2">
-			<jdbc:script location="classpath:hsqldb/02_tables.sql" />
-			<jdbc:script location="classpath:hsqldb/09_initdata.sql" />
+			<jdbc:script location="classpath:h2/02_tables.sql" />
+			<jdbc:script location="classpath:h2/09_initdata.sql" />
 		</jdbc:embedded-database>
 
 	</beans>
@@ -102,7 +102,7 @@
 				</array>
 			</property>
 		</bean>
-		<bean id="losDatasource" class="com.tx.core.datasource.DataSourceFactoryBean">
+		<bean id="demoDatasource" class="com.tx.core.datasource.DataSourceFactoryBean">
 			<property name="supportP6spy" value="true"></property>
 			<property name="datasourceFinderList">
 				<list>
@@ -115,6 +115,6 @@
 				</list>
 			</property>
 		</bean>
-		<alias name="losDatasource" alias="datasource" />
+		<alias name="demoDatasource" alias="datasource" />
 	</beans>
 </beans>

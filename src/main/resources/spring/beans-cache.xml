@@ -7,10 +7,8 @@
 
 	<bean id="ehCacheManager"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation"
-			value="classpath:context/ehcache.xml"></property>
-		<property name="cacheManagerName"
-			value="demo.cache"></property>
+		<property name="configLocation" value="classpath:ehcache.xml"></property>
+		<property name="cacheManagerName" value="demo.cache"></property>
 	</bean>
 
 	<bean id="demoCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">

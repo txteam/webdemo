@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<menu_config>
+<menu_context_config>
 	<!-- 主菜单配置 -->
-	<main_menus_config>
+	<menus_config type="mainMenu">
 		<!-- 一级别菜单:系统配置   -->
 		<menu id="system_config" text="系统配置"
 			authKey="system_config_manange">
@@ -58,10 +58,10 @@
 			<menu id="user_mananger" text="人员管理"></menu>
 			<menu id="base_data_mananger" text="基础数据管理"></menu>
 		</menu>
-	</main_menus_config>
+	</menus_config>
 	
 	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示  -->
-	<tool_menus_config>
+	<menus_config type="toolMenu">
 
 		<!-- 一级别菜单:系统配置   -->
 		<menu id="system_config" text="系统配置"
@@ -131,5 +131,5 @@
 				href="http://blog.csdn.net/abasen/article/details/5123381"
 				target="mainTabs" selectRefresh="false"/>
 		</menu>
-	</tool_menus_config>
-</menu_config>
+	</menus_config>
+</menu_context_config>

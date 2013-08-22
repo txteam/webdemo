@@ -15,7 +15,8 @@
 	<!-- 补充说明：多个HandlerMapping的执行顺序问题： DefaultAnnotationHandlerMapping的order属性值是：0 
 		<mvc:resources/ >自动注册的 SimpleUrlHandlerMapping的order属性值是： 2147483646 <mvc:default-servlet-handler/>自动注册 
 		的SimpleUrlHandlerMapping 的order属性值是： 2147483647 HandlerMapping转到org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler处理 -->
-	<!-- 静态资源映射 -->
+	<!-- 
+	静态资源映射 
 	<mvc:resources mapping="/images/**" location="/resources/images/"
 		cache-period="31556926" />
 	<mvc:resources mapping="/jquery-ui/**" location="/resources/jquery-ui/"
@@ -28,6 +29,7 @@
 		cache-period="1"/>
 	<mvc:resources mapping="/css/**" location="/resources/css/" />
 	<mvc:resources mapping="/js/**" location="/resources/js/" />
+	-->
 	<!-- <mvc:default-servlet-handler /> -->
 
 	<!-- 需要添加该驱动，支持多个convertor的添加 -->
@@ -62,18 +64,7 @@
 
 	<!-- 将jsp映射为controller -->
 	<!-- 为方便权限控制，限制jsp直接访问  -->
-	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<property name="order" value="2147483645"></property>
-		<property name="urlMap">
-			<map>
-				<entry key="/view/**" value="jspFileController" />
-			</map>
-		</property>
-	</bean>
-	<bean id="jspFileController"
-		class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
-	</bean>
-	
+	<!-- 属性转换器 -->
 	<!-- 属性转换器 -->
 	<bean id="conversionService"
 		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
@@ -87,9 +78,9 @@
 				<!-- <bean class="org.springframework.core.convert.support.StringToArrayConverter"></bean> -->
 				<!-- <bean class="org.springframework.core.convert.support.StringToCollectionConverter"></bean> -->
 				<!-- <bean class="org.springframework.core.convert.support.StringToPropertiesConverter"></bean> -->
-				
+
 				<!-- object to string -->
-				<bean class="org.springframework.core.convert.support.EnumToStringConverter"></bean>
+				<!-- <bean class="org.springframework.core.convert.support.EnumToStringConverter"></bean> -->
 				<bean class="org.springframework.core.convert.support.ObjectToStringConverter"></bean>
 
 				<!-- <bean class="org.springframework.core.convert.support.PropertiesToStringConverter"></bean> -->
@@ -104,7 +95,6 @@
 			</list>
 		</property>
 	</bean>
-
 	<!-- 注册属性转换以及验证功能 -->
 	<bean id="webBindingInitializer"
 		class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
@@ -118,10 +108,19 @@
 	</bean>
 	
 	<!-- 将类及方法映射controller -->
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"></bean>
-	<bean id="handlerAdapter"
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	<bean id="requestMappingHandlerMapping"
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
+				<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"/>
+				<!-- 配置一个拦截请求url的拦截器 -->
+				<bean class="com.boda.core.interceptor.RequestUrlInterceptor" />
+			</list>
+		</property>
+	</bean>
+	<bean id="requestMappingHandlerAdapter"
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="webBindingInitializer">
 			<ref bean="webBindingInitializer"/>
 		</property>
@@ -142,9 +141,6 @@
 				<bean class="org.springframework.http.converter.FormHttpMessageConverter"></bean>
 			</list>
 		</property>
-		<!-- 通过这个来实现行级权限 -->
-		<!-- <property name="customModelAndViewResolver"> -->
-		<!-- </property> -->
 	</bean>
 
 	<!-- 支持文件上传 -->
@@ -157,7 +153,8 @@
 
 	<!-- 异常处理 -->
 	<bean id="exceptionResolver"
-		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		class="com.boda.components.mainframe.context.AjaxSimpleMappingExceptionResolver">
+		<property name="ajaxErrorView" value="mainframe/ajaxError" />
 		<property name="defaultErrorView">
 			<value>errorPages/error</value>
 		</property>
@@ -170,8 +167,8 @@
 		</property>
 		<property name="exceptionMappings">
 			<props>
-				<prop
-					key="org.springframework.web.multipart.MaxUploadSizeExceededException">errorPages/maxUploadExceeded</prop>
+				<prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">errorPages/maxUploadExceeded</prop>
+				<prop key="com.boda.core.exception.HttpSessionFailureException">errorPages/sessionFailureError</prop>
 			</props>
 		</property>
 	</bean>
@@ -183,45 +180,4 @@
 		<property name="prefix" value="/WEB-INF/view/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-
-	<!-- ==================================== 以下是restful 内容协商的配置 ================================ -->
-	<!-- 根据客户端的不同的请求决定不同的view进行响应, 如 /blog/1.json /blog/1.xml -->
-	<!-- 设置为true以忽略对Accept Header的支持 -->
-	<!-- 在没有扩展名时即:"/user/1" 时的默认展现形式 -->
-	<!-- 扩展名至mimeType的映射,即 /user.json => application/json -->
-	<!-- 用于开启 /userinfo/123?format=json 的支持 -->
-	<!--  
-	<bean id="contentNegotiatingViewResolver"
-		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<property name="ignoreAcceptHeader" value="true" />
-		<property name="defaultContentType" value="text/html" />
-		<property name="mediaTypes">
-			<map>
-				<entry key="json" value="application/json" />
-				<entry key="jsp" value="text/html"/>
-				<entry key="html" value="text/html"/>
-			</map>
-		</property>
-		<property name="favorParameter" value="false" />
-		<property name="viewResolvers">
-			<list>
-				<bean
-					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-					<property name="viewClass"
-						value="org.springframework.web.servlet.view.JstlView" />
-					<property name="prefix" value="/WEB-INF/view/" />
-					<property name="suffix" value=".jsp" />
-				</bean>
-				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
-			</list>
-		</property>
-		<property name="defaultViews">
-			<list>
-				<bean
-					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"></bean>
-			</list>
-		</property>
-	</bean>
-	-->
-
 </beans>
