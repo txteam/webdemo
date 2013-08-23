@@ -9,6 +9,7 @@
 
 <link href="${contextPath}/js/bootstrap-2.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link id="easyuiTheme" rel="stylesheet" href="${contextPath}/js/jquery-easyui-1.3.3/themes/bootstrap/easyui.css" type="text/css">
+<link id="easyuiTheme" rel="stylesheet" href="${contextPath}/js/jquery-easyui-1.3.3/themes/icon.css" type="text/css">
 <link rel="stylesheet" href="${contextPath}/js/jquery-easyui-portal/portal.css" type="text/css">
 
 <script src="${contextPath}/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -203,23 +204,19 @@
 		<div data-options="region:'center',border:false" title="欢迎使用!改行可去掉" style="overflow: hidden;">
 			<div id="index_tabs" style="overflow: hidden;">
 				<div title="首页" data-options="border:false" style="overflow: hidden;">
-					<iframe src="../portal/index.htm" frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+					<iframe src="../portal/index.htm" style="border: 0; width: 100%; height: 98%;"></iframe>
 				</div>
 			</div>
 		</div>
-		<div data-options="region:'south',border:false" style="height: 30px; overflow: hidden;">
-			<div class="panel-header panel-title" style="text-align: center;">
-				鐗堟潈鎵�鏈堾<a href="mailto:89333367@qq.com">瀛欏畤</a>
-			</div>
-		</div>
+		
 	</div>
 
 	<div id="index_tabsMenu" style="width: 120px; display: none;">
-		<div title="refresh" data-options="iconCls:'transmit'">刷新</div>
+		<div title="refresh" data-options="iconCls:'icon-reload'">刷新</div>
 		<div class="menu-sep"></div>
-		<div title="close" data-options="iconCls:'delete'">关闭</div>
-		<div title="closeOther" data-options="iconCls:'delete'">关闭其他</div>
-		<div title="closeAll" data-options="iconCls:'delete'">关闭所有</div>
+		<div title="close" data-options="iconCls:'icon-cancel'">关闭</div>
+		<div title="closeOther" data-options="iconCls:'icon-cancel'">关闭其他</div>
+		<div title="closeAll" data-options="iconCls:'icon-cancel'">关闭所有</div>
 	</div>
 
 </body>
