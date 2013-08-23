@@ -20,10 +20,8 @@ import org.springframework.stereotype.Component;
   * @since  [产品/模块版本]
   */
 @Component("menuContext")
-public class MenuContextFactory implements FactoryBean<MenuContext>{
+public class MenuContextFactory extends MenuContext implements FactoryBean<MenuContext>{
 
-    private MenuContext menuContext;
-    
     /**
      * @return
      * @throws Exception

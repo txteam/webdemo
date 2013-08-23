@@ -60,6 +60,7 @@ public class DataMapConverter implements Converter {
         if (source == null) {
             return;
         }
+        
         //如果不为空
         Map<String, String> data = (Map<String, String>) source;
         

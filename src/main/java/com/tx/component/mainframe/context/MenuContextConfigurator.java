@@ -24,7 +24,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
 import com.tx.component.mainframe.config.MenuConfig;
@@ -46,7 +45,6 @@ import com.tx.core.util.XstreamUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("menuContextConfigurator")
 public class MenuContextConfigurator implements InitializingBean,
         ApplicationContextAware {
     
@@ -122,7 +120,7 @@ public class MenuContextConfigurator implements InitializingBean,
             menuType2MenuItemListMap.put(menusItemType, menuItemList);
         }
         logger.info("开始加载菜单配置：");
-        return null;
+        return menuType2MenuItemListMap;
     }
     
     /**
@@ -151,7 +149,7 @@ public class MenuContextConfigurator implements InitializingBean,
         }
         
         //迭代menusItemConfig加载对应菜单项目配置
-        if (CollectionUtils.isEmpty(menuItemList)) {
+        if (CollectionUtils.isEmpty(menusItemConfig.getMenuConfigList())) {
             return menuItemList;
         }
         for (MenuItemConfig menuItemConfigTemp : menusItemConfig.getMenuConfigList()) {

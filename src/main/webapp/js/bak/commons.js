@@ -18,9 +18,8 @@ $(document).ready(function() {
     }
 });
 
-
-/** 
- * 提供跨页面的事件广播支持
+/************ 提供跨页面的事件广播支持 ************** */
+/*
  * 客户端统一事件管理器
  */
 (function($, undefined){
@@ -117,56 +116,8 @@ $(document).ready(function() {
     $.bindGE = $.bindge = $.bindGlobalEvent;
 })(jQuery);
 
-/** 
- * 浏览器扩展
- * 浏览器相关信息
- */
-var browser = {
-	appCodeName : navigator.appCodeName,// 浏览器代码名称
-	appName : navigator.appName,// 浏览器的名称
-	appVersion : navigator.appVersion,// 浏览器的平台和版本信息
-	cookieEnabled : navigator.cookieEnabled,// 浏览器中是否启用cookie的布尔值
-	platform : navigator.platform,// 运行浏览器的操作系统平台
-	userAgent : navigator.userAgent, // 由客户机发送服务器的 user-agent 头部的值
-	isIe : false,
-	ieVersion : '',
-	isChrome : false,
-	isFirefox : false
-};
-if (browser.userAgent.indexOf('MSIE') > -1) {
-	// IE浏览器
-	browser.isIe = true;
-	if (browser.userAgent.indexOf('MSIE 10') > -1) {
-		// IE10
-		browser.ieVersion = 10;
-	} else if (browser.userAgent.indexOf('MSIE 9') > -1) {
-		// IE9
-		browser.ieVersion = 9;
-	} else if (browser.userAgent.indexOf('MSIE 8') > -1) {
-		// IE8
-		browser.ieVersion = 8;
-	} else if (browser.userAgent.indexOf('MSIE 7') > -1) {
-		// IE7
-		browser.ieVersion = 7;
-	} else if (browser.userAgent.indexOf('MSIE 6') > -1) {
-		// IE6
-		browser.ieVersion = 6;
-	} else {
 
-	}
-} else if (browser.userAgent.indexOf('Chrome') > -1) {
-	// 谷歌浏览器
-	browser.isChrome = true;
-} else if (browser.userAgent.indexOf('Firefox') > -1) {
-	// 火狐浏览器
-	browser.isFirefox = true;
-} else {
-	// 其他浏览器
-}
-
-/** 
- * 扩展jquery 
- */
+/** ********** 扩展jquery ************** */
 (function($, undefined){
 	$.cookie = function(key, value, options) {
 		if (arguments.length > 1 && (value === null || typeof value !== "object")) {
@@ -789,137 +740,7 @@ window.confirm = function(msg, yes , no){
 
 /** ********** component grid start   ************** **/
 (function($, undefined){   
-	/*
-		Event:
-			afterInsertRow rowidrowdatarowelem 
-			当插入每行时触发。rowid插入当前行的id；rowdata插入行的数据，格式为name: value，name为colModel中的名字
-			beforeRequest none
-			向服务器端发起请求之前触发此事件但如果datatype是一个function时例外
-			beforeSelectRow rowid, e
-			当用户点击当前行在未选择此行时触发。rowid：此行id；e：事件对象。返回值为ture或者false。如果返回true则选择完成，如果返回false则不会选择此行也不会触发其他事件
-			gridComplete none 
-			当表格所有数据都加载完成而且其他的处理也都完成时触发此事件，排序，翻页同样也会触发此事件
-			loadComplete xhr 当从服务器返回响应时执行，xhr：XMLHttpRequest 对象
-			loadError xhr,status,error
-			如果请求服务器失败则调用此方法。xhr：XMLHttpRequest 对象；satus：错误类型，字符串类型；error：exception对象
-			onCellSelect rowid,iCol,cellcontent,e
-			当点击单元格时触发。rowid：当前行id；iCol：当前单元格索引；cellContent：当前单元格内容；e：event对象
-			ondblClickRow rowid,iRow,iCol,e
-			双击行时触发。rowid：当前行id；iRow：当前行索引位置；iCol：当前单元格位置索引；e:event对象
-			onHeaderClick gridstate
-			当点击显示/隐藏表格的那个按钮时触发；gridstate：表格状态，可选值：visible or hidden
-			onPaging pgButton
-			点击翻页按钮填充数据之前触发此事件，同样当输入页码跳转页面时也会触发此事件
-			onRightClickRow rowid,iRow,iCol,e
-			在行上右击鼠标时触发此事件。rowid：当前行id；iRow：当前行位置索引；iCol：当前单元格位置索引；e：event对象
-			onSelectAll aRowids,status
-			multiselect为ture，且点击头部的checkbox时才会触发此事件。aRowids：所有选中行的id集合，为一个数组。 status：boolean变量说明checkbox的选择状态，true选中false不选中。无论checkbox是否选择，aRowids始终有 值
-			onSelectRow rowid,status
-			当选择行时触发此事件。rowid：当前行id；status：选择状态，当multiselect 为true时此参数才可用
-			onSortCol index,iCol,sortorder
-			当点击排序列但是数据还未进行变化时触发此事件。index：name在colModel中位置索引；iCol：当前单元格位置索引；sortorder：排序状态：desc或者asc
-			resizeStart event, index
-			当开始改变一个列宽度时触发此事件。event：event对象；index：当前列在colModel中位置索引
-			resizeStop newwidth, index
-			当列宽度改变之后触发此事件。newwidth：列改变后的宽度；index：当前列在colModel中的位置索引
-			serializeGridData postData
-			向服务器发起请求时会把数据进行序列化，用户自定义数据也可以被提交到服务器端
-	 */
-	
-	/*
-		Method:
-			addJSONData data 
-				none
-				使用传来的data数据填充表格。使用方法：
-				var mygrid = jQuery(”#”+grid_id)[0];
-				var myjsongrid = eval(”(”+jsonresponse.responseText+”)”); mygrid.addJSONData(myjsongrid);
-				myjsongrid = null;
-				jsonresponse =null;
-			addRowData rowid,data, position, srcrowid
-				成功为true, 否则为false
-				根据参数插入一行新的数据，rowid为新行的id，data为新行的数据，position为新增行的位置，srcrowid为新增行的参考位置。 data数据格式：{name1:value1,name2: value2…} name为在colModel中指定的名称
-			addXMLData data 
-				none
-				根据传来的数据填充表格。用法：var mygrid = jQuery(”#”+grid_id)[0]; mygrid.addXmlData(xmlresponse.responseXML);
-			clearGridData clearfooter
-				jqGrid对象
-				清除表格当前加载的数据。如果clearfooter为true时则此方法删除表格最后一行的数据
-			delRowData rowid
-				成功为true否则为false
-				根据rowid删除行，但不会从服务器端删除数据
-			footerData action,data, format
-				jgGrid对象
-				设置或者取得底部数据。action：“get”或者“set”，默认为“get”，如果为“get”返回值为name:value，name为 colModel中名称。
-				如果为“set”则值为name：value，name是colModel中的名称。format：默认为true，当为 true时，在设置新值时会调用formatter格式化数值
-			getCell rowid, iCol
-				单元格内容
-				返回指定rowid，iCol的单元格内容，iCol既可以是当前列在colModel中的位置索引也可以是name值。
-				注意：在编辑行或者单元格时不能使用此方法，此时返回的并不是改变的值，而是原始值
-			getCol colname, returntype, mathoperation 
-				array[] or value
-				返回列的值。colname既可以是当前列在colModel中的位置索引也可以是name值。returntype指定返回数据的类型，默认为 false。
-				当为false时，返回的数组中只包含列的值，当为true时返回数组是对象数组，具体格式 {id:rowid, value:cellvalue} ，
-				id为行的id，value为列的值。如： [{id:1,value:1},{id:2,value:2}…]。mathoperation 可选值为'sum, 'avg', 'count'
-			getDataIDs none 
-				array[]
-				返回当前grid里所有数据的id
-			getGridParam name 
-				mixed value
-				返回请求的参数信息
-			getInd rowid,rowcontent 
-				mixed
-				如果rowcontent为false，返回行所在的索引位置，id为行id。rowcontent默认为false。
-				如果rowconent为ture则返回的为行对象，如果找不到行则返回false
-			getRowData rowid or none      
-				array[]
-				返回指定行的数据，返回数据类型为name:value，name为colModel中的名称，value为所在行的列的值，
-				如果根据rowid找不到则返回空。在编辑模式下不能用此方法来获取数据，它得到的并不是编辑后的值
-			hideCol colnameor[colnames]
-				jqGrid对象
-				如果参数为一个列名则隐藏此列，如果给定的是数组则隐藏指定的所有列。格式： [“name1”,”name2”]
-			remapColumns permutation, updateCells, keepHeader
-				none
-				调整表格列的显示顺序,permutation为当前列的顺序，假如值是[1,0,2]，那么第一列就会在第二位显示。如果updateCells为ture则是对单元格数据进行重新排序，如果keepHeader为true则对header数据显示位置进行调整
-			resetSelection none
-				jqGrid对象
-				选择或者反选行数据，在多选模式下也同样起作用
-			setCaption caption
-				jqGrid对象
-				设置表格的标题
-			setCell rowid,colname, data, class, properties
-				jqGrid对象
-				改变单元格的值。rowid：当前行id；colname：列名称，也可以是列的位置索引，
-				从0开始；data：改变单元格的内容，如果为空则不更 新；class：
-				如果是string则会使用addClass方法将其加入到单元格的css中，
-				如果是array则会直接加到style属性 中；properties：设置单元格属性
-			setGridParam object
-				jqGrid对象
-				设置grid的参数。有些参数的修改必须要重新加载grid才可以生效，这个方法可以覆盖事件
-			setGridHeight new_height
-				jqGrid对象
-				动态改变grid的高度，只能对单元格的高度进行设置而不能对表格的高度进行动态修改。new_height：可以是象素值，百分比或者"auto"
-			setGridWidth new_width,shrink
-				jqGrid对象
-				动态改变表格的宽度。new_width:表格宽度，象素值；shrink：true或者false，作用同shrinkToFit
-			setLabel colname, data, class, properties
-				jqGrid对象
-				给指定列设置一个新的显示名称。colname：列名称，也可以是列的位置索引，从0开始；data：列显示名称，如果为空则不修改；class：如果是 string则会使用addClass方法将其加入到单元格的css中，如果是array则会直接加到style属性中；properties：设置 label的属性
-			setRowData rowid,data, cssprop
-				成功true否则false
-				更新行的值，rowid为行id。data值格式：{name1:value1,name2: value2…} name为colModel中名称；cssprop：如果是string则会使用addClass方法将其加入到行的css中，如果是array或者对象 则会直接加到style属性中
-			setSelection rowid,onselectrow
-				jqGrid对象
-				选择或反选指定行。如果onselectrow为ture则会触发事件onSelectRow，onselectrow默认为ture
-			showCol colname jqGrid
-				显示列。colname可以是数组[“name1”,”name2”],但是name1或者name2必须是colModel中的name
-			trigger(“reloadGrid”) none jqGrid对象
-				重新加载当前表格，也会向服务器发起新的请求
-			updateColumns none none
-				同步表格的宽度，用在表格拖拽时，用法：var mygrid=jQuery(”#grid_id”)[0];mygrid.updateColumns();
-	 */
-    //根据项目中树数据的特性定制tree
-    $.widget("tx.txGrid",
-    {
+    $.widget("tx.txGrid",{
         options : {
         	/*
         	 * 自定义属性部分

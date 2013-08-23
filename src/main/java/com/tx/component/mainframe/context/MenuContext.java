@@ -9,12 +9,12 @@ package com.tx.component.mainframe.context;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.MultiValueMap;
 
 import com.tx.component.auth.context.AuthSessionContext;
 import com.tx.component.auth.model.AuthItemRef;
 import com.tx.component.mainframe.model.MenuItem;
+import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.tree.util.TreeUtils;
 
 /**
@@ -26,19 +26,21 @@ import com.tx.core.tree.util.TreeUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class MenuContext implements InitializingBean{
-    
-    private MenuContextConfigurator menuContextConfigurator;
+public class MenuContext extends MenuContextConfigurator{
     
     private static MenuContext menuContext;
-    
+
     /**
      * @throws Exception
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        // TODO Auto-generated method stub
-        
+        super.afterPropertiesSet();
+        menuContext = this;
+    }
+
+    /** <默认构造函数> */
+    protected MenuContext() {
     }
 
     /**
@@ -51,6 +53,7 @@ public class MenuContext implements InitializingBean{
       * @see [类、类#方法、类#成员]
      */
     public static MenuContext getContext() {
+        AssertUtils.notNull(menuContext, "menuContext is not init.");
         return menuContext;
     }
     
@@ -64,11 +67,18 @@ public class MenuContext implements InitializingBean{
      * @see [类、类#方法、类#成员]
     */
     public List<MenuItem> getMenuItemTreeListFromCurrentSession(String menuType) {
+        AssertUtils.notEmpty(menuType, "menuType is empty.");
+        menuType = menuType.toUpperCase();
         //获取到当前权限引用
         MultiValueMap<String, AuthItemRef> authItemRefMap = AuthSessionContext.getAuthRefMultiValueMapFromSession();
         
         //根据权限及菜单配置生成最终权限列表
         List<MenuItem> resList = new ArrayList<MenuItem>();
+        List<MenuItem> menuItemList = getMenuType2MenuItemListMap().get(menuType);
+        if(menuItemList == null){
+            return resList;
+        }
+        
         for (MenuItem menuItemTemp : getMenuType2MenuItemListMap().get(menuType)) {
             if (menuItemTemp.getAuthKeyList() == null
                     || menuItemTemp.getAuthKeyList().size() == 0) {

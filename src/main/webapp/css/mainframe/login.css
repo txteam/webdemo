@@ -1,10 +1,11 @@
+@import url("./login.easyui.css");
+@import url("../../js/validator-0.2.1/jquery.validator.css");
 @CHARSET "UTF-8";
 body,html {
-	margin: 0pt;
-	padding: 0pt;
-	width: 100%; 
-	height: 100%;
-	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	background: url(../../images/mainframe/big-back.png) repeat-x rgb(241, 241, 241);
+	font-family: Georgia, Arial, Helvetica, "Nimbus Sans L", sans-serif;
 }
 
 .verify-input {

@@ -23,10 +23,10 @@ import com.tx.core.tree.model.TreeAble;
 public interface MenuItem extends TreeAble<List<MenuItem>, MenuItem> {
     
     /** 主菜单 */
-    public static final String TYPE_MAIN_MENU = "MAIN_MENU";
+    public static final String TYPE_MAIN_MENU = "MAINMENU";
     
     /** 工具菜单 */
-    public static final String TYPE_TOOL_MENU = "TOOL_MENU";
+    public static final String TYPE_TOOL_MENU = "TOOLMENU";
     
     /**
       * 唯一键
