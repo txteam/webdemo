@@ -208,11 +208,7 @@
 				</div>
 			</div>
 		</div>
-		<div data-options="region:'south',border:false" style="height: 30px; overflow: hidden;">
-			<div class="panel-header panel-title" style="text-align: center;">
-				鐗堟潈鎵�鏈堾<a href="mailto:89333367@qq.com">瀛欏畤</a>
-			</div>
-		</div>
+		
 	</div>
 
 	<div id="index_tabsMenu" style="width: 120px; display: none;">
