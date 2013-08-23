@@ -8,119 +8,25 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <link href="${contextPath}/js/bootstrap-2.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link id="easyuiTheme" rel="stylesheet" href="${contextPath}/js/jquery-easyui-1.3.3/themes/bootstrap/easyui.css" type="text/css">
-<link id="easyuiTheme" rel="stylesheet" href="${contextPath}/js/jquery-easyui-1.3.3/themes/icon.css" type="text/css">
-<link rel="stylesheet" href="${contextPath}/js/jquery-easyui-portal/portal.css" type="text/css">
+<link id="easyuiTheme" rel="stylesheet" href="${contextPath}/js/jquery-easyui-1.3.3/themes/<c:out value="${cookie.easyuiThemeName.value}" default="bootstrap"/>/easyui.css" type="text/css">
+<link rel="stylesheet" href="${contextPath}/style/extEasyUIIcon.css" type="text/css">
 
-<script src="${contextPath}/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="${contextPath}/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/jquery.easyui.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="${contextPath}/js/commons.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/plugins/jquery.layout.js" charset="utf-8"></script>
-<script type="text/javascript" src="${contextPath}/js/jquery-easyui-portal/jquery.portal.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="${contextPath}/view/js/mainframe/mainframe.js" charset="utf-8"></script>
 <script type="text/javascript">
-	var index_tabs;
-	var index_tabsMenu;
-	var index_layout;
-	$(function() {
-		index_layout = $('#index_layout').layout({
-			fit : true
-		});
-		/*index_layout.layout('collapse', 'east');*/
 
-		index_tabs = $('#index_tabs').tabs({
-			fit : true,
-			border : false,
-			onContextMenu : function(e, title) {
-				e.preventDefault();
-				index_tabsMenu.menu('show', {
-					left : e.pageX,
-					top : e.pageY
-				}).data('tabTitle', title);
-			},
-			tools : [ {
-				iconCls : 'database_refresh',
-				handler : function() {
-					var href = index_tabs.tabs('getSelected').panel('options').href;
-					if (href) {/*说明tab是以href方式引入的目标页面*/
-						var index = index_tabs.tabs('getTabIndex', index_tabs.tabs('getSelected'));
-						index_tabs.tabs('getTab', index).panel('refresh');
-					} else {/*说明tab是以content方式引入的目标页面*/
-						var panel = index_tabs.tabs('getSelected').panel('panel');
-						var frame = panel.find('iframe');
-						try {
-							if (frame.length > 0) {
-								for ( var i = 0; i < frame.length; i++) {
-									frame[i].contentWindow.document.write('');
-									frame[i].contentWindow.close();
-									frame[i].src = frame[i].src;
-								}
-								if (navigator.userAgent.indexOf("MSIE") > 0) {// IE特有回收内存方法
-									try {
-										CollectGarbage();
-									} catch (e) {
-									}
-								}
-							}
-						} catch (e) {
-						}
-					}
-				}
-			}, {
-				iconCls : 'delete',
-				handler : function() {
-					var index = index_tabs.tabs('getTabIndex', index_tabs.tabs('getSelected'));
-					var tab = index_tabs.tabs('getTab', index);
-					if (tab.panel('options').closable) {
-						index_tabs.tabs('close', index);
-					} else {
-						$.messager.alert('提示', '[' + tab.panel('options').title + ']不可以被关闭！', 'error');
-					}
-				}
-			} ]
-		});
-
-		index_tabsMenu = $('#index_tabsMenu').menu({
-			onClick : function(item) {
-				var curTabTitle = $(this).data('tabTitle');
-				var type = $(item.target).attr('title');
-
-				if (type === 'refresh') {
-					index_tabs.tabs('getTab', curTabTitle).panel('refresh');
-					return;
-				}
-
-				if (type === 'close') {
-					var t = index_tabs.tabs('getTab', curTabTitle);
-					if (t.panel('options').closable) {
-						index_tabs.tabs('close', curTabTitle);
-					}
-					return;
-				}
-
-				var allTabs = index_tabs.tabs('tabs');
-				var closeTabsTitle = [];
-
-				$.each(allTabs, function() {
-					var opt = $(this).panel('options');
-					if (opt.closable && opt.title != curTabTitle && type === 'closeOther') {
-						closeTabsTitle.push(opt.title);
-					} else if (opt.closable && type === 'closeAll') {
-						closeTabsTitle.push(opt.title);
-					}
-				});
-
-				for ( var i = 0; i < closeTabsTitle.length; i++) {
-					index_tabs.tabs('close', closeTabsTitle[i]);
-				}
-			}
-		});
-	});
 </script>
 </head>
 <body>
 	<div id="index_layout">
 		<div data-options="region:'north'" style="height: 70px; overflow: hidden;" class="logo">
-			<div id="sessionInfoDiv" style="position: absolute; right: 0px; top: 0px;" class="alert alert-info">
+			<div id="sessionInfoDiv" style="position: absolute; right: 0px; top: 0px;" 
+				class="alert alert-info">
 				欢迎你！
 			</div>
 			<div style="position: absolute; right: 0px; bottom: 0px;">
@@ -201,23 +107,28 @@
 			</div>
 		</div>
 		</div>
+		
 		<div data-options="region:'center',border:false" title="欢迎使用!改行可去掉" style="overflow: hidden;">
 			<div id="index_tabs" style="overflow: hidden;">
 				<div title="首页" data-options="border:false" style="overflow: hidden;">
-					<iframe src="../portal/index.htm" style="border: 0; width: 100%; height: 98%;"></iframe>
+					<iframe src="${contextPath }/portal/index.action" style="border: 0; width: 100%; height: 98%;"></iframe>
 				</div>
 			</div>
 		</div>
 		
+		<div data-options="region:'south',border:false" style="height: 30px; overflow: hidden;">
+			<div class="panel-header panel-title" style="text-align: center;">
+				放置消息提醒，或版本版权信息。
+			</div>
+		</div>
 	</div>
 
 	<div id="index_tabsMenu" style="width: 120px; display: none;">
-		<div title="refresh" data-options="iconCls:'icon-reload'">刷新</div>
+		<div title="refresh" data-options="iconCls:'transmit'">刷新</div>
 		<div class="menu-sep"></div>
-		<div title="close" data-options="iconCls:'icon-cancel'">关闭</div>
-		<div title="closeOther" data-options="iconCls:'icon-cancel'">关闭其他</div>
-		<div title="closeAll" data-options="iconCls:'icon-cancel'">关闭所有</div>
+		<div title="close" data-options="iconCls:'delete'">关闭</div>
+		<div title="closeOther" data-options="iconCls:'delete'">关闭其他</div>
+		<div title="closeAll" data-options="iconCls:'delete'">关闭所有</div>
 	</div>
-
 </body>
 </html>

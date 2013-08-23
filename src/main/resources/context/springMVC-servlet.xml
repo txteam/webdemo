@@ -31,6 +31,7 @@
 	<mvc:resources mapping="/js/**" location="/resources/js/" />
 	-->
 	<!-- <mvc:default-servlet-handler /> -->
+	<mvc:resources mapping="/view/js/**" location="/resources/js/" />
 
 	<!-- 需要添加该驱动，支持多个convertor的添加 -->
 	<mvc:annotation-driven />
