@@ -68,44 +68,44 @@
 		</div>
 		<div data-options="region:'west',split:true" title="模块导航" style="width: 200px; overflow: hidden;">
 			<div class="easyui-accordion" data-options="fit:true,border:false">
-			<div title="系统菜单" style="padding: 5px;" data-options="border:false,isonCls:'anchor',tools : [ {
-						iconCls : 'database_refresh',
-						handler : function() {
-							$('#layout_west_tree').tree('reload');
-						}
-					}, {
-						iconCls : 'resultset_next',
-						handler : function() {
-							var node = $('#layout_west_tree').tree('getSelected');
-							if (node) {
-								$('#layout_west_tree').tree('expandAll', node.target);
-							} else {
-								$('#layout_west_tree').tree('expandAll');
+				<div title="系统菜单" style="padding: 5px;" data-options="border:false,isonCls:'anchor',tools : [ {
+							iconCls : 'database_refresh',
+							handler : function() {
+								$('#layout_west_tree').tree('reload');
 							}
-						}
-					}, {
-						iconCls : 'resultset_previous',
-						handler : function() {
-							var node = $('#layout_west_tree').tree('getSelected');
-							if (node) {
-								$('#layout_west_tree').tree('collapseAll', node.target);
-							} else {
-								$('#layout_west_tree').tree('collapseAll');
+						}, {
+							iconCls : 'resultset_next',
+							handler : function() {
+								var node = $('#layout_west_tree').tree('getSelected');
+								if (node) {
+									$('#layout_west_tree').tree('expandAll', node.target);
+								} else {
+									$('#layout_west_tree').tree('expandAll');
+								}
 							}
-						}
-					} ]">
-				<div class="well well-small">
-					<ul id="layout_west_tree"></ul>
+						}, {
+							iconCls : 'resultset_previous',
+							handler : function() {
+								var node = $('#layout_west_tree').tree('getSelected');
+								if (node) {
+									$('#layout_west_tree').tree('collapseAll', node.target);
+								} else {
+									$('#layout_west_tree').tree('collapseAll');
+								}
+							}
+						} ]">
+					<div class="well well-small">
+						<ul id="layout_west_tree"></ul>
+					</div>
+				</div>
+				<div title="其他示例" data-options="border:false,iconCls:'anchor'">
+					<ul>
+						<li>菜单</li>
+						<li>菜单</li>
+						<li>菜单</li>
+					</ul>
 				</div>
 			</div>
-			<div title="其他示例" data-options="border:false,iconCls:'anchor'">
-				<ul>
-					<li>菜单</li>
-					<li>菜单</li>
-					<li>菜单</li>
-				</ul>
-			</div>
-		</div>
 		</div>
 		
 		<div data-options="region:'center',border:false" title="欢迎使用!改行可去掉" style="overflow: hidden;">

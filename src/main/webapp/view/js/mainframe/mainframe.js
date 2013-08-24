@@ -8,6 +8,9 @@ $(function(){
     index_layout = $('#index_layout').layout({
         fit : true
     });
+    /**
+     * 初始化页面tabs 
+     */
     index_tabs = $('#index_tabs').tabs({
         fit : true,
         border : false,
