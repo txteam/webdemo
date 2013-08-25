@@ -40,7 +40,6 @@ $(function() {
     });
     
     $formBody.before($('#logo').show());
-    
     //$('.dialog-button').prepend($verifyInput).prepend($verifyImg);
     $(window).resize(function() {
         $dialog.dialog('center');
