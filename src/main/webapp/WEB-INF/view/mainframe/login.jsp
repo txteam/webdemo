@@ -17,7 +17,7 @@ $(function() {
     var $dialog = $('<div/>');
     var $formBody = $('#form-body');
     $dialog.dialog({
-        height: 300,
+        height: 300, 
         width: 500,
         content: $formBody.show(),
         noheader: true,
@@ -38,7 +38,8 @@ $(function() {
                 }
             }]
     });
-    $formBody.after($('#logo').show());
+    
+    $formBody.before($('#logo').show());
     
     //$('.dialog-button').prepend($verifyInput).prepend($verifyImg);
     $(window).resize(function() {
