@@ -23,99 +23,137 @@ $(document).ready(function() {
  * 提供跨页面的事件广播支持
  * 客户端统一事件管理器
  */
-(function($, undefined){
+
+(function($, undefined) {
+    //为当前页面定制，本地事件
+    var $localEventHandle = null;
+    //如果当前页面对象不存在，则从window中进行提取，
+    //如果window中对应对象不存在，则进行创建
+    if (!$localEventHandle) {
+        if (!window.$localEventHandle) {
+            window.$localEventHandle = $("<_localEventHandle/>");
+        }
+        $localEventHandle = window.$localEventHandle;
+    }
+    //console.log("$localEventHandle init success. $localEventHandle.size:" + $localEventHandle.size());
+
     /**
      * 定义全局事件管理器
      */
     var _globalEventManagerWin_ = window;
     var _$globalEventManager = null;
-    while (!_$globalEventManager){
-        try{
-            if (!_globalEventManagerWin_.closed
-                    && _globalEventManagerWin_._$globalEventManager){
-            	_$globalEventManager = _globalEventManagerWin_._$globalEventManager;
+    while (!_$globalEventManager) {
+        try {
+            if (!_globalEventManagerWin_.closed && _globalEventManagerWin_.$globalEventManager) {
+                _$globalEventManager = _globalEventManagerWin_.$globalEventManager;
+                _$globalEventManager.registeGlobalEventListener(window);
+                //console.log("registe window to global");
                 break;
             }
-        }catch (e) {
+        } catch (e) {
             // do nothing
         }
 
-        if (!_globalEventManagerWin_.closed
-                && _globalEventManagerWin_.parent != null
-                && _globalEventManagerWin_.parent != _globalEventManagerWin_){
+        if (!_globalEventManagerWin_.closed && _globalEventManagerWin_.parent != null && _globalEventManagerWin_.parent != _globalEventManagerWin_) {
             _globalEventManagerWin_ = _globalEventManagerWin_.parent;
-        }
-        else if (!_globalEventManagerWin_.closed
-                && _globalEventManagerWin_.opener != null
-                && _globalEventManagerWin_.opener != _globalEventManagerWin_){
+        } else if (!_globalEventManagerWin_.closed && _globalEventManagerWin_.opener != null && _globalEventManagerWin_.opener != _globalEventManagerWin_) {
             _globalEventManagerWin_ = _globalEventManagerWin_.opener;
-        }
-        else{
-        	//全局事件管理器
-        	var GlobalEventManager = function(config){
-        		
-        	};
-        	//全局事件管理器属性:
-        	GlobalEventManager.prototype.$globalEventHandle = $("<_global_event_handle/>");
-        	GlobalEventManager.prototype.eventTypeCallbackMapping = {};
-        	
-        	//全局事件管理器方法:
-        	//添加事件监听器
-        	GlobalEventManager.prototype.bind = function(eventType, data, callbackFn){
-        		var _self = this;
-        		if(!callbackFn && $.isFunction(data)){
-        			callbackFn = data;
-        			data = [];
-        		}
-        		//压入堆栈
-        		if(!_self.eventTypeCallbackMapping[eventType]){
-        			_self.eventTypeCallbackMapping[eventType] = $.Callbacks("unique");
-        			_self.$globalEventHandle.bind(eventType, data, function(event){
-        				//console.log(Array.prototype.slice.call(arguments));
-        				_self.eventTypeCallbackMapping[eventType].fireWith(callbackFn,Array.prototype.slice.call(arguments));
-        			});
-        		}
-        		var _whenExceptionRemoveAbleFunction = function(){
-        			try{
-        				callbackFn.apply(callbackFn,arguments);
-        			}catch(e){
-        				//console.log('fire bind global event exception: ' + e);
-        				_self.eventTypeCallbackMapping[eventType].remove(_whenExceptionRemoveAbleFunction);
-        			}
-        		};
-        		_self.eventTypeCallbackMapping[eventType].add(_whenExceptionRemoveAbleFunction);
-        	};
-        	GlobalEventManager.prototype.trigger = function(eventType, params){
-        		this.$globalEventHandle.trigger(eventType, params)
-        	};
-        	
+        } else {
+            //定义一个子window的链表类
+            var ChildWindowLinkedList = function() {
+            };
+            //子引用链
+            ChildWindowLinkedList.prototype.childs = [];
+            //用以支持抹去陈旧的window引用
+            ChildWindowLinkedList.prototype._expungeStaleEntries = function() {
+                var _self = this;
+                var newChilds = $.grep(_self.childs, function(childWindowRefTemp, i) {
+                    if (childWindowRefTemp != null && $.isWindow(childWindowRefTemp) && !childWindowRefTemp.closed) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                this.childs = newChilds;
+            }
+            //添加,能调用到该方法的子页面，应该都是统一域中的
+            ChildWindowLinkedList.prototype.add = function(childWindowRef) {
+                this._expungeStaleEntries();
+                if (childWindowRef != null && $.isWindow(childWindowRef) && !childWindowRef.closed) {
+                    this.childs.push(childWindowRef);
+                }
+            };
+            //获取链表的遍历器
+            ChildWindowLinkedList.prototype.iterator = function() {
+                this._expungeStaleEntries();
+                return this.childs;
+            }
+            //全局事件管理器
+            var GlobalEventManager = function(config) {
+            };
+            GlobalEventManager.prototype._childWindowLinkedList = new ChildWindowLinkedList();
+            GlobalEventManager.prototype.registeGlobalEventListener = function(currentWindowRef) {
+                if (currentWindowRef && $.isWindow(currentWindowRef) && currentWindowRef.$localEventHandle) {
+                    this._childWindowLinkedList.add(currentWindowRef);
+                }
+            };
+            GlobalEventManager.prototype.trigger = function() {
+                //console.log("triggerge:" + arguments[0]);
+                var _self = this;
+                var _arguments = arguments;
+                var childWindowRefArr = this._childWindowLinkedList.iterator();
+                $.each(childWindowRefArr, function(i, childWindowRefTemp) {
+                    if (childWindowRefTemp && childWindowRefTemp.$localEventHandle) {
+                        //console.log("window._$localEventHandle.trigger:" + _arguments[0]);
+                        var $lehandle = childWindowRefTemp.$localEventHandle;
+                        $lehandle.triggerHandler.apply($lehandle, _arguments);
+                    }
+                });
+            };
+
             /**
              * 事件管理器全局对象
              */
-        	_$globalEventManager = new GlobalEventManager();
-        	
-        	_globalEventManagerWin_._$globalEventManager = _$globalEventManager;
-        	//循环调度，用以清理全局事件管理器中，已经被回收的对象
-        	//setInterval(function(){
-        	//	
-        	//},60 * 1000 );
+            _$globalEventManager = new GlobalEventManager();
+            //将当前页面的window对象注入容器
+            _$globalEventManager.registeGlobalEventListener(window);
+            //console.log("new global.and registe window to global");
+
+            //释放对象
+            GlobalEventManager = null;
+            try {
+                //如果跨域时
+                _globalEventManagerWin_.$globalEventManager = _$globalEventManager;
+            } catch(e) {
+            }
         }
     }
     //释放引用
     _globalEventManagerWin_ = null;
 
-    var _globalEventCallbacks = {};
     $.extend({
-        triggerGlobalEvent : function(eventType, params){
-            _$globalEventManager.trigger(eventType, params);
-        }, 
-        bindGlobalEvent : function(eventType, data, callbackFn){
-            _$globalEventManager.bind(eventType, data, callbackFn);
+        bindGlobalEvent : function() {
+            var $lehandle = window.$localEventHandle;
+            $lehandle.bind.apply($lehandle, arguments);
+        },
+        unbindGlobalEvent : function() {
+            var $lehandle = window.$localEventHandle;
+            $lehandle.unbind.apply($lehandle, arguments);
+        },
+        oneGlobalEvent : function() {
+            var $lehandle = window.$localEventHandle;
+            $lehandle.one.apply($lehandle, arguments);
+        },
+        triggerGlobalEvent : function() {
+            _$globalEventManager.trigger.apply(_$globalEventManager, arguments);
         }
     });
     $.triggerGE = $.triggerge = $.triggerGlobalEvent;
     $.bindGE = $.bindge = $.bindGlobalEvent;
-})(jQuery);
+    $.unbindGE = $.unbindge = $.unbindGlobalEvent;
+    $.oneGE = $.onege = $.oneGlobalEvent;
+})(jQuery); 
+
 
 /** 
  * 浏览器扩展
@@ -163,11 +201,57 @@ if (browser.userAgent.indexOf('MSIE') > -1) {
 } else {
 	// 其他浏览器
 }
-
 /** 
  * 扩展jquery 
  */
 (function($, undefined){
+    $.ObjectUtils = {};
+    $.ObjectUtils.isEmpty = function(data){
+        if(!data){
+            return true;
+        }else if($.type(data) == 'string' && data == $.trim(data) == ''){
+            return true;
+        }else if($.type(data) == 'array' && data.length == 0){
+            return true;
+        }
+        return false;
+    };
+    $.TreeUtils = {};
+    $.TreeUtils.defaultConverter = function(data){
+        var converter = this;
+        var resData = $.extend({},{
+            id: data.id,
+            text:null,
+            formatter:null,
+            state: $.ObjectUtils.isEmpty(data.childs) ? null : 'closed',//open/closed
+            attributes: data,
+            iconCls: null,
+        },data);
+        if(data.childs && !$.ObjectUtils.isEmpty(data.childs)){
+            resData.children = [];
+            $.each(data.childs, function(index, childTemp) {
+                resData.children[index] = converter.call(converter,childTemp);
+            });
+        }else{
+             resData.children = null;
+        }
+        return resData;
+    };
+    $.TreeUtils.transform = function(data,converter){
+        converter = converter && $.isFunction(converter) ? converter : $.TreeUtils.defaultConverter;
+        var resTreeData = null;
+        if($.type(data) != 'array'){
+            data = [data];
+        }
+        if($.ObjectUtils.isEmpty(data)){
+            return false;
+        }
+        resTreeData = [];
+        $.each(data,function(index,treeNodeDataTemp){
+            resTreeData[index] = converter.call(converter,treeNodeDataTemp);
+        });
+        return resTreeData;
+    };
 	$.cookie = function(key, value, options) {
 		if (arguments.length > 1 && (value === null || typeof value !== "object")) {
 			options = $.extend({}, options);
@@ -409,16 +493,7 @@ var DialogUtils = function(options){
 /**
  * dialog默认配置
  */
-DialogUtils.defaultConfigs = {
-    autoOpen: true,
-    closeOnEscape: false,
-	width: 'auto',
-	height: 'auto',
-	zIndex: 10000,
-	maxHeight: 1000,
-	maxWidth: 700,
-	draggable: true,
-	position:'center'
+DialogUtils.defaultConfigs = {  
 };
 /**
  * 当前页面Dialog关闭句柄
@@ -667,9 +742,9 @@ DialogUtils.alert = function(msg, yes) {
 };
 
 //改写window alert
-window.alert = function(msg){
-	DialogUtils.alert(msg);
-};
+//window.alert = function(msg){
+//	DialogUtils.alert(msg);
+//};
 /**
  * Dialog消息
  * @param {String} 消息内容

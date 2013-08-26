@@ -11,6 +11,13 @@
 <link id="easyuiTheme" rel="stylesheet" href="${contextPath}/js/jquery-easyui-1.3.3/themes/<c:out value="${cookie.easyuiThemeName.value}" default="bootstrap"/>/easyui.css" type="text/css">
 <link rel="stylesheet" href="${contextPath}/style/extEasyUIIcon.css" type="text/css">
 
+<link rel="stylesheet" href="${contextPath}/js/kindeditor-4.1.7/themes/default/default.css">
+<link rel="stylesheet" href="${contextPath}/js/jquery-easyui-portal/portal.css" type="text/css">
+
+<script type="text/javascript">
+	var _contextPath = "${contextPath}";
+	var _queryMenuUrl = "${contextPath}/mainframe/queryMenuItemTreeListDependAuthority.action";
+</script>
 <script type="text/javascript" src="${contextPath}/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/jquery.easyui.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/commons.js" charset="utf-8"></script>
@@ -18,6 +25,11 @@
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/plugins/jquery.layout.js" charset="utf-8"></script>
 
 <script type="text/javascript" src="${contextPath}/view/js/mainframe/mainframe.js" charset="utf-8"></script>
+<style type="text/css">
+#menuAccordion .panel-title{
+	font-weight:normal;
+}
+</style>
 <script type="text/javascript">
 
 </script>
@@ -66,52 +78,16 @@
 				<div onclick="logoutFun(true);">退出系统</div>
 			</div>
 		</div>
-		<div data-options="region:'west',split:true" title="模块导航" style="width: 200px; overflow: hidden;">
-			<div class="easyui-accordion" data-options="fit:true,border:false">
-				<div title="系统菜单" style="padding: 5px;" data-options="border:false,isonCls:'anchor',tools : [ {
-							iconCls : 'database_refresh',
-							handler : function() {
-								$('#layout_west_tree').tree('reload');
-							}
-						}, {
-							iconCls : 'resultset_next',
-							handler : function() {
-								var node = $('#layout_west_tree').tree('getSelected');
-								if (node) {
-									$('#layout_west_tree').tree('expandAll', node.target);
-								} else {
-									$('#layout_west_tree').tree('expandAll');
-								}
-							}
-						}, {
-							iconCls : 'resultset_previous',
-							handler : function() {
-								var node = $('#layout_west_tree').tree('getSelected');
-								if (node) {
-									$('#layout_west_tree').tree('collapseAll', node.target);
-								} else {
-									$('#layout_west_tree').tree('collapseAll');
-								}
-							}
-						} ]">
-					<div class="well well-small">
-						<ul id="layout_west_tree"></ul>
-					</div>
-				</div>
-				<div title="其他示例" data-options="border:false,iconCls:'anchor'">
-					<ul>
-						<li>菜单</li>
-						<li>菜单</li>
-						<li>菜单</li>
-					</ul>
-				</div>
-			</div>
+		<div data-options="region:'west',split:true,
+				tools : [{ iconCls : 'database_refresh',handler : function() {$.triggerGE('reloadMenus');} }]" 
+				title="菜单" style="width: 200px; overflow: hidden;">
+			<div id="menuAccordion"></div>
 		</div>
 		
-		<div data-options="region:'center',border:false" title="欢迎使用!改行可去掉" style="overflow: hidden;">
+		<div data-options="region:'center'" title="欢迎登录" style="overflow: hidden;">
 			<div id="index_tabs" style="overflow: hidden;">
 				<div title="首页" data-options="border:false" style="overflow: hidden;">
-					<iframe src="${contextPath }/portal/index.action" style="border: 0; width: 100%; height: 98%;"></iframe>
+					<iframe src="${contextPath }/portal/index.action" frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
 				</div>
 			</div>
 		</div>

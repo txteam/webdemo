@@ -12,20 +12,22 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.auth.AuthConstant;
 import com.tx.component.auth.context.AuthContext;
 import com.tx.component.mainframe.context.MenuContext;
 import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.component.mainframe.model.MenuItem;
-import com.tx.component.mainframe.service.OperatorService;
 import com.tx.component.operator.model.Operator;
+import com.tx.component.operator.service.OperatorService;
 
 /**
  * 登录功能入口
@@ -51,7 +53,7 @@ public class MainframeController {
     private AuthContext authContext;
     
     @RequestMapping("/toLogin")
-    public String toLogin(){
+    public String toLogin() {
         return "/mainframe/login";
     }
     
@@ -72,7 +74,8 @@ public class MainframeController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/login")
-    public String login(@RequestParam("loginName")String loginName, @RequestParam("password")String password, Model model) {
+    public String login(@RequestParam("loginName") String loginName,
+            @RequestParam("password") String password, Model model) {
         //登录人员
         Operator oper = this.operatorService.login(loginName, password);
         
@@ -87,15 +90,44 @@ public class MainframeController {
         //authSessionContext.initCurrentUserAuthContextWhenLogin("123456");//初始化用户权限到当前会话中 
         Map<String, String> refType2RefIdMapping = new HashMap<String, String>();
         refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR, "123456");
-        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR_TEMPORARY, "123456");
+        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR_TEMPORARY,
+                "123456");
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_POST, postId);
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_ORGANIZATION, loginOrganization.getId());
         authContext.login(refType2RefIdMapping);
         
         //根据当前用户权限获取当前用户的菜单列表
-        List<MenuItem> mainMenuItemTreeList = MenuContext.getContext().getMenuItemTreeListFromCurrentSession(MenuItem.TYPE_MAIN_MENU);
-        model.addAttribute("menuItemTreeList", mainMenuItemTreeList);
         
         return "/mainframe/mainframe";
     }
+    
+    /**
+      * 查询有权限的菜单<br/>
+      *<功能详细描述>
+      * @param menuItemId
+      * @return [参数说明]
+      * 
+      * @return List<MenuItem> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryMenuItemTreeListDependAuthority")
+    public List<MenuItem> queryMenuItemTreeListDependAuthority(
+            @RequestParam(value = "menuItemId", required = false) String menuItemId) {
+        List<MenuItem> mainMenuItemTreeList = null;
+        if (StringUtils.isEmpty(menuItemId)) {
+            mainMenuItemTreeList = MenuContext.getContext()
+                    .getMenuItemTreeListFromCurrentSession(MenuItem.TYPE_MAIN_MENU);
+        }
+        else {
+            mainMenuItemTreeList = MenuContext.getContext()
+                    .getMenuItemTreeListFromCurrentSession(MenuItem.TYPE_MAIN_MENU,
+                            menuItemId)
+                    .getChilds();
+        }
+        
+        return mainMenuItemTreeList;
+    }
+    
 }

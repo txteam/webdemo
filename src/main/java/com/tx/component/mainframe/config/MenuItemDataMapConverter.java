@@ -31,7 +31,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class DataMapConverter implements Converter {
+public class MenuItemDataMapConverter implements Converter {
     
     /**
      * 解析data的正则表达式<br/>

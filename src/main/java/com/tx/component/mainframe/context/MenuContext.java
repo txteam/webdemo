@@ -66,6 +66,27 @@ public class MenuContext extends MenuContextConfigurator{
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
+    public MenuItem getMenuItemTreeListFromCurrentSession(String menuType,String rootMenuItemId) {
+        AssertUtils.notEmpty(rootMenuItemId, "rootMenuItemId is empty.");
+        List<MenuItem> resTreeList = getMenuItemTreeListFromCurrentSession(menuType);
+        for(MenuItem menuItem: resTreeList){
+            if(rootMenuItemId.equals(menuItem.getId())){
+                return menuItem;
+            }
+        }
+        return null;
+    }
+    
+    
+    /**
+     * 根据当前的登录人员的权限项加载菜单树
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<MenuItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
     public List<MenuItem> getMenuItemTreeListFromCurrentSession(String menuType) {
         AssertUtils.notEmpty(menuType, "menuType is empty.");
         menuType = menuType.toUpperCase();

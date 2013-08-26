@@ -95,7 +95,7 @@ public class MenuItemConfig {
     @XStreamAsAttribute
     private String param = "";
     
-    @XStreamConverter(DataMapConverter.class)
+    @XStreamConverter(MenuItemDataMapConverter.class)
     private Map<String, String> data;
     
     /** 子菜单项 */

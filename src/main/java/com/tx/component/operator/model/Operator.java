@@ -6,9 +6,15 @@
  */
 package com.tx.component.operator.model;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Table;
+
 
  /**
-  * <功能简述>
+  * 操作员<br/>
   * <功能详细描述>
   * 
   * @author  PengQingyang
@@ -16,21 +22,62 @@ package com.tx.component.operator.model;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public class Operator {
+@Table(name = "user_operator")
+public class Operator implements Serializable{
     
+    /** 注释内容 */
+    private static final long serialVersionUID = 6236689049474522678L;
+
+    /** 用户唯一键  */
     private String id;
     
-    private String code;
+    /** 用户所属虚中心 不能为空 not null */
+    private String vcid;
     
+    /**登录名*/
+    private String loginName;
+    
+    /**用户名*/
+    private String userName;
+    
+    /** 密码 */
     private String password;
     
-    private String name;
+    /** 历史密码 */
+    private String historyPwd;
     
-    private String createDate;
+    /**审批密码*/
+    private String examinePwd;
     
-    private String updateDate;
+    /**是否可用*/
+    private boolean valid;
     
-    private String description;
+    /** 创建时间  */
+    private Date createDate;
+    
+    /** 最后一次修改时间 */
+    private Date lastUpdateDate;
+    
+    /**用户最近一次修改密码时间*/
+    private Date pwdUpdateDate;
+    
+    /** 失效时间 */
+    private Date invalidDate;
+    
+    /** 账户是否被锁定 */
+    private boolean locked;
+    
+    /** 用户输错密码的次数 */
+    private Integer pwdErrCount = 0;
+    
+    /** 员工信息,如果为公司员工，则该信息不为空  */
+    private EmployeeInfo employeeInfo;
+    
+    /** 所属分行 */
+    private Organization organization;
+    
+    /** 职位 */
+    private List<Post> postList;
 
     /**
      * @return 返回 id
@@ -47,73 +94,45 @@ public class Operator {
     }
 
     /**
-     * @return 返回 code
+     * @return 返回 vcid
      */
-    public String getCode() {
-        return code;
+    public String getVcid() {
+        return vcid;
     }
 
     /**
-     * @param 对code进行赋值
+     * @param 对vcid进行赋值
      */
-    public void setCode(String code) {
-        this.code = code;
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
     }
 
     /**
-     * @return 返回 name
+     * @return 返回 loginName
      */
-    public String getName() {
-        return name;
+    public String getLoginName() {
+        return loginName;
     }
 
     /**
-     * @param 对name进行赋值
+     * @param 对loginName进行赋值
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     /**
-     * @return 返回 createDate
+     * @return 返回 userName
      */
-    public String getCreateDate() {
-        return createDate;
+    public String getUserName() {
+        return userName;
     }
 
     /**
-     * @param 对createDate进行赋值
+     * @param 对userName进行赋值
      */
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
-     * @return 返回 updateDate
-     */
-    public String getUpdateDate() {
-        return updateDate;
-    }
-
-    /**
-     * @param 对updateDate进行赋值
-     */
-    public void setUpdateDate(String updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    /**
-     * @return 返回 description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * @param 对description进行赋值
-     */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     /**
@@ -128,5 +147,173 @@ public class Operator {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return 返回 historyPwd
+     */
+    public String getHistoryPwd() {
+        return historyPwd;
+    }
+
+    /**
+     * @param 对historyPwd进行赋值
+     */
+    public void setHistoryPwd(String historyPwd) {
+        this.historyPwd = historyPwd;
+    }
+
+    /**
+     * @return 返回 examinePwd
+     */
+    public String getExaminePwd() {
+        return examinePwd;
+    }
+
+    /**
+     * @param 对examinePwd进行赋值
+     */
+    public void setExaminePwd(String examinePwd) {
+        this.examinePwd = examinePwd;
+    }
+
+    /**
+     * @return 返回 valid
+     */
+    public boolean isValid() {
+        return valid;
+    }
+
+    /**
+     * @param 对valid进行赋值
+     */
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    /**
+     * @return 返回 pwdUpdateDate
+     */
+    public Date getPwdUpdateDate() {
+        return pwdUpdateDate;
+    }
+
+    /**
+     * @param 对pwdUpdateDate进行赋值
+     */
+    public void setPwdUpdateDate(Date pwdUpdateDate) {
+        this.pwdUpdateDate = pwdUpdateDate;
+    }
+
+    /**
+     * @return 返回 invalidDate
+     */
+    public Date getInvalidDate() {
+        return invalidDate;
+    }
+
+    /**
+     * @param 对invalidDate进行赋值
+     */
+    public void setInvalidDate(Date invalidDate) {
+        this.invalidDate = invalidDate;
+    }
+
+    /**
+     * @return 返回 locked
+     */
+    public boolean isLocked() {
+        return locked;
+    }
+
+    /**
+     * @param 对locked进行赋值
+     */
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    /**
+     * @return 返回 pwdErrCount
+     */
+    public Integer getPwdErrCount() {
+        return pwdErrCount;
+    }
+
+    /**
+     * @param 对pwdErrCount进行赋值
+     */
+    public void setPwdErrCount(Integer pwdErrCount) {
+        this.pwdErrCount = pwdErrCount;
+    }
+
+    /**
+     * @return 返回 employeeInfo
+     */
+    public EmployeeInfo getEmployeeInfo() {
+        return employeeInfo;
+    }
+
+    /**
+     * @param 对employeeInfo进行赋值
+     */
+    public void setEmployeeInfo(EmployeeInfo employeeInfo) {
+        this.employeeInfo = employeeInfo;
+    }
+
+    /**
+     * @return 返回 organization
+     */
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    /**
+     * @param 对organization进行赋值
+     */
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    /**
+     * @return 返回 postList
+     */
+    public List<Post> getPostList() {
+        return postList;
+    }
+
+    /**
+     * @param 对postList进行赋值
+     */
+    public void setPostList(List<Post> postList) {
+        this.postList = postList;
     }
 }

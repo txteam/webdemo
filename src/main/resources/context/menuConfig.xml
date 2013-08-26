@@ -3,14 +3,50 @@
 	<!-- 主菜单配置 -->
 	<menus_config type="mainMenu">
 		<!-- 一级别菜单:系统配置   -->
-		<menu id="system_config" text="系统配置"
-			authKey="system_config_manange">
-			<!-- 系统管理子菜单: 权限管理 -->
-			<!-- target可配置为mainTabs,openDialog,openModelDialog,triggerGlobalEvent -->
-			<!-- mainTabs: selectRefresh默认为false,即对应tab点击后是否马上刷新  -->
-			<!-- openModelDialog: 需要配置打开的对话框高和宽 height,width -->
-			<menu id="authCconfig" text="权限管理" href="/auth/authMananger"
-				authKey="auth_config_manage" target="mainTabs" selectRefresh="false"/>
+		<menu id="system_config" text="系统管理" href="/mainframe/menuMananger.action"
+			authKey="system_config">
+			<menu id="menu_config" text="菜单管理" href="/mainframe/menuMananger.action"
+				authKey="menu_config" target="mainTabs" selectRefresh="false"/>
+			<menu id="vcid_config" text="虚中心管理" alid="false"
+				authKey="vcid_config" target="mainTabs" href="/auth/authMananger"/>			
+			<menu id="config_config" text="配置项管理" href="/auth/authMananger"
+				authKey="config_config" target="mainTabs" selectRefresh="false"/>
+			<menu id="basicdata_config" text="基础数据项管理" href="/auth/authMananger"
+				authKey="basicdata_config" target="mainTabs" selectRefresh="false"/>
+				
+			<menu id="operator_config_center" text="操作员管理中心" href=""
+				authKey="" target="mainTabs">
+				<menu id="operator_config" text="操作员管理" href=""
+					authKey="" target="mainTabs"></menu>
+				<menu id="org_config" text="组织结构管理" href=""
+					authKey="" target="mainTabs"></menu>
+				<menu id="post_config" text="职位管理" href=""
+					authKey="" target="mainTabs"></menu>
+				</menu>
+			
+			<menu id="auth_config" text="权限管理"
+				authKey="" target="mainTabs">
+				<menu id="role_config" text="权限管理" valid="false"
+					authKey="" target="mainTabs" href="" ></menu>
+			</menu>
+		</menu>
+		
+		<menu id="system_helper" text="帮助"
+			authKey="system_helper" icon="plugin">
+			<menu id="system_rule" text="规范">
+				<menu id="java_code_rule" text="java编码规范" href="/auth/authMananger"
+					target="mainTabs" selectRefresh="false"/>
+				<menu id="database_code_rule" text="数据库编码规范" href="/auth/authMananger"
+					target="mainTabs" selectRefresh="false"/>
+			</menu>
+			<menu id="menu_helper" text="如何配置菜单" href="/auth/authMananger"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="auth_helper" text="如何配置权限" href="/auth/authMananger"
+				target="mainTabs" selectRefresh="false"/>
+			<menu id="code_example" text="代码范例">
+				<menu id="tree_example" text="树范例" href="/auth/authMananger"
+					target="mainTabs" selectRefresh="false"/>
+			</menu>
 		</menu>
 		
 		<menu id="bestDemoMananger" text="最佳实践">
@@ -37,6 +73,9 @@
 			<menu id="demoList" text="dialogDemo" href="/demo/dialogUtilsDemo"
 				target="mainTabs" selectRefresh="false"/>
 		</menu>
+		
+		<menu id="test" text="测试菜单项" href="/demo/dialogUtilsDemo">
+		</menu>
 	
 		<menu id="system_manangersasdf" text="test">
 			<menu id="config_mananger3333" text="test22">
@@ -58,11 +97,12 @@
 			<menu id="user_mananger" text="人员管理"></menu>
 			<menu id="base_data_mananger" text="基础数据管理"></menu>
 		</menu>
+		
+
 	</menus_config>
 	
 	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示  -->
 	<menus_config type="toolMenu">
-
 		<!-- 一级别菜单:系统配置   -->
 		<menu id="system_config" text="系统配置"
 			authKey="system_config_manange">
@@ -73,63 +113,14 @@
 			<menu id="authCconfig" text="权限管理" href="/auth/authMananger"
 				authKey="auth_config_manage" target="mainTabs" selectRefresh="false"/>
 		</menu>
-		
-		<menu id="bestDemoMananger" text="参考demo">	
-			<menu id="hisDemoList" text="简单列表" href="/bestDemo/queryDemoList"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestDemoList" text="ajax列表" href="/bestDemo/toAjaxQueryDemoList"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestAjaxDemoList" text="ajax分页列表" href="/bestDemo/toAjaxQueryDemoPagedList"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestForm" text="form表单" href="/bestDemo/toAddDemo"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="bestView" text="详情页面" href="/bestDemo/toViewDemo"
-				target="mainTabs" selectRefresh="false"/>
+		<menu id="newPortalIndex" text="newPortalIndex" href="/portal/index.action" 
+			target="mainTabs" >
 		</menu>
-		
-		<menu id="component_mananger" text="控     件">
-			<menu id="component_grid" text="表格控件" href="/view/component/grid/index"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="component_tree" text="树控件" href="/view/component/tree/index"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="component_slider" text="滑块控件" href="/view/component/slider/index"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="component_menu" text="菜单控件" href="/view/component/menu/index"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="component_progressbar" text="滑块控件" href="/view/component/progressbar/index"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="component_tooltip" text="滑块控件" href="/view/component/tooltip/index"
-				target="mainTabs" selectRefresh="false"/>
+		<menu id="modifyMyselfInfo" text="修改个人信息" href="/demo/dialogUtilsDemo" 
+			target="openDialog" >
 		</menu>
-		
-		<menu id="component_see_mananger" text="参考信息">
-			<menu id="see_grid_parameters" text="表格控件参数" 
-				href="http://blog.csdn.net/lpy3654321/article/details/7936301"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="see_grid_col_formatter" text="jqGrid中的formatter" 
-				href="http://mj4d.iteye.com/blog/1634857"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="see_grid_demo" text="表格控件demo" 
-				href="http://www.trirand.com/blog/jqgrid/jqgrid.html"
-				target="mainTabs" selectRefresh="false"/>
-				
-			<menu id="see_jquery_cookie" text="jqueryCookie" 
-				href="http://www.nowamagic.net/jquery/jquery_JqueryCookie.php"
-				target="mainTabs" selectRefresh="false"/>
-				
-			<menu id="see_form" text="表单美化及布局" 
-				href="http://www.formee.org/demo/reference.htm"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="see_form_ajax" text="表单ajax提交" 
-				href="http://jquery.malsup.com/form/#xml"
-				target="mainTabs" selectRefresh="false"/>
-			<menu id="see_date" text="日期控件" 
-				href="http://www.my97.net/dp/demo/index.htm"
-				target="mainTabs" selectRefresh="false"/>
-				
-			<menu id="info_ognl" text="ognl的使用" 
-				href="http://blog.csdn.net/abasen/article/details/5123381"
-				target="mainTabs" selectRefresh="false"/>
+		<menu id="logout" text="退出" href="/demo/dialogUtilsDemo"
+			target="triggerGlobalEvent" eventType="modifyMyselfInfo">
 		</menu>
 	</menus_config>
 </menu_context_config>
