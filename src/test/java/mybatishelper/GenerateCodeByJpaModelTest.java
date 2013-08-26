@@ -6,6 +6,7 @@
  */
 package mybatishelper;
 
+import com.tx.component.mainframe.model.District;
 import com.tx.core.mybatis.generator.JpaEntityFreeMarkerGenerator;
 import com.tx.webdemo.demo.model.Demo;
 
@@ -33,7 +34,7 @@ public class GenerateCodeByJpaModelTest {
         factory.setSqlMapTemplateFilePath("mybatishelper/sqlMap.ftl");
         
         //生成后在自己指定的文件夹中去找即可
-        factory.generate(Demo.class, "d:/mybatis");
+        factory.generate(District.class, "d:/mybatis");
         
         System.out.println("success");
     }

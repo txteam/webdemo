@@ -45,7 +45,7 @@ public class OperatorService {
       * @see [类、类#方法、类#成员]
      */
     public void addOperator(Operator operator){
-        
+        AssertUtils.notNull(operator, "operator is null");
     }
     
 }

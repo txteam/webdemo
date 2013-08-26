@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="district">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="districtMap" 
+		type="com.tx.component.mainframe.model.District">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findDistrict" 
+		parameterType="com.tx.component.mainframe.model.District"
+		resultMap="districtMap">
+		SELECT 
+				TD.ID,
+				TD.PARENTID,
+				TD.DESCRIPTION,
+				TD.NAME,
+				TD.TYPE
+		  FROM BASIC_DISTRICT TD
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+	            AND TD.ID = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryDistrict" 
+		parameterType="java.util.Map"
+		resultMap="districtMap">
+		SELECT 
+				TD.ID,
+				TD.PARENTID,
+				TD.DESCRIPTION,
+				TD.NAME,
+				TD.TYPE
+		  FROM BASIC_DISTRICT TD
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+	            AND TD.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
+	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
+	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+	            AND TD.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(type)">  
+	            AND TD.TYPE = #{type,javaType=com.tx.component.mainframe.model.DistrictTypeEnum}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.Ognl@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryDistrictCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM BASIC_DISTRICT TD
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+	            AND TD.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
+	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
+	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+	            AND TD.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.Ognl@isNotEmpty(type)">  
+	            AND TD.TYPE = #{type,javaType=com.tx.component.mainframe.model.DistrictTypeEnum}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertDistrict" 
+		parameterType="com.tx.component.mainframe.model.District">
+		INSERT INTO BASIC_DISTRICT
+		(
+			ID,
+			PARENTID,
+			DESCRIPTION,
+			NAME,
+			TYPE
+		)
+		VALUES
+		(
+			#{id},
+			#{parentId},
+			#{description},
+			#{name},
+			#{type}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deleteDistrict" 
+		parameterType="com.tx.component.mainframe.model.District">
+		DELETE FROM BASIC_DISTRICT TD WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+	            AND TD.ID = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updateDistrict"
+	    parameterType="java.util.Map">  
+	    UPDATE BASIC_DISTRICT TD
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('parentId')">
+	    		PARENTID = #{parentId,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('description')">
+	    		DESCRIPTION = #{description,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('name')">
+	    		NAME = #{name,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('type')">
+	    		TYPE = #{type,javaType=com.tx.component.mainframe.model.DistrictTypeEnum},
+	    	</if>	
+	    </trim>
+	    WHERE TD.ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->

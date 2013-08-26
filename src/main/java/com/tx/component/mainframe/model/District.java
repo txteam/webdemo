@@ -6,6 +6,15 @@
  */
 package com.tx.component.mainframe.model;
 
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.tx.core.tree.model.TreeAble;
+
 
  /**
   * 区域；地方；行政区
@@ -16,15 +25,107 @@ package com.tx.component.mainframe.model;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public class District {
+@Entity
+@Table(name = "BASIC_DISTRICT")
+public class District implements TreeAble<List<District>, District>{
     
-    private String code;
+    /** 区域编码  */
+    @Id
+    private String id;
     
-    private String parentCode;
+    /**  */
+    private String parentId;
     
     private String name;
     
     private String description;
     
+    private DistrictTypeEnum type;
     
+    @Transient
+    private List<District> childs;
+
+    /**
+     * @return 返回 id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param 对id进行赋值
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @return 返回 parentId
+     */
+    public String getParentId() {
+        return parentId;
+    }
+
+    /**
+     * @param 对parentId进行赋值
+     */
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    /**
+     * @return 返回 name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param 对name进行赋值
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return 返回 description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param 对description进行赋值
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return 返回 type
+     */
+    public DistrictTypeEnum getType() {
+        return type;
+    }
+
+    /**
+     * @param 对type进行赋值
+     */
+    public void setType(DistrictTypeEnum type) {
+        this.type = type;
+    }
+
+    /**
+     * @return 返回 childs
+     */
+    public List<District> getChilds() {
+        return childs;
+    }
+
+    /**
+     * @param 对childs进行赋值
+     */
+    public void setChilds(List<District> childs) {
+        this.childs = childs;
+    }
 }

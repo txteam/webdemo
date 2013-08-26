@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 
@@ -22,13 +24,15 @@ import javax.persistence.Table;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-@Table(name = "user_operator")
+@Entity
+@Table(name = "USER_OPERATOR")
 public class Operator implements Serializable{
     
     /** 注释内容 */
     private static final long serialVersionUID = 6236689049474522678L;
 
     /** 用户唯一键  */
+    @Id
     private String id;
     
     /** 用户所属虚中心 不能为空 not null */
@@ -49,6 +53,9 @@ public class Operator implements Serializable{
     /**审批密码*/
     private String examinePwd;
     
+    /** 用户输错密码的次数 */
+    private Integer pwdErrCount = 0;
+    
     /**是否可用*/
     private boolean valid;
     
@@ -67,14 +74,14 @@ public class Operator implements Serializable{
     /** 账户是否被锁定 */
     private boolean locked;
     
-    /** 用户输错密码的次数 */
-    private Integer pwdErrCount = 0;
-    
     /** 员工信息,如果为公司员工，则该信息不为空  */
     private EmployeeInfo employeeInfo;
     
     /** 所属分行 */
     private Organization organization;
+    
+    /** 主要职位 */
+    private Post mainPost;
     
     /** 职位 */
     private List<Post> postList;
@@ -315,5 +322,19 @@ public class Operator implements Serializable{
      */
     public void setPostList(List<Post> postList) {
         this.postList = postList;
+    }
+
+    /**
+     * @return 返回 mainPost
+     */
+    public Post getMainPost() {
+        return mainPost;
+    }
+
+    /**
+     * @param 对mainPost进行赋值
+     */
+    public void setMainPost(Post mainPost) {
+        this.mainPost = mainPost;
     }
 }
