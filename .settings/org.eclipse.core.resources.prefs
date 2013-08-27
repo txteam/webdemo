@@ -7,5 +7,6 @@ encoding//src/main/resources/h2/09_initdata.sql=gbk
 encoding//src/main/webapp/WEB-INF/view/includes/commonHead.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/view/notepad/notepad.jsp=UTF-8
 encoding//src/test/java=UTF-8
+encoding//src/test/resources=UTF-8
 encoding/<project>=UTF-8
 encoding/dbscript=GBK
