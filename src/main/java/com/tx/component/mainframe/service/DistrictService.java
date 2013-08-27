@@ -45,29 +45,14 @@ public class DistrictService {
     private DistrictDao districtDao;
     
     /**
-     * 将district实例插入数据库中保存
-     * 1、如果district为空时抛出参数为空异常
-     * 2、如果district中部分必要参数为非法值时抛出参数不合法异常
-      *<功能详细描述>
-      * @param district [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public void insert(District district){
-        insertDistrict(district);
-    }
-    
-    /**
-     * 将district实例插入数据库中保存
-     * 1、如果district为空时抛出参数为空异常
-     * 2、如果district中部分必要参数为非法值时抛出参数不合法异常
+      * 将district实例插入数据库中保存
+      * 1、如果district为空时抛出参数为空异常
+      * 2、如果district中部分必要参数为非法值时抛出参数不合法异常
      * <功能详细描述>
      * @param district [参数说明]
      * 
      * @return void [返回类型说明]
-     * @exception throws 可能存在数据库访问异常DataAccessException
+     * @exception throws
      * @see [类、类#方法、类#成员]
     */
     @Transactional
@@ -78,35 +63,19 @@ public class DistrictService {
         
         this.districtDao.insertDistrict(district);
     }
-    
-    /**
-      * 根据主键删除district实例
-      *     1、如果入参数为空，则抛出异常
-      *     2、执行删除后，将返回数据库中被影响的条数
-      * @param pk
-      * @return [参数说明]
-      * 
+      
+     /**
+      * 根据id删除district实例
+      * 1、如果入参数为空，则抛出异常
+      * 2、执行删除后，将返回数据库中被影响的条数
+      * @param id
+      * @return 返回删除的数据条数，<br/>
+      * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
+      * 这里讲通用生成的业务层代码定义为返回影响的条数
       * @return int [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
+      * @exception throws 
       * @see [类、类#方法、类#成员]
      */
-    public int deleteByPK(String pk) {
-        int res = deleteById(pk);
-        return res;
-    }
-    
-    /**
-     * 根据id删除district实例
-     * 1、如果入参数为空，则抛出异常
-     * 2、执行删除后，将返回数据库中被影响的条数
-     * @param id
-     * @return 返回删除的数据条数，<br/>
-     * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
-     * 这里讲通用生成的业务层代码定义为返回影响的条数
-     * @return int [返回类型说明]
-     * @exception throws 可能存在数据库访问异常DataAccessException
-     * @see [类、类#方法、类#成员]
-    */
     @Transactional
     public int deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
@@ -117,24 +86,8 @@ public class DistrictService {
     }
     
     /**
-     * 根据主键查询District实体
-     *     1、当id为empty时抛出参数非法异常
-     * <功能详细描述>
-     * @param id
-     * @return [参数说明]
-     * 
-     * @return District [返回类型说明]
-     * @exception throws 可能存在数据库访问异常DataAccessException
-     * @see [类、类#方法、类#成员]
-    */
-    public District findByPK(String pk) {
-        District res = findById(pk);
-        return res;
-    }
-    
-    /**
       * 根据Id查询District实体
-      *     1、当id为empty时抛出参数非法异常
+      * 1、当id为empty时抛出异常
       * <功能详细描述>
       * @param id
       * @return [参数说明]
@@ -143,30 +96,12 @@ public class DistrictService {
       * @exception throws 可能存在数据库访问异常DataAccessException
       * @see [类、类#方法、类#成员]
      */
-    public District findById(String id) {
+    public District findDistrictById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
         
         District condition = new District();
         condition.setId(id);
         return this.districtDao.findDistrict(condition);
-    }
-    
-    /**
-     * 查询所有的district实体<br/>
-     * 
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<District> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public List<District> list() {
-        Map<String, Object> params = new HashMap<String, Object>();
-        //查询所有的district实体
-        List<District> resList = this.districtDao.queryDistrictList(params);
-        
-        return resList;
     }
     
     /**
@@ -203,17 +138,15 @@ public class DistrictService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public PagedList<District> queryDistrictPagedList(
-    /*TODO:自己定义条件*/int pageIndex, int pageSize) {
+    public PagedList<District> queryDistrictPagedList(/*TODO:自己定义条件*/int pageIndex,
+            int pageSize) {
         //TODO:判断条件合法性
         
         //TODO:生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         
         //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<District> resPagedList = this.districtDao.queryDistrictPagedList(params,
-                pageIndex,
-                pageSize);
+        PagedList<District> resPagedList = this.districtDao.queryDistrictPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
@@ -228,7 +161,7 @@ public class DistrictService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public int countDistrict(/*TODO:自己定义条件*/) {
+    public int countDistrict(/*TODO:自己定义条件*/){
         //TODO:判断条件合法性
         
         //TODO:生成查询条件
@@ -237,21 +170,6 @@ public class DistrictService {
         //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.districtDao.countDistrict(params);
         
-        return res;
-    }
-    
-    /**
-      * 根据主键更新对象，对象主键不能为空<br/>
-      *<功能详细描述>
-      * @param district
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public boolean updateByPK(District district) {
-        boolean res = updateById(district);
         return res;
     }
     
@@ -271,15 +189,16 @@ public class DistrictService {
         AssertUtils.notNull(district, "district is null.");
         AssertUtils.notEmpty(district.getId(), "district.id is empty.");
         
+        
         //TODO:生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", district.getId());
         
         //TODO:需要更新的字段
-        updateRowMap.put("parentId", district.getParentId());
-        updateRowMap.put("description", district.getDescription());
-        updateRowMap.put("name", district.getName());
-        updateRowMap.put("type", district.getType());
+		updateRowMap.put("parentId", district.getParentId());	
+		updateRowMap.put("description", district.getDescription());	
+		updateRowMap.put("name", district.getName());	
+		updateRowMap.put("type", district.getType());	
         
         int updateRowCount = this.districtDao.updateDistrict(updateRowMap);
         

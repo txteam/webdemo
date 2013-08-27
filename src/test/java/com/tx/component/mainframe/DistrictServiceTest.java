@@ -13,15 +13,16 @@ import javax.annotation.Resource;
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.Test;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.tx.component.mainframe.model.District;
 import com.tx.component.mainframe.service.DistrictService;
 import com.tx.core.paged.model.PagedList;
-import com.tx.webdemo.TestBase;
+import com.tx.core.util.UUIDUtils;
 
 
  /**
@@ -35,16 +36,20 @@ import com.tx.webdemo.TestBase;
   */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { 
+        "classpath:spring/beans-aop.xml",
+        "classpath:spring/beans-auth.xml",
+        "classpath:spring/beans-cache.xml",
         "classpath:spring/beans-ds.xml",
-        "classpath:spring/beans-tx.xml", 
-        "classpath:spring/beans-mybatis.xml",
+        "classpath:spring/beans-i18n.xml",
+        "classpath:spring/beans-tx.xml",
         "classpath:spring/beans.xml" })
+@ActiveProfiles("dev")
 public class DistrictServiceTest {
     
     /** 设置jndi */
     @BeforeClass
     public static void setUp() {
-        TestBase.bindDsToJNDI();
+        //bindJNDI
     }
     
     @Resource(name="districtService")
@@ -61,7 +66,7 @@ public class DistrictServiceTest {
      */
     protected District getDistrict(){
         District res = new District();
-        
+        res.setId(UUIDUtils.generateUUID());
         
         
         return res;
@@ -87,7 +92,7 @@ public class DistrictServiceTest {
             
             String pk = district.getId();
             
-            District res = this.districtService.findById(pk);
+            District res = this.districtService.findDistrictById(pk);
             
             Assert.assertNotNull(res);
             

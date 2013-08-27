@@ -27,7 +27,7 @@ import org.hibernate.annotations.GenericGenerator;
   * @since  [产品/模块版本]
   */
 @Entity
-@Table(name = "USER_EMPLOYEE")
+@Table(name = "OPER_EMPLOYEE")
 public class EmployeeInfo {
     
     /** id */

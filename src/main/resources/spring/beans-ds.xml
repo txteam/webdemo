@@ -40,7 +40,6 @@
 				<array>
 					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
 					<value>classpath*:com/tx/webdemo/**/*SqlMap.xml</value>
-					<value>classpath*:com/boda/**/*SqlMap.xml</value>
 				</array>
 			</property>
 			<property name="failFast" value="true"></property>

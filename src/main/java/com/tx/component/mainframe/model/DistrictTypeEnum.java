@@ -17,9 +17,15 @@ package com.tx.component.mainframe.model;
   * @since  [产品/模块版本]
   */
 public enum DistrictTypeEnum {
-    /**
-     * 
-     */
-    PROVINCE,
-    CITY;
+    省,
+    市,
+    县,
+    乡,
+    村,
+    城,
+    镇,
+    组,
+    直辖市,
+    自治区,
+    特别行政区;
 }

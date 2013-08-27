@@ -32,9 +32,11 @@ public class GenerateCodeByJpaModelTest {
         factory.setServiceTemplateFilePath("mybatishelper/service.ftl");
         factory.setServiceTestTemplateFilePath("mybatishelper/serviceTest.ftl");
         factory.setSqlMapTemplateFilePath("mybatishelper/sqlMap.ftl");
+        factory.setDbScriptTemplateFilePath("mybatishelper/dbscript.ftl");
         
         //生成后在自己指定的文件夹中去找即可
         factory.generate(District.class, "d:/mybatis");
+        factory.generateScript(District.class, "d:/mybatis");
         
         System.out.println("success");
     }

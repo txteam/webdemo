@@ -22,7 +22,7 @@
 		  FROM BASIC_DISTRICT TD
 		 WHERE
 		<trim prefixOverrides="AND | OR">
-			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TD.ID = #{id}
 	        </if>
 		</trim>
@@ -40,24 +40,24 @@
 				TD.TYPE
 		  FROM BASIC_DISTRICT TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TD.ID = #{id,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
 	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TD.NAME = #{name,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(type)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            AND TD.TYPE = #{type,javaType=com.tx.component.mainframe.model.DistrictTypeEnum}
 	        </if>
 		</trim>
 		<choose>  
-	        <when test="@com.tx.core.Ognl@isNotEmpty(orderSql)">  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
 	            ORDER BY #{orderSql}
 	        </when>
 	        <otherwise>  
@@ -73,19 +73,19 @@
 		SELECT COUNT(1)
 		  FROM BASIC_DISTRICT TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TD.ID = #{id,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(parentId)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(description)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
 	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(name)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TD.NAME = #{name,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.Ognl@isNotEmpty(type)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            AND TD.TYPE = #{type,javaType=com.tx.component.mainframe.model.DistrictTypeEnum}
 	        </if>
 		</trim>
@@ -117,7 +117,7 @@
 		parameterType="com.tx.component.mainframe.model.District">
 		DELETE FROM BASIC_DISTRICT TD WHERE
 		<trim prefixOverrides="AND | OR">
-			<if test="@com.tx.core.Ognl@isNotEmpty(id)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TD.ID = #{id}
 	        </if>
 		</trim>

@@ -6,6 +6,10 @@
  */
 package com.tx.component.operator.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 
  /**
@@ -17,9 +21,12 @@ package com.tx.component.operator.model;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
+@Entity
+@Table(name = "OPER_POST")
 public class Post {
     
     /** id */
+    @Id
     private String id;
     
     /** 职位编码 */
@@ -27,9 +34,6 @@ public class Post {
     
     /** 职位名称 */
     private String name;
-    
-    /** 是否是主管 */
-    private boolean chief;
     
     /** 是否有效 */
     private boolean valid;
@@ -77,20 +81,6 @@ public class Post {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * @return 返回 chief
-     */
-    public boolean isChief() {
-        return chief;
-    }
-
-    /**
-     * @param 对chief进行赋值
-     */
-    public void setChief(boolean chief) {
-        this.chief = chief;
     }
 
     /**

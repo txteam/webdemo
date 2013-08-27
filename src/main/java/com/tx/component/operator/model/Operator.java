@@ -12,7 +12,10 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
  /**
@@ -25,7 +28,7 @@ import javax.persistence.Table;
   * @since  [产品/模块版本]
   */
 @Entity
-@Table(name = "USER_OPERATOR")
+@Table(name = "OPER_OPERATOR")
 public class Operator implements Serializable{
     
     /** 注释内容 */
@@ -34,9 +37,6 @@ public class Operator implements Serializable{
     /** 用户唯一键  */
     @Id
     private String id;
-    
-    /** 用户所属虚中心 不能为空 not null */
-    private String vcid;
     
     /**登录名*/
     private String loginName;
@@ -75,15 +75,19 @@ public class Operator implements Serializable{
     private boolean locked;
     
     /** 员工信息,如果为公司员工，则该信息不为空  */
+    @Transient
     private EmployeeInfo employeeInfo;
     
     /** 所属分行 */
+    @JoinColumn(name="organizationId")
     private Organization organization;
     
     /** 主要职位 */
+    @JoinColumn(name="mainPostId")
     private Post mainPost;
     
     /** 职位 */
+    @ManyToMany
     private List<Post> postList;
 
     /**
@@ -98,20 +102,6 @@ public class Operator implements Serializable{
      */
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * @return 返回 vcid
-     */
-    public String getVcid() {
-        return vcid;
-    }
-
-    /**
-     * @param 对vcid进行赋值
-     */
-    public void setVcid(String vcid) {
-        this.vcid = vcid;
     }
 
     /**
