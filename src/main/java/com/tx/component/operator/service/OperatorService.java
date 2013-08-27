@@ -1,51 +1,248 @@
 /*
  * 描          述:  <描述>
- * 修  改   人:  PengQingyang
- * 修改时间:  2013-8-26
+ * 修  改   人:  
+ * 修改时间:  
  * <修改描述:>
  */
 package com.tx.component.operator.service;
 
-import org.springframework.stereotype.Component;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.tx.component.operator.dao.OperatorDao;
 import com.tx.component.operator.model.Operator;
 import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.core.paged.model.PagedList;
 
-
- /**
-  * 操作员业务层逻辑<br/>
-  * <功能详细描述>
-  * 
-  * @author  PengQingyang
-  * @version  [版本号, 2013-8-26]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
+/**
+ * Operator的业务层
+ * <功能详细描述>
+ * 
+ * @author  
+ * @version  [版本号, ]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
 @Component("operatorService")
 public class OperatorService {
     
-    public Operator login(String id,String password){
-        AssertUtils.notEmpty(id, "is is empty.");
-        AssertUtils.notEmpty(password, "password is empty.");
-        
-        Operator oper = new Operator();
-        return oper;
-    }
+    @SuppressWarnings("unused")
+    private Logger logger = LoggerFactory.getLogger(OperatorService.class);
+    
+    @SuppressWarnings("unused")
+    //@Resource(name = "serviceLogger")
+    private Logger serviceLogger;
+    
+    @Resource(name = "operatorDao")
+    private OperatorDao operatorDao;
     
     /**
-      * 操作员信息<br/>
-      *     通过该接口会直接影响到多张表<br/>
-      *     user_operator
-      *     user_employee
+      * 登录系统，如果登录成功，则返回当前用户
       *<功能详细描述>
-      * @param operator [参数说明]
+      * @param loginName
+      * @param password [参数说明]
       * 
       * @return void [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public void addOperator(Operator operator){
-        AssertUtils.notNull(operator, "operator is null");
+    public Operator login(String loginName,String password){
+        AssertUtils.notEmpty(loginName, "loginName is empty");
+        AssertUtils.notEmpty(password, "password is empty");
+        
+        Operator condition = new Operator();
+        condition.setLoginName(loginName);
+        condition.setPassword(password);
+        
+        if("admin".equals(loginName)
+                && "admin".equals(password)){
+            condition.setId("123456");
+            return condition;
+        }
+        
+        Operator res = this.operatorDao.findOperator(condition);
+        return res;
     }
     
+    /**
+      * 将operator实例插入数据库中保存
+      * 1、如果operator为空时抛出参数为空异常
+      * 2、如果operator中部分必要参数为非法值时抛出参数不合法异常
+     * <功能详细描述>
+     * @param district [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+    */
+    @Transactional
+    public void insertOperator(Operator operator) {
+        //TODO:验证参数是否合法，必填字段是否填写，
+        AssertUtils.notNull(operator, "operator is null.");
+        AssertUtils.notEmpty(operator.getId(), "operator.id is empty.");
+        
+        this.operatorDao.insertOperator(operator);
+    }
+      
+     /**
+      * 根据id删除operator实例
+      * 1、如果入参数为空，则抛出异常
+      * 2、执行删除后，将返回数据库中被影响的条数
+      * @param id
+      * @return 返回删除的数据条数，<br/>
+      * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
+      * 这里讲通用生成的业务层代码定义为返回影响的条数
+      * @return int [返回类型说明]
+      * @exception throws 
+      * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public int deleteById(String id) {
+        AssertUtils.notEmpty(id, "id is empty.");
+        
+        Operator condition = new Operator();
+        condition.setId(id);
+        return this.operatorDao.deleteOperator(condition);
+    }
+    
+    /**
+      * 根据Id查询Operator实体
+      * 1、当id为empty时抛出异常
+      * <功能详细描述>
+      * @param id
+      * @return [参数说明]
+      * 
+      * @return Operator [返回类型说明]
+      * @exception throws 可能存在数据库访问异常DataAccessException
+      * @see [类、类#方法、类#成员]
+     */
+    public Operator findOperatorById(String id) {
+        AssertUtils.notEmpty(id, "id is empty.");
+        
+        Operator condition = new Operator();
+        condition.setId(id);
+        return this.operatorDao.findOperator(condition);
+    }
+    
+    /**
+      * 根据Operator实体列表
+      * TODO:补充说明
+      * 
+      * <功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return List<Operator> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<Operator> queryOperatorList(/*TODO:自己定义条件*/) {
+        //TODO:判断条件合法性
+        
+        //TODO:生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        
+        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        List<Operator> resList = this.operatorDao.queryOperatorList(params);
+        
+        return resList;
+    }
+    
+    /**
+     * 分页查询Operator实体列表
+     * TODO:补充说明
+     * 
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<Operator> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public PagedList<Operator> queryOperatorPagedList(/*TODO:自己定义条件*/int pageIndex,
+            int pageSize) {
+        //TODO:判断条件合法性
+        
+        //TODO:生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        
+        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        PagedList<Operator> resPagedList = this.operatorDao.queryOperatorPagedList(params, pageIndex, pageSize);
+        
+        return resPagedList;
+    }
+    
+    /**
+      * 查询operator列表总条数
+      * TODO:补充说明
+      * <功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return int [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public int countOperator(/*TODO:自己定义条件*/){
+        //TODO:判断条件合法性
+        
+        //TODO:生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        
+        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        int res = this.operatorDao.countOperator(params);
+        
+        return res;
+    }
+    
+    /**
+      * 根据id更新对象
+      * <功能详细描述>
+      * @param operator
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean updateById(Operator operator) {
+        //TODO:验证参数是否合法，必填字段是否填写，
+        AssertUtils.notNull(operator, "operator is null.");
+        AssertUtils.notEmpty(operator.getId(), "operator.id is empty.");
+        
+        
+        //TODO:生成需要更新字段的hashMap
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", operator.getId());
+        
+        //TODO:需要更新的字段
+		//type:java.lang.String
+		updateRowMap.put("mainPost", operator.getMainPost());
+		updateRowMap.put("valid", operator.isValid());	
+		updateRowMap.put("pwdErrCount", operator.getPwdErrCount());	
+		updateRowMap.put("historyPwd", operator.getHistoryPwd());	
+		updateRowMap.put("invalidDate", operator.getInvalidDate());	
+		updateRowMap.put("password", operator.getPassword());	
+		updateRowMap.put("lastUpdateDate", operator.getLastUpdateDate());	
+		//type:java.lang.String
+		updateRowMap.put("organization", operator.getOrganization());
+		updateRowMap.put("pwdUpdateDate", operator.getPwdUpdateDate());	
+		updateRowMap.put("userName", operator.getUserName());	
+		updateRowMap.put("locked", operator.isLocked());	
+		updateRowMap.put("createDate", operator.getCreateDate());	
+		updateRowMap.put("examinePwd", operator.getExaminePwd());	
+		updateRowMap.put("loginName", operator.getLoginName());	
+        
+        int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
+        
+        //TODO:如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return updateRowCount >= 1;
+    }
 }

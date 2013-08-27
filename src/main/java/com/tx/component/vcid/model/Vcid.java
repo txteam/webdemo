@@ -6,11 +6,7 @@
  */
 package com.tx.component.vcid.model;
 
-import java.util.List;
-
 import javax.persistence.Table;
-
-import com.tx.core.tree.model.TreeAble;
 
 
  /**

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="organization">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="organizationMap" 
+		type="com.tx.component.operator.model.Organization">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findOrganization" 
+		parameterType="com.tx.component.operator.model.Organization"
+		resultMap="organizationMap">
+		SELECT 
+				TO.ID,
+				TO.PROVINCEID,
+				TO.VALID,
+				TO.FULLADDRESS,
+				TO.ALIAS,
+				TO.CITYID,
+				TO.CODE,
+				TO.TYPE,
+				TO.AREAID,
+				TO.PARENTID,
+				TO.ADDRESS,
+				TO.CHIEFTYPE,
+				TO.DESCRIPTION,
+				TO.NAME,
+				TO.FULLNAME,
+				TO.CHIEFID
+		  FROM OPER_ORGANIZATION TO
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TO.ID = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryOrganization" 
+		parameterType="java.util.Map"
+		resultMap="organizationMap">
+		SELECT 
+				TO.ID,
+				TO.PROVINCEID,
+				TO.VALID,
+				TO.FULLADDRESS,
+				TO.ALIAS,
+				TO.CITYID,
+				TO.CODE,
+				TO.TYPE,
+				TO.AREAID,
+				TO.PARENTID,
+				TO.ADDRESS,
+				TO.CHIEFTYPE,
+				TO.DESCRIPTION,
+				TO.NAME,
+				TO.FULLNAME,
+				TO.CHIEFID
+		  FROM OPER_ORGANIZATION TO
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TO.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(provinceId)">  
+	            AND TO.PROVINCEID = #{provinceId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TO.VALID = #{valid,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
+	            AND TO.FULLADDRESS = #{fullAddress,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(alias)">  
+	            AND TO.ALIAS = #{alias,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(cityId)">  
+	            AND TO.CITYID = #{cityId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND TO.CODE = #{code,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            AND TO.TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationType}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(areaId)">  
+	            AND TO.AREAID = #{areaId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            AND TO.PARENTID = #{parentId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(address)">  
+	            AND TO.ADDRESS = #{address,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
+	            AND TO.CHIEFTYPE = #{chiefType,javaType=int}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
+	            AND TO.DESCRIPTION = #{description,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            AND TO.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
+	            AND TO.FULLNAME = #{fullName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
+	            AND TO.CHIEFID = #{chiefId,javaType=int}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryOrganizationCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_ORGANIZATION TO
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TO.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(provinceId)">  
+	            AND TO.PROVINCEID = #{provinceId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TO.VALID = #{valid,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
+	            AND TO.FULLADDRESS = #{fullAddress,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(alias)">  
+	            AND TO.ALIAS = #{alias,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(cityId)">  
+	            AND TO.CITYID = #{cityId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND TO.CODE = #{code,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            AND TO.TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationType}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(areaId)">  
+	            AND TO.AREAID = #{areaId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            AND TO.PARENTID = #{parentId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(address)">  
+	            AND TO.ADDRESS = #{address,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
+	            AND TO.CHIEFTYPE = #{chiefType,javaType=int}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
+	            AND TO.DESCRIPTION = #{description,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            AND TO.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
+	            AND TO.FULLNAME = #{fullName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
+	            AND TO.CHIEFID = #{chiefId,javaType=int}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertOrganization" 
+		parameterType="com.tx.component.operator.model.Organization">
+		INSERT INTO OPER_ORGANIZATION
+		(
+			ID,
+			PROVINCEID,
+			VALID,
+			FULLADDRESS,
+			ALIAS,
+			CITYID,
+			CODE,
+			TYPE,
+			AREAID,
+			PARENTID,
+			ADDRESS,
+			CHIEFTYPE,
+			DESCRIPTION,
+			NAME,
+			FULLNAME,
+			CHIEFID
+		)
+		VALUES
+		(
+			#{id},
+			#{provinceId},
+			#{valid},
+			#{fullAddress},
+			#{alias},
+			#{cityId},
+			#{code},
+			#{type},
+			#{areaId},
+			#{parentId},
+			#{address},
+			#{chiefType},
+			#{description},
+			#{name},
+			#{fullName},
+			#{chiefId}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deleteOrganization" 
+		parameterType="com.tx.component.operator.model.Organization">
+		DELETE FROM OPER_ORGANIZATION TO WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TO.ID = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updateOrganization"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_ORGANIZATION TO
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('provinceId')">
+	    		PROVINCEID = #{provinceId,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('valid')">
+	    		VALID = #{valid,javaType=boolean},
+	    	</if>	
+			<if test="_parameter.containsKey('fullAddress')">
+	    		FULLADDRESS = #{fullAddress,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('alias')">
+	    		ALIAS = #{alias,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('cityId')">
+	    		CITYID = #{cityId,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('code')">
+	    		CODE = #{code,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('type')">
+	    		TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationType},
+	    	</if>	
+			<if test="_parameter.containsKey('areaId')">
+	    		AREAID = #{areaId,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('parentId')">
+	    		PARENTID = #{parentId,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('address')">
+	    		ADDRESS = #{address,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('chiefType')">
+	    		CHIEFTYPE = #{chiefType,javaType=int},
+	    	</if>	
+			<if test="_parameter.containsKey('description')">
+	    		DESCRIPTION = #{description,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('name')">
+	    		NAME = #{name,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('fullName')">
+	    		FULLNAME = #{fullName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('chiefId')">
+	    		CHIEFID = #{chiefId,javaType=int},
+	    	</if>	
+	    </trim>
+	    WHERE TO.ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->

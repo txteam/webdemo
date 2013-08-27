@@ -12,23 +12,27 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.tx.component.mainframe.model.District;
 import com.tx.core.tree.model.TreeAble;
 import com.tx.core.util.ObjectUtils;
 
-
- /**
-  * 组织<br/>
-  * <功能详细描述>
-  * 
-  * @author  PengQingyang
-  * @version  [版本号, 2013-8-26]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
+/**
+ * 组织<br/>
+ * <功能详细描述>
+ * 
+ * @author  PengQingyang
+ * @version  [版本号, 2013-8-26]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
 @Entity
 @Table(name = "OPER_ORGANIZATION")
-public class Organization implements TreeAble<List<Organization>, Organization>{
+public class Organization implements TreeAble<List<Organization>, Organization> {
+    
+    /** 主管类型：人员 */
+    public static final int CHIEFTYPE_OPERATOR = 0;
+    
+    /** 主管类型：职位 */
+    public static final int CHIEFTYPE_POST = 1;
     
     /** 组织唯一键 */
     @Id
@@ -59,7 +63,7 @@ public class Organization implements TreeAble<List<Organization>, Organization>{
     private boolean valid;
     
     /** 是否是分行 */
-    private boolean isBranch;
+    private OrganizationType type;
     
     /**省ID*/
     private String provinceId;
@@ -73,100 +77,115 @@ public class Organization implements TreeAble<List<Organization>, Organization>{
     /** 描述 */
     private String description;
     
+    /** 
+     * 主管类型
+     *     0: 人员
+     *     1: 职位
+     */
+    private int chiefType = CHIEFTYPE_OPERATOR;
+    
+    /**
+     * 与主管类型对应的主键：
+     *     可能为人员id
+     *     可能为职位id
+     *     ....
+     */
+    private int chiefId;
+    
     /** 子级组织集合 */
     private List<Organization> childs;
-
+    
     /**
      * @return 返回 id
      */
     public String getId() {
         return id;
     }
-
+    
     /**
      * @param 对id进行赋值
      */
     public void setId(String id) {
         this.id = id;
     }
-
+    
     /**
      * @return 返回 parentId
      */
     public String getParentId() {
         return parentId;
     }
-
+    
     /**
      * @param 对parentId进行赋值
      */
     public void setParentId(String parentId) {
         this.parentId = parentId;
     }
-
+    
     /**
      * @return 返回 code
      */
     public String getCode() {
         return code;
     }
-
+    
     /**
      * @param 对code进行赋值
      */
     public void setCode(String code) {
         this.code = code;
     }
-
+    
     /**
      * @return 返回 name
      */
     public String getName() {
         return name;
     }
-
+    
     /**
      * @param 对name进行赋值
      */
     public void setName(String name) {
         this.name = name;
     }
-
+    
     /**
      * @return 返回 fullName
      */
     public String getFullName() {
         return fullName;
     }
-
+    
     /**
      * @param 对fullName进行赋值
      */
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-
+    
     /**
      * @return 返回 address
      */
     public String getAddress() {
         return address;
     }
-
+    
     /**
      * @param 对address进行赋值
      */
     public void setAddress(String address) {
         this.address = address;
     }
-
+    
     /**
      * @return 返回 valid
      */
     public boolean isValid() {
         return valid;
     }
-
+    
     /**
      * @param 对valid进行赋值
      */
@@ -175,17 +194,17 @@ public class Organization implements TreeAble<List<Organization>, Organization>{
     }
 
     /**
-     * @return 返回 isBranch
+     * @return 返回 type
      */
-    public boolean isBranch() {
-        return isBranch;
+    public OrganizationType getType() {
+        return type;
     }
 
     /**
-     * @param 对isBranch进行赋值
+     * @param 对type进行赋值
      */
-    public void setBranch(boolean isBranch) {
-        this.isBranch = isBranch;
+    public void setType(OrganizationType type) {
+        this.type = type;
     }
 
     /**
@@ -194,82 +213,110 @@ public class Organization implements TreeAble<List<Organization>, Organization>{
     public String getProvinceId() {
         return provinceId;
     }
-
+    
     /**
      * @param 对provinceId进行赋值
      */
     public void setProvinceId(String provinceId) {
         this.provinceId = provinceId;
     }
-
+    
     /**
      * @return 返回 cityId
      */
     public String getCityId() {
         return cityId;
     }
-
+    
     /**
      * @param 对cityId进行赋值
      */
     public void setCityId(String cityId) {
         this.cityId = cityId;
     }
-
+    
     /**
      * @return 返回 areaId
      */
     public String getAreaId() {
         return areaId;
     }
-
+    
     /**
      * @param 对areaId进行赋值
      */
     public void setAreaId(String areaId) {
         this.areaId = areaId;
     }
-
+    
     /**
      * @return 返回 alias
      */
     public String getAlias() {
         return alias;
     }
-
+    
     /**
      * @param 对alias进行赋值
      */
     public void setAlias(String alias) {
         this.alias = alias;
     }
-
+    
     /**
      * @return 返回 fullAddress
      */
     public String getFullAddress() {
         return fullAddress;
     }
-
+    
     /**
      * @param 对fullAddress进行赋值
      */
     public void setFullAddress(String fullAddress) {
         this.fullAddress = fullAddress;
     }
-
+    
     /**
      * @return 返回 description
      */
     public String getDescription() {
         return description;
     }
-
+    
     /**
      * @param 对description进行赋值
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    /**
+     * @return 返回 chiefType
+     */
+    public int getChiefType() {
+        return chiefType;
+    }
+
+    /**
+     * @param 对chiefType进行赋值
+     */
+    public void setChiefType(int chiefType) {
+        this.chiefType = chiefType;
+    }
+
+    /**
+     * @return 返回 chiefId
+     */
+    public int getChiefId() {
+        return chiefId;
+    }
+
+    /**
+     * @param 对chiefId进行赋值
+     */
+    public void setChiefId(int chiefId) {
+        this.chiefId = chiefId;
     }
 
     /**
@@ -278,14 +325,14 @@ public class Organization implements TreeAble<List<Organization>, Organization>{
     public List<Organization> getChilds() {
         return childs;
     }
-
+    
     /**
      * @param 对childs进行赋值
      */
     public void setChilds(List<Organization> childs) {
         this.childs = childs;
     }
-
+    
     /**
      * @param obj
      * @return
@@ -294,28 +341,12 @@ public class Organization implements TreeAble<List<Organization>, Organization>{
     public boolean equals(Object obj) {
         return ObjectUtils.equals(this, obj, "id");
     }
-
+    
     /**
      * @return
      */
     @Override
     public int hashCode() {
-        return ObjectUtils.generateHashCode(this, "id");
+        return ObjectUtils.generateHashCode(super.hashCode(), this, "id");
     }
-    
-    public static void main(String[] args) {
-        //System.out.println(hash);
-        
-        Organization a1 = new Organization();
-        //a1.setId("abc");
-        System.out.println(a1.hashCode());
-        
-        Organization a2 = new Organization();
-        
-        System.out.println(a2.hashCode());
-        
-        System.out.println(a1.equals(a2));
-    }
-    
-    
 }

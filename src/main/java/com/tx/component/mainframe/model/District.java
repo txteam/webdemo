@@ -33,13 +33,16 @@ public class District implements TreeAble<List<District>, District>{
     @Id
     private String id;
     
-    /**  */
+    /** 区域父级id */
     private String parentId;
     
+    /** 区域名 */
     private String name;
     
+    /** 区域描述 */
     private String description;
     
+    /** 区域类型 */
     private DistrictTypeEnum type;
     
     @Transient

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="postMap" 
+		type="com.tx.component.operator.model.Post">
+		<result column="organization_id" property="organization.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findPost" 
+		parameterType="com.tx.component.operator.model.Post"
+		resultMap="postMap">
+		SELECT 
+				TP.ID,
+				TP.VALID,
+				TP.ORGANIZATION AS organization_id,
+				TP.NAME,
+				TP.CODE
+		  FROM OPER_POST TP
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TP.ID = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryPost" 
+		parameterType="java.util.Map"
+		resultMap="postMap">
+		SELECT 
+				TP.ID,
+				TP.VALID,
+				TP.ORGANIZATION AS organization_id,
+				TP.NAME,
+				TP.CODE
+		  FROM OPER_POST TP
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TP.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TP.VALID = #{valid,javaType=boolean}
+	        </if>
+			<if test="organization != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
+		            AND TP.ORGANIZATION = #{organization.id,javaType=java.lang.String}
+		        </if>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            AND TP.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND TP.CODE = #{code,javaType=java.lang.String}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryPostCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_POST TP
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TP.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TP.VALID = #{valid,javaType=boolean}
+	        </if>
+			<if test="organization != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
+		            AND TP.ORGANIZATION = #{organization.id,javaType=java.lang.String}
+		        </if>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            AND TP.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND TP.CODE = #{code,javaType=java.lang.String}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertPost" 
+		parameterType="com.tx.component.operator.model.Post">
+		INSERT INTO OPER_POST
+		(
+			ID,
+			VALID,
+			ORGANIZATION,
+			NAME,
+			CODE
+		)
+		VALUES
+		(
+			#{id},
+			#{valid},
+			<if test="organization != null">
+				#{organization.id},
+	        </if>
+	        <if test="organization == null">
+				#{organization,javaType=java.lang.String},
+	        </if>
+			#{name},
+			#{code}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deletePost" 
+		parameterType="com.tx.component.operator.model.Post">
+		DELETE FROM OPER_POST TP WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TP.ID = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updatePost"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_POST TP
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('valid')">
+	    		VALID = #{valid,javaType=boolean},
+	    	</if>	
+			<if test="_parameter.containsKey('organization')">
+				<if test="organization != null">
+					ORGANIZATION = #{organization.id,javaType=java.lang.String},
+		        </if>
+		        <if test="organization == null">
+					ORGANIZATION = #{organization,javaType=java.lang.String},
+		        </if>
+	    	</if>
+			<if test="_parameter.containsKey('name')">
+	    		NAME = #{name,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('code')">
+	    		CODE = #{code,javaType=java.lang.String},
+	    	</if>	
+	    </trim>
+	    WHERE TP.ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->

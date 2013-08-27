@@ -130,4 +130,36 @@ public class MainframeController {
         return mainMenuItemTreeList;
     }
     
+    /**
+      * 跳转到查询菜单列表页面
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toQueryAllMenuItemTreeList")
+    public String toQueryAllMenuItemTreeList(){
+        return "mainframe/queryAllMenuItemTreeList";
+    }
+    
+    /**
+      * 查询所有菜单列表<br/>
+      *<功能详细描述>
+      * @param menuItemId
+      * @return [参数说明]
+      * 
+      * @return List<MenuItem> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/getAllMenuItemList")
+    public List<MenuItem> getAllMenuItemList() {
+        List<MenuItem> mainMenuItemTreeList = null;
+        mainMenuItemTreeList = MenuContext.getContext().getAllMenuItemList(MenuItem.TYPE_MAIN_MENU);
+        
+        return mainMenuItemTreeList;
+    }
 }

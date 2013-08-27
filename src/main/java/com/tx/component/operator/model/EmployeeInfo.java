@@ -6,6 +6,7 @@
  */
 package com.tx.component.operator.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -28,8 +29,11 @@ import org.hibernate.annotations.GenericGenerator;
   */
 @Entity
 @Table(name = "OPER_EMPLOYEE")
-public class EmployeeInfo {
+public class EmployeeInfo implements Serializable{
     
+    /** 注释内容 */
+    private static final long serialVersionUID = 8805323377968943458L;
+
     /** id */
     @Id
     @Column(name = "OPERATORID")

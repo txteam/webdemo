@@ -77,6 +77,49 @@ public class MenuContext extends MenuContextConfigurator{
         return null;
     }
     
+    /**
+     * 根据当前的登录人员的权限项加载菜单树
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<MenuItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public List<MenuItem> getAllMenuItemTreeList(String menuType) {
+        AssertUtils.notEmpty(menuType, "menuType is empty.");
+        menuType = menuType.toUpperCase();
+        
+        //根据权限及菜单配置生成最终权限列表
+        List<MenuItem> resList = new ArrayList<MenuItem>();
+        List<MenuItem> menuItemList = getMenuType2MenuItemListMap().get(menuType);
+        if(menuItemList == null){
+            return resList;
+        }
+        
+        List<MenuItem> menuTreeList = TreeUtils.changToTree(menuItemList);
+        return menuTreeList;
+    }
+    
+    /**
+     * 根据当前的登录人员的权限项加载菜单树
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<MenuItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public List<MenuItem> getAllMenuItemList(String menuType) {
+        AssertUtils.notEmpty(menuType, "menuType is empty.");
+        menuType = menuType.toUpperCase();
+        
+        //根据权限及菜单配置生成最终权限列表
+        List<MenuItem> resList = new ArrayList<MenuItem>();
+        List<MenuItem> menuItemList = getMenuType2MenuItemListMap().get(menuType);
+        
+        return menuItemList;
+    }
     
     /**
      * 根据当前的登录人员的权限项加载菜单树

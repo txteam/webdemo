@@ -5,10 +5,8 @@
 		<!-- 一级别菜单:系统配置   -->
 		<menu id="system_config" text="系统管理" href="/mainframe/menuMananger.action"
 			authKey="system_config">
-			<menu id="menu_config" text="菜单管理" href="/mainframe/menuMananger.action"
-				authKey="menu_config" target="mainTabs" selectRefresh="false"/>
-			<menu id="vcid_config" text="虚中心管理" alid="false"
-				authKey="vcid_config" target="mainTabs" href="/auth/authMananger"/>			
+			<menu id="menu_config" text="菜单管理" href="/mainframe/toQueryAllMenuItemTreeList.action"
+				authKey="menu_config" target="mainTabs" selectRefresh="false"/>	
 			<menu id="config_config" text="配置项管理" href="/auth/authMananger"
 				authKey="config_config" target="mainTabs" selectRefresh="false"/>
 			<menu id="basicdata_config" text="基础数据项管理" href="/auth/authMananger"

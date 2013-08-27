@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="operator">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="operatorMap" 
+		type="com.tx.component.operator.model.Operator">
+		<result column="mainPost_id" property="mainPost.id"/>
+		<result column="organization_id" property="organization.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findOperator" 
+		parameterType="com.tx.component.operator.model.Operator"
+		resultMap="operatorMap">
+		SELECT 
+				TO.ID,
+				TO.MAINPOSTID AS mainPost_id,
+				TO.VALID,
+				TO.PWDERRCOUNT,
+				TO.HISTORYPWD,
+				TO.INVALIDDATE,
+				TO.PASSWORD,
+				TO.LASTUPDATEDATE,
+				TO.ORGANIZATIONID AS organization_id,
+				TO.PWDUPDATEDATE,
+				TO.USERNAME,
+				TO.LOCKED,
+				TO.CREATEDATE,
+				TO.EXAMINEPWD,
+				TO.LOGINNAME
+		  FROM OPER_OPERATOR TO
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TO.ID = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
+	            AND TO.LOGINNAME = #{loginName}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
+	            AND TO.PASSWORD = #{password}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryOperator" 
+		parameterType="java.util.Map"
+		resultMap="operatorMap">
+		SELECT 
+				TO.ID,
+				TO.MAINPOSTID AS mainPost_id,
+				TO.VALID,
+				TO.PWDERRCOUNT,
+				TO.HISTORYPWD,
+				TO.INVALIDDATE,
+				TO.PASSWORD,
+				TO.LASTUPDATEDATE,
+				TO.ORGANIZATIONID AS organization_id,
+				TO.PWDUPDATEDATE,
+				TO.USERNAME,
+				TO.LOCKED,
+				TO.CREATEDATE,
+				TO.EXAMINEPWD,
+				TO.LOGINNAME
+		  FROM OPER_OPERATOR TO
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TO.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="mainPost != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
+		            AND TO.MAINPOSTID = #{mainPost.id,javaType=java.lang.String}
+		        </if>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TO.VALID = #{valid,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
+	            AND TO.PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(historyPwd)">  
+	            AND TO.HISTORYPWD = #{historyPwd,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(invalidDate)">  
+	            AND TO.INVALIDDATE = #{invalidDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
+	            AND TO.PASSWORD = #{password,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
+	            AND TO.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
+	        </if>
+			<if test="organization != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
+		            AND TO.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
+		        </if>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdUpdateDate)">  
+	            AND TO.PWDUPDATEDATE = #{pwdUpdateDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
+	            AND TO.USERNAME = #{userName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            AND TO.LOCKED = #{locked,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
+	            AND TO.CREATEDATE = #{createDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
+	            AND TO.EXAMINEPWD = #{examinePwd,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
+	            AND TO.LOGINNAME = #{loginName,javaType=java.lang.String}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryOperatorCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_OPERATOR TO
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TO.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="mainPost != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
+		            AND TO.MAINPOSTID = #{mainPost.id,javaType=java.lang.String}
+		        </if>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TO.VALID = #{valid,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
+	            AND TO.PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(historyPwd)">  
+	            AND TO.HISTORYPWD = #{historyPwd,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(invalidDate)">  
+	            AND TO.INVALIDDATE = #{invalidDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
+	            AND TO.PASSWORD = #{password,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
+	            AND TO.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
+	        </if>
+			<if test="organization != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
+		            AND TO.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
+		        </if>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdUpdateDate)">  
+	            AND TO.PWDUPDATEDATE = #{pwdUpdateDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
+	            AND TO.USERNAME = #{userName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            AND TO.LOCKED = #{locked,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
+	            AND TO.CREATEDATE = #{createDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
+	            AND TO.EXAMINEPWD = #{examinePwd,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
+	            AND TO.LOGINNAME = #{loginName,javaType=java.lang.String}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertOperator" 
+		parameterType="com.tx.component.operator.model.Operator">
+		INSERT INTO OPER_OPERATOR
+		(
+			ID,
+			MAINPOSTID,
+			VALID,
+			PWDERRCOUNT,
+			HISTORYPWD,
+			INVALIDDATE,
+			PASSWORD,
+			LASTUPDATEDATE,
+			ORGANIZATIONID,
+			PWDUPDATEDATE,
+			USERNAME,
+			LOCKED,
+			CREATEDATE,
+			EXAMINEPWD,
+			LOGINNAME
+		)
+		VALUES
+		(
+			#{id},
+			<if test="mainPost != null">
+				#{mainPost.id},
+	        </if>
+	        <if test="mainPost == null">
+				#{mainPost,javaType=java.lang.String},
+	        </if>
+			#{valid},
+			#{pwdErrCount},
+			#{historyPwd},
+			#{invalidDate},
+			#{password},
+			#{lastUpdateDate},
+			<if test="organization != null">
+				#{organization.id},
+	        </if>
+	        <if test="organization == null">
+				#{organization,javaType=java.lang.String},
+	        </if>
+			#{pwdUpdateDate},
+			#{userName},
+			#{locked},
+			#{createDate},
+			#{examinePwd},
+			#{loginName}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deleteOperator" 
+		parameterType="com.tx.component.operator.model.Operator">
+		DELETE FROM OPER_OPERATOR TO WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TO.ID = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updateOperator"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_OPERATOR TO
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('mainPost')">
+				<if test="mainPost != null">
+					MAINPOSTID = #{mainPost.id,javaType=java.lang.String},
+		        </if>
+		        <if test="mainPost == null">
+					MAINPOSTID = #{mainPost,javaType=java.lang.String},
+		        </if>
+	    	</if>
+			<if test="_parameter.containsKey('valid')">
+	    		VALID = #{valid,javaType=boolean},
+	    	</if>	
+			<if test="_parameter.containsKey('pwdErrCount')">
+	    		PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer},
+	    	</if>	
+			<if test="_parameter.containsKey('historyPwd')">
+	    		HISTORYPWD = #{historyPwd,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('invalidDate')">
+	    		INVALIDDATE = #{invalidDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('password')">
+	    		PASSWORD = #{password,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('organization')">
+				<if test="organization != null">
+					ORGANIZATIONID = #{organization.id,javaType=java.lang.String},
+		        </if>
+		        <if test="organization == null">
+					ORGANIZATIONID = #{organization,javaType=java.lang.String},
+		        </if>
+	    	</if>
+			<if test="_parameter.containsKey('pwdUpdateDate')">
+	    		PWDUPDATEDATE = #{pwdUpdateDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('userName')">
+	    		USERNAME = #{userName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('locked')">
+	    		LOCKED = #{locked,javaType=boolean},
+	    	</if>	
+			<if test="_parameter.containsKey('createDate')">
+	    		CREATEDATE = #{createDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('examinePwd')">
+	    		EXAMINEPWD = #{examinePwd,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('loginName')">
+	    		LOGINNAME = #{loginName,javaType=java.lang.String},
+	    	</if>	
+	    </trim>
+	    WHERE TO.ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->
