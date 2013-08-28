@@ -38,7 +38,7 @@ public class GenerateCodeByJpaModelTest {
         
         //生成后在自己指定的文件夹中去找即可
         factory.generate(Post.class, "d:/mybatis");
-        factory.generateScript(Post.class, "d:/mybatis");
+        factory.generateScript(Post.class, "d:/mybatis/main/resources");
         
         System.out.println("success");
     }

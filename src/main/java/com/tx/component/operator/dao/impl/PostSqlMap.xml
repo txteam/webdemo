@@ -17,8 +17,11 @@
 		SELECT 
 				TP.ID,
 				TP.VALID,
-				TP.ORGANIZATION AS organization_id,
+				TP.PARENTID,
+				TP.ORGANIZATIONID AS organization_id,
+				TP.REMARK,
 				TP.NAME,
+				TP.FULLNAME,
 				TP.CODE
 		  FROM OPER_POST TP
 		 WHERE
@@ -36,8 +39,11 @@
 		SELECT 
 				TP.ID,
 				TP.VALID,
-				TP.ORGANIZATION AS organization_id,
+				TP.PARENTID,
+				TP.ORGANIZATIONID AS organization_id,
+				TP.REMARK,
 				TP.NAME,
+				TP.FULLNAME,
 				TP.CODE
 		  FROM OPER_POST TP
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -47,13 +53,22 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            AND TP.VALID = #{valid,javaType=boolean}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            AND TP.PARENTID = #{parentId,javaType=java.lang.String}
+	        </if>
 			<if test="organization != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            AND TP.ORGANIZATION = #{organization.id,javaType=java.lang.String}
+		            AND TP.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
 		        </if>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            AND TP.REMARK = #{remark,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TP.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
+	            AND TP.FULLNAME = #{fullName,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TP.CODE = #{code,javaType=java.lang.String}
@@ -82,13 +97,22 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            AND TP.VALID = #{valid,javaType=boolean}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            AND TP.PARENTID = #{parentId,javaType=java.lang.String}
+	        </if>
 			<if test="organization != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            AND TP.ORGANIZATION = #{organization.id,javaType=java.lang.String}
+		            AND TP.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
 		        </if>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            AND TP.REMARK = #{remark,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TP.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
+	            AND TP.FULLNAME = #{fullName,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TP.CODE = #{code,javaType=java.lang.String}
@@ -103,21 +127,27 @@
 		(
 			ID,
 			VALID,
-			ORGANIZATION,
+			PARENTID,
+			ORGANIZATIONID,
+			REMARK,
 			NAME,
+			FULLNAME,
 			CODE
 		)
 		VALUES
 		(
 			#{id},
 			#{valid},
+			#{parentId},
 			<if test="organization != null">
 				#{organization.id},
 	        </if>
 	        <if test="organization == null">
 				#{organization,javaType=java.lang.String},
 	        </if>
+			#{remark},
 			#{name},
+			#{fullName},
 			#{code}
 		)
 	</insert>
@@ -141,16 +171,25 @@
 			<if test="_parameter.containsKey('valid')">
 	    		VALID = #{valid,javaType=boolean},
 	    	</if>	
+			<if test="_parameter.containsKey('parentId')">
+	    		PARENTID = #{parentId,javaType=java.lang.String},
+	    	</if>	
 			<if test="_parameter.containsKey('organization')">
 				<if test="organization != null">
-					ORGANIZATION = #{organization.id,javaType=java.lang.String},
+					ORGANIZATIONID = #{organization.id,javaType=java.lang.String},
 		        </if>
 		        <if test="organization == null">
-					ORGANIZATION = #{organization,javaType=java.lang.String},
+					ORGANIZATIONID = #{organization,javaType=java.lang.String},
 		        </if>
 	    	</if>
+			<if test="_parameter.containsKey('remark')">
+	    		REMARK = #{remark,javaType=java.lang.String},
+	    	</if>	
 			<if test="_parameter.containsKey('name')">
 	    		NAME = #{name,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('fullName')">
+	    		FULLNAME = #{fullName,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('code')">
 	    		CODE = #{code,javaType=java.lang.String},

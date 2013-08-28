@@ -8,6 +8,8 @@ package com.tx.component.operator.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -29,16 +31,27 @@ public class Post {
     @Id
     private String id;
     
+    /** 上级职位id */
+    private String parentId;
+    
     /** 职位编码 */
     private String code;
     
     /** 职位名称 */
     private String name;
     
+    /** 职位名称全名 */
+    private String fullName;
+    
     /** 是否有效 */
     private boolean valid;
     
+    /** 备注 */
+    private String remark;
+    
     /** 组织 */
+    @ManyToOne
+    @JoinColumn(name = "organizationId")
     private Organization organization;
 
     /**
@@ -109,5 +122,47 @@ public class Post {
      */
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    /**
+     * @return 返回 parentId
+     */
+    public String getParentId() {
+        return parentId;
+    }
+
+    /**
+     * @param 对parentId进行赋值
+     */
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    /**
+     * @return 返回 remark
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * @param 对remark进行赋值
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * @return 返回 fullName
+     */
+    public String getFullName() {
+        return fullName;
+    }
+
+    /**
+     * @param 对fullName进行赋值
+     */
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

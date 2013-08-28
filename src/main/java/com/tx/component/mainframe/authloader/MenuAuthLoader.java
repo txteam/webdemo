@@ -112,6 +112,7 @@ public class MenuAuthLoader implements AuthLoader {
         authItem.setValid(true);
         authItem.setViewAble(true);
         resList.add(authItem);
+        
         if(!CollectionUtils.isEmpty(menuItem.getChilds())){
             for(MenuItem childMenuItem : menuItem.getChilds()){
                 if(childMenuItem == null){

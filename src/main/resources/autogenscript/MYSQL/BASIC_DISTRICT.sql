@@ -2,10 +2,10 @@
 -- 表：BASIC_DISTRICT
 --****************************************************************************
 create table BASIC_DISTRICT(
-	id		varchar(64),
+	id		varchar(64) not null,
 	parentId		varchar(64),
 	description		varchar(2000),
-	name		varchar(64),
+	name		varchar(64) not null,
 	type		varchar(64),
 	primary key(ID)
 );

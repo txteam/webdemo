@@ -196,9 +196,12 @@ public class PostService {
         
         //TODO:需要更新的字段
 		updateRowMap.put("valid", post.isValid());	
+		updateRowMap.put("parentId", post.getParentId());	
 		//type:java.lang.String
 		updateRowMap.put("organization", post.getOrganization());
+		updateRowMap.put("remark", post.getRemark());	
 		updateRowMap.put("name", post.getName());	
+		updateRowMap.put("fullName", post.getFullName());	
 		updateRowMap.put("code", post.getCode());	
         
         int updateRowCount = this.postDao.updatePost(updateRowMap);

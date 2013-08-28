@@ -19,6 +19,7 @@
 <script type="text/javascript" src="${contextPath}/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/jquery.easyui.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="${contextPath}/js/extEasyUI.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/commons.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/plugins/jquery.layout.js" charset="utf-8"></script>

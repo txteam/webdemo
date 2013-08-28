@@ -200,13 +200,13 @@ public class OrganizationService {
 		updateRowMap.put("fullAddress", organization.getFullAddress());	
 		updateRowMap.put("alias", organization.getAlias());	
 		updateRowMap.put("cityId", organization.getCityId());	
+		updateRowMap.put("remark", organization.getRemark());	
 		updateRowMap.put("code", organization.getCode());	
 		updateRowMap.put("type", organization.getType());	
 		updateRowMap.put("areaId", organization.getAreaId());	
 		updateRowMap.put("parentId", organization.getParentId());	
 		updateRowMap.put("address", organization.getAddress());	
 		updateRowMap.put("chiefType", organization.getChiefType());	
-		updateRowMap.put("description", organization.getDescription());	
 		updateRowMap.put("name", organization.getName());	
 		updateRowMap.put("fullName", organization.getFullName());	
 		updateRowMap.put("chiefId", organization.getChiefId());	

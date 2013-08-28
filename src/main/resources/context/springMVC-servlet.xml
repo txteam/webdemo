@@ -36,7 +36,7 @@
 	<!-- 需要添加该驱动，支持多个convertor的添加 -->
 	<mvc:annotation-driven />
 	<!-- 配置扫描 -->
-	<context:component-scan base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator,com.tx.component.vcid"
+	<context:component-scan base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />

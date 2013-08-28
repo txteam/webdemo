@@ -56,7 +56,8 @@
 			</property>
 		</bean>
 
-		<bean id="demoDatasource" class="com.tx.core.datasource.DataSourceFactoryBean">
+		<bean id="demoDatasource" class="com.tx.core.datasource.DataSourceFactoryBean"
+			depends-on="webdemoDBScriptExcutor">
 			<property name="supportP6spy" value="true"></property>
 			<property name="datasourceFinderList">
 				<list>
@@ -71,8 +72,7 @@
 		</bean>
 		<alias name="demoDatasource" alias="datasource" />
 
-		<bean id="h2DataSource" 
-			class="org.apache.commons.dbcp.BasicDataSource">
+		<bean id="h2DataSource" class="org.apache.commons.dbcp.BasicDataSource">
 			<property name="driverClassName" value="org.h2.Driver" />
 			<property name="defaultAutoCommit" value="true" />
 			<property name="maxActive" value="30" />
@@ -82,26 +82,30 @@
 			<property name="testOnBorrow" value="true"></property>
 			<property name="validationQuery" value="SELECT 1 "></property>
 			<property name="removeAbandonedTimeout" value="180"></property>
-			<property name="logAbandoned" value="true"></property>  
-			
-			<property name="url" value="jdbc:h2:file:D:/h2/data/webdemo" />
+			<property name="logAbandoned" value="true"></property>
+			<!-- jdbc:h2:mem:webdemo -->
+			<!-- jdbc:h2:file:D:/h2/data/webdemo -->
+			<property name="url" value="jdbc:h2:mem:webdemo" />
 			<property name="username" value="webdemo" />
 			<property name="password" value="webdemo" />
 		</bean>
 		
-		<jdbc:initialize-database
-			data-source="h2DataSource" enabled="true" ignore-failures="ALL">
-			<jdbc:script location="classpath:h2/02_tables.sql" encoding="UTF-8"/>
-			<jdbc:script location="classpath:autogenscript/H2/*.sql" encoding="UTF-8"/>
-			<jdbc:script location="classpath:h2/09_initdata.sql" encoding="UTF-8"/>
-		</jdbc:initialize-database>
-		<!--
-		<jdbc:embedded-database id="h2DataSource" type="H2">
-			<jdbc:script location="classpath:h2/02_tables.sql" />
-			<jdbc:script location="classpath:h2/09_initdata.sql" />
-		</jdbc:embedded-database>
-		  -->
+		<bean id="webdemoDBScriptExcutor"
+			class="com.tx.core.dbscript.executor.DBScriptAutoExecutor">
+			<property name="dataSource">
+				<ref bean="h2DataSource"/>
+			</property>	
+			<property name="initScriptLocations">
+				<list>
+					<value>classpath:h2/02_tables.sql</value>
+					<value>classpath:autogenscript/H2/*.sql</value>
+					<value>classpath:h2/09_initdata.sql</value>
+				</list>
+			</property>
+		</bean>
 	</beans>
+	
+
 
 	<beans profile="production">
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -120,25 +124,38 @@
 					<bean
 						class="com.tx.core.mybatis.interceptor.PagedDiclectStatementHandlerInterceptor">
 						<property name="dialect">
-							<bean class="org.hibernate.dialect.Oracle10gDialect"></bean>
+							<bean class="org.hibernate.dialect.MySQL5InnoDBDialect"></bean>
 						</property>
 					</bean>
 				</array>
 			</property>
 		</bean>
-		<bean id="demoDatasource" class="com.tx.core.datasource.DataSourceFactoryBean">
+		
+		<bean id="demoDatasource" class="com.tx.core.datasource.DataSourceFactoryBean"
+			depends-on="webdemoDBScriptExcutor">
 			<property name="supportP6spy" value="true"></property>
 			<property name="datasourceFinderList">
 				<list>
 					<bean class="com.tx.core.datasource.finder.JNDIDataSourceFinder">
-						<property name="jndiName" value="los_db"></property>
-					</bean>
-					<bean class="com.tx.core.datasource.finder.ConfigDataSourceFinder">
-						<property name="resourceId" value="los_db"></property>
+						<property name="jndiName" value="webdemo_db"></property>
 					</bean>
 				</list>
 			</property>
 		</bean>
 		<alias name="demoDatasource" alias="datasource" />
+				
+		<bean id="webdemoDBScriptExcutor"
+			class="com.tx.core.dbscript.executor.DBScriptAutoExecutor">
+			<property name="dataSource">
+				<ref bean="demoDatasource"/>
+			</property>	
+			<property name="initScriptLocations">
+				<list>
+					<value>classpath:h2/02_tables.sql</value>
+					<value>classpath:h2/09_initdata.sql</value>
+					<value>classpath:autogenscript/H2/*.sql</value>
+				</list>
+			</property>
+		</bean>
 	</beans>
 </beans>

@@ -11,7 +11,9 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.operator.model.Organization;
@@ -19,7 +21,7 @@ import com.tx.component.operator.service.OrganizationService;
 import com.tx.core.tree.util.TreeUtils;
 
 /**
- * <功能简述>
+ * 组织结构管理<br/>
  * <功能详细描述>
  * 
  * @author  PengQingyang
@@ -27,7 +29,7 @@ import com.tx.core.tree.util.TreeUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Controller
+@Controller("organizationController")
 @RequestMapping("/organization")
 public class OrganizationController {
     
@@ -42,10 +44,9 @@ public class OrganizationController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/toQueryOrganizationTreeList")
-    public String toQueryOrganizationTreeList() {
-        
-        return "/operator/queryOrganizationTreeList";
+    @RequestMapping("/toQueryOrganizationList")
+    public String toQueryOrganizationList() {
+        return "/operator/queryOrganizationList";
     }
     
     /**
@@ -58,9 +59,27 @@ public class OrganizationController {
      * @see [类、类#方法、类#成员]
     */
     @RequestMapping("/toAddOrganization")
-    @ResponseBody
     public String toAddOrganization() {
         return "/operator/addOrganization";
+    }
+    
+    /**
+      * 跳转到更新组织页面
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toUpdateOrganization")
+    public String toUpdateOrganization(
+            @RequestParam("organizationId") String organizationId,
+            ModelMap modelMap) {
+        Organization resOrganization = this.organizationService.findOrganizationById(organizationId);
+        
+        modelMap.put("organization", resOrganization);
+        return null;
     }
     
     /**
@@ -72,14 +91,13 @@ public class OrganizationController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/queryAllOrganizationTreeList")
+    @RequestMapping("/queryOrganizationList")
     @ResponseBody
-    public List<Organization> queryAllOrganizationTreeList() {
+    public List<Organization> queryOrganizationList() {
         
         List<Organization> orgList = this.organizationService.queryOrganizationList();
         
-        List<Organization> resTreeList = TreeUtils.changToTree(orgList);
-        return resTreeList;
+        return orgList;
     }
     
     /**
@@ -91,8 +109,8 @@ public class OrganizationController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    @RequestMapping("/addOrganization")
     @ResponseBody
+    @RequestMapping("/addOrganization")
     public boolean addOrganization(Organization organization) {
         this.organizationService.insertOrganization(organization);
         
@@ -111,9 +129,9 @@ public class OrganizationController {
      */
     @RequestMapping("/updateOrganization")
     @ResponseBody
-    public boolean updateOrganization(Organization organization){
-        //this.organizationService.insertOrganization(organization);
-        return true;
+    public boolean updateOrganization(Organization organization) {
+        boolean resFlag = this.organizationService.updateById(organization);
+        return resFlag;
     }
     
 }

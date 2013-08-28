@@ -8,7 +8,7 @@
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
-	<context:component-scan base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator,com.tx.component.vcid">
+	<context:component-scan base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 

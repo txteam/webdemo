@@ -9,11 +9,13 @@
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
+var treeGrid = null;
 $(document).ready(function() {
 	treeGrid = $('#treeGrid').treegrid({
 		url : '${contextPath}/mainframe/getAllMenuItemList.action',
 		idField : 'id',
 		treeField : 'text',
+		parentField : 'parentId',
 		fit : true,
 		fitColumns : true,
 		border : false,
@@ -24,14 +26,10 @@ $(document).ready(function() {
 			hidden : true
 		} ] ],
 		columns : [ [ {
-			title : '编号',
-			field : 'id',
-			width : 150,
-			hidden : true
-		}, {
 			field : 'parentId',
 			title : '上级资源ID',
-			width : 150
+			width : 150,
+			hidden : true
 		}, {
 			field : 'text',
 			title : '资源名称',
@@ -90,30 +88,26 @@ $(document).ready(function() {
 		onLoadSuccess : function() {
 			parent.$.messager.progress('close');
 			$(this).treegrid('tooltip');
-		},
-		onLoadSuccess : function(row, data) {
-			data.children = data.childs;
 		}
 	});
-	
-	function redo() {
-		var node = treeGrid.treegrid('getSelected');
-		if (node) {
-			treeGrid.treegrid('expandAll', node.id);
-		} else {
-			treeGrid.treegrid('expandAll');
-		}
-	}
-
-	function undo() {
-		var node = treeGrid.treegrid('getSelected');
-		if (node) {
-			treeGrid.treegrid('collapseAll', node.id);
-		} else {
-			treeGrid.treegrid('collapseAll');
-		}
-	}
 });
+function redo() {
+	var node = treeGrid.treegrid('getSelected');
+	if (node) {
+		treeGrid.treegrid('expandAll', node.id);
+	} else {
+		treeGrid.treegrid('expandAll');
+	}
+}
+
+function undo() {
+	var node = treeGrid.treegrid('getSelected');
+	if (node) {
+		treeGrid.treegrid('collapseAll', node.id);
+	} else {
+		treeGrid.treegrid('collapseAll');
+	}
+}
 </script>
 </head>
 <body>

@@ -160,6 +160,7 @@ public class MainframeController {
         List<MenuItem> mainMenuItemTreeList = null;
         mainMenuItemTreeList = MenuContext.getContext().getAllMenuItemList(MenuItem.TYPE_MAIN_MENU);
         
+        //mainMenuItemTreeList = TreeUtils.changToTree(mainMenuItemTreeList);
         return mainMenuItemTreeList;
     }
 }

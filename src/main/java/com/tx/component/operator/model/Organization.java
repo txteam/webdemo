@@ -75,7 +75,7 @@ public class Organization implements TreeAble<List<Organization>, Organization> 
     private String areaId;
     
     /** 描述 */
-    private String description;
+    private String remark;
     
     /** 
      * 主管类型
@@ -278,19 +278,19 @@ public class Organization implements TreeAble<List<Organization>, Organization> 
     }
     
     /**
-     * @return 返回 description
+     * @return 返回 remark
      */
-    public String getDescription() {
-        return description;
+    public String getRemark() {
+        return remark;
     }
-    
+
     /**
-     * @param 对description进行赋值
+     * @param 对remark进行赋值
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
-    
+
     /**
      * @return 返回 chiefType
      */

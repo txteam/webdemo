@@ -20,13 +20,13 @@
 				TO.FULLADDRESS,
 				TO.ALIAS,
 				TO.CITYID,
+				TO.REMARK,
 				TO.CODE,
 				TO.TYPE,
 				TO.AREAID,
 				TO.PARENTID,
 				TO.ADDRESS,
 				TO.CHIEFTYPE,
-				TO.DESCRIPTION,
 				TO.NAME,
 				TO.FULLNAME,
 				TO.CHIEFID
@@ -50,13 +50,13 @@
 				TO.FULLADDRESS,
 				TO.ALIAS,
 				TO.CITYID,
+				TO.REMARK,
 				TO.CODE,
 				TO.TYPE,
 				TO.AREAID,
 				TO.PARENTID,
 				TO.ADDRESS,
 				TO.CHIEFTYPE,
-				TO.DESCRIPTION,
 				TO.NAME,
 				TO.FULLNAME,
 				TO.CHIEFID
@@ -80,6 +80,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(cityId)">  
 	            AND TO.CITYID = #{cityId,javaType=java.lang.String}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            AND TO.REMARK = #{remark,javaType=java.lang.String}
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TO.CODE = #{code,javaType=java.lang.String}
 	        </if>
@@ -97,9 +100,6 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
 	            AND TO.CHIEFTYPE = #{chiefType,javaType=int}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
-	            AND TO.DESCRIPTION = #{description,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TO.NAME = #{name,javaType=java.lang.String}
@@ -146,6 +146,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(cityId)">  
 	            AND TO.CITYID = #{cityId,javaType=java.lang.String}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            AND TO.REMARK = #{remark,javaType=java.lang.String}
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TO.CODE = #{code,javaType=java.lang.String}
 	        </if>
@@ -163,9 +166,6 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
 	            AND TO.CHIEFTYPE = #{chiefType,javaType=int}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
-	            AND TO.DESCRIPTION = #{description,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TO.NAME = #{name,javaType=java.lang.String}
@@ -190,13 +190,13 @@
 			FULLADDRESS,
 			ALIAS,
 			CITYID,
+			REMARK,
 			CODE,
 			TYPE,
 			AREAID,
 			PARENTID,
 			ADDRESS,
 			CHIEFTYPE,
-			DESCRIPTION,
 			NAME,
 			FULLNAME,
 			CHIEFID
@@ -209,13 +209,13 @@
 			#{fullAddress},
 			#{alias},
 			#{cityId},
+			#{remark},
 			#{code},
 			#{type},
 			#{areaId},
 			#{parentId},
 			#{address},
 			#{chiefType},
-			#{description},
 			#{name},
 			#{fullName},
 			#{chiefId}
@@ -253,6 +253,9 @@
 			<if test="_parameter.containsKey('cityId')">
 	    		CITYID = #{cityId,javaType=java.lang.String},
 	    	</if>	
+			<if test="_parameter.containsKey('remark')">
+	    		REMARK = #{remark,javaType=java.lang.String},
+	    	</if>	
 			<if test="_parameter.containsKey('code')">
 	    		CODE = #{code,javaType=java.lang.String},
 	    	</if>	
@@ -270,9 +273,6 @@
 	    	</if>	
 			<if test="_parameter.containsKey('chiefType')">
 	    		CHIEFTYPE = #{chiefType,javaType=int},
-	    	</if>	
-			<if test="_parameter.containsKey('description')">
-	    		DESCRIPTION = #{description,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('name')">
 	    		NAME = #{name,javaType=java.lang.String},

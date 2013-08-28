@@ -220,7 +220,7 @@ $(function(){
                         //var $treeContentDiv = $('<div title="系统菜单" style="padding: 5px;"></div>');
                         var $treeParent = $('<div class="well well-small"></div>');
                         $treeParent.append($menuTree);
-                        selectedPanel.css({padding:"5px"}).append($treeParent);
+                        selectedPanel.css({"padding-left":"5px","padding-right":"5px","padding-top":"3px"}).append($treeParent);
                         if(menuItem.childs && menuItem.childs.length > 0){
                             //var treeNodeData = $.TreeUtils.transform(menuItem.childs);
                             //生成树结果数据

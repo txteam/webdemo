@@ -2,79 +2,77 @@
 <menu_context_config>
 	<!-- 主菜单配置 -->
 	<menus_config type="mainMenu">
-		<!-- 一级别菜单:系统配置   -->
+		<!-- 一级别菜单:系统配置 -->
 		<menu id="system_config" text="系统管理" href="/mainframe/menuMananger.action"
 			authKey="system_config">
-			<menu id="menu_config" text="菜单管理" href="/mainframe/toQueryAllMenuItemTreeList.action"
-				authKey="menu_config" target="mainTabs" selectRefresh="false"/>	
+			<menu id="menu_config" text="菜单管理"
+				href="/mainframe/toQueryAllMenuItemTreeList.action" authKey="menu_config"
+				target="mainTabs" selectRefresh="false" />
 			<menu id="config_config" text="配置项管理" href="/auth/authMananger"
-				authKey="config_config" target="mainTabs" selectRefresh="false"/>
+				authKey="config_config" target="mainTabs" selectRefresh="false" />
 			<menu id="basicdata_config" text="基础数据项管理" href="/auth/authMananger"
-				authKey="basicdata_config" target="mainTabs" selectRefresh="false"/>
+				authKey="basicdata_config" target="mainTabs" selectRefresh="false" />
 				
 			<menu id="operator_config_center" text="操作员管理中心" href=""
-				authKey="" target="mainTabs">
-				<menu id="operator_config" text="操作员管理" href=""
+				target="mainTabs" authKey="operator_config_center">
+				<!-- authKey="organization_config" -->
+				<menu id="org_config" text="组织结构管理"
+					href="/organization/toQueryOrganizationList.action" 
+					target="mainTabs"></menu>
+				<menu id="post_config" text="职位管理" href="/post/toQueryPostList.action"
+					authKey="post_config" target="mainTabs"></menu>
+				<menu id="operator_config" text="操作员管理" href="/operator/toQueryOperatorList.action"
 					authKey="" target="mainTabs"></menu>
-				<menu id="org_config" text="组织结构管理" href=""
-					authKey="" target="mainTabs"></menu>
-				<menu id="post_config" text="职位管理" href=""
-					authKey="" target="mainTabs"></menu>
-				</menu>
-			
-			<menu id="auth_config" text="权限管理"
-				authKey="" target="mainTabs">
-				<menu id="role_config" text="权限管理" valid="false"
-					authKey="" target="mainTabs" href="" ></menu>
+				<menu id="auth_config" text="权限管理" href="/auth/toQueryAuthList.action"
+					authKey="auth_config" target="mainTabs"></menu>
 			</menu>
 		</menu>
-		
-		<menu id="system_helper" text="帮助"
-			authKey="system_helper" icon="plugin">
+
+		<menu id="system_helper" text="帮助" authKey="system_helper" icon="plugin">
 			<menu id="system_rule" text="规范">
 				<menu id="java_code_rule" text="java编码规范" href="/auth/authMananger"
-					target="mainTabs" selectRefresh="false"/>
+					target="mainTabs" selectRefresh="false" />
 				<menu id="database_code_rule" text="数据库编码规范" href="/auth/authMananger"
-					target="mainTabs" selectRefresh="false"/>
+					target="mainTabs" selectRefresh="false" />
 			</menu>
 			<menu id="menu_helper" text="如何配置菜单" href="/auth/authMananger"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 			<menu id="auth_helper" text="如何配置权限" href="/auth/authMananger"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 			<menu id="code_example" text="代码范例">
 				<menu id="tree_example" text="树范例" href="/auth/authMananger"
-					target="mainTabs" selectRefresh="false"/>
+					target="mainTabs" selectRefresh="false" />
 			</menu>
 		</menu>
-		
+
 		<menu id="bestDemoMananger" text="最佳实践">
 			<!-- dialog最佳实践 -->
 			<menu id="bestDemoDialogUtils" text="dialog" href="/demo/best/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 			<menu id="bestSimplePage" text="page" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 			<menu id="bestList" text="列表" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 			<menu id="bestPagedList" text="分页列表" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 			<menu id="bestAjaxList" text="ajax列表" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 			<menu id="bestAjaxPagedList" text="ajax分页" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 		</menu>
-		
+
 		<menu id="demoMananger" text="参考demo">
 			<!-- dialogUtils使用demo -->
 			<menu id="demoDialogUtils" text="dialogDemo" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 			<!-- 列表显示 -->
 			<menu id="demoList" text="dialogDemo" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false"/>
+				target="mainTabs" selectRefresh="false" />
 		</menu>
-		
+
 		<menu id="test" text="测试菜单项" href="/demo/dialogUtilsDemo">
 		</menu>
-	
+
 		<menu id="system_manangersasdf" text="test">
 			<menu id="config_mananger3333" text="test22">
 				<menu id="1_mananger1" text="111"></menu>
@@ -87,7 +85,7 @@
 					<menu id="3_mananger53" text="1153"></menu>
 					<menu id="4_mananger54" text="1154"></menu>
 					<menu id="5_mananger55" text="1155"></menu>
-					<menu id="6_mananger56" text="1156"></menu>	
+					<menu id="6_mananger56" text="1156"></menu>
 				</menu>
 				<menu id="6_mananger" text="1156"></menu>
 			</menu>
@@ -95,30 +93,29 @@
 			<menu id="user_mananger" text="人员管理"></menu>
 			<menu id="base_data_mananger" text="基础数据管理"></menu>
 		</menu>
-		
+
 
 	</menus_config>
-	
-	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示  -->
+
+	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示 -->
 	<menus_config type="toolMenu">
-		<!-- 一级别菜单:系统配置   -->
-		<menu id="system_config" text="系统配置"
-			authKey="system_config_manange">
+		<!-- 一级别菜单:系统配置 -->
+		<menu id="system_config" text="系统配置" authKey="system_config_manange">
 			<!-- 系统管理子菜单: 权限管理 -->
 			<!-- target可配置为mainTabs,openDialog,triggerGlobalEvent -->
-			<!-- mainTabs: selectRefresh默认为false,即对应tab点击后是否马上刷新  -->
+			<!-- mainTabs: selectRefresh默认为false,即对应tab点击后是否马上刷新 -->
 			<!-- openModelDialog: 需要配置打开的对话框高和宽 height,width -->
 			<menu id="authCconfig" text="权限管理" href="/auth/authMananger"
-				authKey="auth_config_manage" target="mainTabs" selectRefresh="false"/>
+				authKey="auth_config_manage" target="mainTabs" selectRefresh="false" />
 		</menu>
-		<menu id="newPortalIndex" text="newPortalIndex" href="/portal/index.action" 
-			target="mainTabs" >
+		<menu id="newPortalIndex" text="newPortalIndex" href="/portal/index.action"
+			target="mainTabs">
 		</menu>
-		<menu id="modifyMyselfInfo" text="修改个人信息" href="/demo/dialogUtilsDemo" 
-			target="openDialog" >
+		<menu id="modifyMyselfInfo" text="修改个人信息" href="/demo/dialogUtilsDemo"
+			target="openDialog">
 		</menu>
-		<menu id="logout" text="退出" href="/demo/dialogUtilsDemo"
-			target="triggerGlobalEvent" eventType="modifyMyselfInfo">
+		<menu id="logout" text="退出" href="/demo/dialogUtilsDemo" target="triggerGlobalEvent"
+			eventType="modifyMyselfInfo">
 		</menu>
 	</menus_config>
 </menu_context_config>
