@@ -490,374 +490,312 @@ Date.parseToDate = function(str, format){
 //定义dialogUtils对象
 var DialogUtils = function(options){
 };
-/**
- * dialog默认配置
- */
-DialogUtils.defaultConfigs = {  
-};
-/**
- * 当前页面Dialog关闭句柄
- */
-DialogUtils.currentPageDialogCloserHandlers = {};
-/**
- * 创建或打开dialog
- * @param config
- */
-DialogUtils.createOrOpenDiaglog = function(config){
-	var openWinId = "dialog_" + config.id;
-	config=$.extend({id:openWinId},this.defaultConfigs, config);
-	var $dialogHandle = $("#"+openWinId);
-	if($("#"+openWinId).size() == 0){
-		$dialogHandle = $("<div/>").attr("id",openWinId).hide();
-		config.title && $dialogHandle.attr("title",config.title);
-		$(document).append($dialogHandle);
-		$dialogHandle.wijdialog(config);
-	}else{
-		config.title && $dialogHandle.attr("title",config.title)
-		$dialogHandle.wijdialog(config);
-	    //if(!$dialogHandle.wijdialog("isOpen")){
-	    //    $dialogHandle.wijdialog("open");
-	    //}
-	}
-	if(!DialogUtils.currentPageDialogCloserHandlers[openWinId]){
-		DialogUtils.currentPageDialogCloserHandlers[openWinId] = true;
-		$.bindge("dialog_" + openWinId + "_close",function(){
-			//console.log("dialog_" + openWinId + "_close,happend");
-			$("#" + openWinId).wijdialog("close");
-		});
-	}
-};
-//对话框工具:打开一个iframe的独立页面
-/**
- *	打开openWin默认具有dialog所有按钮，未自动添加任何button
- */
-DialogUtils.openDialog = function(config){
-	config=$.extend({},{
-	    id:'dialog_',
-	    title:null,
-	    autoOpen: true,
-	    modal: false,
-	    width: 'auto',
-        height: 'auto',
-        captionButtons: {
-            pin: {visible: true, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
-            refresh: {visible: true, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
-            toggle: {visible: true, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
-            minimize: {visible: true, click: self.minimize, iconClassOn: 'ui-icon-minus'},
-            maximize: {visible: true, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close'}
-        },
-        contentUrl: ''
-	}, config);
-	DialogUtils.createOrOpenDiaglog(config);
-};
-/**
- *	打开openWin默认具有dialog所有按钮，未自动添加任何button
- */
-DialogUtils.openSimpleDialog = function(config){
-	config=$.extend({},{
-	    id:'dialog_',
-	    title:null,
-	    autoOpen: true,
-	    width: 'auto',
-	    modal: false,
-        height: 'auto',
-        captionButtons: {
-            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
-            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
-            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
-            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
-            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close'}
-        },
-        contentUrl: ''
-	}, config);
-	DialogUtils.createOrOpenDiaglog(config);
-};
-/**
- *	打开openWin默认具有dialog所有按钮，未自动添加任何button
- */
-DialogUtils.dialog = function(id,title,url,width,height,close){
-	var config = $.extend({
-        id:'dialog_',
-        autoOpen: true,
-        width: width && $.isNumeric(width) ? width : 'auto',
-        height: height && $.isNumeric(height) ? height : 'auto',
-        modal: false,
-        captionButtons: {
-            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
-            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
-            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
-            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
-            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close'}
+//全局的dialogUtils对象
+var GlobalDialogUtils = null;
+(function($, undefined) {
+    var _globalEventManagerWin_ = window;
+    while (!GlobalDialogUtils) {
+        try {
+            if (!_globalEventManagerWin_.closed && _globalEventManagerWin_.GlobalDialogUtils) {
+            	GlobalDialogUtils = _globalEventManagerWin_.GlobalDialogUtils;
+                break;
+            }
+        } catch (e) {
+            // do nothing
         }
-	},{
-	    id: id,
-        title: title,
-        contentUrl: url,
-        close : function(){
-            close && close.call(this);
-        }
-	});
-	DialogUtils.createOrOpenDiaglog(config);
-};
-DialogUtils.modalDialog = function(id,title,url,width,height,close){
-	var config = $.extend({
-        id:'dialog_',
-        autoOpen: true,
-        width: width && $.isNumeric(width) ? width : 'auto',
-        height: height && $.isNumeric(height) ? height : 'auto',
-        modal: true,
-        captionButtons: {
-            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
-            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
-            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
-            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
-            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close'}
-        }
-	},{
-	    id: id,
-        contentUrl: url,
-        title: title,
-        close : function(){
-            close && close.call(this);
-        }
-	});
-	DialogUtils.createOrOpenDiaglog(config);
-};
-/**
- * 根据id关闭对话框
- * @param id
- */
-DialogUtils.closeDialogById = function(id){
-	var openWinId = "dialog_" + id;
-	var $dialogHandle = $("#" + openWinId);
-	if($dialogHandle.size() > 0){
-	   $dialogHandle.wijdialog("close");
-	}else{
-	   $.triggerge("dialog_" + openWinId + "_close");
-	}
-};
-/**
- * 提示，并在指定时间后关闭提示
- */
-DialogUtils._temp_dialog_index = 0;
-DialogUtils.openTip = function(config,content,seconds,yes) {
-    var openTipId = "tempDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
-    var autoCloseTimer = null;
-    
-    config=$.extend({
-    	id: openTipId,
-        autoOpen: true,
-        closeOnEscape: false,
-        width: content.length < 50 ? 300 : 'auto',
-        height: content.length < 50 ? 130 : 'auto',
-        captionButtons: {
-            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
-            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
-            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
-            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
-            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close'}
-        },
-        close : function(){
-        	if(autoCloseTimer){
-        		clearTimeout(autoCloseTimer);
-        	}
-        	removeTempTipHandle();
-        }
-    }, config);
-    
-    var $dialogHandle = $("<div/>").attr("id",config.id).hide();
-    $dialogHandle.attr("title","提醒");
-    function removeTempTipHandle(){
-    	yes && yes.call(this);
-        $dialogHandle.remove();
-    }
-    $(document).append($dialogHandle);
-    $dialogHandle.html(content);
-    $dialogHandle.wijdialog(config);
-    autoCloseTimer = window.setTimeout(removeTempTipHandle, seconds * 1000);
-};
-/**
- * 提示，并在指定时间后关闭提示
- */
-DialogUtils._temp_dialog_index = 0;
-DialogUtils.tip = function(content,seconds,yes) {
-    this.openTip({}, content, seconds, yes);
-};
 
-/**
- * Dialog警告
- * @param {String} 消息内容
- * @param {Function} 确定按钮回调函数
- * @return {Object} 对话框操控接口
- */
-DialogUtils.openAlert = function(config, msg, yes) {
-    var openAlertId = "tempDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
-    config=$.extend({
-    	id: openAlertId,
-        autoOpen: true,
-        closeOnEscape: false,
-        width: (msg && ("" + msg).length < 50) ? 300 : 'auto',
-        height: (msg && ("" + msg).length < 50) ? 130 : 'auto',
-        modal: true,
-        dialogClass: "alert",
-        captionButtons: {
-            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
-            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
-            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
-            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
-            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close'}
-        },
-        close : function(){
-        	removeTempTipHandle();
-        },
-        buttons: [{text: "确定" , click: function(){
-            removeTempTipHandle();
-        }}]
-    }, config);
-    
-    var $dialogHandle = $("<div/>").attr("id",config.id).hide();
-    function removeTempTipHandle(){
-    	yes && yes.call(this);
-        $dialogHandle.remove();
-    }
-    $(document).append($dialogHandle);
-    //TODO:添加警告的样式
-    $dialogHandle.html(msg);
-    $dialogHandle.wijdialog(config);
-}; 
-/**
- * Dialog警告
- * @param {String} 消息内容
- * @param {Function} 确定按钮回调函数
- * @return {Object} 对话框操控接口
- */
-DialogUtils.alert = function(msg, yes) {
-    this.openAlert({}, msg, yes);
-};
+        if (!_globalEventManagerWin_.closed && _globalEventManagerWin_.parent != null && _globalEventManagerWin_.parent != _globalEventManagerWin_) {
+            _globalEventManagerWin_ = _globalEventManagerWin_.parent;
+        } else if (!_globalEventManagerWin_.closed && _globalEventManagerWin_.opener != null && _globalEventManagerWin_.opener != _globalEventManagerWin_) {
+            _globalEventManagerWin_ = _globalEventManagerWin_.opener;
+        } else {
+            //定义一个子window的链表类
+            var ChildWindowLinkedList = 
 
-//改写window alert
-//window.alert = function(msg){
-//	DialogUtils.alert(msg);
-//};
-/**
- * Dialog消息
- * @param {String} 消息内容
- * @param {Function} 确定按钮回调函数
- * @return {Object} 对话框操控接口
- */
-DialogUtils.openMessage = function(config, msg, type, yes) {
-    var openAlertId = "tempDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
-    config=$.extend({
-    	id: openAlertId,
-        autoOpen: true,
-        closeOnEscape: false,
-        width: (msg && ("" + msg).length < 50) ? 300 : 'auto',
-        height: (msg && ("" + msg).length < 50) ? 130 : 'auto',
-        modal: true,
-        dialogClass: "alert",
-        captionButtons: {
-            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
-            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
-            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
-            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
-            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close'}
-        },
-        close : function(){
-        	removeTempTipHandle();
-        },
-        buttons: [{text: "确定" , click: function(){
-            removeTempTipHandle();
-        }}]
-    }, config);
-    
-    var $dialogHandle = $("<div/>").attr("id",config.id).hide();
-    if('info' == type){
-    	$dialogHandle.addClass("formee-msg-info");
-    }else if('warning' == type){
-    	$dialogHandle.addClass("formee-msg-warning");
-    }else if('error' == type){
-    	$dialogHandle.addClass("formee-msg-error");
-    }else if('success' == type){
-    	$dialogHandle.addClass("formee-msg-success");
-    }else{
-    	$dialogHandle.addClass("formee-msg-info");
+            //释放对象
+            GlobalEventManager = null;
+            try {
+                //如果跨域时
+            	GlobalDialogUtils = DialogUtils;
+            } catch(e) {
+            }
+        }
     }
+    //释放引用
+    _globalEventManagerWin_ = null;
     
-    function removeTempTipHandle(){
-    	yes && yes.call(this);
-        $dialogHandle.remove();
-    }
-    $(document).append($dialogHandle);
-    //TODO:添加警告的样式
-    $dialogHandle.html(msg);
-    $dialogHandle.wijdialog(config);
-};
-/**
- * Dialog消息
- * @param {String} 消息内容
- * @param {Function} 确定按钮回调函数
- * @return {Object} 对话框操控接口
- */
-DialogUtils.message = function(msg, type, yes) {
-    this.openAlert({}, msg , type , yes);
-};
-/**
- * config
- */
-DialogUtils.openConfirm = function(config, msg, yes , no) {
-    var openConfirmId = "tempDialog_" + (DialogUtils._temp_dialog_index++) + "_" + new Date().getTime();
-    config=$.extend({
-    	id: openConfirmId,
-        autoOpen: true,
-        closeOnEscape: false,
-        width: (msg && ("" + msg).length < 50) ? 300 : 'auto',
-        height: (msg && ("" + msg).length < 50) ? 130 : 'auto',
-        modal: true,
-        captionButtons: {
-            pin: {visible: false, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
-            refresh: {visible: false, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
-            toggle: {visible: false, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
-            minimize: {visible: false, click: self.minimize, iconClassOn: 'ui-icon-minus'},
-            maximize: {visible: false, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-            close: {visible: true, iconClassOn: 'ui-icon-close'}
-        },
-        close : function(){
-        	no && no.call(this);
-        	removeTempTipHandle();
-        },
-        buttons: [{text: "确定" , click: function(){
-        	yes && yes.call(this);
-            removeTempTipHandle();
-        }},{text: "取消" , click: function(){
-        	no && no.call(this);
-            removeTempTipHandle();
-        }}]
-    }, config);
-    
-    var $dialogHandle = $("<div/>").attr("id",config.id).hide();
-    function removeTempTipHandle(){
-        $dialogHandle.remove();
-    }
-    $(document).append($dialogHandle);
-    $dialogHandle.html(msg);
-    $dialogHandle.wijdialog(config);
-}; 
-/**
- * Dialog警告
- * @param {String} 消息内容
- * @param {Function} 确定按钮回调函数
- * @return {Object} 对话框操控接口
- */
-DialogUtils.confirm = function(msg, yes , no) {
-    this.openConfirm({},msg,yes,no);
-}; 
-window.confirm = function(msg, yes , no){
-	DialogUtils.confirm(msg, yes , no);
-};
+    /*
+     * showType:定义消息窗体如何显示 可用值有: null,slide,fade,show. 默认值是slide.
+     * showSpeed: 定义消息窗体最终显示的毫秒数. 默认值是 600.
+     * width: 定义消息窗体宽度.默认值是 250.
+     * height: 定义消息窗体高度. 默认值是100.
+     * msg: 显示的消息文本.
+     * title: 标题文本显示到panel的头部的.
+     * timeout: 如果定义为 0,消息窗体将不会关闭除非用户关闭.定义为不是0,消息窗体将在时间超时后自动关闭. 
+     */
+    DialogUtils.show = function(config){
+    	var option = $.extend({},{
+    		title:'show message title',
+    		msg:'',
+    		timeout:5000,
+    		showType:'slide'
+    	},config);
+    	$.messager.show(option);
+    };
+    window.show = DialogUtils.show;
+    /*
+     * 显示一个alter窗体.参数:
+     * title: 标题文本,显示在panel的头部的.
+     * msg: 显示的消息文本.
+     * icon:显示icon图片,可用值有: error,question,info,warning.
+     * fn: 窗体关闭的时候触发的回调函数. 
+     */
+    DialogUtils.alert = function(title, msg, icon, fn){
+    	$.messager.alert(title, msg, icon, fn);
+    };
+    window.alert = function(msg){
+    	DialogUtils.alert("alert",msg,warning);
+    };
+    /*
+     * 显示一个确认消息窗体有一个OK和一个Cancel按钮,参数:
+     * title:标题文本显示在panel的头部的.
+     * msg:显示的消息文本.
+     * fn(b): 回调函数,当用户点击OK按钮传入true值到函数,其他则传入false. 
+     */
+    DialogUtils.confirm = function(title, msg, fn){
+    	$.messager.confirm(title, msg, fn);
+    };
+    window.confirm = function(msg,fn){
+    	$.messager.confirm("confirm", msg, fn);
+    };
+    /*
+     * 显示一个消息窗体,一个OK和一个Cancel按钮,提示用户输入一些文本,参数:
+     * title: 显示到panel头部的标题文本.
+     * msg: 显示的消息文本.
+     * fn(val): 回调函数,value参数是用户输入的值. 
+     */
+    DialogUtils.prompt = function(title, msg, fn){
+    	$.messager.prompt(title, msg, fn);
+    };
+    window.prompt = function(msg,fn){
+    	$.messager.confirm("prompt", msg, fn);
+    };
+    /*
+     * 显示一个进度消息窗体. 
+     * 选项定义如下:
+     * title: 显示到panel头部的标题文本,默认值''. 
+     * msg: 消息框的body文本,默认值''. 
+     * text: 这个文本显示到进度条上, 默认未定义. 
+     * interval: 每个进度更新的毫秒值长度,默认值 300. 
+     * 方法定义如下:
+     * bar:得到 progressbar 对象. 
+     * close: 关闭进度条窗体. 
+     */
+    DialogUtils.progress = function(){
+    	return $.messager.progress.apply($.messager.progress,arguments);
+    };
+    /*
+     * 默认dialogpe配置
+     */
+    DialogUtils._defaultDialogConfig = {
+    	title : '窗口标题',
+    	collapsible : false,
+    	minimizable : false,
+    	maximizable : false,
+    	resizable : false,
+    	modal: false
+    	//toolbar : []
+    	//buttons : []
+    };
+    /**
+     * 当前页面Dialog关闭句柄
+     */
+    DialogUtils._currentDialogCloseHandlers = {
+    };
+    /*
+     * 创建dialog 
+     */
+    DialogUtils._createOrOpenDialog = function(dialogHandleId,config){
+    	var $dialogHandle = null;
+    	//获取到dialog句柄
+    	$dialogHandle = $("#"+dialogHandleId);
+    	if($dialogHandle.size() == 0){
+    		$dialogHandle = $("<div/>").attr("id",dialogHandleId);
+    		config.title && $dialogHandle.attr("title",config.title);
+    		$("body").append($dialogHandle);
+    	}else{
+    		config.title && $dialogHandle.attr("title",config.title)
+    	}
+    	
+    	//生成对应
+    	var option = $.extend({},DialogUtils._defaultDialogConfig, config);
+    	option.width = option.width == 0 ? option.width : '800';
+    	option.height = option.height == 0 ? option.height : '600';
+    	
+    	//生成关闭句柄
+    	if(!DialogUtils._currentDialogCloseHandlers[dialogHandleId]){
+    		//已经绑定过全局关闭事件的对话框体则不在重复绑定
+    		DialogUtils._currentDialogCloseHandlers[dialogHandleId] = true;
+    		$.bindge("close_dialog_" + dialogHandleId,function(){
+    			$("#" + dialogHandleId).dialog("close");
+    		});
+    	}
+    	return $dialogHandle.dialog(option);
+    };
+    /*
+     * 根据id关闭对话框
+     * @param id
+     */
+    DialogUtils.closeDialogById = function(dialogId){
+    	var $dialogHandle = $("#" + dialogId);
+    	if($dialogHandle.size() > 0){
+    	   $dialogHandle.dialog("close");
+    	}else{
+    	   $.triggerge("close_dialog_" + dialogHandleId);
+    	}
+    };
+    /*
+     * 打开对话框
+     */
+    DialogUtils.dialog = function(id,config){
+    	var _dialog = DialogUtils._createOrOpenDialog(id,config);
+    	return _dialog;
+    };
+    /*
+     * 打开对话框
+     */
+    DialogUtils.openDialog = function(id,title,href,width,height,close){
+    	var _dialog = DialogUtils._createOrOpenDialog(id,{
+    		title : title,
+    		href: href,
+    	    width: width,   
+    	    height: height,
+    	    closed: false,   
+    	    cache: false,
+    	    modal: false,
+    	    onClose: close
+    	});
+    	return _dialog;
+    };
+    /*
+     * 打开对话框
+     */
+    DialogUtils.openModalDialog = function(id,title,href,width,height,close){
+    	var _dialog = DialogUtils._createOrOpenDialog(id,{
+    		title : title,
+    		href: href,
+    	    width: width,   
+    	    height: height,
+    	    closed: false,   
+    	    cache: false,
+    	    modal: true,
+    	    onClose: close
+    	});
+    	return _dialog;
+    };
+
+    /**
+     * dialog默认配置
+     */
+    DialogUtils._defaultWindowConfigs = {
+    	title : '窗口标题',
+    	collapsible : true,
+    	minimizable : true,
+    	maximizable : true,
+    	closable : true,
+    	closed : false,
+    	draggable : true,
+    	resizable : true,
+    	shadow : true,
+    	inline : true,
+    	modal : false
+    };
+    /**
+     * 当前页面Dialog关闭句柄
+     */
+    DialogUtils._currentWinCloseHandlers = {
+    };
+    /**
+     * 创建或打开dialog
+     * @param config
+     */
+    DialogUtils._createOrOpenWindow = function(winHandleId,config){
+    	var $winHandle = null;
+    	//获取到dialog句柄
+    	$winHandle = $("#"+winHandleId);
+    	
+    	if($winHandle.size() == 0){
+    		$winHandle = $("<div/>").attr("id",winHandleId);
+    		config.title && $dialogHandle.attr("title",config.title);
+    		$("body").append($winHandle);
+    	}else{
+    		config.title && $winHandle.attr("title",config.title)
+    	}
+    	
+    	//生成对应
+    	var option = $.extend({},DialogUtils._defaultWindowConfigs, config);
+    	option.width = option.width == 0 ? option.width : '800';
+    	option.height = option.height == 0 ? option.height : '600';
+    	
+    	//生成关闭句柄
+    	if(!DialogUtils._currentWinCloseHandlers[winHandleId]){
+    		//已经绑定过全局关闭事件的对话框体则不在重复绑定
+    		DialogUtils._currentWinCloseHandlers[winHandleId] = true;
+    		$.bindge("close_window_" + winHandleId,function(){
+    			$("#" + winHandleId).dialog("close");
+    		});
+    	}
+    	return $winHandle.window(option);
+    };
+    /*
+     * 根据id关闭窗体
+     * @param id
+     */
+    DialogUtils.closeWindowById = function(winHandleId){
+    	var $winHandle = $("#" + winHandleId);
+    	if($winHandle.size() > 0){
+    		$winHandle.dialog("close");
+    	}else{
+    	   $.triggerge("close_window_" + winHandleId);
+    	}
+    };
+    /*
+     * 打开窗体
+     */
+    DialogUtils.window = function(id,config){
+    	var _window = DialogUtils._createOrOpenWindow(id,config);
+    	return _window;
+    };
+    /*
+     * 打开窗体
+     */
+    DialogUtils.openWindow = function(id,title,href,width,height,close){
+    	var _window = DialogUtils._createOrOpenWindow(id,{
+    		title : title,
+    		href: href,
+    	    width: width,   
+    	    height: height,
+    	    closed: false,   
+    	    cache: false,
+    	    modal: false,
+    	    onClose: close
+    	});
+    	return _window;
+    };
+    /*
+     * 打开窗体
+     */
+    DialogUtils.openModalWindow = function(id,title,href,width,height,close){
+    	var _window = DialogUtils._createOrOpenWindow(id,{
+    		title : title,
+    		href: href,
+    	    width: width,   
+    	    height: height,
+    	    closed: false,   
+    	    cache: false,
+    	    modal: true,
+    	    onClose: close
+    	});
+    	return _window;
+    };
+})(jQuery); 

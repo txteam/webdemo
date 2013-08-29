@@ -24,57 +24,96 @@ $(document).ready(function() {
 			field : 'id',
 			width : 150,
 			hidden : true
-		} ] ],
-		columns : [ [ {
+		},{
 			field : 'parentId',
 			title : '上级资源ID',
 			width : 150,
 			hidden : true
-		}, {
+		} ] ],
+		columns : [ [ {
 			field : 'text',
-			title : '资源名称',
+			title : '菜单名称',
 			width : 200
 		}, {
 			field : 'href',
 			title : '资源路径',
 			width : 230
 		}, {
-			field : 'typeId',
-			title : '资源类型ID',
-			width : 150,
+			field : 'target',
+			title : '资源类型',
+			width : 150
+		}, {
+			field : 'valid',
+			title : '是否有效',
+			width : 100,
+			formatter : function(value, row, index){
+				if(value){
+					return '是';
+				}else{
+					return '否';
+				}
+			},
 			hidden : true
 		}, {
-			field : 'typeName',
-			title : '资源类型',
-			width : 80
-		}, {
-			field : 'seq',
-			title : '排序',
-			width : 40
-		}, {
-			field : 'pname',
-			title : '上级资源',
-			width : 80
+			field : 'visibal',
+			title : '是否可见',
+			width : 100,
+			formatter : function(value, row, index){
+				if(value){
+					return '是';
+				}else{
+					return '否';
+				}
+			}
+		},{
+			field : 'selectRefresh',
+			title : '选中刷新',
+			width : 100,
+			formatter : function(value, row, index){
+				if(value){
+					return '是';
+				}else{
+					return '否';
+				}
+			}
+		},{
+			field : 'openNewEveryTime',
+			title : '存在是否新打开',
+			width : 120,
+			formatter : function(value, row, index){
+				if(value){
+					return '是';
+				}else{
+					return '否';
+				}
+			},
+			hidden : true
+		},{
+			field : 'eventType',
+			title : '事件类型',
+			width : 80,
+			hidden : true
 		}, {
 			field : 'action',
 			title : '操作',
 			width : 50,
 			formatter : function(value, row, index) {
 				var str = '';
-				if ($.canEdit) {
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+				if (true) {
+					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
 				}
 				str += '&nbsp;';
-				if ($.canDelete) {
-					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+				if (false) {
+					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${contextPath}/style/images/extjs_icons/cancel.png');
 				}
 				return str;
 			}
-		}, {
+		},{
 			field : 'remark',
 			title : '备注',
-			width : 200
-		} ] ],
+			width : 200,
+			hidden : true
+		}] ],
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {
 			e.preventDefault();
@@ -91,6 +130,14 @@ $(document).ready(function() {
 		}
 	});
 });
+
+function editFun(){
+	DialogUtils.alert("提醒","暂不支持菜单编辑.","warning");
+}
+function deleteFun(){
+	DialogUtils.alert("提醒","暂不支持菜单删除.");
+}
+
 function redo() {
 	var node = treeGrid.treegrid('getSelected');
 	if (node) {

@@ -3,7 +3,7 @@
 	<!-- 主菜单配置 -->
 	<menus_config type="mainMenu">
 		<!-- 一级别菜单:系统配置 -->
-		<menu id="system_config" text="系统管理" href="/mainframe/menuMananger.action"
+		<menu id="system_config" text="系统管理"
 			authKey="system_config">
 			<menu id="menu_config" text="菜单管理"
 				href="/mainframe/toQueryAllMenuItemTreeList.action" authKey="menu_config"
@@ -13,7 +13,7 @@
 			<menu id="basicdata_config" text="基础数据项管理" href="/auth/authMananger"
 				authKey="basicdata_config" target="mainTabs" selectRefresh="false" />
 				
-			<menu id="operator_config_center" text="操作员管理中心" href=""
+			<menu id="operator_config_center" text="操作员管理中心"
 				target="mainTabs" authKey="operator_config_center">
 				<!-- authKey="organization_config" -->
 				<menu id="org_config" text="组织结构管理"
@@ -42,32 +42,22 @@
 			<menu id="code_example" text="代码范例">
 				<menu id="tree_example" text="树范例" href="/auth/authMananger"
 					target="mainTabs" selectRefresh="false" />
+				<menu id="tree_grid_example" text="树表格范例" href="/auth/authMananger"
+					target="mainTabs" selectRefresh="false" />
+				<menu id="grid_example" text="表格范例" href="/auth/authMananger"
+					target="mainTabs" selectRefresh="false" />
+				<menu id="paged_grid_example" text="分页表格" href="/auth/authMananger"
+					target="mainTabs" selectRefresh="false" />
+				<menu id="flow_grid_example" text="流媒体表格" href="/auth/authMananger"
+					target="mainTabs" selectRefresh="false" />
+				<menu id="window_and_dialog_example" text="弹出窗体" href="/auth/authMananger"
+					target="mainTabs" selectRefresh="false" />
 			</menu>
-		</menu>
-
-		<menu id="bestDemoMananger" text="最佳实践">
-			<!-- dialog最佳实践 -->
-			<menu id="bestDemoDialogUtils" text="dialog" href="/demo/best/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false" />
-			<menu id="bestSimplePage" text="page" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false" />
-			<menu id="bestList" text="列表" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false" />
-			<menu id="bestPagedList" text="分页列表" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false" />
-			<menu id="bestAjaxList" text="ajax列表" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false" />
-			<menu id="bestAjaxPagedList" text="ajax分页" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false" />
-		</menu>
-
-		<menu id="demoMananger" text="参考demo">
-			<!-- dialogUtils使用demo -->
-			<menu id="demoDialogUtils" text="dialogDemo" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false" />
-			<!-- 列表显示 -->
-			<menu id="demoList" text="dialogDemo" href="/demo/dialogUtilsDemo"
-				target="mainTabs" selectRefresh="false" />
+			<menu id="dev_web_example" text="参考网站">
+				<menu id="web_validate_example" text="验证功能" 
+					href="http://niceue.com/validator/#plugin_usage"
+					target="mainTabs" selectRefresh="false" />
+			</menu>
 		</menu>
 
 		<menu id="test" text="测试菜单项" href="/demo/dialogUtilsDemo">
@@ -89,9 +79,6 @@
 				</menu>
 				<menu id="6_mananger" text="1156"></menu>
 			</menu>
-			<menu id="auth_mananger" text="权限管理"></menu>
-			<menu id="user_mananger" text="人员管理"></menu>
-			<menu id="base_data_mananger" text="基础数据管理"></menu>
 		</menu>
 
 

@@ -336,6 +336,14 @@ $(function(){
             }else{
                 //打开非模态对话框
             }
+        }else{
+        	//系统默认为打开对应tab
+        	$.triggerGE("addOrSelectTab",[{
+                title : menuItem.text,
+                href : menuItem.href,
+                iconCls : menuItem.icon
+            }]);
+            return false;
         }
     }
     $(document).ready(function(){

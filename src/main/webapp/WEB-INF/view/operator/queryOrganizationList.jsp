@@ -32,50 +32,80 @@ $(document).ready(function() {
 		}] ],
 		columns : [ [ {
 			field : 'name',
-			title : '组织名称',
-			width : 200
+			title : '名称',
+			width : 80
 		}, {
 			field : 'code',
-			title : '组织编号',
-			width : 230
+			title : '编号',
+			width : 50
+		},{
+			field : 'alias',
+			title : '别名',
+			width : 100,
+			hidden : true
 		}, {
 			field : 'fullName',
-			title : '组织全称',
-			width : 150
-		}, {
-			field : 'alias',
-			title : '组织别名',
-			width : 80,
-			hidden : true
+			title : '全称',
+			width : 160
 		}, {
 			field : 'address',
 			title : '地址',
-			width : 40,
+			width : 80,
 			hidden : true
 		}, {
 			field : 'fullAddress',
 			title : '详细地址',
-			width : 80,
+			width : 160,
 			hidden : true
 		}, {
+			field : 'valid',
+			title : '是否有效',
+			width : 40,
+			formatter : function(value, row, index){
+				if(value){
+					return '是';
+				}else{
+					return '否';
+				}
+			}
+		}, {
+			field : 'type',
+			title : '组织类型',
+			width : 80
+		}, {
+			field : 'provinceId',
+			title : '所在省',
+			width : 80,
+			hidden : true
+		},{
+			field : 'cityId',
+			title : '所在市',
+			width : 80,
+			hidden : true
+		},{
+			field : 'areaId',
+			title : '所在地',
+			width : 80
+		},{
 			field : 'action',
 			title : '操作',
 			width : 50,
 			formatter : function(value, row, index) {
 				var str = '';
-				if ($.canEdit) {
+				<c:if test="${true}">
 					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
-				}
+				</c:if>
 				str += '&nbsp;';
-				if ($.canDelete) {
+				<c:if test="${true}">
 					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
-				}
+				</c:if>
 				return str;
 			}
 		}, {
 			field : 'remark',
 			title : '备注',
-			width : 200
+			width : 200,
+			hidden : true
 		} ] ],
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {
@@ -101,7 +131,6 @@ function redo() {
 		treeGrid.treegrid('expandAll');
 	}
 }
-
 function undo() {
 	var node = treeGrid.treegrid('getSelected');
 	if (node) {
@@ -109,6 +138,12 @@ function undo() {
 	} else {
 		treeGrid.treegrid('collapseAll');
 	}
+}
+/*
+ * 打开添加组织界面
+ */
+function addFun() {
+	DialogUtils.openModalDialog("addOrganization","添加组织","${contextPath}/organization/toAddOrganization.action",600,400);
 }
 </script>
 </head>
@@ -120,7 +155,7 @@ function undo() {
 	</div>
 	
 	<div id="toolbar" style="display: none;">
-		<c:if test="${false}">
+		<c:if test="${true}">
 			<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
 		</c:if>
 		<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 

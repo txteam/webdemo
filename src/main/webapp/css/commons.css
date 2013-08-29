@@ -25,7 +25,6 @@ iframe {
     overflow: hidden;
     z-index: 0;
 }
-
 /* 定义通用页面样式  */
 * {
     margin: 0px;
@@ -33,6 +32,7 @@ iframe {
     font-size: 12px;
     font-family: "Verdana", "Arial", "宋体", "Helvetica", "sans-serif";
 }
+/*
 html, body {
     height: 100%;
     width: 100%;
@@ -53,10 +53,12 @@ body {
     height: 99%;
     width: 99%;
 }
+
 html {
     overflow-y: auto;
     overflow-x: auto;
 }
+*/
 img, form {
     border: none;
 }
@@ -65,90 +67,30 @@ a {
     text-align: left;
     text-decoration: none;
 }
-
-/*  page header  */
-.page-title-header {
-    width: 100%;
-    height: 22px;
-    padding-top: 8px;
-    vertical-align: middle;
-    padding-left: 6px;
-}
-
 /* form table */
 .form-table{
-    margin-bottom: 5px;
-}
-.form-table table {
-    table-layout: fixed;
-    width: 100%;
-    text-overflow: ellipsis;
-    border-collapse: collapse; 
 }
 .form-table * {
     vertical-align: middle;
 }
-.form-table table tbody th,.form-table table tbody td {
-    height: 24px;
-    max-height: 24px;
-    line-height: 24px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    padding-left: 2px;
-    padding-right: 2px;
+.form-table table {
+	/*
+	table-layout:fixed;
+	width:100%;
+	text-overflow:ellipsis;
+	*/
 }
-.form-table .grid-1-12,.form-table .grid-2-12,.form-table .grid-3-12,.form-table .grid-4-12,.form-table .grid-5-12,.form-table .grid-6-12{
-    height: 24px;
-    max-height: 24px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    padding-left: 2px;
-    padding-right: 2px;
+.form-table th, .form-table td {
+	line-height:18px;
+	padding:2px 3px;
+	color:#333;
 }
-.form-table .grid-7-12,.form-table .grid-8-12,.form-table .grid-9-12,.form-table .grid-10-12,.form-table .grid-11-12,.form-table .grid-12-12{
-    height: 24px;
-    max-height: 24px;
+.form-table th {
+	text-align:left;
+	font-weight:normal;
+	padding-left:10px;
 }
-.form-table table tbody th {
-    text-align: left;
-    font-weight: normal;
-    padding-left: 10px;
-}
-.form-table a {
-    text-decoration: underline;
-}
-.form-table .operRow {
-    line-height: 26px;
-    border-top: none;
-    text-align: center;
-}
-.form-table input[type="text"], .form-table input[type="password"], .form-table input[type="file"], .form-table textarea, .form-table select{
-    height: 20px;
-    max-height: 20px;
-    padding-top: 2px;
-    padding-bottom: 1px;
-    padding-left: 6px;
-    padding-right: 2px;
-    max-width: 157px;
-    font-size: 14px;
-}
-.form-table .formee-list{
-    height: 20px;
-    padding-top: 2px;
-    padding-bottom: 1px;
-    padding-left: 6px;
-    padding-right: 2px;
-    max-height: 20px;
-    font-size: 14px;
-}
-.form-table .formee-list li{
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-.form-table .operRow {
-    line-height: 26px;
-    border-top: none;
-    text-align: center;
+.form-table td {
 }
 
 /* list-table */

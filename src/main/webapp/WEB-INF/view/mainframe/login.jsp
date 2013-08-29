@@ -68,11 +68,11 @@ $(document).ready(function() {
                 	<input class="form-radio-other-input" type="radio" name="type" value="0"> <label>管理员</label>
                 </li>
                 <li><label>账	号 </label> 
-                	<input class="easyui-validatebox account form-textbox" type="text" 
+                	<input class="account form-textbox" type="text" 
                 		name="loginName" value="admin" required="required"
                 		data-rule="required;"></li>
                 <li><label>密	码 </label> 
-                	<input class="easyui-validatebox  password form-textbox" type="password" 
+                	<input class="password form-textbox" type="password" 
                 		name="password" value="admin"
                 		data-rule="required;"></li>
             </ul>

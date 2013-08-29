@@ -1,0 +1,11 @@
+1、跨模块对象持有
+	在跨模块的对象互相关联不直接引用对象，仅以xxxId的形式进行关联
+2、模块表
+	例：人员表  oper_operator
+	模块名_+对象名
+	模块名如果超出5个字符，对模块名进行适当缩写
+	如果为模块中的基础数据表
+	oper_basic_+xxx
+	例：oper_basic_operatortype
+	oper_basic_xxxxx
+	
