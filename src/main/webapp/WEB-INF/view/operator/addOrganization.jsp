@@ -20,9 +20,20 @@ $('#parentId').combotree({
 
 		parent.$.messager.progress('close');
 	}
+	
+	$('#form').validator({
+	    //关闭此开关，以便一次性显示所有消息
+	    stopOnError: false,
+	    msgHandler: function(msgs){
+	    	alert("msgHandler");
+	        var html = '';
+	        $.map(msgs, function(msg){
+	            html += '<p class="red">'+ msg +'</p>'
+	        });
+	        $('#msg_holder').html(html);
+	    }
+	});
 });
-
-$('#form').validator(fun);
 </script>
 </head>
 <body>
@@ -31,7 +42,7 @@ $('#form').validator(fun);
 		<form id="form" method="post" class="form">
 			<table>
 				<tr>
-					<th class="narrow">编号<span class="rRed">*</span></th>
+					<th class="narrow">编号<span class="tRed">*</span></th>
 					<td>
 						<input name="code" type="text" value="" class="text"
 							data-rule="编号:required;username">
@@ -76,6 +87,9 @@ $('#form').validator(fun);
 				<tr>
 					<th>备注</th>
 					<td colspan="3"><textarea name="remark" rows="" cols="" class="span5"></textarea></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="提交"/></td>
 				</tr>
 			</table>
 		</form>

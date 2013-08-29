@@ -149,10 +149,6 @@ function addFun() {
 	})*/
 	//alert($.toJsonString($.validator));
 	DialogUtils.openModalDialog("addOrganization","添加组织","${contextPath}/organization/toAddOrganization.action",650,300);
-	$.triggerge("addOrSelectTab",[{
-        title : "添加组织",
-        href : "${contextPath}/organization/toAddOrganization.action"
-    }]);
 }
 </script>
 </head>
