@@ -1,13 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>queryOrganizationList</title>
-<%@include file="../includes/commonHead.jsp" %>
-
 <script type="text/javascript" >
 $('#parentId').combotree({
 	url : '${contextPath}/organization/queryOrganizationList.action',
@@ -24,32 +17,30 @@ $('#parentId').combotree({
 
 $('#form').validator(fun);
 </script>
-</head>
-<body>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form id="form" method="post" class="form">
-			<table>
+		<form id="form" method="post" class="form-table">
+			<table class="table table-striped table-condensed table-hover">
 				<tr>
-					<th class="narrow">编号<span class="rRed">*</span></th>
+					<th>编号<span class="color:red">*</span></th>
 					<td>
-						<input name="code" type="text" value="" class="text"
+						<input name="code" type="text" value="" class="span2"
 							data-rule="编号:required;username">
 					</td>
 					<th>名称</th>
 					<td>
-						<input name="name" type="text" value="" class="text"
+						<input name="name" type="text" value="" class="span2"
 							data-rule="名称:required;"></td>
 				</tr>
 				<tr>
 					<th>资源路径</th>
 					<td>
 						<input name="url" type="text" placeholder="请输入资源路径" 
-							class="text easyui-validatebox" value="">
+							class="easyui-validatebox span2" value="">
 					</td>
 					<th>组织类型</th>
 					<td>
-						<select name="typeId" class="easyui-combobox select">
+						<select name="typeId" class="easyui-combobox span3">
 							<c:forEach items='' var="resourceType">
 								<option value="${resourceType.id}">${resourceType.name}</option>
 							</c:forEach>
@@ -67,7 +58,7 @@ $('#form').validator(fun);
 					</td>
 					<th>上级资源</th>
 					<td>
-						<select id="parentId" name="parentId" class="select"
+						<select id="parentId" name="parentId" class="span3"
 							style="height: 29px;">
 						</select>
 						<img src="${pageContext.request.contextPath}/style/images/extjs_icons/cut_red.png" onclick="$('#pid').combotree('clear');" />
@@ -81,4 +72,3 @@ $('#form').validator(fun);
 		</form>
 	</div>
 </div>
-</body>

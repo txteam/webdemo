@@ -15,6 +15,15 @@ $(document).ready(function() {
 		url : '${contextPath}/mainframe/getAllMenuItemList.action',
 		idField : 'id',
 		treeField : 'text',
+		iconFiled : function(item){
+			if(item['icon']){
+				return item['icon'];
+			}else if($.ObjectUtils.isEmpty(item['childs'])){
+				return 'database';
+			}else{
+				return 'database_gear';
+			}
+		},
 		parentField : 'parentId',
 		fit : true,
 		fitColumns : true,

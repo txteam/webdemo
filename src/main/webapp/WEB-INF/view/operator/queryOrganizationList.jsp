@@ -143,7 +143,16 @@ function undo() {
  * 打开添加组织界面
  */
 function addFun() {
-	DialogUtils.openModalDialog("addOrganization","添加组织","${contextPath}/organization/toAddOrganization.action",600,400);
+	/*DialogUtils.show({
+		title:'show message title',
+		msg:'test'
+	})*/
+	//alert($.toJsonString($.validator));
+	DialogUtils.openModalDialog("addOrganization","添加组织","${contextPath}/organization/toAddOrganization.action",650,300);
+	$.triggerge("addOrSelectTab",[{
+        title : "添加组织",
+        href : "${contextPath}/organization/toAddOrganization.action"
+    }]);
 }
 </script>
 </head>

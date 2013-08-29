@@ -537,12 +537,14 @@ var GlobalDialogUtils = null;
     	var option = $.extend({},{
     		title:'show message title',
     		msg:'',
-    		timeout:5000,
+    		width:370,
+    		height:150,
+    		timeout:10000,
     		showType:'slide'
     	},config);
     	$.messager.show(option);
     };
-    window.show = DialogUtils.show;
+    //window.show = DialogUtils.show;
     /*
      * 显示一个alter窗体.参数:
      * title: 标题文本,显示在panel的头部的.
@@ -553,9 +555,9 @@ var GlobalDialogUtils = null;
     DialogUtils.alert = function(title, msg, icon, fn){
     	$.messager.alert(title, msg, icon, fn);
     };
-    window.alert = function(msg){
-    	DialogUtils.alert("alert",msg,warning);
-    };
+    //window.alert = function(msg){
+    //	DialogUtils.alert("alert",msg,warning);
+    //};
     /*
      * 显示一个确认消息窗体有一个OK和一个Cancel按钮,参数:
      * title:标题文本显示在panel的头部的.
@@ -565,9 +567,9 @@ var GlobalDialogUtils = null;
     DialogUtils.confirm = function(title, msg, fn){
     	$.messager.confirm(title, msg, fn);
     };
-    window.confirm = function(msg,fn){
-    	$.messager.confirm("confirm", msg, fn);
-    };
+    //window.confirm = function(msg,fn){
+    //	$.messager.confirm("confirm", msg, fn);
+    //};
     /*
      * 显示一个消息窗体,一个OK和一个Cancel按钮,提示用户输入一些文本,参数:
      * title: 显示到panel头部的标题文本.
@@ -577,9 +579,9 @@ var GlobalDialogUtils = null;
     DialogUtils.prompt = function(title, msg, fn){
     	$.messager.prompt(title, msg, fn);
     };
-    window.prompt = function(msg,fn){
-    	$.messager.confirm("prompt", msg, fn);
-    };
+    //window.prompt = function(msg,fn){
+    //	$.messager.confirm("prompt", msg, fn);
+    //};
     /*
      * 显示一个进度消息窗体. 
      * 选项定义如下:
@@ -629,8 +631,8 @@ var GlobalDialogUtils = null;
     	
     	//生成对应
     	var option = $.extend({},DialogUtils._defaultDialogConfig, config);
-    	option.width = option.width == 0 ? option.width : '800';
-    	option.height = option.height == 0 ? option.height : '600';
+    	option.width = option.width != 0 ? option.width : '500';
+    	option.height = option.height != 0 ? option.height : '300';
     	
     	//生成关闭句柄
     	if(!DialogUtils._currentDialogCloseHandlers[dialogHandleId]){
@@ -734,8 +736,8 @@ var GlobalDialogUtils = null;
     	
     	//生成对应
     	var option = $.extend({},DialogUtils._defaultWindowConfigs, config);
-    	option.width = option.width == 0 ? option.width : '800';
-    	option.height = option.height == 0 ? option.height : '600';
+    	option.width = option.width != 0 ? option.width : '800';
+    	option.height = option.height != 0 ? option.height : '600';
     	
     	//生成关闭句柄
     	if(!DialogUtils._currentWinCloseHandlers[winHandleId]){
@@ -799,3 +801,115 @@ var GlobalDialogUtils = null;
     	return _window;
     };
 })(jQuery); 
+
+
+/**
+ * 扩展treegrid 
+ * 使其支持平滑数据格式
+ * 支持指定几个主要字段
+ */
+$.fn.tree.defaults.loadFilter = function(data, parent) {
+    var opt = $(this).data().tree.options;
+    var idFiled, textFiled, parentField,iconFiled,childrenFiled;
+    if (opt.parentField) {
+        idFiled = opt.idFiled || 'id';
+        parentField = opt.parentField;
+        textFiled = opt.textFiled || 'text';
+        iconFiled = opt.iconFiled || 'iconCls';
+        var i, l, treeData = [], tmpMap = [];
+        for (i = 0, l = data.length; i < l; i++) {
+            tmpMap[data[i][idFiled]] = data[i];
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+            if (tmpMap[data[i][parentField]] && data[i][idFiled] != data[i][parentField]) {
+                if (!tmpMap[data[i][parentField]]['children'])
+                    tmpMap[data[i][parentField]]['children'] = [];
+                data[i]['text'] = data[i][textFiled];
+                data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+                tmpMap[data[i][parentField]]['children'].push(data[i]);
+            } else {
+                data[i]['text'] = data[i][textFiled];
+                data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+                treeData.push(data[i]);
+            }
+        }
+        return treeData;
+    }else{
+        textFiled = opt.textFiled || 'text';
+        iconFiled = opt.iconFiled || 'iconCls';
+        childrenFiled = opt.children || 'children';  
+        function iteratorTreeData(item){
+            item['text'] = item[textFiled];
+            item['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+            item['children'] = item[childrenFiled];
+            if(!$.ObjectUtils.isEmpty(item['children'])){
+                for(i = 0,l = item['children'].length ; i < l ; i++){
+                    iteratorTreeData(item['children'][i]);
+                }
+            }
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+            iteratorTreeData(data[i]);
+        }
+    }
+    return data;
+};
+
+/**
+ * 扩展treegrid
+ * 使其支持平滑数据格式
+ * 支持指定几个主要字段
+ */
+$.fn.treegrid.defaults.loadFilter = function(data, parentId) {
+    var opt = $(this).data().treegrid.options;
+    var idFiled, textFiled, parentField,iconFiled,childrenFiled;
+    if (opt.parentField) {
+        idFiled = opt.idFiled || 'id';
+        textFiled = opt.textFiled || 'text';
+        iconFiled = opt.iconFiled || 'iconCls';
+        parentField = opt.parentField;
+        var i, l, treeData = [], tmpMap = [];
+        for (i = 0, l = data.length; i < l; i++) {
+            tmpMap[data[i][idFiled]] = data[i];
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+            if (tmpMap[data[i][parentField]] && data[i][idFiled] != data[i][parentField]) {
+                if (!tmpMap[data[i][parentField]]['children'])
+                    tmpMap[data[i][parentField]]['children'] = [];
+                data[i]['text'] = data[i][textFiled];
+                data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+                tmpMap[data[i][parentField]]['children'].push(data[i]);
+            } else {
+                data[i]['text'] = data[i][textFiled];
+                data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+                treeData.push(data[i]);
+            }
+        }
+        return treeData;
+    }else{
+        textFiled = opt.textFiled || 'text';
+        iconFiled = opt.iconFiled || 'iconCls';
+        childrenFiled = opt.children || 'children';  
+        function iteratorTreeData(item){
+            item['text'] = item[textFiled];
+            item['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+            item['children'] = item[childrenFiled];
+            if(!$.ObjectUtils.isEmpty(item['children'])){
+                for(i = 0,l = item['children'].length ; i < l ; i++){
+                    iteratorTreeData(item['children'][i]);
+                }
+            }
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+            iteratorTreeData(data[i]);
+        }
+    }
+    return data;
+};
+
+/**
+ * 扩展treegrid 
+ * 使其支持平滑数据格式
+ * 支持指定几个主要字段
+ */
+$.fn.combotree.defaults.loadFilter = $.fn.tree.defaults.loadFilter;
