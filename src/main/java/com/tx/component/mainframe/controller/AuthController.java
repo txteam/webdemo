@@ -49,7 +49,7 @@ public class AuthController {
     }
     
     /**
-      * 根据当前人员权限列表<br/> 
+      * 根据当前人员权限类型与权限列表<br/> 
       *<功能详细描述>
       * @return [参数说明]
       * 

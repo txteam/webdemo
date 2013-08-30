@@ -106,7 +106,7 @@ public class OrganizationService {
     
     /**
       * 根据Organization实体列表
-      * TODO:补充说明
+      *     如果rootOrgId为空则返回所有的组织，如果不为空则返回以rootOrg下级的列表
       * 
       * <功能详细描述>
       * @return [参数说明]
@@ -115,10 +115,8 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<Organization> queryOrganizationList(/*TODO:自己定义条件*/) {
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
+    public List<Organization> queryOrganizationList(String rootOrgId) {
+        //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         
         //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
@@ -185,16 +183,17 @@ public class OrganizationService {
      */
     @Transactional
     public boolean updateById(Organization organization) {
-        //TODO:验证参数是否合法，必填字段是否填写，
+        //验证参数是否合法，必填字段是否填写，
         AssertUtils.notNull(organization, "organization is null.");
         AssertUtils.notEmpty(organization.getId(), "organization.id is empty.");
+        AssertUtils.notEmpty(organization.getName(), "organization.name is empty.");
+        AssertUtils.notEmpty(organization.getCode(), "organization.code is empty.");
         
-        
-        //TODO:生成需要更新字段的hashMap
+        //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", organization.getId());
         
-        //TODO:需要更新的字段
+        //需要更新的字段
 		updateRowMap.put("provinceId", organization.getProvinceId());	
 		updateRowMap.put("valid", organization.isValid());	
 		updateRowMap.put("fullAddress", organization.getFullAddress());	
@@ -205,15 +204,15 @@ public class OrganizationService {
 		updateRowMap.put("type", organization.getType());	
 		updateRowMap.put("areaId", organization.getAreaId());	
 		updateRowMap.put("parentId", organization.getParentId());	
-		updateRowMap.put("address", organization.getAddress());	
-		updateRowMap.put("chiefType", organization.getChiefType());	
+		updateRowMap.put("address", organization.getAddress());
 		updateRowMap.put("name", organization.getName());	
-		updateRowMap.put("fullName", organization.getFullName());	
+		updateRowMap.put("fullName", organization.getFullName());
+		updateRowMap.put("chiefType", organization.getChiefType());   
 		updateRowMap.put("chiefId", organization.getChiefId());	
         
         int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
         
-        //TODO:如果需要大于1时，抛出异常并回滚，需要在这里修改
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
     }
 }

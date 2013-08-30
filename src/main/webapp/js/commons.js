@@ -544,6 +544,24 @@ var GlobalDialogUtils = null;
     	},config);
     	$.messager.show(option);
     };
+    /**
+     * 消息提醒
+     */
+    DialogUtils.tip = function(msg,width,height){
+    	var option = $.extend({},{
+    		title:'提醒',
+    		msg: msg,
+    		width:370,
+    		height:150,
+    		timeout:10000,
+    		showType:'slide'
+    	},{
+    		msg: msg,
+    		width: width,
+    		height: height,
+    	});
+    	$.messager.show(option);
+    };
     //window.show = DialogUtils.show;
     /*
      * 显示一个alter窗体.参数:
@@ -617,21 +635,10 @@ var GlobalDialogUtils = null;
     /*
      * 创建dialog 
      */
-    DialogUtils._createOrOpenDialog = function(dialogHandleId,config){
-    	var $dialogHandle = null;
-    	//获取到dialog句柄
-    	$dialogHandle = $("#"+dialogHandleId);
-    	if($dialogHandle.size() == 0){
-    		$dialogHandle = $("<div/>").attr("id",dialogHandleId);
-    		config.title && $dialogHandle.attr("title",config.title);
-    		$("body").append($dialogHandle);
-    	}else{
-    		config.title && $dialogHandle.attr("title",config.title)
-    	}
-    	
+    DialogUtils._createOrOpenDialog = function(dialogHandleId,$dialogHandle,config){    	
     	//生成对应
     	var option = $.extend({},DialogUtils._defaultDialogConfig, config);
-    	option.width = option.width != 0 ? option.width : '500';
+    	option.width = option.width != 0 ? option.width : '400';
     	option.height = option.height != 0 ? option.height : '300';
     	
     	//生成关闭句柄
@@ -659,15 +666,19 @@ var GlobalDialogUtils = null;
     /*
      * 打开对话框
      */
-    DialogUtils.dialog = function(id,config){
-    	var _dialog = DialogUtils._createOrOpenDialog(id,config);
-    	return _dialog;
-    };
-    /*
-     * 打开对话框
-     */
-    DialogUtils.openDialog = function(id,title,href,width,height,close){
-    	var _dialog = DialogUtils._createOrOpenDialog(id,{
+    DialogUtils.dialog = function(dialogHandleId,config){
+    	var $dialogHandle = null;
+    	//获取到dialog句柄
+    	$dialogHandle = $("#"+dialogHandleId);
+    	if($dialogHandle.size() == 0){
+    		$dialogHandle = $("<div/>").attr("id",dialogHandleId);
+    		config.title && $dialogHandle.attr("title",config.title);
+    		$("body").append($dialogHandle);
+    	}else{
+    		config.title && $dialogHandle.attr("title",config.title)
+    	}
+    	
+    	var option = $.extend({},{
     		title : title,
     		href: href,
     	    width: width,   
@@ -675,25 +686,118 @@ var GlobalDialogUtils = null;
     	    closed: false,   
     	    cache: false,
     	    modal: false,
-    	    onClose: close
-    	});
+    	    onClose: onClose
+    	},config);
+    	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,config);
     	return _dialog;
     };
     /*
      * 打开对话框
+     * notIframeDialog如果不设定值默认为iframeDialog
+     * 默认为利用iframe打开
+     * 由于iframe为固定大小所以这里不用考虑随着框体大小变化iframe大小变化的情况
      */
-    DialogUtils.openModalDialog = function(id,title,href,width,height,close){
-    	var _dialog = DialogUtils._createOrOpenDialog(id,{
-    		title : title,
-    		href: href,
-    	    width: width,   
-    	    height: height,
-    	    closed: false,   
-    	    cache: false,
-    	    modal: true,
-    	    onClose: close
-    	});
-    	return _dialog;
+    DialogUtils.openDialog = function(dialogHandleId,title,href,width,height,onClose,buttons,notIframeDialog,cache){
+    	var $dialogHandle = null;
+    	//获取到dialog句柄
+    	$dialogHandle = $("#"+dialogHandleId);
+    	if($dialogHandle.size() == 0){
+    		$dialogHandle = $("<div/>").attr("id",dialogHandleId);
+    		$("body").append($dialogHandle);
+    	}
+    	title && $dialogHandle.attr("title",title);
+    	//如果是iframe类型的dialog
+    	if(!notIframeDialog){
+    		$iframe = $dialogHandle.children("iframe");
+    		if($iframe.size() == 0){
+    			$dialogHandle.empty();
+    			$iframe = $('<iframe scrolling="auto" id=dialogIframe_' + dialogHandleId + ' frameborder="0"  src="" style="width:100%;height:100%;">');
+    			$dialogHandle.append($iframe);
+    			$iframe.attr('src',href);
+    		}else{
+    	    	if(!cache){
+    	    		$iframe.attr('src',href);
+    	    	}
+    		}
+        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
+        		title : title,
+        	    width: width,   
+        	    height: height,
+        	    closed: false,   
+        	    cache: true,
+        	    modal: false,
+        	    buttons: buttons,
+        	    onClose: onClose
+        	});
+        	return _dialog;
+    	}else{
+        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
+        		title : title,
+        		href: href,
+        	    width: width,   
+        	    height: height,
+        	    closed: false,   
+        	    cache: false,
+        	    modal: false,
+        	    buttons: buttons,
+        	    onClose: onClose
+        	});
+        	return _dialog;
+    	}
+    };
+    /*
+     * 打开对话框
+     * notIframeDialog如果不设定值默认为iframeDialog
+     */
+    DialogUtils.openModalDialog = function(dialogHandleId,title,href,width,height,onClose,buttons,notIframeDialog,cache){
+    	var $dialogHandle = null;
+    	//获取到dialog句柄
+    	$dialogHandle = $("#"+dialogHandleId);
+    	if($dialogHandle.size() == 0){
+    		$dialogHandle = $("<div/>").attr("id",dialogHandleId);
+    		$("body").append($dialogHandle);
+    	}
+    	title && $dialogHandle.attr("title",title);
+    	//如果是iframe类型的dialog
+    	if(!notIframeDialog){
+    		$iframe = $dialogHandle.children("iframe");
+    		if($iframe.size() == 0){
+    			$dialogHandle.empty();
+    			$iframe = $('<iframe scrolling="auto" id=dialogIframe_' + dialogHandleId + ' frameborder="0"  src="" style="width:100%;height:100%;">');
+    			$dialogHandle.append($iframe);
+    			$iframe.attr('src',href);
+    		}else{
+    	    	if(!cache){
+    	    		$iframe.attr('src',href);
+    	    	}
+    		}
+        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
+        		title : title,
+        	    width: width,   
+        	    height: height,
+        	    closed: false,
+        	    cache: true,
+        	    modal: true,
+        	    buttons: buttons,
+        	    onClose: onClose
+        	});
+        	return _dialog;
+    	}else{
+    	//如果不是dialog对话框
+        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
+        		title : title,
+        	    width: width,   
+        	    height: height,
+        	    closed: false,
+        	    cache: true,
+        	    modal: true,
+        	    buttons: buttons,
+        	    onClose: onClose
+        	});
+        	return _dialog;
+    	}
+    	
+
     };
 
     /**
@@ -824,10 +928,12 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
             if (tmpMap[data[i][parentField]] && data[i][idFiled] != data[i][parentField]) {
                 if (!tmpMap[data[i][parentField]]['children'])
                     tmpMap[data[i][parentField]]['children'] = [];
+                data[i]['attributes'] = data[i];
                 data[i]['text'] = data[i][textFiled];
                 data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
             } else {
+            	data[i]['attributes'] = data[i];
                 data[i]['text'] = data[i][textFiled];
                 data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
                 treeData.push(data[i]);
@@ -839,6 +945,7 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
         iconFiled = opt.iconFiled || 'iconCls';
         childrenFiled = opt.children || 'children';  
         function iteratorTreeData(item){
+        	item['attributes'] = item;
             item['text'] = item[textFiled];
             item['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
             item['children'] = item[childrenFiled];
@@ -849,7 +956,9 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
             }
         }
         for (i = 0, l = data.length; i < l; i++) {
-            iteratorTreeData(data[i]);
+        	if(data[i] != null){
+        		iteratorTreeData(data[i]);
+        	}
         }
     }
     return data;
@@ -913,3 +1022,15 @@ $.fn.treegrid.defaults.loadFilter = function(data, parentId) {
  * 支持指定几个主要字段
  */
 $.fn.combotree.defaults.loadFilter = $.fn.tree.defaults.loadFilter;
+
+/**
+ * 修改默认的验证器设置
+ */
+$(document).ready(function(){
+	if($.validator){
+		$.validator.config({
+			stopOnError: false,
+		    theme: 'yellow_right'
+		});
+	}
+});

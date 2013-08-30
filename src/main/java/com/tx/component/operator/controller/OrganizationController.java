@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OrganizationService;
-import com.tx.core.tree.util.TreeUtils;
 
 /**
  * 组织结构管理<br/>
@@ -83,6 +82,22 @@ public class OrganizationController {
     }
     
     /**
+      * 跳转到选择组织页面
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toChooseOrgnization")
+    public String toChooseOrgnization(@RequestParam(value = "eventName", required = false) String chooseEventName,
+            ModelMap responseMap) {
+        responseMap.put("eventName", chooseEventName);
+        return "/operator/chooseOrganization";
+    }
+    
+    /**
       * 查询所有组织的树列表<br/>
       *<功能详细描述>
       * @return [参数说明]
@@ -93,9 +108,9 @@ public class OrganizationController {
      */
     @RequestMapping("/queryOrganizationList")
     @ResponseBody
-    public List<Organization> queryOrganizationList() {
-        
-        List<Organization> orgList = this.organizationService.queryOrganizationList();
+    public List<Organization> queryOrganizationList(
+            @RequestParam(value = "rootOrganizationId", required = false) String rootOrganizationId) {
+        List<Organization> orgList = this.organizationService.queryOrganizationList(rootOrganizationId);
         
         return orgList;
     }

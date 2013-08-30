@@ -148,7 +148,7 @@ function addFun() {
 		msg:'test'
 	})*/
 	//alert($.toJsonString($.validator));
-	DialogUtils.openModalDialog("addOrganization","添加组织","${contextPath}/organization/toAddOrganization.action",650,300);
+	DialogUtils.openModalDialog("addOrganization","添加组织","${contextPath}/organization/toAddOrganization.action",550,265);
 }
 </script>
 </head>

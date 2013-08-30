@@ -3,7 +3,11 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="organization">
-
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache"
+				eviction="LRU"
+				readOnly="true"
+				size="100"/>
+				
 	<!-- auto generate default resultMap -->
 	<resultMap id="organizationMap" 
 		type="com.tx.component.operator.model.Organization">

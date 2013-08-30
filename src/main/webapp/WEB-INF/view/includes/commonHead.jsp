@@ -21,5 +21,6 @@
 <script type="text/javascript" src="${contextPath }/js/validator-0.2.1/jquery.validator.js"></script>
 <script type="text/javascript" src="${contextPath }/js/validator-0.2.1/local/zh_CN.js"></script>
 <script type="text/javascript" src="${contextPath}/js/commons.js" charset="utf-8"></script>
+<script type="text/javascript" src="${contextPath}/js/components.js" charset="utf-8"></script>
 <script type="text/javascript">
 </script>

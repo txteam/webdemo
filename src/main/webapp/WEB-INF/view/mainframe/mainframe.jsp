@@ -5,26 +5,12 @@
 <html>
 <head>
 <title>业务系统demo</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<link rel="stylesheet" href="${contextPath}/js/jquery-ui-1.10.3.custom/css/no-theme/jquery-ui-1.10.3.custom.min.css" type="text/css">
-<link id="easyuiTheme" rel="stylesheet" href="${contextPath}/js/jquery-easyui-1.3.3/themes/<c:out value="${cookie.easyuiThemeName.value}" default="bootstrap"/>/easyui.css" type="text/css">
-<link rel="stylesheet" href="${contextPath}/style/extEasyUIIcon.css" type="text/css">
-<link rel="stylesheet" href="${contextPath}/js/validator-0.2.1/jquery.validator.css" type="text/css">
-<link rel="stylesheet" href="${contextPath}/css/commons.css">
-
 <script type="text/javascript">
 	var _contextPath = "${contextPath}";
 	var _queryMenuUrl = "${contextPath}/mainframe/queryMenuItemTreeListDependAuthority.action";
 </script>
-<script type="text/javascript" src="${contextPath}/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="${contextPath}/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/jquery.easyui.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="${contextPath}/js/extEasyUI.js" charset="utf-8"></script>
-<script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
-<script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/plugins/jquery.layout.js" charset="utf-8"></script>
+<%@include file="../includes/commonHead.jsp" %>
 
-<script type="text/javascript" src="${contextPath}/js/commons.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/view/js/mainframe/mainframe.js" charset="utf-8"></script>
 <style type="text/css">
 #menuAccordion .panel-title{

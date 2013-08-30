@@ -9,29 +9,18 @@
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
-$('#parentId').combotree({
-	url : '${contextPath}/organization/queryOrganizationList.action',
-	parentField : 'parentId',
-	textFiled : 'name',
-	lines : true,
-	panelHeight : 'auto',
-	onLoadSuccess : function() {
-		$('#parentId').addClass("span3");
-
-		parent.$.messager.progress('close');
-	}
-	
-	$('#form').validator({
-	    //关闭此开关，以便一次性显示所有消息
-	    stopOnError: false,
-	    msgHandler: function(msgs){
-	    	alert("msgHandler");
-	        var html = '';
-	        $.map(msgs, function(msg){
-	            html += '<p class="red">'+ msg +'</p>'
-	        });
-	        $('#msg_holder').html(html);
-	    }
+$(document).ready(function(){
+	$("#parentName").chooseOrganization({
+		eventName : "chooseOrganizationForAddOrganization",
+		contextPath : _contextPath,
+		title : "请选择上级组织",
+		width : 260,
+		height : 400,
+		handler : function(organization){
+			$("#parentName").val(organization.name);
+			$("#parentId").val(organization.id);
+		},
+		
 	});
 });
 </script>
@@ -42,25 +31,27 @@ $('#parentId').combotree({
 		<form id="form" method="post" class="form">
 			<table>
 				<tr>
+					<th class="narrow">名称:<span class="tRed">*</span></th>
+					<td>
+						<input name="name" type="text" value="" class="text"
+							data-rule="名称:required;" data-tip="必填">
+					</td>
+					<th class="narrow">别名:</th>
+					<td>
+						<input name="url" type="alias"
+							class="text" value="">
+					</td>
+				</tr>
+				<tr>
 					<th class="narrow">编号<span class="tRed">*</span></th>
 					<td>
 						<input name="code" type="text" value="" class="text"
-							data-rule="编号:required;username">
+							data-rule="编号:required;" data-tip="不能重复">
 					</td>
-					<th>名称</th>
+					<th class="narrow">组织类型:</th>
 					<td>
-						<input name="name" type="text" value="" class="text"
-							data-rule="名称:required;"></td>
-				</tr>
-				<tr>
-					<th>资源路径</th>
-					<td>
-						<input name="url" type="text" placeholder="请输入资源路径" 
-							class="text easyui-validatebox" value="">
-					</td>
-					<th>组织类型</th>
-					<td>
-						<select name="typeId" class="easyui-combobox select">
+						<select name="type" class="select">
+							<option value="">--- 请选择 ---</option>
 							<c:forEach items='' var="resourceType">
 								<option value="${resourceType.id}">${resourceType.name}</option>
 							</c:forEach>
@@ -71,25 +62,54 @@ $('#parentId').combotree({
 					</td>
 				</tr>
 				<tr>
-					<th>排序</th>
+					<th>是否有效</th>
 					<td>
-						<input name="seq" value="100" class="easyui-numberspinner" 
-							style="width: 140px; height: 29px;" required="required" data-options="editable:false,min:100">
+						是<input name="valid" type="radio" class="radio" value="1" checked="checked"/>
+						否<input name="valid" type="radio" class="radio" value="0"/>
 					</td>
-					<th>上级资源</th>
+					<th>上级组织</th>
 					<td>
-						<select id="parentId" name="parentId" class="select"
-							style="height: 29px;">
-						</select>
-						<img src="${pageContext.request.contextPath}/style/images/extjs_icons/cut_red.png" onclick="$('#pid').combotree('clear');" />
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly"/>
+						<input id="parentName" name="parentName" class="selectInput" readonly="readonly"/>
 					</td>
 				</tr>
+				<tr>
+					<th>主管类型</th>
+					<td>
+						职位<input name="chiefType" type="radio" class="radio" value="职位" checked="checked"/>
+						人员<input name="chiefType" type="radio" class="radio" value="人员"/>
+					</td>
+					<th>主管</th>
+					<td>
+						<input id="chiefId" name="chiefId" type="hidden" readonly="readonly"/>
+						<input id="chiefName" name="chiefName" class="selectInput" readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<th>地址</th>
+					<td colspan="3">
+						<input name="address" type="text" class="longText" value=""/>
+						
+					</td>
+				</tr>
+				<tr>
+					<th>详细地址</th>
+					<td colspan="3">
+						<input name="fullAddress" type="text" class="longText" value=""/>
+					</td>
+				</tr>
+				
+
 				<tr>
 					<th>备注</th>
-					<td colspan="3"><textarea name="remark" rows="" cols="" class="span5"></textarea></td>
+					<td colspan="3">
+						<textarea name="remark" rows="" cols="" class="longText"></textarea>
+					</td>
 				</tr>
 				<tr>
-					<td><input type="submit" value="提交"/></td>
+					<td class="rightOperRow" colspan="4" style="padding-right: 50px">
+						<a id="btn" href="#" class="easyui-linkbutton">提交</a>  	
+					</td>
 				</tr>
 			</table>
 		</form>

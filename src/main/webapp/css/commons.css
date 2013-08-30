@@ -1,5 +1,8 @@
 @charset "utf-8";
 /* 定义frame,iframe样式 */
+.body{
+	overflow-y:auto; 
+}
 frameset {
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
@@ -79,6 +82,19 @@ img {
 .textFocus{
     border-color:#66b31e;
 }
+.selectInput{
+	background: url('./images/attach.png')  no-repeat center right;
+	border: 1px solid #A0C2E5;
+    color: #44474C;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 2px;
+    vertical-align: middle;
+}
+.clearInput{
+	background: url('./images/clear.png') no-repeat center center;
+}
 .select {
     vertical-align:middle;
     width:139px;
@@ -116,20 +132,20 @@ label.selected{
     vertical-align:middle;
 }
 .form a {
-    color:#0066ff;
-    text-decoration:underline;
+    /*color:#0066ff;
+    text-decoration:underline;*/
 }
 .form table{
     /*table-layout:fixed;*/
     width:100%;
     text-overflow:ellipsis;
 }
-.form th, .form td {
+.form table th, .form table td {
     line-height:18px;
     padding:2px 3px;
     color:#333;
 }
-.form th {
+.form table th {
     background:#fafafa;
     color:#5d6973;
     text-align:left;
@@ -152,6 +168,12 @@ label.selected{
     background-color:#f2f2f2;
     border-top:none;
     text-align:center;
+}
+.form td.rightOperRow{
+    line-height:20px;
+    background-color:#f2f2f2;
+    border-top:none;
+    text-align:right;
 }
 .form td.groupRow{
     line-height:18px;

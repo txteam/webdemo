@@ -119,7 +119,7 @@ public class OrganizationServiceTest {
             
             Assert.assertTrue(count >= 0);
             
-            List<Organization> organizationList = this.organizationService.queryOrganizationList();
+            List<Organization> organizationList = this.organizationService.queryOrganizationList(null);
             
             Assert.assertNotNull(organizationList);
             

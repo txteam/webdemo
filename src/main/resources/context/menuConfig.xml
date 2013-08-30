@@ -23,7 +23,7 @@
 					authKey="post_config" target="mainTabs"></menu>
 				<menu id="operator_config" text="操作员管理" href="/operator/toQueryOperatorList.action"
 					authKey="" target="mainTabs"></menu>
-				<menu id="auth_config" text="权限管理" href="/auth/toQueryAuthList.action"
+				<menu id="auth_config" text="权限管理" href="/auth/toQueryAuthView.action"
 					authKey="auth_config" target="mainTabs"></menu>
 			</menu>
 		</menu>
