@@ -15,4 +15,16 @@
 			</auth>	
 		</auth>
 	</authType>
+	<authType key="AUTHTYPE_DATA">
+		<!-- demo的编辑权限，拥有该权限才能查询demo的列表，为增加，删除，修改的父权限 -->
+		<!-- 此处不指定类型，则默认为操作权限 -->
+		<auth key="credit_product" name="贷款产品">
+			<auth key="cre_pro_queryCurrentOrg" name="查询所属组织的贷款产品"></auth>
+			<auth key="cre_pro_queryCurrentPost" name="查询所属职位的贷款产品"></auth>
+		</auth>
+		<auth key="loan_cre" name="贷款预约产品">
+			<auth key="query_cre_loan_cur_org" name="查询所属组织的贷款预约单"></auth>
+			<auth key="query_cre_loan_cur_and_child_org" name="查询所属组织及其子级组织的贷款预约单"></auth>
+		</auth>
+	</authType>
 </auths>

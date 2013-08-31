@@ -10,6 +10,7 @@
 
 <script type="text/javascript" >
 $(document).ready(function() {
+	/*
 	$.post("${contextPath}/auth/queryAuthType2AuthItemListMap.action",
 		function(authType2AuthItemListMap){
 			if($.ObjectUtils.isEmpty(authType2AuthItemListMap)){
@@ -30,12 +31,17 @@ $(document).ready(function() {
 			});
 		}
 	);
+	*/
 
 });
 </script>
 </head>
 <body>
-<div id="authTabView" class="easyui-tabs" style="width:500px;height:250px;">  
-
+<div id="authTabView" class="easyui-tabs">
+<c:forEach items="${authTypeList}" var="authType">
+	<div title="${authType.name}" style="padding:20px;display:none;">
+		${authType.name},${authType.authType},${authType.configAble},${authType.description}
+	</div> 
+</c:forEach>
 </div> 
 </body>

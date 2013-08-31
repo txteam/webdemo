@@ -31,7 +31,6 @@
 		<auth key="base_auth" name="基础数据维护">
 			<auth key="templetTable_auth" name="模板" />
 		</auth>
-		
 		<auth key="system_menu_auth" name="系统管理">
 			<auth key="system_menu_organization_authority_auth" name="组织权限" />
 			<auth key="system_menu_employee_auth" name="职员权限" />

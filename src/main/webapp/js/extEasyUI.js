@@ -286,6 +286,7 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
 	if (opt.parentField) {
 		idFiled = opt.idFiled || 'id';
 		textFiled = opt.textFiled || 'text';
+		iconFiled = opt.iconFiled || 'iconCls';
 		parentField = opt.parentField;
 		var i, l, treeData = [], tmpMap = [];
 		for (i = 0, l = data.length; i < l; i++) {

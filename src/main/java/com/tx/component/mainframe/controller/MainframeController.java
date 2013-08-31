@@ -38,7 +38,6 @@ import com.tx.component.operator.service.OperatorService;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-//@SessionAttributes({WebContextUtils.SESSION_CURRENT_AUTHMAP,WebContextUtils.SESSION_CURRENT_OPERATOR})
 @Controller("mainframeController")
 @RequestMapping("/mainframe")
 public class MainframeController {

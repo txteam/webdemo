@@ -6,20 +6,20 @@
  */
 package com.tx.component.mainframe.controller;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.component.auth.context.AuthSessionContext;
-import com.tx.component.auth.context.AuthTypeItemContext;
 import com.tx.component.auth.model.AuthItem;
-import com.tx.component.auth.model.AuthTypeItem;
+import com.tx.component.mainframe.service.AuthManageService;
 
 /**
  * 权限显示层
@@ -34,6 +34,9 @@ import com.tx.component.auth.model.AuthTypeItem;
 @RequestMapping("/auth")
 public class AuthController {
     
+    @Resource(name = "authManageService")
+    private AuthManageService authManageService;
+    
     /**
       * 跳转到查询权限视图<br/>
       *<功能详细描述>
@@ -44,7 +47,9 @@ public class AuthController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toQueryAuthView")
-    public String toQueryAuthView() {
+    public String toQueryAuthView(ModelMap modelMap) {
+        modelMap.put("authTypeList",
+                this.authManageService.queryAuthTypeItem(true));
         return "/mainframe/queryAuthView";
     }
     
@@ -58,21 +63,18 @@ public class AuthController {
       * @see [类、类#方法、类#成员]
       */
     @ResponseBody
-    @RequestMapping("/queryAuthType2AuthItemListMap")
-    public Map<AuthTypeItem, List<AuthItem>> queryAuthType2AuthItemListMap() {
-        List<AuthItem> hasAuthItemList = AuthSessionContext.getAuthItemListDependAuthRefOfSession();
+    @RequestMapping("/queryAuthItemListMap")
+    public List<AuthItem> queryAuthType2AuthItemListMap(
+            @RequestParam("authType") String authType) {
+        MultiValueMap<String, AuthItem> authType2AuthItemListMap = this.authManageService.queryCurrentPerpetualType2AuthMultiValueMap(true);
         
-        AuthTypeItemContext authTypeContext = AuthTypeItemContext.getContext();
-        Map<String, AuthTypeItem> authTypeMapping = authTypeContext.getAllAuthTypeItemMap();
-        MultiValueMap<AuthTypeItem, AuthItem> authType2AuthItemListMap = new LinkedMultiValueMap<AuthTypeItem, AuthItem>();
-        if (CollectionUtils.isEmpty(hasAuthItemList)) {
-            return authType2AuthItemListMap;
+        List<AuthItem> resList = new ArrayList<AuthItem>();
+        if (!authType2AuthItemListMap.containsKey(authType)) {
+            return resList;
+        } else {
+            return authType2AuthItemListMap.get(authType);
         }
-        for (AuthItem authItemTemp : hasAuthItemList) {
-            authType2AuthItemListMap.add(authTypeMapping.get(authItemTemp.getAuthType()),
-                    authItemTemp);
-        }
-        return authType2AuthItemListMap;
+        
     }
     
 }
