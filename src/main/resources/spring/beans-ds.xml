@@ -71,6 +71,7 @@
 			</property>
 		</bean>
 		<alias name="demoDatasource" alias="datasource" />
+		<alias name="demoDatasource" alias="dataSource" />
 
 		<bean id="h2DataSource" class="org.apache.commons.dbcp.BasicDataSource">
 			<property name="driverClassName" value="org.h2.Driver" />
