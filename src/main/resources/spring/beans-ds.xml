@@ -13,7 +13,7 @@
 	<!-- 统一的mybatis异常转换器 -->
 	<bean id="myBatisExceptionTranslator" class="org.mybatis.spring.MyBatisExceptionTranslator">
 		<constructor-arg name="dataSource">
-			<ref bean="datasource" />
+			<ref bean="dataSource" />
 		</constructor-arg>
 		<constructor-arg name="exceptionTranslatorLazyInit"
 			value="true"></constructor-arg>
@@ -33,13 +33,14 @@
 
 	<beans profile="dev">
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-			<property name="dataSource" ref="datasource"></property>
+			<property name="dataSource" ref="dataSource"></property>
 			<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
 			<property name="typeAliasesPackage" value="com.tx.core.mybatis.handler"></property>
 			<property name="mapperLocations">
 				<array>
 					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
-					<value>classpath*:com/tx/webdemo/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/los/**/*SqlMap.xml</value>
+					<value>classpath*:com/boda/**/*SqlMap.xml</value>
 				</array>
 			</property>
 			<property name="failFast" value="true"></property>
@@ -56,8 +57,8 @@
 			</property>
 		</bean>
 
-		<bean id="demoDatasource" class="com.tx.core.datasource.DataSourceFactoryBean"
-			depends-on="webdemoDBScriptExcutor">
+		<bean id="tx.dataSource" class="com.tx.core.datasource.DataSourceFactoryBean"
+			depends-on="initDBScriptExcutor">
 			<property name="supportP6spy" value="true"></property>
 			<property name="datasourceFinderList">
 				<list>
@@ -70,10 +71,14 @@
 				</list>
 			</property>
 		</bean>
-		<alias name="demoDatasource" alias="datasource" />
-		<alias name="demoDatasource" alias="dataSource" />
+		<alias name="tx.dataSource" alias="dataSource" />
 
 		<bean id="h2DataSource" class="org.apache.commons.dbcp.BasicDataSource">
+			<!-- jdbc:h2:mem:webdemo -->
+			<!-- jdbc:h2:file:D:/h2/data/webdemo -->
+			<property name="url" value="jdbc:h2:mem:webdemo" />
+			<property name="username" value="webdemo" />
+			<property name="password" value="webdemo" />
 			<property name="driverClassName" value="org.h2.Driver" />
 			<property name="defaultAutoCommit" value="true" />
 			<property name="maxActive" value="30" />
@@ -84,21 +89,15 @@
 			<property name="validationQuery" value="SELECT 1 "></property>
 			<property name="removeAbandonedTimeout" value="180"></property>
 			<property name="logAbandoned" value="true"></property>
-			<!-- jdbc:h2:mem:webdemo -->
-			<!-- jdbc:h2:file:D:/h2/data/webdemo -->
-			<property name="url" value="jdbc:h2:mem:webdemo" />
-			<property name="username" value="webdemo" />
-			<property name="password" value="webdemo" />
 		</bean>
 		
-		<bean id="webdemoDBScriptExcutor"
+		<bean id="initDBScriptExcutor"
 			class="com.tx.core.dbscript.executor.DBScriptAutoExecutor">
 			<property name="dataSource">
 				<ref bean="h2DataSource"/>
 			</property>	
 			<property name="initScriptLocations">
 				<list>
-					<value>classpath:h2/02_tables.sql</value>
 					<value>classpath:autogenscript/H2/*.sql</value>
 					<value>classpath:h2/09_initdata.sql</value>
 				</list>
@@ -106,17 +105,16 @@
 		</bean>
 	</beans>
 	
-
-
 	<beans profile="production">
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-			<property name="dataSource" ref="datasource"></property>
+			<property name="dataSource" ref="tx.dataSource"></property>
 			<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
 			<property name="typeAliasesPackage" value="com.tx.core.mybatis.handler"></property>
 			<property name="mapperLocations">
 				<array>
 					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
-					<value>classpath*:com/tx/webdemo/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/los/**/*SqlMap.xml</value>
+					<value>classpath*:com/boda/**/*SqlMap.xml</value>
 				</array>
 			</property>
 			<property name="failFast" value="true"></property>
@@ -125,38 +123,23 @@
 					<bean
 						class="com.tx.core.mybatis.interceptor.PagedDiclectStatementHandlerInterceptor">
 						<property name="dialect">
-							<bean class="org.hibernate.dialect.MySQL5InnoDBDialect"></bean>
+							<bean class="org.hibernate.dialect.Oracle9iDialect"></bean>
 						</property>
 					</bean>
 				</array>
 			</property>
 		</bean>
 		
-		<bean id="demoDatasource" class="com.tx.core.datasource.DataSourceFactoryBean"
-			depends-on="webdemoDBScriptExcutor">
+		<bean id="tx.dataSource" class="com.tx.core.datasource.DataSourceFactoryBean">
 			<property name="supportP6spy" value="true"></property>
 			<property name="datasourceFinderList">
 				<list>
 					<bean class="com.tx.core.datasource.finder.JNDIDataSourceFinder">
-						<property name="jndiName" value="webdemo_db"></property>
+						<property name="jndiName" value="los_db"></property>
 					</bean>
 				</list>
 			</property>
 		</bean>
-		<alias name="demoDatasource" alias="datasource" />
-				
-		<bean id="webdemoDBScriptExcutor"
-			class="com.tx.core.dbscript.executor.DBScriptAutoExecutor">
-			<property name="dataSource">
-				<ref bean="demoDatasource"/>
-			</property>	
-			<property name="initScriptLocations">
-				<list>
-					<value>classpath:h2/02_tables.sql</value>
-					<value>classpath:h2/09_initdata.sql</value>
-					<value>classpath:autogenscript/H2/*.sql</value>
-				</list>
-			</property>
-		</bean>
+		<alias name="tx.dataSource" alias="dataSource" />
 	</beans>
 </beans>

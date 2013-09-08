@@ -143,11 +143,9 @@ function undo() {
  * 打开添加组织界面
  */
 function addFun() {
-	/*DialogUtils.show({
-		title:'show message title',
-		msg:'test'
-	})*/
-	//alert($.toJsonString($.validator));
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
 	DialogUtils.openModalDialog("addOrganization","添加组织","${contextPath}/organization/toAddOrganization.action",550,265);
 }
 </script>

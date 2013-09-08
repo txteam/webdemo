@@ -6,6 +6,8 @@
  */
 package com.tx.component.operator.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,8 +27,11 @@ import javax.persistence.Table;
   */
 @Entity
 @Table(name = "OPER_POST")
-public class Post {
+public class Post implements Serializable{
     
+    /** 注释内容 */
+    private static final long serialVersionUID = -2514159781332417436L;
+
     /** id */
     @Id
     private String id;

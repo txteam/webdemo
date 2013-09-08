@@ -28,8 +28,10 @@
 	      		replicateUpdates=true,
 	      		replicateRemovals=true,
 	      		replicateUpdatesViaCopy=false" />
+	     <!-- 
 	     <bootstrapCacheLoaderFactory
             class="net.sf.ehcache.distribution.jgroups.JGroupsBootstrapCacheLoaderFactory"/>
+          -->
 	</defaultCache>
 	
 </ehcache>

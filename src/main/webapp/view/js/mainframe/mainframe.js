@@ -105,8 +105,13 @@ $(function(){
         }
     });
     
-
     $mainframe.bind("addOrSelectTab", function(event, options) {
+        /*
+        DialogUtils.progress({
+            title :'提示',
+            text : '加载中，请等待....'
+        });
+        */
         var options = $.extend({}, {
             title : "",
             href : null,
@@ -117,7 +122,8 @@ $(function(){
         if ($indexTabs.tabs('exists', options.title)) {
             //TODO:后续加入，根据tab中如果存在refreshOnEverySelected属性时每次选中均刷新的逻辑<br/>
             $indexTabs.tabs('select', options.title);
-            $.messager.progress('close');
+            //如果已经存在直接关闭加载进度条
+            DialogUtils.progress('close');
             return false;
         } else if (options.href) {
             //以iframe的形式显示tab
@@ -131,7 +137,8 @@ $(function(){
                 fit : true
             });
         }
-    }); 
+    });
+
 
 });
 $.bindge("addOrSelectTab", function(event, options) {

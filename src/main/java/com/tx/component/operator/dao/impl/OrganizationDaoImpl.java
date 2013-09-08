@@ -28,7 +28,7 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("organizationDao")
+@Component("newOrganizationDao")
 public class OrganizationDaoImpl implements OrganizationDao {
     
     @Resource(name = "myBatisDaoSupport")
@@ -38,8 +38,10 @@ public class OrganizationDaoImpl implements OrganizationDao {
      * @param condition
      */
     @Override
-    public void insertOrganization(Organization condition) {
-        this.myBatisDaoSupport.insertUseUUID("organization.insertOrganization", condition, "id");
+    public void insertOrganization(Organization organization) {
+        this.myBatisDaoSupport.insertUseUUID("newOrganization.insertOrganization",
+                organization,
+                "id");
     }
     
     /**
@@ -48,7 +50,8 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public int deleteOrganization(Organization condition) {
-        return this.myBatisDaoSupport.delete("organization.deleteOrganization", condition);
+        return this.myBatisDaoSupport.delete("newOrganization.deleteOrganization",
+                condition);
     }
     
     /**
@@ -57,7 +60,8 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public Organization findOrganization(Organization condition) {
-        return this.myBatisDaoSupport.<Organization> find("organization.findOrganization", condition);
+        return this.myBatisDaoSupport.<Organization> find("newOrganization.findOrganization",
+                condition);
     }
     
     /**
@@ -66,7 +70,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public List<Organization> queryOrganizationList(Map<String, Object> params) {
-        return this.myBatisDaoSupport.<Organization> queryList("organization.queryOrganization",
+        return this.myBatisDaoSupport.<Organization> queryList("newOrganization.queryOrganization",
                 params);
     }
     
@@ -78,7 +82,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
     @Override
     public List<Organization> queryOrganizationList(Map<String, Object> params,
             List<Order> orderList) {
-        return this.myBatisDaoSupport.<Organization> queryList("organization.queryOrganization",
+        return this.myBatisDaoSupport.<Organization> queryList("newOrganization.queryOrganization",
                 params,
                 orderList);
     }
@@ -89,7 +93,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public int countOrganization(Map<String, Object> params) {
-        return this.myBatisDaoSupport.<Integer> find("organization.queryOrganizationCount",
+        return this.myBatisDaoSupport.<Integer> find("newOrganization.queryOrganizationCount",
                 params);
     }
     
@@ -100,9 +104,9 @@ public class OrganizationDaoImpl implements OrganizationDao {
      * @return
      */
     @Override
-    public PagedList<Organization> queryOrganizationPagedList(Map<String, Object> params,
-            int pageIndex, int pageSize) {
-        return this.myBatisDaoSupport.<Organization> queryPagedList("organization.queryOrganization",
+    public PagedList<Organization> queryOrganizationPagedList(
+            Map<String, Object> params, int pageIndex, int pageSize) {
+        return this.myBatisDaoSupport.<Organization> queryPagedList("newOrganization.queryOrganization",
                 params,
                 pageIndex,
                 pageSize);
@@ -116,9 +120,10 @@ public class OrganizationDaoImpl implements OrganizationDao {
      * @return
      */
     @Override
-    public PagedList<Organization> queryOrganizationPagedList(Map<String, Object> params,
-            int pageIndex, int pageSize, List<Order> orderList) {
-        return this.myBatisDaoSupport.<Organization> queryPagedList("organization.queryOrganization",
+    public PagedList<Organization> queryOrganizationPagedList(
+            Map<String, Object> params, int pageIndex, int pageSize,
+            List<Order> orderList) {
+        return this.myBatisDaoSupport.<Organization> queryPagedList("newOrganization.queryOrganization",
                 params,
                 pageIndex,
                 pageSize,
@@ -131,6 +136,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public int updateOrganization(Map<String, Object> updateRowMap) {
-        return this.myBatisDaoSupport.update("organization.updateOrganization", updateRowMap);
+        return this.myBatisDaoSupport.update("newOrganization.updateOrganization",
+                updateRowMap);
     }
 }

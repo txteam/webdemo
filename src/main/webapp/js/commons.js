@@ -1,6 +1,9 @@
 /************ 用于统一页面样式 ************** */
 $(document).ready(function() {
     //如果页面body的样式class没有special标志，则自动渲染页面
+    if(window.parent && window.parent.DiologUtils){
+        
+    }
     if($("body.special").size() < 1){
         //统一页面风格
     	//$("body").addClass("ui-widget-content");
@@ -18,6 +21,13 @@ $(document).ready(function() {
     }
 });
 
+$(document).ready(function() {
+    try{
+        if(window.parent && window.parent.DiologUtils){
+            window.parent.DiologUtils.progress('close');
+        }
+    }catch(e){}
+});
 
 /** 
  * 提供跨页面的事件广播支持
@@ -365,9 +375,11 @@ if (browser.userAgent.indexOf('MSIE') > -1) {
 	}
     jQuery.extend({
     	subString: function(oldStr,maxLength,suffix){
-    		if(oldStr.length > maxLength){
-    			oldStr = oldStr.substring(0,maxLength) + suffix;
-    		}
+    	    if(oldStr){
+    	        if(oldStr.length > maxLength){
+                    oldStr = oldStr.substring(0,maxLength) + suffix;
+                }
+    	    }
     		return oldStr;
     	},
     	toJSONString: function(object)
@@ -549,7 +561,7 @@ var GlobalDialogUtils = null;
      */
     DialogUtils.tip = function(msg,width,height){
     	var option = $.extend({},{
-    		title:'提醒',
+    		title:'提示',
     		msg: msg,
     		width:370,
     		height:150,
@@ -612,8 +624,9 @@ var GlobalDialogUtils = null;
      * close: 关闭进度条窗体. 
      */
     DialogUtils.progress = function(){
-    	return $.messager.progress.apply($.messager.progress,arguments);
+    	$.messager.progress.apply($.messager,arguments);
     };
+    
     /*
      * 默认dialogpe配置
      */
@@ -624,6 +637,14 @@ var GlobalDialogUtils = null;
     	maximizable : false,
     	resizable : false,
     	modal: false
+    	/*
+    	onOpen : function() {
+    	    DialogUtils.progress({
+    	        title : '提示',
+    	        text : '数据处理中，请等待....'
+            });
+        }
+        */
     	//toolbar : []
     	//buttons : []
     };
@@ -635,7 +656,7 @@ var GlobalDialogUtils = null;
     /*
      * 创建dialog 
      */
-    DialogUtils._createOrOpenDialog = function(dialogHandleId,$dialogHandle,config){    	
+    DialogUtils._createOrOpenDialog = function(dialogHandleId,$dialogHandle,config){
     	//生成对应
     	var option = $.extend({},DialogUtils._defaultDialogConfig, config);
     	option.width = option.width != 0 ? option.width : '400';
@@ -796,8 +817,6 @@ var GlobalDialogUtils = null;
         	});
         	return _dialog;
     	}
-    	
-
     };
 
     /**
@@ -945,9 +964,12 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
         iconFiled = opt.iconFiled || 'iconCls';
         childrenFiled = opt.children || 'children';  
         function iteratorTreeData(item){
+            if(item == null){
+                return ;
+            }
         	item['attributes'] = item;
             item['text'] = item[textFiled];
-            item['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+            item['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,item) : item[iconFiled];
             item['children'] = item[childrenFiled];
             if(!$.ObjectUtils.isEmpty(item['children'])){
                 for(i = 0,l = item['children'].length ; i < l ; i++){
@@ -1000,8 +1022,11 @@ $.fn.treegrid.defaults.loadFilter = function(data, parentId) {
         iconFiled = opt.iconFiled || 'iconCls';
         childrenFiled = opt.children || 'children';  
         function iteratorTreeData(item){
+            if(item == null){
+                return ;
+            }
             item['text'] = item[textFiled];
-            item['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+            item['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,item) : item[iconFiled];
             item['children'] = item[childrenFiled];
             if(!$.ObjectUtils.isEmpty(item['children'])){
                 for(i = 0,l = item['children'].length ; i < l ; i++){
@@ -1034,3 +1059,4 @@ $(document).ready(function(){
 		});
 	}
 });
+

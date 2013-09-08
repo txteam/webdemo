@@ -6,12 +6,14 @@
  */
 package com.tx.component.operator.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.tx.component.operator.basicdata.ChiefTypeEnum;
 import com.tx.core.tree.model.TreeAble;
 import com.tx.core.util.ObjectUtils;
 
@@ -26,8 +28,11 @@ import com.tx.core.util.ObjectUtils;
  */
 @Entity
 @Table(name = "OPER_ORGANIZATION")
-public class Organization implements TreeAble<List<Organization>, Organization> {
+public class Organization implements TreeAble<List<Organization>, Organization>,Serializable {
     
+    /** 注释内容 */
+    private static final long serialVersionUID = -6369964838562412893L;
+
     /** 主管类型：人员 */
     public static final int CHIEFTYPE_OPERATOR = 0;
     
@@ -66,13 +71,7 @@ public class Organization implements TreeAble<List<Organization>, Organization> 
     private OrganizationType type;
     
     /**省ID*/
-    private String provinceId;
-    
-    /**市里ID*/
-    private String cityId;
-    
-    /** 所属地区 */
-    private String areaId;
+    private String districtId;
     
     /** 描述 */
     private String remark;
@@ -82,7 +81,7 @@ public class Organization implements TreeAble<List<Organization>, Organization> 
      *     0: 人员
      *     1: 职位
      */
-    private int chiefType = CHIEFTYPE_OPERATOR;
+    private ChiefTypeEnum chiefType;
     
     /**
      * 与主管类型对应的主键：
@@ -90,7 +89,7 @@ public class Organization implements TreeAble<List<Organization>, Organization> 
      *     可能为职位id
      *     ....
      */
-    private int chiefId;
+    private String chiefId;
     
     /** 子级组织集合 */
     private List<Organization> childs;
@@ -206,49 +205,21 @@ public class Organization implements TreeAble<List<Organization>, Organization> 
     public void setType(OrganizationType type) {
         this.type = type;
     }
+    
+    /**
+     * @return 返回 districtId
+     */
+    public String getDistrictId() {
+        return districtId;
+    }
 
     /**
-     * @return 返回 provinceId
+     * @param 对districtId进行赋值
      */
-    public String getProvinceId() {
-        return provinceId;
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
     }
-    
-    /**
-     * @param 对provinceId进行赋值
-     */
-    public void setProvinceId(String provinceId) {
-        this.provinceId = provinceId;
-    }
-    
-    /**
-     * @return 返回 cityId
-     */
-    public String getCityId() {
-        return cityId;
-    }
-    
-    /**
-     * @param 对cityId进行赋值
-     */
-    public void setCityId(String cityId) {
-        this.cityId = cityId;
-    }
-    
-    /**
-     * @return 返回 areaId
-     */
-    public String getAreaId() {
-        return areaId;
-    }
-    
-    /**
-     * @param 对areaId进行赋值
-     */
-    public void setAreaId(String areaId) {
-        this.areaId = areaId;
-    }
-    
+
     /**
      * @return 返回 alias
      */
@@ -290,32 +261,32 @@ public class Organization implements TreeAble<List<Organization>, Organization> 
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
+    
     /**
      * @return 返回 chiefType
      */
-    public int getChiefType() {
+    public ChiefTypeEnum getChiefType() {
         return chiefType;
     }
 
     /**
      * @param 对chiefType进行赋值
      */
-    public void setChiefType(int chiefType) {
+    public void setChiefType(ChiefTypeEnum chiefType) {
         this.chiefType = chiefType;
     }
 
     /**
      * @return 返回 chiefId
      */
-    public int getChiefId() {
+    public String getChiefId() {
         return chiefId;
     }
 
     /**
      * @param 对chiefId进行赋值
      */
-    public void setChiefId(int chiefId) {
+    public void setChiefId(String chiefId) {
         this.chiefId = chiefId;
     }
 

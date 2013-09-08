@@ -30,7 +30,7 @@ import com.tx.component.mainframe.service.AuthManageService;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Controller
+@Controller("authControllerNew")
 @RequestMapping("/auth")
 public class AuthController {
     

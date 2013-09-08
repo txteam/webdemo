@@ -6,7 +6,9 @@
  */
 package com.tx.component.operator.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -28,11 +30,11 @@ import com.tx.component.operator.service.OrganizationService;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Controller("organizationController")
+@Controller("newOrganizationController")
 @RequestMapping("/organization")
 public class OrganizationController {
     
-    @Resource(name = "organizationService")
+    @Resource(name = "newOrganizationService")
     private OrganizationService organizationService;
     
     /**
@@ -91,7 +93,8 @@ public class OrganizationController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toChooseOrgnization")
-    public String toChooseOrgnization(@RequestParam(value = "eventName", required = false) String chooseEventName,
+    public String toChooseOrgnization(
+            @RequestParam(value = "eventName", required = false) String chooseEventName,
             ModelMap responseMap) {
         responseMap.put("eventName", chooseEventName);
         return "/operator/chooseOrganization";
@@ -124,12 +127,35 @@ public class OrganizationController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    @ResponseBody
     @RequestMapping("/addOrganization")
-    public boolean addOrganization(Organization organization) {
+    @ResponseBody
+    public boolean addOrganization(Organization organization, ModelMap response) {
         this.organizationService.insertOrganization(organization);
         
         return true;
+    }
+    
+    /**
+     * 跳转到添加组织结构页面
+     *<功能详细描述>
+     * @param organization [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/organizationCodeIsExist")
+    public Map<String, String> organizationCodeIsExist(
+            @RequestParam("code") String code) {
+        boolean resFlag = this.organizationService.organizationCodeIsExist(code);
+        Map<String, String> resMap = new HashMap<String, String>();
+        if (!resFlag) {
+            resMap.put("ok", "可用的组织码号");
+        } else {
+            resMap.put("error", "已经存在的组织编号");
+        }
+        return resMap;
     }
     
     /**

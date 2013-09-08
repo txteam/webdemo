@@ -43,10 +43,10 @@ import com.tx.core.exceptions.util.AssertUtils;
 @Component("authManageService")
 public class AuthManageService {
     
-    @Resource(name = "organizationService")
+    @Resource(name = "newOrganizationService")
     private OrganizationService organizationService;
     
-    @Resource(name = "postService")
+    @Resource(name = "newPostService")
     private PostService postService;
     
     @Resource(name = "operatorService")

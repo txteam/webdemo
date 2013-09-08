@@ -28,7 +28,7 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("postDao")
+@Component("newPostDao")
 public class PostDaoImpl implements PostDao {
     
     @Resource(name = "myBatisDaoSupport")
@@ -39,7 +39,7 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public void insertPost(Post condition) {
-        this.myBatisDaoSupport.insertUseUUID("post.insertPost", condition, "id");
+        this.myBatisDaoSupport.insertUseUUID("newPost.insertPost", condition, "id");
     }
     
     /**
@@ -48,7 +48,7 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public int deletePost(Post condition) {
-        return this.myBatisDaoSupport.delete("post.deletePost", condition);
+        return this.myBatisDaoSupport.delete("newPost.deletePost", condition);
     }
     
     /**
@@ -57,7 +57,7 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public Post findPost(Post condition) {
-        return this.myBatisDaoSupport.<Post> find("post.findPost", condition);
+        return this.myBatisDaoSupport.<Post> find("newPost.findPost", condition);
     }
     
     /**
@@ -66,7 +66,7 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public List<Post> queryPostList(Map<String, Object> params) {
-        return this.myBatisDaoSupport.<Post> queryList("post.queryPost",
+        return this.myBatisDaoSupport.<Post> queryList("newPost.queryPost",
                 params);
     }
     
@@ -78,7 +78,7 @@ public class PostDaoImpl implements PostDao {
     @Override
     public List<Post> queryPostList(Map<String, Object> params,
             List<Order> orderList) {
-        return this.myBatisDaoSupport.<Post> queryList("post.queryPost",
+        return this.myBatisDaoSupport.<Post> queryList("newPost.queryPost",
                 params,
                 orderList);
     }
@@ -89,7 +89,7 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public int countPost(Map<String, Object> params) {
-        return this.myBatisDaoSupport.<Integer> find("post.queryPostCount",
+        return this.myBatisDaoSupport.<Integer> find("newPost.queryPostCount",
                 params);
     }
     
@@ -102,7 +102,7 @@ public class PostDaoImpl implements PostDao {
     @Override
     public PagedList<Post> queryPostPagedList(Map<String, Object> params,
             int pageIndex, int pageSize) {
-        return this.myBatisDaoSupport.<Post> queryPagedList("post.queryPost",
+        return this.myBatisDaoSupport.<Post> queryPagedList("newPost.queryPost",
                 params,
                 pageIndex,
                 pageSize);
@@ -118,7 +118,7 @@ public class PostDaoImpl implements PostDao {
     @Override
     public PagedList<Post> queryPostPagedList(Map<String, Object> params,
             int pageIndex, int pageSize, List<Order> orderList) {
-        return this.myBatisDaoSupport.<Post> queryPagedList("post.queryPost",
+        return this.myBatisDaoSupport.<Post> queryPagedList("newPost.queryPost",
                 params,
                 pageIndex,
                 pageSize,
@@ -131,6 +131,6 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public int updatePost(Map<String, Object> updateRowMap) {
-        return this.myBatisDaoSupport.update("post.updatePost", updateRowMap);
+        return this.myBatisDaoSupport.update("newPost.updatePost", updateRowMap);
     }
 }

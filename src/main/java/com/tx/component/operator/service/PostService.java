@@ -31,7 +31,7 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("postService")
+@Component("newPostService")
 public class PostService {
     
     @SuppressWarnings("unused")
@@ -41,7 +41,7 @@ public class PostService {
     //@Resource(name = "serviceLogger")
     private Logger serviceLogger;
     
-    @Resource(name = "postDao")
+    @Resource(name = "newPostDao")
     private PostDao postDao;
     
     /**

@@ -57,6 +57,7 @@
 				</array>
 			</property>
 		</bean>
+		<bean class="com.tx.core.springmvc.interceptor.ExceptionLoggerInterceptor"></bean>
 		<!-- 向request写入contextPath常量 -->
 		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
 		<!-- 加入权限容器支持 -->
@@ -113,6 +114,7 @@
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
 		<property name="interceptors">
 			<list>
+				<bean class="com.tx.core.springmvc.interceptor.ExceptionLoggerInterceptor"></bean>
 				<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
 				<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"/>
 			</list>
@@ -152,7 +154,7 @@
 
 	<!-- 异常处理 -->
 	<bean id="exceptionResolver"
-		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		class="com.tx.core.springmvc.exceptionresolver.SimpleHandlerExceptionResolver">
 		<property name="defaultErrorView">
 			<value>errorPages/error</value>
 		</property>

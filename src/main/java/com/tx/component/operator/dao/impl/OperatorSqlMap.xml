@@ -16,32 +16,32 @@
 		parameterType="com.tx.component.operator.model.Operator"
 		resultMap="operatorMap">
 		SELECT 
-				TO.ID,
-				TO.MAINPOSTID AS mainPost_id,
-				TO.VALID,
-				TO.PWDERRCOUNT,
-				TO.HISTORYPWD,
-				TO.INVALIDDATE,
-				TO.PASSWORD,
-				TO.LASTUPDATEDATE,
-				TO.ORGANIZATIONID AS organization_id,
-				TO.PWDUPDATEDATE,
-				TO.USERNAME,
-				TO.LOCKED,
-				TO.CREATEDATE,
-				TO.EXAMINEPWD,
-				TO.LOGINNAME
-		  FROM OPER_OPERATOR TO
+				TO_.ID,
+				TO_.MAINPOSTID AS mainPost_id,
+				TO_.VALID,
+				TO_.PWDERRCOUNT,
+				TO_.HISTORYPWD,
+				TO_.INVALIDDATE,
+				TO_.PASSWORD,
+				TO_.LASTUPDATEDATE,
+				TO_.ORGANIZATIONID AS organization_id,
+				TO_.PWDUPDATEDATE,
+				TO_.USERNAME,
+				TO_.LOCKED,
+				TO_.CREATEDATE,
+				TO_.EXAMINEPWD,
+				TO_.LOGINNAME
+		  FROM OPER_OPERATOR TO_
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            AND TO.ID = #{id}
+	            AND TO_.ID = #{id}
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
-	            AND TO.LOGINNAME = #{loginName}
+	            AND TO_.LOGINNAME = #{loginName}
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
-	            AND TO.PASSWORD = #{password}
+	            AND TO_.PASSWORD = #{password}
 	        </if>
 		</trim>
 	</select>
@@ -51,71 +51,71 @@
 		parameterType="java.util.Map"
 		resultMap="operatorMap">
 		SELECT 
-				TO.ID,
-				TO.MAINPOSTID AS mainPost_id,
-				TO.VALID,
-				TO.PWDERRCOUNT,
-				TO.HISTORYPWD,
-				TO.INVALIDDATE,
-				TO.PASSWORD,
-				TO.LASTUPDATEDATE,
-				TO.ORGANIZATIONID AS organization_id,
-				TO.PWDUPDATEDATE,
-				TO.USERNAME,
-				TO.LOCKED,
-				TO.CREATEDATE,
-				TO.EXAMINEPWD,
-				TO.LOGINNAME
-		  FROM OPER_OPERATOR TO
+				TO_.ID,
+				TO_.MAINPOSTID AS mainPost_id,
+				TO_.VALID,
+				TO_.PWDERRCOUNT,
+				TO_.HISTORYPWD,
+				TO_.INVALIDDATE,
+				TO_.PASSWORD,
+				TO_.LASTUPDATEDATE,
+				TO_.ORGANIZATIONID AS organization_id,
+				TO_.PWDUPDATEDATE,
+				TO_.USERNAME,
+				TO_.LOCKED,
+				TO_.CREATEDATE,
+				TO_.EXAMINEPWD,
+				TO_.LOGINNAME
+		  FROM OPER_OPERATOR TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            AND TO.ID = #{id,javaType=java.lang.String}
+	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
 			<if test="mainPost != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
-		            AND TO.MAINPOSTID = #{mainPost.id,javaType=java.lang.String}
+		            AND TO_.MAINPOSTID = #{mainPost.id,javaType=java.lang.String}
 		        </if>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            AND TO.VALID = #{valid,javaType=boolean}
+	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
-	            AND TO.PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer}
+	            AND TO_.PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(historyPwd)">  
-	            AND TO.HISTORYPWD = #{historyPwd,javaType=java.lang.String}
+	            AND TO_.HISTORYPWD = #{historyPwd,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(invalidDate)">  
-	            AND TO.INVALIDDATE = #{invalidDate,javaType=java.util.Date}
+	            AND TO_.INVALIDDATE = #{invalidDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
-	            AND TO.PASSWORD = #{password,javaType=java.lang.String}
+	            AND TO_.PASSWORD = #{password,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
-	            AND TO.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
+	            AND TO_.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
 	        </if>
 			<if test="organization != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            AND TO.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
+		            AND TO_.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
 		        </if>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdUpdateDate)">  
-	            AND TO.PWDUPDATEDATE = #{pwdUpdateDate,javaType=java.util.Date}
+	            AND TO_.PWDUPDATEDATE = #{pwdUpdateDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
-	            AND TO.USERNAME = #{userName,javaType=java.lang.String}
+	            AND TO_.USERNAME = #{userName,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
-	            AND TO.LOCKED = #{locked,javaType=boolean}
+	            AND TO_.LOCKED = #{locked,javaType=boolean}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
-	            AND TO.CREATEDATE = #{createDate,javaType=java.util.Date}
+	            AND TO_.CREATEDATE = #{createDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
-	            AND TO.EXAMINEPWD = #{examinePwd,javaType=java.lang.String}
+	            AND TO_.EXAMINEPWD = #{examinePwd,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
-	            AND TO.LOGINNAME = #{loginName,javaType=java.lang.String}
+	            AND TO_.LOGINNAME = #{loginName,javaType=java.lang.String}
 	        </if>
 		</trim>
 		<choose>  
@@ -133,56 +133,56 @@
 		parameterType="java.util.Map"
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
-		  FROM OPER_OPERATOR TO
+		  FROM OPER_OPERATOR TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            AND TO.ID = #{id,javaType=java.lang.String}
+	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
 			<if test="mainPost != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
-		            AND TO.MAINPOSTID = #{mainPost.id,javaType=java.lang.String}
+		            AND TO_.MAINPOSTID = #{mainPost.id,javaType=java.lang.String}
 		        </if>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            AND TO.VALID = #{valid,javaType=boolean}
+	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
-	            AND TO.PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer}
+	            AND TO_.PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(historyPwd)">  
-	            AND TO.HISTORYPWD = #{historyPwd,javaType=java.lang.String}
+	            AND TO_.HISTORYPWD = #{historyPwd,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(invalidDate)">  
-	            AND TO.INVALIDDATE = #{invalidDate,javaType=java.util.Date}
+	            AND TO_.INVALIDDATE = #{invalidDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
-	            AND TO.PASSWORD = #{password,javaType=java.lang.String}
+	            AND TO_.PASSWORD = #{password,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
-	            AND TO.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
+	            AND TO_.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
 	        </if>
 			<if test="organization != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            AND TO.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
+		            AND TO_.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
 		        </if>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdUpdateDate)">  
-	            AND TO.PWDUPDATEDATE = #{pwdUpdateDate,javaType=java.util.Date}
+	            AND TO_.PWDUPDATEDATE = #{pwdUpdateDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
-	            AND TO.USERNAME = #{userName,javaType=java.lang.String}
+	            AND TO_.USERNAME = #{userName,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
-	            AND TO.LOCKED = #{locked,javaType=boolean}
+	            AND TO_.LOCKED = #{locked,javaType=boolean}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
-	            AND TO.CREATEDATE = #{createDate,javaType=java.util.Date}
+	            AND TO_.CREATEDATE = #{createDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
-	            AND TO.EXAMINEPWD = #{examinePwd,javaType=java.lang.String}
+	            AND TO_.EXAMINEPWD = #{examinePwd,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
-	            AND TO.LOGINNAME = #{loginName,javaType=java.lang.String}
+	            AND TO_.LOGINNAME = #{loginName,javaType=java.lang.String}
 	        </if>
 		</trim>
 	</select>
@@ -241,10 +241,10 @@
 	<!-- auto generate default delete -->
 	<delete id="deleteOperator" 
 		parameterType="com.tx.component.operator.model.Operator">
-		DELETE FROM OPER_OPERATOR TO WHERE
+		DELETE FROM OPER_OPERATOR TO_ WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            AND TO.ID = #{id}
+	            AND TO_.ID = #{id}
 	        </if>
 		</trim>
 	</delete>
@@ -252,7 +252,7 @@
 	<!-- auto generate default update -->
 	<update id="updateOperator"
 	    parameterType="java.util.Map">  
-	    UPDATE OPER_OPERATOR TO
+	    UPDATE OPER_OPERATOR TO_
 	    <trim prefix="SET" suffixOverrides=",">
 			<if test="_parameter.containsKey('mainPost')">
 				<if test="mainPost != null">
@@ -307,7 +307,7 @@
 	    		LOGINNAME = #{loginName,javaType=java.lang.String},
 	    	</if>	
 	    </trim>
-	    WHERE TO.ID = #{id} 
+	    WHERE TO_.ID = #{id} 
 	</update>  
 
 </mapper>

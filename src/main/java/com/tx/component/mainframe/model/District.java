@@ -6,6 +6,7 @@
  */
 package com.tx.component.mainframe.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -27,8 +28,11 @@ import com.tx.core.tree.model.TreeAble;
   */
 @Entity
 @Table(name = "BASIC_DISTRICT")
-public class District implements TreeAble<List<District>, District>{
+public class District implements TreeAble<List<District>, District>,Serializable{
     
+    /** 注释内容 */
+    private static final long serialVersionUID = -3959052246810066341L;
+
     /** 区域编码  */
     @Id
     private String id;

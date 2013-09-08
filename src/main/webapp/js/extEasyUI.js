@@ -142,7 +142,7 @@ var createGridHeaderContextMenu = function(e, field) {
 		top : e.pageY
 	});
 };
-$.fn.datagrid.defaults.onHeaderContextMenu = createGridHeaderContextMenu;
+//$.fn.datagrid.defaults.onHeaderContextMenu = createGridHeaderContextMenu;
 $.fn.treegrid.defaults.onHeaderContextMenu = createGridHeaderContextMenu;
 
 /**

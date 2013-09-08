@@ -28,11 +28,11 @@ import com.tx.component.operator.service.PostService;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-@Controller
+@Controller("newPostController")
 @RequestMapping("/post")
 public class PostController {
     
-    @Resource(name = "postService")
+    @Resource(name = "newPostService")
     private PostService postService;
     
     /**

@@ -397,5 +397,15 @@ public class DefaultMenuItem implements MenuItem {
         }
         return this.getId().hashCode();
     }
+
+    /**
+     * @return
+     * @throws CloneNotSupportedException
+     */
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+    
     
 }

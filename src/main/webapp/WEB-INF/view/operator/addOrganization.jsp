@@ -10,6 +10,8 @@
 
 <script type="text/javascript" >
 $(document).ready(function(){
+	parent.DialogUtils.progress('close');
+	
 	$("#parentName").chooseOrganization({
 		eventName : "chooseOrganizationForAddOrganization",
 		contextPath : _contextPath,
@@ -19,8 +21,25 @@ $(document).ready(function(){
 		handler : function(organization){
 			$("#parentName").val(organization.name);
 			$("#parentId").val(organization.id);
-		},
-		
+		}
+	});
+	
+	$('#organizationForm').on('valid.form', function(e, $form){
+		$('#organizationForm').ajaxSubmit({
+		    url:"${contextPath}/organization/addOrganization", 
+		    type:"POST",
+		    success: function(data) { 
+				if(data){
+					parent.DialogUtils.tip("新增组织成功");
+					parent.DialogUtils.closeDialogById("addOrganization");
+				}
+		    } 
+		});
+		return false;
+	});
+    //提交
+	$("#addBtn").click(function(){
+		$('#organizationForm').submit();
 	});
 });
 </script>
@@ -28,7 +47,7 @@ $(document).ready(function(){
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form id="form" method="post" class="form">
+		<form id="organizationForm" method="post" class="form">
 			<table>
 				<tr>
 					<th class="narrow">名称:<span class="tRed">*</span></th>
@@ -46,7 +65,7 @@ $(document).ready(function(){
 					<th class="narrow">编号<span class="tRed">*</span></th>
 					<td>
 						<input name="code" type="text" value="" class="text"
-							data-rule="编号:required;" data-tip="不能重复">
+							data-rule="编号:required;remote[get:${contextPath }/organization/organizationCodeIsExist.action, code]" data-tip="不能重复">
 					</td>
 					<th class="narrow">组织类型:</th>
 					<td>
@@ -86,20 +105,18 @@ $(document).ready(function(){
 					</td>
 				</tr>
 				<tr>
+					<th>所属区域</th>
+					<td colspan="3">
+						<input name="fullAddress" type="text" class="longText" value=""/>
+					</td>
+				</tr>
+				<tr>
 					<th>地址</th>
 					<td colspan="3">
 						<input name="address" type="text" class="longText" value=""/>
 						
 					</td>
 				</tr>
-				<tr>
-					<th>详细地址</th>
-					<td colspan="3">
-						<input name="fullAddress" type="text" class="longText" value=""/>
-					</td>
-				</tr>
-				
-
 				<tr>
 					<th>备注</th>
 					<td colspan="3">
@@ -108,7 +125,7 @@ $(document).ready(function(){
 				</tr>
 				<tr>
 					<td class="rightOperRow" colspan="4" style="padding-right: 50px">
-						<a id="btn" href="#" class="easyui-linkbutton">提交</a>  	
+						<a id="addBtn" href="#" class="easyui-linkbutton">提交</a>  	
 					</td>
 				</tr>
 			</table>

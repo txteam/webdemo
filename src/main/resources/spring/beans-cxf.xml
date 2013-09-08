@@ -13,13 +13,5 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />  
     <!--  import resource="classpath:META-INF/cxf/cxf-extension-xml.xml" / -->  
     <!--  import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/ -->
-    
-    <jaxws:server id="HelloWorldService"
-		serviceClass="com.tx.webdemo.demo.wsservice.HelloWorldService"
-		address="/HelloWorldService">
-		<jaxws:serviceBean>
-			<ref bean="helloWorld" />
-		</jaxws:serviceBean>
-	</jaxws:server> 
   
 </beans>  

@@ -20,7 +20,7 @@ import com.tx.core.tree.model.TreeAble;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface MenuItem extends TreeAble<List<MenuItem>, MenuItem> {
+public interface MenuItem extends TreeAble<List<MenuItem>, MenuItem>,Cloneable {
     
     /** 主菜单 */
     public static final String TYPE_MAIN_MENU = "MAINMENU";
@@ -157,4 +157,16 @@ public interface MenuItem extends TreeAble<List<MenuItem>, MenuItem> {
       * @see [类、类#方法、类#成员]
      */
     public String getParam();
+    
+    /**
+      * 拷贝复制菜单项
+      *<功能详细描述>
+      * @return
+      * @throws CloneNotSupportedException [参数说明]
+      * 
+      * @return Object [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public Object clone() throws CloneNotSupportedException;
 }

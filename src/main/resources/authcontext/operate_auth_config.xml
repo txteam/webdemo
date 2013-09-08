@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 操作权限 -->
 <auths>
-	<!-- 操作权限 -->
 	<authType key="AUTHTYPE_OPERATE" name="操作权限">
-		<!-- 菜单系统配置权限 -->
+	
 		<auth key="system_config_manange" name="系统配置">
 			<auth key="auth_config_manage" name="配置权限">
 				<auth key="auth2operator_config_manage" name="配置人员权限">
@@ -37,5 +37,7 @@
 			<auth key="system_menu_post_auth" name="职位权限" />
 			<auth key="system_menu_logout_auth" name="退出" />
 		</auth>
+		
+		
 	</authType>
 </auths>

@@ -2,8 +2,12 @@
 <!DOCTYPE mapper 
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="post">
-
+<mapper namespace="newPost">
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" 
+		eviction="LRU"
+		readOnly="false" 
+		size="100" />
+				
 	<!-- auto generate default resultMap -->
 	<resultMap id="postMap" 
 		type="com.tx.component.operator.model.Post">

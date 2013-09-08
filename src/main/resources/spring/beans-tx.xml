@@ -8,23 +8,19 @@
     	http://www.springframework.org/schema/tx 
     	http://www.springframework.org/schema/tx/spring-tx.xsd">
     	
-    <bean id="demo.TransactionManager" 
+    <bean id="tx.TransactionManager" 
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
-	     <property name="dataSource" ref="datasource"/>
+	     <property name="dataSource">
+	     	<ref bean="dataSource"/>
+	     </property>
 	</bean>
-	<alias alias="transactionManager" name="demo.TransactionManager" />
+	<alias alias="transactionManager" name="tx.TransactionManager" />
     
-    <bean id="demo.TransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
-        <property name="transactionManager" ref="demo.TransactionManager" />
+    <bean id="tx.TransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager" />
     </bean>
-	<alias alias="transactionTemplate" name="demo.TransactionTemplate" />
+	<alias alias="transactionTemplate" name="tx.TransactionTemplate" />
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
-    
-    <!-- if there multi trans
-    <bean id="transactionManager2" class="org.springframework.jdbc.DataSourceTransactionManager">
-    <qualifier value="account"/>
-    </bean>
-    //-->
 
 </beans>

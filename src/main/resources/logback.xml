@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="600 seconds">
+<configuration scan="true" scanPeriod="5 seconds">
 
 	<property name="contentName" value="webdemo" />
 	<property name="commonPattern" value=" [%thread] %-5level %logger{100} - %msg%n" />
@@ -11,7 +11,7 @@
 
 	<contextName>${contentName}</contextName>
 
-	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- encoder 默认配置为PatternLayoutEncoder -->
 		<encoder>
 			<pattern>${date}${commonPattern}</pattern>
@@ -39,7 +39,7 @@
 	    <file>${logfile}.sql.log</file>  
 	    <append>false</append>  
 	    <encoder>  
-	      <pattern>${date}: ${commonPattern}</pattern>  
+	      <pattern>${commonPattern}</pattern>  
 	    </encoder>  
 	</appender>
 	
@@ -47,7 +47,7 @@
 	    <file>${logfile}.spy.sql.log</file>  
 	    <append>false</append>  
 	    <encoder>  
-	      <pattern>${date}: ${onlyMessagePattern}</pattern>  
+	      <pattern>${onlyMessagePattern}</pattern>  
 	    </encoder>  
 	</appender>
 	
@@ -64,6 +64,10 @@
 	<logger name="org.springframework" level="ERROR" />
 	<!-- springMVC答应日志级别 -->
 	<logger name="org.springframework.web" level="ERROR" />
+	<logger name="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" level="ERROR"></logger>
+	
+	<logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="DEBUG"></logger>
+	<logger name="org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver" level="DEBUG"></logger>
 	<!-- cxf日志级别 -->
 	<logger name="org.apache.cxf" level="ERROR" />
 	<!-- ehcache日志级别 -->
@@ -75,18 +79,15 @@
 	<logger name="java.sql" level="ERROR">
 		<appender-ref ref="sql_file"/>
 	</logger>
-	<logger name="com.tx.core.log.p6spy" level="DEBUG">
-		<appender-ref ref="spy_sql_file"/>
-	</logger>
 	<logger name="org.apache.cxf.interceptor" level="DEBUG">
 		<appender-ref ref="cxf_log_file"/>
 	</logger>
-	<logger name="org.springframework.web.servlet.handler" level="DEBUG"></logger>
-	
-	
+	<logger name="com.tx.core.log.p6spy.P6SpyLogbackLogger" level="INFO">
+		<appender-ref ref="spy_sql_file"/>
+	</logger>
 
 	<root level="INFO">
-		<appender-ref ref="stdout" />
 		<appender-ref ref="log_file" />
+		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>
