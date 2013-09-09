@@ -25,6 +25,7 @@ $(document).ready(function(){
 		}
 	});
 	//验证器
+	/*
 	$('#organizationForm').validator({
 	    valid: function(){
 	        //表单验证通过，提交表单到服务器
@@ -40,7 +41,19 @@ $(document).ready(function(){
 			return false;
 	    }
 	});
-	
+	*/
+	$('#organizationForm').validator({valid: function(){return false;}}).on('valid.form', function(){
+	    //ajax提交
+		$(this).ajaxSubmit({
+		    url:"${contextPath}/organization/updateOrganization.action",
+		    success: function(data) {
+				if(data){
+					parent.DialogUtils.tip("更新组织成功");
+					parent.DialogUtils.closeDialogById("updateOrganization");
+				}
+		    } 
+		});
+	});
     //提交
 	$("#addBtn").click(function(){
 		$('#organizationForm').submit();

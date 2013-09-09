@@ -8,17 +8,20 @@ package com.tx.component.operator.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +29,11 @@ import com.tx.component.operator.dao.OrganizationDao;
 import com.tx.component.operator.model.Organization;
 import com.tx.core.TxConstants;
 import com.tx.core.exceptions.util.AssertUtils;
-import com.tx.core.paged.model.PagedList;
 
 /**
- * Organization的业务层
+ * Organization的业务层<br/>
+ *      queryOrganization为根据条件查询<br/>
+ *      queryChildOrganization为迭代查询<br/>
  * <功能详细描述>
  * 
  * @author  
@@ -38,7 +42,8 @@ import com.tx.core.paged.model.PagedList;
  * @since  [产品/模块版本]
  */
 @Component("newOrganizationService")
-public class OrganizationService {
+public class OrganizationService implements InitializingBean,
+        ApplicationContextAware, RelateOrganization {
     
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(OrganizationService.class);
@@ -49,6 +54,79 @@ public class OrganizationService {
     
     @Resource(name = "newOrganizationDao")
     private OrganizationDao organizationDao;
+    
+    private ApplicationContext applicationContext;
+    
+    private List<RelateOrganization> relateOrganizationList = new ArrayList<RelateOrganization>();
+    
+    /**
+     * @param applicationContext
+     * @throws BeansException
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext)
+            throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+    
+    /**
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Map<String, RelateOrganization> reMap = this.applicationContext.getBeansOfType(RelateOrganization.class);
+        if (!MapUtils.isEmpty(reMap)) {
+            relateOrganizationList.addAll(reMap.values());
+        }
+    }
+    
+    /**
+     * @return
+     */
+    @Override
+    public String organizationReferenceName() {
+        return "其他组织";
+    }
+    
+    /**
+     * @param organizationId
+     * @return
+     */
+    @Override
+    public boolean isReferenceOrganization(String organizationId) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("organizationId", organizationId);
+        
+        int counts = this.organizationDao.countOrganization(params);
+        boolean isBeReferenced = counts > 0;
+        return isBeReferenced;
+    }
+    
+    /** 
+     * 生成组织全名
+     *<功能详细描述>
+     * @param organization [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private String generateOrganizationFullName(String parentId,
+            String organizationName) {
+        StringBuilder sb = new StringBuilder(TxConstants.INITIAL_STR_LENGTH);
+        sb.append(organizationName);
+        
+        //利用该集合避免循环引用以及自引用的情况，保证循环跳出
+        if (!StringUtils.isEmpty(parentId)) {
+            Organization parent = findOrganizationById(parentId);
+            if (parent != null) {
+                sb.insert(0, "_");
+                sb.insert(0, parent.getFullName());
+            }
+        }
+        String newFullName = sb.toString();
+        return newFullName;
+    }
     
     /**
       * 将organization实例插入数据库中保存
@@ -71,59 +149,11 @@ public class OrganizationService {
                 "organization.code is null");
         
         //生成组织全名
-        generateOrganizationFullName(organization);
+        organization.setFullName(generateOrganizationFullName(organization.getParentId(),
+                organization.getName()));
         
+        //插入组织实体
         this.organizationDao.insertOrganization(organization);
-    }
-    
-    /** 
-     * 生成组织全名
-     *<功能详细描述>
-     * @param organization [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    private void generateOrganizationFullName(Organization organization) {
-        StringBuilder sb = new StringBuilder(TxConstants.INITIAL_STR_LENGTH);
-        sb.append(organization.getName());
-        
-        //利用该集合避免循环引用以及自引用的情况，保证循环跳出
-        Set<String> parentIdSet = new HashSet<String>();
-        
-        Organization parent = organization;
-        while (!StringUtils.isEmpty(parent.getParentId())
-                && !parentIdSet.contains(parent.getParentId())) {
-            parent = findOrganizationById(parent.getParentId());
-            if (parent != null) {
-                sb.insert(0, "_");
-                sb.insert(0, parent.getName());
-                parentIdSet.add(parent.getId());
-            }
-        }
-        organization.setFullName(sb.toString());
-    }
-    
-    /**
-     * 根据id删除organization实例
-     * 1、如果入参数为空，则抛出异常
-     * 2、执行删除后，将返回数据库中被影响的条数
-     * @param id
-     * @return 返回删除的数据条数，<br/>
-     * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
-     * 这里讲通用生成的业务层代码定义为返回影响的条数
-     * @return int [返回类型说明]
-     * @exception throws 
-     * @see [类、类#方法、类#成员]
-    */
-    @Transactional
-    public int deleteById(String id) {
-        AssertUtils.notEmpty(id, "id is empty.");
-        
-        Organization condition = new Organization();
-        condition.setId(id);
-        return this.organizationDao.deleteOrganization(condition);
     }
     
     /**
@@ -156,7 +186,8 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public boolean organizationCodeIsExist(String code,String excludeOrganizationId) {
+    public boolean organizationCodeIsExist(String code,
+            String excludeOrganizationId) {
         AssertUtils.notEmpty(code, "code is empty.");
         
         Map<String, Object> countCondition = new HashMap<String, Object>();
@@ -198,6 +229,29 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryOrganizationList(String parentOrganizationId) {
+        //生成查询条件
+        List<Organization> resList = null;
+        if (StringUtils.isEmpty(parentOrganizationId)) {
+            resList = this.organizationDao.queryOrganizationList(null);
+        } else {
+            resList = queryChildOrganizationListByParentId(parentOrganizationId);
+        }
+        
+        return resList;
+    }
+    
+    /**
+      * 根据父级id查询组织列表
+      *<功能详细描述>
+      * @param parentOrganizationId
+      * @return [参数说明]
+      * 
+      * @return List<Organization> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<Organization> queryOrganizationListByParentId(
+            String parentOrganizationId) {
         //生成查询条件
         List<Organization> resList = null;
         if (StringUtils.isEmpty(parentOrganizationId)) {
@@ -272,51 +326,29 @@ public class OrganizationService {
     }
     
     /**
-     * 分页查询Organization实体列表
-     * TODO:补充说明
-     * 
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<Organization> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public PagedList<Organization> queryOrganizationPagedList(
-    /*TODO:自己定义条件*/int pageIndex, int pageSize) {
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<Organization> resPagedList = this.organizationDao.queryOrganizationPagedList(params,
-                pageIndex,
-                pageSize);
-        
-        return resPagedList;
-    }
-    
-    /**
-      * 查询organization列表总条数
-      * TODO:补充说明
-      * <功能详细描述>
-      * @return [参数说明]
+      *<功能简述>
+      *<功能详细描述>
+      * @param organizationId
+      * @param name [参数说明]
       * 
-      * @return int [返回类型说明]
+      * @return void [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public int countOrganization(/*TODO:自己定义条件*/) {
-        //TODO:判断条件合法性
+    @SuppressWarnings("unused")
+    private void iteratorUpdateChildOrganization(
+            List<Organization> childOrganizationList, String newParentId,
+            String newParentFullName) {
+        if (CollectionUtils.isEmpty(childOrganizationList)) {
+            return;
+        }
         
-        //TODO:生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.organizationDao.countOrganization(params);
-        
-        return res;
+        for (Organization orgTemp : childOrganizationList) {
+            Map<String, Object> updateOrgTempParams = new HashMap<String, Object>();
+            //generateOrganizationFullName(organization);
+            //updateOrgTempParams.put("id", orgTemp.getId());
+            //updateOrgTempParams.put(key, value)
+        }
     }
     
     /**
@@ -339,14 +371,11 @@ public class OrganizationService {
         AssertUtils.notEmpty(organization.getCode(),
                 "organization.code is empty.");
         
-        generateOrganizationFullName(organization);
-        
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", organization.getId());
         
         //需要更新的字段
-        updateRowMap.put("valid", organization.isValid());
         updateRowMap.put("fullAddress", organization.getFullAddress());
         updateRowMap.put("alias", organization.getAlias());
         updateRowMap.put("remark", organization.getRemark());
@@ -355,7 +384,9 @@ public class OrganizationService {
         updateRowMap.put("parentId", organization.getParentId());
         updateRowMap.put("address", organization.getAddress());
         updateRowMap.put("name", organization.getName());
-        updateRowMap.put("fullName", organization.getFullName());
+        updateRowMap.put("fullName",
+                generateOrganizationFullName(organization.getParentId(),
+                        organization.getName()));
         updateRowMap.put("chiefType", organization.getChiefType());
         updateRowMap.put("chiefId", organization.getChiefId());
         
@@ -363,5 +394,76 @@ public class OrganizationService {
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
+    }
+    
+    /**
+     * 根据id删除organization实例
+     *      1、如果入参数为空，则抛出异常
+     *      2、执行删除后，将返回数据库中被影响的条数
+     *      3、考虑如果是级联删除，影响较大，可能一个误操作引起不必要的错误，
+     *             而且与组织关联的对象可能很多，组织一旦被启用后，删除后对原系统冲击过大
+     *             在未建外键关联的情况下，不允许轻易删除组织
+     *      4、采取方案为删除对应组织后，下级组织自动上移一级
+     *      5、并且先上移以后再进行删除
+     *      开发阶段暂不考虑提供组织的删除功能
+     * @param id
+     * @return 返回删除的数据条数，<br/>
+     * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
+     * 这里讲通用生成的业务层代码定义为返回影响的条数
+     * @return int [返回类型说明]
+     * @exception throws 
+     * @see [类、类#方法、类#成员]
+    */
+    @Transactional
+    public int deleteById(String id) {
+        AssertUtils.notEmpty(id, "id is empty.");
+        
+        //如果对应
+        if (isBeReferenced(id)) {
+            //throw new NotAllowedOperateException("对应组织被引用不允许被删除");
+        }
+        
+        Organization condition = new Organization();
+        condition.setId(id);
+        return this.organizationDao.deleteOrganization(condition);
+    }
+    
+    /**
+      * 对应组织是否被引用<br/>
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private boolean isBeReferenced(String organizationId) {
+        for (RelateOrganization roTemp : this.relateOrganizationList) {
+            if (roTemp.isReferenceOrganization(organizationId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+      * 获取存在的引用名称<br/>
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return List<String> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private List<String> getReferenceOrganizationNames(String organizationId) {
+        List<String> resList = new ArrayList<String>();
+        for (RelateOrganization roTemp : this.relateOrganizationList) {
+            if (roTemp.isReferenceOrganization(organizationId)) {
+                resList.add(roTemp.organizationReferenceName());
+            }
+        }
+        return resList;
     }
 }

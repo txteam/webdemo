@@ -10,7 +10,21 @@
 
 <script type="text/javascript" >
 var treeGrid = null;
+var orgTree = null;
 $(document).ready(function() {
+	orgTree = $('#organizationTree').tree({
+		url : '${contextPath}/organization/queryOrganizationList.action',
+		idFiled : 'id',
+		parentField : 'parentId',
+		textFiled : 'name',
+		fit : true,
+		fitColumns : true,
+		border : false,
+		onClick : function(node){
+			$.triggerge("choose_organization_" + "${eventName}",[node['attributes']]);
+		}
+	});
+	
 	treeGrid = $('#treeGrid').treegrid({
 		url : '${contextPath}/post/queryPostList.action',
 		idField : 'id',
@@ -20,44 +34,29 @@ $(document).ready(function() {
 		fitColumns : true,
 		border : false,
 		frozenColumns : [ [ {
-			title : '组织id',
+			title : '职位id',
 			field : 'id',
 			width : 150,
 			hidden : true
 		},{
 			field : 'parentId',
-			title : '上级组织ID',
+			title : '上级职位ID',
 			width : 150,
 			hidden : true
-		}] ],
-		columns : [ [ {
+		},{
 			field : 'name',
-			title : '组织名称',
+			title : '职位名称',
 			width : 200
 		}, {
 			field : 'code',
-			title : '组织编号',
+			title : '职位编号',
 			width : 230
-		}, {
+		}] ],
+		columns : [ [ {
 			field : 'fullName',
 			title : '组织全称',
 			width : 150
-		}, {
-			field : 'alias',
-			title : '组织别名',
-			width : 80,
-			hidden : true
-		}, {
-			field : 'address',
-			title : '地址',
-			width : 40,
-			hidden : true
-		}, {
-			field : 'fullAddress',
-			title : '详细地址',
-			width : 80,
-			hidden : true
-		}, {
+		},{
 			field : 'action',
 			title : '操作',
 			width : 50,
@@ -112,32 +111,38 @@ function undo() {
 }
 </script>
 </head>
-<body>
-	<div class="easyui-layout" data-options="fit:true,border:false">
-		<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-			<table id="treeGrid" style="width:fit;height:fit"></table>
-		</div>
-	</div>
-	
-	<div id="toolbar" style="display: none;">
-		<c:if test="${false}">
-			<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
-		</c:if>
-		<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
-		<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
-		<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" 
-			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
-	</div>
-
-	<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
-		<c:if test="${true}">
-			<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
-		</c:if>
-		<c:if test="${true}">
-			<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
-		</c:if>
-		<c:if test="${true}">
-			<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
-		</c:if>
-	</div>
+<body class="easyui-layout">
+		<div data-options="region:'west',title:'组织结构',split:true" style="width:230px;">
+			<ul id="organizationTree"></ul>
+		</div> 
+		<div data-options="region:'center'" style="padding:5px;background:#eee;">
+			<div class="easyui-layout" data-options="fit:true,border:false">
+				<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+					<table id="treeGrid" style="width:fit;height:fit"></table>
+				</div>
+			</div>
+			
+			<div id="toolbar" style="display: none;">
+				<c:if test="${false}">
+					<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
+				</c:if>
+				<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
+				<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
+				<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" 
+					class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+			</div>
+		
+			<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
+				<c:if test="${true}">
+					<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
+				</c:if>
+				<c:if test="${true}">
+					<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
+				</c:if>
+				<c:if test="${true}">
+					<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
+				</c:if>
+			</div>
+		
+		</div> 
 </body>
