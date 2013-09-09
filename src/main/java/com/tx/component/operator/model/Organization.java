@@ -77,11 +77,9 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     private String remark;
     
     /** 
-     * 主管类型
-     *     0: 人员
-     *     1: 职位
+     * 主管类型 人员 职位
      */
-    private ChiefTypeEnum chiefType;
+    private ChiefTypeEnum chiefType = ChiefTypeEnum.人员;
     
     /**
      * 与主管类型对应的主键：

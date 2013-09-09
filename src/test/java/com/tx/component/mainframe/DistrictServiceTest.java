@@ -22,7 +22,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.tx.component.mainframe.model.District;
 import com.tx.component.mainframe.service.DistrictService;
 import com.tx.core.paged.model.PagedList;
-import com.tx.core.util.UUIDUtils;
 
 
  /**
@@ -66,7 +65,7 @@ public class DistrictServiceTest {
      */
     protected District getDistrict(){
         District res = new District();
-        res.setId(UUIDUtils.generateUUID());
+        
         
         
         return res;

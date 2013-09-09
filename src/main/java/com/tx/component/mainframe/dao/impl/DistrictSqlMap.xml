@@ -16,9 +16,13 @@
 		SELECT 
 				TD.ID,
 				TD.PARENTID,
-				TD.DESCRIPTION,
+				TD.POSTALCODE,
+				TD.REMARK,
 				TD.NAME,
-				TD.TYPE
+				TD.FULLNAME,
+				TD.CODE,
+				TD.TYPE,
+				TD.IDCARDCODE
 		  FROM BASIC_DISTRICT TD
 		 WHERE
 		<trim prefixOverrides="AND | OR">
@@ -35,9 +39,13 @@
 		SELECT 
 				TD.ID,
 				TD.PARENTID,
-				TD.DESCRIPTION,
+				TD.POSTALCODE,
+				TD.REMARK,
 				TD.NAME,
-				TD.TYPE
+				TD.FULLNAME,
+				TD.CODE,
+				TD.TYPE,
+				TD.IDCARDCODE
 		  FROM BASIC_DISTRICT TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
@@ -46,14 +54,26 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
-	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(postalCode)">  
+	            AND TD.POSTALCODE = #{postalCode,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            AND TD.REMARK = #{remark,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TD.NAME = #{name,javaType=java.lang.String}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
+	            AND TD.FULLNAME = #{fullName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND TD.CODE = #{code,javaType=java.lang.String}
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            AND TD.TYPE = #{type,javaType=com.tx.component.mainframe.model.DistrictTypeEnum}
+	            AND TD.TYPE = #{type,javaType=com.tx.component.mainframe.basicdata.DistrictTypeEnum}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardCode)">  
+	            AND TD.IDCARDCODE = #{idCardCode,javaType=java.lang.String}
 	        </if>
 		</trim>
 		<choose>  
@@ -79,14 +99,26 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TD.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
-	            AND TD.DESCRIPTION = #{description,javaType=java.lang.String}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(postalCode)">  
+	            AND TD.POSTALCODE = #{postalCode,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            AND TD.REMARK = #{remark,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TD.NAME = #{name,javaType=java.lang.String}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
+	            AND TD.FULLNAME = #{fullName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND TD.CODE = #{code,javaType=java.lang.String}
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            AND TD.TYPE = #{type,javaType=com.tx.component.mainframe.model.DistrictTypeEnum}
+	            AND TD.TYPE = #{type,javaType=com.tx.component.mainframe.basicdata.DistrictTypeEnum}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardCode)">  
+	            AND TD.IDCARDCODE = #{idCardCode,javaType=java.lang.String}
 	        </if>
 		</trim>
 	</select>
@@ -98,17 +130,25 @@
 		(
 			ID,
 			PARENTID,
-			DESCRIPTION,
+			POSTALCODE,
+			REMARK,
 			NAME,
-			TYPE
+			FULLNAME,
+			CODE,
+			TYPE,
+			IDCARDCODE
 		)
 		VALUES
 		(
 			#{id},
 			#{parentId},
-			#{description},
+			#{postalCode},
+			#{remark},
 			#{name},
-			#{type}
+			#{fullName},
+			#{code},
+			#{type},
+			#{idCardCode}
 		)
 	</insert>
 	
@@ -131,14 +171,26 @@
 			<if test="_parameter.containsKey('parentId')">
 	    		PARENTID = #{parentId,javaType=java.lang.String},
 	    	</if>	
-			<if test="_parameter.containsKey('description')">
-	    		DESCRIPTION = #{description,javaType=java.lang.String},
+			<if test="_parameter.containsKey('postalCode')">
+	    		POSTALCODE = #{postalCode,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('remark')">
+	    		REMARK = #{remark,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('name')">
 	    		NAME = #{name,javaType=java.lang.String},
 	    	</if>	
+			<if test="_parameter.containsKey('fullName')">
+	    		FULLNAME = #{fullName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('code')">
+	    		CODE = #{code,javaType=java.lang.String},
+	    	</if>	
 			<if test="_parameter.containsKey('type')">
-	    		TYPE = #{type,javaType=com.tx.component.mainframe.model.DistrictTypeEnum},
+	    		TYPE = #{type,javaType=com.tx.component.mainframe.basicdata.DistrictTypeEnum},
+	    	</if>	
+			<if test="_parameter.containsKey('idCardCode')">
+	    		IDCARDCODE = #{idCardCode,javaType=java.lang.String},
 	    	</if>	
 	    </trim>
 	    WHERE TD.ID = #{id} 

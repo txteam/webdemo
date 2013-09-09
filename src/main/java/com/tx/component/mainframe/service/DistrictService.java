@@ -6,22 +6,17 @@
  */
 package com.tx.component.mainframe.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.boda.los.clientele.model.Clientinfo;
-import com.boda.los.util.ObjectUtil;
-import com.boda.los.util.StringUtil;
 import com.tx.component.mainframe.dao.DistrictDao;
 import com.tx.component.mainframe.model.District;
 import com.tx.core.exceptions.util.AssertUtils;
@@ -133,50 +128,6 @@ public class DistrictService {
     }
     
     /**
-     * <获取省级地区>
-     * <功能详细描述>
-     * @author 龙剑豪
-     * @return 省级地区
-     * @throws Exception [参数说明]
-     * 
-     * @return List<District> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-   public List<District> queryProvinceSelectList() {
-       Map<String, Object> params = new HashMap<String, Object>();
-       params.put("visible", true);
-       params.put("type", "0");//type:类型{(0:省),(1:市),(2:区)
-       List<District> dList = this.districtDao.queryDistrictList(params);
-       return dList;
-   }
-   
-   /**
-    * 根据传入的type和上级地区provinceId 查询出下级地区列表
-    * <功能详细描述>
-    * @param type:类型{(0:省),(1:市),(2:区)
-    * @param provinceId 省级/市级地区id
-    * @return 省级地区/市级下属的所有市级地区/区县
-    * @throws Exception [参数说明]
-    * @return List<District> [返回类型说明]
-    * @exception throws [异常类型] [异常说明]
-    * @see [类、类#方法、类#成员]
-   */
-   public List<District> queryCitySelectListByProvinceId(String provinceId,String type) {
-       if(StringUtils.isEmpty(provinceId)) {
-           return new ArrayList<District>();
-       }
-       Map<String, Object> params = new HashMap<String, Object>();
-       District province = new District();
-       province.setId(provinceId);
-       params.put("parent", province);
-       params.put("visible", true);
-       params.put("type", type);
-       List<District> dList = this.districtDao.queryDistrictList(params);
-       return dList;
-   }
-    
-    /**
      * 分页查询District实体列表
      * TODO:补充说明
      * 
@@ -245,65 +196,17 @@ public class DistrictService {
         
         //TODO:需要更新的字段
 		updateRowMap.put("parentId", district.getParentId());	
-		updateRowMap.put("description", district.getDescription());	
+		updateRowMap.put("postalCode", district.getPostalCode());	
+		updateRowMap.put("remark", district.getRemark());	
 		updateRowMap.put("name", district.getName());	
+		updateRowMap.put("fullName", district.getFullName());	
+		updateRowMap.put("code", district.getCode());	
 		updateRowMap.put("type", district.getType());	
+		updateRowMap.put("idCardCode", district.getIdCardCode());	
         
         int updateRowCount = this.districtDao.updateDistrict(updateRowMap);
         
         //TODO:如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
     }
-    
-    /**
-     * <获取客户的身份证所在地详细地址>
-     * <功能详细描述>
-     * @author 龙剑豪
-     * @param clientinfo 客户信息实体
-     * @return 客户的身份证所在地
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-   public String getIdCardRegisteredByClientinfo(Clientinfo clientinfo) {
-       StringBuilder address = new StringBuilder();
-       
-       /*
-        * 获取省级地区
-        */
-       String idcardProId = clientinfo.getIdcardProId();
-       if(!StringUtil.isEmpty(idcardProId)) {
-           District idcardPro = this.findDistrictById(idcardProId);
-           if(!ObjectUtil.isEmpty(idcardPro)) {
-               address.append(idcardPro.getName());
-           }
-       }
-       
-       /*
-        * 获取市级地区
-        */
-       String idcardCityId = clientinfo.getIdcardCityId();
-       if(!StringUtil.isEmpty(idcardCityId)) {
-           District idcardCity = this.findDistrictById(idcardCityId);
-           if(!ObjectUtil.isEmpty(idcardCity)) {
-               address.append(idcardCity.getName());
-           }
-       }
-       
-       /*
-        * 获取区/县
-        */
-       String idcardCountyId = clientinfo.getIdcardCountyId();
-       if(!StringUtil.isEmpty(idcardCountyId)) {
-           District idcardCounty = this.findDistrictById(idcardCountyId);
-           if(!ObjectUtil.isEmpty(idcardCounty)) {
-               address.append(idcardCounty.getName());
-           }
-       }
-       
-       address.append(clientinfo.getAddress());//详细地址
-       
-       return address.toString();
-   }
 }

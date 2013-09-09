@@ -1,5 +1,5 @@
 --****************************************************************************
--- Ë°®ÔºöBASIC_DISTRICT
+-- ±Ì£∫BASIC_DISTRICT
 --****************************************************************************
 create table BASIC_DISTRICT(
 	id varchar(64),
@@ -16,7 +16,7 @@ create table BASIC_DISTRICT(
 --create index idx_xxxx_xxxx on BASIC_DISTRICT(xxxx);
 --create unique index idx_xxxx_xxxx on BASIC_DISTRICT(xxxx);
 
---comment on table BASIC_DISTRICT is 'demo‰ø°ÊÅØË°®';
+--comment on table BASIC_DISTRICT is 'demo–≈œ¢±Ì';
 --comment on column BASIC_DISTRICT.id is 'xxxx';
 --comment on column BASIC_DISTRICT.parentId is 'xxxx';
 --comment on column BASIC_DISTRICT.postalCode is 'xxxx';

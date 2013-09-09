@@ -28,7 +28,7 @@ import org.hibernate.annotations.GenericGenerator;
   * @since  [产品/模块版本]
   */
 @Entity
-@Table(name = "OPER_EMPLOYEE")
+@Table(name = "OPER_EMPLOYEEINFO")
 public class EmployeeInfo implements Serializable{
     
     /** 注释内容 */

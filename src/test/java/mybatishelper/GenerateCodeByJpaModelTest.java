@@ -6,6 +6,7 @@
  */
 package mybatishelper;
 
+import com.tx.component.mainframe.model.District;
 import com.tx.component.operator.model.EmployeeInfo;
 import com.tx.component.operator.model.Operator;
 import com.tx.component.operator.model.Organization;
@@ -37,8 +38,8 @@ public class GenerateCodeByJpaModelTest {
         factory.setDbScriptTemplateFilePath("mybatishelper/dbscript.ftl");
         
         //生成后在自己指定的文件夹中去找即可
-        factory.generate(Post.class, "d:/mybatis");
-        factory.generateScript(Post.class, "d:/mybatis/main/resources");
+        factory.generate(District.class, "d:/mybatis");
+        factory.generateScript(District.class, "d:/mybatis","GBK");
         
         System.out.println("success");
     }
