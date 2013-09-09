@@ -93,13 +93,13 @@
 		
 		<bean id="initDBScriptExcutor"
 			class="com.tx.core.dbscript.executor.DBScriptAutoExecutor">
+			<property name="sqlScriptEncoding" value="GBK"></property>
 			<property name="dataSource">
 				<ref bean="h2DataSource"/>
 			</property>	
 			<property name="initScriptLocations">
 				<list>
-					<value>classpath:autogenscript/H2/*.sql</value>
-					<value>classpath:h2/09_initdata.sql</value>
+					<value>classpath:dbscript/mysqlStandard.sql</value>
 				</list>
 			</property>
 		</bean>

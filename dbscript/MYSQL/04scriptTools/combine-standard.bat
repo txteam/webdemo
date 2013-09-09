@@ -1,5 +1,5 @@
-del "00mainframe" /f /s /q
-del "00operator" /f /s /q
+del "mainframe" /f /s /q
+del "operator" /f /s /q
 
 del scriptInput /f /s /q
 xcopy ..\01basisScript\. /s /y
@@ -13,26 +13,26 @@ mkdir scriptInput\tables
 mkdir scriptInput\triggers
 mkdir scriptInput\views
 
-cd "00webdemo"
+cd "mainframe"
   call standard-combine.bat
 cd ..
-cd "01auth"
+cd "operator"
   call standard-combine.bat
 cd ..
 
-del oracleStandard /f /s /q
-mkdir oracleStandard
-type scriptInput\tables\*.sql     >oracleStandard\02_tables.sql
-type scriptInput\sequences\*.sql  >oracleStandard\03_sequences.sql
-type scriptInput\packages\*.sql   >oracleStandard\04_packages.sql
-type scriptInput\functions\*.sql  >oracleStandard\05_functions.sql
-type scriptInput\procedures\*.sql >oracleStandard\06_procedures.sql
-type scriptInput\triggers\*sql    >oracleStandard\07_triggers.sql
-type scriptInput\views\*.sql      >oracleStandard\08_views.sql
-type scriptInput\initdata\*.sql   >oracleStandard\09_initdata.sql
-type scriptInput\jobs\*.sql       >oracleStandard\10_jobs.sql
-del oracleStandard.sql /f /s /q
-type oracleStandard\*.sql >oracleStandard.sql
+del mysqlStandard /f /s /q
+mkdir mysqlStandard
+type scriptInput\tables\*.sql     >mysqlStandard\02_tables.sql
+type scriptInput\sequences\*.sql  >mysqlStandard\03_sequences.sql
+type scriptInput\packages\*.sql   >mysqlStandard\04_packages.sql
+type scriptInput\functions\*.sql  >mysqlStandard\05_functions.sql
+type scriptInput\procedures\*.sql >mysqlStandard\06_procedures.sql
+type scriptInput\triggers\*sql    >mysqlStandard\07_triggers.sql
+type scriptInput\views\*.sql      >mysqlStandard\08_views.sql
+type scriptInput\initdata\*.sql   >mysqlStandard\09_initdata.sql
+type scriptInput\jobs\*.sql       >mysqlStandard\10_jobs.sql
+del mysqlStandard.sql /f /s /q
+type mysqlStandard\*.sql >mysqlStandard.sql
 
 copy 01_create_database.sql   oracleStandard\00_tablespace.sql
 copy 02_create_user.sql   oracleStandard\01_createuser.sql

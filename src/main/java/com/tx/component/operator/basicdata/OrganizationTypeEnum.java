@@ -4,7 +4,7 @@
  * 修改时间:  2013-8-27
  * <修改描述:>
  */
-package com.tx.component.operator.model;
+package com.tx.component.operator.basicdata;
 
 
  /**
@@ -16,7 +16,7 @@ package com.tx.component.operator.model;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public enum OrganizationType {
+public enum OrganizationTypeEnum {
     
     公司部门,
     分公司,

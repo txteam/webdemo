@@ -93,11 +93,14 @@ $(document).ready(function() {
 			formatter : function(value, row, index) {
 				var str = '';
 				<c:if test="${true}">
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
 				</c:if>
 				str += '&nbsp;';
 				<c:if test="${true}">
-					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${contextPath}/style/images/extjs_icons/delete.png');
+				</c:if>
+				<c:if test="${true}">
+					str += $.formatString('<img onclick="stopFun(\'{0}\');" src="{1}" title="停用"/>', row.id, '${contextPath}/style/images/extjs_icons/stop.png');
 				</c:if>
 				return str;
 			}
@@ -146,7 +149,29 @@ function addFun() {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
-	DialogUtils.openModalDialog("addOrganization","添加组织","${contextPath}/organization/toAddOrganization.action",550,265);
+	DialogUtils.openModalDialog(
+		"addOrganization",
+		"添加组织",
+		"${contextPath}/organization/toAddOrganization.action",
+		550,265,function(){
+		$('#treeGrid').treegrid('reload');
+	});
+}
+function editFun(id) {
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	if (id == undefined) {
+		var rows = dataGrid.datagrid('getSelections');
+		id = rows[0].id;
+	}
+	DialogUtils.openModalDialog(
+		"updateOrganization",
+		"编辑组织",
+		$.formatString("${contextPath}/organization/toUpdateOrganization.action?organizationId={0}",id),
+		550,265,function(){
+			$('#treeGrid').treegrid('reload');
+	});
 }
 </script>
 </head>

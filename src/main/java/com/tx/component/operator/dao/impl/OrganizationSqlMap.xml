@@ -62,6 +62,9 @@
 				TO_.CHIEFID
 		  FROM OPER_ORGANIZATION TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
+				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,,javaType=java.lang.String} ]]>
+			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
@@ -81,7 +84,7 @@
 	            AND TO_.CODE = #{code,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationType}
+	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.basicdata.OrganizationTypeEnum}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TO_.PARENTID = #{parentId,javaType=java.lang.String}
@@ -122,6 +125,9 @@
 		SELECT COUNT(1)
 		  FROM OPER_ORGANIZATION TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
+				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,,javaType=java.lang.String} ]]>
+			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
@@ -141,7 +147,7 @@
 	            AND TO_.CODE = #{code,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationType}
+	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.basicdata.OrganizationTypeEnum}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TO_.PARENTID = #{parentId,javaType=java.lang.String}
@@ -238,7 +244,7 @@
 	    		CODE = #{code,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('type')">
-	    		TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationType},
+	    		TYPE = #{type,javaType=com.tx.component.operator.basicdata.OrganizationTypeEnum},
 	    	</if>	
 			<if test="_parameter.containsKey('parentId')">
 	    		PARENTID = #{parentId,javaType=java.lang.String},

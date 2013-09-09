@@ -1,1 +1,1 @@
-prompt "webdemo模块:创建表逻辑  end..."
+-- "webdemo模块:创建表逻辑  end..."

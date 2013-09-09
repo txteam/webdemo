@@ -1,1 +1,1 @@
-prompt "webdemo模块:创建函数逻辑  end..." 
+-- "webdemo模块:创建函数逻辑  end..." 

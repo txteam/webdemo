@@ -34,7 +34,9 @@
 	<mvc:resources mapping="/view/js/**" location="/resources/js/" />
 
 	<!-- 需要添加该驱动，支持多个convertor的添加 -->
+	<!-- 
 	<mvc:annotation-driven />
+	 -->
 	<!-- 配置扫描 -->
 	<context:component-scan base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator"
 		use-default-filters="false">
@@ -44,19 +46,6 @@
 
 	<!--添加拦截器，类级别的处理器映射 -->
 	<mvc:interceptors>
-		<bean
-			class="com.tx.core.springmvc.interceptor.StaticResourceSkipInterceptor">
-			<property name="skipResourcePath">
-				<array>
-					<value>^.+\.js$</value>
-					<value>^.+\.css$</value>
-					<value>^.+\.swf$</value>
-					<value>^.+\.jpg$</value>
-					<value>^.+\.gif$</value>
-					<value>^.+\.png$</value>
-				</array>
-			</property>
-		</bean>
 		<bean class="com.tx.core.springmvc.interceptor.ExceptionLoggerInterceptor"></bean>
 		<!-- 向request写入contextPath常量 -->
 		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />

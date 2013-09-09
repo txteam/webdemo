@@ -12,10 +12,11 @@
 <script type="text/javascript">
 	var _contextPath = "${contextPath}";
 </script>
-
+<!-- jquery -->
 <script type="text/javascript" src="${contextPath}/js/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="${contextPath}/js/jquery.form.js" type="text/javascript" charset="utf-8"></script>
+<!-- jqueryui -->
 <script type="text/javascript" src="${contextPath}/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js" charset="utf-8"></script>
+<!-- easyui -->
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/jquery.easyui.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery-easyui-1.3.3/plugins/jquery.layout.js" charset="utf-8"></script>
@@ -23,10 +24,12 @@
 <script type="text/javascript" src="${contextPath }/js/jquery-easyui-extension/jeasyui.extensions.min.js"></script>
 <script type="text/javascript" src="${contextPath }/js/jquery-easyui-extension/jeasyui.extensions.menu.min.js"></script>
 <script type="text/javascript" src="${contextPath }/js/jquery-easyui-extension/jeasyui.extensions.datagrid.min.js"></script>
-
 <script type="text/javascript" src="${contextPath}/js/extEasyUI.js" charset="utf-8"></script>
+<!-- other -->
+<script type="text/javascript" src="${contextPath}/js/jquery.form.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath }/js/validator-0.2.1/jquery.validator.js"></script>
 <script type="text/javascript" src="${contextPath }/js/validator-0.2.1/local/zh_CN.js"></script>
+<!-- customize -->
 <script type="text/javascript" src="${contextPath}/js/commons.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/components.js" charset="utf-8"></script>
 <script type="text/javascript">

@@ -1,7 +1,6 @@
 --****************************************************************************
 -- 表：OPER_ORGANIZATION
 --****************************************************************************
-drop table OPER_ORGANIZATION;
 create table OPER_ORGANIZATION(
   valid number(1,0),
   fullAddress varchar2(255),
@@ -20,20 +19,5 @@ create table OPER_ORGANIZATION(
   primary key(ID)
 );
 create unique index idx_oper_organ_01 on OPER_ORGANIZATION(code);
---create unique index idx_xxxx_xxxx on OPER_ORGANIZATION(xxxx);
-
---comment on table OPER_ORGANIZATION is 'demo信息表';
---comment on column OPER_ORGANIZATION.valid is 'xxxx';
---comment on column OPER_ORGANIZATION.fullAddress is 'xxxx';
---comment on column OPER_ORGANIZATION.remark is 'xxxx';
---comment on column OPER_ORGANIZATION.alias is 'xxxx';
---comment on column OPER_ORGANIZATION.code is 'xxxx';
---comment on column OPER_ORGANIZATION.type is 'xxxx';
---comment on column OPER_ORGANIZATION.id is 'xxxx';
---comment on column OPER_ORGANIZATION.parentId is 'xxxx';
---comment on column OPER_ORGANIZATION.districtId is 'xxxx';
---comment on column OPER_ORGANIZATION.chiefType is 'xxxx';
---comment on column OPER_ORGANIZATION.address is 'xxxx';
---comment on column OPER_ORGANIZATION.name is 'xxxx';
---comment on column OPER_ORGANIZATION.fullName is 'xxxx';
---comment on column OPER_ORGANIZATION.chiefId is 'xxxx';
+create index idx_oper_organ_02 on OPER_ORGANIZATION(parentId);
+create index idx_oper_organ_03 on OPER_ORGANIZATION(chiefType,chiefId);

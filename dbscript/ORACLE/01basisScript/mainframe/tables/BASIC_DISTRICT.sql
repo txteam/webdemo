@@ -1,7 +1,7 @@
 --****************************************************************************
 -- ±í£ºBASIC_DISTRICT
 --****************************************************************************
-drop table BASIC_DISTRICT;
+--drop table BASIC_DISTRICT;
 create table BASIC_DISTRICT(
 	id varchar2(64 char) not null,
 	parentId varchar2(64 char),

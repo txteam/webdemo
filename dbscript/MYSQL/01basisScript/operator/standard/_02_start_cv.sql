@@ -1,1 +1,1 @@
-prompt "webdemo模块:创建视图逻辑  start..."  
+-- "webdemo模块:创建视图逻辑  start..."  

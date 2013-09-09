@@ -66,8 +66,9 @@
 	<logger name="org.springframework.web" level="ERROR" />
 	<logger name="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" level="ERROR"></logger>
 	
-	<logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="DEBUG"></logger>
-	<logger name="org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver" level="DEBUG"></logger>
+	<logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="ERROR"></logger>
+	<logger name="org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver" level="ERROR"></logger>
+	
 	<!-- cxf日志级别 -->
 	<logger name="org.apache.cxf" level="ERROR" />
 	<!-- ehcache日志级别 -->

@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.tx.component.operator.basicdata.ChiefTypeEnum;
+import com.tx.component.operator.basicdata.OrganizationTypeEnum;
 import com.tx.core.tree.model.TreeAble;
 import com.tx.core.util.ObjectUtils;
 
@@ -68,7 +69,7 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     private boolean valid;
     
     /** 是否是分行 */
-    private OrganizationType type;
+    private OrganizationTypeEnum type;
     
     /**省ID*/
     private String districtId;
@@ -193,14 +194,14 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     /**
      * @return 返回 type
      */
-    public OrganizationType getType() {
+    public OrganizationTypeEnum getType() {
         return type;
     }
 
     /**
      * @param 对type进行赋值
      */
-    public void setType(OrganizationType type) {
+    public void setType(OrganizationTypeEnum type) {
         this.type = type;
     }
     

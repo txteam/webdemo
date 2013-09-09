@@ -1,5 +1,5 @@
-del "00mainframe" /f /s /q
-del "00operator" /f /s /q
+del "mainframe" /f /s /q
+del "operator" /f /s /q
 
 del scriptInput /f /s /q
 xcopy ..\01basisScript\. /s /y

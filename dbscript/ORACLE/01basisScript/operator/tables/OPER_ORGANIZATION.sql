@@ -1,7 +1,7 @@
 --****************************************************************************
 -- ±í£ºOPER_ORGANIZATION
 --****************************************************************************
-drop table OPER_ORGANIZATION;
+--drop table OPER_ORGANIZATION;
 create table OPER_ORGANIZATION(
   valid number(1,0) default 1 not null,
   fullAddress varchar2(255),
