@@ -19,9 +19,6 @@
 	</bean>	
 
 	<bean id="authContext" class="com.tx.component.auth.context.AuthContextFactory">
-		<property name="cache">
-			<ref bean="authItemCache"/>
-		</property>
 		<property name="defaultAuthChecker">
 			<bean class="com.tx.component.auth.context.authchecker.impl.DefaultAuthChecker"></bean>
 		</property>

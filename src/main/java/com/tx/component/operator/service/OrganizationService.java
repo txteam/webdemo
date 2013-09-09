@@ -8,8 +8,10 @@ package com.tx.component.operator.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -86,14 +88,21 @@ public class OrganizationService {
     private void generateOrganizationFullName(Organization organization) {
         StringBuilder sb = new StringBuilder(TxConstants.INITIAL_STR_LENGTH);
         sb.append(organization.getName());
+        
+        //利用该集合避免循环引用以及自引用的情况，保证循环跳出
+        Set<String> parentIdSet = new HashSet<String>();
+        
         Organization parent = organization;
-        while (StringUtils.isEmpty(parent.getParentId())) {
-            parent = findOrganizationById(organization.getParentId());
+        while (!StringUtils.isEmpty(parent.getParentId())
+                && !parentIdSet.contains(parent.getParentId())) {
+            parent = findOrganizationById(parent.getParentId());
             if (parent != null) {
                 sb.insert(0, "_");
                 sb.insert(0, parent.getName());
+                parentIdSet.add(parent.getId());
             }
         }
+        organization.setFullName(sb.toString());
     }
     
     /**
@@ -140,17 +149,19 @@ public class OrganizationService {
       * 对应的编码已经存在<br/>
       *<功能详细描述>
       * @param code
+      * @param excludeOrganizationId 需要抛出的组织id
       * @return [参数说明]
       * 
       * @return boolean [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public boolean organizationCodeIsExist(String code) {
+    public boolean organizationCodeIsExist(String code,String excludeOrganizationId) {
         AssertUtils.notEmpty(code, "code is empty.");
         
         Map<String, Object> countCondition = new HashMap<String, Object>();
         countCondition.put("code", code);
+        countCondition.put("excludeOrganizationId", excludeOrganizationId);
         
         int count = this.organizationDao.countOrganization(countCondition);
         return count > 0;
@@ -247,13 +258,13 @@ public class OrganizationService {
         AssertUtils.notEmpty(parentOrganizationId,
                 "parentOrganizationId is empty");
         
-        List<Organization> orgList = queryChildOrganizationListByParentId(parentOrganizationId);        
+        List<Organization> orgList = queryChildOrganizationListByParentId(parentOrganizationId);
         List<String> resList = new ArrayList<String>();
-        if(CollectionUtils.isEmpty(orgList)){
+        if (CollectionUtils.isEmpty(orgList)) {
             return resList;
         }
         
-        for(Organization orgTemp : orgList){
+        for (Organization orgTemp : orgList) {
             resList.add(orgTemp.getId());
         }
         
@@ -327,6 +338,8 @@ public class OrganizationService {
                 "organization.name is empty.");
         AssertUtils.notEmpty(organization.getCode(),
                 "organization.code is empty.");
+        
+        generateOrganizationFullName(organization);
         
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();

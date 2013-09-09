@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -23,20 +24,23 @@ $(document).ready(function(){
 			$("#parentId").val(organization.id);
 		}
 	});
-	
-	$('#organizationForm').on('valid.form', function(e, $form){
-		$('#organizationForm').ajaxSubmit({
-		    url:"${contextPath}/organization/addOrganization", 
-		    type:"POST",
-		    success: function(data) { 
-				if(data){
-					parent.DialogUtils.tip("新增组织成功");
-					parent.DialogUtils.closeDialogById("addOrganization");
-				}
-		    } 
-		});
-		return false;
+	//验证器
+	$('#organizationForm').validator({
+	    valid: function(){
+	        //表单验证通过，提交表单到服务器
+			$('#organizationForm').ajaxSubmit({
+			    url:"${contextPath}/organization/addOrganization.action",
+			    success: function(data) {
+					if(data){
+						parent.DialogUtils.tip("新增组织成功");
+						parent.DialogUtils.closeDialogById("addOrganization");
+					}
+			    } 
+			});
+			return false;
+	    }
 	});
+	
     //提交
 	$("#addBtn").click(function(){
 		$('#organizationForm').submit();
@@ -47,7 +51,8 @@ $(document).ready(function(){
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form id="organizationForm" method="post" class="form">
+		<form:form id="organizationForm" method="post" cssClass="form"
+			modelAttribute="organization">
 			<table>
 				<tr>
 					<th class="narrow">名称:<span class="tRed">*</span></th>
@@ -69,15 +74,10 @@ $(document).ready(function(){
 					</td>
 					<th class="narrow">组织类型:</th>
 					<td>
-						<select name="type" class="select">
+						<form:select path="type" cssClass="select" >
 							<option value="">--- 请选择 ---</option>
-							<c:forEach items='' var="resourceType">
-								<option value="${resourceType.id}">${resourceType.name}</option>
-							</c:forEach>
-							<option value="公司部门">公司部门</option>
-							<option value="分公司部门">分公司部门</option>
-							<option value="合作方">合作方</option>
-						</select>
+							<form:options items="${OrganizationTypes }"/>
+						</form:select>
 					</td>
 				</tr>
 				<tr>
@@ -95,8 +95,7 @@ $(document).ready(function(){
 				<tr>
 					<th>主管类型</th>
 					<td>
-						职位<input name="chiefType" type="radio" class="radio" value="职位" checked="checked"/>
-						人员<input name="chiefType" type="radio" class="radio" value="人员"/>
+						<form:radiobuttons path="chiefType" items="${chiefTypes }"/>
 					</td>
 					<th>主管</th>
 					<td>
@@ -129,7 +128,7 @@ $(document).ready(function(){
 					</td>
 				</tr>
 			</table>
-		</form>
+		</form:form>
 	</div>
 </div>
 </body>

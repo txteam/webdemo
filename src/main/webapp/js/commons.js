@@ -325,6 +325,7 @@ if (browser.userAgent.indexOf('MSIE') > -1) {
 	 */
 	$.ajaxSetup({
 		type : 'POST',
+		dataType : "json",
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			try {
 				parent.$.messager.progress('close');
@@ -545,7 +546,7 @@ var GlobalDialogUtils = null;
      * title: 标题文本显示到panel的头部的.
      * timeout: 如果定义为 0,消息窗体将不会关闭除非用户关闭.定义为不是0,消息窗体将在时间超时后自动关闭. 
      */
-    DialogUtils.show = function(config){
+    DialogUtils._show = function(config){
     	var option = $.extend({},{
     		title:'show message title',
     		msg:'',
@@ -556,23 +557,27 @@ var GlobalDialogUtils = null;
     	},config);
     	$.messager.show(option);
     };
+    DialogUtils.show = function(config){
+    	GlobalDialogUtils._show(option);
+    };
     /**
      * 消息提醒
      */
-    DialogUtils.tip = function(msg,width,height){
+    DialogUtils.tip = function(msg,width,height,timeout){
     	var option = $.extend({},{
     		title:'提示',
     		msg: msg,
-    		width:370,
-    		height:150,
+    		width:200,
+    		height:100,
     		timeout:10000,
     		showType:'slide'
     	},{
     		msg: msg,
     		width: width,
     		height: height,
+    		timeout: (timeout && timeout > 0) ? timeout : 3000
     	});
-    	$.messager.show(option);
+    	GlobalDialogUtils._show(option);
     };
     //window.show = DialogUtils.show;
     /*
@@ -582,8 +587,11 @@ var GlobalDialogUtils = null;
      * icon:显示icon图片,可用值有: error,question,info,warning.
      * fn: 窗体关闭的时候触发的回调函数. 
      */
-    DialogUtils.alert = function(title, msg, icon, fn){
+    DialogUtils._alert = function(title, msg, icon, fn){
     	$.messager.alert(title, msg, icon, fn);
+    };
+    DialogUtils.alert = function(title, msg, icon, fn){
+    	GlobalDialogUtils._alert(title, msg, icon, fn);
     };
     //window.alert = function(msg){
     //	DialogUtils.alert("alert",msg,warning);
@@ -594,8 +602,11 @@ var GlobalDialogUtils = null;
      * msg:显示的消息文本.
      * fn(b): 回调函数,当用户点击OK按钮传入true值到函数,其他则传入false. 
      */
-    DialogUtils.confirm = function(title, msg, fn){
+    DialogUtils._confirm = function(title, msg, fn){
     	$.messager.confirm(title, msg, fn);
+    };
+    DialogUtils.confirm = function(title, msg, fn){
+    	GlobalDialogUtils._confirm(title, msg, fn);
     };
     //window.confirm = function(msg,fn){
     //	$.messager.confirm("confirm", msg, fn);
@@ -606,8 +617,11 @@ var GlobalDialogUtils = null;
      * msg: 显示的消息文本.
      * fn(val): 回调函数,value参数是用户输入的值. 
      */
-    DialogUtils.prompt = function(title, msg, fn){
+    DialogUtils._prompt = function(title, msg, fn){
     	$.messager.prompt(title, msg, fn);
+    };
+    DialogUtils.prompt = function(title, msg, fn){
+    	GlobalDialogUtils.prompt(title, msg, fn);
     };
     //window.prompt = function(msg,fn){
     //	$.messager.confirm("prompt", msg, fn);
@@ -623,8 +637,11 @@ var GlobalDialogUtils = null;
      * bar:得到 progressbar 对象. 
      * close: 关闭进度条窗体. 
      */
-    DialogUtils.progress = function(){
+    DialogUtils._progress = function(){
     	$.messager.progress.apply($.messager,arguments);
+    };
+    DialogUtils.progress = function(){
+    	GlobalDialogUtils.apply($.messager,arguments);
     };
     
     /*
@@ -807,6 +824,7 @@ var GlobalDialogUtils = null;
     	//如果不是dialog对话框
         	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
         		title : title,
+        		href: href,
         	    width: width,   
         	    height: height,
         	    closed: false,
@@ -1057,6 +1075,34 @@ $(document).ready(function(){
 			stopOnError: false,
 		    theme: 'yellow_right'
 		});
+		/*
+		$.validator.config({
+	        rules: {
+	            digits: [/^\d*$/, "{0}只能输入数字"], //纯数字
+	            letters: [/^[a-z]*$/i, "{0}只能输入字母"], //纯字母
+	            tel: [/^(?:(?:0\d{2,3}[- ]?[1-9]\d{6,7})|(?:[48]00[- ]?[1-9]\d{6}))$/, "电话格式不正确"],  //办公或家庭电话
+	            mobile: [/^1[3-9]\d{9}$/, "手机号格式不正确"],  //移动电话
+	            email: [/^(?:[a-z0-9]+[_\-+.]?)*[a-z0-9]+@(?:([a-z0-9]+-?)*[a-z0-9]+.)+([a-z]{2,})+$/i, "邮箱格式不正确"],
+	            qq: [/^[1-9]\d{4,}$/,"QQ号格式不正确"],
+	            date: [/^\d{4}-\d{1,2}-\d{1,2}$/, "请输入正确的日期,例:yyyy-mm-dd"],
+	            time: [/^([01]\d|2[0-3])(:[0-5]\d){1,2}$/, "请输入正确的时间,例:14:30或14:30:00"],
+	            ID_card: [/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[A-Z])$/, "请输入正确的身份证号码"],
+	            url: [/^(https?|ftp):\/\/[^\s]*$/i, "网址格式不正确"],
+	            postcode: [/^[1-9]\d{5}$/, "邮政编码格式不正确"],
+	            chinese: [/^[\u0391-\uFFE5]+$/, "请输入中文"],
+	            username: [/^\w{3,12}$/, "请输入3-12位数字、字母、下划线"], //用户名
+	            password: [/^[0-9a-zA-Z]{6,16}$/, "密码由6-16位数字、字母组成"], //密码
+	            //可接受的后缀名
+	            accept: function(element, params){
+	                if (!params) return true;
+	                var ext = params[0];
+	                return (ext === '*') 
+	                    || (new RegExp(".(?:" + (ext || "png|jpg|jpeg|gif") + ")$", "i")).test(element.value) 
+	                    || this.renderMsg("只接受{1}后缀", ext.replace('|', ','));
+	            }
+	        }
+		});
+		*/
 	}
 });
 

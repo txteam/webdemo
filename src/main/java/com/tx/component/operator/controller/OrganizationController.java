@@ -12,12 +12,15 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.operator.basicdata.ChiefTypeEnum;
+import com.tx.component.operator.basicdata.OrganizationTypeEnum;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OrganizationService;
 
@@ -60,7 +63,11 @@ public class OrganizationController {
      * @see [类、类#方法、类#成员]
     */
     @RequestMapping("/toAddOrganization")
-    public String toAddOrganization() {
+    public String toAddOrganization(ModelMap response) {
+        response.put("organization", new Organization());
+        response.put("chiefTypes", ChiefTypeEnum.values());
+        response.put("organizationTypes", OrganizationTypeEnum.values());
+        
         return "/operator/addOrganization";
     }
     
@@ -78,9 +85,16 @@ public class OrganizationController {
             @RequestParam("organizationId") String organizationId,
             ModelMap modelMap) {
         Organization resOrganization = this.organizationService.findOrganizationById(organizationId);
+        modelMap.put("organization", resOrganization);
+        modelMap.put("chiefTypes", ChiefTypeEnum.values());
+        modelMap.put("organizationTypes", OrganizationTypeEnum.values());
+        modelMap.put("parentOrganizationName",
+                StringUtils.isEmpty(resOrganization.getParentId()) ? ""
+                        : this.organizationService.findOrganizationById(resOrganization.getParentId())
+                                .getName());
         
         modelMap.put("organization", resOrganization);
-        return null;
+        return "/operator/updateOrganization";
     }
     
     /**
@@ -129,7 +143,7 @@ public class OrganizationController {
     */
     @RequestMapping("/addOrganization")
     @ResponseBody
-    public boolean addOrganization(Organization organization, ModelMap response) {
+    public boolean addOrganization(Organization organization) {
         this.organizationService.insertOrganization(organization);
         
         return true;
@@ -147,8 +161,9 @@ public class OrganizationController {
     @ResponseBody
     @RequestMapping("/organizationCodeIsExist")
     public Map<String, String> organizationCodeIsExist(
-            @RequestParam("code") String code) {
-        boolean resFlag = this.organizationService.organizationCodeIsExist(code);
+            @RequestParam("code") String code,
+            @RequestParam(value="id",required=false) String excludeOrganizationId) {
+        boolean resFlag = this.organizationService.organizationCodeIsExist(code,excludeOrganizationId);
         Map<String, String> resMap = new HashMap<String, String>();
         if (!resFlag) {
             resMap.put("ok", "可用的组织码号");

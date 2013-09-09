@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.tx.component.mainframe.basicdata.DistrictTypeEnum;
 import com.tx.core.tree.model.TreeAble;
 
 
@@ -43,8 +44,20 @@ public class District implements TreeAble<List<District>, District>,Serializable
     /** 区域名 */
     private String name;
     
+    /** 区域全名 */
+    private String fullName;
+    
+    /** 区域编码 */
+    private String code;
+    
+    /** 区域对应身份证编码 */
+    private String idCardCode;
+    
+    /**邮政编码*/    
+    private String postalCode;
+    
     /** 区域描述 */
-    private String description;
+    private String remark;
     
     /** 区域类型 */
     private DistrictTypeEnum type;
@@ -95,17 +108,73 @@ public class District implements TreeAble<List<District>, District>,Serializable
     }
 
     /**
-     * @return 返回 description
+     * @return 返回 fullName
      */
-    public String getDescription() {
-        return description;
+    public String getFullName() {
+        return fullName;
     }
 
     /**
-     * @param 对description进行赋值
+     * @param 对fullName进行赋值
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    /**
+     * @return 返回 code
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * @param 对code进行赋值
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
+     * @return 返回 idCardCode
+     */
+    public String getIdCardCode() {
+        return idCardCode;
+    }
+
+    /**
+     * @param 对idCardCode进行赋值
+     */
+    public void setIdCardCode(String idCardCode) {
+        this.idCardCode = idCardCode;
+    }
+
+    /**
+     * @return 返回 postalCode
+     */
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    /**
+     * @param 对postalCode进行赋值
+     */
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    /**
+     * @return 返回 remark
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * @param 对remark进行赋值
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     /**

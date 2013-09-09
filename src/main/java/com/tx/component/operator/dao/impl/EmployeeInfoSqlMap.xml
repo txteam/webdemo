@@ -27,7 +27,7 @@
 				TEI.OFFICIAL,
 				TEI.LASTUPDATEPHONELINKINFODATE,
 				TEI.CARDNUM
-		  FROM OPER_EMPLOYEE TEI
+		  FROM OPER_EMPLOYEEINFO TEI
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
@@ -54,7 +54,7 @@
 				TEI.OFFICIAL,
 				TEI.LASTUPDATEPHONELINKINFODATE,
 				TEI.CARDNUM
-		  FROM OPER_EMPLOYEE TEI
+		  FROM OPER_EMPLOYEEINFO TEI
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
 	            AND TEI.OPERATORID = #{operatorId,javaType=java.lang.String}
@@ -111,7 +111,7 @@
 		parameterType="java.util.Map"
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
-		  FROM OPER_EMPLOYEE TEI
+		  FROM OPER_EMPLOYEEINFO TEI
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
 	            AND TEI.OPERATORID = #{operatorId,javaType=java.lang.String}
@@ -158,7 +158,7 @@
     <!-- auto generate default insert -->
     <insert id="insertEmployeeInfo" 
 		parameterType="com.tx.component.operator.model.EmployeeInfo">
-		INSERT INTO OPER_EMPLOYEE
+		INSERT INTO OPER_EMPLOYEEINFO
 		(
 			OPERATORID,
 			LEAVINGDATE,
@@ -195,7 +195,7 @@
 	<!-- auto generate default delete -->
 	<delete id="deleteEmployeeInfo" 
 		parameterType="com.tx.component.operator.model.EmployeeInfo">
-		DELETE FROM OPER_EMPLOYEE TEI WHERE
+		DELETE FROM OPER_EMPLOYEEINFO TEI WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
 	            AND TEI.OPERATORID = #{operatorId}
@@ -206,7 +206,7 @@
 	<!-- auto generate default update -->
 	<update id="updateEmployeeInfo"
 	    parameterType="java.util.Map">  
-	    UPDATE OPER_EMPLOYEE TEI
+	    UPDATE OPER_EMPLOYEEINFO TEI
 	    <trim prefix="SET" suffixOverrides=",">
 			<if test="_parameter.containsKey('leavingDate')">
 	    		LEAVINGDATE = #{leavingDate,javaType=java.util.Date},
