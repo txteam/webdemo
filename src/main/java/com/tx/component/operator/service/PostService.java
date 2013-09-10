@@ -37,10 +37,10 @@ public class PostService {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(PostService.class);
     
-    @Resource
+    @Resource(name="newPostDao")
     private PostDao postDao;
     
-    @Resource
+    @Resource(name="newOrganizationService")
     private OrganizationService organizationService;
     
     /**

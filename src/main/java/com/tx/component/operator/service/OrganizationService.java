@@ -45,10 +45,10 @@ public class OrganizationService {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(OrganizationService.class);
     
-    @Resource
+    @Resource(name="newOrganizationDao")
     private OrganizationDao organizationDao;
     
-    @Resource
+    @Resource(name="newPostService")
     private PostService postService;
     
     /** 

@@ -1,5 +1,4 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<!-- <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8"> -->
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
 
 <link rel="stylesheet" href="${contextPath}/js/jquery-ui-1.10.3.custom/css/no-theme/jquery-ui-1.10.3.custom.min.css" type="text/css">
@@ -12,6 +11,7 @@
 <script type="text/javascript">
 	var _contextPath = "${contextPath}";
 </script>
+
 <!-- jquery -->
 <script type="text/javascript" src="${contextPath}/js/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
 <!-- jqueryui -->
@@ -26,6 +26,7 @@
 <script type="text/javascript" src="${contextPath }/js/jquery-easyui-extension/jeasyui.extensions.datagrid.min.js"></script>
 <script type="text/javascript" src="${contextPath}/js/extEasyUI.js" charset="utf-8"></script>
 <!-- other -->
+<script type="text/javascript" src="${contextPath}/js/datePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery.form.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath }/js/validator-0.2.1/jquery.validator.js"></script>
 <script type="text/javascript" src="${contextPath }/js/validator-0.2.1/local/zh_CN.js"></script>

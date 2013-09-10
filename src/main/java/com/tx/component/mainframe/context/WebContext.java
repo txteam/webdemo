@@ -32,11 +32,10 @@ public class WebContext implements InitializingBean {
     
     private static WebContext webContext;
     
-    @Resource
+    @Resource(name="newOrganizationService")
     private OrganizationService organizationService;
     
-    @SuppressWarnings("unused")
-    @Resource
+    @Resource(name = "newPostService")
     private PostService postService;
     
     /**
