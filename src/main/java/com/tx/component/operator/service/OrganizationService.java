@@ -14,19 +14,17 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.component.operator.dao.OrganizationDao;
 import com.tx.component.operator.model.Organization;
+import com.tx.component.operator.model.Post;
+import com.tx.component.operator.treeview.OrganizationPostTreeNode;
 import com.tx.core.TxConstants;
 import com.tx.core.exceptions.util.AssertUtils;
 
@@ -42,65 +40,16 @@ import com.tx.core.exceptions.util.AssertUtils;
  * @since  [产品/模块版本]
  */
 @Component("newOrganizationService")
-public class OrganizationService implements InitializingBean,
-        ApplicationContextAware, RelateOrganization {
+public class OrganizationService {
     
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(OrganizationService.class);
     
-    @SuppressWarnings("unused")
-    //@Resource(name = "serviceLogger")
-    private Logger serviceLogger;
-    
-    @Resource(name = "newOrganizationDao")
+    @Resource
     private OrganizationDao organizationDao;
     
-    private ApplicationContext applicationContext;
-    
-    private List<RelateOrganization> relateOrganizationList = new ArrayList<RelateOrganization>();
-    
-    /**
-     * @param applicationContext
-     * @throws BeansException
-     */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-            throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-    
-    /**
-     * @throws Exception
-     */
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Map<String, RelateOrganization> reMap = this.applicationContext.getBeansOfType(RelateOrganization.class);
-        if (!MapUtils.isEmpty(reMap)) {
-            relateOrganizationList.addAll(reMap.values());
-        }
-    }
-    
-    /**
-     * @return
-     */
-    @Override
-    public String organizationReferenceName() {
-        return "其他组织";
-    }
-    
-    /**
-     * @param organizationId
-     * @return
-     */
-    @Override
-    public boolean isReferenceOrganization(String organizationId) {
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("organizationId", organizationId);
-        
-        int counts = this.organizationDao.countOrganization(params);
-        boolean isBeReferenced = counts > 0;
-        return isBeReferenced;
-    }
+    @Resource
+    private PostService postService;
     
     /** 
      * 生成组织全名
@@ -126,6 +75,30 @@ public class OrganizationService implements InitializingBean,
         }
         String newFullName = sb.toString();
         return newFullName;
+    }
+    
+    /**
+      * 查询获取组织职位树数据列表<br/>
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return List<OrganizationPostTreeNode> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<OrganizationPostTreeNode> queryOrganizationPostTreeNodeListByAuth() {
+        List<Organization> orgList = queryOrganizationListByAuth();
+        
+        List<OrganizationPostTreeNode> resList = new ArrayList<OrganizationPostTreeNode>();
+        for (Organization orgTemp : orgList) {
+            resList.add(new OrganizationPostTreeNode(orgTemp));
+            
+            List<Post> postList = this.postService.queryPostListByOrganizationId(orgTemp.getId());
+            for (Post postTemp : postList) {
+                resList.add(new OrganizationPostTreeNode(postTemp));
+            }
+        }
+        return resList;
     }
     
     /**
@@ -218,25 +191,48 @@ public class OrganizationService implements InitializingBean,
     }
     
     /**
-      * 根据Organization实体列表
-      *     如果rootOrgId为空则返回所有的组织，如果不为空则返回以rootOrg下级的列表
-      * 
-      * <功能详细描述>
+     * 根据Organization实体列表
+     *     根据权限查询组织列表<br/>
+     *     默认：查询当前组织及其下级组织的权限<br/>
+     *     如果有查询所有组织的权限，则能查询所有组织的的数据<br/>
+     *     
+     *     如果rootOrgId为空则返回所有的组织，如果不为空则返回以rootOrg下级的列表
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<Organization> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public List<Organization> queryOrganizationListByAuth() {
+        Organization currentOrgnization = WebContextUtils.getOrganizationFromSession();
+        String parentOrganizationId = "";
+        if (currentOrgnization != null) {
+            parentOrganizationId = currentOrgnization.getId();
+        }
+        
+        List<Organization> resList = null;
+        //如果拥有查询所有组织的权限
+        if (WebContextUtils.hasAuth("query_all_org_post")) {
+            resList = this.organizationDao.queryOrganizationList(null);
+        } else {
+            resList = queryChildOrganizationListByParentId(parentOrganizationId);
+        }
+        
+        return resList;
+    }
+    
+    /**
+      * 查询所有组织的列表<br/>
+      *<功能详细描述>
       * @return [参数说明]
       * 
       * @return List<Organization> [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<Organization> queryOrganizationList(String parentOrganizationId) {
-        //生成查询条件
-        List<Organization> resList = null;
-        if (StringUtils.isEmpty(parentOrganizationId)) {
-            resList = this.organizationDao.queryOrganizationList(null);
-        } else {
-            resList = queryChildOrganizationListByParentId(parentOrganizationId);
-        }
-        
+    public List<Organization> queryAllOrganizationList() {
+        List<Organization> resList = this.organizationDao.queryOrganizationList(null);
         return resList;
     }
     
@@ -381,7 +377,6 @@ public class OrganizationService implements InitializingBean,
         updateRowMap.put("remark", organization.getRemark());
         updateRowMap.put("code", organization.getCode());
         updateRowMap.put("type", organization.getType());
-        updateRowMap.put("parentId", organization.getParentId());
         updateRowMap.put("address", organization.getAddress());
         updateRowMap.put("name", organization.getName());
         updateRowMap.put("fullName",
@@ -405,6 +400,8 @@ public class OrganizationService implements InitializingBean,
      *             在未建外键关联的情况下，不允许轻易删除组织
      *      4、采取方案为删除对应组织后，下级组织自动上移一级
      *      5、并且先上移以后再进行删除
+     *      6、如果组织被其他模块所引用，组织的删除将会影响到其他模块
+     *      7、所以组织的删除将不会真正被执行，组织紧紧只能停用，如果需要真正的删除
      *      开发阶段暂不考虑提供组织的删除功能
      * @param id
      * @return 返回删除的数据条数，<br/>
@@ -418,52 +415,8 @@ public class OrganizationService implements InitializingBean,
     public int deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
         
-        //如果对应
-        if (isBeReferenced(id)) {
-            //throw new NotAllowedOperateException("对应组织被引用不允许被删除");
-        }
-        
         Organization condition = new Organization();
         condition.setId(id);
         return this.organizationDao.deleteOrganization(condition);
-    }
-    
-    /**
-      * 对应组织是否被引用<br/>
-      *<功能详细描述>
-      * @param organizationId
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    private boolean isBeReferenced(String organizationId) {
-        for (RelateOrganization roTemp : this.relateOrganizationList) {
-            if (roTemp.isReferenceOrganization(organizationId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    /**
-      * 获取存在的引用名称<br/>
-      *<功能详细描述>
-      * @param organizationId
-      * @return [参数说明]
-      * 
-      * @return List<String> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    private List<String> getReferenceOrganizationNames(String organizationId) {
-        List<String> resList = new ArrayList<String>();
-        for (RelateOrganization roTemp : this.relateOrganizationList) {
-            if (roTemp.isReferenceOrganization(organizationId)) {
-                resList.add(roTemp.organizationReferenceName());
-            }
-        }
-        return resList;
     }
 }

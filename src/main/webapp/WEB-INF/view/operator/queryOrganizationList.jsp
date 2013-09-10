@@ -16,6 +16,9 @@ $(document).ready(function() {
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
+		iconFiled : function(item){
+			return 'folder_user';	
+		},
 		fit : true,
 		fitColumns : true,
 		border : false,

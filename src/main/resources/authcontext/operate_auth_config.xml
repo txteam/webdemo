@@ -2,7 +2,6 @@
 <!-- 操作权限 -->
 <auths>
 	<authType key="AUTHTYPE_OPERATE" name="操作权限">
-	
 		<auth key="system_config_manange" name="系统配置">
 			<auth key="auth_config_manage" name="配置权限">
 				<auth key="auth2operator_config_manage" name="配置人员权限">
@@ -38,6 +37,33 @@
 			<auth key="system_menu_logout_auth" name="退出" />
 		</auth>
 		
-		
+		<!-- 组织职位数据相关权限 -->
+		<auth key="system_config" name="系统管理权限">
+			<auth key="menu_config" name="菜单管理"></auth>
+			<auth key="config_config" name="配置项管理"></auth>
+			<auth key="basicdata_config" name="基础数据项管理"></auth>
+			<auth key="operator_config_center" name="操作员管理中心">
+				<auth key="organization_config" name="组织结构管理">
+					<auth key="organization_config_add" name="增加组织"></auth>
+					<auth key="organization_config_update" name="更新组织"></auth>
+					<auth key="organization_config_delete" name="删除组织"></auth>
+				</auth>
+				<auth key="post_config" name="组织结构管理">
+					<auth key="post_config_add" name="增加组织"></auth>
+					<auth key="post_config_update" name="更新组织"></auth>
+					<auth key="post_config_delete" name="删除组织"></auth>
+				</auth>
+				<auth key="operator_config" name="操作员管理">
+					<auth key="operator_config_add" name="增加操作员"></auth>
+					<auth key="operator_config_update" name="更新操作员"></auth>
+					<auth key="operator_config_delete" name="删除操作员"></auth>
+					<auth key="operator_config_config_auth" name="配置操作员权限"></auth>
+				</auth>
+				<auth key="auth_config" name="权限管理">
+					<auth key="auth_config_operator" name="配置操作员权限"></auth>
+					<auth key="auth_config_post" name="配置操作员权限"></auth>
+				</auth>
+			</auth>
+		</auth>
 	</authType>
 </auths>

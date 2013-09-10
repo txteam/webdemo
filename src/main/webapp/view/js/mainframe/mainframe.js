@@ -272,6 +272,7 @@ $(function(){
                         selectedPanel._isInit = true;
                     }
                 }
+                
                 return false;
             }
         }); 

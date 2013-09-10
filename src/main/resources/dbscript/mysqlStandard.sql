@@ -7250,7 +7250,7 @@ insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
   values(1,2000000,'人员','合作方公司B办事处A','合作方公司B办事处A','2000001','2000001');
 commit;
 insert into OPER_POST(id,parentId,name,organizationId,code,valid,remark)
-	values('1000000301','10000003','部门经理','1000000',null,1,'集团公司系统开发部部门经理');
+	values('1000000301','','部门经理','1000000',null,1,'集团公司系统开发部部门经理');
 insert into OPER_POST(id,parentId,name,organizationId,code,valid,remark)
 	values('100000030101','1000000301','项目经理','1000000',null,1,'集团公司系统开发部项目经理');
 insert into OPER_POST(id,parentId,name,organizationId,code,valid,remark)

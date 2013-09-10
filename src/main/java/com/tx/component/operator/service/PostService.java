@@ -18,9 +18,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.component.operator.dao.PostDao;
+import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.Post;
 import com.tx.core.exceptions.util.AssertUtils;
-import com.tx.core.paged.model.PagedList;
 
 /**
  * Post的业务层
@@ -37,12 +37,11 @@ public class PostService {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(PostService.class);
     
-    @SuppressWarnings("unused")
-    //@Resource(name = "serviceLogger")
-    private Logger serviceLogger;
-    
-    @Resource(name = "newPostDao")
+    @Resource
     private PostDao postDao;
+    
+    @Resource
+    private OrganizationService organizationService;
     
     /**
       * 将post实例插入数据库中保存
@@ -57,25 +56,38 @@ public class PostService {
     */
     @Transactional
     public void insertPost(Post post) {
-        //TODO:验证参数是否合法，必填字段是否填写，
+        //验证参数是否合法，必填字段是否填写，
         AssertUtils.notNull(post, "post is null.");
         AssertUtils.notEmpty(post.getId(), "post.id is empty.");
+        AssertUtils.notEmpty(post.getCode(), "post.code is empty.");
+        AssertUtils.notEmpty(post.getName(), "post.name is empty.");
+        AssertUtils.notNull(post.getOrganization(),
+                "post.organization is null.");
+        AssertUtils.notNull(post.getOrganization().getId(),
+                "post.organization.id is empty.");
+        
+        //查询所在组织
+        Organization parentOrg = this.organizationService.findOrganizationById(post.getOrganization()
+                .getId());
+        //职位全名
+        String postFullName = parentOrg.getFullName() + post.getName();
+        post.setFullName(postFullName);
         
         this.postDao.insertPost(post);
     }
-      
-     /**
-      * 根据id删除post实例
-      * 1、如果入参数为空，则抛出异常
-      * 2、执行删除后，将返回数据库中被影响的条数
-      * @param id
-      * @return 返回删除的数据条数，<br/>
-      * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
-      * 这里讲通用生成的业务层代码定义为返回影响的条数
-      * @return int [返回类型说明]
-      * @exception throws 
-      * @see [类、类#方法、类#成员]
-     */
+    
+    /**
+     * 根据id删除post实例
+     * 1、如果入参数为空，则抛出异常
+     * 2、执行删除后，将返回数据库中被影响的条数
+     * @param id
+     * @return 返回删除的数据条数，<br/>
+     * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
+     * 这里讲通用生成的业务层代码定义为返回影响的条数
+     * @return int [返回类型说明]
+     * @exception throws 
+     * @see [类、类#方法、类#成员]
+    */
     @Transactional
     public int deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
@@ -105,31 +117,26 @@ public class PostService {
     }
     
     /**
-      * 根据Post实体列表
-      * TODO:补充说明
-      * 
-      * <功能详细描述>
+      * 根据权限查看职位列表
+      *     如果没有查看所有组织职位的权限，
+      *     则默认只能查看当前组织及其下级的组织含有的职位<br/>
+      *<功能详细描述>
       * @return [参数说明]
       * 
       * @return List<Post> [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<Post> queryPostList(/*TODO:自己定义条件*/) {
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<Post> resList = this.postDao.queryPostList(params);
+    public List<Post> queryPostListByAuth(){
+        //在底层查询中，会根据权限，查询当前人员能够看到的所有职位
+        //如果为超级管理员则能查看所有的组织的所有职位
+        List<Post> resList = this.postDao.queryPostList(null);
         
         return resList;
     }
     
     /**
-     * 分页查询Post实体列表
-     * TODO:补充说明
+     * 根据Post实体列表
      * 
      * <功能详细描述>
      * @return [参数说明]
@@ -138,17 +145,63 @@ public class PostService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public PagedList<Post> queryPostPagedList(/*TODO:自己定义条件*/int pageIndex,
-            int pageSize) {
-        //TODO:判断条件合法性
+    public List<Post> queryAllPostList() {
         
-        //TODO:生成查询条件
+        //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
+        //利用该条件能够屏蔽掉底层sql中权限查询的逻辑
+        params.put("organization", new Organization());
         
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<Post> resPagedList = this.postDao.queryPostPagedList(params, pageIndex, pageSize);
+        List<Post> resList = this.postDao.queryPostList(params);
         
-        return resPagedList;
+        return resList;
+    }
+    
+    /**
+      * 根据父级职位id查询子集职位id
+      *<功能详细描述>
+      * @param parentPostId
+      * @return [参数说明]
+      * 
+      * @return List<Post> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<Post> queryPostListByParentId(String parentPostId) {
+        AssertUtils.notEmpty(parentPostId, "parentPostId is empty");
+        
+        //生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("parentId", parentPostId);
+        //利用该条件能够屏蔽掉底层sql中权限查询的逻辑
+        params.put("organization", new Organization());
+        
+        List<Post> resList = this.postDao.queryPostList(params);
+        
+        return resList;
+    }
+    
+    /**
+      * 根据组织id查询职位列表<br/>
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return List<Post> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<Post> queryPostListByOrganizationId(String organizationId) {
+        AssertUtils.notEmpty(organizationId, "organizationId is empty");
+        
+        //生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        //传入了organizationId,权限判断植入的代码即不生效
+        params.put("organizationId", organizationId);
+        
+        List<Post> resList = this.postDao.queryPostList(params);
+        
+        return resList;
     }
     
     /**
@@ -161,16 +214,18 @@ public class PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public int countPost(/*TODO:自己定义条件*/){
-        //TODO:判断条件合法性
+    public boolean postCodeIsExist(String code, String excludePostId) {
+        AssertUtils.notEmpty(code, "code is empty");
         
-        //TODO:生成查询条件
+        //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
+        params.put("code", code);
+        params.put("excludePostId", excludePostId);
         
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.postDao.countPost(params);
         
-        return res;
+        return res > 0;
     }
     
     /**
@@ -189,20 +244,14 @@ public class PostService {
         AssertUtils.notNull(post, "post is null.");
         AssertUtils.notEmpty(post.getId(), "post.id is empty.");
         
-        
         //TODO:生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", post.getId());
         
-        //TODO:需要更新的字段
-		updateRowMap.put("valid", post.isValid());	
-		updateRowMap.put("parentId", post.getParentId());	
-		//type:java.lang.String
-		updateRowMap.put("organization", post.getOrganization());
-		updateRowMap.put("remark", post.getRemark());	
-		updateRowMap.put("name", post.getName());	
-		updateRowMap.put("fullName", post.getFullName());	
-		updateRowMap.put("code", post.getCode());	
+        updateRowMap.put("remark", post.getRemark());
+        updateRowMap.put("name", post.getName());
+        updateRowMap.put("fullName", post.getFullName());
+        updateRowMap.put("code", post.getCode());
         
         int updateRowCount = this.postDao.updatePost(updateRowMap);
         

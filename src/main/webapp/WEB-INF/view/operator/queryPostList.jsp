@@ -13,15 +13,30 @@ var treeGrid = null;
 var orgTree = null;
 $(document).ready(function() {
 	orgTree = $('#organizationTree').tree({
-		url : '${contextPath}/organization/queryOrganizationList.action',
+		url : '${contextPath}/organization/queryOrganizationPostTreeNodeListByAuth.action',
 		idFiled : 'id',
 		parentField : 'parentId',
 		textFiled : 'name',
+		iconFiled : function(item){
+			if(item && item.type == 1){
+				return 'group_group';
+			}else{
+				return 'folder_user';	
+			}
+		},
 		fit : true,
 		fitColumns : true,
 		border : false,
 		onClick : function(node){
-			$.triggerge("choose_organization_" + "${eventName}",[node['attributes']]);
+			if(node['attributes'].type  == 0){
+				$('#treeGrid').treegrid('load',{
+					organizationId: node.id
+				});
+			}else{
+				$('#treeGrid').treegrid('load',{
+					parentPostId: node.id
+				});
+			}
 		}
 	});
 	
@@ -30,6 +45,9 @@ $(document).ready(function() {
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
+		iconFiled : function(item){
+			return 'group_group';	
+		},
 		fit : true,
 		fitColumns : true,
 		border : false,
@@ -92,6 +110,25 @@ $(document).ready(function() {
 		}
 	});
 });
+function refreshTree(){
+	$('#organizationTree').tree('reload');
+	$('#treeGrid').treegrid('reload');
+}
+/*
+ * 打开添加组织界面
+ */
+function addFun() {
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	DialogUtils.openModalDialog(
+		"addOrganization",
+		"添加组织",
+		"${contextPath}/post/toAddPost.action",
+		550,165,function(){
+		$('#treeGrid').treegrid('reload');
+	});
+}
 function redo() {
 	var node = treeGrid.treegrid('getSelected');
 	if (node) {
@@ -112,7 +149,9 @@ function undo() {
 </script>
 </head>
 <body class="easyui-layout">
-		<div data-options="region:'west',title:'组织结构',split:true" style="width:230px;">
+		<div data-options="region:'west',title:'组织结构',split:true,
+			tools : [{ iconCls : 'database_refresh',handler : function() {refreshTree();} }]" 
+			style="width:230px;">
 			<ul id="organizationTree"></ul>
 		</div> 
 		<div data-options="region:'center'" style="padding:5px;background:#eee;">
@@ -123,7 +162,7 @@ function undo() {
 			</div>
 			
 			<div id="toolbar" style="display: none;">
-				<c:if test="${false}">
+				<c:if test="${true}">
 					<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
 				</c:if>
 				<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 

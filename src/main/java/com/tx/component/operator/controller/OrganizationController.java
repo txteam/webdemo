@@ -23,6 +23,7 @@ import com.tx.component.operator.basicdata.ChiefTypeEnum;
 import com.tx.component.operator.basicdata.OrganizationTypeEnum;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OrganizationService;
+import com.tx.component.operator.treeview.OrganizationPostTreeNode;
 
 /**
  * 组织结构管理<br/>
@@ -115,6 +116,23 @@ public class OrganizationController {
     }
     
     /**
+      * 查询组织职位树数据列表
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return List<OrganizationPostTreeNode> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryOrganizationPostTreeNodeListByAuth")
+    public List<OrganizationPostTreeNode> queryOrganizationPostTreeNodeListByAuth() {
+        List<OrganizationPostTreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeListByAuth();
+        
+        return resList;
+    }
+    
+    /**
       * 查询所有组织的树列表<br/>
       *<功能详细描述>
       * @return [参数说明]
@@ -125,15 +143,14 @@ public class OrganizationController {
      */
     @RequestMapping("/queryOrganizationList")
     @ResponseBody
-    public List<Organization> queryOrganizationList(
-            @RequestParam(value = "rootOrganizationId", required = false) String rootOrganizationId) {
-        List<Organization> orgList = this.organizationService.queryOrganizationList(rootOrganizationId);
+    public List<Organization> queryOrganizationList() {
+        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth();
         
         return orgList;
     }
     
     /**
-     * 跳转到添加组织结构页面
+     * 添加组织结构页面
      *<功能详细描述>
      * @param organization [参数说明]
      * 
@@ -162,8 +179,9 @@ public class OrganizationController {
     @RequestMapping("/organizationCodeIsExist")
     public Map<String, String> organizationCodeIsExist(
             @RequestParam("code") String code,
-            @RequestParam(value="id",required=false) String excludeOrganizationId) {
-        boolean resFlag = this.organizationService.organizationCodeIsExist(code,excludeOrganizationId);
+            @RequestParam(value = "id", required = false) String excludeOrganizationId) {
+        boolean resFlag = this.organizationService.organizationCodeIsExist(code,
+                excludeOrganizationId);
         Map<String, String> resMap = new HashMap<String, String>();
         if (!resFlag) {
             resMap.put("ok", "可用的组织码号");

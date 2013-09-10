@@ -13,6 +13,12 @@
 			<auth key="query_cre_loan_cur_org" name="查询所属组织的贷款预约单"></auth>
 			<auth key="query_cre_loan_cur_and_child_org" name="查询所属组织及其子级组织的贷款预约单"></auth>
 		</auth>
-		
+				
+		<!-- 组织职位数据相关权限 -->
+		<auth key="organization_post" name="组织职位权限">
+			<!-- 组织职位权限默认为能够查询当前组织及其下级组织的权限 -->
+			<auth key="query_all_org_post" name="查询所有组织及职位"
+				description="组织权限默认为能够查询当前组织及其下级组织的权限，拥有该权限则能查询所有组织及职位的权限"></auth>
+		</auth>
 	</authType>
 </auths>

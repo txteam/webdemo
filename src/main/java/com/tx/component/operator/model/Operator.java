@@ -79,7 +79,11 @@ public class Operator implements Serializable{
     @Transient
     private EmployeeInfo employeeInfo;
     
-    /** 所属分行 */
+    /** 
+     * 所属组织 
+     * 在代码中控制组织id不能为空，考虑到超级管理员的组织为空的情况
+     * 由界面中创建的人员组织id不能为空
+     */
     @ManyToOne
     @JoinColumn(name="organizationId")
     private Organization organization;

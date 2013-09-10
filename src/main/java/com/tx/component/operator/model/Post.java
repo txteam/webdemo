@@ -18,6 +18,14 @@ import javax.persistence.Table;
 
  /**
   * 职位<br/>
+  *     职位和组织的关系<br/>
+  *     不同的组织结构下面可能存在相同名字的职位
+  *     或职责都相同的职位
+  *     但在不同的组织结构下应该被认定为不同的职位。
+  *     
+  *     在本类中，如果存在parent的职位，
+  *     则默认当前的职位的organizationId与父级职位相同<br/>
+  *     这个理念应该在界面上进行体现<br/>
   * <功能详细描述>
   * 
   * @author  PengQingyang

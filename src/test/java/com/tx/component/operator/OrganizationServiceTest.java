@@ -13,15 +13,14 @@ import javax.annotation.Resource;
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OrganizationService;
-import com.tx.core.paged.model.PagedList;
 
 
  /**
@@ -115,11 +114,8 @@ public class OrganizationServiceTest {
     @Test
     public void testQueryList(){
         try {
-            int count = this.organizationService.countOrganization();
             
-            Assert.assertTrue(count >= 0);
-            
-            List<Organization> organizationList = this.organizationService.queryOrganizationList(null);
+            List<Organization> organizationList = this.organizationService.queryAllOrganizationList();
             
             Assert.assertNotNull(organizationList);
             
@@ -128,25 +124,6 @@ public class OrganizationServiceTest {
             Assert.assertTrue(false);
         }
     }
-    
-    /**
-      * 测试分页查询功能
-      * <功能详细描述> [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @Test
-    public void testQueryPageList(){
-        try {
-            PagedList<Organization> organizationPageList = this.organizationService.queryOrganizationPagedList(1, 10);
-            
-            Assert.assertNotNull(organizationPageList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.assertTrue(false);
-        }
-    }
+
     
 }
