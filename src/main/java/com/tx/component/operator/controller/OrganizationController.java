@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -64,10 +65,16 @@ public class OrganizationController {
      * @see [类、类#方法、类#成员]
     */
     @RequestMapping("/toAddOrganization")
-    public String toAddOrganization(ModelMap response) {
+    public String toAddOrganization(
+            @RequestParam(value = "parentOrganizationId", required = false) String parentOrganizationId,
+            ModelMap response) {
         response.put("organization", new Organization());
         response.put("chiefTypes", ChiefTypeEnum.values());
         response.put("organizationTypes", OrganizationTypeEnum.values());
+        if (!StringUtils.isEmpty(parentOrganizationId)) {
+            Organization parentOrganization = this.organizationService.findOrganizationById(parentOrganizationId);
+            response.put("parentOrganization", parentOrganization);
+        }
         
         return "/operator/addOrganization";
     }
@@ -127,7 +134,7 @@ public class OrganizationController {
     @ResponseBody
     @RequestMapping("/queryOrganizationPostTreeNodeListByAuth")
     public List<OrganizationPostTreeNode> queryOrganizationPostTreeNodeListByAuth() {
-        List<OrganizationPostTreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeListByAuth();
+        List<OrganizationPostTreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeListByAuth(false);
         
         return resList;
     }
@@ -144,7 +151,24 @@ public class OrganizationController {
     @RequestMapping("/queryOrganizationList")
     @ResponseBody
     public List<Organization> queryOrganizationList() {
-        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth();
+        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth(false);
+        
+        return orgList;
+    }
+    
+    /**
+     * 查询所有组织的树列表<br/>
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<Organization> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/queryOrganizationListIncludeInvalid")
+    @ResponseBody
+    public List<Organization> queryOrganizationListIncludeInvalid() {
+        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth(true);
         
         return orgList;
     }
@@ -205,6 +229,68 @@ public class OrganizationController {
     @ResponseBody
     public boolean updateOrganization(Organization organization) {
         boolean resFlag = this.organizationService.updateById(organization);
+        return resFlag;
+    }
+    
+    /**
+     * 检查对应组织是否能够被停用
+     *<功能详细描述>
+     * @param organizationId
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/isDisableAble")
+    public boolean isDisableAble(
+            @RequestParam("organizationId") String organizationId) {
+        List<Organization> resList = this.organizationService.queryOrganizationListByParentId(organizationId,
+                false);
+        
+        //如果存在尚未停用的下级组织则不能被停用
+        if (CollectionUtils.isEmpty(resList)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+      * 停用指定组织
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/disableOrganizationById")
+    public boolean disableOrganizationById(
+            @RequestParam("organizationId") String organizationId) {
+        boolean resFlag = this.organizationService.disableOrganizationById(organizationId);
+        
+        return resFlag;
+    }
+    
+    /**
+      * 启用指定组织
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/enableOrganizationById")
+    public boolean enableOrganizationById(
+            @RequestParam("organizationId") String organizationId) {
+        boolean resFlag = this.organizationService.enableOrganizationById(organizationId);
+        
         return resFlag;
     }
     

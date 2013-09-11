@@ -32,7 +32,7 @@ public class WebContext implements InitializingBean {
     
     private static WebContext webContext;
     
-    @Resource(name="newOrganizationService")
+    @Resource(name = "newOrganizationService")
     private OrganizationService organizationService;
     
     @Resource(name = "newPostService")
@@ -97,23 +97,25 @@ public class WebContext implements InitializingBean {
         Organization currentOrganization = WebContextUtils.getOrganizationFromSession();
         
         List<String> resList = new ArrayList<String>();
-        if(!WebContextUtils.isSuperAdmin()){
+        if (!WebContextUtils.isSuperAdmin()) {
             //如果不是超级管理员
-            AssertUtils.notNull(currentOrganization,"organization is null");
-            AssertUtils.notEmpty(currentOrganization.getId(),"organization.id is empty");
+            AssertUtils.notNull(currentOrganization, "organization is null");
+            AssertUtils.notEmpty(currentOrganization.getId(),
+                    "organization.id is empty");
             
             //查询迭代子集组织id集合
-            resList.addAll(this.organizationService.queryChildOrganizationIdListByParentId(currentOrganization.getId()));
+            resList.addAll(this.organizationService.queryChildOrganizationIdListByParentId(currentOrganization.getId(),
+                    true));
             //将当前组织id压入
             resList.add(currentOrganization.getId());
-        }else{
+        } else {
             List<Organization> allOrgList = this.organizationService.queryAllOrganizationList();
             resList = new ArrayList<String>();
-            for(Organization orgTemp : allOrgList){
+            for (Organization orgTemp : allOrgList) {
                 resList.add(orgTemp.getId());
             }
         }
         
         return resList;
-    }    
+    }
 }

@@ -45,10 +45,10 @@ public class OrganizationService {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(OrganizationService.class);
     
-    @Resource(name="newOrganizationDao")
+    @Resource(name = "newOrganizationDao")
     private OrganizationDao organizationDao;
     
-    @Resource(name="newPostService")
+    @Resource(name = "newPostService")
     private PostService postService;
     
     /** 
@@ -79,15 +79,18 @@ public class OrganizationService {
     
     /**
       * 查询获取组织职位树数据列表<br/>
+      *<功能简述>
       *<功能详细描述>
+      * @param includeInvalidOrganization  是否包括已经停用的组织<br/>
       * @return [参数说明]
       * 
       * @return List<OrganizationPostTreeNode> [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<OrganizationPostTreeNode> queryOrganizationPostTreeNodeListByAuth() {
-        List<Organization> orgList = queryOrganizationListByAuth();
+    public List<OrganizationPostTreeNode> queryOrganizationPostTreeNodeListByAuth(
+            boolean includeInvalidOrganization) {
+        List<Organization> orgList = queryOrganizationListByAuth(includeInvalidOrganization);
         
         List<OrganizationPostTreeNode> resList = new ArrayList<OrganizationPostTreeNode>();
         for (Organization orgTemp : orgList) {
@@ -191,20 +194,23 @@ public class OrganizationService {
     }
     
     /**
-     * 根据Organization实体列表
-     *     根据权限查询组织列表<br/>
-     *     默认：查询当前组织及其下级组织的权限<br/>
-     *     如果有查询所有组织的权限，则能查询所有组织的的数据<br/>
-     *     
-     *     如果rootOrgId为空则返回所有的组织，如果不为空则返回以rootOrg下级的列表
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<Organization> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public List<Organization> queryOrganizationListByAuth() {
+      * 根据Organization实体列表
+      *     根据权限查询组织列表<br/>
+      *     默认：查询当前组织及其下级组织的权限<br/>
+      *     如果有查询所有组织的权限，则能查询所有组织的的数据<br/>
+      *     
+      *     如果rootOrgId为空则返回所有的组织，如果不为空则返回以rootOrg下级的列表
+      *<功能简述>
+      *<功能详细描述>
+      * @param includeInvalidOrganization
+      * @return [参数说明]
+      * 
+      * @return List<Organization> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<Organization> queryOrganizationListByAuth(
+            boolean includeInvalidOrganization) {
         Organization currentOrgnization = WebContextUtils.getOrganizationFromSession();
         String parentOrganizationId = "";
         if (currentOrgnization != null) {
@@ -214,9 +220,15 @@ public class OrganizationService {
         List<Organization> resList = null;
         //如果拥有查询所有组织的权限
         if (WebContextUtils.hasAuth("query_all_org_post")) {
-            resList = this.organizationDao.queryOrganizationList(null);
+            //生成查询条件
+            Map<String, Object> params = new HashMap<String, Object>();
+            if (!includeInvalidOrganization) {
+                params.put("valid", true);
+            }
+            resList = this.organizationDao.queryOrganizationList(params);
         } else {
-            resList = queryChildOrganizationListByParentId(parentOrganizationId);
+            resList = queryChildOrganizationListByParentId(parentOrganizationId,
+                    includeInvalidOrganization);
         }
         
         return resList;
@@ -247,13 +259,19 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryOrganizationListByParentId(
-            String parentOrganizationId) {
+            String parentOrganizationId, boolean includeInvalidOrganization) {
         //生成查询条件
         List<Organization> resList = null;
         if (StringUtils.isEmpty(parentOrganizationId)) {
-            resList = this.organizationDao.queryOrganizationList(null);
+            //生成查询条件
+            Map<String, Object> params = new HashMap<String, Object>();
+            if (!includeInvalidOrganization) {
+                params.put("valid", true);
+            }
+            resList = this.organizationDao.queryOrganizationList(params);
         } else {
-            resList = queryChildOrganizationListByParentId(parentOrganizationId);
+            resList = queryChildOrganizationListByParentId(parentOrganizationId,
+                    includeInvalidOrganization);
         }
         
         return resList;
@@ -270,12 +288,16 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryChildOrganizationListByParentId(
-            String parentOrganizationId) {
+            String parentOrganizationId, boolean includeInvalidOrganization) {
         AssertUtils.notEmpty(parentOrganizationId,
                 "parentOrganizationId is empty");
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("parentId", parentOrganizationId);
+        //如果不包括无效组织
+        if (!includeInvalidOrganization) {
+            params.put("valid", true);
+        }
         
         List<Organization> resList = new ArrayList<Organization>();
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
@@ -286,7 +308,8 @@ public class OrganizationService {
                 if (childTemp == null) {
                     continue;
                 }
-                resList.addAll(queryChildOrganizationListByParentId(childTemp.getId()));
+                resList.addAll(queryChildOrganizationListByParentId(childTemp.getId(),
+                        includeInvalidOrganization));
             }
         }
         
@@ -304,16 +327,16 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<String> queryChildOrganizationIdListByParentId(
-            String parentOrganizationId) {
+            String parentOrganizationId, boolean includeInvalidOrganization) {
         AssertUtils.notEmpty(parentOrganizationId,
                 "parentOrganizationId is empty");
         
-        List<Organization> orgList = queryChildOrganizationListByParentId(parentOrganizationId);
+        List<Organization> orgList = queryChildOrganizationListByParentId(parentOrganizationId,
+                includeInvalidOrganization);
         List<String> resList = new ArrayList<String>();
         if (CollectionUtils.isEmpty(orgList)) {
             return resList;
         }
-        
         for (Organization orgTemp : orgList) {
             resList.add(orgTemp.getId());
         }
@@ -389,6 +412,52 @@ public class OrganizationService {
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
+    }
+    
+    /**
+      * 停用指定组织
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean disableOrganizationById(String organizationId){
+        AssertUtils.notEmpty(organizationId,"organizationId is empty.");
+        
+        //获取对应组织
+        List<Organization> childs = queryOrganizationListByParentId(organizationId, false);
+        AssertUtils.isEmpty(childs,"valid child organization is exist");
+        
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", organizationId);
+        updateRowMap.put("valid", false);
+        
+        int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
+        return updateRowCount > 0;
+    }
+    
+    /**
+      * 启用指定组织
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean enableOrganizationById(String organizationId){
+        AssertUtils.notEmpty(organizationId,"organizationId is empty.");
+        
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", organizationId);
+        updateRowMap.put("valid", true);
+        
+        int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
+        return updateRowCount > 0;
     }
     
     /**

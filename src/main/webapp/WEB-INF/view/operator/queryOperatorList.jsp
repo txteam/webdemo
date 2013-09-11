@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>queryOrganizationList</title>
+<title>queryOperatorList</title>
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >

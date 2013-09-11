@@ -12,7 +12,7 @@
 var treeGrid = null;
 $(document).ready(function() {
 	treeGrid = $('#treeGrid').treegrid({
-		url : '${contextPath}/organization/queryOrganizationList.action',
+		url : '${contextPath}/organization/queryOrganizationListIncludeInvalid.action',
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
@@ -100,10 +100,11 @@ $(document).ready(function() {
 				</c:if>
 				str += '&nbsp;';
 				<c:if test="${true}">
-					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${contextPath}/style/images/extjs_icons/delete.png');
-				</c:if>
-				<c:if test="${true}">
-					str += $.formatString('<img onclick="stopFun(\'{0}\');" src="{1}" title="停用"/>', row.id, '${contextPath}/style/images/extjs_icons/stop.png');
+				if(row.valid){
+					str += $.formatString('<img onclick="stopFun(\'{0}\');" src="{1}" title="停用"/>', row.id, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+				}else{
+					str += $.formatString('<img onclick="stopFun(\'{0}\');" src="{1}" title="启用"/>', row.id, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+				}
 				</c:if>
 				return str;
 			}
@@ -148,14 +149,22 @@ function undo() {
 /*
  * 打开添加组织界面
  */
-function addFun() {
+function addFun(id) {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	if (id == undefined) {
+		var rows = dataGrid.datagrid('getSelections');
+		if(!$.ObjectUtils.isEmpty(rows)){
+			id = rows[0].id;
+		}else{
+			id = ''
+		}
+	}
 	DialogUtils.openModalDialog(
 		"addOrganization",
 		"添加组织",
-		"${contextPath}/organization/toAddOrganization.action",
+		str += $.formatString("${contextPath}/organization/toAddOrganization.action?parentOrganizationId={0}",id),
 		550,265,function(){
 		$('#treeGrid').treegrid('reload');
 	});
@@ -168,6 +177,27 @@ function editFun(id) {
 		var rows = dataGrid.datagrid('getSelections');
 		id = rows[0].id;
 	}
+	DialogUtils.openModalDialog(
+		"updateOrganization",
+		"编辑组织",
+		$.formatString("${contextPath}/organization/toUpdateOrganization.action?organizationId={0}",id),
+		550,265,function(){
+			$('#treeGrid').treegrid('reload');
+	});
+}
+function stopFun(id) {
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	if (id == undefined) {
+		var rows = dataGrid.datagrid('getSelections');
+		id = rows[0].id;
+	}
+	//判断对应组织是否能被停用
+	$.post(
+		'${contextPath}/organization/isDisabled.action',
+		{});
+	
 	DialogUtils.openModalDialog(
 		"updateOrganization",
 		"编辑组织",
@@ -198,9 +228,6 @@ function editFun(id) {
 	<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
 		<c:if test="${true}">
 			<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
-		</c:if>
-		<c:if test="${true}">
-			<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
 		</c:if>
 		<c:if test="${true}">
 			<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
