@@ -21,10 +21,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.component.mainframe.context.WebContextUtils;
+import com.tx.component.operator.OperatorConstants;
 import com.tx.component.operator.dao.OrganizationDao;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.Post;
-import com.tx.component.operator.treeview.OrganizationPostTreeNode;
+import com.tx.component.operator.treeview.TreeNode;
+import com.tx.component.operator.treeview.TreeNodeAdapter;
 import com.tx.core.TxConstants;
 import com.tx.core.exceptions.util.AssertUtils;
 
@@ -88,17 +90,17 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<OrganizationPostTreeNode> queryOrganizationPostTreeNodeListByAuth(
+    public List<TreeNode> queryOrganizationPostTreeNodeListByAuth(
             boolean includeInvalidOrganization) {
         List<Organization> orgList = queryOrganizationListByAuth(includeInvalidOrganization);
         
-        List<OrganizationPostTreeNode> resList = new ArrayList<OrganizationPostTreeNode>();
+        List<TreeNode> resList = new ArrayList<TreeNode>();
         for (Organization orgTemp : orgList) {
-            resList.add(new OrganizationPostTreeNode(orgTemp));
+            resList.add(new TreeNode(organizationAdapter, orgTemp));
             
             List<Post> postList = this.postService.queryPostListByOrganizationId(orgTemp.getId());
             for (Post postTemp : postList) {
-                resList.add(new OrganizationPostTreeNode(postTemp));
+                resList.add(new TreeNode(postAdapter, postTemp));
             }
         }
         return resList;
@@ -424,12 +426,13 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public boolean disableOrganizationById(String organizationId){
-        AssertUtils.notEmpty(organizationId,"organizationId is empty.");
+    public boolean disableOrganizationById(String organizationId) {
+        AssertUtils.notEmpty(organizationId, "organizationId is empty.");
         
         //获取对应组织
-        List<Organization> childs = queryOrganizationListByParentId(organizationId, false);
-        AssertUtils.isEmpty(childs,"valid child organization is exist");
+        List<Organization> childs = queryOrganizationListByParentId(organizationId,
+                false);
+        AssertUtils.isEmpty(childs, "valid child organization is exist");
         
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", organizationId);
@@ -449,8 +452,8 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public boolean enableOrganizationById(String organizationId){
-        AssertUtils.notEmpty(organizationId,"organizationId is empty.");
+    public boolean enableOrganizationById(String organizationId) {
+        AssertUtils.notEmpty(organizationId, "organizationId is empty.");
         
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", organizationId);
@@ -488,4 +491,51 @@ public class OrganizationService {
         condition.setId(id);
         return this.organizationDao.deleteOrganization(condition);
     }
+    
+    /** 组织转换为树节点的适配器 */
+    private static final TreeNodeAdapter<Organization> organizationAdapter = new TreeNodeAdapter<Organization>() {
+        
+        @Override
+        public String getId(Organization obj) {
+            return obj.getId();
+        }
+        
+        @Override
+        public int getType(Organization obj) {
+            return OperatorConstants.TREENODE_TYPE_ORGANIZATION;
+        }
+        
+        @Override
+        public String getParentId(Organization obj) {
+            return obj.getParentId();
+        }
+        
+        @Override
+        public String getName(Organization obj) {
+            return obj.getName();
+        }
+    };
+    
+    private static final TreeNodeAdapter<Post> postAdapter = new TreeNodeAdapter<Post>() {
+        
+        @Override
+        public String getId(Post obj) {
+            return obj.getId();
+        }
+        
+        @Override
+        public int getType(Post obj) {
+            return OperatorConstants.TREENODE_TYPE_POST;
+        }
+        
+        @Override
+        public String getParentId(Post obj) {
+            return obj.getParentId();
+        }
+        
+        @Override
+        public String getName(Post obj) {
+            return obj.getName();
+        }
+    };
 }

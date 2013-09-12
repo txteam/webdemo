@@ -24,7 +24,7 @@ import com.tx.component.operator.basicdata.ChiefTypeEnum;
 import com.tx.component.operator.basicdata.OrganizationTypeEnum;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OrganizationService;
-import com.tx.component.operator.treeview.OrganizationPostTreeNode;
+import com.tx.component.operator.treeview.TreeNode;
 
 /**
  * 组织结构管理<br/>
@@ -133,8 +133,8 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping("/queryOrganizationPostTreeNodeListByAuth")
-    public List<OrganizationPostTreeNode> queryOrganizationPostTreeNodeListByAuth() {
-        List<OrganizationPostTreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeListByAuth(false);
+    public List<TreeNode> queryOrganizationPostTreeNodeListByAuth() {
+        List<TreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeListByAuth(false);
         
         return resList;
     }
@@ -290,6 +290,23 @@ public class OrganizationController {
     public boolean enableOrganizationById(
             @RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.enableOrganizationById(organizationId);
+        
+        return resFlag;
+    }
+    
+    /**
+      * 根据组织id删除对应组织<br/> 
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean deleteOrganizationById(
+            @RequestParam("organizationId") String organizationId) {
+        boolean resFlag = this.organizationService.deleteById(organizationId) > 0;
         
         return resFlag;
     }

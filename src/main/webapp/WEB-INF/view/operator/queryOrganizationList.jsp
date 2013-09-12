@@ -154,7 +154,7 @@ function addFun(id) {
         text : '加载中，请等待....'
 	});
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = treeGrid.treegrid('getSelections');
 		if(!$.ObjectUtils.isEmpty(rows)){
 			id = rows[0].id;
 		}else{
@@ -164,7 +164,7 @@ function addFun(id) {
 	DialogUtils.openModalDialog(
 		"addOrganization",
 		"添加组织",
-		str += $.formatString("${contextPath}/organization/toAddOrganization.action?parentOrganizationId={0}",id),
+		$.formatString("${contextPath}/organization/toAddOrganization.action?parentOrganizationId={0}",id),
 		550,265,function(){
 		$('#treeGrid').treegrid('reload');
 	});

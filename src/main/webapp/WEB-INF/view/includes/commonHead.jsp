@@ -28,7 +28,7 @@
 <!-- other -->
 <script type="text/javascript" src="${contextPath}/js/datePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery.form.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="${contextPath }/js/validator-0.2.1/jquery.validator.js"></script>
+<script type="text/javascript" src="${contextPath }/js/validator-0.2.1/src/jquery.validator.js"></script>
 <script type="text/javascript" src="${contextPath }/js/validator-0.2.1/local/zh_CN.js"></script>
 <!-- customize -->
 <script type="text/javascript" src="${contextPath}/js/commons.js" charset="utf-8"></script>

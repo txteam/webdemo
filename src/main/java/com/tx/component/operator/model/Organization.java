@@ -68,7 +68,7 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     /** 是否可用 */
     private boolean valid;
     
-    /** 是否是分行 */
+    /** 组织类型 */
     private OrganizationTypeEnum type;
     
     /**省ID*/

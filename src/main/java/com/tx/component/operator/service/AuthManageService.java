@@ -4,20 +4,26 @@
  * 修改时间:  2013-8-30
  * <修改描述:>
  */
-package com.tx.component.mainframe.service;
+package com.tx.component.operator.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.tx.component.auth.AuthConstant;
 import com.tx.component.auth.context.AuthContext;
 import com.tx.component.auth.context.AuthSessionContext;
 import com.tx.component.auth.context.AuthTypeItemContext;
@@ -26,9 +32,7 @@ import com.tx.component.auth.model.AuthItemImpl;
 import com.tx.component.auth.model.AuthItemRef;
 import com.tx.component.auth.model.AuthTypeItem;
 import com.tx.component.mainframe.MainframeConstants;
-import com.tx.component.operator.service.OperatorService;
-import com.tx.component.operator.service.OrganizationService;
-import com.tx.component.operator.service.PostService;
+import com.tx.component.operator.model.Operator;
 import com.tx.core.exceptions.util.AssertUtils;
 
 /**
@@ -54,6 +58,162 @@ public class AuthManageService {
     
     @Resource(name = "authContext")
     private AuthContext authContext;
+    
+    /**
+      * 根据用户id查询对应用户拥有的权限集合<br/>
+      *<功能详细描述>
+      * @param operatorId
+      * @return [参数说明]
+      * 
+      * @return List<String> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public Set<String> queryAuthItemIdSetByOperatorId(String operatorId) {
+        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+        
+        Set<String> resSet = new HashSet<String>();
+        List<AuthItemRef> authItemRefList = AuthContext.getContext()
+                .queryAuthItemRefListByAuthRefTypeAndRefId(AuthConstant.AUTHREFTYPE_OPERATOR,
+                        operatorId);
+        if (authItemRefList != null) {
+            for (AuthItemRef refTemp : authItemRefList) {
+                resSet.add(refTemp.getAuthItem().getId());
+            }
+        }
+        
+        return resSet;
+    }
+    
+    /**
+      * 根据职位id查询组织拥有的权限<br/>
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return Set<String> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public Set<String> queryAuthItemIdSetByOrganizationId(String organizationId) {
+        AssertUtils.notEmpty(organizationId, "organizationId is empty.");
+        
+        Set<String> resSet = new HashSet<String>();
+        List<AuthItemRef> authItemRefList = AuthContext.getContext()
+                .queryAuthItemRefListByAuthRefTypeAndRefId(AuthConstant.AUTHREFTYPE_ORGANIZATION,
+                        organizationId);
+        if (authItemRefList != null) {
+            for (AuthItemRef refTemp : authItemRefList) {
+                resSet.add(refTemp.getAuthItem().getId());
+            }
+        }
+        
+        return resSet;
+    }
+    
+    /**
+      * 根据职位id查询职位拥有的权限集合<br/>
+      *<功能详细描述>
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return Set<String> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public Set<String> queryAuthItemIdSetByPostId(String postId) {
+        AssertUtils.notEmpty(postId, "postId is empty.");
+        
+        Set<String> resSet = new HashSet<String>();
+        List<AuthItemRef> authItemRefList = AuthContext.getContext()
+                .queryAuthItemRefListByAuthRefTypeAndRefId(AuthConstant.AUTHREFTYPE_POST,
+                        postId);
+        if (authItemRefList != null) {
+            for (AuthItemRef refTemp : authItemRefList) {
+                resSet.add(refTemp.getAuthItem().getId());
+            }
+        }
+        
+        return resSet;
+    }
+    
+    /**
+      * 查询指定权限对应的人员id集合
+      *<功能详细描述>
+      * @param authItemId
+      * @return [参数说明]
+      * 
+      * @return Set<String> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public Set<String> queryOperatorIdSetByAuthItemId(String authItemId) {
+        AssertUtils.notEmpty(authItemId, "authItemId is empty.");
+        
+        Set<String> resSet = new HashSet<String>();
+        List<AuthItemRef> authItemRefList = AuthContext.getContext()
+                .queryAuthItemRefListByAuthRefTypeAndAuthItemId(AuthConstant.AUTHREFTYPE_OPERATOR,
+                        authItemId);
+        if (authItemRefList != null) {
+            for (AuthItemRef refTemp : authItemRefList) {
+                resSet.add(refTemp.getAuthItem().getId());
+            }
+        }
+        
+        return resSet;
+    }
+    
+    /**
+     * 查询指定权限对应的组织id集合
+     *<功能详细描述>
+     * @param authItemId
+     * @return [参数说明]
+     * 
+     * @return Set<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public Set<String> queryOrganizationIdSetByAuthItemId(String organizationId) {
+        AssertUtils.notEmpty(organizationId, "organizationId is empty.");
+        
+        Set<String> resSet = new HashSet<String>();
+        List<AuthItemRef> authItemRefList = AuthContext.getContext()
+                .queryAuthItemRefListByAuthRefTypeAndAuthItemId(AuthConstant.AUTHREFTYPE_ORGANIZATION,
+                        organizationId);
+        if (authItemRefList != null) {
+            for (AuthItemRef refTemp : authItemRefList) {
+                resSet.add(refTemp.getAuthItem().getId());
+            }
+        }
+        
+        return resSet;
+    }
+    
+    /**
+     * 查询指定权限对应的职位id集合
+     *<功能详细描述>
+     * @param authItemId
+     * @return [参数说明]
+     * 
+     * @return Set<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public Set<String> queryPostIdSetByAuthItemId(String postId) {
+        AssertUtils.notEmpty(postId, "postId is empty.");
+        
+        Set<String> resSet = new HashSet<String>();
+        List<AuthItemRef> authItemRefList = AuthContext.getContext()
+                .queryAuthItemRefListByAuthRefTypeAndAuthItemId(AuthConstant.AUTHREFTYPE_ORGANIZATION,
+                        postId);
+        if (authItemRefList != null) {
+            for (AuthItemRef refTemp : authItemRefList) {
+                resSet.add(refTemp.getAuthItem().getId());
+            }
+        }
+        
+        return resSet;
+    }
     
     /**
      * 查询权限类型项<br/>
@@ -210,6 +370,39 @@ public class AuthManageService {
                 operatorId);
         
         return AuthItemRefList;
+    }
+    
+    /**
+      * 查询当前人员拥有权限的权限类型集合（不包含）
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return List<AuthTypeItem> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<AuthTypeItem> queryCurrentOperatorAuthTypeItemOfHasChild() {
+        MultiValueMap<String, AuthItem> authType2AuthItemListMap = queryCurrentPerpetualType2AuthMultiValueMap(true);
+        
+        List<String> hasAuthTypeIdList = new ArrayList<String>();
+        if (authType2AuthItemListMap != null) {
+            for (Entry<String, List<AuthItem>> entryTemp : authType2AuthItemListMap.entrySet()) {
+                if (CollectionUtils.isEmpty(entryTemp.getValue())
+                        && hasAuthTypeIdList.contains(entryTemp.getKey())) {
+                    continue;
+                }
+                hasAuthTypeIdList.add(entryTemp.getKey());
+            }
+        }
+        
+        Map<String, AuthTypeItem> authTypeMap = AuthTypeItemContext.getContext()
+                .getAllAuthTypeItemMap();
+        List<AuthTypeItem> hasChildAuthTypeList = new ArrayList<AuthTypeItem>();
+        for (String authTypeKeyTemp : hasAuthTypeIdList) {
+            hasChildAuthTypeList.add(authTypeMap.get(authTypeKeyTemp));
+        }
+        
+        return hasChildAuthTypeList;
     }
     
     /**

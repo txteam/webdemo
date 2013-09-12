@@ -304,7 +304,7 @@
 
             ret = (me.isValid || opt.debug === 2) ? 'valid' : 'invalid';
             opt[ret].call(me, form);
-            me.$el.trigger(ret + '.form', [form]);
+            me.$el.trigger('' + ret + '.form', [form]);
             me.submiting = false;
         },
 

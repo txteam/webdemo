@@ -18,8 +18,8 @@ package com.tx.component.operator.basicdata;
   */
 public enum OrganizationTypeEnum {
     
-    公司部门,
+    公司,
     分公司,
-    分公司部门,
-    合作方;
+    部门,
+    分行;
 }

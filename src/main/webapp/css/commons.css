@@ -191,6 +191,36 @@ label.selected {
 .form .n-invalid {
     border: 1px solid #f00;
 }
+.form input {
+    border: 1px solid #A0C2E5;
+    color: #44474C;
+    background: #fff;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 2px;
+    vertical-align: middle;
+}
+.form select {
+    vertical-align: middle;
+    width: 139px;
+    width: 133px\9;
+    height: 22px;
+    line-height: 22px;
+    border: 1px solid #A0C2E5;
+    background: #fff;
+}
+.form textarea {
+    border: 1px solid #A0C2E5;
+    background: #FFF;
+    vertical-align: middle;
+    padding: 2px;
+    overflow: auto;
+}
+.form input[type="radio"],.form input[type="checkbox"] {
+    vertical-align: middle;
+}
+
 /* list-table */
 .list-table {
 
@@ -226,6 +256,7 @@ label.selected {
     border-top: none;
 }
 
+/* 提供颜色样式 */
 .tRed {
     color: #f00;
 }
@@ -233,10 +264,11 @@ label.selected {
     color: #999;
 }
 
+
+/* 覆写datagrid样式 */
 .datagrid-header-row td .datagrid-cell {
     white-space: nowrap;
 }
-
 .datagrid-header-cell-arrow {
     display: inline-block;
     float: right;
@@ -246,17 +278,14 @@ label.selected {
     filter: alpha(opacity = 0);
     opacity: 0;
 }
-
 .datagrid-header-cell-arrow-show {
     border-left-width: 1px;
     filter: alpha(opacity = 80);
     opacity: 0.8;
 }
-
 .datagrid-header-filter {
     overflow: auto;
 }
-
 .datagrid-header-filter {
     text-align: center;
     vertical-align: top;
@@ -270,14 +299,12 @@ label.selected {
     margin-top: 3px;
     margin-bottom: 3px;
 }
-
 .datagrid-header-filter-container {
     padding-top: 5px;
     overflow: auto;
     font-size: 11px;
     text-align: left;
 }
-
 .datagrid-header-filter-item {
     overflow: hidden;
     padding: 0px;
@@ -286,17 +313,14 @@ label.selected {
     white-space: nowrap;
     margin: 2px;
 }
-
 .datagrid-header-filter-item:hover {
     filter: alpha(opacity = 60);
     opacity: 0.6;
 }
-
 .datagrid-header-filter-item-text {
     padding-left: 20px;
     float: left;
 }
-
 .datagrid-header-filter-item-icon {
     left: 2px;
     top: 50%;
@@ -304,7 +328,6 @@ label.selected {
     height: 16px;
     margin-top: -3px;
 }
-
 .datagrid-header-filter-itemwrap {
     overflow: hidden;
     padding-left: 5px;
@@ -312,21 +335,17 @@ label.selected {
     white-space: nowrap;
     height: 20px;
 }
-
 .datagrid-header-filter-slider {
     
 }
-
 .datagrid-header-filter-sliderwrap {
     overflow: hidden;
     padding-left: 30px;
     padding-top: 15px;
 }
-
 .datagrid-header-filter-sliderwrap .slider-rulelabel span {
     font-size: 11px;
 }
-
 .datagrid-header-filter-numeric {
     width: 60px;
     height: 12px;

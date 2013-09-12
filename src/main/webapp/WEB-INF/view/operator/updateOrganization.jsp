@@ -13,8 +13,8 @@
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
-	$('#organizationForm').validator()
-		.on('valid.form', function(){
+	$('#organizationForm').bind('valid.form', function(){
+			alert('valid.form');
 		    //ajax提交
 			$(this).ajaxSubmit({
 			    url:"${contextPath}/organization/updateOrganization.action",
@@ -26,6 +26,8 @@ $(document).ready(function(){
 			    } 
 			});
 	});
+	
+	alert("form bing success.");
     //提交
 	$("#addBtn").click(function(){
 		$('#organizationForm').submit();

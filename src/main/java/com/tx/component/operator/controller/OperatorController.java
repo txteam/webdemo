@@ -6,6 +6,8 @@
  */
 package com.tx.component.operator.controller;
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -90,11 +92,16 @@ public class OperatorController {
       * @see [类、类#方法、类#成员]
      */
     public PagedList<Operator> queryOperatorPagedList(
-            @RequestParam MultivaluedMap<String, String> requestMap,
-            @RequestParam(value="pageIndex",required=false,defaultValue="1") int pageIndex,
-            @RequestParam(value="pageSize",required=false,defaultValue="10") int pageSize,
+            @RequestParam Map<String, String> requestMap,
+            @RequestParam(value = "pageIndex", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             ModelMap responseMap) {
-        PagedList<Operator> resPagedList = this.operatorService.queryOperatorPagedList(pageIndex, pageSize);
+        String organizationId = requestMap.get("organizationId");
+        String postId = requestMap.get("postId");
+        
+        //String organizationId = requestMap.get("");
+        PagedList<Operator> resPagedList = this.operatorService.queryOperatorPagedList(pageIndex,
+                pageSize);
         return resPagedList;
     }
     
