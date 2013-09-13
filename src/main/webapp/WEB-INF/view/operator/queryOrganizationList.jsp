@@ -100,6 +100,10 @@ $(document).ready(function() {
 				</c:if>
 				str += '&nbsp;';
 				<c:if test="${true}">
+					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
+				</c:if>
+				str += '&nbsp;';
+				<c:if test="${true}">
 				if(row.valid){
 					str += $.formatString('<img onclick="stopFun(\'{0}\');" src="{1}" title="停用"/>', row.id, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
 				}else{

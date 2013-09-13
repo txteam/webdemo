@@ -4,15 +4,14 @@
  * 修改时间:  2013-8-30
  * <修改描述:>
  */
-package com.tx.component.operator.service;
+package com.tx.component.mainframe.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.tx.component.auth.AuthConstant;
 import com.tx.component.auth.context.AuthContext;
 import com.tx.component.auth.context.AuthSessionContext;
 import com.tx.component.auth.context.AuthTypeItemContext;
@@ -32,7 +30,11 @@ import com.tx.component.auth.model.AuthItemImpl;
 import com.tx.component.auth.model.AuthItemRef;
 import com.tx.component.auth.model.AuthTypeItem;
 import com.tx.component.mainframe.MainframeConstants;
-import com.tx.component.operator.model.Operator;
+import com.tx.component.mainframe.treeview.CheckAbleTreeNode;
+import com.tx.component.mainframe.treeview.CheckAbleTreeNodeAdapter;
+import com.tx.component.operator.service.OperatorService;
+import com.tx.component.operator.service.OrganizationService;
+import com.tx.component.operator.service.PostService;
 import com.tx.core.exceptions.util.AssertUtils;
 
 /**
@@ -60,74 +62,67 @@ public class AuthManageService {
     private AuthContext authContext;
     
     /**
-      * 根据用户id查询对应用户拥有的权限集合<br/>
-      *<功能详细描述>
-      * @param operatorId
-      * @return [参数说明]
-      * 
-      * @return List<String> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public Set<String> queryAuthItemIdSetByOperatorId(String operatorId) {
-        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+     * 生成引用的权限树
+     *     根据引用项id以及引用类型查询
+     *<功能详细描述>
+     * @param postId
+     * @return [参数说明]
+     * 
+     * @return MultiValueMap<String,CheckAbleTreeNode> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public MultiValueMap<String, CheckAbleTreeNode> queryAuthType2TreeNodeMapByRefId(
+            String refType, String refId) {
+        AssertUtils.notEmpty(refId, "refId is empty.");
+        AssertUtils.notEmpty(refType, "refType is empty.");
         
-        Set<String> resSet = new HashSet<String>();
-        List<AuthItemRef> authItemRefList = AuthContext.getContext()
-                .queryAuthItemRefListByAuthRefTypeAndRefId(AuthConstant.AUTHREFTYPE_OPERATOR,
-                        operatorId);
-        if (authItemRefList != null) {
-            for (AuthItemRef refTemp : authItemRefList) {
-                resSet.add(refTemp.getAuthItem().getId());
+        //查询当前登录人员拥有的权限集合
+        Map<String, List<AuthItem>> res = queryCurrentPerpetualType2AuthMultiValueMap(true);
+        //查询指定职位的权限id集合
+        Set<String> refAuthIdSet = queryAuthItemIdSetByRefId(refType, refId);
+        
+        //值map
+        MultiValueMap<String, CheckAbleTreeNode> resMap = new LinkedMultiValueMap<String, CheckAbleTreeNode>();
+        for (Entry<String, List<AuthItem>> entryTemp : res.entrySet()) {
+            if (CollectionUtils.isEmpty(entryTemp.getValue())) {
+                continue;
+            }
+            
+            for (AuthItem authTemp : entryTemp.getValue()) {
+                if (refAuthIdSet.contains(authTemp.getId())) {
+                    //如果对应职位已经有对应权限
+                    resMap.add(entryTemp.getKey(), new CheckAbleTreeNode(
+                            authAdapter, authTemp, true));
+                } else {
+                    //如果对应职位没有有对应权限
+                    resMap.add(entryTemp.getKey(), new CheckAbleTreeNode(
+                            authAdapter, authTemp, false));
+                }
             }
         }
         
-        return resSet;
+        return resMap;
     }
     
     /**
-      * 根据职位id查询组织拥有的权限<br/>
+      * 差尊指定引用类型的引用id拥有的权限id集合
       *<功能详细描述>
-      * @param organizationId
-      * @return [参数说明]
-      * 
-      * @return Set<String> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public Set<String> queryAuthItemIdSetByOrganizationId(String organizationId) {
-        AssertUtils.notEmpty(organizationId, "organizationId is empty.");
-        
-        Set<String> resSet = new HashSet<String>();
-        List<AuthItemRef> authItemRefList = AuthContext.getContext()
-                .queryAuthItemRefListByAuthRefTypeAndRefId(AuthConstant.AUTHREFTYPE_ORGANIZATION,
-                        organizationId);
-        if (authItemRefList != null) {
-            for (AuthItemRef refTemp : authItemRefList) {
-                resSet.add(refTemp.getAuthItem().getId());
-            }
-        }
-        
-        return resSet;
-    }
-    
-    /**
-      * 根据职位id查询职位拥有的权限集合<br/>
-      *<功能详细描述>
-      * @param postId
+      * @param refType
+      * @param refId
       * @return [参数说明]
       * 
       * @return Set<String> [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public Set<String> queryAuthItemIdSetByPostId(String postId) {
-        AssertUtils.notEmpty(postId, "postId is empty.");
+    public Set<String> queryAuthItemIdSetByRefId(String refType, String refId) {
+        AssertUtils.notEmpty(refId, "refId is empty.");
+        AssertUtils.notEmpty(refType, "refType is empty.");
         
         Set<String> resSet = new HashSet<String>();
         List<AuthItemRef> authItemRefList = AuthContext.getContext()
-                .queryAuthItemRefListByAuthRefTypeAndRefId(AuthConstant.AUTHREFTYPE_POST,
-                        postId);
+                .queryAuthItemRefListByAuthRefTypeAndRefId(refType, refId);
         if (authItemRefList != null) {
             for (AuthItemRef refTemp : authItemRefList) {
                 resSet.add(refTemp.getAuthItem().getId());
@@ -138,8 +133,9 @@ public class AuthManageService {
     }
     
     /**
-      * 查询指定权限对应的人员id集合
+      * 查询指定引用类型的引用id集合
       *<功能详细描述>
+      * @param refType
       * @param authItemId
       * @return [参数说明]
       * 
@@ -147,65 +143,15 @@ public class AuthManageService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public Set<String> queryOperatorIdSetByAuthItemId(String authItemId) {
+    public Set<String> queryRefIdSetByAuthItemId(String refType,
+            String authItemId) {
         AssertUtils.notEmpty(authItemId, "authItemId is empty.");
+        AssertUtils.notEmpty(refType, "refType is empty.");
         
         Set<String> resSet = new HashSet<String>();
         List<AuthItemRef> authItemRefList = AuthContext.getContext()
-                .queryAuthItemRefListByAuthRefTypeAndAuthItemId(AuthConstant.AUTHREFTYPE_OPERATOR,
+                .queryAuthItemRefListByAuthRefTypeAndAuthItemId(refType,
                         authItemId);
-        if (authItemRefList != null) {
-            for (AuthItemRef refTemp : authItemRefList) {
-                resSet.add(refTemp.getAuthItem().getId());
-            }
-        }
-        
-        return resSet;
-    }
-    
-    /**
-     * 查询指定权限对应的组织id集合
-     *<功能详细描述>
-     * @param authItemId
-     * @return [参数说明]
-     * 
-     * @return Set<String> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public Set<String> queryOrganizationIdSetByAuthItemId(String organizationId) {
-        AssertUtils.notEmpty(organizationId, "organizationId is empty.");
-        
-        Set<String> resSet = new HashSet<String>();
-        List<AuthItemRef> authItemRefList = AuthContext.getContext()
-                .queryAuthItemRefListByAuthRefTypeAndAuthItemId(AuthConstant.AUTHREFTYPE_ORGANIZATION,
-                        organizationId);
-        if (authItemRefList != null) {
-            for (AuthItemRef refTemp : authItemRefList) {
-                resSet.add(refTemp.getAuthItem().getId());
-            }
-        }
-        
-        return resSet;
-    }
-    
-    /**
-     * 查询指定权限对应的职位id集合
-     *<功能详细描述>
-     * @param authItemId
-     * @return [参数说明]
-     * 
-     * @return Set<String> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public Set<String> queryPostIdSetByAuthItemId(String postId) {
-        AssertUtils.notEmpty(postId, "postId is empty.");
-        
-        Set<String> resSet = new HashSet<String>();
-        List<AuthItemRef> authItemRefList = AuthContext.getContext()
-                .queryAuthItemRefListByAuthRefTypeAndAuthItemId(AuthConstant.AUTHREFTYPE_ORGANIZATION,
-                        postId);
         if (authItemRefList != null) {
             for (AuthItemRef refTemp : authItemRefList) {
                 resSet.add(refTemp.getAuthItem().getId());
@@ -459,4 +405,27 @@ public class AuthManageService {
         }
     }
     
+    /** 职位转换为树节点的适配器 */
+    private static CheckAbleTreeNodeAdapter<AuthItem> authAdapter = new CheckAbleTreeNodeAdapter<AuthItem>() {
+        
+        public String getId(AuthItem obj) {
+            return obj.getId();
+        }
+        
+        public int getType(AuthItem obj) {
+            return 0;
+        }
+        
+        public String getParentId(AuthItem obj) {
+            return obj.getParentId();
+        }
+        
+        public String getName(AuthItem obj) {
+            return obj.getName();
+        }
+        
+        public boolean isChecked(AuthItem obj) {
+            return false;
+        }
+    };
 }

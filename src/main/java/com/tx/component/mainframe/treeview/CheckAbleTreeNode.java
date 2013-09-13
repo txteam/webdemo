@@ -4,7 +4,7 @@
  * 修改时间:  2013-9-12
  * <修改描述:>
  */
-package com.tx.component.operator.treeview;
+package com.tx.component.mainframe.treeview;
 
 /**
  * 可选择的树节点模型，用以支持显示时支持哪些实体是选中的<br/>
@@ -26,9 +26,16 @@ public class CheckAbleTreeNode extends TreeNode {
     private boolean checked;
     
     /** <默认构造函数> */
-    public <T> CheckAbleTreeNode(CheckedAbleTreeNodeAdapter<T> adapter, T obj) {
+    public <T> CheckAbleTreeNode(CheckAbleTreeNodeAdapter<T> adapter, T obj) {
         super(adapter, obj);
         this.checked = adapter.isChecked(obj);
+    }
+    
+    /** <默认构造函数> */
+    public <T> CheckAbleTreeNode(TreeNodeAdapter<T> adapter, T obj,
+            boolean checked) {
+        super(adapter, obj);
+        this.checked = checked;
     }
     
     /**

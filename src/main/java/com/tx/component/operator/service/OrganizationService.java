@@ -21,12 +21,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.component.mainframe.context.WebContextUtils;
+import com.tx.component.mainframe.treeview.TreeNode;
+import com.tx.component.mainframe.treeview.TreeNodeAdapter;
 import com.tx.component.operator.OperatorConstants;
 import com.tx.component.operator.dao.OrganizationDao;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.Post;
-import com.tx.component.operator.treeview.TreeNode;
-import com.tx.component.operator.treeview.TreeNodeAdapter;
 import com.tx.core.TxConstants;
 import com.tx.core.exceptions.util.AssertUtils;
 
@@ -492,6 +492,7 @@ public class OrganizationService {
         return this.organizationDao.deleteOrganization(condition);
     }
     
+    
     /** 组织转换为树节点的适配器 */
     private static final TreeNodeAdapter<Organization> organizationAdapter = new TreeNodeAdapter<Organization>() {
         
@@ -516,6 +517,7 @@ public class OrganizationService {
         }
     };
     
+    /** 职位与树节点转换的适配器 */
     private static final TreeNodeAdapter<Post> postAdapter = new TreeNodeAdapter<Post>() {
         
         @Override
@@ -530,7 +532,10 @@ public class OrganizationService {
         
         @Override
         public String getParentId(Post obj) {
-            return obj.getParentId();
+            String parentId = StringUtils.isEmpty(obj.getParentId()) ? obj.getOrganization()
+                    .getId()
+                    : obj.getParentId();
+            return parentId;
         }
         
         @Override

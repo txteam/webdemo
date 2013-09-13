@@ -57,7 +57,7 @@ $(document).ready(function(){
 				<tr>
 					<th class="narrow">名称:<span class="tRed">*</span></th>
 					<td>
-						<form:input path="name" cssClass="text"
+						<form:input path="name"
 							data-rule="名称:required;" 
 							data-tip="必填"/>
 					</td>
@@ -74,8 +74,11 @@ $(document).ready(function(){
 							data-rule="编号:required;digits;remote[get:${contextPath }/organization/organizationCodeIsExist.action, code]" 
 							data-tip="不能重复的数字"/>
 					</td>
-					<th class="narrow">&nbsp;</th>
-					<td class="narrow">&nbsp;</td>
+					<th class="narrow">上级职位</th>
+					<td>
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly"/>
+						<input id="parentName" name="parentName" class="linkInput" readonly="readonly"/>
+					</td>
 				</tr>
 				<tr>
 					<th>备注</th>

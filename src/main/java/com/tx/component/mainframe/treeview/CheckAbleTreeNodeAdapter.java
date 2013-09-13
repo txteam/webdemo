@@ -4,7 +4,7 @@
  * 修改时间:  2013-9-12
  * <修改描述:>
  */
-package com.tx.component.operator.treeview;
+package com.tx.component.mainframe.treeview;
 
 /**
  * 树节点转换适配器
@@ -15,7 +15,7 @@ package com.tx.component.operator.treeview;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface CheckedAbleTreeNodeAdapter<T> extends TreeNodeAdapter<T> {
+public interface CheckAbleTreeNodeAdapter<T> extends TreeNodeAdapter<T> {
     
     /**
       *节点是否选中

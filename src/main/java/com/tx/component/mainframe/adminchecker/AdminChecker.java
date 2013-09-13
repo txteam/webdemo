@@ -4,7 +4,7 @@
  * 修改时间:  2013-9-8
  * <修改描述:>
  */
-package com.tx.component.operator.adminchecker;
+package com.tx.component.mainframe.adminchecker;
 
 import org.springframework.stereotype.Component;
 

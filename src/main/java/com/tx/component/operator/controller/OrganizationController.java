@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.mainframe.treeview.TreeNode;
 import com.tx.component.operator.basicdata.ChiefTypeEnum;
 import com.tx.component.operator.basicdata.OrganizationTypeEnum;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OrganizationService;
-import com.tx.component.operator.treeview.TreeNode;
 
 /**
  * 组织结构管理<br/>

@@ -69,8 +69,7 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 			hidden : true
 		},{
 			field : 'name',
-			title : '权限名称',
-			width : 200
+			title : '权限名称'
 		}] ],
 		columns : [ [ {
 			field : 'viewAble',
@@ -121,7 +120,8 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 			}
 		},{
 			field : 'description',
-			title : '备注'
+			title : '备注',
+			width : 300
 		} ] ],
 		toolbar : tableToolsbarId,
 		onContextMenu : function(e, row) {

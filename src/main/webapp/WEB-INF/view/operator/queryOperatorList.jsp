@@ -9,13 +9,46 @@
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
+var orgTree = null;
+$(document).ready(function() {
+	orgTree = $('#organizationTree').tree({
+		url : '${contextPath}/organization/queryOrganizationPostTreeNodeListByAuth.action',
+		idFiled : 'id',
+		parentField : 'parentId',
+		textFiled : 'name',
+		iconFiled : function(item){
+			if(item && item.type == 1){
+				return 'group_group';
+			}else{
+				return 'folder_user';	
+			}
+		},
+		fit : true,
+		fitColumns : true,
+		border : false,
+		onClick : function(node){
+			if(node['attributes'].type  == 0){
+				$('#treeGrid').treegrid('load',{
+					organizationId: node.id
+				});
+			}else{
+				$('#treeGrid').treegrid('load',{
+					parentPostId: node.id
+				});
+			}
+		}
+	});
+});
 
 </script>
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'west',title:'组织结构',split:true" style="width:230px;">
-		
+	<div data-options="region:'west',title:'组织结构',split:true,
+		tools : [{ iconCls : 'database_refresh',handler : function() {refreshTree();} }]" 
+		style="width:230px;">
+		<ul id="organizationTree"></ul>
 	</div> 
+		
 	<div data-options="region:'center'" style="padding:5px;background:#eee;">
 		<div class="easyui-layout" data-options="fit : true,border : false">
 			<div data-options="region:'north',title:'查询条件',border:false" 

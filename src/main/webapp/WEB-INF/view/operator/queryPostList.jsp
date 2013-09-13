@@ -72,20 +72,24 @@ $(document).ready(function() {
 		}] ],
 		columns : [ [ {
 			field : 'fullName',
-			title : '组织全称',
+			title : '职位全称',
 			width : 150
 		},{
 			field : 'action',
 			title : '操作',
-			width : 50,
+			width : 100,
 			formatter : function(value, row, index) {
 				var str = '';
-				if ($.canEdit) {
+				if (true) {
 					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
 				}
 				str += '&nbsp;';
-				if ($.canDelete) {
+				if (true) {
 					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+				}
+				str += '&nbsp;';
+				if (true) {
+					str += $.formatString('<img onclick="configPostAuth(\'{0}\');" src="{1}" title="配置职位权限"/>', row.id, '${pageContext.request.contextPath}/style/images/extjs_icons/key.png');
 				}
 				return str;
 			}
@@ -137,7 +141,6 @@ function redo() {
 		treeGrid.treegrid('expandAll');
 	}
 }
-
 function undo() {
 	var node = treeGrid.treegrid('getSelected');
 	if (node) {
@@ -145,6 +148,27 @@ function undo() {
 	} else {
 		treeGrid.treegrid('collapseAll');
 	}
+}
+function configPostAuth(id){
+	if (id == undefined) {
+		var rows = dataGrid.datagrid('getSelections');
+		id = rows[0].id;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("请选择职位");
+		return ;
+	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	DialogUtils.openModalDialog(
+		"configPostAuth",
+		"配置职位权限",
+		$.formatString("${contextPath}/auth/toConfigPostAuth.action?postId={0}",id),
+		600,500,function(){
+		//$('#treeGrid').treegrid('reload');
+		alert('reload');
+	});
 }
 </script>
 </head>
@@ -154,6 +178,7 @@ function undo() {
 			style="width:230px;">
 			<ul id="organizationTree"></ul>
 		</div> 
+		
 		<div data-options="region:'center'" style="padding:5px;background:#eee;">
 			<div class="easyui-layout" data-options="fit:true,border:false">
 				<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
