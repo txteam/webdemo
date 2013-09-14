@@ -49,7 +49,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public void insertOrganizationToHis(Organization organization) {
-        this.myBatisDaoSupport.insert("newOrganization.insertOrganizationHis",
+        this.myBatisDaoSupport.insert("newOrganization.insertOrganizationToHis",
                 organization);
     }
     

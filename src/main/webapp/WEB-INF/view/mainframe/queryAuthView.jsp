@@ -51,7 +51,7 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
-		iconFiled : function(item){
+		iconField : function(item){
 			return 'database_key';	
 		},
 		fit : true,
@@ -105,10 +105,6 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 			width : 100,
 			formatter : function(value, row, index) {
 				var str = '';
-				if (true) {
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="授权给组织"/>', row.id, '${contextPath}/style/images/extjs_icons/folder/folder_key.png');
-				}
-				str += '&nbsp;';
 				if (true) {
 					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="授权给职位"/>', row.id, '${contextPath}/style/images/extjs_icons/group/group_key.png');
 				}

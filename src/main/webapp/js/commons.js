@@ -569,7 +569,7 @@ var GlobalDialogUtils = null;
     		msg: msg,
     		width:200,
     		height:100,
-    		timeout:10000,
+    		timeout:5000,
     		showType:'slide'
     	},{
     		msg: msg,
@@ -735,7 +735,7 @@ var GlobalDialogUtils = null;
      * 默认为利用iframe打开
      * 由于iframe为固定大小所以这里不用考虑随着框体大小变化iframe大小变化的情况
      */
-    DialogUtils.openDialog = function(dialogHandleId,title,href,width,height,onClose,buttons,notIframeDialog,cache){
+    DialogUtils.openDialog = function(dialogHandleId,title,href,width,height,onClose,buttons,cache,notIframeDialog){
     	var $dialogHandle = null;
     	//获取到dialog句柄
     	$dialogHandle = $("#"+dialogHandleId);
@@ -744,19 +744,27 @@ var GlobalDialogUtils = null;
     		$("body").append($dialogHandle);
     	}
     	title && $dialogHandle.attr("title",title);
+    	
     	//如果是iframe类型的dialog
     	if(!notIframeDialog){
-    		$iframe = $dialogHandle.children("iframe");
+    		$dialogHandle.css("overflow","hidden");
+    		$iframe = $dialogHandle.find("iframe");
     		if($iframe.size() == 0){
     			$dialogHandle.empty();
-    			$iframe = $('<iframe scrolling="auto" id=dialogIframe_' + dialogHandleId + ' frameborder="0"  src="" style="width:100%;height:100%;">');
-    			$dialogHandle.append($iframe);
+    			$iframe = $('<iframe scrolling="auto" id=dialogIframe_' + dialogHandleId + ' frameborder="0" border="0" src="" style="width:100%;height:100%;">');
+    			var $iframediv = $('<div style="width:100%;height:100%;overflow:hidden"></div>').append($iframe);
+    			$dialogHandle.append($iframediv);
     			$iframe.attr('src',href);
     		}else{
     	    	if(!cache){
     	    		$iframe.attr('src',href);
+    	    	}else{
+    	    		if($iframe.attr('src') != href){
+    	    			$iframe.attr('src',href);
+    	    		}
     	    	}
     		}
+    		
         	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
         		title : title,
         	    width: width,   
@@ -787,7 +795,7 @@ var GlobalDialogUtils = null;
      * 打开对话框
      * notIframeDialog如果不设定值默认为iframeDialog
      */
-    DialogUtils.openModalDialog = function(dialogHandleId,title,href,width,height,onClose,buttons,notIframeDialog,cache){
+    DialogUtils.openModalDialog = function(dialogHandleId,title,href,width,height,onClose,buttons,cache,notIframeDialog){
     	var $dialogHandle = null;
     	//获取到dialog句柄
     	$dialogHandle = $("#"+dialogHandleId);
@@ -796,20 +804,28 @@ var GlobalDialogUtils = null;
     		$("body").append($dialogHandle);
     	}
     	title && $dialogHandle.attr("title",title);
+    	
     	//如果是iframe类型的dialog
     	if(!notIframeDialog){
-    		$iframe = $dialogHandle.children("iframe");
+    		$dialogHandle.css("overflow","hidden");
+    		$iframe = $dialogHandle.find("iframe");
     		if($iframe.size() == 0){
     			$dialogHandle.empty();
-    			$iframe = $('<iframe scrolling="auto" id=dialogIframe_' + dialogHandleId + ' frameborder="0"  src="" style="width:100%;height:100%;">');
-    			$dialogHandle.append($iframe);
+    			$iframe = $('<iframe scrolling="auto" id=dialogIframe_' + dialogHandleId + ' frameborder="0" border="0" src="" style="width:100%;height:100%;">');
+    			var $iframediv = $('<div style="width:100%;height:100%;overflow:hidden"></div>').append($iframe);
+    			$dialogHandle.append($iframediv);
     			$iframe.attr('src',href);
     		}else{
     	    	if(!cache){
     	    		$iframe.attr('src',href);
+    	    	}else{
+    	    		if($iframe.attr('src') != href){
+    	    			$iframe.attr('src',href);
+    	    		}
     	    	}
     		}
-        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
+    		
+    		var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
         		title : title,
         	    width: width,   
         	    height: height,
@@ -821,14 +837,14 @@ var GlobalDialogUtils = null;
         	});
         	return _dialog;
     	}else{
-    	//如果不是dialog对话框
+    		//如果不是dialog对话框
         	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
         		title : title,
         		href: href,
         	    width: width,   
         	    height: height,
         	    closed: false,
-        	    cache: true,
+        	    cache: cache,
         	    modal: true,
         	    buttons: buttons,
         	    onClose: onClose
@@ -951,44 +967,44 @@ var GlobalDialogUtils = null;
  */
 $.fn.tree.defaults.loadFilter = function(data, parent) {
     var opt = $(this).data().tree.options;
-    var idFiled, textFiled, parentField,iconFiled,childrenFiled;
+    var idField, textField, parentField,iconField,childrenField;
     if (opt.parentField) {
-        idFiled = opt.idFiled || 'id';
+        idField = opt.idField || 'id';
         parentField = opt.parentField;
-        textFiled = opt.textFiled || 'text';
-        iconFiled = opt.iconFiled || 'iconCls';
+        textField = opt.textField || 'text';
+        iconField = opt.iconField || 'iconCls';
         var i, l, treeData = [], tmpMap = [];
         for (i = 0, l = data.length; i < l; i++) {
-            tmpMap[data[i][idFiled]] = data[i];
+            tmpMap[data[i][idField]] = data[i];
         }
         for (i = 0, l = data.length; i < l; i++) {
-            if (tmpMap[data[i][parentField]] && data[i][idFiled] != data[i][parentField]) {
+            if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
                 if (!tmpMap[data[i][parentField]]['children'])
                     tmpMap[data[i][parentField]]['children'] = [];
                 data[i]['attributes'] = data[i];
-                data[i]['text'] = data[i][textFiled];
-                data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+                data[i]['text'] = data[i][textField];
+                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
             } else {
             	data[i]['attributes'] = data[i];
-                data[i]['text'] = data[i][textFiled];
-                data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+                data[i]['text'] = data[i][textField];
+                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 treeData.push(data[i]);
             }
         }
         return treeData;
     }else{
-        textFiled = opt.textFiled || 'text';
-        iconFiled = opt.iconFiled || 'iconCls';
-        childrenFiled = opt.children || 'children';  
+        textField = opt.textField || 'text';
+        iconField = opt.iconField || 'iconCls';
+        childrenField = opt.childrenField || 'children';  
         function iteratorTreeData(item){
             if(item == null){
                 return ;
             }
         	item['attributes'] = item;
-            item['text'] = item[textFiled];
-            item['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,item) : item[iconFiled];
-            item['children'] = item[childrenFiled];
+            item['text'] = item[textField];
+            item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
+            item['children'] = item[childrenField];
             if(!$.ObjectUtils.isEmpty(item['children'])){
                 for(i = 0,l = item['children'].length ; i < l ; i++){
                     iteratorTreeData(item['children'][i]);
@@ -1011,41 +1027,41 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
  */
 $.fn.treegrid.defaults.loadFilter = function(data, parentId) {
     var opt = $(this).data().treegrid.options;
-    var idFiled, textFiled, parentField,iconFiled,childrenFiled;
+    var idField, textField, parentField,iconField,iconField;
     if (opt.parentField) {
-        idFiled = opt.idFiled || 'id';
-        textFiled = opt.textFiled || 'text';
-        iconFiled = opt.iconFiled || 'iconCls';
+        idField = opt.idField || 'id';
+        textField = opt.textField || 'text';
+        iconField = opt.iconField || 'iconCls';
         parentField = opt.parentField;
         var i, l, treeData = [], tmpMap = [];
         for (i = 0, l = data.length; i < l; i++) {
-            tmpMap[data[i][idFiled]] = data[i];
+            tmpMap[data[i][idField]] = data[i];
         }
         for (i = 0, l = data.length; i < l; i++) {
-            if (tmpMap[data[i][parentField]] && data[i][idFiled] != data[i][parentField]) {
+            if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
                 if (!tmpMap[data[i][parentField]]['children'])
                     tmpMap[data[i][parentField]]['children'] = [];
-                data[i]['text'] = data[i][textFiled];
-                data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+                data[i]['text'] = data[i][textField];
+                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
             } else {
-                data[i]['text'] = data[i][textFiled];
-                data[i]['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,data[i]) : data[i][iconFiled];
+                data[i]['text'] = data[i][textField];
+                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 treeData.push(data[i]);
             }
         }
         return treeData;
     }else{
-        textFiled = opt.textFiled || 'text';
-        iconFiled = opt.iconFiled || 'iconCls';
-        childrenFiled = opt.children || 'children';  
+        textField = opt.textField || 'text';
+        iconField = opt.iconField || 'iconCls';
+        childrenField = opt.childrenField || 'children';
         function iteratorTreeData(item){
             if(item == null){
                 return ;
             }
-            item['text'] = item[textFiled];
-            item['iconCls'] = $.isFunction(iconFiled) ? iconFiled.call(iconFiled,item) : item[iconFiled];
-            item['children'] = item[childrenFiled];
+            item['text'] = item[textField];
+            item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
+            item['children'] = item[childrenField];
             if(!$.ObjectUtils.isEmpty(item['children'])){
                 for(i = 0,l = item['children'].length ; i < l ; i++){
                     iteratorTreeData(item['children'][i]);
@@ -1075,34 +1091,6 @@ $(document).ready(function(){
 			stopOnError: false,
 		    theme: 'yellow_right'
 		});
-		/*
-		$.validator.config({
-	        rules: {
-	            digits: [/^\d*$/, "{0}只能输入数字"], //纯数字
-	            letters: [/^[a-z]*$/i, "{0}只能输入字母"], //纯字母
-	            tel: [/^(?:(?:0\d{2,3}[- ]?[1-9]\d{6,7})|(?:[48]00[- ]?[1-9]\d{6}))$/, "电话格式不正确"],  //办公或家庭电话
-	            mobile: [/^1[3-9]\d{9}$/, "手机号格式不正确"],  //移动电话
-	            email: [/^(?:[a-z0-9]+[_\-+.]?)*[a-z0-9]+@(?:([a-z0-9]+-?)*[a-z0-9]+.)+([a-z]{2,})+$/i, "邮箱格式不正确"],
-	            qq: [/^[1-9]\d{4,}$/,"QQ号格式不正确"],
-	            date: [/^\d{4}-\d{1,2}-\d{1,2}$/, "请输入正确的日期,例:yyyy-mm-dd"],
-	            time: [/^([01]\d|2[0-3])(:[0-5]\d){1,2}$/, "请输入正确的时间,例:14:30或14:30:00"],
-	            ID_card: [/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[A-Z])$/, "请输入正确的身份证号码"],
-	            url: [/^(https?|ftp):\/\/[^\s]*$/i, "网址格式不正确"],
-	            postcode: [/^[1-9]\d{5}$/, "邮政编码格式不正确"],
-	            chinese: [/^[\u0391-\uFFE5]+$/, "请输入中文"],
-	            username: [/^\w{3,12}$/, "请输入3-12位数字、字母、下划线"], //用户名
-	            password: [/^[0-9a-zA-Z]{6,16}$/, "密码由6-16位数字、字母组成"], //密码
-	            //可接受的后缀名
-	            accept: function(element, params){
-	                if (!params) return true;
-	                var ext = params[0];
-	                return (ext === '*') 
-	                    || (new RegExp(".(?:" + (ext || "png|jpg|jpeg|gif") + ")$", "i")).test(element.value) 
-	                    || this.renderMsg("只接受{1}后缀", ext.replace('|', ','));
-	            }
-	        }
-		});
-		*/
 	}
 });
 

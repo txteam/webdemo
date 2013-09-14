@@ -166,7 +166,7 @@
 	</select>
 	
     <!-- auto generate default insert -->
-    <insert id="insertOrganizationHis" 
+    <insert id="insertOrganizationToHis" 
 		parameterType="com.tx.component.operator.model.Organization">
 		INSERT INTO OPER_ORGANIZATION_HIS
 		(

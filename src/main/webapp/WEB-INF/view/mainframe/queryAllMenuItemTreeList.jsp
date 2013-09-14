@@ -15,7 +15,7 @@ $(document).ready(function() {
 		url : '${contextPath}/mainframe/getAllMenuItemList.action',
 		idField : 'id',
 		treeField : 'text',
-		iconFiled : function(item){
+		iconField : function(item){
 			if(item['icon']){
 				return item['icon'];
 			}else if($.ObjectUtils.isEmpty(item['childs'])){

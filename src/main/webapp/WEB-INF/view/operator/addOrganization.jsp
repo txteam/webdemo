@@ -22,7 +22,11 @@ $(document).ready(function(){
 		handler : function(organization){
 			$("#parentName").val(organization.name);
 			$("#parentId").val(organization.id);
-		}
+		},
+	    clearHandler: function(){
+	    	$("#parentName").val("");
+			$("#parentId").val("");
+	    }
 	});
 	//验证器
 	$('#organizationForm').validator({
@@ -35,7 +39,7 @@ $(document).ready(function(){
 						parent.DialogUtils.tip("新增组织成功");
 						parent.DialogUtils.closeDialogById("addOrganization");
 					}
-			    } 
+			    }
 			});
 			return false;
 	    }
@@ -74,24 +78,25 @@ $(document).ready(function(){
 							data-rule="编号:required;digits;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code]" 
 							data-tip="不能重复的数字"/>
 					</td>
-					<th class="narrow">组织类型:</th>
-					<td>
-						<form:select path="type" cssClass="select" >
-							<option value="">--- 请选择 ---</option>
-							<form:options items="${OrganizationTypes }"/>
-						</form:select>
-					</td>
-				</tr>
-				<tr>
 					<th>所在地区</th>
 					<td>
 						<input id="districtId" name="districtId" type="hidden" readonly="readonly"/>
 						<input id="districtName" name="districtName" class="selectInput" readonly="readonly"/>
 					</td>
+				</tr>
+				<tr>
+					<th class="narrow">组织类型:<span class="tRed">*</span></th>
+					<td>
+						<form:select path="type" cssClass="select" data-rule="组织类型:required;" >
+							<option value="">--- 请选择 ---</option>
+							<form:options items="${OrganizationTypes }"/>
+						</form:select>
+					</td>
+
 					<th>上级组织</th>
 					<td>
-						<input id="parentId" name="parentId" type="hidden" readonly="readonly"/>
-						<input id="parentName" name="parentName" class="selectInput" readonly="readonly"/>
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly" value="${parentOrganization.id }"/>
+						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" value="${parentOrganization.name }"/>
 					</td>
 				</tr>
 				<tr>

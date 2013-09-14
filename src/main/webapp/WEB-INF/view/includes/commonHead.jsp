@@ -5,7 +5,7 @@
 <link rel="stylesheet" id="easyuiTheme" href="${contextPath}/js/jquery-easyui-1.3.4/themes/<c:out value="${cookie.easyuiThemeName.value}" default="bootstrap"/>/easyui.css" type="text/css">
 <link rel="stylesheet" href="${contextPath}/js/jquery-easyui-extension/icons.css" type="text/css">
 <link rel="stylesheet" href="${contextPath}/style/extEasyUIIcon.css" type="text/css">
-<link rel="stylesheet" href="${contextPath}/js/validator-0.2.1/jquery.validator.css" type="text/css">
+<link rel="stylesheet" href="${contextPath}/js/validator-0.3.0/jquery.validator.css" type="text/css">
 <link rel="stylesheet" href="${contextPath}/css/commons.css">
 
 <script type="text/javascript">

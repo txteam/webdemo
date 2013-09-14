@@ -13,10 +13,10 @@ var orgTree = null;
 $(document).ready(function() {
 	orgTree = $('#organizationTree').tree({
 		url : '${contextPath}/organization/queryOrganizationPostTreeNodeListByAuth.action',
-		idFiled : 'id',
+		idField : 'id',
 		parentField : 'parentId',
-		textFiled : 'name',
-		iconFiled : function(item){
+		textField : 'name',
+		iconField : function(item){
 			if(item && item.type == 1){
 				return 'group_group';
 			}else{

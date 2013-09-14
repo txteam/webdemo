@@ -13,18 +13,16 @@ var tree = null;
 $(document).ready(function() {
 	tree = $('#organizationTree').tree({
 		url : '${contextPath}/organization/queryOrganizationList.action',
-		idFiled : 'id',
+		idField : 'id',
 		parentField : 'parentId',
-		textFiled : 'name',
-		fit : true,
-		fitColumns : true,
+		iconField : function(){
+			return 'folder_user';
+		},
+		textField : 'name',
 		border : false,
 		onClick : function(node){
 			$.triggerge("choose_organization_" + "${eventName}",[node['attributes']]);
 		}
-	});
-	$("#confirmBtn").click(function(){
-		parent.DialogUtils.closeDialogById("component_dialog_chooseOrganization");
 	});
 });
 
@@ -35,19 +33,6 @@ $(document).ready(function() {
 		<div data-options="region:'center',border:false" style="overflow-y:auto;"
 			class="form">
 			<ul id="organizationTree"></ul>
-					<form id="form" method="post" class="form">
-			<!-- 
-			<table style="position: absolute;bottom: 5px">
-				<tr>
-					<td class="rightOperRow" colspan="4">
-						<a id="confirmBtn" href="#" class="easyui-linkbutton">确认</a>&nbsp;&nbsp;&nbsp;
-					</td>
-				</tr>
-			</table>
-			 -->
-			 <div class="dialog-button" style="position: absolute;bottom: 5px;width: 100%">
-			 	<a id="confirmBtn" href="#" class="easyui-linkbutton">确认</a>&nbsp;&nbsp;&nbsp;
-			 </div>
 		</div>
 	</div>
 </body>

@@ -229,39 +229,17 @@ $(function(){
                         $treeParent.append($menuTree);
                         selectedPanel.css({"padding-left":"5px","padding-right":"5px","padding-top":"3px"}).append($treeParent);
                         if(menuItem.childs && menuItem.childs.length > 0){
-                            //var treeNodeData = $.TreeUtils.transform(menuItem.childs);
-                            //生成树结果数据
-                            var treeNodeData = $.TreeUtils.transform(menuItem.childs,function(data){
-                                var converter = this;
-                                var icon = data.icon;
-                                if($.ObjectUtils.isEmpty(icon)){
-                                    if($.ObjectUtils.isEmpty(data.childs)){
-                                        icon = "database";
-                                    }else{
-                                        icon = "database_gear";
-                                    }
-                                }
-                                var resData = $.extend({},{
-                                    id: data.id,
-                                    text:null,
-                                    formatter:null,
-                                    state: $.ObjectUtils.isEmpty(data.childs) ? null : 'closed',//open/closed
-                                    attributes: data,
-                                    iconCls: icon
-                                },data);
-                                if(data.childs && !$.ObjectUtils.isEmpty(data.childs)){
-                                    resData.children = [];
-                                    $.each(data.childs, function(index, childTemp) {
-                                        resData.children[index] = converter.call(converter,childTemp);
-                                    });
-                                }else{
-                                     resData.children = null;
-                                }
-                                return resData;
-                            });
-                            //alert("" + $.toJSONString(treeNodeData));
                             $menuTree.tree({
-                                data: treeNodeData,
+                            	idField: 'id',
+                            	childrenField: 'childs',
+                            	iconField: function(row){
+                                    if($.ObjectUtils.isEmpty(row.childs)){
+                                        return "database";
+                                    }else{
+                                        return "database_gear";
+                                    }
+                            	},
+                                data: menuItem.childs,
                                 onClick: function(node){
                                     if (_this.options && _this.options.onSelected && $.isFunction(_this.options.onSelected)) {
                                         _this.options.onSelected.call(_this, node.attributes);

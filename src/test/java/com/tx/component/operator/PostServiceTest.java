@@ -94,9 +94,9 @@ public class PostServiceTest {
             
             Assert.assertNotNull(res);
             
-            int count = this.postService.deleteById(res.getId());
+            boolean resFlag = this.postService.deleteById(res.getId());
             
-            Assert.assertTrue(count > 0);
+            Assert.assertTrue(resFlag);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.assertTrue(false);

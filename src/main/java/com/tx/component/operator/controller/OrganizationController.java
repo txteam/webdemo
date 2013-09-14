@@ -266,6 +266,8 @@ public class OrganizationController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @ResponseBody
+    @RequestMapping("/deleteOrganizationById")
     public boolean deleteOrganizationById(
             @RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.deleteById(organizationId);

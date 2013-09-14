@@ -12,59 +12,16 @@
 <script type="text/javascript" >
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
-	$("#organizationName").chooseOrganization({
-		eventName : "chooseOrganizationForAddPost",
-		contextPath : _contextPath,
-		title : "请选择上级组织",
-		width : 260,
-		height : 400,
-		handler : function(organization){
-			$("#organizationName").val(organization.name);
-			$("#organizationId").val(organization.id);
-			$("#parentName").val('');
-			$("#parentId").val('');
-		},
-		clearHandler: function(){
-			$("#organizationName").val('');
-			$("#organizationId").val('');
-			$("#parentName").val('');
-			$("#parentId").val('');
-		}
-	});
-	
-	$("#parentName").choosePost({
-		organizationId : $("#organizationId").val(),
-		eventName : "choosePostForAddPost",
-		contextPath : _contextPath,
-		title : "请选择上级组织",
-		width : 750,
-		height : 400,
-		handler : function(post){
-			$("#parentName").val(post.name);
-			$("#parentId").val(post.id);
-			if(post.organization && !$.ObjectUtils.isEmpty(post.organization.name)){
-				$("#organizationName").val(post.organization.name);
-				$("#organizationId").val(post.organization.id);
-			}else{
-				$("#organizationName").val('');
-				$("#organizationId").val('');
-			}
-		},
-		clearHandler: function(){
-			$("#parentName").val('');
-			$("#parentId").val('');
-		}
-	});
 	//验证器
 	$('#postForm').validator({
 	    valid: function(){
 	        //表单验证通过，提交表单到服务器
 			$('#postForm').ajaxSubmit({
-			    url:"${contextPath}/post/addPost.action",
+			    url:"${contextPath}/post/updatePost.action",
 			    success: function(data) {
 					if(data){
-						parent.DialogUtils.tip("新增组织成功");
-						parent.DialogUtils.closeDialogById("addPost");
+						parent.DialogUtils.tip("修改职位信息成功");
+						parent.DialogUtils.closeDialogById("updatePost");
 					}
 			    } 
 			});
@@ -84,6 +41,7 @@ $(document).ready(function(){
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form:form id="postForm" method="post" cssClass="form"
 			modelAttribute="post">
+			<form:hidden path="id"></form:hidden>
 			<table>
 				<tr>
 					<th class="narrow">名称:<span class="tRed">*</span></th>
@@ -97,7 +55,7 @@ $(document).ready(function(){
 					<th class="narrow">编号<span class="tRed">*</span></th>
 					<td>
 						<form:input path="code" cssClass="text"
-							data-rule="编号:required;digits;remote[get:${contextPath }/post/postCodeIsExist.action, code]" 
+							data-rule="编号:required;digits;remote[get:${contextPath }/post/postCodeIsExist.action, code, id]" 
 							data-tip="不能重复的数字"/>
 					</td>
 				</tr>
@@ -105,10 +63,10 @@ $(document).ready(function(){
 					<th class="narrow">所属组织<span class="tRed">*</span></th>
 					<td>
 						<input id="organizationId" name="organization.id" type="hidden"
-							value="${organization.id }"
+							value="${post.organization.id }"
 							readonly="readonly"/>
 						<input id="organizationName" name="organization.name"
-							value="${organization.name }" 
+							value="${post.organization.name }" 
 							data-rule="所属组织:required;"
 							class="selectInput" readonly="readonly"/>
 					</td>
@@ -127,7 +85,7 @@ $(document).ready(function(){
 				<tr>
 					<th>备注</th>
 					<td colspan="3">
-						<textarea name="remark" rows="" cols="" class="longText"></textarea>
+						<form:textarea path="remark" class="longText"/>
 					</td>
 				</tr>
 				<tr>

@@ -49,10 +49,10 @@ $(document).ready(function() {
 //如果tabs初始化
 function initAuthTree($currentAuthTreeEl,authType,configAble,authItemList){
 	currentTree = $currentAuthTreeEl.tree({
-		idFiled : 'id',
+		idField : 'id',
 		parentField : 'parentId',
-		textFiled : 'name',
-		iconFiled : function(item){
+		textField : 'name',
+		iconField : function(item){
 			return 'database_key';	
 		},
 		checkbox : true,
@@ -80,7 +80,7 @@ function initAuthTree($currentAuthTreeEl,authType,configAble,authItemList){
 				<form id="form_${authType.authType}" method="post">
 				<ul class="checkAblePostTreeNode"
 					isLoad="false" authType="${authType.authType}" configAble="${authType.configAble}"
-					style="padding-bottom: 50px;padding-top:2px;padding-left: 5px"></ul>
+					style="margin-bottom: 40px;padding-top:2px;padding-left: 5px"></ul>
 				<div class="dialog-button" style="position:absolute;bottom: 0px;width:100%">
 					<a id="confirmBtn_${authType.authType}" href="#" class="easyui-linkbutton">确认</a>&nbsp;&nbsp;&nbsp;</div>
 				</form>

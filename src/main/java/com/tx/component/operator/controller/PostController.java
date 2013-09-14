@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.Post;
+import com.tx.component.operator.service.OrganizationService;
 import com.tx.component.operator.service.PostService;
 
 /**
@@ -38,6 +41,9 @@ public class PostController {
     @Resource(name = "newPostService")
     private PostService postService;
     
+    @Resource(name = "newOrganizationService")
+    private OrganizationService organizationService;
+    
     /**
       * 跳转到查询职位列表<br/>
       *<功能详细描述>
@@ -53,6 +59,23 @@ public class PostController {
     }
     
     /**
+     * 跳转到查询职位列表<br/>
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/toChoosePost")
+    public String toChoosePost(
+            @RequestParam(value = "eventName", required = false) String chooseEventName,
+            ModelMap responseMap) {
+        responseMap.put("eventName", chooseEventName);
+        return "/operator/choosePost";
+    }
+    
+    /**
       * 跳转到添加职位页面<br/>
       *<功能详细描述>
       * @return [参数说明]
@@ -62,7 +85,18 @@ public class PostController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAddPost")
-    public String toAddPost(ModelMap response) {
+    public String toAddPost(
+            @RequestParam(value = "organizationId", required = false) String organizationId,
+            @RequestParam(value = "parentPostId", required = false) String parentPostId,
+            ModelMap response) {
+        if (!StringUtils.isEmpty(parentPostId)) {
+            Post parentPost = this.postService.findPostById(parentPostId);
+            response.put("parentPost", parentPost);
+            response.put("organization", parentPost.getOrganization());
+        } else if (!StringUtils.isEmpty(organizationId)) {
+            Organization organization = this.organizationService.findOrganizationById(organizationId);
+            response.put("organization", organization);
+        }
         response.put("post", new Post());
         return "/operator/addPost";
     }
@@ -80,6 +114,10 @@ public class PostController {
     public String toUpdatePost(@RequestParam("postId") String postId,
             ModelMap modelMap) {
         Post resPost = this.postService.findPostById(postId);
+        if (!StringUtils.isEmpty(resPost.getParentId())) {
+            Post parentPost = this.postService.findPostById(resPost.getParentId());
+            modelMap.put("parentPost", parentPost);
+        }
         
         modelMap.put("post", resPost);
         return "/operator/updatePost";
@@ -100,7 +138,7 @@ public class PostController {
     @RequestMapping("/postCodeIsExist")
     public Map<String, String> postCodeIsExist(
             @RequestParam("code") String code,
-            @RequestParam(value = "code", required = false) String excludePostId) {
+            @RequestParam(value = "id", required = false) String excludePostId) {
         boolean flag = this.postService.postCodeIsExist(code, excludePostId);
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {
@@ -151,6 +189,63 @@ public class PostController {
     public boolean addPost(Post post) {
         this.postService.insertPost(post);
         return true;
+    }
+
+    /**
+      * 更新组织<br/>
+      *<功能详细描述>
+      * @param post
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/updatePost")
+    @ResponseBody
+    public boolean updatePost(Post post){
+        this.postService.updateById(post);
+        
+        return true;
+    }
+    
+    /**
+      * 校验指定职位是否能被删除
+      *<功能详细描述>
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/isDeleteAble")
+    public boolean isDeleteAble(@RequestParam(value = "postId") String postId) {
+        List<Post> postList = this.postService.queryPostListByParentId(postId);
+        
+        if (CollectionUtils.isEmpty(postList)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+      * 删除指定职位<br/> 
+      *<功能详细描述>
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/deletePostById")
+    public boolean deletePostById(@RequestParam(value = "postId") String postId) {
+        boolean resFlag = this.postService.deleteById(postId);
+        return resFlag;
     }
     
 }

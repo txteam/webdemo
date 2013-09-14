@@ -201,6 +201,36 @@
 		)
 	</insert>
 	
+	<!-- auto generate default insert -->
+    <insert id="insertPostToHis" 
+		parameterType="com.tx.component.operator.model.Post">
+		INSERT INTO OPER_POST_HIS
+		(
+			ID,
+			PARENTID,
+			ORGANIZATIONID,
+			REMARK,
+			NAME,
+			FULLNAME,
+			CODE
+		)
+		VALUES
+		(
+			#{id},
+			#{parentId},
+			<if test="organization != null">
+				#{organization.id},
+	        </if>
+	        <if test="organization == null">
+				#{organization,javaType=java.lang.String},
+	        </if>
+			#{remark},
+			#{name},
+			#{fullName},
+			#{code}
+		)
+	</insert>
+	
 	<!-- auto generate default delete -->
 	<delete id="deletePost" 
 		parameterType="com.tx.component.operator.model.Post">

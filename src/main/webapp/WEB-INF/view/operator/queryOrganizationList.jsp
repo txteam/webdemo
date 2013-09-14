@@ -16,7 +16,7 @@ $(document).ready(function() {
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
-		iconFiled : function(item){
+		iconField : function(item){
 			return 'folder_user';	
 		},
 		fit : true,
@@ -89,7 +89,7 @@ $(document).ready(function() {
 				</c:if>
 				str += '&nbsp;';
 				<c:if test="${true}">
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
+					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
 				</c:if>
 				str += '&nbsp;';
 				return str;
@@ -151,7 +151,7 @@ function addFun(id) {
 		"addOrganization",
 		"添加组织",
 		$.formatString("${contextPath}/organization/toAddOrganization.action?parentOrganizationId={0}",id),
-		550,275,function(){
+		600,275,function(){
 		$('#treeGrid').treegrid('reload');
 	});
 }
@@ -160,36 +160,50 @@ function editFun(id) {
         text : '加载中，请等待....'
 	});
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
 	}
 	DialogUtils.openModalDialog(
 		"updateOrganization",
 		"编辑组织",
 		$.formatString("${contextPath}/organization/toUpdateOrganization.action?organizationId={0}",id),
-		550,275,function(){
+		580,275,function(){
 			$('#treeGrid').treegrid('reload');
 	});
 }
-function deleteFun(id) {
+function deleteFun(id,name) {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
+		name = rows[0].name;
 	}
 	//判断对应组织是否能被停用
 	$.post(
-		'${contextPath}/organization/isDisabled.action',
-		{});
-	
-	DialogUtils.openModalDialog(
-		"updateOrganization",
-		"编辑组织",
-		$.formatString("${contextPath}/organization/toUpdateOrganization.action?organizationId={0}",id),
-		550,275,function(){
-			$('#treeGrid').treegrid('reload');
+		'${contextPath}/post/isDeleteAble.action',
+		{organizationId: id},
+		function(data){
+			if(data){
+			    DialogUtils.confirm(
+			    		"确认提醒" , 
+			    		$.formatString("是否确认删除组织:[{0}]?",name), 
+			    function(data){
+			    	if(data){
+			    		//如果确认删除对应组织
+			    		$.post(
+					    		'${contextPath}/organization/deleteOrganizationById.action',
+					    		{organizationId:id},
+					    		function(){
+					    			DialogUtils.tip("删除组织成功");
+					    			$('#treeGrid').treegrid('reload');
+					    });
+			    	}
+			    });
+			}else{
+				DialogUtils.alert("提醒","该组织存在下级组织，不能被删除。","warning");
+			}
 	});
 }
 </script>
@@ -219,7 +233,7 @@ function deleteFun(id) {
 			<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
 		</c:if>
 		<c:if test="${true}">
-			<div onclick="editFun();" data-options="iconCls:'pencil_delete'">删除</div>
+			<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
 		</c:if>
 	</div>
 </body>

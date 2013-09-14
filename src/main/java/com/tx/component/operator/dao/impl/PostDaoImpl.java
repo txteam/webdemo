@@ -44,6 +44,16 @@ public class PostDaoImpl implements PostDao {
     
     /**
      * @param condition
+     */
+    @Override
+    public void insertPostToHis(Post condition) {
+        this.myBatisDaoSupport.insert("newPost.insertPostToHis", condition);
+    }
+
+
+
+    /**
+     * @param condition
      * @return
      */
     @Override
