@@ -60,13 +60,6 @@ public class OperatorService {
         
         Operator condition = new Operator();
         condition.setLoginName(loginName);
-        condition.setPassword(password);
-        
-        //TODO:登录
-        if ("admin".equals(loginName) && "admin".equals(password)) {
-            condition.setId("123456");
-            return condition;
-        }
         
         Operator res = this.operatorDao.findOperator(condition);
         if (res == null) {

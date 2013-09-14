@@ -55,28 +55,27 @@ $(document).ready(function() {
 				style="height: 125px; overflow: hidden;">
 				<form method="post" id="creditProductForm" name="creditProductForm" class="form">
 				<!-- query condition -->
-				<div class="form-table">
+				<div>
 					<table>
 						<tbody>
 						<tr>
-							<th class="narrow">所属组织:</th>
-							<td><input name="productName" class="text" type="text" value=''/></td>
-							<th class="narrow">职位:</th>
+							<th class="narrow">登录名:</th>
+							<td><input name="loginName" class="text" type="text" value=''/></td>
+							<th class="narrow">用户编码:</th>
 							<td>
-								<input name="productName" class="text" type="text" value=''/>
+								<input name="code" class="text" type="text" value=''/>
 							</td>
 						</tr>
 						<tr>
 							<th class="narrow">用户编码:</th>
 							<td><input name="productName" class="text" type="text" value=''/></td>
-							<th class="narrow">登录名:</th>
+							<th class="narrow">状态:</th>
 							<td>
 								<select name="productState" class="select">
-									<optgroup label="---请选择---"> 
-										<option>---请选择---</option>
-										<option>---请选择---</option>
-										<option>---请选择---</option>
-										<option>---请选择---</option>
+									<optgroup label=""> 
+										<option>--- 不限 ---</option>
+										<option value="0">--- 禁用 ---</option>
+										<option value="1">--- 有效 ---</option>
 									</optgroup>
 								</select>
 							</td>
