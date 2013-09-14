@@ -88,13 +88,13 @@ public class WebContextUtils {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public static boolean isOrganizationChief(){
-        Operator currentOperator = getOperatorFromSession();
-        Organization currentOrganization = getOrganizationFromSession();
+    public static boolean isOrganizationChief() {
+        Operator currentOperator = getCurrentOperator();
+        Organization currentOrganization = getCurrentOrganization();
         
-        if(isSuperAdmin()){
+        if (isSuperAdmin()) {
             return true;
-        }else{
+        } else {
             currentOrganization.getChiefType();
             currentOrganization.getChiefId();
             
@@ -143,7 +143,7 @@ public class WebContextUtils {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public static Organization getOrganizationFromSession() {
+    public static Organization getCurrentOrganization() {
         HttpSession session = getSession(true);
         
         Organization currentOrganization = (Organization) session.getAttribute(SESSION_CURRENT_ORGANIZATION);
@@ -159,7 +159,7 @@ public class WebContextUtils {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public static Operator getOperatorFromSession() {
+    public static Operator getCurrentOperator() {
         HttpSession session = getSession(true);
         
         Operator currentOperator = (Operator) session.getAttribute(SESSION_CURRENT_OPERATOR);
@@ -176,7 +176,7 @@ public class WebContextUtils {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public static void putPostInSession(Post post) {
+    public static void putMainPostInSession(Post post) {
         HttpSession session = getSession(true);
         
         session.setAttribute(SESSION_CURRENT_POST, post);

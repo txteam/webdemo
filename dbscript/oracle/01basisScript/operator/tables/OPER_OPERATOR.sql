@@ -1,6 +1,7 @@
 --****************************************************************************
 -- ±í£ºOPER_OPERATOR
 --****************************************************************************
+drop table OPER_OPERATOR;
 create table OPER_OPERATOR(
 	valid number(1,0) DEFAULT 1 NOT NULL,
 	pwdErrCount number(10,0),

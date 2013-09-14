@@ -15,7 +15,6 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OrganizationService;
-import com.tx.component.operator.service.PostService;
 import com.tx.core.exceptions.SILException;
 import com.tx.core.exceptions.util.AssertUtils;
 
@@ -35,8 +34,8 @@ public class WebContext implements InitializingBean {
     @Resource(name = "newOrganizationService")
     private OrganizationService organizationService;
     
-    @Resource(name = "newPostService")
-    private PostService postService;
+//    @Resource(name = "newPostService")
+//    private PostService postService;
     
     /**
       * 获取web容器实例<br/>
@@ -94,7 +93,7 @@ public class WebContext implements InitializingBean {
      * @see [类、类#方法、类#成员]
     */
     public List<String> queryCurrentAndChildOrganizationIdList() {
-        Organization currentOrganization = WebContextUtils.getOrganizationFromSession();
+        Organization currentOrganization = WebContextUtils.getCurrentOrganization();
         
         List<String> resList = new ArrayList<String>();
         if (!WebContextUtils.isSuperAdmin()) {
@@ -104,8 +103,7 @@ public class WebContext implements InitializingBean {
                     "organization.id is empty");
             
             //查询迭代子集组织id集合
-            resList.addAll(this.organizationService.queryChildOrganizationIdListByParentId(currentOrganization.getId(),
-                    true));
+            resList.addAll(this.organizationService.queryChildOrganizationIdListByParentId(currentOrganization.getId()));
             //将当前组织id压入
             resList.add(currentOrganization.getId());
         } else {

@@ -13,10 +13,10 @@ mkdir scriptInput\tables
 mkdir scriptInput\triggers
 mkdir scriptInput\views
 
-cd "00webdemo"
+cd "mainframe"
   call standard-combine.bat
 cd ..
-cd "01auth"
+cd "operator"
   call standard-combine.bat
 cd ..
 

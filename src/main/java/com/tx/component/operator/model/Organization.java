@@ -65,13 +65,10 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     /** 地址 */
     private String address;
     
-    /** 是否可用 */
-    private boolean valid;
-    
     /** 组织类型 */
     private OrganizationTypeEnum type;
     
-    /**省ID*/
+    /**所在区域ID*/
     private String districtId;
     
     /** 描述 */
@@ -175,20 +172,6 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
      */
     public void setAddress(String address) {
         this.address = address;
-    }
-    
-    /**
-     * @return 返回 valid
-     */
-    public boolean isValid() {
-        return valid;
-    }
-    
-    /**
-     * @param 对valid进行赋值
-     */
-    public void setValid(boolean valid) {
-        this.valid = valid;
     }
 
     /**

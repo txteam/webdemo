@@ -1,73 +1,83 @@
-----prompt "webdemo模块:创建表逻辑  start..."  
+prompt "webdemo模块:创建表逻辑  start..."  
 --****************************************************************************
 -- 表：BASIC_DISTRICT
 --****************************************************************************
---drop table BASIC_DISTRICT;
+drop table BASIC_DISTRICT;
 create table BASIC_DISTRICT(
-	id varchar(64) not null,
-	parentId varchar(64),
-	postalCode varchar(64),
-	remark varchar(2000),
-	name varchar(64) not null,
-	code varchar(64) not null,
-	fullName varchar(64),
-	idCardCode varchar(64),
-	type varchar(64),
+	id varchar2(64 char) not null,
+	parentId varchar2(64 char),
+	postalCode varchar2(64 char),
+	remark varchar2(2000 char),
+	name varchar2(64 char) not null,
+	code varchar2(64 char) not null,
+	fullName varchar2(64 char),
+	idCardCode varchar2(64 char),
+	type varchar2(64 char),
 	primary key(ID)
 );
 create index idx_bas_district_00 on BASIC_DISTRICT(code);
 create index idx_bas_district_01 on BASIC_DISTRICT(parentId);
 create index idx_bas_district_02 on BASIC_DISTRICT(idCardCode);
 create index idx_bas_district_03 on BASIC_DISTRICT(postalCode);
---prompt "webdemo模块:创建表逻辑  end..."
---prompt "webdemo模块:创建表逻辑  start..."  
+
+comment on table BASIC_DISTRICT is '区域信息表';
+comment on column BASIC_DISTRICT.idCardCode is '区域对应身份证编码';
+comment on column BASIC_DISTRICT.postalCode is '区域对应邮政编码';
+prompt "webdemo模块:创建表逻辑  end..."
+prompt "webdemo模块:创建表逻辑  start..."  
 --****************************************************************************
 -- 表：OPER_EMPLOYEEINFO
 --****************************************************************************
+drop table OPER_EMPLOYEEINFO;
 create table OPER_EMPLOYEEINFO(
-	leavingDate timestamp,
-	sex integer,
-	OPERATORID varchar(64),
-	code varchar(64),
-	officialDate timestamp,
-	entryDate timestamp,
-	trialPeriodEndDate timestamp,
-	leaving bit,
-	name varchar(64),
-	age integer,
-	official bit,
-	lastUpdatePhoneLinkInfoDate timestamp,
-	cardNum varchar(255),
+	leavingDate date,
+	sex number(10,0),
+	operatorid varchar2(64 char),
+	code varchar2(64 char),
+	officialDate date,
+	entryDate date,
+	trialPeriodEndDate date,
+	leaving number(1,0),
+	name varchar2(64 char),
+	age number(10,0),
+	official number(1,0) default 0 not null,
+	lastUpdatePhoneLinkInfoDate date,
+	cardNum varchar2(255 char),
 	primary key(OPERATORID)
 );
+create unique index idx_oper_emp_00 on OPER_EMPLOYEEINFO(code);
 --****************************************************************************
 -- 表：OPER_OPERATOR
 --****************************************************************************
+drop table OPER_OPERATOR;
 create table OPER_OPERATOR(
-	valid bit default 1 not null,
-	pwdErrCount integer,
-	historyPwd varchar(255),
-	organizationId varchar(64),
-	password varchar(255) not null,
-	invalidDate timestamp,
-	lastUpdateDate timestamp default sysdate() not null,
-	id varchar(64) not null,
-	pwdUpdateDate timestamp default sysdate() not null,
-	mainPostId varchar(64),
-	userName varchar(64),
-	locked bit default 0 not null,
-	createDate timestamp default sysdate() not null,
-	examinePwd varchar(255),
-	loginName varchar(64) not null,
+	valid number(1,0) DEFAULT 1 NOT NULL,
+	pwdErrCount number(10,0),
+	historyPwd varchar2(255 char),
+	organizationId varchar2(64 char),
+	password varchar2(255 char),
+	invalidDate date,
+	lastUpdateDate date default sysdate not null,
+	id varchar2(64 char),
+	pwdUpdateDate date default sysdate not null,
+	mainPostId varchar2(64 char),
+	userName varchar2(64 char),
+	locked number(1,0) default 0 not null,
+	createDate date default sysdate not null,
+	examinePwd varchar2(255 char),
+	loginName varchar2(64 char)  not null,
 	primary key(ID)
 );
 create unique index idx_oper_oper_00 on OPER_OPERATOR(loginName);
 create index idx_oper_oper_01 on OPER_OPERATOR(loginName,password);
+
+comment on table OPER_OPERATOR is '系统使用人员信息表';
+comment on column OPER_OPERATOR.valid is '是否有效 0 无效  1有效  默认有效';
 --****************************************************************************
--- 表：OPER_ORGANIZATION
+-- 组织信息表：OPER_ORGANIZATION
 --****************************************************************************
+drop table OPER_ORGANIZATION;
 create table OPER_ORGANIZATION(
-  valid number(1,0),
   fullAddress varchar2(255),
   remark varchar2(2000),
   alias varchar2(255),
@@ -79,63 +89,95 @@ create table OPER_ORGANIZATION(
   chiefType varchar2(64),
   address varchar2(255),
   name varchar2(64) not null,
-  fullName varchar2(64) not null,
+  fullName varchar2(255) not null,
   chiefId varchar2(64),
   primary key(ID)
 );
 create unique index idx_oper_organ_01 on OPER_ORGANIZATION(code);
 create index idx_oper_organ_02 on OPER_ORGANIZATION(parentId);
 create index idx_oper_organ_03 on OPER_ORGANIZATION(chiefType,chiefId);
+
+comment on table OPER_ORGANIZATION is '组织信息表';
+comment on column OPER_ORGANIZATION.type is '组织类型';
+comment on column OPER_ORGANIZATION.chiefType is '组织主管类型：可以是人员，可以是职位，也可以是其他...';
+--****************************************************************************
+-- 组织信息表历史表：OPER_ORGANIZATION_HIS
+--****************************************************************************
+drop table OPER_ORGANIZATION_HIS;
+CREATE TABLE OPER_ORGANIZATION_HIS(
+  fullAddress varchar2(255),
+  remark varchar2(2000),
+  alias varchar2(255),
+  code varchar2(64) not null,
+  type varchar2(64),
+  id varchar2(64) not null,
+  parentId varchar2(64),
+  districtId varchar2(64),
+  chiefType varchar2(64),
+  address varchar2(255),
+  name varchar2(64) not null,
+  fullName varchar2(255) not null,
+  chiefId varchar2(64),
+  primary key(ID)
+);
 --****************************************************************************
 -- 职位信息表：OPER_POST
 --****************************************************************************
+drop table OPER_POST;
 create table OPER_POST(
-	id varchar(64) not null,
-	parentId varchar(64),
-	valid bit default 1 not null,
-	remark varchar(2000),
-	name varchar(64),
-	organizationId varchar(64),
-	code varchar(64),
-	fullName varchar(64),
+	id varchar2(64) not null,
+	parentId varchar2(64),
+	remark varchar2(2000),
+	name varchar2(64),
+	organizationId varchar2(64),
+	code varchar2(64),
+	fullName varchar2(255),
 	primary key(ID)
 );
 create index idx_oper_post_00 on OPER_POST(parentId);
 create index idx_oper_post_01 on OPER_POST(code);
 create index idx_oper_post_02 on OPER_POST(organizationId);
---prompt "webdemo模块:创建表逻辑  end..."
---prompt "webdemo模块:创建sequence  start..."  
---prompt "webdemo模块:创建sequence end..."  
---prompt "webdemo模块:创建sequence  start..."  
+
+comment on table OPER_POST is '职位信息表';
+comment on column OPER_POST.code is '职位编码';
 --****************************************************************************
--- demo sequence SEQ_DEMO
+-- 职位信息表历史表：OPER_POST
 --****************************************************************************
-create sequence SEQ_DEMO
-  minvalue 10000
-  maxvalue 999999999999999999999999
-  start with 10001
-  increment by 1
-  cache 20;
---prompt "webdemo模块:创建sequence end..."  
---prompt "webdemo模块:创建包   start..."  
---prompt "webdemo模块:创建包  end..."
---prompt "webdemo模块:创建包   start..."  
---prompt "webdemo模块:创建包  end..."
---prompt "webdemo模块:创建函数逻辑  start..."  
---prompt "webdemo模块:创建函数逻辑  end..." 
---prompt "webdemo模块:创建函数逻辑  start..."  
---prompt "webdemo模块:创建函数逻辑  end..." 
---prompt "webdemo模块:创建存储过程逻辑  start..." 
---prompt "webdemo模块:创建存储过程逻辑  end..."
---prompt "webdemo模块:创建存储过程逻辑  start..." 
---prompt "webdemo模块:创建存储过程逻辑  end..."
---prompt "webdemo模块:创建触发器   start..."  
---prompt "webdemo模块:创建触发器  end..." 
---prompt "webdemo模块:创建触发器   start..."  
---prompt "webdemo模块:创建触发器  end..." 
---prompt "webdemo模块:创建视图逻辑  start..."  
---prompt "webdemo模块:创建视图逻辑  start..."  
---prompt "webdemo模块:初始化基础数据  start..." 
+drop table OPER_POST_HIS;
+create table OPER_POST_HIS(
+	id varchar2(64) not null,
+	parentId varchar2(64),
+	remark varchar2(2000),
+	name varchar2(64),
+	organizationId varchar2(64),
+	code varchar2(64),
+	fullName varchar2(255),
+	primary key(ID)
+);
+prompt "webdemo模块:创建表逻辑  end..."
+prompt "webdemo模块:创建sequence  start..."  
+prompt "webdemo模块:创建sequence end..."  
+prompt "webdemo模块:创建sequence  start..."  
+prompt "webdemo模块:创建sequence end..."  
+prompt "webdemo模块:创建包   start..."  
+prompt "webdemo模块:创建包  end..."
+prompt "webdemo模块:创建包   start..."  
+prompt "webdemo模块:创建包  end..."
+prompt "webdemo模块:创建函数逻辑  start..."  
+prompt "webdemo模块:创建函数逻辑  end..." 
+prompt "webdemo模块:创建函数逻辑  start..."  
+prompt "webdemo模块:创建函数逻辑  end..." 
+prompt "webdemo模块:创建存储过程逻辑  start..." 
+prompt "webdemo模块:创建存储过程逻辑  end..."
+prompt "webdemo模块:创建存储过程逻辑  start..." 
+prompt "webdemo模块:创建存储过程逻辑  end..."
+prompt "webdemo模块:创建触发器   start..."  
+prompt "webdemo模块:创建触发器  end..." 
+prompt "webdemo模块:创建触发器   start..."  
+prompt "webdemo模块:创建触发器  end..." 
+prompt "webdemo模块:创建视图逻辑  start..."  
+prompt "webdemo模块:创建视图逻辑  start..."  
+prompt "webdemo模块:初始化基础数据  start..." 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('dd5defbf548e49068167bb4834e5ae48', '3d4bd283cbd04c1c85722c6865f1b772', null, null, '保定市', '06', '保定市', '130600', null);
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
@@ -7209,8 +7251,8 @@ values ('2c9092e430e90bb50130e9c90e010167', '2c9092e430e90bb50130e9c865110162', 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('2c9092e43263a8df013266254ddf389c', '2388cbcd7b30404292f8e01ad88e6f8d', '741000', null, '秦州区', '02', '秦州区', '620502', null);
 commit;
---prompt "webdemo模块:初始化基础数据  end..." 
---prompt "webdemo模块:初始化基础数据  start..." 
+prompt "webdemo模块:初始化基础数据  end..." 
+prompt "webdemo模块:初始化基础数据  start..." 
 INSERT INTO OPER_OPERATOR(ID,LOGINNAME,PASSWORD,USERNAME)
 	values('123456','admin','admin','admin');
 INSERT INTO OPER_OPERATOR(ID,LOGINNAME,PASSWORD,USERNAME)
@@ -7218,49 +7260,49 @@ INSERT INTO OPER_OPERATOR(ID,LOGINNAME,PASSWORD,USERNAME)
 INSERT INTO OPER_OPERATOR(ID,LOGINNAME,PASSWORD,USERNAME)
 	values('123456002','pqy','pqy','pqy');
 commit;--TRUNCATE TABLE OPER_ORGANIZATION;
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,null,'人员','集团公司','集团公司','1000000','1000000');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1000000','人员','系统开发部','集团公司_系统开发部','1100000001','1100000001');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1000000','人员','人力资源部','集团公司_系统开发部','1100000002','1100000002');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1000000','人员','审计部','集团公司_系统开发部','1100000003','1100000003');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1000000','人员','市场部','集团公司_市场部','1100000004','1100000004');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1100000004','人员','销售一科','集团公司_市场部_销售一科','1100000004001','1100000004001');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1100000004','人员','销售二科','集团公司_市场部_销售二科','1100000004002','1100000004002');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1100000004001','人员','销售一组','集团公司_市场部_销售一组','1100000004003','1100000004003');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1000000','人员','分公司A','分公司A','1000001','1000001');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1000000','人员','分公司B','分公司B','1000002','1000002');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1000001','人员','分公司网点A','分公司网点A','1000001001','1000001001');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,'1000001','人员','分公司网点B','分公司网点B','1000001002','1000001002');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,null,'人员','合作方公司A','合作方公司A','2000000','2000000');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,null,'人员','合作方公司B','合作方公司B','3000000','3000000');
-insert into OPER_ORGANIZATION(VALID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
-  values(1,2000000,'人员','合作方公司B办事处A','合作方公司B办事处A','2000001','2000001');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values(null,'人员','集团公司','集团公司','1000000','1000000');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1000000','人员','系统开发部','集团公司_系统开发部','1100000001','1100000001');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1000000','人员','人力资源部','集团公司_系统开发部','1100000002','1100000002');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1000000','人员','审计部','集团公司_系统开发部','1100000003','1100000003');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1000000','人员','市场部','集团公司_市场部','1100000004','1100000004');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1100000004','人员','销售一科','集团公司_市场部_销售一科','1100000004001','1100000004001');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1100000004','人员','销售二科','集团公司_市场部_销售二科','1100000004002','1100000004002');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1100000004001','人员','销售一组','集团公司_市场部_销售一组','1100000004003','1100000004003');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1000000','人员','分公司A','分公司A','1000001','1000001');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1000000','人员','分公司B','分公司B','1000002','1000002');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1000001','人员','分公司网点A','分公司网点A','1000001001','1000001001');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values('1000001','人员','分公司网点B','分公司网点B','1000001002','1000001002');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values(null,'人员','合作方公司A','合作方公司A','2000000','2000000');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values(null,'人员','合作方公司B','合作方公司B','3000000','3000000');
+insert into OPER_ORGANIZATION(PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE)
+  values(2000000,'人员','合作方公司B办事处A','合作方公司B办事处A','2000001','2000001');
 commit;
-insert into OPER_POST(id,parentId,name,organizationId,code,valid,remark)
-	values('1000000301','','部门经理','1000000',null,1,'集团公司系统开发部部门经理');
-insert into OPER_POST(id,parentId,name,organizationId,code,valid,remark)
-	values('100000030101','1000000301','项目经理','1000000',null,1,'集团公司系统开发部项目经理');
-insert into OPER_POST(id,parentId,name,organizationId,code,valid,remark)
-	values('100000030102','1000000301','SE','1000000',null,1,'集团公司系统开发部SE');
-insert into OPER_POST(id,parentId,name,organizationId,code,valid,remark)
-	values('10000003010101','100000030101','高级软件工程师','1000000',null,1,'集团公司系统开发部高级软件工程师');
-insert into OPER_POST(id,parentId,name,organizationId,code,valid,remark)
-	values('10000003010102','100000030101','工程师','1000000',null,1,'集团公司系统开发部工程师');
-insert into OPER_POST(id,parentId,name,organizationId,code,valid,remark)
-	values('10000003010103','100000030101','助理工程师','1000000',null,1,'集团公司系统开发部助理工程师');
-commit;--prompt "webdemo模块:初始化基础数据  end..." 
---prompt "webdemo模块:创建任务job  end..."
---prompt "webdemo模块:创建任务job  end..."
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('1000000301',null,'部门经理','1000000',null,'集团公司系统开发部部门经理');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('100000030101','1000000301','项目经理','1000000',null,'集团公司系统开发部项目经理');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('100000030102','1000000301','SE','1000000',null,'集团公司系统开发部SE');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('10000003010101','100000030101','高级软件工程师','1000000',null,'集团公司系统开发部高级软件工程师');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('10000003010102','100000030101','工程师','1000000',null,'集团公司系统开发部工程师');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('10000003010103','100000030101','助理工程师','1000000',null,'集团公司系统开发部助理工程师');
+commit;prompt "webdemo模块:初始化基础数据  end..." 
+prompt "webdemo模块:创建任务job  end..."
+prompt "webdemo模块:创建任务job  end..."

@@ -61,17 +61,6 @@ $(document).ready(function() {
 			width : 160,
 			hidden : true
 		}, {
-			field : 'valid',
-			title : '是否有效',
-			width : 40,
-			formatter : function(value, row, index){
-				if(value){
-					return '是';
-				}else{
-					return '否';
-				}
-			}
-		}, {
 			field : 'type',
 			title : '组织类型',
 			width : 80
@@ -100,16 +89,9 @@ $(document).ready(function() {
 				</c:if>
 				str += '&nbsp;';
 				<c:if test="${true}">
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
+					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
 				</c:if>
 				str += '&nbsp;';
-				<c:if test="${true}">
-				if(row.valid){
-					str += $.formatString('<img onclick="stopFun(\'{0}\');" src="{1}" title="停用"/>', row.id, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
-				}else{
-					str += $.formatString('<img onclick="stopFun(\'{0}\');" src="{1}" title="启用"/>', row.id, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
-				}
-				</c:if>
 				return str;
 			}
 		}, {
@@ -169,7 +151,7 @@ function addFun(id) {
 		"addOrganization",
 		"添加组织",
 		$.formatString("${contextPath}/organization/toAddOrganization.action?parentOrganizationId={0}",id),
-		550,265,function(){
+		550,275,function(){
 		$('#treeGrid').treegrid('reload');
 	});
 }
@@ -185,11 +167,11 @@ function editFun(id) {
 		"updateOrganization",
 		"编辑组织",
 		$.formatString("${contextPath}/organization/toUpdateOrganization.action?organizationId={0}",id),
-		550,265,function(){
+		550,275,function(){
 			$('#treeGrid').treegrid('reload');
 	});
 }
-function stopFun(id) {
+function deleteFun(id) {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
@@ -206,7 +188,7 @@ function stopFun(id) {
 		"updateOrganization",
 		"编辑组织",
 		$.formatString("${contextPath}/organization/toUpdateOrganization.action?organizationId={0}",id),
-		550,265,function(){
+		550,275,function(){
 			$('#treeGrid').treegrid('reload');
 	});
 }
@@ -235,6 +217,9 @@ function stopFun(id) {
 		</c:if>
 		<c:if test="${true}">
 			<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
+		</c:if>
+		<c:if test="${true}">
+			<div onclick="editFun();" data-options="iconCls:'pencil_delete'">删除</div>
 		</c:if>
 	</div>
 </body>

@@ -1,8 +1,8 @@
 --****************************************************************************
--- 组织信息表：OPER_ORGANIZATION
+-- 组织信息表历史表：OPER_ORGANIZATION_HIS
 --****************************************************************************
-drop table OPER_ORGANIZATION;
-create table OPER_ORGANIZATION(
+drop table OPER_ORGANIZATION_HIS;
+CREATE TABLE OPER_ORGANIZATION_HIS(
   fullAddress varchar2(255),
   remark varchar2(2000),
   alias varchar2(255),
@@ -18,10 +18,3 @@ create table OPER_ORGANIZATION(
   chiefId varchar2(64),
   primary key(ID)
 );
-create unique index idx_oper_organ_01 on OPER_ORGANIZATION(code);
-create index idx_oper_organ_02 on OPER_ORGANIZATION(parentId);
-create index idx_oper_organ_03 on OPER_ORGANIZATION(chiefType,chiefId);
-
-comment on table OPER_ORGANIZATION is '组织信息表';
-comment on column OPER_ORGANIZATION.type is '组织类型';
-comment on column OPER_ORGANIZATION.chiefType is '组织主管类型：可以是人员，可以是职位，也可以是其他...';

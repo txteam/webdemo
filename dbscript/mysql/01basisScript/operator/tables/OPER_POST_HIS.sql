@@ -1,5 +1,5 @@
 --****************************************************************************
--- 职位信息表：OPER_POST
+-- 职位信息表历史表：OPER_POST_HIS
 --****************************************************************************
 create table OPER_POST(
 	id varchar(64) not null,
@@ -11,6 +11,3 @@ create table OPER_POST(
 	fullName varchar(64),
 	primary key(ID)
 );
-create index idx_oper_post_00 on OPER_POST(parentId);
-create index idx_oper_post_01 on OPER_POST(code);
-create index idx_oper_post_02 on OPER_POST(organizationId);

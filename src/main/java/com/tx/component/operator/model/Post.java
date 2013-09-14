@@ -56,9 +56,6 @@ public class Post implements Serializable{
     /** 职位名称全名 */
     private String fullName;
     
-    /** 是否有效 */
-    private boolean valid;
-    
     /** 备注 */
     private String remark;
     
@@ -107,20 +104,6 @@ public class Post implements Serializable{
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * @return 返回 valid
-     */
-    public boolean isValid() {
-        return valid;
-    }
-
-    /**
-     * @param 对valid进行赋值
-     */
-    public void setValid(boolean valid) {
-        this.valid = valid;
     }
 
     /**

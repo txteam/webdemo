@@ -90,9 +90,8 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<TreeNode> queryOrganizationPostTreeNodeListByAuth(
-            boolean includeInvalidOrganization) {
-        List<Organization> orgList = queryOrganizationListByAuth(includeInvalidOrganization);
+    public List<TreeNode> queryOrganizationPostTreeNodeListByAuth() {
+        List<Organization> orgList = queryOrganizationListByAuth();
         
         List<TreeNode> resList = new ArrayList<TreeNode>();
         for (Organization orgTemp : orgList) {
@@ -211,9 +210,8 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<Organization> queryOrganizationListByAuth(
-            boolean includeInvalidOrganization) {
-        Organization currentOrgnization = WebContextUtils.getOrganizationFromSession();
+    public List<Organization> queryOrganizationListByAuth() {
+        Organization currentOrgnization = WebContextUtils.getCurrentOrganization();
         String parentOrganizationId = "";
         if (currentOrgnization != null) {
             parentOrganizationId = currentOrgnization.getId();
@@ -224,13 +222,9 @@ public class OrganizationService {
         if (WebContextUtils.hasAuth("query_all_org_post")) {
             //生成查询条件
             Map<String, Object> params = new HashMap<String, Object>();
-            if (!includeInvalidOrganization) {
-                params.put("valid", true);
-            }
             resList = this.organizationDao.queryOrganizationList(params);
         } else {
-            resList = queryChildOrganizationListByParentId(parentOrganizationId,
-                    includeInvalidOrganization);
+            resList = queryChildOrganizationListByParentId(parentOrganizationId);
         }
         
         return resList;
@@ -261,19 +255,16 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryOrganizationListByParentId(
-            String parentOrganizationId, boolean includeInvalidOrganization) {
+            String parentOrganizationId) {
         //生成查询条件
         List<Organization> resList = null;
         if (StringUtils.isEmpty(parentOrganizationId)) {
             //生成查询条件
             Map<String, Object> params = new HashMap<String, Object>();
-            if (!includeInvalidOrganization) {
-                params.put("valid", true);
-            }
+            
             resList = this.organizationDao.queryOrganizationList(params);
         } else {
-            resList = queryChildOrganizationListByParentId(parentOrganizationId,
-                    includeInvalidOrganization);
+            resList = queryChildOrganizationListByParentId(parentOrganizationId);
         }
         
         return resList;
@@ -290,16 +281,12 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryChildOrganizationListByParentId(
-            String parentOrganizationId, boolean includeInvalidOrganization) {
+            String parentOrganizationId) {
         AssertUtils.notEmpty(parentOrganizationId,
                 "parentOrganizationId is empty");
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("parentId", parentOrganizationId);
-        //如果不包括无效组织
-        if (!includeInvalidOrganization) {
-            params.put("valid", true);
-        }
         
         List<Organization> resList = new ArrayList<Organization>();
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
@@ -310,8 +297,7 @@ public class OrganizationService {
                 if (childTemp == null) {
                     continue;
                 }
-                resList.addAll(queryChildOrganizationListByParentId(childTemp.getId(),
-                        includeInvalidOrganization));
+                resList.addAll(queryChildOrganizationListByParentId(childTemp.getId()));
             }
         }
         
@@ -329,12 +315,11 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<String> queryChildOrganizationIdListByParentId(
-            String parentOrganizationId, boolean includeInvalidOrganization) {
+            String parentOrganizationId) {
         AssertUtils.notEmpty(parentOrganizationId,
                 "parentOrganizationId is empty");
         
-        List<Organization> orgList = queryChildOrganizationListByParentId(parentOrganizationId,
-                includeInvalidOrganization);
+        List<Organization> orgList = queryChildOrganizationListByParentId(parentOrganizationId);
         List<String> resList = new ArrayList<String>();
         if (CollectionUtils.isEmpty(orgList)) {
             return resList;
@@ -358,8 +343,7 @@ public class OrganizationService {
      */
     @SuppressWarnings("unused")
     private void iteratorUpdateChildOrganization(
-            List<Organization> childOrganizationList, String newParentId,
-            String newParentFullName) {
+            List<Organization> childOrganizationList, String newParentFullName) {
         if (CollectionUtils.isEmpty(childOrganizationList)) {
             return;
         }
@@ -397,18 +381,18 @@ public class OrganizationService {
         updateRowMap.put("id", organization.getId());
         
         //需要更新的字段
-        updateRowMap.put("fullAddress", organization.getFullAddress());
         updateRowMap.put("alias", organization.getAlias());
+        updateRowMap.put("fullAddress", organization.getFullAddress());
         updateRowMap.put("remark", organization.getRemark());
         updateRowMap.put("code", organization.getCode());
         updateRowMap.put("type", organization.getType());
         updateRowMap.put("address", organization.getAddress());
         updateRowMap.put("name", organization.getName());
+        updateRowMap.put("chiefType", organization.getChiefType());
+        updateRowMap.put("chiefId", organization.getChiefId());
         updateRowMap.put("fullName",
                 generateOrganizationFullName(organization.getParentId(),
                         organization.getName()));
-        updateRowMap.put("chiefType", organization.getChiefType());
-        updateRowMap.put("chiefId", organization.getChiefId());
         
         int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
         
@@ -417,64 +401,11 @@ public class OrganizationService {
     }
     
     /**
-      * 停用指定组织
-      *<功能详细描述>
-      * @param organizationId
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public boolean disableOrganizationById(String organizationId) {
-        AssertUtils.notEmpty(organizationId, "organizationId is empty.");
-        
-        //获取对应组织
-        List<Organization> childs = queryOrganizationListByParentId(organizationId,
-                false);
-        AssertUtils.isEmpty(childs, "valid child organization is exist");
-        
-        Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        updateRowMap.put("id", organizationId);
-        updateRowMap.put("valid", false);
-        
-        int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
-        return updateRowCount > 0;
-    }
-    
-    /**
-      * 启用指定组织
-      *<功能详细描述>
-      * @param organizationId
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public boolean enableOrganizationById(String organizationId) {
-        AssertUtils.notEmpty(organizationId, "organizationId is empty.");
-        
-        Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        updateRowMap.put("id", organizationId);
-        updateRowMap.put("valid", true);
-        
-        int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
-        return updateRowCount > 0;
-    }
-    
-    /**
      * 根据id删除organization实例
      *      1、如果入参数为空，则抛出异常
-     *      2、执行删除后，将返回数据库中被影响的条数
-     *      3、考虑如果是级联删除，影响较大，可能一个误操作引起不必要的错误，
+     *      2、考虑如果是级联删除，影响较大，可能一个误操作引起不必要的错误，
      *             而且与组织关联的对象可能很多，组织一旦被启用后，删除后对原系统冲击过大
      *             在未建外键关联的情况下，不允许轻易删除组织
-     *      4、采取方案为删除对应组织后，下级组织自动上移一级
-     *      5、并且先上移以后再进行删除
-     *      6、如果组织被其他模块所引用，组织的删除将会影响到其他模块
-     *      7、所以组织的删除将不会真正被执行，组织紧紧只能停用，如果需要真正的删除
-     *      开发阶段暂不考虑提供组织的删除功能
      * @param id
      * @return 返回删除的数据条数，<br/>
      * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
@@ -484,14 +415,25 @@ public class OrganizationService {
      * @see [类、类#方法、类#成员]
     */
     @Transactional
-    public int deleteById(String id) {
+    public boolean deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
         
+        //如果存在子级组织不能被删除
+        List<Organization> childs = queryOrganizationListByParentId(id);
+        AssertUtils.isTrue(CollectionUtils.isEmpty(childs), "对应组织尚存在子级组织不能被删除.");
+        
+        //如果不存在则可以被删除
         Organization condition = new Organization();
         condition.setId(id);
-        return this.organizationDao.deleteOrganization(condition);
+        Organization res = this.organizationDao.findOrganization(condition);
+        if (res == null) {
+            return false;
+        }
+        //将要删除的组织信息写入历史表中
+        this.organizationDao.insertOrganizationToHis(res);
+        
+        return this.organizationDao.deleteOrganization(condition) > 0;
     }
-    
     
     /** 组织转换为树节点的适配器 */
     private static final TreeNodeAdapter<Organization> organizationAdapter = new TreeNodeAdapter<Organization>() {

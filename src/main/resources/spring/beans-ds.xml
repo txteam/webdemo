@@ -99,7 +99,7 @@
 			</property>	
 			<property name="initScriptLocations">
 				<list>
-					<value>classpath:dbscript/mysqlStandard.sql</value>
+					<value>classpath:dbscript/oracleStandard.sql</value>
 				</list>
 			</property>
 		</bean>

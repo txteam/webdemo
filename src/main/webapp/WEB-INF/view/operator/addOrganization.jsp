@@ -58,19 +58,20 @@ $(document).ready(function(){
 					<th class="narrow">名称:<span class="tRed">*</span></th>
 					<td>
 						<form:input path="name" cssClass="text"
-							data-rule="名称:required;" 
+							data-rule="名称:required;length[2~16]" 
 							data-tip="必填"/>
 					</td>
 					<th class="narrow">别名:</th>
 					<td>
-						<form:input path="alias" cssClass="text"/>
+						<form:input path="alias" cssClass="text"
+							data-rule="别名:length[~16]"/>
 					</td>
 				</tr>
 				<tr>
 					<th class="narrow">编号<span class="tRed">*</span></th>
 					<td>
 						<form:input path="code" cssClass="text"
-							data-rule="编号:required;digits;remote[get:${contextPath }/organization/organizationCodeIsExist.action, code]" 
+							data-rule="编号:required;digits;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code]" 
 							data-tip="不能重复的数字"/>
 					</td>
 					<th class="narrow">组织类型:</th>
@@ -82,10 +83,10 @@ $(document).ready(function(){
 					</td>
 				</tr>
 				<tr>
-					<th>是否有效</th>
+					<th>所在地区</th>
 					<td>
-						是<form:radiobutton path="valid" value="1"/>
-						否<form:radiobutton path="valid" value="0"/>
+						<input id="districtId" name="districtId" type="hidden" readonly="readonly"/>
+						<input id="districtName" name="districtName" class="selectInput" readonly="readonly"/>
 					</td>
 					<th>上级组织</th>
 					<td>

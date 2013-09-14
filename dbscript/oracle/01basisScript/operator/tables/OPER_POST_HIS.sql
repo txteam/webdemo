@@ -1,8 +1,8 @@
 --****************************************************************************
--- 职位信息表：OPER_POST
+-- 职位信息表历史表：OPER_POST
 --****************************************************************************
-drop table OPER_POST;
-create table OPER_POST(
+drop table OPER_POST_HIS;
+create table OPER_POST_HIS(
 	id varchar2(64) not null,
 	parentId varchar2(64),
 	remark varchar2(2000),
@@ -12,9 +12,3 @@ create table OPER_POST(
 	fullName varchar2(255),
 	primary key(ID)
 );
-create index idx_oper_post_00 on OPER_POST(parentId);
-create index idx_oper_post_01 on OPER_POST(code);
-create index idx_oper_post_02 on OPER_POST(organizationId);
-
-comment on table OPER_POST is '职位信息表';
-comment on column OPER_POST.code is '职位编码';

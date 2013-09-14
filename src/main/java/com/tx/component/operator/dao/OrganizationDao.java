@@ -38,6 +38,19 @@ public interface OrganizationDao {
     public void insertOrganization(Organization condition);
     
     /**
+     * 插入Organization对象实体
+     * 1、auto generate
+     * <功能详细描述>
+     * @param condition [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+   //auto generate
+   public void insertOrganizationToHis(Organization condition);
+    
+    /**
       * 删除Organization对象
       * 1、auto generate
       * 2、根据入参条件进行删除

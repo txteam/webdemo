@@ -6,7 +6,7 @@
      * 可以覆盖默认配置, 也会被主题配置和调用时的传参覆盖
      */
     $.validator.config({
-        stopOnError: false,
+        //stopOnError: false,
         //theme: 'yellow_right',
         defaultMsg: '{0}格式不正确',
         loadingMsg: '正在验证...',
@@ -96,6 +96,11 @@
         'simple_bottom': {
             formClass: 'n-simple',
             msgClass: 'n-bottom'
+        },
+        'yellow_top': {
+            formClass: 'n-yellow',
+            msgClass: 'n-top',
+            msgArrow: TPL_ARROW
         },
         'yellow_right': {
             formClass: 'n-yellow',

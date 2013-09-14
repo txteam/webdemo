@@ -20,7 +20,6 @@
 		resultMap="postMap">
 		SELECT 
 				TP.ID,
-				TP.VALID,
 				TP.PARENTID,
 				TP.ORGANIZATIONID AS organization_id,
 				TP.REMARK,
@@ -42,7 +41,6 @@
 		resultMap="postMap">
 		SELECT 
 				TP.ID,
-				TP.VALID,
 				TP.PARENTID,
 				TP.ORGANIZATIONID AS organization_id,
 				TP.REMARK,
@@ -79,9 +77,6 @@
 	        
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TP.ID = #{id,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            AND TP.VALID = #{valid,javaType=boolean}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TP.PARENTID = #{parentId,javaType=java.lang.String}
@@ -158,9 +153,6 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TP.ID = #{id,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            AND TP.VALID = #{valid,javaType=boolean}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TP.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
@@ -185,7 +177,6 @@
 		INSERT INTO OPER_POST
 		(
 			ID,
-			VALID,
 			PARENTID,
 			ORGANIZATIONID,
 			REMARK,
@@ -196,7 +187,6 @@
 		VALUES
 		(
 			#{id},
-			#{valid},
 			#{parentId},
 			<if test="organization != null">
 				#{organization.id},
@@ -227,9 +217,6 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_POST TP
 	    <trim prefix="SET" suffixOverrides=",">
-			<if test="_parameter.containsKey('valid')">
-	    		VALID = #{valid,javaType=boolean},
-	    	</if>	
 			<if test="_parameter.containsKey('parentId')">
 	    		PARENTID = #{parentId,javaType=java.lang.String},
 	    	</if>	

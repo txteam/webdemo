@@ -134,7 +134,7 @@ public class OrganizationController {
     @ResponseBody
     @RequestMapping("/queryOrganizationPostTreeNodeListByAuth")
     public List<TreeNode> queryOrganizationPostTreeNodeListByAuth() {
-        List<TreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeListByAuth(false);
+        List<TreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeListByAuth();
         
         return resList;
     }
@@ -151,7 +151,7 @@ public class OrganizationController {
     @RequestMapping("/queryOrganizationList")
     @ResponseBody
     public List<Organization> queryOrganizationList() {
-        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth(false);
+        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth();
         
         return orgList;
     }
@@ -168,7 +168,7 @@ public class OrganizationController {
     @RequestMapping("/queryOrganizationListIncludeInvalid")
     @ResponseBody
     public List<Organization> queryOrganizationListIncludeInvalid() {
-        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth(true);
+        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth();
         
         return orgList;
     }
@@ -208,9 +208,9 @@ public class OrganizationController {
                 excludeOrganizationId);
         Map<String, String> resMap = new HashMap<String, String>();
         if (!resFlag) {
-            resMap.put("ok", "可用的组织码号");
+            resMap.put("ok", "");
         } else {
-            resMap.put("error", "已经存在的组织编号");
+            resMap.put("error", "重复的组织编号");
         }
         return resMap;
     }
@@ -243,11 +243,10 @@ public class OrganizationController {
      * @see [类、类#方法、类#成员]
     */
     @ResponseBody
-    @RequestMapping("/isDisableAble")
-    public boolean isDisableAble(
+    @RequestMapping("/isDeleteAble")
+    public boolean isDeleteAble(
             @RequestParam("organizationId") String organizationId) {
-        List<Organization> resList = this.organizationService.queryOrganizationListByParentId(organizationId,
-                false);
+        List<Organization> resList = this.organizationService.queryOrganizationListByParentId(organizationId);
         
         //如果存在尚未停用的下级组织则不能被停用
         if (CollectionUtils.isEmpty(resList)) {
@@ -255,43 +254,6 @@ public class OrganizationController {
         } else {
             return false;
         }
-    }
-    
-    /**
-      * 停用指定组织
-      *<功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @ResponseBody
-    @RequestMapping("/disableOrganizationById")
-    public boolean disableOrganizationById(
-            @RequestParam("organizationId") String organizationId) {
-        boolean resFlag = this.organizationService.disableOrganizationById(organizationId);
-        
-        return resFlag;
-    }
-    
-    /**
-      * 启用指定组织
-      *<功能详细描述>
-      * @param organizationId
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @ResponseBody
-    @RequestMapping("/enableOrganizationById")
-    public boolean enableOrganizationById(
-            @RequestParam("organizationId") String organizationId) {
-        boolean resFlag = this.organizationService.enableOrganizationById(organizationId);
-        
-        return resFlag;
     }
     
     /**
@@ -306,7 +268,7 @@ public class OrganizationController {
      */
     public boolean deleteOrganizationById(
             @RequestParam("organizationId") String organizationId) {
-        boolean resFlag = this.organizationService.deleteById(organizationId) > 0;
+        boolean resFlag = this.organizationService.deleteById(organizationId);
         
         return resFlag;
     }

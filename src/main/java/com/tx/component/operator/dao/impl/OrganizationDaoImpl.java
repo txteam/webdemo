@@ -46,6 +46,15 @@ public class OrganizationDaoImpl implements OrganizationDao {
     
     /**
      * @param condition
+     */
+    @Override
+    public void insertOrganizationToHis(Organization organization) {
+        this.myBatisDaoSupport.insert("newOrganization.insertOrganizationHis",
+                organization);
+    }
+    
+    /**
+     * @param condition
      * @return
      */
     @Override

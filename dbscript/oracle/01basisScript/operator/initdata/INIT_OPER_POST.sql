@@ -1,5 +1,5 @@
 insert into OPER_POST(id,parentId,name,organizationId,code,remark)
-	values('1000000301','10000003','部门经理','1000000',null,'集团公司系统开发部部门经理');
+	values('1000000301',null,'部门经理','1000000',null,'集团公司系统开发部部门经理');
 insert into OPER_POST(id,parentId,name,organizationId,code,remark)
 	values('100000030101','1000000301','项目经理','1000000',null,'集团公司系统开发部项目经理');
 insert into OPER_POST(id,parentId,name,organizationId,code,remark)
