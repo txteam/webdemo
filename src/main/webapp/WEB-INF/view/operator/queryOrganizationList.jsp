@@ -182,7 +182,7 @@ function deleteFun(id,name) {
 	}
 	//判断对应组织是否能被停用
 	$.post(
-		'${contextPath}/post/isDeleteAble.action',
+		'${contextPath}/organization/isDeleteAble.action',
 		{organizationId: id},
 		function(data){
 			if(data){

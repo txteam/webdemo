@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.auth.AuthConstant;
 import com.tx.component.auth.context.AuthContext;
+import com.tx.component.auth.context.AuthSessionContext;
 import com.tx.component.mainframe.context.MenuContext;
 import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.component.mainframe.model.MenuItem;
@@ -94,6 +95,8 @@ public class MainframeController {
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_POST, postId);
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_ORGANIZATION, loginOrganization.getId());
         authContext.login(refType2RefIdMapping);
+        //修改权限项记录日志会用到对应值
+        AuthSessionContext.putOperatorIdToSession(oper.getId());
         
         //根据当前用户权限获取当前用户的菜单列表
         

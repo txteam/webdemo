@@ -14,7 +14,7 @@ var $currentAuthTreeEl = null;
 var currentTree = null;
 var authType2AuthItemListMap = null;
 $(document).ready(function() {
-	$.post('${contextPath}/auth/queryAuthType2AuthItemListMap.action',{postId:'${postId}'},function(data){
+	$.post('${contextPath}/auth/queryPostAuthType2AuthItemListMap.action',{postId:'${postId}'},function(data){
 		authType2AuthItemListMap = data;
 		
 		//初始化tabs
@@ -48,6 +48,7 @@ $(document).ready(function() {
 });
 //如果tabs初始化
 function initAuthTree($currentAuthTreeEl,authType,configAble,authItemList){
+	//alert('init_' + authType);
 	currentTree = $currentAuthTreeEl.tree({
 		idField : 'id',
 		parentField : 'parentId',
@@ -65,10 +66,43 @@ function initAuthTree($currentAuthTreeEl,authType,configAble,authItemList){
 	});
 	
 	$("#confirmBtn_" + authType).click(function(){
-		$("#form_" + authType).ajaxSubmit({
-			
-		});
+		var $treeEL = $currentAuthTreeEl;
+		var checked = $treeEL.tree('getChecked',['checked','indeterminate']);
+		var authItemIds = [];
+		if(checked.length > 0){
+			$.each(checked,function(index,item){
+				authItemIds[index] = item.id;
+			});
+		}
+		//提交数据
+		$.post("${contextPath}/auth/savePost2AuthItemList.action",{
+			    	authType: authType,
+			    	postId: '${postId}',
+			    	authItemId: authItemIds
+			    },
+			    function(data) {
+					if(data){
+						parent.DialogUtils.tip("配置职位权限成功");
+					}
+			    }
+		);
 	});
+}
+function redo() {
+	var node = $currentAuthTreeEl.tree('getSelected');
+	if (node) {
+		$currentAuthTreeEl.tree('expandAll', node.id);
+	} else {
+		$currentAuthTreeEl.tree('expandAll');
+	}
+}
+function undo() {
+	var node = $currentAuthTreeEl.tree('getSelected');
+	if (node) {
+		$currentAuthTreeEl.tree('collapseAll', node.id);
+	} else {
+		$currentAuthTreeEl.tree('collapseAll');
+	}
 }
 </script>
 </head>
@@ -76,12 +110,19 @@ function initAuthTree($currentAuthTreeEl,authType,configAble,authItemList){
 	<!-- authTreeTabs -->
 	<div id="authTabView" class="easyui-tabs">
 		<c:forEach items="${authTypeList}" var="authType">
-			<div title="${authType.name}" style="overflow-y:auto;overflow-x:hidden;height:fit;width:auto">
+			<div title="${authType.name}" data-options="tools:'#tab_tools_${authType.authType}'"
+				style="overflow-y:auto;overflow-x:hidden;height:fit;width:auto">
+				<div class="datagrid-toolbar">
+			        <a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a>
+			        <a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a>
+			    </div>
 				<form id="form_${authType.authType}" method="post">
-				<ul class="checkAblePostTreeNode"
-					isLoad="false" authType="${authType.authType}" configAble="${authType.configAble}"
-					style="margin-bottom: 40px;padding-top:2px;padding-left: 5px"></ul>
-				<div class="dialog-button" style="position:absolute;bottom: 0px;width:100%">
+					<input type="hidden" name="authType" value="${authType.authType}"/>
+					<input type="hidden" name="postId" value="${postId}"/>
+					<ul class="checkAblePostTreeNode"
+						isLoad="false" authType="${authType.authType}" configAble="${authType.configAble}"
+						style="margin-bottom: 40px;padding-top:2px;padding-left: 5px"></ul>
+					<div class="dialog-button" style="position:absolute;bottom: 0px;width:100%">
 					<a id="confirmBtn_${authType.authType}" href="#" class="easyui-linkbutton">确认</a>&nbsp;&nbsp;&nbsp;</div>
 				</form>
 		    </div>

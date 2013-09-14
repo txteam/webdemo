@@ -258,7 +258,7 @@ function configPostAuth(id,name){
 		$.formatString("${contextPath}/auth/toConfigPostAuth.action?postId={0}",id),
 		450,500,function(){
 			//$('#treeGrid').treegrid('reload');
-			alert('reload');
+			//alert('reload');
 		}
 	);
 }

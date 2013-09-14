@@ -136,6 +136,22 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 		data: authItemList
 	});
 }
+function redo() {
+	var node = $currentAuthTreeGridEl.treegrid('getSelected');
+	if (node) {
+		$currentAuthTreeGridEl.treegrid('expandAll', node.id);
+	} else {
+		$currentAuthTreeGridEl.treegrid('expandAll');
+	}
+}
+function undo() {
+	var node = $currentAuthTreeGridEl.treegrid('getSelected');
+	if (node) {
+		$currentAuthTreeGridEl.treegrid('collapseAll', node.id);
+	} else {
+		$currentAuthTreeGridEl.treegrid('collapseAll');
+	}
+}
 </script>
 </head>
 <body>
@@ -150,11 +166,8 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 
 <c:forEach items="${authTypeList}" var="authType">
 <div id="toolbar_${authType.authType}" style="display: none;">
-	<c:if test="${false}">
-		<a onclick="" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
-	</c:if>
-	<a onclick="" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
-	<a onclick="" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
+	<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
+	<a onclick="undo()" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
 	<a onclick="" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 </div>
 </c:forEach>

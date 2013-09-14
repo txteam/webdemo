@@ -967,12 +967,14 @@ var GlobalDialogUtils = null;
  */
 $.fn.tree.defaults.loadFilter = function(data, parent) {
     var opt = $(this).data().tree.options;
-    var idField, textField, parentField,iconField,childrenField;
+    var idField, textField, parentField,iconField,childrenField,checkedField;
     if (opt.parentField) {
         idField = opt.idField || 'id';
         parentField = opt.parentField;
         textField = opt.textField || 'text';
         iconField = opt.iconField || 'iconCls';
+        checkedField = opt.iconField || 'checked';
+        
         var i, l, treeData = [], tmpMap = [];
         for (i = 0, l = data.length; i < l; i++) {
             tmpMap[data[i][idField]] = data[i];
@@ -985,10 +987,12 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
                 data[i]['text'] = data[i][textField];
                 data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
+                tmpMap[data[i][parentField]]['checked'] = false;
             } else {
             	data[i]['attributes'] = data[i];
                 data[i]['text'] = data[i][textField];
                 data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
+                data[i]['checked'] = data[i][checkedField];
                 treeData.push(data[i]);
             }
         }
@@ -1006,8 +1010,10 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
             item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
             item['children'] = item[childrenField];
             if(!$.ObjectUtils.isEmpty(item['children'])){
-                for(i = 0,l = item['children'].length ; i < l ; i++){
-                    iteratorTreeData(item['children'][i]);
+            	var k = 0;
+            	var length = item['children'].length;
+                for(k = 0 ; k < length ; k++){
+                    iteratorTreeData(item['children'][k]);
                 }
             }
         }
@@ -1063,8 +1069,10 @@ $.fn.treegrid.defaults.loadFilter = function(data, parentId) {
             item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
             item['children'] = item[childrenField];
             if(!$.ObjectUtils.isEmpty(item['children'])){
-                for(i = 0,l = item['children'].length ; i < l ; i++){
-                    iteratorTreeData(item['children'][i]);
+            	var k = 0;
+            	var length = item['children'].length;
+                for(k = 0 ; k < length ; k++){
+                    iteratorTreeData(item['children'][k]);
                 }
             }
         }

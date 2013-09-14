@@ -10,8 +10,10 @@
 				target="mainTabs" selectRefresh="false" />
 			<menu id="config_config" text="配置项管理" href="/auth/authMananger"
 				authKey="config_config" target="mainTabs" selectRefresh="false" />
-			<menu id="basicdata_config" text="基础数据项管理" href="/auth/authMananger"
-				authKey="basicdata_config" target="mainTabs" selectRefresh="false" />
+			<menu id="basicdata_config" text="基础数据项管理"
+				authKey="basicdata_config" target="mainTabs" selectRefresh="false">
+				<menu id="district_manange" text="区域数据"></menu>
+			</menu>
 				
 			<menu id="operator_config_center" text="操作员管理中心"
 				target="mainTabs" authKey="operator_config_center">
@@ -66,50 +68,22 @@
 					target="mainTabs" selectRefresh="false" />
 			</menu>
 		</menu>
-
-		<menu id="test" text="测试菜单项" href="/demo/dialogUtilsDemo">
+		
+		<menu id="control_panel" text="控制面板">
+			<menu id="modify_password" text="修改密码"></menu>
+			<menu id="modify_myself_info" text="修改个人信息"></menu>
+			<menu id="my_post" text="我的职位"></menu>
+			<menu id="my_auth" text="我的权限"></menu>
 		</menu>
-
-		<menu id="system_manangersasdf" text="test">
-			<menu id="config_mananger3333" text="test22">
-				<menu id="1_mananger1" text="111"></menu>
-				<menu id="2_mananger" text="112"></menu>
-				<menu id="3_mananger" text="113"></menu>
-				<menu id="4_mananger" text="114"></menu>
-				<menu id="5_mananger" text="115">
-					<menu id="1_mananger51" text="1151"></menu>
-					<menu id="2_mananger52" text="1152"></menu>
-					<menu id="3_mananger53" text="1153"></menu>
-					<menu id="4_mananger54" text="1154"></menu>
-					<menu id="5_mananger55" text="1155"></menu>
-					<menu id="6_mananger56" text="1156"></menu>
-				</menu>
-				<menu id="6_mananger" text="1156"></menu>
-			</menu>
+		<menu id="logout_center" text="注销">
+			<menu id="lock_window" text="锁定窗口"></menu>
+			<menu id="re_login" text="重新登录"></menu>
+			<menu id="logout" text="退出系统"></menu>
 		</menu>
-
-
 	</menus_config>
 
 	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示 -->
 	<menus_config type="toolMenu">
 		<!-- 一级别菜单:系统配置 -->
-		<menu id="system_config" text="系统配置" authKey="system_config_manange">
-			<!-- 系统管理子菜单: 权限管理 -->
-			<!-- target可配置为mainTabs,openDialog,triggerGlobalEvent -->
-			<!-- mainTabs: selectRefresh默认为false,即对应tab点击后是否马上刷新 -->
-			<!-- openModelDialog: 需要配置打开的对话框高和宽 height,width -->
-			<menu id="authCconfig" text="权限管理" href="/auth/authMananger"
-				authKey="auth_config_manage" target="mainTabs" selectRefresh="false" />
-		</menu>
-		<menu id="newPortalIndex" text="newPortalIndex" href="/portal/index.action"
-			target="mainTabs">
-		</menu>
-		<menu id="modifyMyselfInfo" text="修改个人信息" href="/demo/dialogUtilsDemo"
-			target="openDialog">
-		</menu>
-		<menu id="logout" text="退出" href="/demo/dialogUtilsDemo" target="triggerGlobalEvent"
-			eventType="modifyMyselfInfo">
-		</menu>
 	</menus_config>
 </menu_context_config>

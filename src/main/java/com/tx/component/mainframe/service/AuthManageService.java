@@ -245,18 +245,17 @@ public class AuthManageService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public void savePostAuth(String authType, String postId,
-            List<String> authIdList) {
-        AssertUtils.notEmpty(postId, "postId is empty");
+    public void saveRefId2AuthItemIdList(String authType, String refType,
+            String refId, List<String> authIdList) {
+        AssertUtils.notEmpty(refId, "refId is empty");
+        AssertUtils.notEmpty(refType, "refType is empty");
         
         if (StringUtils.isEmpty(authType)) {
-            authContext.saveAuthRefOfAuthItemIdList(MainframeConstants.AUTHREFTYPE_POST,
-                    postId,
-                    authIdList);
+            authContext.saveAuthRefOfAuthItemIdList(refType, refId, authIdList);
         } else {
             authContext.saveAuthRefOfAuthItemIdList(authType,
-                    MainframeConstants.AUTHREFTYPE_POST,
-                    postId,
+                    refType,
+                    refId,
                     authIdList);
         }
     }
@@ -351,59 +350,6 @@ public class AuthManageService {
         return hasChildAuthTypeList;
     }
     
-    /**
-      * 保存组织权限<br/>
-      *<功能详细描述>
-      * @param authType
-      * @param organizationId
-      * @param authIdList [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public void saveOrganizationAuth(String authType, String organizationId,
-            List<String> authIdList) {
-        AssertUtils.notEmpty(organizationId, "organizationId is empty");
-        
-        if (StringUtils.isEmpty(authType)) {
-            authContext.saveAuthRefOfAuthItemIdList(MainframeConstants.AUTHREFTYPE_ORGANIZATION,
-                    organizationId,
-                    authIdList);
-        } else {
-            authContext.saveAuthRefOfAuthItemIdList(authType,
-                    MainframeConstants.AUTHREFTYPE_ORGANIZATION,
-                    organizationId,
-                    authIdList);
-        }
-    }
-    
-    /**
-      * 保存人员权限<br/>
-      *<功能详细描述>
-      * @param authType
-      * @param operatorId
-      * @param authIdList [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public void saveOperatorAuth(String authType, String operatorId,
-            List<String> authIdList) {
-        AssertUtils.notEmpty(operatorId, "operatorId is empty");
-        
-        if (StringUtils.isEmpty(authType)) {
-            authContext.saveAuthRefOfAuthItemIdList(MainframeConstants.AUTHREFTYPE_OPERATOR,
-                    operatorId,
-                    authIdList);
-        } else {
-            authContext.saveAuthRefOfAuthItemIdList(authType,
-                    MainframeConstants.AUTHREFTYPE_OPERATOR,
-                    operatorId,
-                    authIdList);
-        }
-    }
     
     /** 职位转换为树节点的适配器 */
     private static CheckAbleTreeNodeAdapter<AuthItem> authAdapter = new CheckAbleTreeNodeAdapter<AuthItem>() {

@@ -62,6 +62,7 @@ public class OperatorService {
         condition.setLoginName(loginName);
         condition.setPassword(password);
         
+        //TODO:登录
         if ("admin".equals(loginName) && "admin".equals(password)) {
             condition.setId("123456");
             return condition;
@@ -143,18 +144,29 @@ public class OperatorService {
         return this.operatorDao.deleteOperator(condition);
     }
     
-    public void disableOperatorById(String id) {
+    /**
+      * 根据id禁用操作员<br/>
+      *<功能详细描述>
+      * @param id [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean disableOperatorById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
         
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", id);
         
-        //TODO:需要更新的字段
+        //需要更新的字段
         updateRowMap.put("valid", false);
         updateRowMap.put("invalidDate", new Date());
         updateRowMap.put("pwdErrCount", 0);
         
         int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
+        return updateRowCount > 0;
     }
     
     /**

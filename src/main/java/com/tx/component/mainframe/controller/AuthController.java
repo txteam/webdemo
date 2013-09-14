@@ -6,6 +6,8 @@
  */
 package com.tx.component.mainframe.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,8 +46,8 @@ public class AuthController {
     @Resource(name = "newPostService")
     private PostService postService;
     
-//    @Resource(name = "organizationService")
-//    private OrganizationService organizationService;
+    //    @Resource(name = "organizationService")
+    //    private OrganizationService organizationService;
     
     /**
       * 跳转到查询权限视图<br/>
@@ -123,6 +125,37 @@ public class AuthController {
     }
     
     /**
+      * 保存角色权限<br/>
+      *<功能详细描述>
+      * @param postId
+      * @param authType
+      * @param authItemIds
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/savePost2AuthItemList")
+    public boolean savePost2AuthItemList(@RequestParam("postId") String postId,
+            @RequestParam("authType") String authType,
+            @RequestParam(value="authItemId[]",required=false) String[] authItemIds,
+            @RequestParam()MultiValueMap<String, String> request) {
+        List<String> authIdList = null;
+        if(authItemIds == null){
+            authIdList = new ArrayList<String>();
+        }else{
+            authIdList = Arrays.asList(authItemIds);
+        }
+        this.authManageService.saveRefId2AuthItemIdList(authType,
+                AuthConstant.AUTHREFTYPE_POST,
+                postId,
+                authIdList);
+        return true;
+    }
+    
+    /**
      * 跳转到配置操作员权限列表页面<br/>
      *<功能详细描述>
      * @param modelMap
@@ -161,5 +194,4 @@ public class AuthController {
         modelMap.put("authTypeList", hasChildAuthTypeList);
         return "/mainframe/configOrganizationAuth";
     }
-    
 }
