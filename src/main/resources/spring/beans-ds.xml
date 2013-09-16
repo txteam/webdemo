@@ -35,7 +35,7 @@
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 			<property name="dataSource" ref="dataSource"></property>
 			<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
-			<property name="typeAliasesPackage" value="com.tx.core.mybatis.handler"></property>
+			<property name="typeHandlersPackage" value="com.tx.core.mybatis.handler"></property>
 			<property name="mapperLocations">
 				<array>
 					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
@@ -109,7 +109,7 @@
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 			<property name="dataSource" ref="tx.dataSource"></property>
 			<property name="configLocation" value="classpath:context/mybatis-config.xml"></property>
-			<property name="typeAliasesPackage" value="com.tx.core.mybatis.handler"></property>
+			<property name="typeHandlersPackage" value="com.tx.core.mybatis.handler"></property>
 			<property name="mapperLocations">
 				<array>
 					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
