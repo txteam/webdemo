@@ -1,7 +1,7 @@
 --****************************************************************************
 -- ±í£ºOPER_EMPLOYEEINFO
 --****************************************************************************
-DROP TABLE OPER_EMPLOYEEINFO;
+DROP TABLE OPER_EMPLOYEEINFO_HIS;
 CREATE TABLE OPER_EMPLOYEEINFO(
 	leavingDate date,
 	sex number(10,0),
@@ -18,4 +18,3 @@ CREATE TABLE OPER_EMPLOYEEINFO(
 	cardNum varchar2(255),
 	primary key(OPERATORID)
 );
-create unique index idx_oper_emp_00 on OPER_EMPLOYEEINFO(code);

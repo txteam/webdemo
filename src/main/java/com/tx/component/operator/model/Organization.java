@@ -74,6 +74,9 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     /** 描述 */
     private String remark;
     
+    /** 是否有效 */
+    private boolean valid;
+    
     /** 
      * 主管类型 人员 职位
      */
@@ -286,6 +289,20 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
         this.childs = childs;
     }
     
+    /**
+     * @return 返回 valid
+     */
+    public boolean isValid() {
+        return valid;
+    }
+
+    /**
+     * @param 对valid进行赋值
+     */
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
     /**
      * @param obj
      * @return

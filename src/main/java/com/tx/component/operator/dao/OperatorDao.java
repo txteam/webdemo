@@ -9,9 +9,9 @@ package com.tx.component.operator.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.tx.component.operator.model.Operator;
 import com.tx.core.mybatis.model.Order;
 import com.tx.core.paged.model.PagedList;
-import com.tx.component.operator.model.Operator;
 
 /**
  * Operator持久层
@@ -23,6 +23,10 @@ import com.tx.component.operator.model.Operator;
  * @since  [产品/模块版本]
  */
 public interface OperatorDao {
+    
+//    public void batchInsertOperatorRef(List<OperatorRef> operatorRef);
+//    
+//    public void batchDeleteOperatorRef(List<OperatorRef> operatorRef);
     
     /**
       * 插入Operator对象实体

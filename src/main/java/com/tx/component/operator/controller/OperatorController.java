@@ -9,7 +9,6 @@ package com.tx.component.operator.controller;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.ws.rs.core.MultivaluedMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

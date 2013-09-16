@@ -34,6 +34,14 @@ public class Operator implements Serializable{
     
     /** 注释内容 */
     private static final long serialVersionUID = 6236689049474522678L;
+    
+    public static final int VALID = 1;
+    
+    public static final int INVALID = 0;
+    
+    public static final int LOCKED_TRUE = 1;
+    
+    public static final int LOCKED_FALSE = 0;
 
     /** 用户唯一键  */
     @Id
@@ -51,7 +59,7 @@ public class Operator implements Serializable{
     /** 历史密码 */
     private String historyPwd;
     
-    /**审批密码*/
+    /** 审批密码 */
     private String examinePwd;
     
     /** 用户输错密码的次数 */

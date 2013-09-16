@@ -115,7 +115,7 @@ public class OrganizationServiceTest {
     public void testQueryList(){
         try {
             
-            List<Organization> organizationList = this.organizationService.queryAllOrganizationList();
+            List<Organization> organizationList = this.organizationService.queryOrganizationListIncludeInvalid();
             
             Assert.assertNotNull(organizationList);
             

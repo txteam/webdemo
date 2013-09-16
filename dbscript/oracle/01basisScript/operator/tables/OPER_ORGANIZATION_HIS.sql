@@ -1,8 +1,9 @@
 --****************************************************************************
 -- 组织信息表历史表：OPER_ORGANIZATION_HIS
 --****************************************************************************
-drop table OPER_ORGANIZATION_HIS;
+DROP TABLE OPER_ORGANIZATION_HIS;
 CREATE TABLE OPER_ORGANIZATION_HIS(
+  valid number(1,0) default 1 not null,
   fullAddress varchar2(255),
   remark varchar2(2000),
   alias varchar2(255),
@@ -14,7 +15,7 @@ CREATE TABLE OPER_ORGANIZATION_HIS(
   chiefType varchar2(64),
   address varchar2(255),
   name varchar2(64) not null,
-  fullName varchar2(255) not null,
+  fullName varchar2(64) not null,
   chiefId varchar2(64),
   primary key(ID)
 );
