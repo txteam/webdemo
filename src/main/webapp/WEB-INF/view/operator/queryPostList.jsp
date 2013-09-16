@@ -256,7 +256,7 @@ function configPostAuth(id,name){
 		"configPostAuth",
 		$.formatString("配置职位权限_[{0}]",name),
 		$.formatString("${contextPath}/auth/toConfigPostAuth.action?postId={0}",id),
-		450,500,function(){
+		400,450,function(){
 			//$('#treeGrid').treegrid('reload');
 			//alert('reload');
 		}

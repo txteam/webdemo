@@ -71,6 +71,7 @@ public class OperatorService {
         
         Operator condition = new Operator();
         condition.setLoginName(loginName);
+<<<<<<< HEAD
         condition.setPassword(password);
         
         Operator oper = this.operatorDao.findOperator(condition);
@@ -92,6 +93,23 @@ public class OperatorService {
             this.operatorDao.updateOperator(updateRowMap);
             return false;
         }
+=======
+        
+        Operator res = this.operatorDao.findOperator(condition);
+        if (res == null) {
+            return null;
+        }
+        
+        //更新密码错误次数为0
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", res.getId());
+        updateRowMap.put("pwdErrCount", 0);
+        this.operatorDao.updateOperator(updateRowMap);
+        
+        //TODO: 记录登录日志
+        
+        return res;
+>>>>>>> branch '5.0.x' of https://github.com/txteam/webdemo.git
     }
     
     /**
