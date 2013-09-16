@@ -36,7 +36,7 @@ $(document).ready(function(){
 			    url:"${contextPath}/organization/addOrganization.action",
 			    success: function(data) {
 					if(data){
-						parent.DialogUtils.tip("新增组织成功");
+						DialogUtils.tip("新增组织成功");
 						parent.DialogUtils.closeDialogById("addOrganization");
 					}
 			    }

@@ -44,22 +44,56 @@ public class OperatorService {
     @Resource(name = "operatorDao")
     private OperatorDao operatorDao;
     
+    /** 校验密码最大错误次数 */
+    private int checkPasswordMaxErrorCount = 3;
+    
     /**
-      * 登录系统，如果登录成功，则返回当前用户
+      * 校验用户名密码，如果用户密码错误，则将用户密码输入错误次数+1，否则置为0
       *<功能详细描述>
       * @param loginName
-      * @param password [参数说明]
+      * @param password
+      * @return [参数说明]
       * 
-      * @return void [返回类型说明]
+      * @return boolean [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public Operator login(String loginName, String password) {
+    public boolean checkPassword(String loginName, String password) {
         AssertUtils.notEmpty(loginName, "loginName is empty");
         AssertUtils.notEmpty(password, "password is empty");
         
+        //根据用户名查询用户
+        Operator res = findOperatorByLoginName(loginName);
+        //如果不存在对应用户名则直接返回
+        if (res == null) {
+            return false;
+        }
+        
         Operator condition = new Operator();
         condition.setLoginName(loginName);
+<<<<<<< HEAD
+        condition.setPassword(password);
+        
+        Operator oper = this.operatorDao.findOperator(condition);
+        if (oper != null) {
+            //更新密码错误次数为0
+            Map<String, Object> updateRowMap = new HashMap<String, Object>();
+            updateRowMap.put("id", res.getId());
+            updateRowMap.put("pwdErrCount", 0);
+            this.operatorDao.updateOperator(updateRowMap);
+            return true;
+        } else {
+            Map<String, Object> updateRowMap = new HashMap<String, Object>();
+            int errorCount = res.getPwdErrCount() + 1;
+            updateRowMap.put("id", res.getId());
+            updateRowMap.put("pwdErrCount", errorCount);
+            if (errorCount > checkPasswordMaxErrorCount) {
+                updateRowMap.put("locked", Operator.LOCKED_TRUE);
+            }
+            this.operatorDao.updateOperator(updateRowMap);
+            return false;
+        }
+=======
         
         Operator res = this.operatorDao.findOperator(condition);
         if (res == null) {
@@ -75,6 +109,7 @@ public class OperatorService {
         //TODO: 记录登录日志
         
         return res;
+>>>>>>> branch '5.0.x' of https://github.com/txteam/webdemo.git
     }
     
     /**
@@ -178,6 +213,25 @@ public class OperatorService {
         
         Operator condition = new Operator();
         condition.setId(id);
+        return this.operatorDao.findOperator(condition);
+    }
+    
+    /**
+     * 根据LoginName查询Operator实体
+     * 1、当id为empty时抛出异常
+     * <功能详细描述>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return Operator [返回类型说明]
+     * @exception throws 可能存在数据库访问异常DataAccessException
+     * @see [类、类#方法、类#成员]
+    */
+    public Operator findOperatorByLoginName(String loginName) {
+        AssertUtils.notEmpty(loginName, "loginName is empty.");
+        
+        Operator condition = new Operator();
+        condition.setLoginName(loginName);
         return this.operatorDao.findOperator(condition);
     }
     
@@ -288,7 +342,6 @@ public class OperatorService {
         updateRowMap.put("locked", operator.isLocked());
         updateRowMap.put("createDate", operator.getCreateDate());
         updateRowMap.put("examinePwd", operator.getExaminePwd());
-        updateRowMap.put("loginName", operator.getLoginName());
         
         int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
         
