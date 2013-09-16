@@ -77,7 +77,7 @@ public class MainframeController {
     public String login(@RequestParam("loginName") String loginName,
             @RequestParam("password") String password, Model model) {
         //登录人员
-        Operator oper = this.operatorService.findOperatorById(loginName);
+        Operator oper = this.operatorService.findOperatorByLoginName(loginName);
         if (oper == null) {
             model.addAttribute("errorMsg", "指定用户不存在.");
             return "/mainframe/login";
@@ -89,7 +89,7 @@ public class MainframeController {
         }
         
         //如果登录不成功继续返回登录页面
-        if (this.operatorService.checkPassword(loginName, password)) {
+        if (!this.operatorService.checkPassword(loginName, password)) {
             model.addAttribute("errorMsg", "用户密码错误.请重新输入.");
             return "/mainframe/login";
         }

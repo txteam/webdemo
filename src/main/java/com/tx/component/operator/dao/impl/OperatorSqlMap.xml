@@ -295,17 +295,6 @@
             AND TOR_.REFID = #{refId}
         </if>
 	</delete>
-	
-	<delete id="deleteOperatorRef"
-		parameterType="java.util.Map">
-		DELETE FROM OPER_OPERATOR_REF TOR_ WHERE TOR_.REFTYPE = #{refType}
-		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
-            AND TOR_.OPERATORID = #{operatorId}
-        </if>
-        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
-            AND TOR_.REFID = #{refId}
-        </if>
-	</delete>
 
 	<!-- auto generate default update -->
 	<update id="updateOperator"

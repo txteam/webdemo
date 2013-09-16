@@ -34,14 +34,6 @@ public class Operator implements Serializable{
     
     /** 注释内容 */
     private static final long serialVersionUID = 6236689049474522678L;
-    
-    public static final int VALID = 1;
-    
-    public static final int INVALID = 0;
-    
-    public static final int LOCKED_TRUE = 1;
-    
-    public static final int LOCKED_FALSE = 0;
 
     /** 用户唯一键  */
     @Id
