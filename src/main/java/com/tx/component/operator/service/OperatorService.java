@@ -72,6 +72,7 @@ public class OperatorService {
         Operator condition = new Operator();
         condition.setLoginName(loginName);
 <<<<<<< HEAD
+<<<<<<< HEAD
         condition.setPassword(password);
         
         Operator oper = this.operatorDao.findOperator(condition);
@@ -94,6 +95,31 @@ public class OperatorService {
             return false;
         }
 =======
+=======
+<<<<<<< HEAD
+        condition.setPassword(password);
+        
+        Operator oper = this.operatorDao.findOperator(condition);
+        if (oper != null) {
+            //更新密码错误次数为0
+            Map<String, Object> updateRowMap = new HashMap<String, Object>();
+            updateRowMap.put("id", res.getId());
+            updateRowMap.put("pwdErrCount", 0);
+            this.operatorDao.updateOperator(updateRowMap);
+            return true;
+        } else {
+            Map<String, Object> updateRowMap = new HashMap<String, Object>();
+            int errorCount = res.getPwdErrCount() + 1;
+            updateRowMap.put("id", res.getId());
+            updateRowMap.put("pwdErrCount", errorCount);
+            if (errorCount > checkPasswordMaxErrorCount) {
+                updateRowMap.put("locked", Operator.LOCKED_TRUE);
+            }
+            this.operatorDao.updateOperator(updateRowMap);
+            return false;
+        }
+=======
+>>>>>>> branch '5.0.x' of https://github.com/txteam/webdemo.git
         
         Operator res = this.operatorDao.findOperator(condition);
         if (res == null) {
@@ -109,6 +135,10 @@ public class OperatorService {
         //TODO: 记录登录日志
         
         return res;
+<<<<<<< HEAD
+>>>>>>> branch '5.0.x' of https://github.com/txteam/webdemo.git
+=======
+>>>>>>> branch '5.0.x' of https://github.com/txteam/webdemo.git
 >>>>>>> branch '5.0.x' of https://github.com/txteam/webdemo.git
     }
     

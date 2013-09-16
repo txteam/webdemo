@@ -12,7 +12,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -80,6 +79,23 @@ public class OrganizationController {
     }
     
     /**
+     * 查询所有组织的树列表<br/>
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<Organization> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/queryOrganizationListIncludeInvalid")
+    @ResponseBody
+    public List<Organization> queryOrganizationListIncludeInvalid() {
+        List<Organization> orgList = this.organizationService.queryOrganizationListIncludeInvalid();
+        
+        return orgList;
+    }
+    
+    /**
       * 跳转到更新组织页面
       *<功能详细描述>
       * @return [参数说明]
@@ -124,6 +140,8 @@ public class OrganizationController {
     
     /**
       * 查询组织职位树数据列表
+      *     一般服务于选择组织树
+      *     不包含已经禁用的组织
       *<功能详细描述>
       * @return [参数说明]
       * 
@@ -151,23 +169,6 @@ public class OrganizationController {
     @RequestMapping("/queryOrganizationList")
     @ResponseBody
     public List<Organization> queryOrganizationList() {
-        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth();
-        
-        return orgList;
-    }
-    
-    /**
-     * 查询所有组织的树列表<br/>
-     *<功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<Organization> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    @RequestMapping("/queryOrganizationListIncludeInvalid")
-    @ResponseBody
-    public List<Organization> queryOrganizationListIncludeInvalid() {
         List<Organization> orgList = this.organizationService.queryOrganizationListByAuth();
         
         return orgList;
@@ -233,7 +234,7 @@ public class OrganizationController {
     }
     
     /**
-     * 检查对应组织是否能够被停用
+     * 检查对应组织是否能够被删除
      *<功能详细描述>
      * @param organizationId
      * @return [参数说明]
@@ -246,10 +247,32 @@ public class OrganizationController {
     @RequestMapping("/isDeleteAble")
     public boolean isDeleteAble(
             @RequestParam("organizationId") String organizationId) {
-        List<Organization> resList = this.organizationService.queryOrganizationListByParentId(organizationId);
+        boolean resFlag = this.organizationService.isDeleteAble(organizationId);
         
         //如果存在尚未停用的下级组织则不能被停用
-        if (CollectionUtils.isEmpty(resList)) {
+        if (resFlag) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+      * 检查对应组织是否能够被禁用<br/>
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean isDisableAble(
+            @RequestParam("organizationId") String organizationId) {
+        boolean resFlag = this.organizationService.isDisableAble(organizationId);
+        
+        //如果存在尚未停用的下级组织则不能被停用
+        if (resFlag) {
             return true;
         } else {
             return false;
@@ -271,6 +294,40 @@ public class OrganizationController {
     public boolean deleteOrganizationById(
             @RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.deleteById(organizationId);
+        
+        return resFlag;
+    }
+    
+    /**
+      * 根据组织id进行禁用<br/>
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean disableOrganizationById(
+            @RequestParam("organizationId") String organizationId) {
+        boolean resFlag = this.organizationService.disableOrganizationById(organizationId);
+        
+        return resFlag;
+    }
+    
+    /**
+      * 根据组织id进行启用<br/> 
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean enableOrganizationById(
+            @RequestParam("organizationId") String organizationId) {
+        boolean resFlag = this.organizationService.enableOrganizationById(organizationId);
         
         return resFlag;
     }

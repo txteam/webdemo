@@ -19,6 +19,7 @@
 		resultMap="organizationMap">
 		SELECT 
 				TO_.ID,
+				TO_.VALID,
 				TO_.FULLADDRESS,
 				TO_.ALIAS,
 				TO_.REMARK,
@@ -46,6 +47,7 @@
 		resultMap="organizationMap">
 		SELECT 
 				TO_.ID,
+				TO_.VALID,
 				TO_.FULLADDRESS,
 				TO_.ALIAS,
 				TO_.REMARK,
@@ -65,6 +67,9 @@
 			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
 	            AND TO_.FULLADDRESS = #{fullAddress,javaType=java.lang.String}
@@ -126,6 +131,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TO_.VALID = #{valid,javaType=boolean}
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
 	            AND TO_.FULLADDRESS = #{fullAddress,javaType=java.lang.String}
 	        </if>
@@ -165,12 +173,13 @@
 		</trim>
 	</select>
 	
-    <!-- auto generate default insert -->
-    <insert id="insertOrganizationToHis" 
+	<!-- auto generate default insert -->
+    <insert id="insertOrganizationToHis"
 		parameterType="com.tx.component.operator.model.Organization">
 		INSERT INTO OPER_ORGANIZATION_HIS
 		(
 			ID,
+			VALID,
 			FULLADDRESS,
 			ALIAS,
 			REMARK,
@@ -187,6 +196,7 @@
 		VALUES
 		(
 			#{id},
+			#{valid},
 			#{fullAddress},
 			#{alias},
 			#{remark},
@@ -208,6 +218,7 @@
 		INSERT INTO OPER_ORGANIZATION
 		(
 			ID,
+			VALID,
 			FULLADDRESS,
 			ALIAS,
 			REMARK,
@@ -224,6 +235,7 @@
 		VALUES
 		(
 			#{id},
+			#{valid},
 			#{fullAddress},
 			#{alias},
 			#{remark},
@@ -255,6 +267,9 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_ORGANIZATION TO_
 	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('valid')">
+	    		VALID = #{valid,javaType=boolean},
+	    	</if>	
 			<if test="_parameter.containsKey('fullAddress')">
 	    		FULLADDRESS = #{fullAddress,javaType=java.lang.String},
 	    	</if>	

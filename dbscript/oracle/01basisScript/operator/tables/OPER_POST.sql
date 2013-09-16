@@ -1,8 +1,8 @@
 --****************************************************************************
 -- 职位信息表：OPER_POST
 --****************************************************************************
-drop table OPER_POST;
-create table OPER_POST(
+DROP TABLE OPER_POST;
+CREATE TABLE OPER_POST(
 	id varchar2(64) not null,
 	parentId varchar2(64),
 	remark varchar2(2000),

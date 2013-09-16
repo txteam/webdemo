@@ -77,15 +77,24 @@ public class MainframeController {
     public String login(@RequestParam("loginName") String loginName,
             @RequestParam("password") String password, Model model) {
         //登录人员
-        Operator oper = this.operatorService.login(loginName, password);
+        Operator oper = this.operatorService.findOperatorById(loginName);
+        if (oper == null) {
+            model.addAttribute("errorMsg", "指定用户不存在.");
+            return "/mainframe/login";
+        }
+        //用户是否被锁定
+        if (!oper.isValid() || oper.isLocked()) {
+            model.addAttribute("errorMsg", "指定用户已被锁定，请联系管理员进行解锁.");
+            return "/mainframe/login";
+        }
         
         //如果登录不成功继续返回登录页面
-        if (oper == null) {
+        if (this.operatorService.checkPassword(loginName, password)) {
+            model.addAttribute("errorMsg", "用户密码错误.请重新输入.");
             return "/mainframe/login";
         }
         
         model.addAttribute(WebContextUtils.SESSION_CURRENT_OPERATOR, oper);
-        
         //初始化用户权限到当前会话中
         //authSessionContext.initCurrentUserAuthContextWhenLogin("123456");//初始化用户权限到当前会话中 
         Map<String, String> refType2RefIdMapping = new HashMap<String, String>();
@@ -97,8 +106,6 @@ public class MainframeController {
         authContext.login(refType2RefIdMapping);
         //修改权限项记录日志会用到对应值
         AuthSessionContext.putOperatorIdToSession(oper.getId());
-        
-        //根据当前用户权限获取当前用户的菜单列表
         
         return "/mainframe/mainframe";
     }
@@ -121,8 +128,7 @@ public class MainframeController {
         if (StringUtils.isEmpty(menuItemId)) {
             mainMenuItemTreeList = MenuContext.getContext()
                     .getMenuItemTreeListFromCurrentSession(MenuItem.TYPE_MAIN_MENU);
-        }
-        else {
+        } else {
             mainMenuItemTreeList = MenuContext.getContext()
                     .getMenuItemTreeListFromCurrentSession(MenuItem.TYPE_MAIN_MENU,
                             menuItemId)
@@ -142,7 +148,7 @@ public class MainframeController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toQueryAllMenuItemTreeList")
-    public String toQueryAllMenuItemTreeList(){
+    public String toQueryAllMenuItemTreeList() {
         return "mainframe/queryAllMenuItemTreeList";
     }
     
@@ -160,7 +166,8 @@ public class MainframeController {
     @RequestMapping("/getAllMenuItemList")
     public List<MenuItem> getAllMenuItemList() {
         List<MenuItem> mainMenuItemTreeList = null;
-        mainMenuItemTreeList = MenuContext.getContext().getAllMenuItemList(MenuItem.TYPE_MAIN_MENU);
+        mainMenuItemTreeList = MenuContext.getContext()
+                .getAllMenuItemList(MenuItem.TYPE_MAIN_MENU);
         
         //mainMenuItemTreeList = TreeUtils.changToTree(mainMenuItemTreeList);
         return mainMenuItemTreeList;

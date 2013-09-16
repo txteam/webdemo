@@ -1,8 +1,8 @@
 --****************************************************************************
 -- 表：OPER_OPERATOR
 --****************************************************************************
-DROP TABLE OPER_OPERATOR;
-CREATE TABLE OPER_OPERATOR(
+DROP TABLE OPER_OPERATOR_HIS;
+CREATE TABLE OPER_OPERATOR_HIS(
 	valid number(1,0) DEFAULT 1 NOT NULL,
 	pwdErrCount number(10,0),
 	historyPwd varchar2(255),
@@ -20,8 +20,3 @@ CREATE TABLE OPER_OPERATOR(
 	loginName varchar2(64)  not null,
 	primary key(ID)
 );
-create unique index idx_oper_oper_00 on OPER_OPERATOR(loginName);
-create index idx_oper_oper_01 on OPER_OPERATOR(loginName,password);
-
-comment on table OPER_OPERATOR is '系统使用人员信息表';
-comment on column OPER_OPERATOR.valid is '是否有效 0 无效  1有效  默认有效';

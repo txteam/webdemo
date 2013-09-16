@@ -65,7 +65,35 @@
 				TO_.EXAMINEPWD,
 				TO_.LOGINNAME
 		  FROM OPER_OPERATOR TO_
+	    <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType2refIdMap)">  
+        	LEFT JOIN OPER_OPERATOR_REF TOR ON (TO_ID = TOR.OPERATORID)
+	    </if>
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<!-- 如果条件指定了组织id则使用传入的组织id -->
+			<if test="organization == null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
+					AND TO_.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
+				</if>
+				<!-- 如果没有指定，仅能查询当前组织及其子级组织的数据，如果拥有查询所有职位组织的权限，则不根据组织id去查询 -->
+				<if test="@com.tx.core.util.OgnlUtils@isEmpty(organizationId)">
+					AND TO_.ORGANIZATIONID IN 
+		        	<foreach 
+		        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryCurrentAndChildOrganizationIdList()"
+		        		item="organizationId" open="(" close=")" separator=",">
+		        		'${organizationId}'
+		        	</foreach>
+				</if>
+			</if>
+        	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
+				AND TO_.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
+			</if>
+		    <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType2refIdMap)">  
+	        	AND
+	        	<foreach collection="refType2RefIdMap.entrySet()" item="entryTemp" open="(" close=")" separator="or">
+					(TOR.REFTYPE = #{entryTemp.key} AND TOR.REFID = #{entryTemp.value})
+				</foreach>
+		    </if>
+		    
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
@@ -77,28 +105,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
-	            AND TO_.PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(historyPwd)">  
 	            AND TO_.HISTORYPWD = #{historyPwd,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(invalidDate)">  
-	            AND TO_.INVALIDDATE = #{invalidDate,javaType=java.util.Date}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
-	            AND TO_.PASSWORD = #{password,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
-	            AND TO_.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
-	        </if>
-			<if test="organization != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            AND TO_.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
-		        </if>
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdUpdateDate)">  
-	            AND TO_.PWDUPDATEDATE = #{pwdUpdateDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
 	            AND TO_.USERNAME = #{userName,javaType=java.lang.String}
@@ -108,9 +116,6 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
 	            AND TO_.CREATEDATE = #{createDate,javaType=java.util.Date}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
-	            AND TO_.EXAMINEPWD = #{examinePwd,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
 	            AND TO_.LOGINNAME = #{loginName,javaType=java.lang.String}
@@ -133,6 +138,31 @@
 		SELECT COUNT(1)
 		  FROM OPER_OPERATOR TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<!-- 如果条件指定了组织id则使用传入的组织id -->
+			<if test="organization == null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
+					AND TO_.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
+				</if>
+				<!-- 如果没有指定，仅能查询当前组织及其子级组织的数据，如果拥有查询所有职位组织的权限，则不根据组织id去查询 -->
+				<if test="@com.tx.core.util.OgnlUtils@isEmpty(organizationId)">
+					AND TO_.ORGANIZATIONID IN 
+		        	<foreach 
+		        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryCurrentAndChildOrganizationIdList()"
+		        		item="organizationId" open="(" close=")" separator=",">
+		        		'${organizationId}'
+		        	</foreach>
+				</if>
+			</if>
+        	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
+				AND TO_.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
+			</if>
+		    <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType2refIdMap)">  
+	        	AND
+	        	<foreach collection="refType2RefIdMap.entrySet()" item="entryTemp" open="(" close=")" separator="or">
+					(TOR.REFTYPE = #{entryTemp.key} AND TOR.REFID = #{entryTemp.value})
+				</foreach>
+		    </if>
+		    
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
@@ -144,28 +174,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
-	            AND TO_.PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(historyPwd)">  
 	            AND TO_.HISTORYPWD = #{historyPwd,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(invalidDate)">  
-	            AND TO_.INVALIDDATE = #{invalidDate,javaType=java.util.Date}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
-	            AND TO_.PASSWORD = #{password,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
-	            AND TO_.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
-	        </if>
-			<if test="organization != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            AND TO_.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
-		        </if>
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdUpdateDate)">  
-	            AND TO_.PWDUPDATEDATE = #{pwdUpdateDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
 	            AND TO_.USERNAME = #{userName,javaType=java.lang.String}
@@ -175,9 +185,6 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
 	            AND TO_.CREATEDATE = #{createDate,javaType=java.util.Date}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
-	            AND TO_.EXAMINEPWD = #{examinePwd,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
 	            AND TO_.LOGINNAME = #{loginName,javaType=java.lang.String}
@@ -246,6 +253,59 @@
 	        </if>
 		</trim>
 	</delete>
+	
+	<!-- 新增人员引用项 -->
+	<insert id="insertOperatorRef" 
+		parameterType="com.tx.component.operator.model.OperatorRef">
+		INSERT INTO OPER_OPERATOR_REF
+		(
+			OPERATORID,
+			REFID,
+			REFTYPE
+		)VALUES(
+			#{operatorId},
+			#{refId},
+			#{refType}
+		)
+	</insert>
+	
+	<!-- 将人员引用项插入历史表 -->
+	<insert id="insertOperatorRefToHis" 
+		parameterType="com.tx.component.operator.model.OperatorRef">
+		INSERT INTO OPER_OPERATOR_REF_HIS
+		(
+			OPERATORID,
+			REFID,
+			REFTYPE
+		)VALUES(
+			#{operatorId},
+			#{refId},
+			#{refType}
+		)
+	</insert>
+	
+	<!-- 删除人员引用项 -->
+	<delete id="deleteOperatorRef"
+		parameterType="com.tx.component.operator.model.OperatorRef">
+		DELETE FROM OPER_OPERATOR_REF TOR_ WHERE TOR_.REFTYPE = #{refType}
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+            AND TOR_.OPERATORID = #{operatorId}
+        </if>
+        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
+            AND TOR_.REFID = #{refId}
+        </if>
+	</delete>
+	
+	<delete id="deleteOperatorRef"
+		parameterType="java.util.Map">
+		DELETE FROM OPER_OPERATOR_REF TOR_ WHERE TOR_.REFTYPE = #{refType}
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+            AND TOR_.OPERATORID = #{operatorId}
+        </if>
+        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
+            AND TOR_.REFID = #{refId}
+        </if>
+	</delete>
 
 	<!-- auto generate default update -->
 	<update id="updateOperator"
@@ -300,10 +360,7 @@
 	    	</if>	
 			<if test="_parameter.containsKey('examinePwd')">
 	    		EXAMINEPWD = #{examinePwd,javaType=java.lang.String},
-	    	</if>	
-			<if test="_parameter.containsKey('loginName')">
-	    		LOGINNAME = #{loginName,javaType=java.lang.String},
-	    	</if>	
+	    	</if>
 	    </trim>
 	    WHERE TO_.ID = #{id} 
 	</update>  
