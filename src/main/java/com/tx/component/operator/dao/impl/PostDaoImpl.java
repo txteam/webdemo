@@ -28,7 +28,7 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("newPostDao")
+@Component("postDao")
 public class PostDaoImpl implements PostDao {
     
     @Resource(name = "myBatisDaoSupport")

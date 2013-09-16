@@ -38,7 +38,7 @@ import com.tx.component.operator.service.OrganizationService;
 @RequestMapping("/organization")
 public class OrganizationController {
     
-    @Resource(name = "newOrganizationService")
+    @Resource(name = "organizationService")
     private OrganizationService organizationService;
     
     /**

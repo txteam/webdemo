@@ -38,10 +38,10 @@ import com.tx.component.operator.service.PostService;
 @RequestMapping("/post")
 public class PostController {
     
-    @Resource(name = "newPostService")
+    @Resource(name = "postService")
     private PostService postService;
     
-    @Resource(name = "newOrganizationService")
+    @Resource(name = "organizationService")
     private OrganizationService organizationService;
     
     /**

@@ -33,16 +33,16 @@ import com.tx.core.exceptions.util.AssertUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("newPostService")
+@Component("postService")
 public class PostService {
     
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(PostService.class);
     
-    @Resource(name = "newPostDao")
+    @Resource(name = "postDao")
     private PostDao postDao;
     
-    @Resource(name = "newOrganizationService")
+    @Resource(name = "organizationService")
     private OrganizationService organizationService;
     
     /**

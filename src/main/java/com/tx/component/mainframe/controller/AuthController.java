@@ -43,7 +43,7 @@ public class AuthController {
     @Resource(name = "authManageService")
     private AuthManageService authManageService;
     
-    @Resource(name = "newPostService")
+    @Resource(name = "postService")
     private PostService postService;
     
     //    @Resource(name = "organizationService")
