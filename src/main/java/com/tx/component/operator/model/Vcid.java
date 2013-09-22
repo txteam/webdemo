@@ -6,7 +6,14 @@
  */
 package com.tx.component.operator.model;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.tx.core.tree.model.TreeAble;
 
 
  /**
@@ -21,13 +28,22 @@ import javax.persistence.Table;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-@Table(name = "user_vcid")
-public class Vcid{
+@Table(name = "OPER_VCID")
+public class Vcid implements TreeAble<List<Vcid>, Vcid>,Serializable{
     
+    /** 注释内容 */
+    private static final long serialVersionUID = 299142584465484552L;
+
     /**
      * 虚中心唯一id
      */
+    @Id
     private String id;
+    
+    /**
+     * 上级虚中心id
+     */
+    private String parentId;
     
     /**
      * 虚中心名
@@ -37,7 +53,41 @@ public class Vcid{
     /**
      * 虚中心说明
      */
-    private String description;
+    private String remark;
+    
+    /**
+     * 子级虚中心
+     */
+    @Transient
+    private List<Vcid> childs;
+
+    /**
+     * @return 返回 parentId
+     */
+    public String getParentId() {
+        return parentId;
+    }
+
+    /**
+     * @param 对parentId进行赋值
+     */
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    /**
+     * @return 返回 childs
+     */
+    public List<Vcid> getChilds() {
+        return childs;
+    }
+
+    /**
+     * @param 对childs进行赋值
+     */
+    public void setChilds(List<Vcid> childs) {
+        this.childs = childs;
+    }
 
     /**
      * @return 返回 id
@@ -68,17 +118,16 @@ public class Vcid{
     }
 
     /**
-     * @return 返回 description
+     * @return 返回 remark
      */
-    public String getDescription() {
-        return description;
+    public String getRemark() {
+        return remark;
     }
 
     /**
-     * @param 对description进行赋值
+     * @param 对remark进行赋值
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
-
 }

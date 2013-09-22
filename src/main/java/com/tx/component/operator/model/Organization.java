@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.tx.component.operator.basicdata.ChiefTypeEnum;
 import com.tx.component.operator.basicdata.OrganizationTypeEnum;
@@ -91,6 +92,7 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     private String chiefId;
     
     /** 子级组织集合 */
+    @Transient
     private List<Organization> childs;
     
     /**

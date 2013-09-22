@@ -6,6 +6,8 @@
  */
 package com.tx.component.operator.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -22,11 +24,23 @@ import javax.persistence.Table;
 @Table(name = "OPER_OPERATOR_REF")
 public class OperatorRef {
     
+    /** 操作员id */
     private String operatorId;
     
+    /** 引用id */
     private String refId;
     
+    /** 引用类型 */
     private OperatorRefTypeEnum refType;
+    
+    /** 创建时间 */
+    private Date createDate;
+    
+    /** 生效时间 */
+    private Date effectiveDate;
+    
+    /** 失效时间 */
+    private Date endDate;
     
     /**
      * @return 返回 operatorId
@@ -68,5 +82,47 @@ public class OperatorRef {
      */
     public void setRefType(OperatorRefTypeEnum refType) {
         this.refType = refType;
+    }
+
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    /**
+     * @return 返回 effectiveDate
+     */
+    public Date getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    /**
+     * @param 对effectiveDate进行赋值
+     */
+    public void setEffectiveDate(Date effectiveDate) {
+        this.effectiveDate = effectiveDate;
+    }
+
+    /**
+     * @return 返回 endDate
+     */
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param 对endDate进行赋值
+     */
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

@@ -37,10 +37,6 @@ public class ${service.entitySimpleName}Service {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(${service.entitySimpleName}Service.class);
     
-    @SuppressWarnings("unused")
-    //@Resource(name = "serviceLogger")
-    private Logger serviceLogger;
-    
     @Resource(name = "${service.lowerCaseEntitySimpleName}Dao")
     private ${service.entitySimpleName}Dao ${service.lowerCaseEntitySimpleName}Dao;
     

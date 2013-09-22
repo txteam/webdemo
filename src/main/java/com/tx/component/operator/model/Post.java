@@ -7,12 +7,16 @@
 package com.tx.component.operator.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.tx.core.tree.model.TreeAble;
 
 
 
@@ -35,7 +39,7 @@ import javax.persistence.Table;
   */
 @Entity
 @Table(name = "OPER_POST")
-public class Post implements Serializable{
+public class Post implements TreeAble<List<Post>, Post>,Serializable{
     
     /** 注释内容 */
     private static final long serialVersionUID = -2514159781332417436L;
@@ -63,6 +67,24 @@ public class Post implements Serializable{
     @ManyToOne
     @JoinColumn(name = "organizationId")
     private Organization organization;
+    
+    /** 子职位 */
+    @Transient
+    private List<Post> childs;
+
+    /**
+     * @return 返回 childs
+     */
+    public List<Post> getChilds() {
+        return childs;
+    }
+
+    /**
+     * @param 对childs进行赋值
+     */
+    public void setChilds(List<Post> childs) {
+        this.childs = childs;
+    }
 
     /**
      * @return 返回 id
