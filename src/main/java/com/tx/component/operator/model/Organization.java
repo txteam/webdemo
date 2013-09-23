@@ -21,6 +21,17 @@ import com.tx.core.util.ObjectUtils;
 
 /**
  * 组织<br/>
+ *     组织在创建时需要指定对应虚中心
+ *     组织的虚拟中心不允许更改，
+ *     如果更改会增加系统很大的复杂度
+ *     如果组织虚中心调整会影响相当多的历史数据记录
+ *     设计认为：现阶段无需要为组织虚中心调整考虑太多的业务逻辑
+ *     如果有这样的情况的话，最好通过禁用现有虚中心，新建虚中心的方式进行解决
+ *     组织一旦初始化后，虚中心不允许进行更改的设计的话，业务数据仅需要根据组织纬度进行描述即可
+ *     虚中心相关数据抽取，以及处理就可以通过关联的组织纬度抽取对应的虚中心。
+ *     现在看来这样的设计是最佳的
+ *     对组织现提供了删除，提供了禁用，删除的权限尽量不要为业务人员开放，
+ *     组织关联过多不系统在系统中根据外键对组织删除做完整性约束。
  * <功能详细描述>
  * 
  * @author  PengQingyang
@@ -47,6 +58,9 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     
     /** 父组织id */
     private String parentId;
+    
+    /** */
+    private String vcid;
     
     /** 编码 */
     private String code;
@@ -291,6 +305,20 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
         this.childs = childs;
     }
     
+    /**
+     * @return 返回 vcid
+     */
+    public String getVcid() {
+        return vcid;
+    }
+
+    /**
+     * @param 对vcid进行赋值
+     */
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
+    }
+
     /**
      * @return 返回 valid
      */

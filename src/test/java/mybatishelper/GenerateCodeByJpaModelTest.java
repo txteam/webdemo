@@ -6,7 +6,7 @@
  */
 package mybatishelper;
 
-import com.tx.component.operator.model.Operator;
+import com.tx.component.operator.model.VirtualCenter;
 import com.tx.core.mybatis.generator.JpaEntityFreeMarkerGenerator;
 
 
@@ -34,8 +34,8 @@ public class GenerateCodeByJpaModelTest {
         factory.setDbScriptTemplateFilePath("mybatishelper/dbscript.ftl");
         
         //生成后在自己指定的文件夹中去找即可
-        factory.generate(Operator.class, "d:/mybatis");
-        factory.generateScript(Operator.class, "d:/mybatis","GBK");
+        factory.generate(VirtualCenter.class, "d:/mybatis");
+        factory.generateScript(VirtualCenter.class, "d:/mybatis","GBK");
         
         System.out.println("success");
     }

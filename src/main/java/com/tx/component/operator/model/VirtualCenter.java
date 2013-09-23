@@ -28,8 +28,8 @@ import com.tx.core.tree.model.TreeAble;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-@Table(name = "OPER_VCID")
-public class Vcid implements TreeAble<List<Vcid>, Vcid>,Serializable{
+@Table(name = "OPER_VC")
+public class VirtualCenter implements TreeAble<List<VirtualCenter>, VirtualCenter>,Serializable{
     
     /** 注释内容 */
     private static final long serialVersionUID = 299142584465484552L;
@@ -59,7 +59,7 @@ public class Vcid implements TreeAble<List<Vcid>, Vcid>,Serializable{
      * 子级虚中心
      */
     @Transient
-    private List<Vcid> childs;
+    private List<VirtualCenter> childs;
 
     /**
      * @return 返回 parentId
@@ -78,14 +78,14 @@ public class Vcid implements TreeAble<List<Vcid>, Vcid>,Serializable{
     /**
      * @return 返回 childs
      */
-    public List<Vcid> getChilds() {
+    public List<VirtualCenter> getChilds() {
         return childs;
     }
 
     /**
      * @param 对childs进行赋值
      */
-    public void setChilds(List<Vcid> childs) {
+    public void setChilds(List<VirtualCenter> childs) {
         this.childs = childs;
     }
 

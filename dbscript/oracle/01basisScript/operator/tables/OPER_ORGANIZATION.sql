@@ -3,6 +3,7 @@
 --****************************************************************************
 DROP TABLE OPER_ORGANIZATION;
 CREATE TABLE OPER_ORGANIZATION(
+  vcid varchar2(64) not null,
   valid number(1,0) default 1 not null,
   fullAddress varchar2(255),
   remark varchar2(2000),
@@ -20,8 +21,9 @@ CREATE TABLE OPER_ORGANIZATION(
   primary key(ID)
 );
 create unique index idx_oper_organ_01 on OPER_ORGANIZATION(code);
-create index idx_oper_organ_02 on OPER_ORGANIZATION(parentId);
-create index idx_oper_organ_03 on OPER_ORGANIZATION(chiefType,chiefId);
+create index idx_oper_organ_02 on OPER_ORGANIZATION(vcid);
+create index idx_oper_organ_03 on OPER_ORGANIZATION(parentId);
+create index idx_oper_organ_04 on OPER_ORGANIZATION(chiefType,chiefId);
 
 comment on table OPER_ORGANIZATION is '组织信息表';
 comment on column OPER_ORGANIZATION.VALID is '是否有效 1 有效 0 无效';

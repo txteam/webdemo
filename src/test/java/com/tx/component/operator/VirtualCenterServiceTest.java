@@ -19,12 +19,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.tx.component.operator.model.Organization;
-import com.tx.component.operator.service.OrganizationService;
+import com.tx.component.operator.model.VirtualCenter;
+import com.tx.component.operator.service.VirtualCenterService;
 
 
  /**
-  * Organization业务层单元测试类
+  * VirtualCenter业务层单元测试类
   * <功能详细描述>
   * 
   * @author  brady
@@ -42,7 +42,7 @@ import com.tx.component.operator.service.OrganizationService;
         "classpath:spring/beans-tx.xml",
         "classpath:spring/beans.xml" })
 @ActiveProfiles("dev")
-public class OrganizationServiceTest {
+public class VirtualCenterServiceTest {
     
     /** 设置jndi */
     @BeforeClass
@@ -50,20 +50,20 @@ public class OrganizationServiceTest {
         //bindJNDI
     }
     
-    @Resource(name="organizationService")
-    private OrganizationService organizationService;
+    @Resource(name="virtualCenterService")
+    private VirtualCenterService virtualCenterService;
     
     /**
-      * 生成organization实例
+      * 生成virtualCenter实例
       * <功能详细描述>
       * @return [参数说明]
       * 
-      * @return Organization [返回类型说明]
+      * @return VirtualCenter [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    protected Organization getOrganization(){
-        Organization res = new Organization();
+    protected VirtualCenter getVirtualCenter(){
+        VirtualCenter res = new VirtualCenter();
         
         
         
@@ -82,21 +82,21 @@ public class OrganizationServiceTest {
     public void testInsertAndFindAndDelete(){
         //
         try {
-            Organization organization = getOrganization();
+            VirtualCenter virtualCenter = getVirtualCenter();
             
-            this.organizationService.insertOrganization(organization);
+            this.virtualCenterService.insertVirtualCenter(virtualCenter);
             
-            Assert.assertNotNull(organization.getId());
+            Assert.assertNotNull(virtualCenter.getId());
             
-            String pk = organization.getId();
+            String pk = virtualCenter.getId();
             
-            Organization res = this.organizationService.findOrganizationById(pk);
+            VirtualCenter res = this.virtualCenterService.findVirtualCenterById(pk);
             
             Assert.assertNotNull(res);
             
-            boolean deleteFlag = this.organizationService.deleteById(res.getId());
+            boolean count = this.virtualCenterService.deleteById(res.getId());
             
-            Assert.assertTrue(deleteFlag);
+            Assert.assertTrue(count);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.assertTrue(false);
@@ -114,13 +114,9 @@ public class OrganizationServiceTest {
     @Test
     public void testQueryList(){
         try {
-            //int count = this.organizationService.coun;
+            List<VirtualCenter> virtualCenterList = this.virtualCenterService.listVirtualCenter();
             
-            //Assert.assertTrue(count >= 0);
-            
-            List<Organization> organizationList = this.organizationService.queryOrganizationListByParentId(null);
-            
-            Assert.assertNotNull(organizationList);
+            Assert.assertNotNull(virtualCenterList);
             
         } catch (Exception e) {
             e.printStackTrace();

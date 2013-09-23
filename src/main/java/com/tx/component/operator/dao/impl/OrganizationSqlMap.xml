@@ -20,6 +20,7 @@
 		SELECT 
 				TO_.ID,
 				TO_.VALID,
+				TO_.VCID,
 				TO_.FULLADDRESS,
 				TO_.ALIAS,
 				TO_.REMARK,
@@ -48,6 +49,7 @@
 		SELECT 
 				TO_.ID,
 				TO_.VALID,
+				TO_.VCID,
 				TO_.FULLADDRESS,
 				TO_.ALIAS,
 				TO_.REMARK,
@@ -65,20 +67,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
 				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,,javaType=java.lang.String} ]]>
 			</if>
+			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            AND TO_.VCID = #{vcid,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
-	            AND TO_.FULLADDRESS = #{fullAddress,javaType=java.lang.String}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(alias)">  
 	            AND TO_.ALIAS = #{alias,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            AND TO_.REMARK = #{remark,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TO_.CODE = #{code,javaType=java.lang.String}
@@ -92,17 +92,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
 	            AND TO_.DISTRICTID = #{districtId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(address)">  
-	            AND TO_.ADDRESS = #{address,javaType=java.lang.String}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
 	            AND TO_.CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.basicdata.ChiefTypeEnum}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TO_.NAME = #{name,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
-	            AND TO_.FULLNAME = #{fullName,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
 	            AND TO_.CHIEFID = #{chiefId,javaType=java.lang.String}
@@ -128,20 +122,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
 				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,,javaType=java.lang.String} ]]>
 			</if>
+			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            AND TO_.VCID = #{vcid,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
-	            AND TO_.FULLADDRESS = #{fullAddress,javaType=java.lang.String}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(alias)">  
 	            AND TO_.ALIAS = #{alias,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            AND TO_.REMARK = #{remark,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TO_.CODE = #{code,javaType=java.lang.String}
@@ -155,17 +147,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
 	            AND TO_.DISTRICTID = #{districtId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(address)">  
-	            AND TO_.ADDRESS = #{address,javaType=java.lang.String}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
 	            AND TO_.CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.basicdata.ChiefTypeEnum}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TO_.NAME = #{name,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
-	            AND TO_.FULLNAME = #{fullName,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
 	            AND TO_.CHIEFID = #{chiefId,javaType=java.lang.String}
@@ -180,6 +166,7 @@
 		(
 			ID,
 			VALID,
+			VCID,
 			FULLADDRESS,
 			ALIAS,
 			REMARK,
@@ -197,6 +184,7 @@
 		(
 			#{id},
 			#{valid},
+			#{vcid},
 			#{fullAddress},
 			#{alias},
 			#{remark},

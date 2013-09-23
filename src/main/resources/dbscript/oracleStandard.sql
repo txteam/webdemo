@@ -1,4 +1,4 @@
-----prompt "webdemo模块:创建表逻辑  start..."  
+--prompt "webdemo模块:创建表逻辑  start..."  
 --****************************************************************************
 -- 表：BASIC_DISTRICT
 --****************************************************************************
@@ -23,8 +23,8 @@ create index idx_bas_district_03 on BASIC_DISTRICT(postalCode);
 comment on table BASIC_DISTRICT is '区域信息表';
 comment on column BASIC_DISTRICT.idCardCode is '区域对应身份证编码';
 comment on column BASIC_DISTRICT.postalCode is '区域对应邮政编码';
-----prompt "webdemo模块:创建表逻辑  end..."
-----prompt "webdemo模块:创建表逻辑  start..."  
+--prompt "webdemo模块:创建表逻辑  end..."
+--prompt "webdemo模块:创建表逻辑  start..."  
 --****************************************************************************
 -- 表：OPER_EMPLOYEEINFO
 --****************************************************************************
@@ -144,6 +144,7 @@ CREATE TABLE OPER_OPERATOR_REF_HIS(
 --****************************************************************************
 DROP TABLE OPER_ORGANIZATION;
 CREATE TABLE OPER_ORGANIZATION(
+  vcid varchar2(64),
   valid number(1,0) default 1 not null,
   fullAddress varchar2(255),
   remark varchar2(2000),
@@ -161,8 +162,9 @@ CREATE TABLE OPER_ORGANIZATION(
   primary key(ID)
 );
 create unique index idx_oper_organ_01 on OPER_ORGANIZATION(code);
-create index idx_oper_organ_02 on OPER_ORGANIZATION(parentId);
-create index idx_oper_organ_03 on OPER_ORGANIZATION(chiefType,chiefId);
+create index idx_oper_organ_02 on OPER_ORGANIZATION(vcid);
+create index idx_oper_organ_03 on OPER_ORGANIZATION(parentId);
+create index idx_oper_organ_04 on OPER_ORGANIZATION(chiefType,chiefId);
 
 comment on table OPER_ORGANIZATION is '组织信息表';
 comment on column OPER_ORGANIZATION.VALID is '是否有效 1 有效 0 无效';
@@ -173,6 +175,7 @@ comment on column OPER_ORGANIZATION.chiefType is '组织主管类型：可以是人员，可以
 --****************************************************************************
 DROP TABLE OPER_ORGANIZATION_HIS;
 CREATE TABLE OPER_ORGANIZATION_HIS(
+  vcid varchar2(64) not null,
   valid number(1,0) default 1 not null,
   fullAddress varchar2(255),
   remark varchar2(2000),
@@ -223,30 +226,44 @@ create table OPER_POST_HIS(
 	fullName varchar2(255),
 	primary key(ID)
 );
-----prompt "webdemo模块:创建表逻辑  end..."
-----prompt "webdemo模块:创建sequence  start..."  
-----prompt "webdemo模块:创建sequence end..."  
-----prompt "webdemo模块:创建sequence  start..."  
-----prompt "webdemo模块:创建sequence end..."  
-----prompt "webdemo模块:创建包   start..."  
-----prompt "webdemo模块:创建包  end..."
-----prompt "webdemo模块:创建包   start..."  
-----prompt "webdemo模块:创建包  end..."
-----prompt "webdemo模块:创建函数逻辑  start..."  
-----prompt "webdemo模块:创建函数逻辑  end..." 
-----prompt "webdemo模块:创建函数逻辑  start..."  
-----prompt "webdemo模块:创建函数逻辑  end..." 
-----prompt "webdemo模块:创建存储过程逻辑  start..." 
-----prompt "webdemo模块:创建存储过程逻辑  end..."
-----prompt "webdemo模块:创建存储过程逻辑  start..." 
-----prompt "webdemo模块:创建存储过程逻辑  end..."
-----prompt "webdemo模块:创建触发器   start..."  
-----prompt "webdemo模块:创建触发器  end..." 
-----prompt "webdemo模块:创建触发器   start..."  
-----prompt "webdemo模块:创建触发器  end..." 
-----prompt "webdemo模块:创建视图逻辑  start..."  
-----prompt "webdemo模块:创建视图逻辑  start..."  
-----prompt "webdemo模块:初始化基础数据  start..." 
+--****************************************************************************
+-- 表：OPER_VC
+--****************************************************************************
+create table OPER_VC(
+	id varchar2(64) not null,
+	parentId varchar2(64),
+	remark varchar2(2000),
+	name varchar2(64) not null,
+	primary key(ID)
+);
+create unique index idx_OPER_VC on OPER_VC(name);
+
+comment on table OPER_VC is '虚中心信息表';
+comment on column OPER_VC.name is '虚中心名';
+--prompt "webdemo模块:创建表逻辑  end..."
+--prompt "webdemo模块:创建sequence  start..."  
+--prompt "webdemo模块:创建sequence end..."  
+--prompt "webdemo模块:创建sequence  start..."  
+--prompt "webdemo模块:创建sequence end..."  
+--prompt "webdemo模块:创建包   start..."  
+--prompt "webdemo模块:创建包  end..."
+--prompt "webdemo模块:创建包   start..."  
+--prompt "webdemo模块:创建包  end..."
+--prompt "webdemo模块:创建函数逻辑  start..."  
+--prompt "webdemo模块:创建函数逻辑  end..." 
+--prompt "webdemo模块:创建函数逻辑  start..."  
+--prompt "webdemo模块:创建函数逻辑  end..." 
+--prompt "webdemo模块:创建存储过程逻辑  start..." 
+--prompt "webdemo模块:创建存储过程逻辑  end..."
+--prompt "webdemo模块:创建存储过程逻辑  start..." 
+--prompt "webdemo模块:创建存储过程逻辑  end..."
+--prompt "webdemo模块:创建触发器   start..."  
+--prompt "webdemo模块:创建触发器  end..." 
+--prompt "webdemo模块:创建触发器   start..."  
+--prompt "webdemo模块:创建触发器  end..." 
+--prompt "webdemo模块:创建视图逻辑  start..."  
+--prompt "webdemo模块:创建视图逻辑  start..."  
+--prompt "webdemo模块:初始化基础数据  start..." 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('dd5defbf548e49068167bb4834e5ae48', '3d4bd283cbd04c1c85722c6865f1b772', null, null, '保定市', '06', '保定市', '130600', null);
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
@@ -1248,7 +1265,7 @@ values ('a7a5db86046e4359b593d5bb51806516', 'b51c615743e24581bf67975def934d06', 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('6a4a9d34b6904464805411c3d91a1313', 'b51c615743e24581bf67975def934d06', null, null, '深圳市', '03', '深圳市', '440300', null);
 commit;
-----prompt 500 records committed...
+--prompt 500 records committed...
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('fc52a64b6b3748229bd8f9afab749793', 'b51c615743e24581bf67975def934d06', null, null, '珠海市', '04', '珠海市', '440400', null);
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
@@ -2250,7 +2267,7 @@ values ('f7ca6189a14343b4ad2376d6703a6885', 'd6b0f77426fb44c690e4059d93094127', 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('1c91b7c85b1045a780fb421fd9602cb6', 'd6b0f77426fb44c690e4059d93094127', '616850', null, '甘洛县', '35', '甘洛县', '513435', null);
 commit;
-----prompt 1000 records committed...
+--prompt 1000 records committed...
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('f193e12564f54bb38445478efad16cb1', 'd6b0f77426fb44c690e4059d93094127', '616450', null, '美姑县', '36', '美姑县', '513436', null);
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
@@ -3252,7 +3269,7 @@ values ('3086b26b9c7242e481bf66eca46d8e63', '8df5d2d1bf024ffa92c29fe60871da10', 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('1989dc4ef2c340f49ae85cda4c1d058c', '8df5d2d1bf024ffa92c29fe60871da10', '322300', null, '磐安县', '27', '磐安县', '330727', null);
 commit;
-----prompt 1500 records committed...
+--prompt 1500 records committed...
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('ee49f859be664dae9c6882c08f7ce3ba', '8df5d2d1bf024ffa92c29fe60871da10', '321100', null, '兰溪市', '81', '兰溪市', '330781', null);
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
@@ -4254,7 +4271,7 @@ values ('34b47c9481aa49d4b4102cfdf063d831', 'd3a817abfa1a4d2f80ce7ca14cb04134', 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('39ad6eb1206748a7a929ba341914c434', 'd3a817abfa1a4d2f80ce7ca14cb04134', '442600', null, '郧西县', '22', '郧西县', '420322', null);
 commit;
-----prompt 2000 records committed...
+--prompt 2000 records committed...
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('ceb67fd1148a454d81ca22a79fcacc0e', 'd3a817abfa1a4d2f80ce7ca14cb04134', '442200', null, '竹山县', '23', '竹山县', '420323', null);
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
@@ -5256,7 +5273,7 @@ values ('83e655138a6641d9b07e7985402f1971', '87081bc7c2b44b4db666df033cb09e88', 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('94482c78c5f746949583c250091ef1f3', '87081bc7c2b44b4db666df033cb09e88', '625100', null, '名山县', '21', '名山县', '511821', null);
 commit;
-----prompt 2500 records committed...
+--prompt 2500 records committed...
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('43d3eabeb7a8425e9b2b5a41ce6345b7', '87081bc7c2b44b4db666df033cb09e88', '625200', null, '荥经县', '22', '荥经县', '511822', null);
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
@@ -6258,7 +6275,7 @@ values ('96ff142b3aab4e4ab849f87ae40f5e79', '4d775ed4147c4a29896d82e845939e8b', 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('23b4513fe0814a5995d8fae1e4b50061', '4d775ed4147c4a29896d82e845939e8b', '421300', null, '衡山县', '23', '衡山县', '430423', null);
 commit;
-----prompt 3000 records committed...
+--prompt 3000 records committed...
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('7839c9559b374c2cbdc380767d55d29b', '4d775ed4147c4a29896d82e845939e8b', '421400', null, '衡东县', '24', '衡东县', '430424', null);
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
@@ -7260,7 +7277,7 @@ values ('353d6c75aea9465189a16ca7bcd3e775', '83bc76056d074e4c94c5824d81e94650', 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('8fbf0edbedc14bf8ac3400151c142638', '83bc76056d074e4c94c5824d81e94650', '860400', null, '朗县', '27', '朗县', '542627', null);
 commit;
-----prompt 3500 records committed...
+--prompt 3500 records committed...
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('a9b12c094d2449aa89c02f6d7e046b58', '66d88b8406a8414580256a8811834fea', '710000', null, '市辖区', '01', '市辖区', '610101', null);
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
@@ -7320,8 +7337,8 @@ values ('2c9092e430e90bb50130e9c90e010167', '2c9092e430e90bb50130e9c865110162', 
 insert into BASIC_DISTRICT (ID, PARENTID, POSTALCODE, REMARK, NAME, CODE, FULLNAME, IDCARDCODE, TYPE)
 values ('2c9092e43263a8df013266254ddf389c', '2388cbcd7b30404292f8e01ad88e6f8d', '741000', null, '秦州区', '02', '秦州区', '620502', null);
 commit;
-----prompt "webdemo模块:初始化基础数据  end..." 
-----prompt "webdemo模块:初始化基础数据  start..." 
+--prompt "webdemo模块:初始化基础数据  end..." 
+--prompt "webdemo模块:初始化基础数据  start..." 
 INSERT INTO OPER_OPERATOR(ID,LOGINNAME,PASSWORD,USERNAME)
 	values('123456','admin','admin','admin');
 INSERT INTO OPER_OPERATOR(ID,LOGINNAME,PASSWORD,USERNAME)
@@ -7374,6 +7391,6 @@ insert into OPER_POST(id,parentId,name,organizationId,code,remark)
 insert into OPER_POST(id,parentId,name,organizationId,code,remark)
 	values('10000003010103','100000030101','助理工程师','1000000',null,'集团公司系统开发部助理工程师');
 commit;
-----prompt "webdemo模块:初始化基础数据  end..." 
-----prompt "webdemo模块:创建任务job  end..."
-----prompt "webdemo模块:创建任务job  end..."
+--prompt "webdemo模块:初始化基础数据  end..." 
+--prompt "webdemo模块:创建任务job  end..."
+--prompt "webdemo模块:创建任务job  end..."

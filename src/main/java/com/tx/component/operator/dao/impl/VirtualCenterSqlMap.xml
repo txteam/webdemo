@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="virtualCenter">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="virtualCenterMap" 
+		type="com.tx.component.operator.model.VirtualCenter">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findVirtualCenter" 
+		parameterType="com.tx.component.operator.model.VirtualCenter"
+		resultMap="virtualCenterMap">
+		SELECT 
+				TVC.ID,
+				TVC.PARENTID,
+				TVC.REMARK,
+				TVC.NAME
+		  FROM OPER_VC TVC
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TVC.ID = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryVirtualCenter" 
+		parameterType="java.util.Map"
+		resultMap="virtualCenterMap">
+		SELECT 
+				TVC.ID,
+				TVC.PARENTID,
+				TVC.REMARK,
+				TVC.NAME
+		  FROM OPER_VC TVC
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TVC.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            AND TVC.PARENTID = #{parentId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeVirtualCenterId)">  
+				<![CDATA[  AND TVC.ID <> #{excludeVirtualCenterId,javaType=java.lang.String} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            AND TVC.NAME = #{name,javaType=java.lang.String}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryVirtualCenterCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_VC TVC
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TVC.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            AND TVC.PARENTID = #{parentId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeVirtualCenterId)">  
+				<![CDATA[  AND TVC.ID <> #{excludeVirtualCenterId,javaType=java.lang.String} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            AND TVC.NAME = #{name,javaType=java.lang.String}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertVirtualCenter" 
+		parameterType="com.tx.component.operator.model.VirtualCenter">
+		INSERT INTO OPER_VC
+		(
+			ID,
+			PARENTID,
+			REMARK,
+			NAME
+		)
+		VALUES
+		(
+			#{id},
+			#{parentId},
+			#{remark},
+			#{name}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deleteVirtualCenter" 
+		parameterType="com.tx.component.operator.model.VirtualCenter">
+		DELETE FROM OPER_VC TVC WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TVC.ID = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updateVirtualCenter"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_VC TVC
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('parentId')">
+	    		PARENTID = #{parentId,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('remark')">
+	    		REMARK = #{remark,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('name')">
+	    		NAME = #{name,javaType=java.lang.String},
+	    	</if>	
+	    </trim>
+	    WHERE TVC.ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->
