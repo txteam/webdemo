@@ -7,7 +7,7 @@
 package mybatishelper;
 
 import com.tx.component.operator.model.VirtualCenter;
-import com.tx.core.generator.JpaEntityFreeMarkerGenerator;
+import com.tx.core.mybatis.generator.JpaEntityFreeMarkerGenerator;
 
 
  /**
