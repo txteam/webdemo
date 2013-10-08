@@ -37,6 +37,11 @@ public class LoginLog extends TXBaseServiceLog {
     private int loginType = LOGINTYPE_LOGIN;
     
     /** <默认构造函数> */
+    public LoginLog() {
+        super();
+    }
+
+    /** <默认构造函数> */
     public LoginLog(String systemId, int loginType, String message,
             Object[] messageParams) {
         super(message, messageParams);

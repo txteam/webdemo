@@ -9,9 +9,9 @@
 <title>queryLoginLog</title>
 <%@include file="../includes/commonHead.jsp" %>
 <script type="text/javascript" >
-var dataGrid = null;
+var serviceLogTable = null;
 $(document).ready(function(){
-	dataGrid = $('#serviceLogTable').datagrid({
+	serviceLogTable = $('#serviceLogTable').datagrid({
 		url : '${contextPath}/servicelog/mainframe/loginLog/queryLoginLogPagedList.action',
 		fit : true,
 		fitColumns : true,
@@ -28,6 +28,15 @@ $(document).ready(function(){
 		striped : true,
 		rownumbers : true,
 		singleSelect : true,
+		loadFilter: function(data){
+			var res = {total:0,rows:[]};
+			if(!$.ObjectUtils.isEmpty(data)
+					&& !$.ObjectUtils.isEmpty(data.list)){
+				res['total'] = data.count;
+				res['rows'] = data.list;
+			}
+			return res;
+		}, 
 		frozenColumns : [ [ {
 			field : 'id',
 			title : '编号',
@@ -35,31 +44,48 @@ $(document).ready(function(){
 			hidden : true
 		}, {
 			field : 'createDate',
-			title : '操作员id',
-			width : 80
+			title : '记录日志时间',
+			width : 180,
+			sortable : true
 		}, {
 			field : 'vcid',
 			title : '虚中心id',
-			width : 80
+			width : 100,
+			hidden : true
 		} , {
 			field : 'operatorId',
 			title : '操作员id',
-			width : 80
+			width : 100,
+			hidden : true
 		}, {
+			field : 'operatorLoginName',
+			title : '操作员登录名',
+			width : 120
+		}, {
+			field : 'operatorName',
+			title : '操作员名',
+			width : 120
+		},{
 			field : 'organizationId',
-			title : '组织id',
-			width : 80
+			title : '组织',
+			width : 100
 		}] ],
 		columns : [[ {
 			field : 'message',
 			title : '日志信息',
-			width : 150,
-			sortable : true
+			width : 200
 		}, {
-			field : 'modifydatetime',
-			title : '最后修改时间',
+			field : 'loginType',
+			title : '登录类型',
 			width : 150,
-			sortable : true
+			formatter: function(cellvalue, options, rowObject){
+				var loginType = rowObject['loginType'];
+	   			if(loginType == '1'){
+	   				return '注销';
+	   			}else{
+	   				return '登录';
+	   			}
+			}
 		}, {
 			field : 'typeId',
 			title : 'BUG类型ID',
@@ -84,13 +110,20 @@ $(document).ready(function(){
 			});
 		}
 	});
+	
+	$("#queryBtn").click(function(){
+		serviceLogTable.datagrid('load',{
+			minCreateDate: $("#minCreateDate").val(),
+			maxCreateDate: $("#maxCreateDate").val()
+		});
+	});
 });
 </script>
 </head>
 <body>
 <div class="easyui-layout" data-options="fit : true,border : false">
-	<div data-options="region:'north',title:'查询条件',border:false" style="height: 160px; overflow: hidden;">
-		<form id="searchForm" class="form">
+	<div data-options="region:'north',title:'查询条件',border:false" style="height: 85px; overflow: hidden;">
+		<form id="queryForm" class="form">
 			<table class="table table-hover table-condensed">
 				<tr>
 					<th>开始时间</th>
@@ -102,6 +135,11 @@ $(document).ready(function(){
 					<td>
 						<input name="maxCreateDate" readonly="readonly"
 							placeholder="点击选择时间" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" class="button operRow">
+						<a id="queryBtn" href="#" class="easyui-linkbutton">查询</a>
 					</td>
 				</tr>
 			</table>

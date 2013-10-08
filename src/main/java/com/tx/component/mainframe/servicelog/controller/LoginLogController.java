@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.mainframe.servicelog.LoginLog;
@@ -56,8 +57,11 @@ public class LoginLogController {
      */
     @ResponseBody
     @RequestMapping("/queryLoginLogPagedList")
-    public PagedList<LoginLog> queryLoginLogPagedList(Date minCreateDate,
-            Date maxCreateDate, int pageIndex, int pageSize) {
+    public PagedList<LoginLog> queryLoginLogPagedList(
+            @RequestParam(value = "minCreateDate", required = false) Date minCreateDate,
+            @RequestParam(value = "maxCreateDate", required = false) Date maxCreateDate,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "1") int pageSize) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("minCreateDate", minCreateDate);
         params.put("maxCreateDate", maxCreateDate);

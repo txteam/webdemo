@@ -6,7 +6,7 @@ create table MAINFRAME_LOGIN_LOG(
 	SYSTEMID varchar2(64 char),
 	ORGANIZATIONID varchar2(64 char),
 	MESSAGE varchar2(255 char),
-	CREATEDATE date default sysdate not null,
+	CREATEDATE timestamp default sysdate not null,
 	VCID varchar2(64 char),
 	LOGINTYPE number(1,0) not null,
 	ID varchar2(64 char)  not null,
