@@ -69,13 +69,14 @@ $(document).ready(function() {
         } else if (!_globalEventManagerWin_.closed && _globalEventManagerWin_.opener != null && _globalEventManagerWin_.opener != _globalEventManagerWin_) {
             _globalEventManagerWin_ = _globalEventManagerWin_.opener;
         } else {
-            //定义一个子window的链表类
-            var ChildWindowLinkedList = function() {
+        	//console.log("build global event handler center.");
+        	//定义一个子window的链表类
+            var ChildWindowLinkedSet = function() {
             };
             //子引用链
-            ChildWindowLinkedList.prototype.childs = [];
+            ChildWindowLinkedSet.prototype.childs = [];
             //用以支持抹去陈旧的window引用
-            ChildWindowLinkedList.prototype._expungeStaleEntries = function() {
+            ChildWindowLinkedSet.prototype._expungeStaleEntries = function() {
                 var _self = this;
                 var newChilds = $.grep(_self.childs, function(childWindowRefTemp, i) {
                     if (childWindowRefTemp != null && $.isWindow(childWindowRefTemp) && !childWindowRefTemp.closed) {
@@ -85,23 +86,39 @@ $(document).ready(function() {
                     }
                 });
                 this.childs = newChilds;
+            };
+            ChildWindowLinkedSet.prototype._exist = function(childWindowRef) {
+                var _self = this;
+                var existFlag = false;
+                $.each(_self.childs, function(i,childWindowRefTemp) {
+                    if (childWindowRef === childWindowRefTemp) {
+                    	console.log("window is exist.");
+                    	existFlag = true;
+                    	//跳出循环
+                    	return false;
+                    } else {
+                    	//继续循环
+                        return true;
+                    }
+                });
+                return existFlag;
             }
             //添加,能调用到该方法的子页面，应该都是统一域中的
-            ChildWindowLinkedList.prototype.add = function(childWindowRef) {
+            ChildWindowLinkedSet.prototype.add = function(childWindowRef) {
                 this._expungeStaleEntries();
-                if (childWindowRef != null && $.isWindow(childWindowRef) && !childWindowRef.closed) {
+                if (childWindowRef != null && $.isWindow(childWindowRef) && !childWindowRef.closed && !this._exist(childWindowRef)) {
                     this.childs.push(childWindowRef);
                 }
             };
             //获取链表的遍历器
-            ChildWindowLinkedList.prototype.iterator = function() {
+            ChildWindowLinkedSet.prototype.iterator = function() {
                 this._expungeStaleEntries();
                 return this.childs;
             }
             //全局事件管理器
             var GlobalEventManager = function(config) {
             };
-            GlobalEventManager.prototype._childWindowLinkedList = new ChildWindowLinkedList();
+            GlobalEventManager.prototype._childWindowLinkedList = new ChildWindowLinkedSet();
             GlobalEventManager.prototype.registeGlobalEventListener = function(currentWindowRef) {
                 if (currentWindowRef && $.isWindow(currentWindowRef) && currentWindowRef.$localEventHandle) {
                     this._childWindowLinkedList.add(currentWindowRef);
@@ -143,7 +160,8 @@ $(document).ready(function() {
 
     $.extend({
         bindGlobalEvent : function() {
-            var $lehandle = window.$localEventHandle;
+        	//console.log("bind event" + arguments[0]);
+        	var $lehandle = window.$localEventHandle;
             $lehandle.bind.apply($lehandle, arguments);
         },
         unbindGlobalEvent : function() {
@@ -155,6 +173,7 @@ $(document).ready(function() {
             $lehandle.one.apply($lehandle, arguments);
         },
         triggerGlobalEvent : function() {
+        	//console.log("trigger event" + arguments[0]);
             _$globalEventManager.trigger.apply(_$globalEventManager, arguments);
         }
     });

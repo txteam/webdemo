@@ -542,5 +542,6 @@ img {
 .folder_add {background: url('images/extjs_icons/folder/folder_add.png') no-repeat center center;}
 .folder_edit {background: url('images/extjs_icons/folder/folder_edit.png') no-repeat center center;}
 .group_group {background: url('images/extjs_icons/group/group.png') no-repeat center center;}
+.save{background: url('images/extjs_icons/group/disk.png') no-repeat center center;}
 .control_stop_blue {background: url('images/extjs_icons/control/control_stop_blue.png') no-repeat center center;}
 .control_play_blue{background: url('images/extjs_icons/control/control_play_blue.png') no-repeat center center;}

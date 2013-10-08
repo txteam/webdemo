@@ -239,6 +239,7 @@ label.selected {
 	font-size: 12px;
 	height: 20px;
 	line-height: 20px;
+	width:80%;
 	padding: 0 2px;
 	vertical-align: middle;
 }
