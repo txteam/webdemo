@@ -51,6 +51,7 @@
 		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
 		<!-- 加入权限容器支持 -->
 		<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"></bean>
+		<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
 	</mvc:interceptors>
 
 	<!-- 将jsp映射为controller -->
@@ -106,6 +107,7 @@
 				<bean class="com.tx.core.springmvc.interceptor.ExceptionLoggerInterceptor"></bean>
 				<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
 				<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"/>
+				<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
 			</list>
 		</property>
 	</bean>

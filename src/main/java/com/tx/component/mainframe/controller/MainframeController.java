@@ -27,8 +27,12 @@ import com.tx.component.auth.context.AuthSessionContext;
 import com.tx.component.mainframe.context.MenuContext;
 import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.component.mainframe.model.MenuItem;
+import com.tx.component.mainframe.servicelog.LoginLog;
 import com.tx.component.operator.model.Operator;
+import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OperatorService;
+import com.tx.component.operator.service.OrganizationService;
+import com.tx.component.servicelog.context.ServiceLoggerContext;
 
 /**
  * 登录功能入口
@@ -48,6 +52,9 @@ public class MainframeController {
     
     @Resource(name = "operatorService")
     private OperatorService operatorService;
+    
+    @Resource(name = "organizationService")
+    private OrganizationService organizationService;
     
     @Resource(name = "authContext")
     private AuthContext authContext;
@@ -104,8 +111,22 @@ public class MainframeController {
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_POST, postId);
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_ORGANIZATION, loginOrganization.getId());
         authContext.login(refType2RefIdMapping);
+        
         //修改权限项记录日志会用到对应值
         AuthSessionContext.putOperatorIdToSession(oper.getId());
+        //写入会话中信息
+        WebContextUtils.putOperatorInSession(oper);
+        //
+        if(oper.getOrganization() != null){
+            Organization currentOrg = this.organizationService.findOrganizationById(oper.getOrganization().getId());
+            WebContextUtils.putOganizationInSession(currentOrg);
+        }
+        //WebContextUtils.putMainPostInSession(post);
+        //WebContextUtils.putPostListInSession(postList);
+        
+        ServiceLoggerContext.getLogger(LoginLog.class).log(new LoginLog(
+                "webdemo", LoginLog.LOGINTYPE_LOGIN, "操作员{}登录系统",
+                new Object[] { loginName }));
         
         return "/mainframe/mainframe";
     }

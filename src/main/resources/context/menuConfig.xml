@@ -32,6 +32,13 @@
 				<menu id="auth_config" text="权限管理" href="/auth/toQueryAuthView.action"
 					authKey="auth_config" target="mainTabs"></menu>
 			</menu>
+			
+			<menu id="servicelog_query_center" text="业务日志查询"
+				target="mainTabs" authKey="servicelog_query_center">
+				<menu id="query_loginlog" text="登录日志"
+					href="/servicelog/mainframe/loginLog/toQueryLoginLog.action" 
+					target="mainTabs"></menu>
+			</menu>
 		</menu>
 
 		<menu id="system_helper" text="帮助" authKey="system_helper" icon="plugin">
