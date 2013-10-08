@@ -8,11 +8,11 @@ package com.tx.component.mainframe.servicelog.controller;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.mainframe.servicelog.LoginLog;
 import com.tx.component.servicelog.context.ServiceLoggerContext;
@@ -27,7 +27,7 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("loginLogController")
+@Controller("loginLogController")
 @RequestMapping("/servicelog/mainframe/loginLog")
 public class LoginLogController {
     
@@ -42,7 +42,7 @@ public class LoginLogController {
      */
     @RequestMapping("/toQueryLoginLog")
     public String toQueryLoginLog() {
-        return "queryLoginLog";
+        return "/mainframe/queryLoginLog";
     }
     
     /**
@@ -54,6 +54,8 @@ public class LoginLogController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @ResponseBody
+    @RequestMapping("/queryLoginLogPagedList")
     public PagedList<LoginLog> queryLoginLogPagedList(Date minCreateDate,
             Date maxCreateDate, int pageIndex, int pageSize) {
         Map<String, Object> params = new HashMap<String, Object>();

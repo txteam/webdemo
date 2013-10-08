@@ -24,16 +24,25 @@ import com.tx.component.servicelog.defaultimpl.TXBaseServiceLog;
 @Table(name = "mainframe_login_log")
 public class LoginLog extends TXBaseServiceLog {
     
+    /** 登录类型:登入 */
+    public static final int LOGINTYPE_LOGIN = 0;
+    
+    /** 登录类型:登出 */
+    public static final int LOGINTYPE_LOGOUT = 0;
+    
     /** 所属系统id */
     private String systemId;
     
     /** 登录：0 登出 1 */
-    private int loginType;
+    private int loginType = LOGINTYPE_LOGIN;
     
     /** <默认构造函数> */
-    public LoginLog(String systemId, String type, String message,
+    public LoginLog(String systemId, int loginType, String message,
             Object[] messageParams) {
         super(message, messageParams);
+        
+        this.systemId = systemId;
+        this.loginType = loginType;
     }
     
     /**
