@@ -9,7 +9,7 @@
         <dependent-module archiveName="tx-core-1.3.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-core/tx-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="tx-component-auth-1.3.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-component-auth/tx-component-auth">
+        <dependent-module archiveName="tx-component-servicelog-1.3.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tx-component-servicelog/tx-component-servicelog">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="webdemo"/>

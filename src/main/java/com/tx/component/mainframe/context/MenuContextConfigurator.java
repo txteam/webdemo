@@ -210,7 +210,7 @@ public class MenuContextConfigurator implements InitializingBean,
         }
         
         //如果菜单id重复，认为是配置存在问题，这里抛出异常，启动时解决
-        AssertUtils.isTrue(mainMenuItemList.contains(menu),
+        AssertUtils.isTrue(!mainMenuItemList.contains(menu),
                 new MenuContextInitException("菜单id重复,重复id为："
                         + menuItemConfig.getId()));
         mainMenuItemList.add(menu);
