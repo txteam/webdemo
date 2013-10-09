@@ -8,6 +8,7 @@ package mybatishelper;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.tx.component.mainframe.servicelog.LoginLog;
 import com.tx.component.mainframe.servicelog.SystemOperateLog;
 import com.tx.component.servicelog.defaultimpl.TXServiceLogDBScriptHelper;
 import com.tx.component.servicelog.defaultimpl.TXServiceLogViewHelper;

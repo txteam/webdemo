@@ -1,7 +1,7 @@
 /*
- * 描          述:  <描述>
- * 修  改   人:  brady
- * 修改时间:  2013-10-8
+ * 描          述:  业务日志ServiceLog:LoginLog
+ * 修  改   人:  
+ * 修改时间:  
  * <修改描述:>
  */
 package com.tx.component.mainframe.servicelog.controller;
@@ -34,7 +34,7 @@ import com.tx.core.paged.model.PagedList;
 public class LoginLogController {
     
     /**
-      * 跳转到查询登录日志页面
+      * 跳转到查询LoginLog日志页面
       *<功能详细描述>
       * @return [参数说明]
       * 
@@ -42,13 +42,13 @@ public class LoginLogController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/toQueryLoginLog")
-    public String toQueryLoginLog() {
-        return "/mainframe/queryLoginLog";
+    @RequestMapping("/toQueryLoginLogPagedList")
+    public String toQueryLoginLogPagedList() {
+        return "/mainframe/queryLoginLogPagedList";
     }
     
     /**
-      * 分页查询登录日志<br/>
+      * 分页查询LoginLog日志<br/>
       *<功能详细描述>
       * @return [参数说明]
       * 
@@ -83,7 +83,8 @@ public class LoginLogController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    protected PagedList<LoginLog> filter(PagedList<LoginLog> resPagedList) {
+    protected PagedList<LoginLog> filter(
+            PagedList<LoginLog> resPagedList) {
         return resPagedList;
     }
 }

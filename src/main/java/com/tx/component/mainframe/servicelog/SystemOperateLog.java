@@ -38,6 +38,8 @@ public class SystemOperateLog extends TXBaseServiceLog {
     public SystemOperateLog(String systemId, String function, String message,
             Object[] params) {
         super(message, params);
+        this.systemId = systemId;
+        this.function = function;
     }
 
     /**
