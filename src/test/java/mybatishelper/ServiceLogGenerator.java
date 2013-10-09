@@ -6,9 +6,13 @@
  */
 package mybatishelper;
 
-import com.tx.component.mainframe.servicelog.LoginLog;
+import org.apache.commons.lang.StringUtils;
+
+import com.tx.component.mainframe.servicelog.SystemOperateLog;
 import com.tx.component.servicelog.defaultimpl.TXServiceLogDBScriptHelper;
+import com.tx.component.servicelog.defaultimpl.TXServiceLogViewHelper;
 import com.tx.core.dbscript.model.DataSourceTypeEnum;
+import com.tx.core.reflection.JpaMetaClass;
 
 /**
  * <功能简述>
@@ -22,9 +26,28 @@ import com.tx.core.dbscript.model.DataSourceTypeEnum;
 public class ServiceLogGenerator {
     
     public static void main(String[] args) {
-        String dbScript = TXServiceLogDBScriptHelper.generateDBScriptContent(LoginLog.class,
+        Class<?> serviceLogType = SystemOperateLog.class;
+        String resultFolderPath = "d:/servicelog";
+        
+        JpaMetaClass<?> jpaMetaClass = JpaMetaClass.forClass(serviceLogType);
+        String dbScript = TXServiceLogDBScriptHelper.generateDBScriptContent(serviceLogType,
                 DataSourceTypeEnum.ORACLE,
                 "UTF-8");
+        TXServiceLogViewHelper.generate(resultFolderPath,
+                serviceLogType,
+                DataSourceTypeEnum.ORACLE,
+                "UTF-8");
+        
         System.out.println(dbScript);
+        System.out.println("toQueryAction: /servicelog/"
+                + jpaMetaClass.getModulePackageSimpleName() + "/"
+                + StringUtils.uncapitalize(jpaMetaClass.getEntitySimpleName())
+                + "/toQuery" + jpaMetaClass.getEntitySimpleName()
+                + "PagedList.action");
+        System.out.println("queryAction: /servicelog/"
+                + jpaMetaClass.getModulePackageSimpleName() + "/"
+                + StringUtils.uncapitalize(jpaMetaClass.getEntitySimpleName())
+                + "/query" + jpaMetaClass.getEntitySimpleName()
+                + "PagedList.action");
     }
 }

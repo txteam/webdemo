@@ -70,18 +70,14 @@
 				<!-- <bean class="org.springframework.core.convert.support.StringToArrayConverter"></bean> -->
 				<!-- <bean class="org.springframework.core.convert.support.StringToCollectionConverter"></bean> -->
 				<!-- <bean class="org.springframework.core.convert.support.StringToPropertiesConverter"></bean> -->
-
 				<!-- object to string -->
 				<!-- <bean class="org.springframework.core.convert.support.EnumToStringConverter"></bean> -->
-				<bean class="org.springframework.core.convert.support.ObjectToStringConverter"></bean>
-
+				<!-- bean class="org.springframework.core.convert.support.ObjectToStringConverter"></bean -->
 				<!-- <bean class="org.springframework.core.convert.support.PropertiesToStringConverter"></bean> -->
-				
 				<!-- other -->
 				<!-- <bean class="org.springframework.core.convert.support.CharacterToNumberFactory"></bean> -->
 				<!-- <bean class="org.springframework.core.convert.support.NumberToNumberConverterFactory"></bean> -->
 				<!-- <bean class="org.springframework.core.convert.support.NumberToCharacterConverter"></bean> -->
-				
 				<!-- customize -->
 				<bean class="com.tx.core.springmvc.support.StringToDateConverter"></bean>
 			</list>

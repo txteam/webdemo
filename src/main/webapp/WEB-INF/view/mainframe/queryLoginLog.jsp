@@ -46,7 +46,12 @@ $(document).ready(function(){
 			field : 'createDate',
 			title : '记录日志时间',
 			width : 180,
-			sortable : true
+			sortable : true,
+			formatter: function(cellvalue, options, rowObject){
+	   			var createDate = new Date();
+	   			createDate.setTime(cellvalue);
+	   			return createDate.format('yyyy-MM-dd hh:mm:ss');;
+			}
 		}, {
 			field : 'vcid',
 			title : '虚中心id',
@@ -68,7 +73,8 @@ $(document).ready(function(){
 		},{
 			field : 'organizationId',
 			title : '组织',
-			width : 100
+			width : 100,
+			hidden : true
 		}] ],
 		columns : [[ {
 			field : 'message',
@@ -86,11 +92,6 @@ $(document).ready(function(){
 	   				return '登录';
 	   			}
 			}
-		}, {
-			field : 'typeId',
-			title : 'BUG类型ID',
-			width : 150,
-			hidden : true
 		}
 		]],
 		toolbar : '#toolbar',
@@ -113,8 +114,8 @@ $(document).ready(function(){
 	
 	$("#queryBtn").click(function(){
 		serviceLogTable.datagrid('load',{
-			minCreateDate: $("#minCreateDate").val(),
-			maxCreateDate: $("#maxCreateDate").val()
+			minCreateDate: $(":input[name=minCreateDate]",$("#queryForm")).val(),
+			maxCreateDate: $(":input[name=maxCreateDate]",$("#queryForm")).val()
 		});
 	});
 });
@@ -126,17 +127,17 @@ $(document).ready(function(){
 		<form id="queryForm" class="form">
 			<table class="table table-hover table-condensed">
 				<tr>
-					<th>开始时间</th>
-					<td>
-						<input name="minCreateDate" readonly="readonly"
-							placeholder="点击选择时间" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-					</td>
-					<th>结束时间</th>
-					<td>
-						<input name="maxCreateDate" readonly="readonly"
-							placeholder="点击选择时间" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-					</td>
-				</tr>
+						<th>开始时间</th>
+						<td><input id="minCreateDate" name="minCreateDate"
+							readonly="readonly" placeholder="点击选择时间"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'maxCreateDate\')}' })" />
+						</td>
+						<th>结束时间</th>
+						<td><input id="maxCreateDate" name="maxCreateDate"
+							readonly="readonly" placeholder="点击选择时间"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'minCreateDate\')}'})" />
+						</td>
+					</tr>
 				<tr>
 					<td colspan="4" class="button operRow">
 						<a id="queryBtn" href="#" class="easyui-linkbutton">查询</a>
@@ -151,6 +152,6 @@ $(document).ready(function(){
 </div> 
 
 <div id="toolbar" style="display: none;"> 
-	<a onclick="" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+	<a onclick="serviceLogTable.datagrid('reload');return false;" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 </div>
 </body>

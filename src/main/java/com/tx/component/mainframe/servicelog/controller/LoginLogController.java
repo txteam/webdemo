@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,6 +59,7 @@ public class LoginLogController {
     @ResponseBody
     @RequestMapping("/queryLoginLogPagedList")
     public PagedList<LoginLog> queryLoginLogPagedList(
+            @RequestParam MultiValueMap<String, String> requestParameters,
             @RequestParam(value = "minCreateDate", required = false) Date minCreateDate,
             @RequestParam(value = "maxCreateDate", required = false) Date maxCreateDate,
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
@@ -68,6 +70,20 @@ public class LoginLogController {
         
         PagedList<LoginLog> resPagedList = ServiceLoggerContext.getLogger(LoginLog.class)
                 .queryPagedList(params, pageIndex, pageSize);
+        return resPagedList;
+    }
+    
+    /**
+      * 处理返回数据<br/>
+      *<功能详细描述>
+      * @param resPagedList
+      * @return [参数说明]
+      * 
+      * @return PagedList<LoginLog> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    protected PagedList<LoginLog> filter(PagedList<LoginLog> resPagedList) {
         return resPagedList;
     }
 }

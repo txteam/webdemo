@@ -21,12 +21,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.component.mainframe.context.WebContextUtils;
+import com.tx.component.mainframe.servicelog.SystemOperateLog;
 import com.tx.component.mainframe.treeview.TreeNode;
 import com.tx.component.mainframe.treeview.TreeNodeAdapter;
 import com.tx.component.operator.OperatorConstants;
 import com.tx.component.operator.dao.OrganizationDao;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.Post;
+import com.tx.component.servicelog.context.ServiceLoggerContext;
 import com.tx.core.TxConstants;
 import com.tx.core.exceptions.util.AssertUtils;
 
@@ -121,6 +123,10 @@ public class OrganizationService {
         
         //插入组织实体
         this.organizationDao.insertOrganization(organization);
+        
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo", "新增组织", "新增组织", null));
     }
     
     /** 
@@ -557,6 +563,11 @@ public class OrganizationService {
         updateRowMap.put("valid", false);
         
         int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
+        
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo", "停用组织", "停用组织", null));
+        
         return updateRowCount > 0;
     }
     
@@ -578,6 +589,11 @@ public class OrganizationService {
         updateRowMap.put("valid", true);
         
         int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
+        
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo", "启用组织", "启用组织", null));
+        
         return updateRowCount > 0;
     }
     
@@ -630,6 +646,10 @@ public class OrganizationService {
         }
         //将要删除的组织信息写入历史表中
         this.organizationDao.insertOrganizationToHis(res);
+        
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo", "删除组织", "删除组织", null));
         
         return this.organizationDao.deleteOrganization(condition) > 0;
     }

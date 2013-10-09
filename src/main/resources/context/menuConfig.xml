@@ -38,6 +38,11 @@
 				<menu id="query_loginlog" text="登录日志"
 					href="/servicelog/mainframe/loginLog/toQueryLoginLog.action" 
 					target="mainTabs"></menu>
+				<menu id="query_loginlog" text="系统操作日志"
+					href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList.action" 
+					target="mainTabs"></menu>
+					
+					
 			</menu>
 		</menu>
 

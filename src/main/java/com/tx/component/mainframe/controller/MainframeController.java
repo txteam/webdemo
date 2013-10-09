@@ -33,7 +33,7 @@ import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OperatorService;
 import com.tx.component.operator.service.OrganizationService;
 import com.tx.component.servicelog.context.ServiceLoggerContext;
-import com.tx.component.servicelog.context.ServiceLoggerSessionContext;
+import com.tx.component.servicelog.logger.ServiceLogger;
 
 /**
  * 登录功能入口
@@ -126,11 +126,13 @@ public class MainframeController {
         //WebContextUtils.putPostListInSession(postList);
         //System.out.println("123");
         //这个时候记录日志中信息没有写进需要手动写入
-        ServiceLoggerSessionContext.getContext().setAttribute("operatorId", oper.getId());
-        ServiceLoggerSessionContext.getContext().setAttribute("operatorName", oper.getUserName());
-        ServiceLoggerSessionContext.getContext().setAttribute("operatorLoginName", oper.getLoginName());
+        ServiceLogger<LoginLog> serviceLogger =  ServiceLoggerContext.getLogger(LoginLog.class);
         
-        ServiceLoggerContext.getLogger(LoginLog.class).log(new LoginLog(
+        serviceLogger.setAttribute("operatorId", oper.getId());
+        serviceLogger.setAttribute("operatorName", oper.getUserName());
+        serviceLogger.setAttribute("operatorLoginName", oper.getLoginName());
+        
+        serviceLogger.log(new LoginLog(
                 "webdemo", LoginLog.LOGINTYPE_LOGIN, "操作员{}登录系统",
                 new Object[] { loginName }));
         
