@@ -211,7 +211,7 @@ comment on column OPER_ORGANIZATION.chiefType is '组织主管类型：可以是人员，可以
 --****************************************************************************
 DROP TABLE OPER_ORGANIZATION_HIS;
 CREATE TABLE OPER_ORGANIZATION_HIS(
-  vcid varchar2(64) not null,
+  vcid varchar2(64),
   valid number(1,0) default 1 not null,
   fullAddress varchar2(255),
   remark varchar2(2000),

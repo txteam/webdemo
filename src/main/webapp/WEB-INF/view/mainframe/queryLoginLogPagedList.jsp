@@ -140,7 +140,7 @@ $(document).ready(function(){
 					</tr>
 				<tr>
 					<td colspan="4" class="button operRow">
-						<a id="queryBtn" href="#" class="easyui-linkbutton">查询</a>
+						<a id="queryBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>
 					</td>
 				</tr>
 			</table>

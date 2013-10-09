@@ -1,4 +1,4 @@
-.tooltip{/*½â¾öEasyUIÓëbootstrap³åÍ»Ê±tip²»ÏÔÊ¾µÄÎÊÌâ*/
+.tooltip{/*ï¿½ï¿½ï¿½EasyUIï¿½ï¿½bootstrapï¿½ï¿½Í»Ê±tipï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 	opacity:1;
 	filter:alpha(opacity=100);
 }
@@ -538,6 +538,7 @@ img {
 .chart_pie_link {background: url('images/extjs_icons/chart/chart_pie_link.png') no-repeat center center;}
 
 .clear {background: url('images/extjs_icons/clear.png') no-repeat center center;}
+.search {background: url('images/extjs_icons/search.png') no-repeat center center;}
 .folder_user {background: url('images/extjs_icons/folder/folder_user.png') no-repeat center center;}
 .folder_add {background: url('images/extjs_icons/folder/folder_add.png') no-repeat center center;}
 .folder_edit {background: url('images/extjs_icons/folder/folder_edit.png') no-repeat center center;}

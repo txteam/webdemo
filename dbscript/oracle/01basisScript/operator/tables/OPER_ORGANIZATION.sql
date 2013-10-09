@@ -3,7 +3,7 @@
 --****************************************************************************
 DROP TABLE OPER_ORGANIZATION;
 CREATE TABLE OPER_ORGANIZATION(
-  vcid varchar2(64) not null,
+  vcid varchar2(64),
   valid number(1,0) default 1 not null,
   fullAddress varchar2(255),
   remark varchar2(2000),
