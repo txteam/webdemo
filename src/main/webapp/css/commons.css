@@ -246,14 +246,12 @@ label.selected {
 
 .form select {
 	vertical-align: middle;
-	width: 139px;
-	width: 133px\9;
-	height: 22px;
+	width:82%;
+	height: 22px;	
 	line-height: 22px;
 	border: 1px solid #A0C2E5;
 	background: #fff;
 }
-
 .form textarea {
 	border: 1px solid #A0C2E5;
 	background: #FFF;
@@ -264,6 +262,7 @@ label.selected {
 
 .form input[type="radio"],.form input[type="checkbox"] {
 	vertical-align: middle;
+	width:10%;
 }
 
 /* list-table */
