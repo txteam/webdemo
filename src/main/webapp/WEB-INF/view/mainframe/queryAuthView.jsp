@@ -57,12 +57,7 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 		fit : true,
 		fitColumns : true,
 		border : false,
-		frozenColumns : [ [ {
-			title : '权限id',
-			field : 'id',
-			width : 150,
-			hidden : true
-		},{
+		frozenColumns : [ [{
 			field : 'parentId',
 			title : '上级权限ID',
 			width : 150,
@@ -72,6 +67,11 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 			title : '权限名称'
 		}] ],
 		columns : [ [ {
+			title : '权限key',
+			field : 'id',
+			width : 150,
+			hidden : true
+		},{
 			field : 'viewAble',
 			title : '是否可见',
 			width : 100,

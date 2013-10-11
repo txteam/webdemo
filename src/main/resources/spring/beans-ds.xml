@@ -73,7 +73,8 @@
 		</bean>
 		<alias name="tx.dataSource" alias="dataSource" />
 
-		<bean id="h2DataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<bean id="h2DataSource" class="com.alibaba.druid.pool.DruidDataSource"
+			init-method="init" destroy-method="close">
 			<!-- jdbc:h2:mem:webdemo -->
 			<!-- jdbc:h2:file:D:/h2/data/webdemo -->
 			<property name="url" value="jdbc:h2:mem:webdemo" />

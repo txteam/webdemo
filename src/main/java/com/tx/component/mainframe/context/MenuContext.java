@@ -115,7 +115,7 @@ public class MenuContext extends MenuContextConfigurator{
         menuType = menuType.toUpperCase();
         
         //根据权限及菜单配置生成最终权限列表
-        List<MenuItem> resList = new ArrayList<MenuItem>();
+        //List<MenuItem> resList = new ArrayList<MenuItem>();
         List<MenuItem> menuItemList = getMenuType2MenuItemListMap().get(menuType);
         
         return menuItemList;

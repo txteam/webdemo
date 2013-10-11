@@ -10,8 +10,6 @@
        http://www.springframework.org/schema/mvc  
        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
-	<bean class="com.tx.component.auth.springmvc.ControllerCheckOperateAuthInterceptor"></bean>
-	
 	<!-- 当在web.xml 中 DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 
 		defaultServlet在不同服务器中不太相同 -->
 	<!-- 补充说明：多个HandlerMapping的执行顺序问题： DefaultAnnotationHandlerMapping的order属性值是：0 
@@ -54,6 +52,7 @@
 		<!-- 加入权限容器支持 -->
 		<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"></bean>
 		<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
+		<bean class="com.tx.component.auth.springmvc.ControllerCheckOperateAuthInterceptor"></bean>
 	</mvc:interceptors>
 
 	<!-- 将jsp映射为controller -->
@@ -106,6 +105,7 @@
 				<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
 				<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"/>
 				<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
+				<bean class="com.tx.component.auth.springmvc.ControllerCheckOperateAuthInterceptor"></bean>
 			</list>
 		</property>
 	</bean>

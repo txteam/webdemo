@@ -10,6 +10,14 @@
 				target="mainTabs" selectRefresh="false" />
 			<menu id="config_config" text="配置项管理" href="/auth/authMananger"
 				authKey="config_config" target="mainTabs" selectRefresh="false" />
+			<menu id="system_monitor" text="系统监控"
+				authKey="system_monitor_view" target="mainTabs" selectRefresh="false">
+				<menu id="druid_monitor_result" text="druid监控视图"
+					href="/druid"></menu>
+				<menu id="JavaMelody_monitor_result" text="JavaMelody监控视图"
+					href="/monitoring"></menu>
+			</menu>	
+			
 			<menu id="basicdata_config" text="基础数据项管理"
 				authKey="basicdata_config" target="mainTabs" selectRefresh="false">
 				<menu id="district_manange" text="区域数据"></menu>
