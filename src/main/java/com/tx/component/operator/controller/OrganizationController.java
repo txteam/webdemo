@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.auth.annotation.CheckOperateAuth;
 import com.tx.component.mainframe.treeview.TreeNode;
 import com.tx.component.operator.basicdata.ChiefTypeEnum;
 import com.tx.component.operator.basicdata.OrganizationTypeEnum;
@@ -36,6 +37,7 @@ import com.tx.component.operator.service.OrganizationService;
  */
 @Controller("newOrganizationController")
 @RequestMapping("/organization")
+@CheckOperateAuth(key = "organization_manage")
 public class OrganizationController {
     
     @Resource(name = "organizationService")
@@ -87,6 +89,7 @@ public class OrganizationController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
+    @CheckOperateAuth(key = "query_organization", name = "查询组织")
     @RequestMapping("/queryOrganizationListIncludeInvalid")
     @ResponseBody
     public List<Organization> queryOrganizationListIncludeInvalid() {
@@ -183,6 +186,7 @@ public class OrganizationController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
+    @CheckOperateAuth(key = "add_organization", name = "增加组织")
     @RequestMapping("/addOrganization")
     @ResponseBody
     public boolean addOrganization(Organization organization) {
@@ -226,6 +230,7 @@ public class OrganizationController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @CheckOperateAuth(key = "update_organization", name = "更新组织")
     @RequestMapping("/updateOrganization")
     @ResponseBody
     public boolean updateOrganization(Organization organization) {
@@ -289,6 +294,7 @@ public class OrganizationController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @CheckOperateAuth(key = "delete_organization", name = "删除组织")
     @ResponseBody
     @RequestMapping("/deleteOrganizationById")
     public boolean deleteOrganizationById(
@@ -308,6 +314,7 @@ public class OrganizationController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @CheckOperateAuth(key = "disable_organization", name = "禁用组织")
     public boolean disableOrganizationById(
             @RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.disableOrganizationById(organizationId);
@@ -325,6 +332,7 @@ public class OrganizationController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @CheckOperateAuth(key = "enable_organization", name = "启用组织")
     public boolean enableOrganizationById(
             @RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.enableOrganizationById(organizationId);

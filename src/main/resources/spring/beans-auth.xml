@@ -36,4 +36,11 @@
 		<property name="systemId" value="testauth"></property>
 		<property name="tableSuffix" value="_test"></property>
 	</bean>
+	<bean class="com.tx.component.auth.context.loader.impl.ControllerCheckOperateAuthLoader">
+		<property name="basePackages">
+			<value>com.tx.component,com.tx.webdemo</value>
+		</property>
+	</bean>
+	
+	
 </beans>

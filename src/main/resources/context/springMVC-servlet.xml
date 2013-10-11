@@ -10,6 +10,8 @@
        http://www.springframework.org/schema/mvc  
        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
+	<bean class="com.tx.component.auth.springmvc.ControllerCheckOperateAuthInterceptor"></bean>
+	
 	<!-- 当在web.xml 中 DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 
 		defaultServlet在不同服务器中不太相同 -->
 	<!-- 补充说明：多个HandlerMapping的执行顺序问题： DefaultAnnotationHandlerMapping的order属性值是：0 

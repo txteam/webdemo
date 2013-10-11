@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.helpers.MessageFormatter;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 import com.tx.component.auth.context.AuthTypeItemContext;
@@ -48,7 +49,7 @@ public class MenuAuthLoader implements AuthLoader {
      */
     @Override
     public int getOrder() {
-        return Integer.MAX_VALUE - 10;
+        return Ordered.HIGHEST_PRECEDENCE + 10;
     }
     
     /**
@@ -93,32 +94,39 @@ public class MenuAuthLoader implements AuthLoader {
         List<AuthItem> resList = new ArrayList<AuthItem>();
         
         //根据菜单生成对应权限项
-        AuthItemImpl authItem = new AuthItemImpl();
-        authItem.setAuthType(AuthTypeItemContext.getContext()
-                .registeAuthTypeItem("AUTHTYPE_OPERATE",
-                        "操作权限",
-                        "菜单操作权限",
-                        true,
-                        true)
-                .getAuthType());
-        authItem.setConfigAble(true);
-        authItem.setDescription(MessageFormatter.arrayFormat("菜单[{}]的操作权限",
-                new Object[] { menuItem.getText() }).getMessage());
-        authItem.setEditAble(false);
-        authItem.setId(menuItem.getId());
-        authItem.setName(menuItem.getText());
-        authItem.setParentId(parentMenuAuthItem != null ? parentMenuAuthItem.getId()
-                : null);
-        authItem.setValid(true);
-        authItem.setViewAble(true);
-        resList.add(authItem);
+        AuthItemImpl authItem = null;
+        List<String> authKeyList = menuItem.getAuthKeyList();
+        if(authKeyList != null){
+            for(String authKeyTemp : authKeyList){
+                authItem = new AuthItemImpl();
+                authItem.setAuthType(AuthTypeItemContext.getContext()
+                        .registeAuthTypeItem("AUTHTYPE_OPERATE",
+                                "操作权限",
+                                "菜单操作权限",
+                                true,
+                                true)
+                        .getAuthType());
+                authItem.setConfigAble(true);
+                authItem.setDescription(MessageFormatter.arrayFormat("菜单[{}]的操作权限",
+                        new Object[] { menuItem.getText() }).getMessage());
+                authItem.setEditAble(false);
+                authItem.setId(authKeyTemp);
+                authItem.setName(menuItem.getText());
+                authItem.setParentId(parentMenuAuthItem != null ? parentMenuAuthItem.getId()
+                        : null);
+                authItem.setValid(true);
+                authItem.setViewAble(true);
+                resList.add(authItem);
+            }
+        }
+        parentMenuAuthItem = authItem == null ? parentMenuAuthItem : authItem;
         
         if(!CollectionUtils.isEmpty(menuItem.getChilds())){
             for(MenuItem childMenuItem : menuItem.getChilds()){
                 if(childMenuItem == null){
                     continue;
                 }
-                resList.addAll(createAuthItem(authItem, childMenuItem));
+                resList.addAll(createAuthItem(parentMenuAuthItem, childMenuItem));
             }
         }
         

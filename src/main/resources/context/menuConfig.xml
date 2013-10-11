@@ -22,15 +22,15 @@
 					href="/virtualCenter/toQueryVirtualCenterList.action" 
 					target="mainTabs"></menu>
 				<menu id="organization_config" text="组织结构管理" 
-					authKey="organization_config"
+					authKey="organization_manage"
 					href="/organization/toQueryOrganizationList.action" 
 					target="mainTabs"></menu>
 				<menu id="post_config" text="职位管理" href="/post/toQueryPostList.action"
-					authKey="post_config" target="mainTabs"></menu>
+					authKey="post_manage" target="mainTabs"></menu>
 				<menu id="operator_config" text="操作员管理" href="/operator/toQueryOperatorList.action"
-					authKey="" target="mainTabs"></menu>
+					authKey="operator_manage" target="mainTabs"></menu>
 				<menu id="auth_config" text="权限管理" href="/auth/toQueryAuthView.action"
-					authKey="auth_config" target="mainTabs"></menu>
+					authKey="auth_manage" target="mainTabs"></menu>
 			</menu>
 			
 			<menu id="servicelog_query_center" text="业务日志查询"
