@@ -18,7 +18,8 @@
 	<bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
 		<property name="patterns">
 			<list>
-				<value>com.tx..dao.*.*</value>
+				<value>com.tx.*\.service\..+?Service.*</value>
+				<value>com.tx.*\.context\..+?Context.*</value>
 			</list>
 		</property>
 	</bean>
