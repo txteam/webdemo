@@ -4,7 +4,7 @@
  * 修改时间:  2013-10-12
  * <修改描述:>
  */
-package com.tx.component.template.model;
+package com.tx.component.template.basicdata;
 
 
 

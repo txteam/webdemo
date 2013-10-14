@@ -10,6 +10,9 @@ import java.io.Serializable;
 
 import javax.persistence.Table;
 
+import com.tx.component.template.basicdata.TemplateColumnServiceType;
+import com.tx.component.template.basicdata.TemplateColumnTypeEnum;
+
 /**
  * 模板表字段<br/>
  * <功能详细描述>
@@ -36,6 +39,9 @@ public class TemplateColumn implements Serializable, Cloneable {
      * 由该类型决定对应数据的表中结构
      */
     private TemplateColumnTypeEnum columnType;
+    
+    /** 模板字段业务类型 */
+    private TemplateColumnServiceType columnServiceType;
     
     
 }

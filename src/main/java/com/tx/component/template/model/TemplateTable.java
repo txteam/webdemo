@@ -12,6 +12,9 @@ import java.util.Set;
 
 import javax.persistence.Table;
 
+import com.tx.component.template.basicdata.TemplateTableStatusEnum;
+import com.tx.component.template.basicdata.TemplateTableType;
+
 /**
  * 模板表<br/>
  * <功能详细描述>

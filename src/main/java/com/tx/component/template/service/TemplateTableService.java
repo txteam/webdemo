@@ -6,8 +6,8 @@
  */
 package com.tx.component.template.service;
 
+import com.tx.component.template.basicdata.TemplateTableType;
 import com.tx.component.template.model.TemplateTable;
-import com.tx.component.template.model.TemplateTableType;
 
 /**
  * 模板业务层<br/>
