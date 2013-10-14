@@ -8,9 +8,13 @@ package com.tx.component.template.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.apache.commons.collections.CollectionUtils;
 
 import com.tx.component.template.basicdata.TemplateTableStatusEnum;
 import com.tx.component.template.basicdata.TemplateTableType;
@@ -55,6 +59,9 @@ public class TemplateTable implements Serializable {
      * 仅在模板表创建初期（创建时，配置态），将由公共字段拷贝一份增加到当前表字段中 
      */
     private Set<TemplateColumn> columns;
+    
+    @Transient
+    private Set<String> columnNames;
     
     /** 创建人 */
     private String createOperatorId;
@@ -164,6 +171,19 @@ public class TemplateTable implements Serializable {
      */
     public void setColumns(Set<TemplateColumn> columns) {
         this.columns = columns;
+        this.columnNames = new HashSet<String>();
+        if(!CollectionUtils.isEmpty(columns)){
+            for(TemplateColumn columnTemp : columns){
+                this.columnNames.add(columnTemp.getColumnName());
+            }
+        }
+    }
+    
+    /**
+     * @return 返回 columnNames
+     */
+    public Set<String> getColumnNames() {
+        return columnNames;
     }
 
     /**

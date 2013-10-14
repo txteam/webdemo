@@ -25,6 +25,24 @@ public class TempalteEngineConfigurator {
     private DataSource dataSource;
     
     private DataSourceTypeEnum dataSourceType;
+    
+    private String systemId;
+    
+    
+
+    /**
+     * @return 返回 systemId
+     */
+    public String getSystemId() {
+        return systemId;
+    }
+
+    /**
+     * @param 对systemId进行赋值
+     */
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
+    }
 
     /**
      * @return 返回 dataSource

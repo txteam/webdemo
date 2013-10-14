@@ -23,4 +23,54 @@ public class TemplateColumnServiceType implements Serializable{
     /** 注释内容 */
     private static final long serialVersionUID = -4170866621472703672L;
     
+    /** 模板字段业务类型id */
+    private String id;
+    
+    /** 模板字段业务类型名 */
+    private String name;
+    
+    /** 模板字段业务类型备注 */
+    private String remark;
+
+    /**
+     * @return 返回 id
+     */
+    protected String getId() {
+        return id;
+    }
+
+    /**
+     * @param 对id进行赋值
+     */
+    protected void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @return 返回 name
+     */
+    protected String getName() {
+        return name;
+    }
+
+    /**
+     * @param 对name进行赋值
+     */
+    protected void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return 返回 remark
+     */
+    protected String getRemark() {
+        return remark;
+    }
+
+    /**
+     * @param 对remark进行赋值
+     */
+    protected void setRemark(String remark) {
+        this.remark = remark;
+    }
 }
