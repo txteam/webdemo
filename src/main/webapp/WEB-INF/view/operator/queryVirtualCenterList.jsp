@@ -38,6 +38,10 @@ $(document).ready(function() {
 			title : '名称',
 			width : 50,
 		},{
+			field : 'remark',
+			title : '备注',
+			width : 150
+		},{
 			field : 'action',
 			title : '操作',
 			width : 50,
@@ -53,10 +57,6 @@ $(document).ready(function() {
 				str += '&nbsp;';
 				return str;
 			}
-		}, {
-			field : 'remark',
-			title : '备注',
-			width : 150
 		} ] ],
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {

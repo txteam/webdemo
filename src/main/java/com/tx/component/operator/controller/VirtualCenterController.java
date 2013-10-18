@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.auth.annotation.CheckOperateAuth;
 import com.tx.component.operator.model.VirtualCenter;
 import com.tx.component.operator.service.VirtualCenterService;
 
@@ -33,6 +34,7 @@ import com.tx.component.operator.service.VirtualCenterService;
  */
 @Controller("virtualCenterController")
 @RequestMapping("/virtualCenter")
+@CheckOperateAuth(key = "virtualCenter_manage")
 public class VirtualCenterController {
     
     @Resource(name = "virtualCenterService")
@@ -125,6 +127,7 @@ public class VirtualCenterController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/queryVirtualCenterList")
+    @CheckOperateAuth(key = "query_VirtualCenter", name = "查询虚中心")
     @ResponseBody
     public List<VirtualCenter> queryVirtualCenterList() {
         List<VirtualCenter> virtualCenterList = this.virtualCenterService.listVirtualCenter();
@@ -142,6 +145,7 @@ public class VirtualCenterController {
      * @see [类、类#方法、类#成员]
     */
     @RequestMapping("/addVirtualCenter")
+    @CheckOperateAuth(key = "add_VirtualCenter", name = "新增虚中心")
     @ResponseBody
     public boolean addVirtualCenter(VirtualCenter virtualCenter) {
         this.virtualCenterService.insertVirtualCenter(virtualCenter);
@@ -185,6 +189,7 @@ public class VirtualCenterController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/updateVirtualCenter")
+    @CheckOperateAuth(key = "update_VirtualCenter", name = "更新虚中心")
     @ResponseBody
     public boolean updateVirtualCenter(VirtualCenter virtualCenter) {
         boolean resFlag = this.virtualCenterService.updateById(virtualCenter);
@@ -226,6 +231,7 @@ public class VirtualCenterController {
       * @see [类、类#方法、类#成员]
      */
     @ResponseBody
+    @CheckOperateAuth(key = "delete_VirtualCenter", name = "删除虚中心")
     @RequestMapping("/deleteVirtualCenterById")
     public boolean deleteVirtualCenterById(
             @RequestParam("virtualCenterId") String virtualCenterId) {

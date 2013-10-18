@@ -25,8 +25,8 @@
 				
 			<menu id="operator_config_center" text="操作员管理中心"
 				target="mainTabs" authKey="operator_config_center">
-				<menu id="virtualcenter_config" text="虚中心管理" 
-					authKey="virtualcenter_config"
+				<menu id="virtualCenter_config" text="虚中心管理" 
+					authKey="virtualCenter_manage"
 					href="/virtualCenter/toQueryVirtualCenterList.action" 
 					target="mainTabs"></menu>
 				<menu id="organization_config" text="组织结构管理" 

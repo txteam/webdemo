@@ -207,6 +207,10 @@ public class MenuContextConfigurator implements InitializingBean,
         if (!StringUtils.isEmpty(menuItemConfig.getAuthKey())) {
             menu.setAuthKeyList(Arrays.asList(StringUtils.splitByWholeSeparatorPreserveAllTokens(menuItemConfig.getAuthKey(),
                     ",")));
+        }else{
+            if(parentMenuItem != null){
+                menu.setAuthKeyList(parentMenuItem.getAuthKeyList());
+            }
         }
         
         //如果菜单id重复，认为是配置存在问题，这里抛出异常，启动时解决

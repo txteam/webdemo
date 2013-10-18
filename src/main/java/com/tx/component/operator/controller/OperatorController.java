@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.tx.component.auth.annotation.CheckOperateAuth;
 import com.tx.component.operator.model.Operator;
 import com.tx.component.operator.service.OperatorService;
 import com.tx.core.paged.model.PagedList;
@@ -30,6 +31,7 @@ import com.tx.core.paged.model.PagedList;
  */
 @Controller
 @RequestMapping("/operator")
+@CheckOperateAuth(key = "operator_manage")
 public class OperatorController {
     
     @Resource(name = "operatorService")
@@ -90,6 +92,7 @@ public class OperatorController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @CheckOperateAuth(key = "query_operator", name = "查询操作员")
     public PagedList<Operator> queryOperatorPagedList(
             @RequestParam Map<String, String> requestMap,
             @RequestParam(value = "pageIndex", required = false, defaultValue = "1") int pageIndex,

@@ -37,7 +37,11 @@ public class AdminChecker implements
      */
     @Override
     public boolean isSuperAdmin(String refId) {
-        return true;
+        if("123456".equals(refId)){
+            return true;
+        }
+        
+        return false;
     }
     
 }

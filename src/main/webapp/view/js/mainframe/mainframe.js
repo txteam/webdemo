@@ -146,6 +146,9 @@ $.bindge("addOrSelectTab", function(event, options) {
     if ((hrefValue.indexOf("http://") < 0 || hrefValue.indexOf("http://") > 0 ) && hrefValue.indexOf(_contextPath) != 0) {
         options.href = _contextPath + hrefValue;
     }
+    if (hrefValue.indexOf("/") == 0 && hrefValue.indexOf(_contextPath) != 0) {
+        options.href = _contextPath + hrefValue;
+    }
     $mainframe.trigger("addOrSelectTab", options);
     return true;
 });
