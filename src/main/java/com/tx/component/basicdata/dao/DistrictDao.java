@@ -4,14 +4,14 @@
  * 修改时间:  
  * <修改描述:>
  */
-package com.tx.component.mainframe.dao;
+package com.tx.component.basicdata.dao;
 
 import java.util.List;
 import java.util.Map;
 
 import com.tx.core.mybatis.model.Order;
 import com.tx.core.paged.model.PagedList;
-import com.tx.component.mainframe.model.District;
+import com.tx.component.basicdata.model.District;
 
 /**
  * District持久层

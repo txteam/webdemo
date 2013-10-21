@@ -53,11 +53,11 @@ public class MenuItemConfig {
     
     /** 是否有效 */
     @XStreamAsAttribute
-    private boolean isValid;
+    private boolean valid;
     
     /** 是否可见 */
     @XStreamAsAttribute
-    private boolean isVisible;
+    private boolean visible;
     
     /** 打开类型 ： mainTabs,openDialog,triggerGlobalEvent */
     @XStreamAsAttribute
@@ -81,7 +81,7 @@ public class MenuItemConfig {
     
     /** openDialog: 是否模态 */
     @XStreamAsAttribute
-    private boolean isModal = false;
+    private boolean modal = false;
     
     /** triggerGlobalEvent: 事件类型 */
     @XStreamAsAttribute
@@ -187,20 +187,6 @@ public class MenuItemConfig {
     }
     
     /**
-     * @return 返回 isVisible
-     */
-    public boolean isVisible() {
-        return isVisible;
-    }
-    
-    /**
-     * @param 对isVisible进行赋值
-     */
-    public void setVisible(boolean isVisible) {
-        this.isVisible = isVisible;
-    }
-    
-    /**
      * @return 返回 id
      */
     public String getId() {
@@ -212,20 +198,6 @@ public class MenuItemConfig {
      */
     public void setId(String id) {
         this.id = id;
-    }
-    
-    /**
-     * @return 返回 isValid
-     */
-    public boolean isValid() {
-        return isValid;
-    }
-    
-    /**
-     * @param 对isValid进行赋值
-     */
-    public void setValid(boolean isValid) {
-        this.isValid = isValid;
     }
 
     /**
@@ -299,17 +271,17 @@ public class MenuItemConfig {
     }
 
     /**
-     * @return 返回 isModal
+     * @return 返回 modal
      */
     public boolean isModal() {
-        return isModal;
+        return modal;
     }
 
     /**
-     * @param 对isModal进行赋值
+     * @param 对modal进行赋值
      */
-    public void setModal(boolean isModal) {
-        this.isModal = isModal;
+    public void setModal(boolean modal) {
+        this.modal = modal;
     }
 
     /**
@@ -352,5 +324,33 @@ public class MenuItemConfig {
      */
     public void setParam(String param) {
         this.param = param;
+    }
+
+    /**
+     * @return 返回 valid
+     */
+    public boolean isValid() {
+        return valid;
+    }
+
+    /**
+     * @param 对valid进行赋值
+     */
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
+    /**
+     * @return 返回 visible
+     */
+    public boolean isVisible() {
+        return visible;
+    }
+
+    /**
+     * @param 对visible进行赋值
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

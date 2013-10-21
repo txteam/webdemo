@@ -64,28 +64,66 @@
 					href="http://www.my97.net/dp/demo/index.htm"
 					target="mainTabs" selectRefresh="false"/>
 			</menu>
-			<menu id="system_rule" text="规范">
-				<menu id="java_code_rule" text="java编码规范" href="/auth/authMananger"
+			<menu id="standard_rule_manage" text="规范">
+				<menu id="java_code_standard_rule" text="java编码规范" href="/standardRule/javaCodeRule"
 					target="mainTabs" selectRefresh="false" />
-				<menu id="database_code_rule" text="数据库编码规范" href="/auth/authMananger"
+				<menu id="database_code_standard_rule" text="数据库编码规范" href="/standardRule/databaseCodeRule"
+					target="mainTabs" selectRefresh="false" />
+				<menu id="project_standard_rule" text="项目命名规范" href="/standardRule/projectNamedRule"
+					target="mainTabs" selectRefresh="false" />
+				<menu id="page_code_rule" text="页面编码规范" href="/standardRule/pageCodeRule"
 					target="mainTabs" selectRefresh="false" />
 			</menu>
-			<menu id="menu_helper" text="如何配置菜单" href="/auth/authMananger"
-				target="mainTabs" selectRefresh="false" />
-			<menu id="auth_helper" text="如何配置权限" href="/auth/authMananger"
-				target="mainTabs" selectRefresh="false" />
-			<menu id="code_example" text="代码范例">
-				<menu id="tree_example" text="树范例" href="/auth/authMananger"
+			<menu id="helper_manage" text="帮助">
+				<menu id="menuconfig_helper" text="置配菜单" href="/helper/menuConfigHelper"
 					target="mainTabs" selectRefresh="false" />
-				<menu id="tree_grid_example" text="树表格范例" href="/auth/authMananger"
+				<menu id="authconfig_helper" text="配置权限" href="/helper/authConfigHelper"
 					target="mainTabs" selectRefresh="false" />
-				<menu id="grid_example" text="表格范例" href="/auth/authMananger"
+				<menu id="servicelog_helper" text="业务日志" href="/helper/serviceLogHelper"
 					target="mainTabs" selectRefresh="false" />
-				<menu id="paged_grid_example" text="分页表格" href="/auth/authMananger"
+				<menu id="basicdata_helper" text="基础数据" href="/helper/basicdataHelper"
 					target="mainTabs" selectRefresh="false" />
-				<menu id="flow_grid_example" text="流媒体表格" href="/auth/authMananger"
+			</menu>
+			
+			<menu id="code_example" text="范例">
+				<menu id="tree_grid_example" text="树表格范例" 
+					href=""
 					target="mainTabs" selectRefresh="false" />
-				<menu id="window_and_dialog_example" text="弹出窗体" href="/auth/authMananger"
+				<menu id="grid_example" text="表格范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="paged_grid_example" text="分页表格范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="workflow_paged_grid_example" text="流加载表格范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="dialog_example" text="对话框范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="query_page_example" text="查询页面范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="add_page_example" text="增加页面范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="update_page_example" text="update页面范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="query_and_update_page_example" text="查询操作共页面范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="global_event_example" text="触发捕获全局事件范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="check_auth_example" text="页面鉴权范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="get_config_example" text="获取配置值范例" 
+					href=""
+					target="mainTabs" selectRefresh="false" />
+				<menu id="get_basicdata_example" text="获取基础数据范例" 
+					href=""
 					target="mainTabs" selectRefresh="false" />
 			</menu>
 		</menu>

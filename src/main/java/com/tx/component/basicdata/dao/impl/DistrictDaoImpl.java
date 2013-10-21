@@ -4,7 +4,7 @@
  * 修改时间:  
  * <修改描述:>
  */
-package com.tx.component.mainframe.dao.impl;
+package com.tx.component.basicdata.dao.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -13,8 +13,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.tx.component.mainframe.dao.DistrictDao;
-import com.tx.component.mainframe.model.District;
+import com.tx.component.basicdata.dao.DistrictDao;
+import com.tx.component.basicdata.model.District;
 import com.tx.core.mybatis.model.Order;
 import com.tx.core.mybatis.support.MyBatisDaoSupport;
 import com.tx.core.paged.model.PagedList;

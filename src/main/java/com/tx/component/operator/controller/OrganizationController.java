@@ -37,7 +37,10 @@ import com.tx.component.operator.service.OrganizationService;
  */
 @Controller("newOrganizationController")
 @RequestMapping("/organization")
-@CheckOperateAuth(key = "organization_manage")
+@CheckOperateAuth(key = "organization_manage",
+    parentKey="operator_config_center",
+    description="组织结构管理",
+    name="组织结构管理")
 public class OrganizationController {
     
     @Resource(name = "organizationService")

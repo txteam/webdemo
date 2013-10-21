@@ -19,8 +19,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.tx.component.mainframe.model.District;
-import com.tx.component.mainframe.service.DistrictService;
+import com.tx.component.basicdata.model.District;
+import com.tx.component.basicdata.service.DistrictService;
 import com.tx.core.paged.model.PagedList;
 
 

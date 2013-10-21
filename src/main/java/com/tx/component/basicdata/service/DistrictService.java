@@ -4,7 +4,7 @@
  * 修改时间:  
  * <修改描述:>
  */
-package com.tx.component.mainframe.service;
+package com.tx.component.basicdata.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.component.mainframe.dao.DistrictDao;
-import com.tx.component.mainframe.model.District;
+import com.tx.component.basicdata.dao.DistrictDao;
+import com.tx.component.basicdata.model.District;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 

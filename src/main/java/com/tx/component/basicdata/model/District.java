@@ -4,7 +4,7 @@
  * 修改时间:  2013-8-26
  * <修改描述:>
  */
-package com.tx.component.mainframe.model;
+package com.tx.component.basicdata.model;
 
 import java.io.Serializable;
 import java.util.List;
