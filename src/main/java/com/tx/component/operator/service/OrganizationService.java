@@ -65,8 +65,22 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<TreeNode> queryOrganizationPostTreeNodeListByAuth() {
-        return queryOrganizationPostTreeNodeListByAuth(false);
+    public List<TreeNode> queryOrganizationPostTreeNodeListByVcid(String vcid) {
+        AssertUtils.notEmpty(vcid, "vcid is empty.");
+        return queryOrganizationPostTreeNodeListByVcid(vcid, false);
+    }
+    
+    /**
+      * 查询所有的组织人员树列表<br/>
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return List<TreeNode> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<TreeNode> queryAllOrganizationPostTreeNodeList() {
+        return queryOrganizationPostTreeNodeListByVcid(null, false);
     }
     
     /**
@@ -81,9 +95,10 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    private List<TreeNode> queryOrganizationPostTreeNodeListByAuth(
+    private List<TreeNode> queryOrganizationPostTreeNodeListByVcid(String vcid,
             boolean includeInvalidOrganization) {
-        List<Organization> orgList = queryOrganizationListByAuth(includeInvalidOrganization);
+        List<Organization> orgList = queryOrganizationListByVcid(vcid,
+                includeInvalidOrganization);
         
         List<TreeNode> resList = new ArrayList<TreeNode>();
         for (Organization orgTemp : orgList) {
@@ -259,7 +274,8 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<Organization> queryOrganizationListIncludeInvalid(String virtualCenterId) {
+    public List<Organization> queryOrganizationListIncludeInvalid(
+            String virtualCenterId) {
         return queryOrganizationListByAuth(true);
     }
     
@@ -279,7 +295,7 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    private List<Organization> queryOrganizationListByAuth(
+    private List<Organization> queryOrganizationListByVcid(String vcid,
             boolean includeInvalidOrganization) {
         Organization currentOrgnization = WebContextUtils.getCurrentOrganization();
         String parentOrganizationId = "";
@@ -295,12 +311,19 @@ public class OrganizationService {
             if (!includeInvalidOrganization) {
                 params.put("valid", true);
             }
+            if (!StringUtils.isEmpty(vcid)) {
+                params.put("vcid", vcid);
+            }
             resList = this.organizationDao.queryOrganizationList(params);
         } else {
-            resList = queryChildOrganizationListByParentId(parentOrganizationId,
-                    includeInvalidOrganization);
-            //将当前组织信息添加到结果集中
-            resList.add(findOrganizationById(currentOrgnization.getId()));
+            if (StringUtils.isEmpty(vcid)) {
+                resList = queryChildOrganizationListByParentId(parentOrganizationId,
+                        includeInvalidOrganization);
+                //将当前组织信息添加到结果集中
+                resList.add(findOrganizationById(currentOrgnization.getId()));
+            } else {
+                
+            }
         }
         
         return resList;
@@ -371,44 +394,6 @@ public class OrganizationService {
     }
     
     /**
-      * 根据父组织id迭代查询当前组织及其子组织的列表<br/>
-      *<功能详细描述>
-      * @param parentOrganizationId
-      * @return [参数说明]
-      * 
-      * @return List<Organization> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    private List<Organization> queryChildOrganizationListByParentId(
-            String parentOrganizationId, boolean includeInvalidOrganization) {
-        AssertUtils.notEmpty(parentOrganizationId,
-                "parentOrganizationId is empty");
-        //生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        //濡傛灉涓嶅寘鎷棤鏁堢粍缁�
-        if (!includeInvalidOrganization) {
-            params.put("valid", true);
-        }
-        
-        List<Organization> resList = new ArrayList<Organization>();
-        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<Organization> childList = this.organizationDao.queryOrganizationList(params);
-        if (!CollectionUtils.isEmpty(childList)) {
-            resList.addAll(childList);
-            for (Organization childTemp : childList) {
-                if (childTemp == null) {
-                    continue;
-                }
-                resList.addAll(queryChildOrganizationListByParentId(childTemp.getId(),
-                        includeInvalidOrganization));
-            }
-        }
-        
-        return resList;
-    }
-    
-    /**
       * 查询子组织id列表
       *<功能详细描述>
       * @param parentOrganizationId
@@ -420,7 +405,32 @@ public class OrganizationService {
      */
     public List<String> queryChildOrganizationIdListByParentId(
             String parentOrganizationId) {
-        return queryChildOrganizationIdListByParentId(parentOrganizationId,
+        AssertUtils.notEmpty(parentOrganizationId,
+                "parentOrganizationId is empty");
+        
+        return queryChildOrganizationIdListByParentId(null,
+                parentOrganizationId,
+                false);
+    }
+    
+    /**
+     * 查询子组织id列表
+     *<功能详细描述>
+     * @param parentOrganizationId
+     * @return [参数说明]
+     * 
+     * @return List<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public List<String> queryChildOrganizationIdListByVcidAndParentId(
+            String vcid, String parentOrganizationId) {
+        AssertUtils.notEmpty(vcid, "vcid is empty");
+        AssertUtils.notEmpty(parentOrganizationId,
+                "parentOrganizationId is empty");
+        
+        return queryChildOrganizationIdListByParentId(vcid,
+                parentOrganizationId,
                 false);
     }
     
@@ -434,12 +444,13 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    private List<String> queryChildOrganizationIdListByParentId(
+    private List<String> queryChildOrganizationIdListByParentId(String vcid,
             String parentOrganizationId, boolean includeInvalidOrganization) {
         AssertUtils.notEmpty(parentOrganizationId,
                 "parentOrganizationId is empty");
         
-        List<Organization> orgList = queryChildOrganizationListByParentId(parentOrganizationId,
+        List<Organization> orgList = queryChildOrganizationListByParentId(vcid,
+                parentOrganizationId,
                 includeInvalidOrganization);
         List<String> resList = new ArrayList<String>();
         if (CollectionUtils.isEmpty(orgList)) {
@@ -453,7 +464,53 @@ public class OrganizationService {
     }
     
     /**
-      *<功能简述>
+     * 根据父组织id迭代查询当前组织及其子组织的列表<br/>
+     *<功能详细描述>
+     * @param parentOrganizationId
+     * @return [参数说明]
+     * 
+     * @return List<Organization> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    private List<Organization> queryChildOrganizationListByParentId(
+            String vcid, String parentOrganizationId,
+            boolean includeInvalidOrganization) {
+        AssertUtils.notEmpty(parentOrganizationId,
+                "parentOrganizationId is empty");
+        
+        //生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("parentId", parentOrganizationId);
+        //濡傛灉涓嶅寘鎷棤鏁堢粍缁�
+        if (!includeInvalidOrganization) {
+            params.put("valid", true);
+        }
+        if (!StringUtils.isEmpty(vcid)) {
+            params.put("vcid", vcid);
+        }
+        
+        List<Organization> resList = new ArrayList<Organization>();
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        List<Organization> childList = this.organizationDao.queryOrganizationList(params);
+        
+        if (!CollectionUtils.isEmpty(childList)) {
+            resList.addAll(childList);
+            for (Organization childTemp : childList) {
+                if (childTemp == null) {
+                    continue;
+                }
+                resList.addAll(queryChildOrganizationListByParentId(vcid,
+                        childTemp.getId(),
+                        includeInvalidOrganization));
+            }
+        }
+        
+        return resList;
+    }
+    
+    /**
+      * 更新当前组织名信息时，需要将子组织的全名进行更新<br/>
       *<功能详细描述>
       * @param organizationId
       * @param name [参数说明]
