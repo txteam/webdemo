@@ -2,7 +2,7 @@
 <!DOCTYPE mapper 
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="newOrganization">
+<mapper namespace="organization">
 	<cache type="org.mybatis.caches.ehcache.EhcacheCache"
 				eviction="LRU"
 				readOnly="false"
@@ -65,7 +65,7 @@
 		  FROM OPER_ORGANIZATION TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
-				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,,javaType=java.lang.String} ]]>
+				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,javaType=java.lang.String} ]]>
 			</if>
 			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
@@ -120,7 +120,7 @@
 		  FROM OPER_ORGANIZATION TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
-				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,,javaType=java.lang.String} ]]>
+				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,javaType=java.lang.String} ]]>
 			</if>
 			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  

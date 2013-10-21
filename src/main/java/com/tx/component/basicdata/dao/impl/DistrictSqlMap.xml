@@ -57,9 +57,6 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(postalCode)">  
 	            AND TD.POSTALCODE = #{postalCode,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            AND TD.REMARK = #{remark,javaType=java.lang.String}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TD.NAME = #{name,javaType=java.lang.String}
 	        </if>
@@ -101,9 +98,6 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(postalCode)">  
 	            AND TD.POSTALCODE = #{postalCode,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            AND TD.REMARK = #{remark,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TD.NAME = #{name,javaType=java.lang.String}

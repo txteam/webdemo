@@ -6,39 +6,23 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>addVirtualCenter.jsp</title>
+<title>updateVirtualCenter.jsp</title>
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
-	$("#parentName").chooseVirtualCenter({
-		eventName : "chooseVirtualCenterForAddVirtualCenter",
-		contextPath : _contextPath,
-		title : "请选择上级虚中心",  
-		width : 260,
-		height : 400,
-		handler : function(organization){
-			$("#parentName").val(organization.name);
-			$("#parentId").val(organization.id);
-		},
-	    clearHandler: function(){
-	    	$("#parentName").val("");
-			$("#parentId").val("");
-	    }
-	});
-	
 	//验证器
 	$('#virtualCenterForm').validator({
 	    valid: function(){
 	        //表单验证通过，提交表单到服务器
 			$('#virtualCenterForm').ajaxSubmit({
-			    url:"${contextPath}/virtualCenter/addVirtualCenter.action",
+			    url:"${contextPath}/virtualCenter/updateVirtualCenter.action",
 			    success: function(data) {
 					if(data){
-						DialogUtils.tip("新增虚中心成功");
-						parent.DialogUtils.closeDialogById("addVirtualCenter");
+						DialogUtils.tip("更新虚中心成功");
+						parent.DialogUtils.closeDialogById("updateVirtualCenter");
 					}
 			    }
 			});
@@ -58,12 +42,13 @@ $(document).ready(function(){
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form:form id="virtualCenterForm" method="post" cssClass="form"
 			modelAttribute="virtualCenter">
+			<form:hidden path="id"/>
 			<table>
 				<tr>
 					<th class="narrow">名称:<span class="tRed">*</span></th>
 					<td>
 						<form:input path="name" cssClass="text"
-							data-rule="名称:required;length[2~16];remote[${contextPath }/virtualCenter/virtualCenterNameIsExist.action, name]" 
+							data-rule="名称:required;length[2~16];remote[${contextPath }/virtualCenter/virtualCenterNameIsExist.action, name, id]" 
 							data-tip="必填"/>
 					</td>
 					<td width="30%" colspan="2">&nbsp;</td>
@@ -71,15 +56,14 @@ $(document).ready(function(){
 				<tr>
 					<th>上级虚中心：</th>
 					<td>
-						<input id="parentId" name="parentId" type="hidden" readonly="readonly" value="${parentVirtualCenter.id }"/>
-						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" value="${parentVirtualCenter.name }"/>
+						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" value="${parentVirtualCenterName }"/>
 					</td>
-					<td colspan="2">&nbsp;</td>
+					<td width="30%" colspan="2">&nbsp;</td>
 				</tr>
 				<tr>
 					<th>备注：</th>
 					<td colspan="3">
-						<textarea name="remark" rows="" cols="" class="longText"></textarea>
+						<form:textarea path="remark" cssClass="longText"/>
 					</td>
 				</tr>
 				<tr>

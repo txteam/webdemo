@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" import="java.lang.*;"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE div PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE div >
 <%@include file="../includes/commonHead.jsp" %>
 <html>
 	<head>

@@ -3,6 +3,7 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="virtualCenter">
+	<cache-ref namespace="organization"/>
 
 	<!-- auto generate default resultMap -->
 	<resultMap id="virtualCenterMap" 

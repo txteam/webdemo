@@ -37,10 +37,7 @@ import com.tx.component.operator.service.OrganizationService;
  */
 @Controller("newOrganizationController")
 @RequestMapping("/organization")
-@CheckOperateAuth(key = "organization_manage",
-    parentKey="operator_config_center",
-    description="组织结构管理",
-    name="组织结构管理")
+@CheckOperateAuth(key = "organization_manage", parentKey = "operator_config_center", description = "组织结构管理", name = "组织结构管理")
 public class OrganizationController {
     
     @Resource(name = "organizationService")
@@ -95,8 +92,9 @@ public class OrganizationController {
     @CheckOperateAuth(key = "query_organization", name = "查询组织")
     @RequestMapping("/queryOrganizationListIncludeInvalid")
     @ResponseBody
-    public List<Organization> queryOrganizationListIncludeInvalid() {
-        List<Organization> orgList = this.organizationService.queryOrganizationListIncludeInvalid();
+    public List<Organization> queryOrganizationListIncludeInvalid(
+            @RequestParam(value = "virtualCenterId", required = false) String virtualCenterId) {
+        List<Organization> orgList = this.organizationService.queryOrganizationListIncludeInvalid(virtualCenterId);
         
         return orgList;
     }

@@ -165,7 +165,7 @@ public class VirtualCenterController {
     @ResponseBody
     @RequestMapping("/virtualCenterNameIsExist")
     public Map<String, String> virtualCenterNameIsExist(
-            @RequestParam("code") String name,
+            @RequestParam("name") String name,
             @RequestParam(value = "id", required = false) String excludeVirtualCenterId) {
         boolean resFlag = this.virtualCenterService.virtualCenterNameIsExist(name,
                 excludeVirtualCenterId);
@@ -173,7 +173,7 @@ public class VirtualCenterController {
         if (!resFlag) {
             resMap.put("ok", "");
         } else {
-            resMap.put("error", "重复的虚中心编号");
+            resMap.put("error", "重复的虚中心名");
         }
         return resMap;
     }
@@ -231,7 +231,7 @@ public class VirtualCenterController {
       * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @CheckOperateAuth(key = "delete_VirtualCenter", name = "删除虚中心")
+    @CheckOperateAuth(key = "delete_VirtualCenter", name = "删除虚中心", configAble = false)
     @RequestMapping("/deleteVirtualCenterById")
     public boolean deleteVirtualCenterById(
             @RequestParam("virtualCenterId") String virtualCenterId) {

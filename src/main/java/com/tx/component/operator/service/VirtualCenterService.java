@@ -57,8 +57,6 @@ public class VirtualCenterService {
     @Transactional
     public void insertVirtualCenter(VirtualCenter virtualCenter) {
         AssertUtils.notNull(virtualCenter, "virtualCenter is null.");
-        AssertUtils.notEmpty(virtualCenter.getId(),
-                "virtualCenter.id is empty.");
         AssertUtils.notEmpty(virtualCenter.getName(),
                 "virtualCenter.name is empty.");
         

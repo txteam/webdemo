@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html >
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,8 +9,26 @@
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
+var virtualCenterTree = null;
 var treeGrid = null;
 $(document).ready(function() {
+	virtualCenterTree = $('#virtualCenterTree').tree({
+		url : '${contextPath}/virtualCenter/queryVirtualCenterList.action',
+		idField : 'id',
+		parentField : 'parentId',
+		iconField : function(){
+			return 'folder_user';
+		},
+		textField : 'name',
+		border : false,
+		onClick : function(node){
+			$('#treeGrid').treegrid('load',{
+				virtualCenterId: node.id
+			});
+		}
+	});
+	
+	
 	treeGrid = $('#treeGrid').treegrid({
 		url : '${contextPath}/organization/queryOrganizationListIncludeInvalid.action',
 		idField : 'id',
@@ -167,7 +185,7 @@ function editFun(id) {
 		"updateOrganization",
 		"编辑组织",
 		$.formatString("${contextPath}/organization/toUpdateOrganization.action?organizationId={0}",id),
-		580,275,function(){
+		600,275,function(){
 			$('#treeGrid').treegrid('reload');
 	});
 }
@@ -206,34 +224,67 @@ function deleteFun(id,name) {
 			}
 	});
 }
+function deselect(){
+	var selectedNode = virtualCenterTree.tree('getSelected');
+	if(selectedNode){
+		virtualCenterTree.find(".tree-node-selected").removeClass("tree-node-selected");
+		treeGrid.treegrid('load',{});
+	}
+}
+function refreshTree(){
+	var selectedNode = virtualCenterTree.tree('getSelected');
+	virtualCenterTree.tree('reload');
+	if(selectedNode){
+		treeGrid.treegrid('load',{
+			organizationId: '',
+			parentPostId: ''
+		});
+	}
+}
+
 </script>
 </head>
 <body>
-	<div class="easyui-layout" data-options="fit:true,border:false">
-		<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-			<table id="treeGrid" style="width:fit;height:fit"></table>
-		</div>
-	</div>
-	
-	<div id="toolbar" style="display: none;">
-		<c:if test="${true}">
-			<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
-		</c:if>
-		<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
-		<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
-		<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" 
-			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
-	</div>
 
-	<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
-		<c:if test="${true}">
-			<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
-		</c:if>
-		<c:if test="${true}">
-			<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
-		</c:if>
-		<c:if test="${true}">
-			<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
-		</c:if>
-	</div>
+</body>
+
+<body class="easyui-layout">
+	<div data-options="region:'west',title:'虚中心',split:true,
+		tools : [
+			{ iconCls : 'clear',handler : function() {deselect();} } ,
+			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
+		]"
+		style="width:230px;">
+		<ul id="virtualCenterTree"></ul>
+	</div> 
+	
+	<div data-options="region:'center'" style="padding:5px;background:#eee;">
+		<div class="easyui-layout" data-options="fit:true,border:false">
+			<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+				<table id="treeGrid" style="width:fit;height:fit"></table>
+			</div>
+		</div>
+		
+		<div id="toolbar" style="display: none;">
+			<c:if test="${true}">
+				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
+			</c:if>
+			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
+			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
+			<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" 
+				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+		</div>
+	
+		<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
+			<c:if test="${true}">
+				<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
+			</c:if>
+			<c:if test="${true}">
+				<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
+			</c:if>
+			<c:if test="${true}">
+				<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
+			</c:if>
+		</div>
+	</div> 
 </body>

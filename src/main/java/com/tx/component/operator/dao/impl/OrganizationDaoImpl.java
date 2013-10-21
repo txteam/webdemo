@@ -39,7 +39,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public void insertOrganization(Organization organization) {
-        this.myBatisDaoSupport.insertUseUUID("newOrganization.insertOrganization",
+        this.myBatisDaoSupport.insertUseUUID("organization.insertOrganization",
                 organization,
                 "id");
     }
@@ -49,7 +49,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public void insertOrganizationToHis(Organization organization) {
-        this.myBatisDaoSupport.insert("newOrganization.insertOrganizationToHis",
+        this.myBatisDaoSupport.insert("organization.insertOrganizationToHis",
                 organization);
     }
     
@@ -59,7 +59,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public int deleteOrganization(Organization condition) {
-        return this.myBatisDaoSupport.delete("newOrganization.deleteOrganization",
+        return this.myBatisDaoSupport.delete("organization.deleteOrganization",
                 condition);
     }
     
@@ -69,7 +69,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public Organization findOrganization(Organization condition) {
-        return this.myBatisDaoSupport.<Organization> find("newOrganization.findOrganization",
+        return this.myBatisDaoSupport.<Organization> find("organization.findOrganization",
                 condition);
     }
     
@@ -79,7 +79,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public List<Organization> queryOrganizationList(Map<String, Object> params) {
-        return this.myBatisDaoSupport.<Organization> queryList("newOrganization.queryOrganization",
+        return this.myBatisDaoSupport.<Organization> queryList("organization.queryOrganization",
                 params);
     }
     
@@ -91,7 +91,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
     @Override
     public List<Organization> queryOrganizationList(Map<String, Object> params,
             List<Order> orderList) {
-        return this.myBatisDaoSupport.<Organization> queryList("newOrganization.queryOrganization",
+        return this.myBatisDaoSupport.<Organization> queryList("organization.queryOrganization",
                 params,
                 orderList);
     }
@@ -102,7 +102,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public int countOrganization(Map<String, Object> params) {
-        return this.myBatisDaoSupport.<Integer> find("newOrganization.queryOrganizationCount",
+        return this.myBatisDaoSupport.<Integer> find("organization.queryOrganizationCount",
                 params);
     }
     
@@ -115,7 +115,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
     @Override
     public PagedList<Organization> queryOrganizationPagedList(
             Map<String, Object> params, int pageIndex, int pageSize) {
-        return this.myBatisDaoSupport.<Organization> queryPagedList("newOrganization.queryOrganization",
+        return this.myBatisDaoSupport.<Organization> queryPagedList("organization.queryOrganization",
                 params,
                 pageIndex,
                 pageSize);
@@ -132,7 +132,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
     public PagedList<Organization> queryOrganizationPagedList(
             Map<String, Object> params, int pageIndex, int pageSize,
             List<Order> orderList) {
-        return this.myBatisDaoSupport.<Organization> queryPagedList("newOrganization.queryOrganization",
+        return this.myBatisDaoSupport.<Organization> queryPagedList("organization.queryOrganization",
                 params,
                 pageIndex,
                 pageSize,
@@ -145,7 +145,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public int updateOrganization(Map<String, Object> updateRowMap) {
-        return this.myBatisDaoSupport.update("newOrganization.updateOrganization",
+        return this.myBatisDaoSupport.update("organization.updateOrganization",
                 updateRowMap);
     }
 }

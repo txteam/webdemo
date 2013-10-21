@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html >
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -12,7 +12,7 @@
 var tree = null;
 $(document).ready(function() {
 	tree = $('#organizationTree').tree({
-		url : '${contextPath}/organization/queryOrganizationList.action',
+		url : '${contextPath}/virtualCenter/queryVirtualCenterList.action',
 		idField : 'id',
 		parentField : 'parentId',
 		iconField : function(){
@@ -21,7 +21,7 @@ $(document).ready(function() {
 		textField : 'name',
 		border : false,
 		onClick : function(node){
-			$.triggerge("choose_organization_" + "${eventName}",[node['attributes']]);
+			$.triggerge("choose_virtualCenter_" + "${eventName}",[node['attributes']]);
 		}
 	});
 });
