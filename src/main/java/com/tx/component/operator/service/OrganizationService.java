@@ -56,8 +56,29 @@ public class OrganizationService {
     private PostService postService;
     
     /**
-      * 根据当前人员权限查询组织和职位树列表
-      *     默认仅能查询不包含已经被禁用的组织列表<br/>
+     * 根据当前人员是否具有查询所有组织的权限查询组织职位列表
+     *      如果有：查询所有组织
+     *      如果没有：查询所在vcid中的组织列表
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<TreeNode> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public List<TreeNode> queryOrganizationPostTreeNodeListByAuth() {
+        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_ORG)) {
+            //如果具有查询所有组织的权限，则查询所有组织角色列表
+            return queryAllOrganizationPostTreeNodeList();
+        } else {
+            //否则根据当前人员所属虚中心，查询所在虚中心组织列表
+            String vcid = WebContextUtils.getCurrentVcid();
+            return queryOrganizationPostTreeNodeListByVcid(vcid);
+        }
+    }
+    
+    /**
+      * 根据虚中心id查询组织职位数据列表<br/>
       *<功能详细描述>
       * @return [参数说明]
       * 
@@ -67,7 +88,10 @@ public class OrganizationService {
      */
     public List<TreeNode> queryOrganizationPostTreeNodeListByVcid(String vcid) {
         AssertUtils.notEmpty(vcid, "vcid is empty.");
-        return queryOrganizationPostTreeNodeListByVcid(vcid, false);
+        
+        List<TreeNode> resList = queryOrganizationPostTreeNodeListByVcid(vcid,
+                false);
+        return resList;
     }
     
     /**
@@ -80,7 +104,9 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<TreeNode> queryAllOrganizationPostTreeNodeList() {
-        return queryOrganizationPostTreeNodeListByVcid(null, false);
+        List<TreeNode> resList = queryOrganizationPostTreeNodeListByVcid(null,
+                false);
+        return resList;
     }
     
     /**
@@ -97,8 +123,14 @@ public class OrganizationService {
     */
     private List<TreeNode> queryOrganizationPostTreeNodeListByVcid(String vcid,
             boolean includeInvalidOrganization) {
-        List<Organization> orgList = queryOrganizationListByVcid(vcid,
-                includeInvalidOrganization);
+        Map<String, Object> params = new HashMap<String, Object>();
+        if (!includeInvalidOrganization) {
+            params.put("valid", true);
+        }
+        if (!StringUtils.isEmpty(vcid)) {
+            params.put("vcid", vcid);
+        }
+        List<Organization> orgList = this.organizationDao.queryOrganizationList(params);
         
         List<TreeNode> resList = new ArrayList<TreeNode>();
         for (Organization orgTemp : orgList) {
@@ -232,6 +264,47 @@ public class OrganizationService {
     }
     
     /**
+     * 根据权限查询组织id集合<br/>
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public List<String> queryOranizationIdListByAuth() {
+        List<Organization> orgList = queryOrganizationListByAuth();
+        List<String> resIdList = new ArrayList<String>();
+        for (Organization orgTemp : orgList) {
+            resIdList.add(orgTemp.getId());
+        }
+        return resIdList;
+    }
+    
+    /**
+     * 查询包含有已经被禁用的组织列表<br/>
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<Organization> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public List<Organization> queryOrganizationListByAuthIncludeInvalid(
+            String virtualCenterId) {
+        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_ORG)) {
+            //如果具有查询所有组织的权限，则查询所有组织角色列表
+            return queryOrganizationListByVcid(null, true);
+        } else {
+            //否则根据当前人员所属虚中心，查询所在虚中心组织列表
+            String vcid = WebContextUtils.getCurrentVcid();
+            AssertUtils.notEmpty(vcid, "currentVcid what in session is empty.");
+            
+            return queryOrganizationListByVcid(vcid, true);
+        }
+    }
+    
+    /**
       * 根据Organization实体列表
       *     根据权限查询组织列表<br/>
       *     默认：查询当前组织及其下级组织的权限<br/>
@@ -244,39 +317,16 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryOrganizationListByAuth() {
-        return queryOrganizationListByAuth(false);
-    }
-    
-    /**
-      * 根据权限查询组织id集合<br/>
-      *<功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return List<String> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public List<String> queryOranizationIdListByAuth() {
-        List<Organization> orgList = queryOrganizationListByAuth();
-        List<String> resIdList = new ArrayList<String>();
-        for (Organization orgTemp : orgList) {
-            resIdList.add(orgTemp.getId());
+        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_ORG)) {
+            //如果具有查询所有组织的权限，则查询所有组织角色列表
+            return queryOrganizationListByVcid(null, false);
+        } else {
+            //否则根据当前人员所属虚中心，查询所在虚中心组织列表
+            String vcid = WebContextUtils.getCurrentVcid();
+            AssertUtils.notEmpty(vcid, "currentVcid what in session is empty.");
+            
+            return queryOrganizationListByVcid(vcid, false);
         }
-        return resIdList;
-    }
-    
-    /**
-      * 查询包含有已经被禁用的组织列表<br/>
-      *<功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return List<Organization> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public List<Organization> queryOrganizationListIncludeInvalid(
-            String virtualCenterId) {
-        return queryOrganizationListByAuth(true);
     }
     
     /**
@@ -297,33 +347,23 @@ public class OrganizationService {
      */
     private List<Organization> queryOrganizationListByVcid(String vcid,
             boolean includeInvalidOrganization) {
-        Organization currentOrgnization = WebContextUtils.getCurrentOrganization();
-        String parentOrganizationId = "";
-        if (currentOrgnization != null) {
-            parentOrganizationId = currentOrgnization.getId();
-        }
         
         List<Organization> resList = null;
-        //如果拥有查询所有组织的权限
-        if (WebContextUtils.hasAuth("query_all_org_post")) {
+        if (!StringUtils.isEmpty(vcid)) {
+            //生成查询条件
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("vcid", vcid);
+            if (!includeInvalidOrganization) {
+                params.put("valid", true);
+            }
+            resList = this.organizationDao.queryOrganizationList(params);
+        } else {
             //生成查询条件
             Map<String, Object> params = new HashMap<String, Object>();
             if (!includeInvalidOrganization) {
                 params.put("valid", true);
             }
-            if (!StringUtils.isEmpty(vcid)) {
-                params.put("vcid", vcid);
-            }
             resList = this.organizationDao.queryOrganizationList(params);
-        } else {
-            if (StringUtils.isEmpty(vcid)) {
-                resList = queryChildOrganizationListByParentId(parentOrganizationId,
-                        includeInvalidOrganization);
-                //将当前组织信息添加到结果集中
-                resList.add(findOrganizationById(currentOrgnization.getId()));
-            } else {
-                
-            }
         }
         
         return resList;
@@ -341,7 +381,12 @@ public class OrganizationService {
      */
     public List<Organization> queryOrganizationListByParentId(
             String parentOrganizationId) {
-        return queryOrganizationListByParentId(parentOrganizationId, false);
+        AssertUtils.notEmpty(parentOrganizationId,
+                "parentOrganizationId is empty.");
+        
+        List<Organization> resList = queryOrganizationListByParentId(parentOrganizationId,
+                false);
+        return resList;
     }
     
     /**
@@ -356,24 +401,16 @@ public class OrganizationService {
      */
     private List<Organization> queryOrganizationListByParentId(
             String parentOrganizationId, boolean includeInvalidOrganization) {
+        AssertUtils.notEmpty(parentOrganizationId,
+                "parentOrganizationId is empty.");
+        
         //生成查询条件
-        List<Organization> resList = null;
-        if (StringUtils.isEmpty(parentOrganizationId)) {
-            //生成查询条件
-            Map<String, Object> params = new HashMap<String, Object>();
-            if (!includeInvalidOrganization) {
-                params.put("valid", true);
-            }
-            resList = this.organizationDao.queryOrganizationList(params);
-        } else {
-            //生成查询条件
-            Map<String, Object> params = new HashMap<String, Object>();
-            if (!includeInvalidOrganization) {
-                params.put("valid", true);
-            }
-            params.put("parentId", parentOrganizationId);
-            resList = this.organizationDao.queryOrganizationList(params);
+        Map<String, Object> params = new HashMap<String, Object>();
+        if (!includeInvalidOrganization) {
+            params.put("valid", true);
         }
+        params.put("parentId", parentOrganizationId);
+        List<Organization> resList = this.organizationDao.queryOrganizationList(params);
         
         return resList;
     }
@@ -408,29 +445,7 @@ public class OrganizationService {
         AssertUtils.notEmpty(parentOrganizationId,
                 "parentOrganizationId is empty");
         
-        return queryChildOrganizationIdListByParentId(null,
-                parentOrganizationId,
-                false);
-    }
-    
-    /**
-     * 查询子组织id列表
-     *<功能详细描述>
-     * @param parentOrganizationId
-     * @return [参数说明]
-     * 
-     * @return List<String> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public List<String> queryChildOrganizationIdListByVcidAndParentId(
-            String vcid, String parentOrganizationId) {
-        AssertUtils.notEmpty(vcid, "vcid is empty");
-        AssertUtils.notEmpty(parentOrganizationId,
-                "parentOrganizationId is empty");
-        
-        return queryChildOrganizationIdListByParentId(vcid,
-                parentOrganizationId,
+        return queryChildOrganizationIdListByParentId(parentOrganizationId,
                 false);
     }
     
@@ -444,13 +459,12 @@ public class OrganizationService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    private List<String> queryChildOrganizationIdListByParentId(String vcid,
+    private List<String> queryChildOrganizationIdListByParentId(
             String parentOrganizationId, boolean includeInvalidOrganization) {
         AssertUtils.notEmpty(parentOrganizationId,
                 "parentOrganizationId is empty");
         
-        List<Organization> orgList = queryChildOrganizationListByParentId(vcid,
-                parentOrganizationId,
+        List<Organization> orgList = queryChildOrganizationListByParentId(parentOrganizationId,
                 includeInvalidOrganization);
         List<String> resList = new ArrayList<String>();
         if (CollectionUtils.isEmpty(orgList)) {
@@ -474,8 +488,7 @@ public class OrganizationService {
      * @see [类、类#方法、类#成员]
     */
     private List<Organization> queryChildOrganizationListByParentId(
-            String vcid, String parentOrganizationId,
-            boolean includeInvalidOrganization) {
+            String parentOrganizationId, boolean includeInvalidOrganization) {
         AssertUtils.notEmpty(parentOrganizationId,
                 "parentOrganizationId is empty");
         
@@ -485,9 +498,6 @@ public class OrganizationService {
         //濡傛灉涓嶅寘鎷棤鏁堢粍缁�
         if (!includeInvalidOrganization) {
             params.put("valid", true);
-        }
-        if (!StringUtils.isEmpty(vcid)) {
-            params.put("vcid", vcid);
         }
         
         List<Organization> resList = new ArrayList<Organization>();
@@ -500,8 +510,7 @@ public class OrganizationService {
                 if (childTemp == null) {
                     continue;
                 }
-                resList.addAll(queryChildOrganizationListByParentId(vcid,
-                        childTemp.getId(),
+                resList.addAll(queryChildOrganizationListByParentId(childTemp.getId(),
                         includeInvalidOrganization));
             }
         }

@@ -103,6 +103,57 @@ public class MainframeController {
         }
         
         model.addAttribute(WebContextUtils.SESSION_CURRENT_OPERATOR, oper);
+        
+        //调用权限容器登录句柄
+        authContextLoginHandler(oper);
+        
+        //web容器登录句柄，负责向容器中写入需要的会话信息
+        webContextLoginHandler(oper);
+        
+        //这个时候记录日志中信息没有写进需要手动写入
+        ServiceLogger<LoginLog> serviceLogger =  ServiceLoggerContext.getLogger(LoginLog.class);
+        serviceLogger.setAttribute("operatorId", oper.getId());
+        serviceLogger.setAttribute("operatorName", oper.getUserName());
+        serviceLogger.setAttribute("operatorLoginName", oper.getLoginName());
+        serviceLogger.log(new LoginLog(
+                "webdemo", LoginLog.LOGINTYPE_LOGIN, "操作员{}登录系统",
+                new Object[] { loginName }));
+        
+        return "/mainframe/mainframe";
+    }
+
+    
+     /** 
+      *<功能简述>
+      *<功能详细描述>
+      * @param oper [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+      */
+    private void webContextLoginHandler(Operator oper) {
+        //将当前登录人员写入会话中
+        WebContextUtils.putOperatorInSession(oper);
+        
+        //将当前组织写入会话中
+        Organization currentOrg = this.organizationService.findOrganizationById(oper.getOrganization().getId());
+        WebContextUtils.putOganizationInSession(currentOrg);
+        
+        
+    }
+
+    
+     /** 
+      * 权限容器登录句柄
+      *<功能详细描述>
+      * @param oper [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+      */
+    private void authContextLoginHandler(Operator oper) {
         //初始化用户权限到当前会话中
         //authSessionContext.initCurrentUserAuthContextWhenLogin("123456");//初始化用户权限到当前会话中 
         Map<String, String> refType2RefIdMapping = new HashMap<String, String>();
@@ -112,31 +163,8 @@ public class MainframeController {
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_POST, postId);
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_ORGANIZATION, loginOrganization.getId());
         authContext.login(refType2RefIdMapping);
-        
         //修改权限项记录日志会用到对应值
         AuthSessionContext.putOperatorIdToSession(oper.getId());
-        //写入会话中信息
-        WebContextUtils.putOperatorInSession(oper);
-        //
-        if(oper.getOrganization() != null){
-            Organization currentOrg = this.organizationService.findOrganizationById(oper.getOrganization().getId());
-            WebContextUtils.putOganizationInSession(currentOrg);
-        }
-        //WebContextUtils.putMainPostInSession(post);
-        //WebContextUtils.putPostListInSession(postList);
-        //System.out.println("123");
-        //这个时候记录日志中信息没有写进需要手动写入
-        ServiceLogger<LoginLog> serviceLogger =  ServiceLoggerContext.getLogger(LoginLog.class);
-        
-        serviceLogger.setAttribute("operatorId", oper.getId());
-        serviceLogger.setAttribute("operatorName", oper.getUserName());
-        serviceLogger.setAttribute("operatorLoginName", oper.getLoginName());
-        
-        serviceLogger.log(new LoginLog(
-                "webdemo", LoginLog.LOGINTYPE_LOGIN, "操作员{}登录系统",
-                new Object[] { loginName }));
-        
-        return "/mainframe/mainframe";
     }
     
     /**

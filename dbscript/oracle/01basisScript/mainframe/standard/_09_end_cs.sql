@@ -1,1 +1,1 @@
-prompt "webdemo模块:创建sequence end..."  
+prompt "webdemo模块:创建sequence end...";

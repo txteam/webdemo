@@ -32,8 +32,6 @@ import com.tx.core.exceptions.util.AssertUtils;
  */
 public class WebContextUtils {
     
-    public static final String SESSION_ISSUPERADMIN_FLAG = "isSuperAdmin";
-    
     /** 当前登录人员在session中的key */
     public static final String SESSION_CURRENT_OPERATOR = "operator";
     
@@ -46,37 +44,8 @@ public class WebContextUtils {
     /** 获取当前登录人员的职位 */
     public static final String SESSION_CURRENT_POST = "post";
     
-    /**
-      * 将是否超级管理员的标志压栈到会话中，该功能为包内可见<br/>
-      *<功能详细描述>
-      * @param isSuperAdmin [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    static void putIsSuperAdminFlagInSession(boolean isSuperAdmin) {
-        HttpSession session = getSession(true);
-        
-        session.setAttribute(SESSION_ISSUPERADMIN_FLAG, isSuperAdmin);
-    }
-    
-    /**
-      * 是否为超级管理员
-      *<功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    static boolean isSuperAdmin() {
-        HttpSession session = getSession(true);
-        Boolean isSuperAdminFlag = (Boolean) session.getAttribute(SESSION_ISSUPERADMIN_FLAG);
-        
-        boolean isSuperAdmin = (isSuperAdminFlag != null && isSuperAdminFlag.booleanValue());
-        return isSuperAdmin;
-    }
+    /** 获取当前虚中心 */
+    public static final String SESSION_CURRENT_VCID = "vcid";
     
     /**
       * 当前登录人员是否是所属组织主管 
@@ -92,15 +61,9 @@ public class WebContextUtils {
         Operator currentOperator = getCurrentOperator();
         Organization currentOrganization = getCurrentOrganization();
         
-        if (isSuperAdmin()) {
-            return true;
-        } else {
-            currentOrganization.getChiefType();
-            currentOrganization.getChiefId();
-            
-            //TODO:
-            return true;
-        }
+        //TODO:XXX
+        
+        return true;
     }
     
     /**
@@ -132,6 +95,22 @@ public class WebContextUtils {
     public static boolean isHasAuth(String authKey, Object... params) {
         boolean res = AuthContext.isHasAuth(authKey, params);
         return res;
+    }
+    
+    /**
+      *<功能简述>
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public static String getCurrentVcid() {
+        HttpSession session = getSession(true);
+        
+        String vcid = (String) session.getAttribute(SESSION_CURRENT_VCID);
+        return vcid;
     }
     
     /**
@@ -167,8 +146,8 @@ public class WebContextUtils {
     }
     
     /**
-     * 放入会话中的组织现允许为空<br/>
-     *     超级管理员对应的组织和职位都是空的<br/>
+     * 将当前人员的主要职位放入会话中<br/>
+     *     可能为空<br/>
      *<功能详细描述>
      * @param organization [参数说明]
      * 
@@ -183,8 +162,8 @@ public class WebContextUtils {
     }
     
     /**
-     * 放入会话中的组织现允许为空<br/>
-     *     超级管理员对应的组织和职位都是空的<br/>
+     * 放入会话中的职位列表允许为空<br/>
+     *  
      *<功能详细描述>
      * @param organization [参数说明]
      * 
@@ -199,8 +178,7 @@ public class WebContextUtils {
     }
     
     /**
-      * 放入会话中的组织现允许为空<br/>
-      *     超级管理员对应的组织和职位都是空的<br/>
+      * 放入会话中的组织现不允许为空<br/>
       *<功能详细描述>
       * @param organization [参数说明]
       * 
@@ -209,12 +187,11 @@ public class WebContextUtils {
       * @see [类、类#方法、类#成员]
      */
     public static void putOganizationInSession(Organization organization) {
-        HttpSession session = getSession(true);
-        if (!isSuperAdmin()) {
-            AssertUtils.notNull(organization, "organization is null");
-        }
+        AssertUtils.notNull(organization, "organization is null");
         
+        HttpSession session = getSession(true);
         session.setAttribute(SESSION_CURRENT_ORGANIZATION, organization);
+        session.setAttribute(SESSION_CURRENT_VCID, organization.getVcid());
     }
     
     /**
@@ -228,8 +205,8 @@ public class WebContextUtils {
      */
     public static void putOperatorInSession(Operator operator) {
         AssertUtils.notNull(operator, "operator is null");
-        HttpSession session = getSession(true);
         
+        HttpSession session = getSession(true);
         session.setAttribute(SESSION_CURRENT_OPERATOR, operator);
     }
     

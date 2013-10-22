@@ -94,7 +94,7 @@ public class OrganizationController {
     @ResponseBody
     public List<Organization> queryOrganizationListIncludeInvalid(
             @RequestParam(value = "virtualCenterId", required = false) String virtualCenterId) {
-        List<Organization> orgList = this.organizationService.queryOrganizationListIncludeInvalid(virtualCenterId);
+        List<Organization> orgList = this.organizationService.queryOrganizationListByAuthIncludeInvalid(virtualCenterId);
         
         return orgList;
     }
