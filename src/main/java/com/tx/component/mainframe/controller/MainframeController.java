@@ -157,9 +157,9 @@ public class MainframeController {
         //初始化用户权限到当前会话中
         //authSessionContext.initCurrentUserAuthContextWhenLogin("123456");//初始化用户权限到当前会话中 
         Map<String, String> refType2RefIdMapping = new HashMap<String, String>();
-        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR, "123456");
+        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR, oper.getId());
         refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR_TEMPORARY,
-                "123456");
+                oper.getId());
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_POST, postId);
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_ORGANIZATION, loginOrganization.getId());
         authContext.login(refType2RefIdMapping);
