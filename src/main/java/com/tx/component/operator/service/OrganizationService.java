@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.component.mainframe.context.WebContextUtils;
 import com.tx.component.mainframe.servicelog.SystemOperateLog;
 import com.tx.component.mainframe.treeview.TreeNode;
 import com.tx.component.mainframe.treeview.TreeNodeAdapter;
@@ -54,28 +53,6 @@ public class OrganizationService {
     
     @Resource(name = "postService")
     private PostService postService;
-    
-    /**
-     * 根据当前人员是否具有查询所有组织的权限查询组织职位列表
-     *      如果有：查询所有组织
-     *      如果没有：查询所在vcid中的组织列表
-     *<功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<TreeNode> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public List<TreeNode> queryOrganizationPostTreeNodeListByAuth() {
-        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_VC)) {
-            //如果具有查询所有组织的权限，则查询所有组织角色列表
-            return queryAllOrganizationPostTreeNodeList();
-        } else {
-            //否则根据当前人员所属虚中心，查询所在虚中心组织列表
-            String vcid = WebContextUtils.getCurrentVcid();
-            return queryOrganizationPostTreeNodeListByVcid(vcid);
-        }
-    }
     
     /**
       * 根据虚中心id查询组织职位数据列表<br/>
@@ -261,79 +238,6 @@ public class OrganizationService {
         
         int count = this.organizationDao.countOrganization(countCondition);
         return count > 0;
-    }
-    
-    /**
-     * 根据权限查询组织id集合<br/>
-     *<功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<String> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public List<String> queryOranizationIdListByAuth() {
-        List<Organization> orgList = queryOrganizationListByAuth();
-        List<String> resIdList = new ArrayList<String>();
-        for (Organization orgTemp : orgList) {
-            resIdList.add(orgTemp.getId());
-        }
-        return resIdList;
-    }
-    
-    /**
-     * 查询包含有已经被禁用的组织列表<br/>
-     *<功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<Organization> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public List<Organization> queryOrganizationListByAuthIncludeInvalid(
-            String virtualCenterId) {
-        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_VC)
-                || StringUtils.isEmpty(virtualCenterId)) {
-            //如果具有查询所有组织的权限，则查询所有组织角色列表
-            return queryOrganizationListByVcid(null, true);
-        } else {
-            if (StringUtils.isEmpty(virtualCenterId)) {
-                //否则根据当前人员所属虚中心，查询所在虚中心组织列表
-                String vcid = WebContextUtils.getCurrentVcid();
-                AssertUtils.notEmpty(vcid,
-                        "currentVcid what in session is empty.");
-                
-                return queryOrganizationListByVcid(vcid, true);
-            } else {
-                return queryOrganizationListByVcid(virtualCenterId, true);
-            }
-            
-        }
-    }
-    
-    /**
-      * 根据Organization实体列表
-      *     根据权限查询组织列表<br/>
-      *     默认：查询当前组织及其下级组织的权限<br/>
-      *     如果有查询所有组织的权限，则能查询所有组织的的数据<br/>
-      *<功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return List<Organization> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public List<Organization> queryOrganizationListByAuth() {
-        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_VC)) {
-            //如果具有查询所有组织的权限，则查询所有组织角色列表
-            return queryOrganizationListByVcid(null, false);
-        } else {
-            //否则根据当前人员所属虚中心，查询所在虚中心组织列表
-            String vcid = WebContextUtils.getCurrentVcid();
-            AssertUtils.notEmpty(vcid, "currentVcid what in session is empty.");
-            
-            return queryOrganizationListByVcid(vcid, false);
-        }
     }
     
     /**

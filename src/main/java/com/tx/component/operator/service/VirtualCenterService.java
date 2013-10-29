@@ -8,18 +8,19 @@ package com.tx.component.operator.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.component.mainframe.context.WebContextUtils;
-import com.tx.component.operator.OperatorConstants;
 import com.tx.component.operator.dao.OrganizationDao;
 import com.tx.component.operator.dao.VirtualCenterDao;
 import com.tx.component.operator.model.VirtualCenter;
@@ -82,7 +83,9 @@ public class VirtualCenterService {
     public boolean deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
         //再次验证虚中心允许被删除
-        AssertUtils.isTrue(isDeleteAble(id),"virtualCenter is not deleteAble.id:{}",id);
+        AssertUtils.isTrue(isDeleteAble(id),
+                "virtualCenter is not deleteAble.id:{}",
+                id);
         
         VirtualCenter condition = new VirtualCenter();
         condition.setId(id);
@@ -105,8 +108,8 @@ public class VirtualCenterService {
         
         //检查对应用户名是否已经存在
         Map<String, Object> countParams = new HashMap<String, Object>();
-        countParams.put("name",name);
-        countParams.put("excludeVirtualCenterId",excludeVirtualCenterId);
+        countParams.put("name", name);
+        countParams.put("excludeVirtualCenterId", excludeVirtualCenterId);
         int resCount = this.virtualCenterDao.countVirtualCenter(countParams);
         boolean resFlag = resCount > 0;
         
@@ -124,13 +127,13 @@ public class VirtualCenterService {
       * @see [类、类#方法、类#成员]
      */
     public boolean isDeleteAble(String virtualCenterId) {
-        AssertUtils.notEmpty(virtualCenterId,"virtualCenterId is empty.");
+        AssertUtils.notEmpty(virtualCenterId, "virtualCenterId is empty.");
         
         //如果存在下级虚中心，则虚中心不能删除
         Map<String, Object> countParams = new HashMap<String, Object>();
-        countParams.put("parentId",virtualCenterId);
+        countParams.put("parentId", virtualCenterId);
         int resCount = this.virtualCenterDao.countVirtualCenter(countParams);
-        if(resCount > 0){
+        if (resCount > 0) {
             return false;
         }
         
@@ -138,7 +141,7 @@ public class VirtualCenterService {
         Map<String, Object> queryOrgParams = new HashMap<String, Object>();
         queryOrgParams.put("vcid", virtualCenterId);
         int orgCount = this.organizationDao.countOrganization(queryOrgParams);
-        if(orgCount > 0){
+        if (orgCount > 0) {
             return false;
         }
         
@@ -165,30 +168,80 @@ public class VirtualCenterService {
     }
     
     /**
-     * 根据权限查询虚中心<br/>
-     *     如果没有查询所有虚中心的权限，仅返回当前虚中心，否则返回所有的虚中心<br/>
-     * 补充说明
-     * 
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<VirtualCenter> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-   public List<VirtualCenter> queryVirtualCenterByAuth() {
-       List<VirtualCenter> resList = null;
-       if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_VC)) {
-           resList = this.virtualCenterDao.queryVirtualCenterList(null);
-       }else{
-           resList = new ArrayList<VirtualCenter>();
-           
-           String vcid = WebContextUtils.getCurrentVcid();
-           resList.add(findVirtualCenterById(vcid));
-       }
-       
-       return resList;
-   }
+      * 根据parentId查询虚中心列表<br/>
+      *<功能详细描述>
+      * @param parentId
+      * @return [参数说明]
+      * 
+      * @return List<VirtualCenter> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<VirtualCenter> queryVirtualCenterListByParentId(String parentId) {
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
+        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("parentId", parentId);
+        List<VirtualCenter> resList = this.virtualCenterDao.queryVirtualCenterList(params);
+        
+        return resList;
+    }
+    
+    /**
+      * 查询子级虚中心列表<br/>
+      *<功能详细描述>
+      * @param parentId
+      * @return [参数说明]
+      * 
+      * @return List<VirtualCenter> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<VirtualCenter> queryChildVirtualCenterList(String vcid) {
+        AssertUtils.notEmpty(vcid, "vcid is empty.");
+        
+        Set<VirtualCenter> resSet = new HashSet<VirtualCenter>();
+        //如果不存在子集列表则返回仅包含当前虚中心的列表
+        List<VirtualCenter> resList = new ArrayList<VirtualCenter>();
+        resList.add(findVirtualCenterById(vcid));
+        
+        List<VirtualCenter> tempList = queryVirtualCenterListByParentId(vcid);
+        //如果不存在子集列表则返回仅包含当前虚中心的列表
+        if (CollectionUtils.isEmpty(tempList)) {
+            return resList;
+        }
+        
+        //迭代查询子集虚中心
+        queryChildVirtualCenterSet(new HashSet<VirtualCenter>(tempList), resSet);
+        
+        resList.addAll(resSet);
+        return resList;
+    }
+    
+    /**
+      * 迭代查询子集虚中心<br/>
+      *<功能详细描述>
+      * @param parentSet
+      * @param resSet [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private void queryChildVirtualCenterSet(Set<VirtualCenter> parentSet,
+            Set<VirtualCenter> resSet) {
+        if (!CollectionUtils.isEmpty(parentSet)) {
+            Set<VirtualCenter> iteSet = new HashSet<VirtualCenter>();
+            for (VirtualCenter vcTemp : parentSet) {
+                if (!resSet.contains(vcTemp)) {
+                    resSet.add(vcTemp);
+                    iteSet.add(vcTemp);
+                }
+            }
+            //迭代查询
+            queryChildVirtualCenterSet(iteSet, resSet);
+        }
+    }
     
     /**
       * 根据VirtualCenter实体列表
