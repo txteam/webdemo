@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.auth.annotation.CheckOperateAuth;
+import com.tx.component.auth.context.AuthContext;
+import com.tx.component.mainframe.context.WebContextUtils;
+import com.tx.component.operator.OperatorConstants;
 import com.tx.component.operator.model.VirtualCenter;
 import com.tx.component.operator.service.VirtualCenterService;
 
@@ -118,6 +121,30 @@ public class VirtualCenterController {
     }
     
     /**
+     * 查询所有虚中心的树列表<br/>
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<VirtualCenter> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/queryVirtualCenterListByAuth")
+    @ResponseBody
+    public List<VirtualCenter> queryVirtualCenterListByAuth() {
+        List<VirtualCenter> virtualCenterList = null;
+        if (AuthContext.getContext()
+                .hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_VC)) {
+            virtualCenterList = this.virtualCenterService.listVirtualCenter();
+        } else {
+            String vcid = WebContextUtils.getCurrentVcid();
+            virtualCenterList = this.virtualCenterService.queryChildVirtualCenterList(vcid);
+        }
+        
+        return virtualCenterList;
+    }
+    
+    /**
       * 查询所有虚中心的树列表<br/>
       *<功能详细描述>
       * @return [参数说明]
@@ -126,11 +153,12 @@ public class VirtualCenterController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/queryVirtualCenterList")
-    @CheckOperateAuth(key = "query_VirtualCenter", name = "查询虚中心")
+    @RequestMapping("/queryAllVirtualCenterList")
+    @CheckOperateAuth(key = "query_All_VirtualCenter", name = "查询虚中心")
     @ResponseBody
-    public List<VirtualCenter> queryVirtualCenterList() {
-        List<VirtualCenter> virtualCenterList = this.virtualCenterService.listVirtualCenter();
+    public List<VirtualCenter> queryAllVirtualCenterList() {
+        List<VirtualCenter> virtualCenterList = null;
+        virtualCenterList = this.virtualCenterService.listVirtualCenter();
         
         return virtualCenterList;
     }
