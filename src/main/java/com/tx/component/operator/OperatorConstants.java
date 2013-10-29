@@ -37,5 +37,5 @@ public interface OperatorConstants {
     public static final int OPERATOR_LOCKED_FALSE = 0;
     
     /** 权限项：查询所有组织 */
-    public static final String AUTHKEY_QUERY_ALL_ORG = "query_all_org";
+    public static final String AUTHKEY_QUERY_ALL_VC = "query_all_vc";
 }

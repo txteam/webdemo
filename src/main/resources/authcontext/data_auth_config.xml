@@ -17,7 +17,7 @@
 		<!-- 组织职位数据相关权限 -->
 		<auth key="organization_post" name="组织职位权限">
 			<!-- 组织职位权限默认为能够查询当前组织及其下级组织的权限 -->
-			<auth key="query_all_org" name="查询所有组织"
+			<auth key="query_all_vc" name="查询所有虚中心"
 				configAble="false"
 				description="具有该权限能够查询所有的组织，否则仅能查询所属虚中心组织">
 			</auth>

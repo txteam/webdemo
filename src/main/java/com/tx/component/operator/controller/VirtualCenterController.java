@@ -130,7 +130,7 @@ public class VirtualCenterController {
     @CheckOperateAuth(key = "query_VirtualCenter", name = "查询虚中心")
     @ResponseBody
     public List<VirtualCenter> queryVirtualCenterList() {
-        List<VirtualCenter> virtualCenterList = this.virtualCenterService.listVirtualCenter();
+        List<VirtualCenter> virtualCenterList = this.virtualCenterService.queryVirtualCenterByAuth();
         
         return virtualCenterList;
     }

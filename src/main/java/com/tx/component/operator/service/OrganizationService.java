@@ -67,7 +67,7 @@ public class OrganizationService {
      * @see [类、类#方法、类#成员]
     */
     public List<TreeNode> queryOrganizationPostTreeNodeListByAuth() {
-        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_ORG)) {
+        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_VC)) {
             //如果具有查询所有组织的权限，则查询所有组织角色列表
             return queryAllOrganizationPostTreeNodeList();
         } else {
@@ -292,15 +292,22 @@ public class OrganizationService {
     */
     public List<Organization> queryOrganizationListByAuthIncludeInvalid(
             String virtualCenterId) {
-        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_ORG)) {
+        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_VC)
+                || StringUtils.isEmpty(virtualCenterId)) {
             //如果具有查询所有组织的权限，则查询所有组织角色列表
             return queryOrganizationListByVcid(null, true);
         } else {
-            //否则根据当前人员所属虚中心，查询所在虚中心组织列表
-            String vcid = WebContextUtils.getCurrentVcid();
-            AssertUtils.notEmpty(vcid, "currentVcid what in session is empty.");
+            if (StringUtils.isEmpty(virtualCenterId)) {
+                //否则根据当前人员所属虚中心，查询所在虚中心组织列表
+                String vcid = WebContextUtils.getCurrentVcid();
+                AssertUtils.notEmpty(vcid,
+                        "currentVcid what in session is empty.");
+                
+                return queryOrganizationListByVcid(vcid, true);
+            } else {
+                return queryOrganizationListByVcid(virtualCenterId, true);
+            }
             
-            return queryOrganizationListByVcid(vcid, true);
         }
     }
     
@@ -317,7 +324,7 @@ public class OrganizationService {
       * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryOrganizationListByAuth() {
-        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_ORG)) {
+        if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_VC)) {
             //如果具有查询所有组织的权限，则查询所有组织角色列表
             return queryOrganizationListByVcid(null, false);
         } else {

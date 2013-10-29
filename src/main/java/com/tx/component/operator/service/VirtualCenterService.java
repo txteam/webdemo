@@ -6,6 +6,7 @@
  */
 package com.tx.component.operator.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tx.component.mainframe.context.WebContextUtils;
+import com.tx.component.operator.OperatorConstants;
 import com.tx.component.operator.dao.OrganizationDao;
 import com.tx.component.operator.dao.VirtualCenterDao;
 import com.tx.component.operator.model.VirtualCenter;
@@ -160,6 +163,32 @@ public class VirtualCenterService {
         condition.setId(id);
         return this.virtualCenterDao.findVirtualCenter(condition);
     }
+    
+    /**
+     * 根据权限查询虚中心<br/>
+     *     如果没有查询所有虚中心的权限，仅返回当前虚中心，否则返回所有的虚中心<br/>
+     * 补充说明
+     * 
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<VirtualCenter> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+   public List<VirtualCenter> queryVirtualCenterByAuth() {
+       List<VirtualCenter> resList = null;
+       if (WebContextUtils.hasAuth(OperatorConstants.AUTHKEY_QUERY_ALL_VC)) {
+           resList = this.virtualCenterDao.queryVirtualCenterList(null);
+       }else{
+           resList = new ArrayList<VirtualCenter>();
+           
+           String vcid = WebContextUtils.getCurrentVcid();
+           resList.add(findVirtualCenterById(vcid));
+       }
+       
+       return resList;
+   }
     
     /**
       * 根据VirtualCenter实体列表
