@@ -19,9 +19,9 @@ $(document).ready(function(){
 		title : "请选择上级虚中心",  
 		width : 260,
 		height : 400,
-		handler : function(organization){
-			$("#parentName").val(organization.name);
-			$("#parentId").val(organization.id);
+		handler : function(vc){
+			$("#parentName").val(vc.name);
+			$("#parentId").val(vc.id);
 		},
 	    clearHandler: function(){
 	    	$("#parentName").val("");

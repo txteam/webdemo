@@ -102,9 +102,9 @@ public class OperatorController {
         String postId = requestMap.get("postId");
         
         //String organizationId = requestMap.get("");
-        PagedList<Operator> resPagedList = this.operatorService.queryOperatorPagedList(pageIndex,
-                pageSize);
-        return resPagedList;
+//        PagedList<Operator> resPagedList = this.operatorService.queryOperatorPagedList(pageIndex,
+//                pageSize);
+        return null;
     }
     
 }

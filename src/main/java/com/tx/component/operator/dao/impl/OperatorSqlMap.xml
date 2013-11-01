@@ -253,48 +253,6 @@
 	        </if>
 		</trim>
 	</delete>
-	
-	<!-- 新增人员引用项 -->
-	<insert id="insertOperatorRef" 
-		parameterType="com.tx.component.operator.model.OperatorRef">
-		INSERT INTO OPER_OPERATOR_REF
-		(
-			OPERATORID,
-			REFID,
-			REFTYPE
-		)VALUES(
-			#{operatorId},
-			#{refId},
-			#{refType}
-		)
-	</insert>
-	
-	<!-- 将人员引用项插入历史表 -->
-	<insert id="insertOperatorRefToHis" 
-		parameterType="com.tx.component.operator.model.OperatorRef">
-		INSERT INTO OPER_OPERATOR_REF_HIS
-		(
-			OPERATORID,
-			REFID,
-			REFTYPE
-		)VALUES(
-			#{operatorId},
-			#{refId},
-			#{refType}
-		)
-	</insert>
-	
-	<!-- 删除人员引用项 -->
-	<delete id="deleteOperatorRef"
-		parameterType="com.tx.component.operator.model.OperatorRef">
-		DELETE FROM OPER_OPERATOR_REF TOR_ WHERE TOR_.REFTYPE = #{refType}
-		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
-            AND TOR_.OPERATORID = #{operatorId}
-        </if>
-        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
-            AND TOR_.REFID = #{refId}
-        </if>
-	</delete>
 
 	<!-- auto generate default update -->
 	<update id="updateOperator"

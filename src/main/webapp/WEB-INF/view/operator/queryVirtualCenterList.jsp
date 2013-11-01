@@ -12,7 +12,7 @@
 var treeGrid = null;
 $(document).ready(function() {
 	treeGrid = $('#treeGrid').treegrid({
-		url : '${contextPath}/virtualCenter/queryVirtualCenterList.action',
+		url : '${contextPath}/virtualCenter/queryVirtualCenterListByAuth.action',
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',

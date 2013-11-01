@@ -12,7 +12,7 @@
 var tree = null;
 $(document).ready(function() {
 	tree = $('#organizationTree').tree({
-		url : '${contextPath}/virtualCenter/queryVirtualCenterList.action',
+		url : '${contextPath}/virtualCenter/queryVirtualCenterListByAuth.action',
 		idField : 'id',
 		parentField : 'parentId',
 		iconField : function(){

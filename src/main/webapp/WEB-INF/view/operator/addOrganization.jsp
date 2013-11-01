@@ -13,6 +13,29 @@
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
+	//虚中心与组织存在联动关系，如果选中需中心，则组织仅能在选中的虚中心中选取
+	//所以在组织与虚中心任一发生变动时应当影响到对方
+	$("#virtualCenterName").chooseVirtualCenter({
+		eventName : "chooseVirtualCenterForAddVirtualCenter",
+		contextPath : _contextPath,
+		title : "请选择上级虚中心",  
+		width : 260,
+		height : 400,
+		handler : function(vc){
+			$("#virtualCenterName").val(vc.name);
+			$("#vcid").val(vc.id);
+			
+			$("#parentName").val("");
+			$("#parentId").val("");
+		},
+	    clearHandler: function(){
+	    	$("#virtualCenterName").val("");
+			$("#vcid").val("");
+			
+			$("#parentName").val("");
+			$("#parentId").val("");
+	    }
+	});
 	$("#parentName").chooseOrganization({
 		eventName : "chooseOrganizationForAddOrganization",
 		contextPath : _contextPath,
@@ -22,12 +45,24 @@ $(document).ready(function(){
 		handler : function(organization){
 			$("#parentName").val(organization.name);
 			$("#parentId").val(organization.id);
+			
+			$("#virtualCenterName").val("");
+			$("#vcid").val("");
+			//根据选中的虚组织，查询其虚中心信息填入虚中心中
+			$.get("${contextPath}/virtualCenter/findVirtualcenterById.action",{vcid: organization.vcid}, function(data){
+				$("#virtualCenterName").val(data.name);
+				$("#vcid").val(data.vcid);
+			});
 		},
 	    clearHandler: function(){
 	    	$("#parentName").val("");
 			$("#parentId").val("");
+			
+			$("#virtualCenterName").val("");
+			$("#vcid").val("");
 	    }
 	});
+
 	//验证器
 	$('#organizationForm').validator({
 	    valid: function(){
@@ -78,13 +113,6 @@ $(document).ready(function(){
 							data-rule="编号:required;digits;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code]" 
 							data-tip="不能重复的数字"/>
 					</td>
-					<th>所在地区</th>
-					<td>
-						<input id="districtId" name="districtId" type="hidden" readonly="readonly"/>
-						<input id="districtName" name="districtName" class="selectInput" readonly="readonly"/>
-					</td>
-				</tr>
-				<tr>
 					<th class="narrow">组织类型:<span class="tRed">*</span></th>
 					<td>
 						<form:select path="type" cssClass="select" data-rule="组织类型:required;" >
@@ -93,6 +121,14 @@ $(document).ready(function(){
 						</form:select>
 					</td>
 
+				</tr>
+				<tr>
+					<th>所属虚中心<span class="tRed">*</span></th>
+					<td>
+						<input id="vcid" name="vcid" type="hidden" readonly="readonly"/>
+						<input id="virtualCenterName" name="virtualCenterName" class="selectInput" readonly="readonly"
+							data-rule="所属虚中心:required;" />
+					</td>
 					<th>上级组织</th>
 					<td>
 						<input id="parentId" name="parentId" type="hidden" readonly="readonly" value="${parentOrganization.id }"/>

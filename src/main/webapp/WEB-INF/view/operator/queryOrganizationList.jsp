@@ -13,7 +13,7 @@ var virtualCenterTree = null;
 var treeGrid = null;
 $(document).ready(function() {
 	virtualCenterTree = $('#virtualCenterTree').tree({
-		url : '${contextPath}/virtualCenter/queryVirtualCenterList.action',
+		url : '${contextPath}/virtualCenter/queryVirtualCenterListByAuth.action',
 		idField : 'id',
 		parentField : 'parentId',
 		iconField : function(){

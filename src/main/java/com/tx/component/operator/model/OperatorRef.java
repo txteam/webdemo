@@ -9,6 +9,7 @@ package com.tx.component.operator.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -25,6 +26,7 @@ import javax.persistence.Table;
 public class OperatorRef {
     
     /** 操作员id */
+    @Id
     private String operatorId;
     
     /** 引用id */

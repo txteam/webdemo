@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.tx.component.operator.basicdata.ChiefTypeEnum;
-import com.tx.component.operator.basicdata.OrganizationTypeEnum;
 import com.tx.core.tree.model.TreeAble;
 import com.tx.core.util.ObjectUtils;
 

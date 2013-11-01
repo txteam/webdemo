@@ -70,16 +70,17 @@ public class OperatorService {
             return false;
         }
         
+        //校验密码是否正确
         Operator condition = new Operator();
         condition.setLoginName(loginName);
         condition.setPassword(password);
-        
         Operator oper = this.operatorDao.findOperator(condition);
         if (oper != null) {
+            //如果密码正确
             //更新密码错误次数为0
             Map<String, Object> updateRowMap = new HashMap<String, Object>();
             updateRowMap.put("id", res.getId());
-            updateRowMap.put("pwdErrCount", 0);
+            updateRowMap.put("pwdErrCount", 0);//密码错误次数重置为0
             this.operatorDao.updateOperator(updateRowMap);
             return true;
         } else {
@@ -88,7 +89,8 @@ public class OperatorService {
             updateRowMap.put("id", res.getId());
             updateRowMap.put("pwdErrCount", errorCount);
             if (errorCount > checkPasswordMaxErrorCount) {
-                updateRowMap.put("locked", OperatorConstants.OPERATOR_LOCKED_TRUE);
+                updateRowMap.put("locked",
+                        OperatorConstants.OPERATOR_LOCKED_TRUE);
             }
             this.operatorDao.updateOperator(updateRowMap);
             return false;
@@ -218,28 +220,24 @@ public class OperatorService {
         return this.operatorDao.findOperator(condition);
     }
     
-    /**
-      * 根据Operator实体列表
-      * TODO:补充说明
-      * 
-      * <功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return List<Operator> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public List<Operator> queryOperatorList(/*TODO:自己定义条件*/) {
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<Operator> resList = this.operatorDao.queryOperatorList(params);
-        
-        return resList;
-    }
+    //    /**
+    //      * 根据Operator实体列表
+    //      * 
+    //      * <功能详细描述>
+    //      * @return [参数说明]
+    //      * 
+    //      * @return List<Operator> [返回类型说明]
+    //      * @exception throws [异常类型] [异常说明]
+    //      * @see [类、类#方法、类#成员]
+    //     */
+    //    public List<Operator> queryOperatorList() {
+    //        Map<String, Object> params = new HashMap<String, Object>();
+    //        
+    //        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+    //        List<Operator> resList = this.operatorDao.queryOperatorList(params);
+    //        
+    //        return resList;
+    //    }
     
     /**
      * 分页查询Operator实体列表
@@ -252,8 +250,8 @@ public class OperatorService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public PagedList<Operator> queryOperatorPagedList(
-    /*TODO:自己定义条件*/int pageIndex, int pageSize) {
+    public PagedList<Operator> queryOperatorPagedListByOrganizationId(
+            String organizationId, int pageIndex, int pageSize) {
         //TODO:判断条件合法性
         
         //TODO:生成查询条件
@@ -265,28 +263,6 @@ public class OperatorService {
                 pageSize);
         
         return resPagedList;
-    }
-    
-    /**
-      * 查询operator列表总条数
-      * TODO:补充说明
-      * <功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return int [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public int countOperator(/*TODO:自己定义条件*/) {
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.operatorDao.countOperator(params);
-        
-        return res;
     }
     
     /**

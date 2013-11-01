@@ -188,6 +188,38 @@ public class VirtualCenterService {
     }
     
     /**
+      * 查询当前虚中心及其子集虚中心集合<br/>
+      *<功能详细描述>
+      * @param vcid
+      * @return [参数说明]
+      * 
+      * @return List<VirtualCenter> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<VirtualCenter> queryCurrentAndChildsVirtualCenterList(
+            String vcid) {
+        AssertUtils.notEmpty(vcid, "vcid is empty.");
+        
+        Set<VirtualCenter> resSet = new HashSet<VirtualCenter>();
+        //如果不存在子集列表则返回仅包含当前虚中心的列表
+        List<VirtualCenter> resList = new ArrayList<VirtualCenter>();
+        resList.add(findVirtualCenterById(vcid));
+        
+        List<VirtualCenter> tempList = queryVirtualCenterListByParentId(vcid);
+        //如果不存在子集列表则返回仅包含当前虚中心的列表
+        if (CollectionUtils.isEmpty(tempList)) {
+            return resList;
+        }
+        
+        //迭代查询子集虚中心
+        queryChildVirtualCenterSet(new HashSet<VirtualCenter>(tempList), resSet);
+        
+        resList.addAll(resSet);
+        return resList;
+    }
+    
+    /**
       * 查询子级虚中心列表<br/>
       *<功能详细描述>
       * @param parentId
@@ -197,7 +229,7 @@ public class VirtualCenterService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<VirtualCenter> queryChildVirtualCenterList(String vcid) {
+    public List<VirtualCenter> queryChildsVirtualCenterList(String vcid) {
         AssertUtils.notEmpty(vcid, "vcid is empty.");
         
         Set<VirtualCenter> resSet = new HashSet<VirtualCenter>();

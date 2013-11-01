@@ -31,9 +31,6 @@ public class WebContext implements InitializingBean {
     @Resource(name = "organizationService")
     private OrganizationService organizationService;
     
-    //    @Resource(name = "postService")
-    //    private PostService postService;
-    
     /**
       * 获取web容器实例<br/>
       *<功能详细描述>
@@ -89,8 +86,8 @@ public class WebContext implements InitializingBean {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public List<String> queryCurrentAndChildOrganizationIdList() {
-        List<String> resList = this.organizationService.queryOranizationIdListByAuth();
+    public List<String> queryOrganizationIdList() {
+        List<String> resList = this.organizationService.queryOrganizationIdList();
         
         return resList;
     }

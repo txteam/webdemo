@@ -56,17 +56,14 @@
 				</if>
 				<!-- 如果没有指定，仅能查询当前组织及其子级组织的数据，如果拥有查询所有职位组织的权限，则不根据组织id去查询 -->
 				<if test="@com.tx.core.util.OgnlUtils@isEmpty(organizationId)">
-					<if test="!@com.tx.component.mainframe.context.WebContextUtils@hasAuth('query_all_vc')">
-						AND TP.ORGANIZATIONID IN 
-			        	<foreach 
-			        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryCurrentAndChildOrganizationIdList()"
-			        		item="organizationId" open="(" close=")" separator=",">
-			        		'${organizationId}'
-			        	</foreach>
-			        </if>
+					AND TP.ORGANIZATIONID IN 
+		        	<foreach 
+		        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryOrganizationIdList()"
+		        		item="organizationId" open="(" close=")" separator=",">
+		        		'${organizationId}'
+		        	</foreach>
 				</if>
 			</if>
-			
 	        <if test="organization != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
 		            AND TP.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
@@ -75,17 +72,11 @@
 	         <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludePostId)">
 				<![CDATA[ AND TP.ID <> #{excludePostId,,javaType=java.lang.String} ]]>
 			</if>
-	        
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TP.ID = #{id,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TP.PARENTID = #{parentId,javaType=java.lang.String}
-	        </if>
-			<if test="organization != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            AND TP.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
-		        </if>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
 	            AND TP.REMARK = #{remark,javaType=java.lang.String}
@@ -120,25 +111,16 @@
 			<!-- 如果条件指定了组织id则使用传入的组织id -->
 			<if test="organization == null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
-					<if test="!@com.tx.component.mainframe.context.WebContextUtils@hasAuth('query_all_vc')">
-						AND TP.ORGANIZATIONID IN 
-			        	<foreach 
-			        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryCurrentAndChildOrganizationIdList()"
-			        		item="organizationId" open="(" close=")" separator=",">
-			        		'${organizationId}'
-			        	</foreach>
-			        </if>
+					AND TP.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
 				</if>
 				<!-- 如果没有指定，仅能查询当前组织及其子级组织的数据，如果拥有查询所有职位组织的权限，则不根据组织id去查询 -->
 				<if test="@com.tx.core.util.OgnlUtils@isEmpty(organizationId)">
-					<if test="!@com.tx.component.mainframe.context.WebContextUtils@hasAuth('query_all_vc')">
-						AND TP.ORGANIZATIONID IN 
-			        	<foreach 
-			        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryCurrentAndChildOrganizationIdList()"
-			        		item="organizationId" open="(" close=")" separator=",">
-			        		'${organizationId}'
-			        	</foreach>
-			        </if>
+					AND TP.ORGANIZATIONID IN 
+		        	<foreach 
+		        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryOrganizationIdList()"
+		        		item="organizationId" open="(" close=")" separator=",">
+		        		'${organizationId}'
+		        	</foreach>
 				</if>
 			</if>
 	        <if test="organization != null">
@@ -146,10 +128,9 @@
 		            AND TP.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
 		        </if>
 	        </if>
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludePostId)">
+	         <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludePostId)">
 				<![CDATA[ AND TP.ID <> #{excludePostId,,javaType=java.lang.String} ]]>
 			</if>
-	        
 	        
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TP.ID = #{id,javaType=java.lang.String}

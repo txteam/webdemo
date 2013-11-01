@@ -121,6 +121,24 @@ public class VirtualCenterController {
     }
     
     /**
+      * 根据虚中心id查询虚中心信息
+      *<功能详细描述>
+      * @param vcid
+      * @return [参数说明]
+      * 
+      * @return VirtualCenter [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/findVirtualcenterById")
+    @ResponseBody
+    public VirtualCenter findVirtualcenterById(@RequestParam("vcid")String vcid) {
+        VirtualCenter vc = this.virtualCenterService.findVirtualCenterById(vcid);
+        
+        return vc;
+    }
+    
+    /**
      * 查询所有虚中心的树列表<br/>
      *<功能详细描述>
      * @return [参数说明]
@@ -138,7 +156,8 @@ public class VirtualCenterController {
             virtualCenterList = this.virtualCenterService.listVirtualCenter();
         } else {
             String vcid = WebContextUtils.getCurrentVcid();
-            virtualCenterList = this.virtualCenterService.queryChildVirtualCenterList(vcid);
+            virtualCenterList = this.virtualCenterService.queryCurrentAndChildsVirtualCenterList(vcid);
+            virtualCenterList.add(this.virtualCenterService.findVirtualCenterById(vcid));
         }
         
         return virtualCenterList;

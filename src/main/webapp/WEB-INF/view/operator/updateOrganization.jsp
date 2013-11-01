@@ -59,14 +59,6 @@ $(document).ready(function(){
 							data-rule="编号:required;digits;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code , id]" 
 							data-tip="不能重复的数字"/>
 					</td>
-					<th>所在地区</th>
-					<td>
-						<input id="districtId" name="districtId" type="hidden" readonly="readonly"/>
-						<input id="districtName" name="districtName" class="selectInput" readonly="readonly"/>
-					</td>
-
-				</tr>
-				<tr>
 					<th class="narrow">组织类型:<span class="tRed">*</span></th>
 					<td>
 						<form:select path="type" cssClass="select" data-rule="组织类型:required;" >
@@ -74,9 +66,19 @@ $(document).ready(function(){
 							<form:options items="${OrganizationTypes }"/>
 						</form:select>
 					</td>
+				</tr>
+				<tr>
+					<th>所属虚中心<span class="tRed">*</span></th>
+					<td>
+						<input id="vcid" name="vcid" type="hidden" readonly="readonly"
+							value="${organization.vcid}"/>
+						<input id="virtualCenterName" name="virtualCenterName" class="selectInput" readonly="readonly"
+							value = "${virtualCenter.name }"/>
+					</td>
 					<th>上级组织</th>
 					<td>
-						<input id="parentId" name="parentId" type="hidden" readonly="readonly"/>
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly"
+							value="${organization.parentId}"/>
 						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" 
 							value="${parentOrganizationName}"/>
 					</td>

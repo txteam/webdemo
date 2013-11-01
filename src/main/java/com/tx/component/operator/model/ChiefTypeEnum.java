@@ -4,7 +4,7 @@
  * 修改时间:  2013-9-9
  * <修改描述:>
  */
-package com.tx.component.operator.basicdata;
+package com.tx.component.operator.model;
 
 /**
  * 主管类型<br/>

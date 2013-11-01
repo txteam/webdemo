@@ -3,10 +3,12 @@
 --****************************************************************************
 DROP TABLE OPER_OPERATOR_REF;
 CREATE TABLE OPER_OPERATOR_REF(
-	OPERATORID VARCHAR2(64) NOT NULL,
-	REFID VARCHAR2(64) NOT NULL,
-	REFTYPE VARCHAR2(64) NOT NULL,
-	CREATEDATE DATE DEFAULT SYSDATE NOT NULL,
+	EFFECTIVEDATE timestamp,
+	CREATEDATE timestamp default sysdate not null,
+	OPERATORID varchar2(64 char) not null,
+	REFID varchar2(64 char) not null,
+	ENDDATE timestamp,
+	REFTYPE varchar2(255 char) not null,
 	PRIMARY KEY(OPERATORID,REFID,REFTYPE)
 );
 CREATE INDEX IDX_OPER_OPERREF_00 ON OPER_OPERATOR_REF(OPERATORID,REFTYPE);

@@ -12,7 +12,7 @@
 var orgTree = null;
 $(document).ready(function() {
 	orgTree = $('#organizationTree').tree({
-		url : '${contextPath}/organization/queryOrganizationPostTreeNodeListByAuth.action',
+		url : '${contextPath}/organization/queryOrganizationPostTreeNodeList.action',
 		idField : 'id',
 		parentField : 'parentId',
 		textField : 'name',
@@ -67,7 +67,7 @@ $(document).ready(function() {
 							</td>
 						</tr>
 						<tr>
-							<th class="narrow">用户编码:</th>
+							<th class="narrow">用户姓名:</th>
 							<td><input name="productName" class="text" type="text" value=''/></td>
 							<th class="narrow">状态:</th>
 							<td>

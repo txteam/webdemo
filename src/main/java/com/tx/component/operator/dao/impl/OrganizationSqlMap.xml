@@ -64,43 +64,43 @@
 				TO_.CHIEFID
 		  FROM OPER_ORGANIZATION TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<!-- 如果没有查询所有组织的权限，则仅能查询当前虚中心的组织 -->
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
+				<![CDATA[ AND TO_.VCID = #{vcid,javaType=java.lang.String} ]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isEmpty(vcid) &amp;&amp; 
+						@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
+				<if test="!@com.tx.component.mainframe.context.WebContextUtils@hasAuth('query_all_org')">
+					AND TO_.VCID = #{@com.tx.component.mainframe.context.WebContextUtils@getCurrentVcid()}
+				</if>
+			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
 				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,javaType=java.lang.String} ]]>
 			</if>
-			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
-	            AND TO_.VCID = #{vcid,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            AND TO_.VALID = #{valid,javaType=boolean}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(alias)">  
-	            AND TO_.ALIAS = #{alias,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	       	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TO_.CODE = #{code,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TO_.VALID = #{valid,javaType=boolean}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.basicdata.OrganizationTypeEnum}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TO_.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
 	            AND TO_.DISTRICTID = #{districtId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
 	            AND TO_.CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.basicdata.ChiefTypeEnum}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
-	            AND TO_.NAME = #{name,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
 	            AND TO_.CHIEFID = #{chiefId,javaType=java.lang.String}
-	        </if>
+	        </if>		
 		</trim>
 		<choose>  
 	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
@@ -119,43 +119,44 @@
 		SELECT COUNT(1)
 		  FROM OPER_ORGANIZATION TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<!-- 如果没有查询所有组织的权限，则仅能查询当前虚中心的组织 -->
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
+				<![CDATA[ AND TO_.VCID = #{vcid,javaType=java.lang.String} ]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isEmpty(vcid) &amp;&amp; 
+						@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
+				<if test="!@com.tx.component.mainframe.context.WebContextUtils@hasAuth('query_all_org')">
+					AND TO_.VCID = #{@com.tx.component.mainframe.context.WebContextUtils@getCurrentVcid()}
+				</if>
+			</if>
+			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
 				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,javaType=java.lang.String} ]]>
 			</if>
-			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
-	            AND TO_.VCID = #{vcid,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            AND TO_.VALID = #{valid,javaType=boolean}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(alias)">  
-	            AND TO_.ALIAS = #{alias,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TO_.CODE = #{code,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            AND TO_.VALID = #{valid,javaType=boolean}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.basicdata.OrganizationTypeEnum}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TO_.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
 	            AND TO_.DISTRICTID = #{districtId,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
 	            AND TO_.CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.basicdata.ChiefTypeEnum}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
-	            AND TO_.NAME = #{name,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
 	            AND TO_.CHIEFID = #{chiefId,javaType=java.lang.String}
-	        </if>
+	        </if>		
 		</trim>
 	</select>
 	
@@ -207,6 +208,7 @@
 		(
 			ID,
 			VALID,
+			VCID,
 			FULLADDRESS,
 			ALIAS,
 			REMARK,
@@ -224,6 +226,7 @@
 		(
 			#{id},
 			#{valid},
+			#{vcid},
 			#{fullAddress},
 			#{alias},
 			#{remark},

@@ -4,7 +4,7 @@
  * 修改时间:  2013-8-27
  * <修改描述:>
  */
-package com.tx.component.operator.basicdata;
+package com.tx.component.operator.model;
 
 
  /**

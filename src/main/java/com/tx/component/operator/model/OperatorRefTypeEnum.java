@@ -19,13 +19,50 @@ public enum OperatorRefTypeEnum {
     /**
      * 人员职位
      */
-    POST, 
+    POST("post"), 
     /**
      * 人员组织
      */
-    ORGANIZATION, 
+    ORGANIZATION("organization");
+    
+    //销售分组等以后在此进行扩展
+    
+    /** <默认构造函数> */
+    private OperatorRefTypeEnum(String code) {
+        this.code = code;
+    }
+
+    /** 操作员引用类型编码 */
+    private String code;
+    
+    /** 操作员引用类型名 */
+    private String name;
+
     /**
-     * 人员分组
+     * @return 返回 code
      */
-    GROUP;
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * @param 对code进行赋值
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
+     * @return 返回 name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param 对name进行赋值
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 }

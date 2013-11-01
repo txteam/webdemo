@@ -21,10 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.auth.annotation.CheckOperateAuth;
 import com.tx.component.mainframe.treeview.TreeNode;
-import com.tx.component.operator.basicdata.ChiefTypeEnum;
-import com.tx.component.operator.basicdata.OrganizationTypeEnum;
+import com.tx.component.operator.model.ChiefTypeEnum;
 import com.tx.component.operator.model.Organization;
+import com.tx.component.operator.model.OrganizationTypeEnum;
 import com.tx.component.operator.service.OrganizationService;
+import com.tx.component.operator.service.VirtualCenterService;
 
 /**
  * 组织结构管理<br/>
@@ -42,6 +43,9 @@ public class OrganizationController {
     
     @Resource(name = "organizationService")
     private OrganizationService organizationService;
+    
+    @Resource(name = "virtualCenterService")
+    private VirtualCenterService virtualCenterService;
     
     /**
       * 跳转到组织查询页面
@@ -94,7 +98,7 @@ public class OrganizationController {
     @ResponseBody
     public List<Organization> queryOrganizationListIncludeInvalid(
             @RequestParam(value = "virtualCenterId", required = false) String virtualCenterId) {
-        List<Organization> orgList = this.organizationService.queryOrganizationListByAuthIncludeInvalid(virtualCenterId);
+        List<Organization> orgList = this.organizationService.queryOrganizationListIncludeInvalid(virtualCenterId);
         
         return orgList;
     }
@@ -120,6 +124,7 @@ public class OrganizationController {
                 StringUtils.isEmpty(resOrganization.getParentId()) ? ""
                         : this.organizationService.findOrganizationById(resOrganization.getParentId())
                                 .getName());
+        modelMap.put("virtualCenter",this.virtualCenterService.findVirtualCenterById(resOrganization.getVcid()));
         
         modelMap.put("organization", resOrganization);
         return "/operator/updateOrganization";
@@ -154,9 +159,9 @@ public class OrganizationController {
       * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping("/queryOrganizationPostTreeNodeListByAuth")
-    public List<TreeNode> queryOrganizationPostTreeNodeListByAuth() {
-        List<TreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeListByAuth();
+    @RequestMapping("/queryOrganizationPostTreeNodeList")
+    public List<TreeNode> queryOrganizationPostTreeNodeList() {
+        List<TreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeList();
         
         return resList;
     }
@@ -173,7 +178,7 @@ public class OrganizationController {
     @RequestMapping("/queryOrganizationList")
     @ResponseBody
     public List<Organization> queryOrganizationList() {
-        List<Organization> orgList = this.organizationService.queryOrganizationListByAuth();
+        List<Organization> orgList = this.organizationService.queryOrganizationList();
         
         return orgList;
     }
