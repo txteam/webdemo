@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="operatorRef">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="operatorRefMap" 
+		type="com.tx.component.operator.model.OperatorRef">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findOperatorRef" 
+		parameterType="com.tx.component.operator.model.OperatorRef"
+		resultMap="operatorRefMap">
+		SELECT 
+				TOR.OPERATORID,
+				TOR.REFID,
+				TOR.ENDDATE,
+				TOR.CREATEDATE,
+				TOR.EFFECTIVEDATE,
+				TOR.REFTYPE
+		  FROM OPER_OPERATOR_REF TOR
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            AND TOR.OPERATORID = #{operatorId}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryOperatorRef" 
+		parameterType="java.util.Map"
+		resultMap="operatorRefMap">
+		SELECT 
+				TOR.OPERATORID,
+				TOR.REFID,
+				TOR.ENDDATE,
+				TOR.CREATEDATE,
+				TOR.EFFECTIVEDATE,
+				TOR.REFTYPE
+		  FROM OPER_OPERATOR_REF TOR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            AND TOR.OPERATORID = #{operatorId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
+	            AND TOR.REFID = #{refId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(endDate)">  
+	            AND TOR.ENDDATE = #{endDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
+	            AND TOR.CREATEDATE = #{createDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(effectiveDate)">  
+	            AND TOR.EFFECTIVEDATE = #{effectiveDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType)">  
+	            AND TOR.REFTYPE = #{refType,javaType=com.tx.component.operator.model.OperatorRefTypeEnum}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryOperatorRefCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_OPERATOR_REF TOR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            AND TOR.OPERATORID = #{operatorId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
+	            AND TOR.REFID = #{refId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(endDate)">  
+	            AND TOR.ENDDATE = #{endDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
+	            AND TOR.CREATEDATE = #{createDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(effectiveDate)">  
+	            AND TOR.EFFECTIVEDATE = #{effectiveDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType)">  
+	            AND TOR.REFTYPE = #{refType,javaType=com.tx.component.operator.model.OperatorRefTypeEnum}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertOperatorRef" 
+		parameterType="com.tx.component.operator.model.OperatorRef">
+		INSERT INTO OPER_OPERATOR_REF
+		(
+			OPERATORID,
+			REFID,
+			ENDDATE,
+			CREATEDATE,
+			EFFECTIVEDATE,
+			REFTYPE
+		)
+		VALUES
+		(
+			#{operatorId},
+			#{refId},
+			#{endDate},
+			#{createDate},
+			#{effectiveDate},
+			#{refType}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deleteOperatorRef" 
+		parameterType="com.tx.component.operator.model.OperatorRef">
+		DELETE FROM OPER_OPERATOR_REF TOR WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            AND TOR.OPERATORID = #{operatorId}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updateOperatorRef"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_OPERATOR_REF TOR
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('refId')">
+	    		REFID = #{refId,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('endDate')">
+	    		ENDDATE = #{endDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('createDate')">
+	    		CREATEDATE = #{createDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('effectiveDate')">
+	    		EFFECTIVEDATE = #{effectiveDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('refType')">
+	    		REFTYPE = #{refType,javaType=com.tx.component.operator.model.OperatorRefTypeEnum},
+	    	</if>	
+	    </trim>
+	    WHERE TOR.OPERATORID = #{operatorId} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->
