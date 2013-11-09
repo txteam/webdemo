@@ -87,7 +87,7 @@
 	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.basicdata.OrganizationTypeEnum}
+	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationTypeEnum}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TO_.PARENTID = #{parentId,javaType=java.lang.String}
@@ -96,7 +96,7 @@
 	            AND TO_.DISTRICTID = #{districtId,javaType=java.lang.String}
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
-	            AND TO_.CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.basicdata.ChiefTypeEnum}
+	            AND TO_.CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.model.ChiefTypeEnum}
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
 	            AND TO_.CHIEFID = #{chiefId,javaType=java.lang.String}
@@ -143,7 +143,7 @@
 	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.basicdata.OrganizationTypeEnum}
+	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationTypeEnum}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TO_.PARENTID = #{parentId,javaType=java.lang.String}
@@ -274,7 +274,7 @@
 	    		CODE = #{code,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('type')">
-	    		TYPE = #{type,javaType=com.tx.component.operator.basicdata.OrganizationTypeEnum},
+	    		TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationTypeEnum},
 	    	</if>	
 			<if test="_parameter.containsKey('parentId')">
 	    		PARENTID = #{parentId,javaType=java.lang.String},

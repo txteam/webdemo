@@ -1051,7 +1051,7 @@ a:hover.l-btn-plain-selected {
   margin: 0;
   padding: 0 4px;
   white-space: nowrap;
-  word-wrap: normal;
+  word-wrap: break-word;
   overflow: hidden;
   height: 18px;
   line-height: 18px;

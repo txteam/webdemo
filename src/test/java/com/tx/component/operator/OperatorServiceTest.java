@@ -107,49 +107,49 @@ public class OperatorServiceTest {
         }
     }
     
-    /**
-      * 测试查询列表
-      * <功能详细描述> [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @Test
-    public void testQueryList(){
-        try {
-            int count = this.operatorService.countOperator();
-            
-            Assert.assertTrue(count >= 0);
-            
-            List<Operator> operatorList = this.operatorService.queryOperatorList();
-            
-            Assert.assertNotNull(operatorList);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.assertTrue(false);
-        }
-    }
-    
-    /**
-      * 测试分页查询功能
-      * <功能详细描述> [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @Test
-    public void testQueryPageList(){
-        try {
-            PagedList<Operator> operatorPageList = this.operatorService.queryOperatorPagedList(1, 10);
-            
-            Assert.assertNotNull(operatorPageList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.assertTrue(false);
-        }
-    }
+//    /**
+//      * 测试查询列表
+//      * <功能详细描述> [参数说明]
+//      * 
+//      * @return void [返回类型说明]
+//      * @exception throws [异常类型] [异常说明]
+//      * @see [类、类#方法、类#成员]
+//     */
+//    @Test
+//    public void testQueryList(){
+//        try {
+//            int count = this.operatorService.countOperator();
+//            
+//            Assert.assertTrue(count >= 0);
+//            
+//            List<Operator> operatorList = this.operatorService.queryOperatorList();
+//            
+//            Assert.assertNotNull(operatorList);
+//            
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Assert.assertTrue(false);
+//        }
+//    }
+//    
+//    /**
+//      * 测试分页查询功能
+//      * <功能详细描述> [参数说明]
+//      * 
+//      * @return void [返回类型说明]
+//      * @exception throws [异常类型] [异常说明]
+//      * @see [类、类#方法、类#成员]
+//     */
+//    @Test
+//    public void testQueryPageList(){
+//        try {
+//            PagedList<Operator> operatorPageList = this.operatorService.queryOperatorPagedList(1, 10);
+//            
+//            Assert.assertNotNull(operatorPageList);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Assert.assertTrue(false);
+//        }
+//    }
     
 }
