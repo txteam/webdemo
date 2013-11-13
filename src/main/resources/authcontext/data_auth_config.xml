@@ -11,7 +11,7 @@
 				</auth>
 			</auth>
 			<auth key="organization" name="组织数据权限">
-				<auth key="query_all_org" name="查询所有虚中心"
+				<auth key="query_all_org" name="查询所有组织"
 					configAble="false"
 					description="具有该权限能够查询所有的组织，否则仅能查询所属虚中心组织">
 				</auth>

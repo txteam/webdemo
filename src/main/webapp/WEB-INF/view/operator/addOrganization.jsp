@@ -66,6 +66,21 @@ $(document).ready(function(){
 	//验证器
 	$('#organizationForm').validator({
 	    valid: function(){
+	    	var flag = false;
+	    	if($.ObjectUtils.isEmpty($('#parentId').val())){
+            	if($('#type').val() == '公司' || $('#type').val() == '分公司'){
+            		flag = true;
+            	}else{
+            		flag = false;
+            	}
+            }else{
+            	flag = true;
+            }
+	    	if(!flag){
+	    		DialogUtils.alert('警告',"非分公司类型组织上级组织不允许为空",'warning');
+	    		return false;
+	    	}
+	    	
 	        //表单验证通过，提交表单到服务器
 			$('#organizationForm').ajaxSubmit({
 			    url:"${contextPath}/organization/addOrganization.action",
@@ -100,10 +115,21 @@ $(document).ready(function(){
 							data-rule="名称:required;length[2~16]" 
 							data-tip="必填"/>
 					</td>
-					<th class="narrow">别名:</th>
+					<th class="narrow">&nbsp;</th>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<th class="narrow">组织类型:<span class="tRed">*</span></th>
 					<td>
-						<form:input path="alias" cssClass="text"
-							data-rule="别名:length[~16]"/>
+						<form:select path="type" cssClass="select" data-rule="组织类型:required;" >
+							<option value="">--- 请选择 ---</option>
+							<form:options items="${OrganizationTypes }"/>
+						</form:select>
+					</td>
+					<th>上级组织</th>
+					<td>
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly" value="${parentOrganization.id }"/>
+						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" value="${parentOrganization.name }"/>
 					</td>
 				</tr>
 				<tr>
@@ -113,26 +139,10 @@ $(document).ready(function(){
 							data-rule="编号:required;digits;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code]" 
 							data-tip="不能重复的数字"/>
 					</td>
-					<th class="narrow">组织类型:<span class="tRed">*</span></th>
+					<th class="narrow">别名:</th>
 					<td>
-						<form:select path="type" cssClass="select" data-rule="组织类型:required;" >
-							<option value="">--- 请选择 ---</option>
-							<form:options items="${OrganizationTypes }"/>
-						</form:select>
-					</td>
-
-				</tr>
-				<tr>
-					<th>所属虚中心<span class="tRed">*</span></th>
-					<td>
-						<input id="vcid" name="vcid" type="hidden" readonly="readonly"/>
-						<input id="virtualCenterName" name="virtualCenterName" class="selectInput" readonly="readonly"
-							data-rule="所属虚中心:required;" />
-					</td>
-					<th>上级组织</th>
-					<td>
-						<input id="parentId" name="parentId" type="hidden" readonly="readonly" value="${parentOrganization.id }"/>
-						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" value="${parentOrganization.name }"/>
+						<form:input path="alias" cssClass="text"
+							data-rule="别名:length[~16]"/>
 					</td>
 				</tr>
 				<tr>

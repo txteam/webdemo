@@ -39,9 +39,8 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public void insertOrganization(Organization organization) {
-        this.myBatisDaoSupport.insertUseUUID("organization.insertOrganization",
-                organization,
-                "id");
+        this.myBatisDaoSupport.insert("organization.insertOrganization",
+                organization);
     }
     
     /**

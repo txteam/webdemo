@@ -3,6 +3,8 @@
 --****************************************************************************
 DROP TABLE OPER_OPERATOR_HIS;
 CREATE TABLE OPER_OPERATOR_HIS(
+	id varchar2(64),
+	vcid varchar2(64),
 	valid number(1,0) DEFAULT 1 NOT NULL,
 	pwdErrCount number(10,0),
 	historyPwd varchar2(255),
@@ -10,7 +12,6 @@ CREATE TABLE OPER_OPERATOR_HIS(
 	password varchar2(255),
 	invalidDate date,
 	lastUpdateDate date default sysdate not null,
-	id varchar2(64),
 	pwdUpdateDate date default sysdate not null,
 	mainPostId varchar2(64),
 	userName varchar2(64),

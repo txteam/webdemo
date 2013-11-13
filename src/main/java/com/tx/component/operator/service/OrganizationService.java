@@ -26,10 +26,13 @@ import com.tx.component.mainframe.treeview.TreeNodeAdapter;
 import com.tx.component.operator.OperatorConstants;
 import com.tx.component.operator.dao.OrganizationDao;
 import com.tx.component.operator.model.Organization;
+import com.tx.component.operator.model.OrganizationTypeEnum;
 import com.tx.component.operator.model.Post;
 import com.tx.component.servicelog.context.ServiceLoggerContext;
 import com.tx.core.TxConstants;
+import com.tx.core.exceptions.argument.IllegalArgException;
 import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.core.util.UUIDUtils;
 
 /**
  * Organization的业务层<br/>
@@ -53,6 +56,39 @@ public class OrganizationService {
     
     @Resource(name = "postService")
     private PostService postService;
+    
+    /**
+      * 根据组织ID生成虚中心id
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private String generateVcid(Organization organization) {
+        AssertUtils.notEmpty(organization.getId(), "organization.id is empty.");
+        //如果不存在父级组织时，对应组织类型应当为公司或分公司
+        if (StringUtils.isEmpty(organization.getParentId())) {
+            if (OrganizationTypeEnum.公司.equals(organization.getType())
+                    || OrganizationTypeEnum.分公司.equals(organization.getType())) {
+                throw new IllegalArgException(
+                        "organization.parent is null and type is not company");
+            }
+        }
+        
+        String vcid = null;
+        if (OrganizationTypeEnum.公司.equals(organization.getType())
+                || OrganizationTypeEnum.分公司.equals(organization.getType())) {
+            vcid = organization.getId();
+        } else {
+            Organization parentOrg = findOrganizationById(organization.getParentId());
+            vcid = generateVcid(parentOrg);
+        }
+        
+        return vcid;
+    }
     
     /**
       * 根据虚中心id查询组织职位数据列表<br/>
@@ -102,9 +138,15 @@ public class OrganizationService {
         AssertUtils.notEmpty(organization.getCode(),
                 "organization.code is null");
         
+        //生成组织唯一键
+        organization.setId(UUIDUtils.generateUUID());
+        
         //生成组织全名
         organization.setFullName(generateOrganizationFullName(organization.getParentId(),
                 organization.getName()));
+        
+        //获取当前组织所属虚拟中心并设值
+        organization.setVcid(generateVcid(organization));
         
         //插入组织实体
         this.organizationDao.insertOrganization(organization);
@@ -344,7 +386,7 @@ public class OrganizationService {
         updateRowMap.put("fullAddress", organization.getFullAddress());
         updateRowMap.put("remark", organization.getRemark());
         updateRowMap.put("code", organization.getCode());
-        updateRowMap.put("type", organization.getType());
+        //updateRowMap.put("type", organization.getType());
         updateRowMap.put("address", organization.getAddress());
         updateRowMap.put("name", organization.getName());
         updateRowMap.put("chiefType", organization.getChiefType());

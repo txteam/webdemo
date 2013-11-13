@@ -12,6 +12,7 @@
 var virtualCenterTree = null;
 var treeGrid = null;
 $(document).ready(function() {
+	/*
 	virtualCenterTree = $('#virtualCenterTree').tree({
 		url : '${contextPath}/virtualCenter/queryVirtualCenterListByAuth.action',
 		idField : 'id',
@@ -27,7 +28,7 @@ $(document).ready(function() {
 			});
 		}
 	});
-	
+	*/
 	
 	treeGrid = $('#treeGrid').treegrid({
 		url : '${contextPath}/organization/queryOrganizationListIncludeInvalid.action',
@@ -248,16 +249,7 @@ function refreshTree(){
 
 </body>
 
-<body class="easyui-layout">
-	<div data-options="region:'west',title:'虚中心',split:true,
-		tools : [
-			{ iconCls : 'clear',handler : function() {deselect();} } ,
-			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
-		]"
-		style="width:230px;">
-		<ul id="virtualCenterTree"></ul>
-	</div> 
-	
+<body class="easyui-layout">	
 	<div data-options="region:'center'" style="padding:5px;background:#eee;">
 		<div class="easyui-layout" data-options="fit:true,border:false">
 			<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
