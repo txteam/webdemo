@@ -152,7 +152,7 @@
 	            AND TO_.DISTRICTID = #{districtId,javaType=java.lang.String}
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
-	            AND TO_.CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.basicdata.ChiefTypeEnum}
+	            AND TO_.CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.model.ChiefTypeEnum}
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
 	            AND TO_.CHIEFID = #{chiefId,javaType=java.lang.String}
@@ -286,7 +286,7 @@
 	    		ADDRESS = #{address,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('chiefType')">
-	    		CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.basicdata.ChiefTypeEnum},
+	    		CHIEFTYPE = #{chiefType,javaType=com.tx.component.operator.model.ChiefTypeEnum},
 	    	</if>	
 			<if test="_parameter.containsKey('name')">
 	    		NAME = #{name,javaType=java.lang.String},

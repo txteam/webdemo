@@ -4,7 +4,6 @@
 DROP TABLE OPER_OPERATOR;
 CREATE TABLE OPER_OPERATOR(
 	id varchar2(64) not null,
-	vcid varchar2(64),
 	valid number(1,0) DEFAULT 1 NOT NULL,
 	pwdErrCount number(10,0),
 	historyPwd varchar2(255),

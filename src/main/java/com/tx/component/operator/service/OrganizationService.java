@@ -71,8 +71,8 @@ public class OrganizationService {
         AssertUtils.notEmpty(organization.getId(), "organization.id is empty.");
         //如果不存在父级组织时，对应组织类型应当为公司或分公司
         if (StringUtils.isEmpty(organization.getParentId())) {
-            if (OrganizationTypeEnum.公司.equals(organization.getType())
-                    || OrganizationTypeEnum.分公司.equals(organization.getType())) {
+            if (!OrganizationTypeEnum.公司.equals(organization.getType())
+                    && !OrganizationTypeEnum.分公司.equals(organization.getType())) {
                 throw new IllegalArgException(
                         "organization.parent is null and type is not company");
             }

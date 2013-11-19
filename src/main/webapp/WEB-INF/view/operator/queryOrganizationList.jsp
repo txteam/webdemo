@@ -277,6 +277,9 @@ function refreshTree(){
 			<c:if test="${true}">
 				<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
 			</c:if>
+			<c:if test="${true}">
+				<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
+			</c:if>
 		</div>
 	</div> 
 </body>

@@ -57,8 +57,8 @@ create table MAINFRAME_SYSOPE_LOG(
 	OPERATORLOGINNAME varchar2(64 char),
 	primary key(ID)
 );
-prompt "webdemo模块:创建表逻辑  end...";
-prompt "webdemo模块:创建表逻辑  start...";
+--prompt "webdemo模块:创建表逻辑  end...";
+--prompt "webdemo模块:创建表逻辑  start...";
 --****************************************************************************
 -- 表：OPER_EMPLOYEEINFO
 --****************************************************************************
@@ -106,7 +106,6 @@ CREATE TABLE OPER_EMPLOYEEINFO(
 DROP TABLE OPER_OPERATOR;
 CREATE TABLE OPER_OPERATOR(
 	id varchar2(64) not null,
-	vcid varchar2(64),
 	valid number(1,0) DEFAULT 1 NOT NULL,
 	pwdErrCount number(10,0),
 	historyPwd varchar2(255),
@@ -134,7 +133,6 @@ comment on column OPER_OPERATOR.valid is '是否有效 0 无效  1有效  默认有效';
 DROP TABLE OPER_OPERATOR_HIS;
 CREATE TABLE OPER_OPERATOR_HIS(
 	id varchar2(64),
-	vcid varchar2(64),
 	valid number(1,0) DEFAULT 1 NOT NULL,
 	pwdErrCount number(10,0),
 	historyPwd varchar2(255),
@@ -240,7 +238,6 @@ CREATE TABLE OPER_ORGANIZATION_HIS(
 DROP TABLE OPER_POST;
 CREATE TABLE OPER_POST(
 	id varchar2(64) not null,
-	vcid varchar2(64),
 	parentId varchar2(64),
 	remark varchar2(2000),
 	name varchar2(64),
@@ -261,7 +258,6 @@ comment on column OPER_POST.code is '职位编码';
 drop table OPER_POST_HIS;
 create table OPER_POST_HIS(
 	id varchar2(64) not null,
-	vcid varchar2(64),
 	parentId varchar2(64),
 	remark varchar2(2000),
 	name varchar2(64),
@@ -7383,12 +7379,12 @@ values ('2c9092e43263a8df013266254ddf389c', '2388cbcd7b30404292f8e01ad88e6f8d', 
 commit;
 --prompt "webdemo模块:初始化基础数据  end...";
 --prompt "webdemo模块:初始化基础数据  start...";
-INSERT INTO OPER_OPERATOR(ID,VCID,ORGANIZATIONID,LOGINNAME,PASSWORD,USERNAME)
-	values('123456','1000000','1000000','admin','admin','admin');
-INSERT INTO OPER_OPERATOR(ID,VCID,ORGANIZATIONID,LOGINNAME,PASSWORD,USERNAME)
-	values('123456001','1000000','1000000','yr','yr','yr');
-INSERT INTO OPER_OPERATOR(ID,VCID,ORGANIZATIONID,LOGINNAME,PASSWORD,USERNAME)
-	values('123456002','1000000','1000000','pqy','pqy','pqy');
+INSERT INTO OPER_OPERATOR(ID,ORGANIZATIONID,LOGINNAME,PASSWORD,USERNAME)
+	values('123456','1000000','admin','admin','admin');
+INSERT INTO OPER_OPERATOR(ID,ORGANIZATIONID,LOGINNAME,PASSWORD,USERNAME)
+	values('123456001','1000000','yr','yr','yr');
+INSERT INTO OPER_OPERATOR(ID,ORGANIZATIONID,LOGINNAME,PASSWORD,USERNAME)
+	values('123456002','1000000','pqy','pqy','pqy');
 commit;
 --TRUNCATE TABLE OPER_ORGANIZATION;
 insert into OPER_ORGANIZATION(VCID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE,TYPE)
@@ -7426,18 +7422,18 @@ insert into OPER_ORGANIZATION(VCID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE,TYPE
 insert into OPER_ORGANIZATION(VCID,PARENTID,CHIEFTYPE,NAME,FULLNAME,ID,CODE,TYPE)
   values('3000000','3000000','人员','办事处A','合作方公司B_办事处A','30000001','30000001','部门');
 commit;
-insert into OPER_POST(id,vcid,parentId,name,organizationId,code,remark)
-	values('1000000301','1000000',null,'部门经理','1000000',null,'集团公司系统开发部部门经理');
-insert into OPER_POST(id,vcid,parentId,name,organizationId,code,remark)
-	values('100000030101','1000000','1000000301','项目经理','1000000',null,'集团公司系统开发部项目经理');
-insert into OPER_POST(id,vcid,parentId,name,organizationId,code,remark)
-	values('100000030102','1000000','1000000301','SE','1000000',null,'集团公司系统开发部SE');
-insert into OPER_POST(id,vcid,parentId,name,organizationId,code,remark)
-	values('10000003010101','1000000','100000030101','高级软件工程师','1000000',null,'集团公司系统开发部高级软件工程师');
-insert into OPER_POST(id,vcid,parentId,name,organizationId,code,remark)
-	values('10000003010102','1000000','100000030101','工程师','1000000',null,'集团公司系统开发部工程师');
-insert into OPER_POST(id,vcid,parentId,name,organizationId,code,remark)
-	values('10000003010103','1000000','100000030101','助理工程师','1000000',null,'集团公司系统开发部助理工程师');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('1000000301',null,'部门经理','1000000',null,'集团公司系统开发部部门经理');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('100000030101','1000000301','项目经理','1000000',null,'集团公司系统开发部项目经理');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('100000030102','1000000301','SE','1000000',null,'集团公司系统开发部SE');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('10000003010101','100000030101','高级软件工程师','1000000',null,'集团公司系统开发部高级软件工程师');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('10000003010102','100000030101','工程师','1000000',null,'集团公司系统开发部工程师');
+insert into OPER_POST(id,parentId,name,organizationId,code,remark)
+	values('10000003010103','100000030101','助理工程师','1000000',null,'集团公司系统开发部助理工程师');
 commit;
 INSERT INTO OPER_VC(ID,PARENTID,NAME,REMARK)
 	values('001',null,'集团公司','集团公司');

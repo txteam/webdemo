@@ -4,7 +4,6 @@
 drop table OPER_POST_HIS;
 create table OPER_POST_HIS(
 	id varchar2(64) not null,
-	vcid varchar2(64),
 	parentId varchar2(64),
 	remark varchar2(2000),
 	name varchar2(64),

@@ -46,34 +46,13 @@ $(document).ready(function(){
 							data-rule="名称:required;length[2~16]" 
 							data-tip="必填"/>
 					</td>
-					<th class="narrow">别名:</th>
-					<td>
-						<form:input path="alias" cssClass="text"
-							data-rule="别名:length[~16]"/>
-					</td>
+					<th class="narrow">&nbsp;</th>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<th class="narrow">编号<span class="tRed">*</span></th>
-					<td>
-						<form:input path="code" cssClass="text"
-							data-rule="编号:required;digits;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code , id]" 
-							data-tip="不能重复的数字"/>
-					</td>
 					<th class="narrow">组织类型:<span class="tRed">*</span></th>
 					<td>
-						<form:select path="type" cssClass="select" data-rule="组织类型:required;" >
-							<option value="">--- 请选择 ---</option>
-							<form:options items="${OrganizationTypes }"/>
-						</form:select>
-					</td>
-				</tr>
-				<tr>
-					<th>所属虚中心<span class="tRed">*</span></th>
-					<td>
-						<input id="vcid" name="vcid" type="hidden" readonly="readonly"
-							value="${organization.vcid}"/>
-						<input id="virtualCenterName" name="virtualCenterName" class="selectInput" readonly="readonly"
-							value = "${virtualCenter.name }"/>
+						<c:out value="${organization.type}"></c:out>
 					</td>
 					<th>上级组织</th>
 					<td>
@@ -83,6 +62,20 @@ $(document).ready(function(){
 							value="${parentOrganizationName}"/>
 					</td>
 				</tr>
+				<tr>
+					<th class="narrow">编号<span class="tRed">*</span></th>
+					<td>
+						<form:input path="code" cssClass="text"
+							data-rule="编号:required;digits;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code , id]" 
+							data-tip="不能重复的数字"/>
+					</td>
+					<th class="narrow">别名:</th>
+					<td>
+						<form:input path="alias" cssClass="text"
+							data-rule="别名:length[~16]"/>
+					</td>
+				</tr>
+
 				<tr>
 					<th>主管类型</th>
 					<td>

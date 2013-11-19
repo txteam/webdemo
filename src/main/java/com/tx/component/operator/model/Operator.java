@@ -45,6 +45,8 @@ public class Operator implements Serializable{
     /**用户名*/
     private String userName;
     
+    private String name;
+    
     /** 密码 */
     private String password;
     
@@ -96,6 +98,20 @@ public class Operator implements Serializable{
     /** 职位 */
     @ManyToMany
     private List<Post> postList;
+
+    /**
+     * @return 返回 name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param 对name进行赋值
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
     /**
      * @return 返回 id
