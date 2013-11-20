@@ -60,6 +60,9 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
     /** 职位名称全名 */
     private String fullName;
     
+    /** 职位是否有效 */
+    private boolean valid;
+    
     /** 备注 */
     private String remark;
     
@@ -182,5 +185,19 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
      */
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    /**
+     * @return 返回 valid
+     */
+    public boolean isValid() {
+        return valid;
+    }
+
+    /**
+     * @param 对valid进行赋值
+     */
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }

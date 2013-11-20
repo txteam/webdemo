@@ -12,7 +12,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.auth.annotation.CheckOperateAuth;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.Post;
 import com.tx.component.operator.service.OrganizationService;
@@ -34,6 +34,7 @@ import com.tx.component.operator.service.PostService;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@CheckOperateAuth(key = "post_manage", parentKey = "operator_config_center", description = "职位管理", name = "职位管理")
 @Controller("newPostController")
 @RequestMapping("/post")
 public class PostController {
@@ -159,14 +160,34 @@ public class PostController {
       * @see [类、类#方法、类#成员]
      */
     @ResponseBody
+    @RequestMapping("/queryPostListIncludeInvalid")
+    public List<Post> queryPostListIncludeInvalid(
+            @RequestParam(value = "parentPostId", required = false) String parentPostId,
+            @RequestParam(value = "organizationId", required = false) String organizationId) {
+        List<Post> resList = this.postService.queryPostListIncludeInvalid(parentPostId,
+                organizationId);
+        return resList;
+    }
+    
+    /**
+     * 查询职位列表<br/>
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<Post> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
     @RequestMapping("/queryPostList")
     public List<Post> queryPostList(
             @RequestParam(value = "parentPostId", required = false) String parentPostId,
             @RequestParam(value = "organizationId", required = false) String organizationId) {
         List<Post> resList = null;
+        
         if (StringUtils.isEmpty(parentPostId)
                 && StringUtils.isEmpty(organizationId)) {
-            resList = this.postService.queryPostListByAuth();
+            resList = this.postService.queryPostList();
         } else if (!StringUtils.isEmpty(organizationId)) {
             resList = this.postService.queryPostListByOrganizationId(organizationId);
         } else {
@@ -184,13 +205,14 @@ public class PostController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
+    @CheckOperateAuth(key = "add_post", name = "增加职位")
     @RequestMapping("/addPost")
     @ResponseBody
     public boolean addPost(Post post) {
         this.postService.insertPost(post);
         return true;
     }
-
+    
     /**
       * 更新组织<br/>
       *<功能详细描述>
@@ -201,9 +223,10 @@ public class PostController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @CheckOperateAuth(key = "update_post", name = "编辑职位")
     @RequestMapping("/updatePost")
     @ResponseBody
-    public boolean updatePost(Post post){
+    public boolean updatePost(Post post) {
         this.postService.updateById(post);
         
         return true;
@@ -222,13 +245,9 @@ public class PostController {
     @ResponseBody
     @RequestMapping("/isDeleteAble")
     public boolean isDeleteAble(@RequestParam(value = "postId") String postId) {
-        List<Post> postList = this.postService.queryPostListByParentId(postId);
+        boolean flag = this.postService.isDeleteAble(postId);
         
-        if (CollectionUtils.isEmpty(postList)) {
-            return true;
-        } else {
-            return false;
-        }
+        return flag;
     }
     
     /**
@@ -241,10 +260,35 @@ public class PostController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @CheckOperateAuth(key = "delete_post", name = "删除职位", configAble = false)
     @ResponseBody
     @RequestMapping("/deletePostById")
     public boolean deletePostById(@RequestParam(value = "postId") String postId) {
         boolean resFlag = this.postService.deleteById(postId);
+        return resFlag;
+    }
+    
+    @ResponseBody
+    @RequestMapping("/isDisableAble")
+    public boolean isDisableAble(@RequestParam(value = "postId") String postId) {
+        boolean flag = this.postService.isDisableAble(postId);
+        
+        return flag;
+    }
+    
+    @CheckOperateAuth(key = "disable_post", name = "禁用职位")
+    @ResponseBody
+    @RequestMapping("/disablePostById")
+    public boolean disablePostById(@RequestParam(value = "postId") String postId) {
+        boolean resFlag = this.postService.disableById(postId);
+        return resFlag;
+    }
+    
+    @CheckOperateAuth(key = "enable_post", name = "启用职位")
+    @ResponseBody
+    @RequestMapping("/enablePostById")
+    public boolean enablePostById(@RequestParam(value = "postId") String postId) {
+        boolean resFlag = this.postService.enableById(postId);
         return resFlag;
     }
     

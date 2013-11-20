@@ -9,6 +9,27 @@
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
+$.canAdd = false;
+$.canDelete = false;
+$.canDisable = false;
+$.canModify = false;
+$.canEnable = false;
+<c:if test='${authContext.hasAuth("add_post")}'>
+	$.canAdd = true;
+</c:if>
+<c:if test='${authContext.hasAuth("delete_post")}'>
+	$.canDelete = true;
+</c:if>
+<c:if test='${authContext.hasAuth("disable_post")}'>
+	$.canDisable = true;
+</c:if>
+<c:if test='${authContext.hasAuth("enable_post")}'>
+	$.canEnable = true;
+</c:if>
+<c:if test='${authContext.hasAuth("update_post")}'>
+	$.canModify = true;
+</c:if>
+
 var treeGrid = null;
 var orgTree = null;
 $(document).ready(function() {
@@ -29,7 +50,7 @@ $(document).ready(function() {
 	});
 	
 	treeGrid = $('#treeGrid').treegrid({
-		url : '${contextPath}/post/queryPostList.action',
+		url : '${contextPath}/post/queryPostListIncludeInvalid.action',
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
@@ -72,33 +93,55 @@ $(document).ready(function() {
 				}
 			}
 		}] ],
-		columns : [ [ {
+		columns : [ [{
+			field : 'valid',
+			title : '是否有效',
+			width : 80,
+			formatter : function(value, row, index) {
+				var str = '';
+				if(value == '1'){
+					return "有效";
+				}else{
+					return "无效";
+				}
+			}
+		},{
 			field : 'fullName',
 			title : '职位全称',
-			width : 150
+			width : 150,
+			hidden : true
+		},{
+			field : 'remark',
+			title : '备注',
+			width : 200,
 		},{
 			field : 'action',
 			title : '操作',
 			width : 100,
 			formatter : function(value, row, index) {
 				var str = '';
-				if (true) {
+				if(!row.valid && $.canEnable){
+					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+					str += '&nbsp;';
+				}
+				if($.canModify){
 					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
+					str += '&nbsp;';
 				}
-				str += '&nbsp;';
-				if (true) {
+				
+				if($.canDelete){
 					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
+					str += '&nbsp;';
 				}
-				str += '&nbsp;';
+				if(row.valid && $.canDisable){
+					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+					str += '&nbsp;';
+				}
 				if (true) {
 					str += $.formatString('<img onclick="configPostAuth(\'{0}\',\'{1}\');" src="{2}" title="配置职位权限"/>', row.id, row.name,'${contextPath}/style/images/extjs_icons/database_key.png');
 				}
 				return str;
 			}
-		}, {
-			field : 'remark',
-			title : '备注',
-			width : 200
 		} ] ],
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {
@@ -172,7 +215,7 @@ function addFun(id) {
 			}
 		}
 	}
-	DialogUtils.openModalDialog(
+	GlobalDialogUtils.openModalDialog(
 		"addPost",
 		"添加职位",
 		$.formatString("${contextPath}/post/toAddPost.action?parentPostId={0}&organizationId={1}",id,organizationId),
@@ -236,6 +279,67 @@ function deleteFun(id,name) {
 			}
 	});
 }
+function disableFun(id,name){
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	if (id == undefined) {
+		var rows = treeGrid.datagrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].name;
+	}
+	//判断对应组织是否能被停用
+	$.post(
+		'${contextPath}/post/isDisableAble.action',
+		{postId: id},
+		function(data){
+			if(data){
+			    DialogUtils.confirm(
+			    		"确认提醒" , 
+			    		$.formatString("是否确认禁用职位:[{0}]?",name), 
+			    function(data){
+			    	if(data){
+			    		//如果确认删除对应组织
+			    		$.post(
+					    		'${contextPath}/post/disablePostById.action',
+					    		{postId:id},
+					    		function(){
+					    			DialogUtils.tip("禁用 职位成功");
+					    			$('#treeGrid').treegrid('reload');
+					    });
+			    	}
+			    });
+			}else{
+				DialogUtils.alert("提醒","该 职位存在尚未禁用的下级 职位，不能被禁用。","warning");
+			}
+	});
+}
+function enableFun(id,name){
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	if (id == undefined) {
+		var rows = treeGrid.datagrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].name;
+	}
+	//判断对应组织是否能被停用
+    DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认启用 职位:[{0}]?",name), 
+    function(data){
+    	if(data){
+    		//如果确认删除对应组织
+    		$.post(
+		    		'${contextPath}/post/enablePostById.action',
+		    		{postId:id},
+		    		function(){
+		    			DialogUtils.tip("启用 职位成功");
+		    			$('#treeGrid').treegrid('reload');
+		    });
+    	}
+    });
+}
 /*
  * 配置职位权限
  */
@@ -282,7 +386,7 @@ function configPostAuth(id,name){
 		</div>
 		
 		<div id="toolbar" style="display: none;">
-			<c:if test="${true}">
+			<c:if test='${authContext.hasAuth("add_post") }'>
 				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
 			</c:if>
 			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
@@ -292,14 +396,14 @@ function configPostAuth(id,name){
 		</div>
 	
 		<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
-			<c:if test="${true}">
+			<c:if test='${authContext.hasAuth("add_organization")}'>
 				<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
 			</c:if>
-			<c:if test="${true}">
-				<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
-			</c:if>
-			<c:if test="${true}">
+			<c:if test='${authContext.hasAuth("update_organization")}'>
 				<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
+			</c:if>
+			<c:if test='${authContext.hasAuth("delete_organization")}'>
+				<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
 			</c:if>
 		</div>
 	

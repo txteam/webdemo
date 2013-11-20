@@ -57,9 +57,24 @@ function initAuthTree($currentAuthTreeEl,authType,configAble,authItemList){
 			return 'database_key';	
 		},
 		checkbox : true,
-		cascadeCheck : true,
 		lines : true,
 		data: authItemList,
+		//不联动选中，允许仅含有顶级权限的情况
+		cascadeCheck : true,
+		/*
+		onCheck: function(node, checked){
+			if(checked){
+				alert("checked:true");
+				alert(node.nodeName);
+				var parentObj = $currentAuthTreeEl.tree('getParent');
+				alert("parentEl == null:" + (parentObj == null));
+			}else{
+				alert("checked:false");
+				var chidrensEls = $currentAuthTreeEl.tree('getChildren',node);
+				alert("chidrensEls == null:" + (chidrensEls == null));
+			}
+		},
+		*/
 		onClick : function(node){
 			$.triggerge("choose_organization_" + "${eventName}",[node['attributes']]);
 		}

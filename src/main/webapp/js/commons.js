@@ -672,6 +672,7 @@ var GlobalDialogUtils = null;
     	minimizable : false,
     	maximizable : false,
     	resizable : false,
+    	inline: false,
     	modal: false
     	/*
     	onOpen : function() {

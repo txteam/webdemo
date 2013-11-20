@@ -118,7 +118,7 @@ public class PostServiceTest {
 //            
 //            Assert.assertTrue(count >= 0);
             
-            List<Post> postList = this.postService.queryAllPostList();
+            List<Post> postList = this.postService.queryPostList();
             
             Assert.assertNotNull(postList);
             

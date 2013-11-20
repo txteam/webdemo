@@ -12,6 +12,33 @@
 <script type="text/javascript" >
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
+	$("#parentName").choosePost({
+		organizationId : $("#organizationId").val(),
+		eventName : "choosePostForAddPost",
+		contextPath : _contextPath,
+		title : "请选择上级组织",
+		width : 750,
+		height : 400,
+		handler : function(post){
+			$("#parentName").val(post.name);
+			$("#parentId").val(post.id);
+			/*
+			现允许上级职位与当前职位不属于同一组织
+			if(post.organization && !$.ObjectUtils.isEmpty(post.organization.name)){
+				$("#organizationName").val(post.organization.name);
+				$("#organizationId").val(post.organization.id);
+			}else{
+				$("#organizationName").val('');
+				$("#organizationId").val('');
+			}
+			*/
+		},
+		clearHandler: function(){
+			$("#parentName").val('');
+			$("#parentId").val('');
+		}
+	});
+	
 	//验证器
 	$('#postForm').validator({
 	    valid: function(){

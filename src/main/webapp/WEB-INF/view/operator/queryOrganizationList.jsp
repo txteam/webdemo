@@ -9,6 +9,27 @@
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
+$.canAdd = false;
+$.canDelete = false;
+$.canDisable = false;
+$.canModify = false;
+$.canEnable = false;
+<c:if test='${authContext.hasAuth("add_organization")}'>
+	$.canAdd = true;
+</c:if>
+<c:if test='${authContext.hasAuth("delete_organization")}'>
+	$.canDelete = true;
+</c:if>
+<c:if test='${authContext.hasAuth("disable_organization")}'>
+	$.canDisable = true;
+</c:if>
+<c:if test='${authContext.hasAuth("enable_organization")}'>
+	$.canEnable = true;
+</c:if>
+<c:if test='${authContext.hasAuth("update_organization")}'>
+	$.canModify = true;
+</c:if>
+
 var virtualCenterTree = null;
 var treeGrid = null;
 $(document).ready(function() {
@@ -84,6 +105,18 @@ $(document).ready(function() {
 			title : '组织类型',
 			width : 80
 		}, {
+			field : 'valid',
+			title : '是否有效',
+			width : 80,
+			formatter : function(value, row, index) {
+				var str = '';
+				if(value == '1'){
+					return "有效";
+				}else{
+					return "无效";
+				}
+			}
+		}, {
 			field : 'provinceId',
 			title : '所在省',
 			width : 80,
@@ -103,14 +136,18 @@ $(document).ready(function() {
 			width : 50,
 			formatter : function(value, row, index) {
 				var str = '';
-				<c:if test="${true}">
+				if(!row.valid && $.canEnable){
+					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+				}
+				if($.canModify){
 					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
-				</c:if>
-				str += '&nbsp;';
-				<c:if test="${true}">
+				}
+				if($.canDelete){
 					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
-				</c:if>
-				str += '&nbsp;';
+				}
+				if(row.valid && $.canDisable){
+					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+				}
 				return str;
 			}
 		}, {
@@ -225,6 +262,67 @@ function deleteFun(id,name) {
 			}
 	});
 }
+function disableFun(id,name){
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	if (id == undefined) {
+		var rows = treeGrid.datagrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].name;
+	}
+	//判断对应组织是否能被停用
+	$.post(
+		'${contextPath}/organization/isDisableAble.action',
+		{organizationId: id},
+		function(data){
+			if(data){
+			    DialogUtils.confirm(
+			    		"确认提醒" , 
+			    		$.formatString("是否确认禁用组织:[{0}]?",name), 
+			    function(data){
+			    	if(data){
+			    		//如果确认删除对应组织
+			    		$.post(
+					    		'${contextPath}/organization/disableOrganizationById.action',
+					    		{organizationId:id},
+					    		function(){
+					    			DialogUtils.tip("禁用组织成功");
+					    			$('#treeGrid').treegrid('reload');
+					    });
+			    	}
+			    });
+			}else{
+				DialogUtils.alert("提醒","该组织存在尚未禁用的下级组织，不能被禁用。","warning");
+			}
+	});
+}
+function enableFun(id,name){
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	if (id == undefined) {
+		var rows = treeGrid.datagrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].name;
+	}
+	//判断对应组织是否能被停用
+    DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认启用组织:[{0}]?",name), 
+    function(data){
+    	if(data){
+    		//如果确认删除对应组织
+    		$.post(
+		    		'${contextPath}/organization/enableOrganizationById.action',
+		    		{organizationId:id},
+		    		function(){
+		    			DialogUtils.tip("启用组织成功");
+		    			$('#treeGrid').treegrid('reload');
+		    });
+    	}
+    });
+}
 function deselect(){
 	var selectedNode = virtualCenterTree.tree('getSelected');
 	if(selectedNode){
@@ -258,26 +356,22 @@ function refreshTree(){
 		</div>
 		
 		<div id="toolbar" style="display: none;">
-			<c:if test="${true}">
-				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
+			<c:if test='${authContext.hasAuth("add_organization") }'>
+				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">增加</a>
 			</c:if>
 			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
 			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
-			<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" 
-				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+			<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 		</div>
 	
 		<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
-			<c:if test="${true}">
+			<c:if test='${authContext.hasAuth("add_organization")}'>
 				<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
 			</c:if>
-			<c:if test="${true}">
+			<c:if test='${authContext.hasAuth("update_organization")}'>
 				<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
 			</c:if>
-			<c:if test="${true}">
-				<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
-			</c:if>
-			<c:if test="${true}">
+			<c:if test='${authContext.hasAuth("delete_organization")}'>
 				<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
 			</c:if>
 		</div>

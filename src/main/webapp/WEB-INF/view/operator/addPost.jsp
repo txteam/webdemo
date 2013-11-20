@@ -21,14 +21,10 @@ $(document).ready(function(){
 		handler : function(organization){
 			$("#organizationName").val(organization.name);
 			$("#organizationId").val(organization.id);
-			$("#parentName").val('');
-			$("#parentId").val('');
 		},
 		clearHandler: function(){
 			$("#organizationName").val('');
 			$("#organizationId").val('');
-			$("#parentName").val('');
-			$("#parentId").val('');
 		}
 	});
 	
@@ -42,6 +38,8 @@ $(document).ready(function(){
 		handler : function(post){
 			$("#parentName").val(post.name);
 			$("#parentId").val(post.id);
+			/*
+			现允许上级职位与当前职位不属于同一组织
 			if(post.organization && !$.ObjectUtils.isEmpty(post.organization.name)){
 				$("#organizationName").val(post.organization.name);
 				$("#organizationId").val(post.organization.id);
@@ -49,6 +47,7 @@ $(document).ready(function(){
 				$("#organizationName").val('');
 				$("#organizationId").val('');
 			}
+			*/
 		},
 		clearHandler: function(){
 			$("#parentName").val('');

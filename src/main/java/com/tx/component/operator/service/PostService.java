@@ -123,9 +123,9 @@ public class PostService {
             AssertUtils.notNull(parentPost,
                     "parentPostId:{} is not exist.",
                     post.getParentId());
-            AssertUtils.isTrue(org.getId().equals(parentPost.getOrganization().getId()));
+            AssertUtils.isTrue(org.getId().equals(parentPost.getOrganization()
+                    .getId()));
         }
-        
         
         //生成职位全名
         String postFullName = org.getFullName() + post.getName();
@@ -152,9 +152,9 @@ public class PostService {
         
         //校验业务意义上的删除是否合法
         List<Post> childPostList = queryPostListByParentId(id);
-        AssertUtils.isEmpty(childPostList,"职位存在下级职位不能被删除");
+        AssertUtils.isEmpty(childPostList, "职位存在下级职位不能被删除");
         Post res = findPostById(id);
-        AssertUtils.notNull(res,"Post id:{} is not exist",id);
+        AssertUtils.notNull(res, "Post id:{} is not exist", id);
         //将要删除的数据放入历史表
         this.postDao.insertPostToHis(res);
         
@@ -189,6 +189,42 @@ public class PostService {
     }
     
     /**
+      * 查询包括无效职位在内的职位列表<br/>
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return List<Post> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<Post> queryPostListIncludeInvalid(String parentPostId,
+            String organizationId) {
+        List<Post> resList = null;
+        
+        if (StringUtils.isEmpty(parentPostId)
+                && StringUtils.isEmpty(organizationId)) {
+            //生成查询条件
+            Map<String, Object> params = new HashMap<String, Object>();
+            resList = this.postDao.queryPostList(params);
+        } else if (!StringUtils.isEmpty(organizationId)) {
+            //生成查询条件
+            Map<String, Object> params = new HashMap<String, Object>();
+            //传入了organizationId,权限判断植入的代码即不生效
+            params.put("organizationId", organizationId);
+            resList = this.postDao.queryPostList(params);
+        } else {
+            //生成查询条件
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("parentId", parentPostId);
+            resList = this.postDao.queryPostList(params);
+        }
+        
+        //为查询结果装载组织信息
+        setupOrganizationInfo(resList);
+        return resList;
+    }
+    
+    /**
       * 根据权限查看职位列表
       *     如果没有查看所有组织职位的权限，
       *     则默认只能查看当前组织及其下级的组织含有的职位<br/>
@@ -199,33 +235,12 @@ public class PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<Post> queryPostListByAuth() {
-        //在底层查询中，会根据权限，查询当前人员能够看到的所有职位
-        //如果为超级管理员则能查看所有的组织的所有职位
-        List<Post> resList = this.postDao.queryPostList(null);
-        
-        //为查询结果装载组织信息
-        setupOrganizationInfo(resList);
-        return resList;
-    }
-    
-    /**
-     * 根据Post实体列表
-     * 
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<Post> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public List<Post> queryAllPostList() {
-        
+    public List<Post> queryPostList() {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
-        //利用该条件能够屏蔽掉底层sql中权限查询的逻辑
-        params.put("organization", new Organization());
-        
+        params.put("valid", true);
+        //在底层查询中，会根据权限，查询当前人员能够看到的所有职位
+        //如果为超级管理员则能查看所有的组织的所有职位
         List<Post> resList = this.postDao.queryPostList(params);
         
         //为查询结果装载组织信息
@@ -248,9 +263,8 @@ public class PostService {
         
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
+        params.put("valid", true);
         params.put("parentId", parentPostId);
-        //利用该条件能够屏蔽掉底层sql中权限查询的逻辑
-        params.put("organization", new Organization());
         
         List<Post> resList = this.postDao.queryPostList(params);
         
@@ -276,6 +290,7 @@ public class PostService {
         Map<String, Object> params = new HashMap<String, Object>();
         //传入了organizationId,权限判断植入的代码即不生效
         params.put("organizationId", organizationId);
+        params.put("valid", true);
         
         List<Post> resList = this.postDao.queryPostList(params);
         
@@ -286,8 +301,7 @@ public class PostService {
     }
     
     /**
-      * 查询post列表总条数
-      * TODO:补充说明
+      * 判断职位编码是否已经存在<br/>
       * <功能详细描述>
       * @return [参数说明]
       * 
@@ -327,6 +341,7 @@ public class PostService {
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", post.getId());
+        updateRowMap.put("parentId", post.getParentId());
         
         updateRowMap.put("remark", post.getRemark());
         updateRowMap.put("name", post.getName());
@@ -337,5 +352,81 @@ public class PostService {
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
+    }
+    
+    /**
+      * 是否可删除<br/> 
+      * 如果存子职位则不能被删除
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean isDeleteAble(String postId){
+        AssertUtils.notEmpty(postId, "postId is empty.");
+        
+        //生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("parentId", postId);
+        //利用该条件能够屏蔽掉底层sql中权限查询限定的逻辑
+        params.put("organization", new Organization());
+        
+        int count = this.postDao.countPost(params);
+        boolean flag = count <= 0;
+        
+        return flag;
+    }
+    
+    /**
+      * 是否可禁用<BR/>
+      *     如果子级职位存在尚未被禁用的职位，则该职位不能被禁用<br/>
+      *<功能详细描述>
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean isDisableAble(String postId){
+        AssertUtils.notEmpty(postId, "postId is empty.");
+        
+        //生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("valid", true);
+        params.put("parentId", postId);
+        //利用该条件能够屏蔽掉底层sql中权限查询限定的逻辑
+        params.put("organization", new Organization());
+        
+        int count = this.postDao.countPost(params);
+        boolean flag = count <= 0;
+        
+        return flag;
+    }
+    
+    public boolean disableById(String postId){
+        AssertUtils.notEmpty(postId, "postId is empty.");
+        
+        //生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("id", postId);
+        params.put("valid", false);
+        this.postDao.updatePost(params);
+        
+        return true;
+    }
+    
+    public boolean enableById(String postId){
+        AssertUtils.notEmpty(postId, "postId is empty.");
+        
+        //生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("id", postId);
+        params.put("valid", true);
+        this.postDao.updatePost(params);
+        
+        return true;
     }
 }

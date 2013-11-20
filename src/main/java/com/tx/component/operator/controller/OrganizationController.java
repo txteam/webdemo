@@ -124,7 +124,8 @@ public class OrganizationController {
                 StringUtils.isEmpty(resOrganization.getParentId()) ? ""
                         : this.organizationService.findOrganizationById(resOrganization.getParentId())
                                 .getName());
-        modelMap.put("virtualCenter",this.virtualCenterService.findVirtualCenterById(resOrganization.getVcid()));
+        modelMap.put("virtualCenter",
+                this.virtualCenterService.findVirtualCenterById(resOrganization.getVcid()));
         
         modelMap.put("organization", resOrganization);
         return "/operator/updateOrganization";
@@ -278,6 +279,8 @@ public class OrganizationController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @ResponseBody
+    @RequestMapping("/isDisableAble")
     public boolean isDisableAble(
             @RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.isDisableAble(organizationId);
@@ -300,7 +303,7 @@ public class OrganizationController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @CheckOperateAuth(key = "delete_organization", name = "删除组织")
+    @CheckOperateAuth(key = "delete_organization", name = "删除组织", configAble = false)
     @ResponseBody
     @RequestMapping("/deleteOrganizationById")
     public boolean deleteOrganizationById(
@@ -321,6 +324,8 @@ public class OrganizationController {
       * @see [类、类#方法、类#成员]
      */
     @CheckOperateAuth(key = "disable_organization", name = "禁用组织")
+    @ResponseBody
+    @RequestMapping("/disableOrganizationById")
     public boolean disableOrganizationById(
             @RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.disableOrganizationById(organizationId);
@@ -339,6 +344,8 @@ public class OrganizationController {
       * @see [类、类#方法、类#成员]
      */
     @CheckOperateAuth(key = "enable_organization", name = "启用组织")
+    @ResponseBody
+    @RequestMapping("/enableOrganizationById")
     public boolean enableOrganizationById(
             @RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.enableOrganizationById(organizationId);

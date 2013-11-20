@@ -238,6 +238,7 @@ CREATE TABLE OPER_ORGANIZATION_HIS(
 DROP TABLE OPER_POST;
 CREATE TABLE OPER_POST(
 	id varchar2(64) not null,
+	valid number(1,0) default 1 not null,
 	parentId varchar2(64),
 	remark varchar2(2000),
 	name varchar2(64),
@@ -258,6 +259,7 @@ comment on column OPER_POST.code is 'Ö°Î»±àÂë';
 drop table OPER_POST_HIS;
 create table OPER_POST_HIS(
 	id varchar2(64) not null,
+	valid number(1,0) default 1 not null,
 	parentId varchar2(64),
 	remark varchar2(2000),
 	name varchar2(64),

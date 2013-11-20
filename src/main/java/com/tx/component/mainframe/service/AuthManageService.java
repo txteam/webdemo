@@ -73,7 +73,8 @@ public class AuthManageService {
      * @see [类、类#方法、类#成员]
     */
     public MultiValueMap<String, CheckAbleTreeNode> queryAuthType2TreeNodeMapByRefId(
-            String refType, String refId) {
+            String refType, String refId, boolean isIncludeInvalid,
+            boolean isIncludeCanNotConfigAble,boolean isIncludeCanNotEditAble) {
         AssertUtils.notEmpty(refId, "refId is empty.");
         AssertUtils.notEmpty(refType, "refType is empty.");
         
@@ -88,8 +89,17 @@ public class AuthManageService {
             if (CollectionUtils.isEmpty(entryTemp.getValue())) {
                 continue;
             }
-            
             for (AuthItem authTemp : entryTemp.getValue()) {
+                if(!isIncludeInvalid &&  !authTemp.isValid()){
+                    continue;
+                }
+                if(!isIncludeCanNotConfigAble &&  !authTemp.isConfigAble()){
+                    continue;
+                }
+                if(!isIncludeCanNotEditAble && authTemp.isEditAble()){
+                    continue;
+                }
+                
                 if (refAuthIdSet.contains(authTemp.getId())) {
                     //如果对应职位已经有对应权限
                     resMap.add(entryTemp.getKey(), new CheckAbleTreeNode(
@@ -132,78 +142,78 @@ public class AuthManageService {
         return resSet;
     }
     
-    /**
-      * 查询指定引用类型的引用id集合
-      *<功能详细描述>
-      * @param refType
-      * @param authItemId
-      * @return [参数说明]
-      * 
-      * @return Set<String> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public Set<String> queryRefIdSetByAuthItemId(String refType,
-            String authItemId) {
-        AssertUtils.notEmpty(authItemId, "authItemId is empty.");
-        AssertUtils.notEmpty(refType, "refType is empty.");
-        
-        Set<String> resSet = new HashSet<String>();
-        List<AuthItemRef> authItemRefList = AuthContext.getContext()
-                .queryAuthItemRefListByAuthRefTypeAndAuthItemId(refType,
-                        authItemId);
-        if (authItemRefList != null) {
-            for (AuthItemRef refTemp : authItemRefList) {
-                resSet.add(refTemp.getAuthItem().getId());
-            }
-        }
-        
-        return resSet;
-    }
+//    /**
+//      * 查询指定引用类型的引用id集合
+//      *<功能详细描述>
+//      * @param refType
+//      * @param authItemId
+//      * @return [参数说明]
+//      * 
+//      * @return Set<String> [返回类型说明]
+//      * @exception throws [异常类型] [异常说明]
+//      * @see [类、类#方法、类#成员]
+//     */
+//    public Set<String> queryRefIdSetByAuthItemId(String refType,
+//            String authItemId) {
+//        AssertUtils.notEmpty(authItemId, "authItemId is empty.");
+//        AssertUtils.notEmpty(refType, "refType is empty.");
+//        
+//        Set<String> resSet = new HashSet<String>();
+//        List<AuthItemRef> authItemRefList = AuthContext.getContext()
+//                .queryAuthItemRefListByAuthRefTypeAndAuthItemId(refType,
+//                        authItemId);
+//        if (authItemRefList != null) {
+//            for (AuthItemRef refTemp : authItemRefList) {
+//                resSet.add(refTemp.getAuthItem().getId());
+//            }
+//        }
+//        
+//        return resSet;
+//    }
     
-    /**
-     * 查询权限类型项<br/>
-     *     如果viewAble为true则仅返回可见的权限类型项<br/>
-      *<功能简述>
-      *<功能详细描述>
-      * @param viewAble
-      * @return [参数说明]
-      * 
-      * @return List<AuthTypeItem> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @SuppressWarnings("unchecked")
-    public List<AuthTypeItem> queryAuthTypeItem(boolean viewAble) {
-        List<AuthTypeItem> authTypeItemList = AuthTypeItemContext.getContext()
-                .getAllAuthTypeItemList();
-        List<AuthTypeItem> resList = new ArrayList<AuthTypeItem>();
-        
-        for (AuthTypeItem typeTemp : authTypeItemList) {
-            if (viewAble && !typeTemp.isViewAble()) {
-                continue;
-            }
-            resList.add(typeTemp);
-        }
-        
-        return ListUtils.unmodifiableList(resList);
-    }
+//    /**
+//     * 查询权限类型项<br/>
+//     *     如果viewAble为true则仅返回可见的权限类型项<br/>
+//      *<功能简述>
+//      *<功能详细描述>
+//      * @param viewAble
+//      * @return [参数说明]
+//      * 
+//      * @return List<AuthTypeItem> [返回类型说明]
+//      * @exception throws [异常类型] [异常说明]
+//      * @see [类、类#方法、类#成员]
+//     */
+//    @SuppressWarnings("unchecked")
+//    public List<AuthTypeItem> queryAuthTypeItem(boolean viewAble) {
+//        List<AuthTypeItem> authTypeItemList = AuthTypeItemContext.getContext()
+//                .getAllAuthTypeItemList();
+//        List<AuthTypeItem> resList = new ArrayList<AuthTypeItem>();
+//        
+//        for (AuthTypeItem typeTemp : authTypeItemList) {
+//            if (viewAble && !typeTemp.isViewAble()) {
+//                continue;
+//            }
+//            resList.add(typeTemp);
+//        }
+//        
+//        return ListUtils.unmodifiableList(resList);
+//    }
     
-    /**
-     * 查询当前人员可对外授权的权限项列表（不包括临时权限）<br/>
-     *<功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<AuthItemImpl> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    @SuppressWarnings("unchecked")
-    public List<AuthItemImpl> queryCurrentPerpetualAuthList() {
-        List<AuthItem> erpetualAuthItemList = AuthSessionContext.getPerpetualAuthItemListDependAuthRefOfSession();
-        
-        return ListUtils.unmodifiableList(erpetualAuthItemList);
-    }
+//    /**
+//     * 查询当前人员可对外授权的权限项列表（不包括临时权限）<br/>
+//     *<功能详细描述>
+//     * @return [参数说明]
+//     * 
+//     * @return List<AuthItemImpl> [返回类型说明]
+//     * @exception throws [异常类型] [异常说明]
+//     * @see [类、类#方法、类#成员]
+//    */
+//    @SuppressWarnings("unchecked")
+//    public List<AuthItemImpl> queryCurrentPerpetualAuthList() {
+//        List<AuthItem> erpetualAuthItemList = AuthSessionContext.getPerpetualAuthItemListDependAuthRefOfSession();
+//        
+//        return ListUtils.unmodifiableList(erpetualAuthItemList);
+//    }
     
     /**
       * 参训当前登录人员所有可授权权限列表的权限类型和权限列表的映射
@@ -260,62 +270,62 @@ public class AuthManageService {
         }
     }
     
-    /**
-      * 查询职位权限
-      *<功能详细描述>
-      * @param postId
-      * @return [参数说明]
-      * 
-      * @return List<AuthItemRef> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public List<AuthItemRef> queryPostAuth(String postId) {
-        AssertUtils.notEmpty(postId, "postId is empty");
-        
-        List<AuthItemRef> AuthItemRefList = authContext.queryAuthItemRefListByAuthRefTypeAndRefId(MainframeConstants.AUTHREFTYPE_POST,
-                postId);
-        
-        return AuthItemRefList;
-    }
+//    /**
+//      * 查询职位权限
+//      *<功能详细描述>
+//      * @param postId
+//      * @return [参数说明]
+//      * 
+//      * @return List<AuthItemRef> [返回类型说明]
+//      * @exception throws [异常类型] [异常说明]
+//      * @see [类、类#方法、类#成员]
+//     */
+//    public List<AuthItemRef> queryPostAuth(String postId) {
+//        AssertUtils.notEmpty(postId, "postId is empty");
+//        
+//        List<AuthItemRef> AuthItemRefList = authContext.queryAuthItemRefListByAuthRefTypeAndRefId(MainframeConstants.AUTHREFTYPE_POST,
+//                postId);
+//        
+//        return AuthItemRefList;
+//    }
     
-    /**
-      * 查询组织权限
-      *<功能详细描述>
-      * @param organizationId
-      * @return [参数说明]
-      * 
-      * @return List<AuthItemRef> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public List<AuthItemRef> queryOrganizationAuth(String organizationId) {
-        AssertUtils.notEmpty(organizationId, "postId is empty");
-        
-        List<AuthItemRef> AuthItemRefList = authContext.queryAuthItemRefListByAuthRefTypeAndRefId(MainframeConstants.AUTHREFTYPE_ORGANIZATION,
-                organizationId);
-        
-        return AuthItemRefList;
-    }
+//    /**
+//      * 查询组织权限
+//      *<功能详细描述>
+//      * @param organizationId
+//      * @return [参数说明]
+//      * 
+//      * @return List<AuthItemRef> [返回类型说明]
+//      * @exception throws [异常类型] [异常说明]
+//      * @see [类、类#方法、类#成员]
+//     */
+//    public List<AuthItemRef> queryOrganizationAuth(String organizationId) {
+//        AssertUtils.notEmpty(organizationId, "postId is empty");
+//        
+//        List<AuthItemRef> AuthItemRefList = authContext.queryAuthItemRefListByAuthRefTypeAndRefId(MainframeConstants.AUTHREFTYPE_ORGANIZATION,
+//                organizationId);
+//        
+//        return AuthItemRefList;
+//    }
     
-    /**
-      * 查询操作权限
-      *<功能详细描述>
-      * @param operatorId
-      * @return [参数说明]
-      * 
-      * @return List<AuthItemRef> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public List<AuthItemRef> queryOperatorAuth(String operatorId) {
-        AssertUtils.notEmpty(operatorId, "postId is empty");
-        
-        List<AuthItemRef> AuthItemRefList = authContext.queryAuthItemRefListByAuthRefTypeAndRefId(MainframeConstants.AUTHREFTYPE_ORGANIZATION,
-                operatorId);
-        
-        return AuthItemRefList;
-    }
+//    /**
+//      * 查询操作权限
+//      *<功能详细描述>
+//      * @param operatorId
+//      * @return [参数说明]
+//      * 
+//      * @return List<AuthItemRef> [返回类型说明]
+//      * @exception throws [异常类型] [异常说明]
+//      * @see [类、类#方法、类#成员]
+//     */
+//    public List<AuthItemRef> queryOperatorAuth(String operatorId) {
+//        AssertUtils.notEmpty(operatorId, "postId is empty");
+//        
+//        List<AuthItemRef> AuthItemRefList = authContext.queryAuthItemRefListByAuthRefTypeAndRefId(MainframeConstants.AUTHREFTYPE_ORGANIZATION,
+//                operatorId);
+//        
+//        return AuthItemRefList;
+//    }
     
     /**
       * 查询当前人员拥有权限的权限类型集合（不包含）
@@ -349,7 +359,6 @@ public class AuthManageService {
         
         return hasChildAuthTypeList;
     }
-    
     
     /** 职位转换为树节点的适配器 */
     private static CheckAbleTreeNodeAdapter<AuthItem> authAdapter = new CheckAbleTreeNodeAdapter<AuthItem>() {

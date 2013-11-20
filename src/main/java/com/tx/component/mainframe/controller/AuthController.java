@@ -119,7 +119,10 @@ public class AuthController {
     public Map<String, List<CheckAbleTreeNode>> queryPostAuthType2AuthItemListMap(
             @RequestParam("postId") String postId) {
         MultiValueMap<String, CheckAbleTreeNode> authType2AuthItemListMap = this.authManageService.queryAuthType2TreeNodeMapByRefId(AuthConstant.AUTHREFTYPE_POST,
-                postId);
+                postId,
+                false,
+                false,
+                true);
         
         return authType2AuthItemListMap;
     }
@@ -138,14 +141,15 @@ public class AuthController {
      */
     @ResponseBody
     @RequestMapping("/savePost2AuthItemList")
-    public boolean savePost2AuthItemList(@RequestParam("postId") String postId,
+    public boolean savePost2AuthItemList(
+            @RequestParam("postId") String postId,
             @RequestParam("authType") String authType,
-            @RequestParam(value="authItemId[]",required=false) String[] authItemIds,
-            @RequestParam()MultiValueMap<String, String> request) {
+            @RequestParam(value = "authItemId[]", required = false) String[] authItemIds,
+            @RequestParam() MultiValueMap<String, String> request) {
         List<String> authIdList = null;
-        if(authItemIds == null){
+        if (authItemIds == null) {
             authIdList = new ArrayList<String>();
-        }else{
+        } else {
             authIdList = Arrays.asList(authItemIds);
         }
         this.authManageService.saveRefId2AuthItemIdList(authType,
