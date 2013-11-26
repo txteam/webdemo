@@ -268,6 +268,16 @@ public class PostController {
         return resFlag;
     }
     
+    /**
+      * 判断职位是否能被禁用
+      *<功能详细描述>
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     @ResponseBody
     @RequestMapping("/isDisableAble")
     public boolean isDisableAble(@RequestParam(value = "postId") String postId) {
@@ -276,6 +286,15 @@ public class PostController {
         return flag;
     }
     
+    /**
+      * 禁用职位
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     @CheckOperateAuth(key = "disable_post", name = "禁用职位")
     @ResponseBody
     @RequestMapping("/disablePostById")
@@ -284,6 +303,16 @@ public class PostController {
         return resFlag;
     }
     
+    /**
+      * 启用职位<br/>
+      *<功能详细描述>
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     @CheckOperateAuth(key = "enable_post", name = "启用职位")
     @ResponseBody
     @RequestMapping("/enablePostById")

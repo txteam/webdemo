@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tx.component.operator.OperatorConstants;
 import com.tx.component.operator.dao.OperatorDao;
 import com.tx.component.operator.model.Operator;
+import com.tx.component.operator.model.OperatorStateEnum;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 
@@ -124,7 +126,6 @@ public class OperatorService {
                 "operator.organization.id is empty.");
         
         //TODO:密码加密
-        
         //写入默认时间
         Date now = new Date();
         operator.setCreateDate(now);
@@ -147,13 +148,13 @@ public class OperatorService {
      * @see [类、类#方法、类#成员]
     */
     @Transactional
-    public int deleteById(String id) {
+    public boolean deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
         
         Operator condition = new Operator();
         condition.setId(id);
         
-        return this.operatorDao.deleteOperator(condition);
+        return this.operatorDao.deleteOperator(condition) > 0;
     }
     
     /**
@@ -240,7 +241,51 @@ public class OperatorService {
     
     /**
      * 分页查询Operator实体列表
-     * TODO:补充说明
+     *     (包含禁用的操作员)
+     * 
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<Operator> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    public PagedList<Operator> queryOperatorPagedListByOrganizationIdIncludeInvalid(
+            String organizationId, String loginName, String userName,
+            String code, OperatorStateEnum state, int pageIndex, int pageSize) {
+        //生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        if (!StringUtils.isEmpty(organizationId)) {
+            params.put("organizationId", organizationId);
+        }
+        params.put("loginName", loginName);
+        params.put("userName", userName);
+        //无default该方法查询出结果，可以包含valid:false的情况
+        if(state != null){
+            switch (state) {
+                case 停用:
+                    params.put("valid", false);
+                    break;
+                case 锁定:
+                    params.put("valid", true);
+                    params.put("locked", true);
+                    break;
+                case 正常:
+                    params.put("valid", true);
+                    params.put("locked", false);
+                    break;
+            }
+        }
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        PagedList<Operator> resPagedList = this.operatorDao.queryOperatorPagedList(params,
+                pageIndex,
+                pageSize);
+        return resPagedList;
+    }
+    
+    /**
+     * 分页查询Operator实体列表
+     *     (包含禁用的操作员)
      * 
      * <功能详细描述>
      * @return [参数说明]
@@ -250,17 +295,30 @@ public class OperatorService {
      * @see [类、类#方法、类#成员]
     */
     public PagedList<Operator> queryOperatorPagedListByOrganizationId(
-            String organizationId, int pageIndex, int pageSize) {
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
+            String organizationId, String loginName, String userName,
+            String code, OperatorStateEnum state, int pageIndex, int pageSize) {
+        //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
+        if (!StringUtils.isEmpty(organizationId)) {
+            params.put("organizationId", organizationId);
+        }
+        params.put("loginName", loginName);
+        params.put("userName", userName);
+        params.put("valid", true);
+        //无default该方法查询出结果，可以包含valid:false的情况
+        switch (state) {
+            case 锁定:
+                params.put("locked", true);
+                break;
+            case 正常:
+                params.put("locked", false);
+                break;
+        }
         
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         PagedList<Operator> resPagedList = this.operatorDao.queryOperatorPagedList(params,
                 pageIndex,
                 pageSize);
-        
         return resPagedList;
     }
     
@@ -293,6 +351,7 @@ public class OperatorService {
         updateRowMap.put("invalidDate", operator.getInvalidDate());
         updateRowMap.put("password", operator.getPassword());
         updateRowMap.put("lastUpdateDate", operator.getLastUpdateDate());
+        
         //type:java.lang.String
         updateRowMap.put("organization", operator.getOrganization());
         updateRowMap.put("pwdUpdateDate", operator.getPwdUpdateDate());

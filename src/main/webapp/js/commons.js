@@ -718,7 +718,7 @@ var GlobalDialogUtils = null;
     	if($dialogHandle.size() > 0){
     	   $dialogHandle.dialog("close");
     	}else{
-    	   $.triggerge("close_dialog_" + dialogHandleId);
+    	   $.triggerge("close_dialog_" + dialogId);
     	}
     };
     /*

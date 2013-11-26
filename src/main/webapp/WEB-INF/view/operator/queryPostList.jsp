@@ -396,13 +396,13 @@ function configPostAuth(id,name){
 		</div>
 	
 		<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
-			<c:if test='${authContext.hasAuth("add_organization")}'>
+			<c:if test='${authContext.hasAuth("add_post")}'>
 				<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
 			</c:if>
-			<c:if test='${authContext.hasAuth("update_organization")}'>
+			<c:if test='${authContext.hasAuth("update_post")}'>
 				<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
 			</c:if>
-			<c:if test='${authContext.hasAuth("delete_organization")}'>
+			<c:if test='${authContext.hasAuth("delete_post")}'>
 				<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
 			</c:if>
 		</div>

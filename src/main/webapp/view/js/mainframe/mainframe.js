@@ -104,7 +104,7 @@ $(function(){
 
         }
     });
-    
+
     $mainframe.bind("addOrSelectTab", function(event, options) {
         /*
         DialogUtils.progress({
@@ -127,7 +127,7 @@ $(function(){
             return false;
         } else if (options.href) {
             //以iframe的形式显示tab
-            var newIframe = '<iframe src="' + options.href + '" frameborder="0" border="0" style="border:0;width:100%;height:98%;"></iframe>';
+            var newIframe = '<iframe class="mainframeTab" src="' + options.href + '" frameborder="0" border="0" style="border:0;width:100%;height:98%;"></iframe>';
             $indexTabs.tabs('add', {
                 title : options.title,
                 closable : true,
@@ -138,8 +138,45 @@ $(function(){
             });
         }
     });
+    $mainframe.bind("refreshTab", function(event, options) {
 
-
+        var options = $.extend({}, {
+            title : "",
+            href : null,
+            iconCls : null,
+            contentText : null
+        }, options);
+        //如果指定tab已经存在，则直接将该tab选中即可
+        if ($indexTabs.tabs('exists', options.title)) {
+            //TODO:后续加入，根据tab中如果存在refreshOnEverySelected属性时每次选中均刷新的逻辑<br/>
+            $indexTabs.tabs('select', options.title);
+            /*
+            DialogUtils.progress({
+                title :'提示',
+                text : '加载中，请等待....'
+            });
+            */
+            var tab = $indexTabs.tabs('getTab', options.title);
+            if($(tab).find("iframe.mainframeTab") > 0){
+                var $iframe = $(tab).find("iframe.mainframeTab");
+                if($.ObjectUtils.isEmpty(options.href)){
+                    $iframe.attr("src",options.href);
+                }else{
+                    var srcTemp = $iframe.attr("src");
+                    $iframe.attr("src",srcTemp);
+                }
+            }
+            //如果已经存在直接关闭加载进度条
+            DialogUtils.progress('close');
+            return false;
+        }
+    });
+    $mainframe.bind("closeSelectedTab",function(event){
+    	//console.info($indexTabs.tabs("getSelected").title);
+    	var tab = $indexTabs.tabs('getSelected');  
+        var index = $indexTabs.tabs('getTabIndex',tab);  
+    	$indexTabs.tabs('close',index);
+    });
 });
 $.bindge("addOrSelectTab", function(event, options) {
     var hrefValue = options.href;
@@ -152,6 +189,23 @@ $.bindge("addOrSelectTab", function(event, options) {
     $mainframe.trigger("addOrSelectTab", options);
     return true;
 });
+$.bindge("refreshTab", function(event, options) {
+    var hrefValue = options.href;
+    if ((hrefValue.indexOf("http://") < 0 || hrefValue.indexOf("http://") > 0 ) && hrefValue.indexOf(_contextPath) != 0) {
+        options.href = _contextPath + hrefValue;
+    }
+    if (hrefValue.indexOf("/") == 0 && hrefValue.indexOf(_contextPath) != 0) {
+        options.href = _contextPath + hrefValue;
+    }
+    $mainframe.trigger("refreshTab", options);
+    return true;
+});
+//关闭当前选中的tab
+$.bindge("closeSelectedTab",function(event){
+	$mainframe.trigger("closeSelectedTab");
+	return true;
+});
+
 
 /**
  * 首页更换皮肤方法 
