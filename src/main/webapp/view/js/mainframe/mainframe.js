@@ -178,6 +178,7 @@ $(function(){
     	$indexTabs.tabs('close',index);
     });
 });
+
 $.bindge("addOrSelectTab", function(event, options) {
     var hrefValue = options.href;
     if ((hrefValue.indexOf("http://") < 0 || hrefValue.indexOf("http://") > 0 ) && hrefValue.indexOf(_contextPath) != 0) {
@@ -204,6 +205,16 @@ $.bindge("refreshTab", function(event, options) {
 $.bindge("closeSelectedTab",function(event){
 	$mainframe.trigger("closeSelectedTab");
 	return true;
+});
+
+//session丢失后跳转到会话丢失页面
+$.bindge("sessionLost",function(event){
+    GlobalDialogUtils.openModalDialog("autoRedirectToLoginPage","登录超时",_contextPath + "/mainframe/toLogin.action");
+    return true;
+});
+//系统自动跳转到登录页面
+$.bindge("returnLoginPage",function(event){
+    window.location.href = _contextPath + "/mainframe/toLogin.action";
 });
 
 
@@ -361,9 +372,10 @@ $(function(){
      * @param {Object} menuItem
      */
     function onSelectedMenuItem(menuItem){
-        if($.ObjectUtils.isEmpty(menuItem.href)){
-            return false;
-        }else if(menuItem.target == "mainTabs"){
+        if(menuItem.target == "mainTabs"){
+            if($.ObjectUtils.isEmpty(menuItem.href)){
+                return false;
+            }
             $.triggerGE("addOrSelectTab",[{
                 title : menuItem.text,
                 href : menuItem.href,
@@ -371,7 +383,7 @@ $(function(){
             }]);
             return false;
         }else if(menuItem.target == "triggerGlobalEvent"){
-            $.triggerGE(menuItem.eventType,[menuItem]);
+            $.triggerge(menuItem.eventType,[menuItem]);
             return false;
         }else if(menuItem.target == "openDialog"){
             if(menuItem.isModal){
@@ -380,6 +392,9 @@ $(function(){
                 //打开非模态对话框
             }
         }else{
+            if($.ObjectUtils.isEmpty(menuItem.href)){
+                return false;
+            }
         	//系统默认为打开对应tab
         	$.triggerGE("addOrSelectTab",[{
                 title : menuItem.text,

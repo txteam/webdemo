@@ -98,9 +98,9 @@ public class OperatorServiceTest {
             
             Assert.assertNotNull(res);
             
-            int count = this.operatorService.deleteById(res.getId());
+            boolean resflag = this.operatorService.deleteById(res.getId());
             
-            Assert.assertTrue(count > 0);
+            Assert.assertTrue(resflag);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.assertTrue(false);

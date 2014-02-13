@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>grid demo index</title>
-<%@include file="../../../includes/commonHead.jsp" %>
+<%@include file="../../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
 $(document).ready(function() {

@@ -18,7 +18,14 @@
 }
 </style>
 <script type="text/javascript">
-
+function logoutFun(){
+	DialogUtils.confirm("","是否确认退出系统",function(flag){
+		if(flag){
+			window.location.href = _contextPath + "/mainframe/logout.action";
+		}
+	});
+}
+$.bindge("logout",logoutFun);
 </script>
 </head>
 <body>
@@ -52,17 +59,20 @@
 				<div onclick="changeThemeFun('metro-red');" title="metro-red">metro-red</div>
 			</div>
 			<div id="layout_north_kzmbMenu" style="width: 100px; display: none;">
+				<div onclick="editCurrentUserPwd();">记事本</div>
+				<div onclick="editCurrentUserPwd();">行事历</div>
+				<div class="menu-sep"></div>
 				<div onclick="editCurrentUserPwd();">修改密码</div>
+				<div onclick="editCurrentUserPwd();">修改个人信息</div>
 				<div class="menu-sep"></div>
 				<div onclick="currentUserRole();">我的角色</div>
-				<div class="menu-sep"></div>
 				<div onclick="currentUserResource();">我的权限</div>
 			</div>
 			<div id="layout_north_zxMenu" style="width: 100px; display: none;">
 				<div onclick="logoutFun();">锁定窗口</div>
-				<div class="menu-sep"></div>
 				<div onclick="logoutFun();">重新登录</div>
-				<div onclick="logoutFun(true);">退出系统</div>
+				<div class="menu-sep"></div>
+				<div onclick="logoutFun();">退出系统</div>
 			</div>
 		</div>
 		<div data-options="region:'west',split:true,
@@ -93,5 +103,27 @@
 		<div title="closeOther" data-options="iconCls:'delete'">关闭其他</div>
 		<div title="closeAll" data-options="iconCls:'delete'">关闭所有</div>
 	</div>
+	
+<div id="loginDialog" title="用户登录"
+	style="width: 330px; height: 220px; overflow: hidden; display: none;">
+	<form id="loginForm" method="post">
+		<table class="table table-hover table-condensed">
+			<tr>
+				<th>登录名</th>
+				<td><input name="name" type="text" 
+					placeholder="请输入登录名" 
+					class="easyui-validatebox" 
+					data-options="required:true" value="孙宇"></td>
+			</tr>
+			<tr>
+				<th>密码</th>
+				<td><input name="pwd" type="password" placeholder="请输入密码"
+					class="easyui-validatebox" 
+					data-options="required:true" 
+					value="123456"></td>
+			</tr>
+		</table>
+	</form>
+</div>
 </body>
 </html>

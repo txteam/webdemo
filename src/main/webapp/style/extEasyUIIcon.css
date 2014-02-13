@@ -1,4 +1,4 @@
-.tooltip{/*���EasyUI��bootstrap��ͻʱtip����ʾ������*/
+.tooltip{
 	opacity:1;
 	filter:alpha(opacity=100);
 }
@@ -8,7 +8,7 @@ img {
 }
 
 .logo {
-	background: url('images/sypro.png') no-repeat;
+	background: url('images/webdemo.png') no-repeat;
 }
 
 .folder_wrench {background: url('images/extjs_icons/folder/folder_wrench.png') no-repeat center center;}

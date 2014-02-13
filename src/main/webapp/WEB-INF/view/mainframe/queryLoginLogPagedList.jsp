@@ -11,6 +11,7 @@
 <script type="text/javascript" >
 var serviceLogTable = null;
 $(document).ready(function(){
+	//alert("document.ready");
 	serviceLogTable = $('#serviceLogTable').datagrid({
 		url : '${contextPath}/servicelog/mainframe/loginLog/queryLoginLogPagedList.action',
 		fit : true,
@@ -140,7 +141,7 @@ $(document).ready(function(){
 					</tr>
 				<tr>
 					<td colspan="4" class="button operRow">
-						<a id="queryBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>
+						<a id="queryBtn" href="javascript:void(0);" onclick="return false;" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>
 					</td>
 				</tr>
 			</table>

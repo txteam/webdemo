@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
@@ -60,9 +61,32 @@ public class MainframeController {
     @Resource(name = "authContext")
     private AuthContext authContext;
     
+    /**
+      * 跳转到登录页面
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     @RequestMapping("/toLogin")
     public String toLogin() {
         return "/mainframe/login";
+    }
+    
+    /**
+      * 跳转到会话丢失错误页面<br/>
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toSessionLostErrorPage")
+    public String toSessionLostErrorPage(){
+        return "/error/sessionLostError";
     }
     
     /**
@@ -97,11 +121,12 @@ public class MainframeController {
         }
         
         //如果登录不成功继续返回登录页面
-        if (!this.operatorService.checkPassword(loginName, password)) {
+        if (!this.operatorService.checkPasswordForLogin(loginName, password)) {
             model.addAttribute("errorMsg", "用户密码错误.请重新输入.");
             return "/mainframe/login";
         }
         
+        //登录的标志
         model.addAttribute(WebContextUtils.SESSION_CURRENT_OPERATOR, oper);
         
         //调用权限容器登录句柄
@@ -111,53 +136,68 @@ public class MainframeController {
         webContextLoginHandler(oper);
         
         //这个时候记录日志中信息没有写进需要手动写入
-        ServiceLogger<LoginLog> serviceLogger =  ServiceLoggerContext.getLogger(LoginLog.class);
+        ServiceLogger<LoginLog> serviceLogger = ServiceLoggerContext.getLogger(LoginLog.class);
         serviceLogger.setAttribute("operatorId", oper.getId());
         serviceLogger.setAttribute("operatorName", oper.getUserName());
         serviceLogger.setAttribute("operatorLoginName", oper.getLoginName());
-        serviceLogger.log(new LoginLog(
-                "webdemo", LoginLog.LOGINTYPE_LOGIN, "操作员{}登录系统",
-                new Object[] { loginName }));
+        serviceLogger.log(new LoginLog("webdemo", LoginLog.LOGINTYPE_LOGIN,
+                "操作员{}登录系统", new Object[] { loginName }));
         
         return "/mainframe/mainframe";
     }
-
     
-     /** 
-      *<功能简述>
-      *<功能详细描述>
-      * @param oper [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-      */
+    /** 
+     * 在登录期间需要通过WebContextUtils写入的相关操作
+     *<功能详细描述>
+     * @param oper [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
     private void webContextLoginHandler(Operator oper) {
         //将当前登录人员写入会话中
         WebContextUtils.putOperatorInSession(oper);
         
         //将当前组织写入会话中
-        Organization currentOrg = this.organizationService.findOrganizationById(oper.getOrganization().getId());
+        Organization currentOrg = this.organizationService.findOrganizationById(oper.getOrganization()
+                .getId());
         WebContextUtils.putOganizationInSession(currentOrg);
-        
-        
     }
-
     
-     /** 
-      * 权限容器登录句柄
+    /**
+      * 退出系统<br/>
       *<功能详细描述>
-      * @param oper [参数说明]
+      * @return [参数说明]
       * 
-      * @return void [返回类型说明]
+      * @return String [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
-      */
+     */
+    @RequestMapping("/logout")
+    public String logout() {
+        HttpSession session = WebContextUtils.getSession(true);
+        //使session失效
+        session.invalidate();
+        //退出到登录页面
+        return "/mainframe/logout";
+    }
+    
+    /** 
+     * 权限容器登录句柄
+     *<功能详细描述>
+     * @param oper [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
     private void authContextLoginHandler(Operator oper) {
         //初始化用户权限到当前会话中
         //authSessionContext.initCurrentUserAuthContextWhenLogin("123456");//初始化用户权限到当前会话中 
         Map<String, String> refType2RefIdMapping = new HashMap<String, String>();
-        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR, oper.getId());
+        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR,
+                oper.getId());
         refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR_TEMPORARY,
                 oper.getId());
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_POST, postId);

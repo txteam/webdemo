@@ -50,6 +50,55 @@ public class OperatorService {
     private int checkPasswordMaxErrorCount = 3;
     
     /**
+      * 判断登录名是否已经存在<br/>
+      *<功能详细描述>
+      * @param loginName
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean loginNameIsExist(String loginName, String excludeOperatorId) {
+        AssertUtils.notEmpty(loginName, "loginName is empty");
+        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("loginName", loginName);
+        params.put("excludeOperatorId", excludeOperatorId);
+        
+        int count = this.operatorDao.countOperator(params);
+        return count > 0;
+    }
+    
+    /**
+      * 校验用户名密码
+      *<功能详细描述>
+      * @param loginName
+      * @param password
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean checkPassword(String operatorId, String password) {
+        AssertUtils.notEmpty(operatorId, "operatorId is empty");
+        AssertUtils.notEmpty(password, "password is empty");
+        
+        //校验密码是否正确
+        Operator condition = new Operator();
+        condition.setId(operatorId);
+        condition.setPassword(password);
+        Operator oper = this.operatorDao.findOperator(condition);
+        
+        if (oper != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
       * 校验用户名密码，如果用户密码错误，则将用户密码输入错误次数+1，否则置为0
       *<功能详细描述>
       * @param loginName
@@ -60,7 +109,7 @@ public class OperatorService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public boolean checkPassword(String loginName, String password) {
+    public boolean checkPasswordForLogin(String loginName, String password) {
         AssertUtils.notEmpty(loginName, "loginName is empty");
         AssertUtils.notEmpty(password, "password is empty");
         
@@ -79,10 +128,12 @@ public class OperatorService {
         if (oper != null) {
             //如果密码正确
             //更新密码错误次数为0
-            Map<String, Object> updateRowMap = new HashMap<String, Object>();
-            updateRowMap.put("id", res.getId());
-            updateRowMap.put("pwdErrCount", 0);//密码错误次数重置为0
-            this.operatorDao.updateOperator(updateRowMap);
+            if (oper.getPwdErrCount() > 0) {
+                Map<String, Object> updateRowMap = new HashMap<String, Object>();
+                updateRowMap.put("id", res.getId());
+                updateRowMap.put("pwdErrCount", 0);//密码错误次数重置为0
+                this.operatorDao.updateOperator(updateRowMap);
+            }
             return true;
         } else {
             Map<String, Object> updateRowMap = new HashMap<String, Object>();
@@ -112,11 +163,10 @@ public class OperatorService {
     @Transactional
     public void insertOperator(Operator operator) {
         AssertUtils.notNull(operator, "operator is null.");
-        AssertUtils.notEmpty(operator.getId(), "operator.id is empty.");
         AssertUtils.notEmpty(operator.getLoginName(),
                 "operator.loginName is empty.");
-        AssertUtils.notEmpty(operator.getPassword(),
-                "operator.password is empty.");
+        //        AssertUtils.notEmpty(operator.getPassword(),
+        //                "operator.password is empty.");
         
         //业务意义上的验证
         //新增人员需要指定人员所属组织<br/>
@@ -130,7 +180,12 @@ public class OperatorService {
         Date now = new Date();
         operator.setCreateDate(now);
         operator.setLastUpdateDate(now);
+        operator.setPwdUpdateDate(now);
         operator.setPwdErrCount(0);
+        
+        operator.setName(operator.getUserName());
+        //TODO:获取配置的默认密码并设值
+        operator.setPassword("123321qQ");
         
         this.operatorDao.insertOperator(operator);
     }
@@ -155,31 +210,6 @@ public class OperatorService {
         condition.setId(id);
         
         return this.operatorDao.deleteOperator(condition) > 0;
-    }
-    
-    /**
-      * 根据id禁用操作员<br/>
-      *<功能详细描述>
-      * @param id [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @Transactional
-    public boolean disableOperatorById(String id) {
-        AssertUtils.notEmpty(id, "id is empty.");
-        
-        Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        updateRowMap.put("id", id);
-        
-        //需要更新的字段
-        updateRowMap.put("valid", false);
-        updateRowMap.put("invalidDate", new Date());
-        updateRowMap.put("pwdErrCount", 0);
-        
-        int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
-        return updateRowCount > 0;
     }
     
     /**
@@ -220,25 +250,6 @@ public class OperatorService {
         return this.operatorDao.findOperator(condition);
     }
     
-    //    /**
-    //      * 根据Operator实体列表
-    //      * 
-    //      * <功能详细描述>
-    //      * @return [参数说明]
-    //      * 
-    //      * @return List<Operator> [返回类型说明]
-    //      * @exception throws [异常类型] [异常说明]
-    //      * @see [类、类#方法、类#成员]
-    //     */
-    //    public List<Operator> queryOperatorList() {
-    //        Map<String, Object> params = new HashMap<String, Object>();
-    //        
-    //        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-    //        List<Operator> resList = this.operatorDao.queryOperatorList(params);
-    //        
-    //        return resList;
-    //    }
-    
     /**
      * 分页查询Operator实体列表
      *     (包含禁用的操作员)
@@ -261,7 +272,7 @@ public class OperatorService {
         params.put("loginName", loginName);
         params.put("userName", userName);
         //无default该方法查询出结果，可以包含valid:false的情况
-        if(state != null){
+        if (state != null) {
             switch (state) {
                 case 停用:
                     params.put("valid", false);
@@ -306,13 +317,17 @@ public class OperatorService {
         params.put("userName", userName);
         params.put("valid", true);
         //无default该方法查询出结果，可以包含valid:false的情况
-        switch (state) {
-            case 锁定:
-                params.put("locked", true);
-                break;
-            case 正常:
-                params.put("locked", false);
-                break;
+        if (state != null) {
+            switch (state) {
+                case 锁定:
+                    params.put("locked", true);
+                    break;
+                case 正常:
+                    params.put("locked", false);
+                    break;
+                case 停用:
+                    break;
+            }
         }
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
@@ -320,6 +335,37 @@ public class OperatorService {
                 pageIndex,
                 pageSize);
         return resPagedList;
+    }
+    
+    /**
+     * 根据id更新对象
+     * <功能详细描述>
+     * @param operator
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @Transactional
+    public boolean updatePasswordById(String operatorId, String newPassword) {
+        //验证参数是否合法，必填字段是否填写
+        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+        AssertUtils.notEmpty(newPassword, "newPassword is empty.");
+        
+        //生成需要更新字段的hashMap
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", operatorId);
+        
+        //需要更新的字段
+        Date now = new Date();
+        updateRowMap.put("lastUpdateDate", now);
+        updateRowMap.put("pwdUpdateDate", now);
+        updateRowMap.put("password", newPassword);
+        int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
+        
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return updateRowCount >= 1;
     }
     
     /**
@@ -334,35 +380,92 @@ public class OperatorService {
      */
     @Transactional
     public boolean updateById(Operator operator) {
-        //TODO:验证参数是否合法，必填字段是否填写，
+        //验证参数是否合法，必填字段是否填写，
         AssertUtils.notNull(operator, "operator is null.");
         AssertUtils.notEmpty(operator.getId(), "operator.id is empty.");
+        AssertUtils.notEmpty(operator.getLoginName(),
+                "operator.loginName is empty.");
         
-        //TODO:生成需要更新字段的hashMap
+        //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", operator.getId());
         
-        //TODO:需要更新的字段
-        //type:java.lang.String
-        updateRowMap.put("mainPost", operator.getMainPost());
-        updateRowMap.put("valid", operator.isValid());
-        updateRowMap.put("pwdErrCount", operator.getPwdErrCount());
-        updateRowMap.put("historyPwd", operator.getHistoryPwd());
-        updateRowMap.put("invalidDate", operator.getInvalidDate());
-        updateRowMap.put("password", operator.getPassword());
-        updateRowMap.put("lastUpdateDate", operator.getLastUpdateDate());
-        
-        //type:java.lang.String
+        //需要更新的字段
+        Date now = new Date();
+        updateRowMap.put("lastUpdateDate", now);
         updateRowMap.put("organization", operator.getOrganization());
-        updateRowMap.put("pwdUpdateDate", operator.getPwdUpdateDate());
         updateRowMap.put("userName", operator.getUserName());
-        updateRowMap.put("locked", operator.isLocked());
-        updateRowMap.put("createDate", operator.getCreateDate());
-        updateRowMap.put("examinePwd", operator.getExaminePwd());
+        updateRowMap.put("name", operator.getUserName());
         
         int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
         
-        //TODO:如果需要大于1时，抛出异常并回滚，需要在这里修改
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
+    }
+    
+    /**
+      * 禁用操作员<br/>
+      *<功能详细描述>
+      * @param operatorId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean disableOperatorById(String operatorId) {
+        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+        
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", operatorId);
+        
+        //需要更新的字段
+        updateRowMap.put("valid", false);
+        updateRowMap.put("invalidDate", new Date());
+        updateRowMap.put("lastUpdateDate", new Date());
+        updateRowMap.put("pwdErrCount", 0);
+        
+        int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
+        return updateRowCount > 0;
+    }
+    
+    /**
+      * 启用操作员<br/>
+      *<功能详细描述>
+      * @param operatorId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean enableOperatorById(String operatorId) {
+        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", operatorId);
+        
+        updateRowMap.put("lastUpdateDate", new Date());
+        updateRowMap.put("valid", false);
+        return true;
+    }
+    
+    /**
+      * 解锁操作员<br/>
+      *<功能详细描述>
+      * @param operatorId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean unlockOperatorById(String operatorId) {
+        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", operatorId);
+        
+        updateRowMap.put("lastUpdateDate", new Date());
+        updateRowMap.put("locked", false);
+        return true;
     }
 }

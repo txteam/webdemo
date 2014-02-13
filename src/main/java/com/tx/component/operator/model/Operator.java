@@ -60,7 +60,7 @@ public class Operator implements Serializable{
     private Integer pwdErrCount = 0;
     
     /**是否可用*/
-    private boolean valid;
+    private boolean valid = true;
     
     /** 创建时间  */
     private Date createDate;
@@ -75,7 +75,7 @@ public class Operator implements Serializable{
     private Date invalidDate;
     
     /** 账户是否被锁定 */
-    private boolean locked;
+    private boolean locked = false;
     
     /** 员工信息,如果为公司员工，则该信息不为空  */
     @Transient

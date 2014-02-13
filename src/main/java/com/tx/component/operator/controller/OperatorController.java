@@ -6,11 +6,13 @@
  */
 package com.tx.component.operator.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tx.component.auth.annotation.CheckOperateAuth;
 import com.tx.component.operator.model.Operator;
 import com.tx.component.operator.model.OperatorStateEnum;
-import com.tx.component.operator.model.Post;
+import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.service.OperatorService;
+import com.tx.component.operator.service.OrganizationService;
 import com.tx.core.paged.model.PagedList;
 
 /**
@@ -38,8 +41,51 @@ import com.tx.core.paged.model.PagedList;
 @CheckOperateAuth(key = "operator_manage")
 public class OperatorController {
     
+    /** 操作员业务层逻辑 */
     @Resource(name = "operatorService")
     private OperatorService operatorService;
+    
+    /** 组织业务层逻辑 */
+    @Resource(name = "organizationService")
+    private OrganizationService organizationService;
+    
+    /**
+     * 跳转到查询职位列表(单选)<br/>
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/toSingleChooseOperator")
+    public String toSingleChooseOperator(
+            @RequestParam(value = "eventName", required = false) String chooseEventName,
+            @RequestParam(value = "organizationId", required = false) String organizationId,
+            ModelMap responseMap) {
+        responseMap.put("eventName", chooseEventName);
+        responseMap.put("organizationId", organizationId);
+        return "/operator/singleChooseOperator";
+    }
+    
+    /**
+     * 跳转到查询职位列表（复选）<br/>
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/toMultiChooseOperator")
+    public String toMultiChooseOperator(
+            @RequestParam(value = "eventName", required = false) String chooseEventName,
+            @RequestParam(value = "organizationId", required = false) String organizationId,
+            ModelMap responseMap) {
+        responseMap.put("eventName", chooseEventName);
+        responseMap.put("organizationId", organizationId);
+        return "/operator/multiChooseOperator";
+    }
     
     /**
       * 跳转到查询人员列表页面<BR/>
@@ -65,7 +111,14 @@ public class OperatorController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAddOperator")
-    public String toAddOperator() {
+    public String toAddOperator(
+            @RequestParam(value = "organizationId", required = false) String organizationId,
+            ModelMap response) {
+        if (!StringUtils.isEmpty(organizationId)) {
+            Organization organization = this.organizationService.findOrganizationById(organizationId);
+            response.put("organization", organization);
+        }
+        response.put("operator", new Operator());
         return "/operator/addOperator";
     }
     
@@ -79,7 +132,18 @@ public class OperatorController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdateOperator")
-    public String toUpdateOperator() {
+    public String toUpdateOperator(
+            @RequestParam("operatorId") String operatorId, ModelMap modelMap) {
+        Operator resOper = this.operatorService.findOperatorById(operatorId);
+        Organization organization = null;
+        if (resOper.getOrganization() != null
+                && !StringUtils.isEmpty(resOper.getOrganization().getId())) {
+            organization = this.organizationService.findOrganizationById(resOper.getOrganization()
+                    .getId());
+        }
+        modelMap.put("organization", organization);
+        modelMap.put("operator", resOper);
+        
         return "/operator/updateOperator";
     }
     
@@ -207,29 +271,96 @@ public class OperatorController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-   @CheckOperateAuth(key = "delete_operator", name = "删除操作员", configAble = false)
-   @ResponseBody
-   @RequestMapping("/deleteOperatorById")
-   public boolean deleteOperatorById(@RequestParam(value = "operatorId") String operatorId) {
-       boolean resFlag = this.operatorService.deleteById(operatorId);
-       return resFlag;
-   }
-   
-   
-//   @CheckOperateAuth(key = "disable_post", name = "禁用职位")
-//   @ResponseBody
-//   @RequestMapping("/disablePostById")
-//   public boolean disablePostById(@RequestParam(value = "postId") String postId) {
-//       boolean resFlag = this.postService.disableById(postId);
-//       return resFlag;
-//   }
-//   
-//   @CheckOperateAuth(key = "enable_post", name = "启用职位")
-//   @ResponseBody
-//   @RequestMapping("/enablePostById")
-//   public boolean enablePostById(@RequestParam(value = "postId") String postId) {
-//       boolean resFlag = this.postService.enableById(postId);
-//       return resFlag;
-//   }
+    @CheckOperateAuth(key = "delete_operator", name = "删除操作员", configAble = false)
+    @ResponseBody
+    @RequestMapping("/deleteOperatorById")
+    public boolean deleteOperatorById(
+            @RequestParam(value = "operatorId") String operatorId) {
+        boolean resFlag = this.operatorService.deleteById(operatorId);
+        return resFlag;
+    }
+    
+    /**
+      * 判断登录名是否已经在系统中存在<br/>
+      *<功能详细描述>
+      * @param loginName
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/loginNameIsExist")
+    public Map<String, String> loginNameIsExist(
+            @RequestParam(value = "loginName") String loginName,
+            @RequestParam(value = "id", required = false) String excludeOperatorId) {
+        boolean resFlag = this.operatorService.loginNameIsExist(loginName,
+                excludeOperatorId);
+        Map<String, String> resMap = new HashMap<String, String>();
+        if (!resFlag) {
+            resMap.put("ok", "可用的登录名");
+        } else {
+            resMap.put("error", "已经存在的登录名");
+        }
+        return resMap;
+    }
+    
+    /**
+      * 禁用操作员<br/>
+      *<功能详细描述>
+      * @param operatorId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @CheckOperateAuth(key = "disable_operator", name = "禁用操作员")
+    @ResponseBody
+    @RequestMapping("/disableOperatorById")
+    public boolean disableOperatorById(
+            @RequestParam(value = "operatorId") String operatorId) {
+        boolean resFlag = this.operatorService.disableOperatorById(operatorId);
+        return resFlag;
+    }
+    
+    /**
+      * 启用操作员<br/>
+      *<功能详细描述>
+      * @param operatorId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @CheckOperateAuth(key = "enable_operator", name = "启用操作员")
+    @ResponseBody
+    @RequestMapping("/enableOperatorById")
+    public boolean enableOperatorById(
+            @RequestParam(value = "operatorId") String operatorId) {
+        boolean resFlag = this.operatorService.enableOperatorById(operatorId);
+        return resFlag;
+    }
+    
+    /**
+     * 解锁操作员<br/>
+     *<功能详细描述>
+     * @param operatorId
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @CheckOperateAuth(key = "unlock_operator", name = "解锁操作员")
+    @ResponseBody
+    @RequestMapping("/unlockOperatorById")
+    public boolean unlockOperatorById(
+            @RequestParam(value = "operatorId") String operatorId) {
+        boolean resFlag = this.operatorService.unlockOperatorById(operatorId);
+        return resFlag;
+    }
     
 }

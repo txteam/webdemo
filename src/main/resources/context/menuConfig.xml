@@ -129,6 +129,8 @@
 		</menu>
 		
 		<menu id="control_panel" text="控制面板">
+			<menu id="MyCalandar" text="行事历"></menu>
+			<menu id="Notepad" text="记事本"></menu>
 			<menu id="modify_password" text="修改密码"></menu>
 			<menu id="modify_myself_info" text="修改个人信息"></menu>
 			<menu id="my_post" text="我的职位"></menu>
@@ -137,7 +139,9 @@
 		<menu id="logout_center" text="注销">
 			<menu id="lock_window" text="锁定窗口"></menu>
 			<menu id="re_login" text="重新登录"></menu>
-			<menu id="logout" text="退出系统"></menu>
+			<menu id="logout" text="退出系统"
+				target="triggerGlobalEvent" 
+				eventType="logout"></menu>
 		</menu>
 	</menus_config>
 

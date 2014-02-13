@@ -339,20 +339,40 @@ if (browser.userAgent.indexOf('MSIE') > -1) {
 			return [];
 		}
 	};
+	
+    /**
+     * ajax调用错误信息处理 
+     */
+    var easyuiErrorFunction = function(XMLHttpRequest,Status,errorThrown) {
+        if (XMLHttpRequest.status == 501) {
+            $.triggerge("sessionLost");
+        } else if (XMLHttpRequest.status == 500) {
+            try {
+                GlobalDialogUtils.alert('错误', XMLHttpRequest.responseText);
+            } catch (e) {
+                alert(XMLHttpRequest.responseText);
+            }
+        } else {
+            try {
+                GlobalDialogUtils.alert('错误', XMLHttpRequest.responseText);
+            } catch (e) {
+                alert(XMLHttpRequest.responseText);
+            }
+        }
+    }; 
+    $.fn.datagrid.defaults.onLoadError = easyuiErrorFunction;
+    $.fn.treegrid.defaults.onLoadError = easyuiErrorFunction;
+    $.fn.tree.defaults.onLoadError = easyuiErrorFunction;
+    $.fn.combogrid.defaults.onLoadError = easyuiErrorFunction;
+    $.fn.combobox.defaults.onLoadError = easyuiErrorFunction;
+    $.fn.form.defaults.onLoadError = easyuiErrorFunction;
 	/*
 	 * 改变jQuery的AJAX默认属性和方法
 	 */
 	$.ajaxSetup({
 		type : 'POST',
 		dataType : "json",
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			try {
-				parent.$.messager.progress('close');
-				parent.$.messager.alert('错误', XMLHttpRequest.responseText);
-			} catch (e) {
-				alert(XMLHttpRequest.responseText);
-			}
-		}
+		error : easyuiErrorFunction
 	});
 	/**
 	 * @author 孙宇

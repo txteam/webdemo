@@ -14,7 +14,7 @@
 	<bean id="authItemCache" 
 		class="org.springframework.cache.ehcache.EhCacheFactoryBean">
 		<property name="cacheManager">
-			<ref bean="identicalEhcacheManager"/>
+			<ref bean="ehcacheManager"/>
 		</property>
 	</bean>	
 

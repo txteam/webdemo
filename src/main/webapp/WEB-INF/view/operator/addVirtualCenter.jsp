@@ -20,8 +20,10 @@ $(document).ready(function(){
 		width : 260,
 		height : 400,
 		handler : function(vc){
-			$("#parentName").val(vc.name);
-			$("#parentId").val(vc.id);
+			if(vc != null){
+				$("#parentName").val(vc.name);
+				$("#parentId").val(vc.id);
+			}
 		},
 	    clearHandler: function(){
 	    	$("#parentName").val("");

@@ -13,20 +13,42 @@
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
+	
+	$("#chiefName").chooseOperator({
+		eventName : "chooseOperatorForAddOrganization",
+		contextPath : _contextPath,
+		title : "请选择人员",  
+		width : 800,
+		height : 450,
+		handler : function(operator){
+			if(operator != null){
+				$("#chiefName").val(operator.loginName);
+				$("#chiefId").val(operator.id);
+			}
+		},
+	    clearHandler: function(){
+	    	$("#chiefName").val("");
+			$("#chiefId").val("");
+	    }
+	});
+	
 	//虚中心与组织存在联动关系，如果选中需中心，则组织仅能在选中的虚中心中选取
 	//所以在组织与虚中心任一发生变动时应当影响到对方
+	/*
 	$("#virtualCenterName").chooseVirtualCenter({
-		eventName : "chooseVirtualCenterForAddVirtualCenter",
+		eventName : "chooseVirtualCenterForAddOrganization",
 		contextPath : _contextPath,
 		title : "请选择上级虚中心",  
 		width : 260,
 		height : 400,
 		handler : function(vc){
-			$("#virtualCenterName").val(vc.name);
-			$("#vcid").val(vc.id);
-			
-			$("#parentName").val("");
-			$("#parentId").val("");
+			if(vc != null){
+				$("#virtualCenterName").val(vc.name);
+				$("#vcid").val(vc.id);
+				
+				$("#parentName").val("");
+				$("#parentId").val("");
+			}
 		},
 	    clearHandler: function(){
 	    	$("#virtualCenterName").val("");
@@ -36,6 +58,8 @@ $(document).ready(function(){
 			$("#parentId").val("");
 	    }
 	});
+	*/
+	
 	$("#parentName").chooseOrganization({
 		eventName : "chooseOrganizationForAddOrganization",
 		contextPath : _contextPath,
@@ -43,16 +67,20 @@ $(document).ready(function(){
 		width : 260,
 		height : 400,
 		handler : function(organization){
-			$("#parentName").val(organization.name);
-			$("#parentId").val(organization.id);
-			
-			$("#virtualCenterName").val("");
-			$("#vcid").val("");
-			//根据选中的虚组织，查询其虚中心信息填入虚中心中
-			$.get("${contextPath}/virtualCenter/findVirtualcenterById.action",{vcid: organization.vcid}, function(data){
-				$("#virtualCenterName").val(data.name);
-				$("#vcid").val(data.vcid);
-			});
+			if(organization != null){
+				$("#parentName").val(organization.name);
+				$("#parentId").val(organization.id);
+				
+				/*
+				$("#virtualCenterName").val("");
+				$("#vcid").val("");
+				//根据选中的虚组织，查询其虚中心信息填入虚中心中
+				$.get("${contextPath}/virtualCenter/findVirtualcenterById.action",{vcid: organization.vcid}, function(data){
+					$("#virtualCenterName").val(data.name);
+					$("#vcid").val(data.vcid);
+				});
+				*/
+			}
 		},
 	    clearHandler: function(){
 	    	$("#parentName").val("");

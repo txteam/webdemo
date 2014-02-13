@@ -46,12 +46,21 @@
 
 	<!--添加拦截器，类级别的处理器映射 -->
 	<mvc:interceptors>
+		<!-- 如果出现异常，异常日志记录拦截 -->
 		<bean class="com.tx.core.springmvc.interceptor.ExceptionLoggerInterceptor"></bean>
+		<!-- 校验会话拦截器 -->
+		<bean class="com.tx.component.mainframe.interceptor.SessionCheckInterceptor">
+			<property name="configLocaton">
+				<value>classpath:context/session-check.xml</value>
+			</property>
+		</bean>
 		<!-- 向request写入contextPath常量 -->
 		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
 		<!-- 加入权限容器支持 -->
 		<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"></bean>
+		<!-- 业务日志支持拦截器 -->
 		<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
+		<!-- controller权限注解支持 -->
 		<bean class="com.tx.component.auth.springmvc.ControllerCheckOperateAuthInterceptor"></bean>
 	</mvc:interceptors>
 
@@ -99,15 +108,6 @@
 	<!-- 将类及方法映射controller -->
 	<bean id="requestMappingHandlerMapping"
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-		<property name="interceptors">
-			<list>
-				<bean class="com.tx.core.springmvc.interceptor.ExceptionLoggerInterceptor"></bean>
-				<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
-				<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"/>
-				<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
-				<bean class="com.tx.component.auth.springmvc.ControllerCheckOperateAuthInterceptor"></bean>
-			</list>
-		</property>
 	</bean>
 	<bean id="requestMappingHandlerAdapter"
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
@@ -140,24 +140,27 @@
 		<!-- max size 5M -->
 		<property name="maxUploadSize" value="5000000" />
 	</bean>
-
 	<!-- 异常处理 -->
 	<bean id="exceptionResolver"
 		class="com.tx.core.springmvc.exceptionresolver.SimpleHandlerExceptionResolver">
+		<property name="warnLogCategory">
+			<value>org.springframework.web.servlet.handler.simplemappingexceptionresolver</value>
+		</property>
 		<property name="defaultErrorView">
-			<value>errorPages/error</value>
+			<value>error/error</value>
 		</property>
 		<property name="defaultStatusCode">
 			<value>500</value>
 		</property>
-		<property name="warnLogCategory">
-			<value>org.springframework.web.servlet.handler.simplemappingexceptionresolver
-			</value>
+		<property name="statusCodes">
+			<map>
+				<entry key="error/sessionLostError" value="501"></entry>
+			</map>
 		</property>
 		<property name="exceptionMappings">
 			<props>
-				<prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">errorPages/maxUploadExceeded</prop>
-				<prop key="com.boda.core.exception.HttpSessionFailureException">errorPages/sessionFailureError</prop>
+				<prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error/maxUploadExceeded</prop>
+				<prop key="com.tx.component.mainframe.exception.SessionLostException">error/sessionLostError</prop>
 			</props>
 		</property>
 	</bean>
