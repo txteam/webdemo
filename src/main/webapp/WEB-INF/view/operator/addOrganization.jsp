@@ -135,7 +135,7 @@ $(document).ready(function(){
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form:form id="organizationForm" method="post" cssClass="form"
 			modelAttribute="organization">
-			<table>
+			<table class="common_table">
 				<tr>
 					<th class="narrow">名称:<span class="tRed">*</span></th>
 					<td>

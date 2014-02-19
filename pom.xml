@@ -26,7 +26,7 @@
 			<artifactId>javamelody-core</artifactId>
 			<version>1.47.0</version>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>com.tx</groupId>
 			<artifactId>tx-core</artifactId>
@@ -38,6 +38,10 @@
 		<dependency>
 			<groupId>com.tx</groupId>
 			<artifactId>tx-component-servicelog</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tx</groupId>
+			<artifactId>tx-component-configuration</artifactId>
 		</dependency>
 
 		<!-- commons -->
@@ -253,7 +257,7 @@
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-spring</artifactId>
 		</dependency>
-		
+
 		<!-- log -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

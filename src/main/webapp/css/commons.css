@@ -144,6 +144,11 @@ input[type="radio"],input[type="checkbox"] {
 	vertical-align: middle;
 }
 
+.common_table input{
+	width:139px;
+    width:133px\9;
+}
+
 label {
 	color: #7d7d7d;
 	margin: 0 4px 0 2px;
@@ -152,6 +157,7 @@ label {
 label.selected {
 	color: #000;
 }
+
 /* form table */
 .form {
 	margin-bottom: 5px;
@@ -232,6 +238,23 @@ label.selected {
 	border: 1px solid #f00;
 }
 
+.form .n-right{
+	vertical-align: top;
+}
+
+.form .common_table input {
+	border: 1px solid #A0C2E5;
+	color: #44474C;
+	background: #fff;
+	font-size: 12px;
+	height: 20px;
+	line-height: 20px;
+	width: 139px;
+	width: 133px\9;
+	padding: 0 2px;
+	vertical-align: middle;
+}
+
 .form input {
 	border: 1px solid #A0C2E5;
 	color: #44474C;
@@ -242,6 +265,29 @@ label.selected {
 	width:80%;
 	padding: 0 2px;
 	vertical-align: middle;
+}
+
+.form .common_table input{
+	border: 1px solid #A0C2E5;
+	color: #44474C;
+	background: #fff;
+	font-size: 12px;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 2px;
+	vertical-align: middle;
+	width:134px;
+    width:128px\9;
+}
+
+.form .common_table select {
+	vertical-align: middle;
+	width:139px;
+    width:133px\9;
+	height: 22px;	
+	line-height: 22px;
+	border: 1px solid #A0C2E5;
+	background: #fff;
 }
 
 .form select {

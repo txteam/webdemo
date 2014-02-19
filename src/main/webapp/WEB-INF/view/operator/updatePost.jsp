@@ -12,6 +12,22 @@
 <script type="text/javascript" >
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
+	
+	$("#organizationName").chooseOrganization({
+		eventName : "chooseOrganizationForAddPost",
+		contextPath : _contextPath,
+		title : "请选择上级组织",
+		width : 260,
+		height : 400,
+		handler : function(organization){
+			$("#organizationName").val(organization.name);
+			$("#organizationId").val(organization.id);
+		},
+		clearHandler: function(){
+			$("#organizationName").val('');
+			$("#organizationId").val('');
+		}
+	});
 	$("#parentName").choosePost({
 		organizationId : $("#organizationId").val(),
 		eventName : "choosePostForAddPost",
@@ -69,7 +85,7 @@ $(document).ready(function(){
 		<form:form id="postForm" method="post" cssClass="form"
 			modelAttribute="post">
 			<form:hidden path="id"></form:hidden>
-			<table>
+			<table class="common_table">
 				<tr>
 					<th class="narrow">名称:<span class="tRed">*</span></th>
 					<td>

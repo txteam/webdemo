@@ -33,7 +33,7 @@ public class OperatorRef {
     private String refId;
     
     /** 引用类型 */
-    private OperatorRefTypeEnum refType;
+    private String refType;
     
     /** 创建时间 */
     private Date createDate;
@@ -44,6 +44,20 @@ public class OperatorRef {
     /** 失效时间 */
     private Date endDate;
     
+    /** <默认构造函数> */
+    public OperatorRef() {
+        super();
+    }
+
+    /** <默认构造函数> */
+    public OperatorRef(String operatorId, String refId,
+            String refType) {
+        super();
+        this.operatorId = operatorId;
+        this.refId = refId;
+        this.refType = refType;
+    }
+
     /**
      * @return 返回 operatorId
      */
@@ -71,18 +85,18 @@ public class OperatorRef {
     public void setRefId(String refId) {
         this.refId = refId;
     }
-    
+
     /**
      * @return 返回 refType
      */
-    public OperatorRefTypeEnum getRefType() {
+    public String getRefType() {
         return refType;
     }
-    
+
     /**
      * @param 对refType进行赋值
      */
-    public void setRefType(OperatorRefTypeEnum refType) {
+    public void setRefType(String refType) {
         this.refType = refType;
     }
 

@@ -13,7 +13,7 @@
 		<property name="dataSource">
 			<ref bean="dataSource"/>
 		</property>
-		<property name="dataSourceType" value="H2"></property>
+		<property name="dataSourceType" value="#{config.getValue('dataSource.dataSourceType')}"></property>
 		<property name="serviceLoggerBuilder">
 			<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerBuilder"></bean>
 		</property>

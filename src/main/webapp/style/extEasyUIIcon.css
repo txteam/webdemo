@@ -546,3 +546,5 @@ img {
 .save{background: url('images/extjs_icons/group/disk.png') no-repeat center center;}
 .control_stop_blue {background: url('images/extjs_icons/control/control_stop_blue.png') no-repeat center center;}
 .control_play_blue{background: url('images/extjs_icons/control/control_play_blue.png') no-repeat center center;}
+
+.table_refresh{background: url('images/extjs_icons/table/table_refresh.png') no-repeat center center;}

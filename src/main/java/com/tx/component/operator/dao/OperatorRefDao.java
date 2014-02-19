@@ -25,6 +25,30 @@ import com.tx.component.operator.model.OperatorRef;
 public interface OperatorRefDao {
     
     /**
+     * 插入OperatorRef对象实体
+     * 1、auto generate
+     * <功能详细描述>
+     * @param condition [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    //auto generate
+    public void insertOperatorRefHis(OperatorRef condition);
+    
+    /**
+      * 批量插入OperatorRef对象实体
+      *<功能详细描述>
+      * @param operatorRefList [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public void batchInsertOperatorRefHis(List<OperatorRef> operatorRefList);
+    
+    /**
       * 插入OperatorRef对象实体
       * 1、auto generate
       * <功能详细描述>
@@ -36,6 +60,17 @@ public interface OperatorRefDao {
      */
     //auto generate
     public void insertOperatorRef(OperatorRef condition);
+    
+    /**
+      * 批量插入OperatorRef对象实体
+      *<功能详细描述>
+      * @param operatorRefList [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public void batchInsertOperatorRef(List<OperatorRef> operatorRefList);
     
     /**
       * 删除OperatorRef对象
@@ -50,6 +85,17 @@ public interface OperatorRefDao {
      */
     //auto generate
     public int deleteOperatorRef(OperatorRef condition);
+    
+    /**
+      * <功能简述>
+      *<功能详细描述>
+      * @param operatorRefList [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public void batchDeleteOperatorRef(List<OperatorRef> operatorRefList);
     
     /**
       * 查询OperatorRef实体
@@ -122,8 +168,8 @@ public interface OperatorRefDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public PagedList<OperatorRef> queryOperatorRefPagedList(Map<String, Object> params,
-            int pageIndex, int pageSize);
+    public PagedList<OperatorRef> queryOperatorRefPagedList(
+            Map<String, Object> params, int pageIndex, int pageSize);
     
     /**
       * 分页查询OperatorRef列表，传入排序字段
@@ -140,9 +186,9 @@ public interface OperatorRefDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public PagedList<OperatorRef> queryOperatorRefPagedList(Map<String, Object> params,
-            int pageIndex, int pageSize, List<Order> orderList);
-    
+    public PagedList<OperatorRef> queryOperatorRefPagedList(
+            Map<String, Object> params, int pageIndex, int pageSize,
+            List<Order> orderList);
     
     /**
       * 更新OperatorRef实体，

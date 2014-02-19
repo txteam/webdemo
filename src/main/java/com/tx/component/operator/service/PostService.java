@@ -110,6 +110,7 @@ public class PostService {
         AssertUtils.notEmpty(post.getOrganization().getId(),
                 "post.organization.id is empty.");
         
+        post.setValid(true);
         //查询所在组织
         Organization org = this.organizationService.findOrganizationById(post.getOrganization()
                 .getId());
@@ -342,6 +343,7 @@ public class PostService {
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", post.getId());
         updateRowMap.put("parentId", post.getParentId());
+        updateRowMap.put("organization", post.getOrganization());
         
         updateRowMap.put("remark", post.getRemark());
         updateRowMap.put("name", post.getName());
@@ -364,7 +366,7 @@ public class PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public boolean isDeleteAble(String postId){
+    public boolean isDeleteAble(String postId) {
         AssertUtils.notEmpty(postId, "postId is empty.");
         
         //生成查询条件
@@ -390,7 +392,7 @@ public class PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public boolean isDisableAble(String postId){
+    public boolean isDisableAble(String postId) {
         AssertUtils.notEmpty(postId, "postId is empty.");
         
         //生成查询条件
@@ -406,7 +408,17 @@ public class PostService {
         return flag;
     }
     
-    public boolean disableById(String postId){
+    /**
+      * 根据职位id禁用职位<br/>
+      *<功能详细描述>
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean disableById(String postId) {
         AssertUtils.notEmpty(postId, "postId is empty.");
         
         //生成查询条件
@@ -418,7 +430,17 @@ public class PostService {
         return true;
     }
     
-    public boolean enableById(String postId){
+    /**
+     * 根据职位id启用职位<br/>
+      *<功能详细描述>
+      * @param postId
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public boolean enableById(String postId) {
         AssertUtils.notEmpty(postId, "postId is empty.");
         
         //生成查询条件
@@ -429,4 +451,6 @@ public class PostService {
         
         return true;
     }
+    
+    
 }

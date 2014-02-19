@@ -18,26 +18,32 @@ package com.tx.component.operator;
 public interface OperatorConstants {
     
     /** 组织职位树 节点类型：组织 */
-    public static final int TREENODE_TYPE_ORGANIZATION = 0;
+    int TREENODE_TYPE_ORGANIZATION = 0;
     
     /** 组织职位树 节点类型：职位 */
-    public static final int TREENODE_TYPE_POST = 1;
+    int TREENODE_TYPE_POST = 1;
     
     /** 人员有效  */
-    public static final int OPERATOR_VALID = 1;
+    int OPERATOR_VALID = 1;
     
     /** 人员无效  */
-    public static final int OPERATOR_INVALID = 0;
+    int OPERATOR_INVALID = 0;
     
     /** 人员锁定 */
-    public static final int OPERATOR_LOCKED_TRUE = 1;
+    int OPERATOR_LOCKED_TRUE = 1;
     
     /** 人员未锁定 */
-    public static final int OPERATOR_LOCKED_FALSE = 0;
+    int OPERATOR_LOCKED_FALSE = 0;
     
     /** 权限项：查询所有组织 */
-    public static final String AUTHKEY_QUERY_ALL_VC = "query_all_vc";
+    String AUTHKEY_QUERY_ALL_VC = "query_all_vc";
     
     /** 权限项：查询所有组织 */
-    public static final String AUTHKEY_QUERY_ALL_ORG = "query_all_org";
+    String AUTHKEY_QUERY_ALL_ORG = "query_all_org";
+    
+    /** 人员引用类型：职位 */
+    String OPERATORREF_TYPE_POST = "post";
+    
+    /** 人员引用类型: 组织 */
+    String OPERATORREF_TYPE_ORGANIZATIOIN = "organization";
 }

@@ -2,7 +2,7 @@
 -- ±í£ºOPER_EMPLOYEEINFO
 --****************************************************************************
 DROP TABLE OPER_EMPLOYEEINFO_HIS;
-CREATE TABLE OPER_EMPLOYEEINFO(
+CREATE TABLE OPER_EMPLOYEEINFO_HIS(
 	leavingDate date,
 	sex number(10,0),
 	operatorid varchar2(64),

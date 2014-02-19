@@ -38,8 +38,38 @@ public class OperatorRefDaoImpl implements OperatorRefDao {
      * @param condition
      */
     @Override
+    public void insertOperatorRefHis(OperatorRef condition) {
+        this.myBatisDaoSupport.insert("operatorRef.insertOperatorRefHis",
+                condition);
+    }
+    
+    /**
+     * @param operatorRefList
+     */
+    @Override
+    public void batchInsertOperatorRefHis(List<OperatorRef> operatorRefList) {
+        this.myBatisDaoSupport.batchInsert("operatorRef.insertOperatorRefHis",
+                operatorRefList,
+                true);
+    }
+    
+    /**
+     * @param operatorRefList
+     */
+    @Override
+    public void batchInsertOperatorRef(List<OperatorRef> operatorRefList) {
+        this.myBatisDaoSupport.batchInsert("operatorRef.insertOperatorRef",
+                operatorRefList,
+                true);
+    }
+    
+    /**
+     * @param condition
+     */
+    @Override
     public void insertOperatorRef(OperatorRef condition) {
-        this.myBatisDaoSupport.insertUseUUID("operatorRef.insertOperatorRef", condition, "id");
+        this.myBatisDaoSupport.insert("operatorRef.insertOperatorRef",
+                condition);
     }
     
     /**
@@ -48,7 +78,18 @@ public class OperatorRefDaoImpl implements OperatorRefDao {
      */
     @Override
     public int deleteOperatorRef(OperatorRef condition) {
-        return this.myBatisDaoSupport.delete("operatorRef.deleteOperatorRef", condition);
+        return this.myBatisDaoSupport.delete("operatorRef.deleteOperatorRef",
+                condition);
+    }
+    
+    /**
+     * @param operatorRefList
+     */
+    @Override
+    public void batchDeleteOperatorRef(List<OperatorRef> operatorRefList) {
+        this.myBatisDaoSupport.batchDelete("operatorRef.deleteOperatorRef",
+                operatorRefList,
+                true);
     }
     
     /**
@@ -57,7 +98,8 @@ public class OperatorRefDaoImpl implements OperatorRefDao {
      */
     @Override
     public OperatorRef findOperatorRef(OperatorRef condition) {
-        return this.myBatisDaoSupport.<OperatorRef> find("operatorRef.findOperatorRef", condition);
+        return this.myBatisDaoSupport.<OperatorRef> find("operatorRef.findOperatorRef",
+                condition);
     }
     
     /**
@@ -100,8 +142,8 @@ public class OperatorRefDaoImpl implements OperatorRefDao {
      * @return
      */
     @Override
-    public PagedList<OperatorRef> queryOperatorRefPagedList(Map<String, Object> params,
-            int pageIndex, int pageSize) {
+    public PagedList<OperatorRef> queryOperatorRefPagedList(
+            Map<String, Object> params, int pageIndex, int pageSize) {
         return this.myBatisDaoSupport.<OperatorRef> queryPagedList("operatorRef.queryOperatorRef",
                 params,
                 pageIndex,
@@ -116,8 +158,9 @@ public class OperatorRefDaoImpl implements OperatorRefDao {
      * @return
      */
     @Override
-    public PagedList<OperatorRef> queryOperatorRefPagedList(Map<String, Object> params,
-            int pageIndex, int pageSize, List<Order> orderList) {
+    public PagedList<OperatorRef> queryOperatorRefPagedList(
+            Map<String, Object> params, int pageIndex, int pageSize,
+            List<Order> orderList) {
         return this.myBatisDaoSupport.<OperatorRef> queryPagedList("operatorRef.queryOperatorRef",
                 params,
                 pageIndex,
@@ -131,6 +174,7 @@ public class OperatorRefDaoImpl implements OperatorRefDao {
      */
     @Override
     public int updateOperatorRef(Map<String, Object> updateRowMap) {
-        return this.myBatisDaoSupport.update("operatorRef.updateOperatorRef", updateRowMap);
+        return this.myBatisDaoSupport.update("operatorRef.updateOperatorRef",
+                updateRowMap);
     }
 }

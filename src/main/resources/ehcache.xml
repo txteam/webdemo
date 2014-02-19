@@ -23,6 +23,7 @@
 		diskSpoolBufferSizeMB="30" 
 		diskExpiryThreadIntervalSeconds="120"
 		memoryStoreEvictionPolicy="LRU">
+	<!-- 
 		<cacheEventListenerFactory
 			class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
 			properties="replicateAsynchronously=true,
@@ -30,6 +31,7 @@
 	      		replicateUpdates=false,
 	      		replicateRemovals=true,
 	      		replicateUpdatesViaCopy=false" />
+	 -->
 	</defaultCache>
 	
 </ehcache>

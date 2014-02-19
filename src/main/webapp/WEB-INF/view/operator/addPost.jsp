@@ -38,16 +38,6 @@ $(document).ready(function(){
 		handler : function(post){
 			$("#parentName").val(post.name);
 			$("#parentId").val(post.id);
-			/*
-			现允许上级职位与当前职位不属于同一组织
-			if(post.organization && !$.ObjectUtils.isEmpty(post.organization.name)){
-				$("#organizationName").val(post.organization.name);
-				$("#organizationId").val(post.organization.id);
-			}else{
-				$("#organizationName").val('');
-				$("#organizationId").val('');
-			}
-			*/
 		},
 		clearHandler: function(){
 			$("#parentName").val('');
@@ -83,7 +73,7 @@ $(document).ready(function(){
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form:form id="postForm" method="post" cssClass="form"
 			modelAttribute="post">
-			<table>
+			<table class="common_table">
 				<tr>
 					<th class="narrow">名称:<span class="tRed">*</span></th>
 					<td>

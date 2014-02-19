@@ -26,6 +26,39 @@ import com.tx.component.operator.model.OperatorRef;
 public interface OperatorRefService {
     
     /**
+      * 保存操作员和操作员引用列表间的关系
+      *     自动根据原存在关系分析出哪些是增加的，哪些是减少的权限<br/>
+      *     一般用于配置人员所属分组
+      *     或人员所属职位等功能
+      *<功能详细描述>
+      * @param refType
+      * @param operatorId
+      * @param refIdList [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public void saveOperator2RefIdList(String refType,
+            String operatorId, List<String> refIdList);
+    
+    /**
+      * 保存引用id,引用类型对操作员的引用关系
+      *     一般用于处理配置职位对应的人员
+      *     或分组对应的人员等功能
+      *<功能详细描述>
+      * @param refType
+      * @param refId
+      * @param operatorIdList [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public void saveRefId2OperatorIdList(String refType,
+            String refId, List<String> operatorIdList);
+    
+    /**
       * 删除操作员引用
       *<功能详细描述>
       * @param operatorRef [参数说明]
@@ -34,43 +67,34 @@ public interface OperatorRefService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public void deleteOperatorRef(OperatorRef operatorRef);
+    public void deleteByOperatorId(String operatorId);
     
-    /**
-      * 批量删除操作员引用
+    /** 
+      * 根据引用id删除操作员引用
       *<功能详细描述>
-      * @param operatorRefs [参数说明]
+      * @param refId [参数说明]
       * 
       * @return void [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public void batchDeleteOperatorRef(List<OperatorRef> operatorRefs);
+    public void deleteByRefId(String refId);
     
     /**
-      * 插入操作员的引用实例<br/> 
-      *<功能详细描述>
-      * @param operatorRef [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public void insertOperatorRef(OperatorRef operatorRef);
-    
-    /**
-      * 批量插入操作员的引用 
-      *<功能详细描述>
-      * @param operatorRefs [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public void batchInsertOperatorRef(List<OperatorRef> operatorRefs);
-    
-    /**
-     * 插入操作员的引用实例<br/> 
+     * 将operatorRef实例插入数据库中保存
+     * 1、如果operatorRef为空时抛出参数为空异常
+     * 2、如果operatorRef中部分必要参数为非法值时抛出参数不合法异常
+    * <功能详细描述>
+    * @param district [参数说明]
+    * 
+    * @return void [返回类型说明]
+    * @exception throws
+    * @see [类、类#方法、类#成员]
+   */
+   public void insertOperatorRef(OperatorRef operatorRef);
+   
+   /**
+     * 为操作员引用历史插入值 <br/>
      *<功能详细描述>
      * @param operatorRef [参数说明]
      * 
@@ -78,16 +102,5 @@ public interface OperatorRefService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public void insertOperatorRefHis(OperatorRef operatorRef);
-    
-    /**
-      * 批量插入操作员的引用 
-      *<功能详细描述>
-      * @param operatorRefs [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public void batchInsertOperatorRefHis(List<OperatorRef> operatorRefs);
+   public void insertOperatorRefHis(OperatorRef operatorRef);
 }

@@ -98,6 +98,28 @@
 	        </if>
 		</trim>
 	</select>
+	
+	<insert id="insertOperatorRefHis" 
+		parameterType="com.tx.component.operator.model.OperatorRef">
+		INSERT INTO OPER_OPERATOR_REF_HIS
+		(
+			OPERATORID,
+			REFID,
+			ENDDATE,
+			CREATEDATE,
+			EFFECTIVEDATE,
+			REFTYPE
+		)
+		VALUES
+		(
+			#{operatorId},
+			#{refId},
+			#{endDate},
+			#{createDate},
+			#{effectiveDate},
+			#{refType}
+		)
+	</insert>
     
     <!-- auto generate default insert -->
     <insert id="insertOperatorRef" 

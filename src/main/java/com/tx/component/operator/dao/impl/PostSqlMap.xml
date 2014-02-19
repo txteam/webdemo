@@ -224,6 +224,12 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_POST TP
 	    <trim prefix="SET" suffixOverrides=",">
+	    	<if test="organization != null">
+				ORGANIZATIONID = #{organization.id,javaType=java.lang.String},
+	        </if>
+	        <if test="organization == null">
+				ORGANIZATIONID = '',
+	        </if>
 			<if test="_parameter.containsKey('parentId')">
 	    		PARENTID = #{parentId,javaType=java.lang.String},
 	    	</if>
