@@ -227,9 +227,6 @@
 	    	<if test="organization != null">
 				ORGANIZATIONID = #{organization.id,javaType=java.lang.String},
 	        </if>
-	        <if test="organization == null">
-				ORGANIZATIONID = '',
-	        </if>
 			<if test="_parameter.containsKey('parentId')">
 	    		PARENTID = #{parentId,javaType=java.lang.String},
 	    	</if>

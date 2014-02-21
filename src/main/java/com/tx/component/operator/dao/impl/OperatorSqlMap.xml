@@ -236,10 +236,10 @@
 	<!-- auto generate default delete -->
 	<delete id="deleteOperator" 
 		parameterType="com.tx.component.operator.model.Operator">
-		DELETE FROM OPER_OPERATOR TO_ WHERE
+		DELETE FROM OPER_OPERATOR WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            AND TO_.ID = #{id}
+	            AND ID = #{id}
 	        </if>
 		</trim>
 	</delete>

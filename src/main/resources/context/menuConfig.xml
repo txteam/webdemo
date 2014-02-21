@@ -8,7 +8,8 @@
 			<menu id="menu_config" text="菜单管理"
 				href="/mainframe/toQueryAllMenuItemTreeList.action" authKey="menu_config"
 				target="mainTabs" selectRefresh="false" />
-			<menu id="config_config" text="配置项管理" href="/auth/authMananger"
+			<menu id="config_configuration" text="配置项管理" 
+				href="/configuration/toQueryConfigProperty.action"
 				authKey="config_config" target="mainTabs" selectRefresh="false" />
 			<menu id="system_monitor" text="系统监控"
 				authKey="system_monitor_view" target="mainTabs" selectRefresh="false">

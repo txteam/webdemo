@@ -144,9 +144,22 @@
 				</list>
 			</property>
 		</bean>
-		-->
+		 -->
+		 <bean id="tx.dataSource" class="com.tx.core.datasource.DataSourceFactoryBean">
+			<property name="supportP6spy" value="true"></property>
+			<property name="datasourceFinderList">
+				<list>
+					<bean
+						class="com.tx.core.datasource.finder.DelegatingDataSourceImplFinder">
+						<property name="srcDatasource">
+							<ref bean="druidDataSource" />
+						</property>
+					</bean>
+				</list>
+			</property>
+		</bean>
 		
-		<bean id="tx.dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		<bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource"
 			init-method="init" destroy-method="close">
 			<property name="url" value="#{config.getValue('dataSource.url')}" />
 			<property name="username" value="#{config.getValue('dataSource.username')}" />

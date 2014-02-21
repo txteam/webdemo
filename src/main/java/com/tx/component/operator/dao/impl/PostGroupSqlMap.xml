@@ -112,10 +112,10 @@
 	<!-- auto generate default delete -->
 	<delete id="deletePostGroup" 
 		parameterType="com.tx.component.operator.model.PostGroup">
-		DELETE FROM POSTGROUP TPG WHERE
+		DELETE FROM POSTGROUP WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            AND TPG.ID = #{id}
+	            AND ID = #{id}
 	        </if>
 		</trim>
 	</delete>

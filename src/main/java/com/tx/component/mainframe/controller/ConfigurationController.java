@@ -6,15 +6,23 @@
  */
 package com.tx.component.mainframe.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.configuration.context.ConfigContext;
+import com.tx.component.configuration.model.ConfigProperty;
 import com.tx.component.configuration.model.ConfigPropertyGroup;
 
 /**
@@ -43,7 +51,25 @@ public class ConfigurationController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("toQueryConfigProperty")
-    public String toQueryConfigProperty() {
+    public String toQueryConfigProperty(ModelMap responseMap) {
+        List<ConfigProperty> configPropertyList = configContext.getAllConfigProperty();
+        MultiValueMap<String, ConfigProperty> configGroup2PropertyMap = new LinkedMultiValueMap<String, ConfigProperty>();
+        if(!CollectionUtils.isEmpty(configPropertyList)){
+            for(ConfigProperty configPropertyTemp : configPropertyList){
+                configGroup2PropertyMap.add(configPropertyTemp.getConfigPropertyGroupName(), configPropertyTemp);
+            }
+        }
+        
+        //过滤掉配置组下不存在配置属性的配置组
+        Map<String, List<ConfigProperty>> resMap = new HashMap<String, List<ConfigProperty>>();
+        for(Entry<String, List<ConfigProperty>> entryTemp : configGroup2PropertyMap.entrySet()){
+            if(CollectionUtils.isEmpty(entryTemp.getValue())){
+                continue;
+            }
+            resMap.put(entryTemp.getKey(), entryTemp.getValue());
+        }
+        
+        responseMap.put("configGroup2PropertyMap", resMap);
         return "/mainframe/queryConfigProperty";
     }
     
@@ -62,7 +88,5 @@ public class ConfigurationController {
         List<ConfigPropertyGroup> configPropertyGroupList = configContext.getAllConfigPropertyGroup();
         return configPropertyGroupList;
     }
-    
-    
     
 }
