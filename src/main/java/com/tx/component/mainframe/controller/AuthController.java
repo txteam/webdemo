@@ -121,7 +121,7 @@ public class AuthController {
         MultiValueMap<String, CheckAbleTreeNode> authType2AuthItemListMap = this.authManageService.queryAuthType2TreeNodeMapByRefId(AuthConstant.AUTHREFTYPE_POST,
                 postId,
                 false,
-                true,
+                false,
                 true);
         
         return authType2AuthItemListMap;

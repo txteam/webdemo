@@ -18,6 +18,8 @@ package com.tx.component.mainframe.treeview;
   */
 public interface TreeNodeAdapter<T> {
     
+    public Object getTarget(T obj);
+    
     /**
      * @return 返回 id
      */

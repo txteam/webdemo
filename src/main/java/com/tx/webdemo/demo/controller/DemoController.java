@@ -103,7 +103,7 @@ public class DemoController {
         //列表向树的转换属于业务逻辑应该写在业务层，这里写这里只是为了显示
         List<MenuItem> menuItemList = MenuContext.getContext().getMenuItemListFromCurrentSession(MenuItem.TYPE_MAIN_MENU);
         
-        List<MenuItem> menuItemTreeList = TreeUtils.changToTree(menuItemList);
+        List<MenuItem> menuItemTreeList = TreeUtils.changeToTree(menuItemList);
         
         model.addAttribute("menuItemTreeList", menuItemTreeList);
         

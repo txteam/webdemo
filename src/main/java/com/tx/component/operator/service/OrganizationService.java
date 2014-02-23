@@ -32,6 +32,7 @@ import com.tx.component.servicelog.context.ServiceLoggerContext;
 import com.tx.core.TxConstants;
 import com.tx.core.exceptions.argument.IllegalArgException;
 import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.core.util.MessageUtils;
 import com.tx.core.util.UUIDUtils;
 
 /**
@@ -140,6 +141,7 @@ public class OrganizationService {
         
         //生成组织唯一键
         organization.setId(UUIDUtils.generateUUID());
+        organization.setValid(true);
         
         //生成组织全名
         organization.setFullName(generateOrganizationFullName(organization.getParentId(),
@@ -153,7 +155,10 @@ public class OrganizationService {
         
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo", "新增组织", "新增组织", null));
+                .log(new SystemOperateLog("webdemo",
+                        MessageUtils.createMessage("新增组织[{}]",
+                                new Object[] { organization.getName() }),
+                        "新增组织", null));
     }
     
     /** 
@@ -397,6 +402,13 @@ public class OrganizationService {
         
         int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
         
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo","更新组织",
+                        MessageUtils.createMessage("更新组织[{}]",
+                                new Object[] { organization.getName() }),
+                         null));
+        
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
     }
@@ -442,11 +454,15 @@ public class OrganizationService {
         updateRowMap.put("id", organizationId);
         updateRowMap.put("valid", false);
         
-        int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
-        
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo", "停用组织", "停用组织", null));
+                .log(new SystemOperateLog(
+                        "webdemo","停用组织",
+                        MessageUtils.createMessage("停用组织[{}]",
+                                new Object[] { findOrganizationById(organizationId).getName() }),
+                         null));
+        
+        int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
         
         return updateRowCount > 0;
     }
@@ -468,11 +484,15 @@ public class OrganizationService {
         updateRowMap.put("id", organizationId);
         updateRowMap.put("valid", true);
         
-        int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
-        
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo", "启用组织", "启用组织", null));
+                .log(new SystemOperateLog(
+                        "webdemo","启用组织",
+                        MessageUtils.createMessage("启用组织[{}]",
+                                new Object[] { findOrganizationById(organizationId).getName() }),
+                         null));
+        
+        int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
         
         return updateRowCount > 0;
     }
@@ -524,18 +544,27 @@ public class OrganizationService {
         if (res == null) {
             return false;
         }
-        //将要删除的组织信息写入历史表中
-        this.organizationDao.insertOrganizationToHis(res);
+        
         
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo", "删除组织", "删除组织", null));
+                .log(new SystemOperateLog(
+                        "webdemo","删除组织",
+                        MessageUtils.createMessage("删除组织[{}]",
+                                new Object[] { res.getName() }),
+                         null));
+        //将要删除的组织信息写入历史表中
+        this.organizationDao.insertOrganizationToHis(res);
         
         return this.organizationDao.deleteOrganization(condition) > 0;
     }
     
     /** 组织转换为树节点的适配器 */
     private static final TreeNodeAdapter<Organization> organizationAdapter = new TreeNodeAdapter<Organization>() {
+        
+        public Object getTarget(Organization obj) {
+            return obj;
+        }
         
         @Override
         public String getId(Organization obj) {
@@ -560,6 +589,10 @@ public class OrganizationService {
     
     /** 职位与树节点转换的适配器 */
     private static final TreeNodeAdapter<Post> postAdapter = new TreeNodeAdapter<Post>() {
+        
+        public Object getTarget(Post obj) {
+            return obj;
+        }
         
         @Override
         public String getId(Post obj) {

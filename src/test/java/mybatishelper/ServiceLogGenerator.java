@@ -32,7 +32,7 @@ public class ServiceLogGenerator {
         
         JpaMetaClass<?> jpaMetaClass = JpaMetaClass.forClass(serviceLogType);
         String dbScript = TXServiceLogDBScriptHelper.generateDBScriptContent(serviceLogType,
-                DataSourceTypeEnum.ORACLE,
+                DataSourceTypeEnum.MYSQL,
                 "UTF-8");
         TXServiceLogViewHelper.generate(resultFolderPath,
                 serviceLogType,

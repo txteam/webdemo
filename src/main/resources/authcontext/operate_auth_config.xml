@@ -19,7 +19,7 @@
 			
 		</auth>
 		<!-- 组织职位数据相关权限 -->
-		<auth key="system_config" name="系统管理权限">
+		<auth key="system_config" name="系统管理权限">`
 			<auth key="menu_config" name="菜单管理"></auth>
 			<auth key="config_config" name="配置项管理"></auth>
 			<auth key="basicdata_config" name="基础数据项管理"></auth>

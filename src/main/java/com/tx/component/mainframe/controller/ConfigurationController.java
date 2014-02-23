@@ -6,24 +6,26 @@
  */
 package com.tx.component.mainframe.controller;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.auth.annotation.CheckOperateAuth;
 import com.tx.component.configuration.context.ConfigContext;
 import com.tx.component.configuration.model.ConfigProperty;
 import com.tx.component.configuration.model.ConfigPropertyGroup;
+import com.tx.component.mainframe.treeview.TreeNode;
+import com.tx.component.mainframe.treeview.TreeNodeAdapter;
+import com.tx.component.mainframe.treeview.TreeNodeUtils;
+import com.tx.core.tree.util.TreeUtils;
 
 /**
  * 配置属性控制器 <br/>
@@ -37,6 +39,10 @@ import com.tx.component.configuration.model.ConfigPropertyGroup;
 @Controller("configurationController")
 @RequestMapping("/configuration")
 public class ConfigurationController {
+    
+    public static final int TREENODE_TYPE_CONFIGGROUP = 0;
+    
+    public static final int TREENODE_TYPE_CONFIGPROPERTY = 1;
     
     @Resource(name = "configContext")
     private ConfigContext configContext;
@@ -52,25 +58,44 @@ public class ConfigurationController {
      */
     @RequestMapping("toQueryConfigProperty")
     public String toQueryConfigProperty(ModelMap responseMap) {
-        List<ConfigProperty> configPropertyList = configContext.getAllConfigProperty();
-        MultiValueMap<String, ConfigProperty> configGroup2PropertyMap = new LinkedMultiValueMap<String, ConfigProperty>();
-        if(!CollectionUtils.isEmpty(configPropertyList)){
-            for(ConfigProperty configPropertyTemp : configPropertyList){
-                configGroup2PropertyMap.add(configPropertyTemp.getConfigPropertyGroupName(), configPropertyTemp);
-            }
-        }
-        
-        //过滤掉配置组下不存在配置属性的配置组
-        Map<String, List<ConfigProperty>> resMap = new HashMap<String, List<ConfigProperty>>();
-        for(Entry<String, List<ConfigProperty>> entryTemp : configGroup2PropertyMap.entrySet()){
-            if(CollectionUtils.isEmpty(entryTemp.getValue())){
-                continue;
-            }
-            resMap.put(entryTemp.getKey(), entryTemp.getValue());
-        }
-        
-        responseMap.put("configGroup2PropertyMap", resMap);
         return "/mainframe/queryConfigProperty";
+    }
+    
+    /**
+      * 跳转到编辑配置属性页<br/>
+      *<功能详细描述>
+      * @param responseMap
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("toUpdateConfigProperty")
+    public String toUpdateConfigProperty(@RequestParam("key") String key,
+            ModelMap responseMap) {
+        responseMap.put("configProperty",
+                configContext.getConfigPropertyByKey(key));
+        return "/mainframe/updateConfigProperty";
+    }
+    
+    /**
+      * 更新配置属性值<br/>
+      *<功能详细描述>
+      * @param key
+      * @param value
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @CheckOperateAuth(key = "update_configProperty", parentKey = "config_config", name = "修改配置项")
+    @ResponseBody
+    @RequestMapping("updateConfigPropertyValue")
+    public boolean updateConfigPropertyValue(String key, String value) {
+        configContext.getConfigPropertyByKey(key).update(value);
+        return true;
     }
     
     /**
@@ -88,5 +113,100 @@ public class ConfigurationController {
         List<ConfigPropertyGroup> configPropertyGroupList = configContext.getAllConfigPropertyGroup();
         return configPropertyGroupList;
     }
+    
+    /**
+      * 获取配置属性树节点<br/>
+      *<功能详细描述>
+      * @param configPropertyGroupName
+      * @return [参数说明]
+      * 
+      * @return List<TreeNode> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("getConfigPropertyTreeNodeList")
+    public List<TreeNode> getConfigPropertyTreeNodeList(
+            @RequestParam(value = "configPropertyGroupName", required = false) String configPropertyGroupName) {
+        List<ConfigPropertyGroup> configPropertyGroupList = new ArrayList<ConfigPropertyGroup>(
+                configContext.getAllConfigPropertyGroup());
+        List<ConfigProperty> configPropertyList = new ArrayList<ConfigProperty>(
+                configContext.getAllConfigPropertyMap().values());
+        
+        List<TreeNode> resList = new ArrayList<TreeNode>();
+        resList.addAll(TreeNodeUtils.transformedList(configPropertyGroupList,
+                configGroupAdapter));
+        resList.addAll(TreeNodeUtils.transformedList(configPropertyList,
+                configPropertyAdapter));
+        
+        List<TreeNode> resTreeList = TreeUtils.changeToTree(resList);
+        if (StringUtils.isEmpty(configPropertyGroupName)) {
+            return resTreeList;
+        } else {
+            resTreeList = new ArrayList<TreeNode>();
+            for (TreeNode treeNodeTemp : resList) {
+                if (configPropertyGroupName.equals(treeNodeTemp.getParentId())) {
+                    resTreeList.add(treeNodeTemp);
+                }
+            }
+            return resTreeList;
+        }
+    }
+    
+    private static final TreeNodeAdapter<ConfigPropertyGroup> configGroupAdapter = new TreeNodeAdapter<ConfigPropertyGroup>() {
+        
+        @Override
+        public Object getTarget(ConfigPropertyGroup obj) {
+            return obj;
+        }
+        
+        @Override
+        public String getId(ConfigPropertyGroup obj) {
+            return obj.getName();
+        }
+        
+        @Override
+        public int getType(ConfigPropertyGroup obj) {
+            return ConfigurationController.TREENODE_TYPE_CONFIGGROUP;
+        }
+        
+        @Override
+        public String getParentId(ConfigPropertyGroup obj) {
+            return obj.getParentName();
+        }
+        
+        @Override
+        public String getName(ConfigPropertyGroup obj) {
+            return obj.getName();
+        }
+    };
+    
+    private static final TreeNodeAdapter<ConfigProperty> configPropertyAdapter = new TreeNodeAdapter<ConfigProperty>() {
+        
+        @Override
+        public Object getTarget(ConfigProperty obj) {
+            return obj;
+        }
+        
+        @Override
+        public String getId(ConfigProperty obj) {
+            return obj.getKey();
+        }
+        
+        @Override
+        public int getType(ConfigProperty obj) {
+            return ConfigurationController.TREENODE_TYPE_CONFIGPROPERTY;
+        }
+        
+        @Override
+        public String getParentId(ConfigProperty obj) {
+            return obj.getConfigPropertyGroupName();
+        }
+        
+        @Override
+        public String getName(ConfigProperty obj) {
+            return obj.getName();
+        }
+    };
     
 }

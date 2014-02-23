@@ -69,7 +69,7 @@ public class MenuAuthLoader implements AuthLoader {
             menuItemSet.addAll(menuItemListTemp);
         }
         List<MenuItem> menuItemList = new ArrayList<MenuItem>(menuItemSet);
-        List<MenuItem> menuItemTreeList = TreeUtils.changToTree(menuItemList);
+        List<MenuItem> menuItemTreeList = TreeUtils.changeToTree(menuItemList);
         
         for(MenuItem menuItemTemp : menuItemTreeList){
             authItemSet.addAll(createAuthItem(null, menuItemTemp));

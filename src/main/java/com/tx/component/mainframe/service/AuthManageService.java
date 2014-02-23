@@ -72,21 +72,40 @@ public class AuthManageService {
      */
     private boolean isNeedSkip(
             MultiValueMap<String, AuthItem> parentKey2AuthItemMultiValueMap,
-            AuthItem authItem) {
+            AuthItem authItem, boolean isIncludeInvalid,
+            boolean isIncludeCanNotConfigAble, boolean isIncludeCanNotEditAble) {
         //非虚拟权限
         if (!authItem.isVirtual()) {
+            if (!isIncludeInvalid && !authItem.isValid()) {
+                return true;
+            }
+            if (!isIncludeCanNotConfigAble && !authItem.isConfigAble()) {
+                return true;
+            }
+            if (!isIncludeCanNotEditAble && !authItem.isEditAble()) {
+                return true;
+            }
             return false;
         }
         
+        //判断节点为虚拟权限节点的情况:
         //如果为虚拟权限，则其子权限应当存在非虚拟权限或飞空虚拟权限
         List<AuthItem> childAuthItemList = parentKey2AuthItemMultiValueMap.get(authItem.getId());
         //如果子集权限为空，则直接判断该权限为虚拟权限
         if (CollectionUtils.isEmpty(childAuthItemList)) {
             return true;
         }
-        
         for (AuthItem authItemTemp : childAuthItemList) {
             if (!authItemTemp.isVirtual()) {
+                if (!isIncludeInvalid && !authItemTemp.isValid()) {
+                    continue;
+                }
+                if (!isIncludeCanNotConfigAble && !authItemTemp.isConfigAble()) {
+                    continue;
+                }
+                if (!isIncludeCanNotEditAble && !authItemTemp.isEditAble()) {
+                    continue;
+                }
                 return false;
             } else {
                 List<AuthItem> childOrChildAuthItemList = parentKey2AuthItemMultiValueMap.get(authItem.getId());
@@ -95,7 +114,10 @@ public class AuthManageService {
                 }
                 for (AuthItem childOfChildAuthItemTemp : childOrChildAuthItemList) {
                     if (!isNeedSkip(parentKey2AuthItemMultiValueMap,
-                            childOfChildAuthItemTemp)) {
+                            childOfChildAuthItemTemp,
+                            isIncludeInvalid,
+                            isIncludeCanNotConfigAble,
+                            isIncludeCanNotEditAble)) {
                         return false;
                     }
                 }
@@ -150,18 +172,11 @@ public class AuthManageService {
             //权限项
             for (AuthItem authTemp : entryTemp.getValue()) {
                 //如果对应节点为虚拟节点，并且虚拟节点以下的子节点为空或均为虚拟节点，则不加载该节点
-                if (isNeedSkip(parentKey2AuthItemMultiValueMap, authTemp)) {
-                    continue;
-                }
-                
-                //其他逻辑
-                if (!isIncludeInvalid && !authTemp.isValid()) {
-                    continue;
-                }
-                if (!isIncludeCanNotConfigAble && !authTemp.isConfigAble()) {
-                    continue;
-                }
-                if (!isIncludeCanNotEditAble && authTemp.isEditAble()) {
+                if (isNeedSkip(parentKey2AuthItemMultiValueMap,
+                        authTemp,
+                        isIncludeInvalid,
+                        isIncludeCanNotConfigAble,
+                        isIncludeCanNotEditAble)) {
                     continue;
                 }
                 
@@ -446,6 +461,10 @@ public class AuthManageService {
         
         public boolean isChecked(AuthItem obj) {
             return false;
+        }
+        
+        public Object getTarget(AuthItem obj) {
+            return obj;
         }
     };
 }

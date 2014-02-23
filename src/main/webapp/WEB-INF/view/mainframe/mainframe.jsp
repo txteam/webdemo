@@ -47,16 +47,11 @@ $.bindge("logout",logoutFun);
 				<div onclick="changeThemeFun('bootstrap');" title="bootstrap">bootstrap</div>
 				<div onclick="changeThemeFun('black');" title="black">black</div>
 				<div class="menu-sep"></div>
-				<div onclick="changeThemeFun('cupertino');" title="cupertino">cupertino</div>
-				<div onclick="changeThemeFun('dark-hive');" title="dark-hive">dark-hive</div>
-				<div onclick="changeThemeFun('pepper-grinder');" title="pepper-grinder">pepper-grinder</div>
-				<div onclick="changeThemeFun('sunny');" title="sunny">sunny</div>
-				<div class="menu-sep"></div>
-				<div onclick="changeThemeFun('metro-blue');" title="metro-blue">metro-blue</div>
-				<div onclick="changeThemeFun('metro-gray');" title="metro-gray">metro-gray</div>
-				<div onclick="changeThemeFun('metro-green');" title="metro-green">metro-green</div>
-				<div onclick="changeThemeFun('metro-orange');" title="metro-orange">metro-orange</div>
-				<div onclick="changeThemeFun('metro-red');" title="metro-red">metro-red</div>
+				<div onclick="changeThemeFun('default');" title="default">default</div>
+				<div onclick="changeThemeFun('gray');" title="gray">gray</div>
+				<div onclick="changeThemeFun('metro');" title="metro">metro</div>
+				<div onclick="changeThemeFun('bootstrap');" title="bootstrap">bootstrap</div>
+				<div onclick="changeThemeFun('black');" title="black">black</div>
 			</div>
 			<div id="layout_north_kzmbMenu" style="width: 100px; display: none;">
 				<div onclick="editCurrentUserPwd();">记事本</div>

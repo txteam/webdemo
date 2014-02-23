@@ -22,25 +22,27 @@ $(document).ready(function() {
 			fit:true,
 			tabPosition:'right',
 			onSelect: function(title,index){
-				var target = this;
-				var $element = $(target);
-				var $tabPannel = $element.tabs('getSelected');
-				
-				$currentAuthTreeEl = $tabPannel.find("ul.checkAblePostTreeNode");
-				
-				var isLoad = ($currentAuthTreeEl.attr('isLoad') == 'true');
-				var isConfigAble = ($currentAuthTreeEl.attr('configAble') == 'true');
-				var authType = $currentAuthTreeEl.attr('authType');
-				
-				//获取当前操作面板的TreeGrid句柄
-				
-				//如果当前面板树尚未加载，就在此处进行加载
-				if(!isLoad){
-					initAuthTree($currentAuthTreeEl,authType,isConfigAble,authType2AuthItemListMap[authType]);
-					$currentAuthTreeEl.attr('isLoad','true');
-				}
+				loadCurrentPannel();
 			}
 		});
+		//加载需要加载的tab内容
+		loadCurrentPannel();
+		//加载pannel内容
+		function loadCurrentPannel(){
+			var $tabPannel = $("#authTabView").tabs('getSelected');
+			$currentAuthTreeEl = $tabPannel.find("ul.checkAblePostTreeNode");
+			var isLoad = ($currentAuthTreeEl.attr('isLoad') == 'true');
+			var isConfigAble = ($currentAuthTreeEl.attr('configAble') == 'true');
+			var authType = $currentAuthTreeEl.attr('authType');
+			
+			//获取当前操作面板的TreeGrid句柄
+			
+			//如果当前面板树尚未加载，就在此处进行加载
+			if(!isLoad){
+				initAuthTree($currentAuthTreeEl,authType,isConfigAble,authType2AuthItemListMap[authType]);
+				$currentAuthTreeEl.attr('isLoad','true');
+			}
+		}
 	});
 	$("#confirmBtn").click(function(){
 		parent.DialogUtils.closeDialogById("component_dialog_chooseOrganization");
@@ -123,10 +125,11 @@ function undo() {
 </head>
 <body class="body">
 	<!-- authTreeTabs -->
-	<div id="authTabView" class="easyui-tabs">
-		<c:forEach items="${authTypeList}" var="authType">
-			<div title="${authType.name}" data-options="tools:'#tab_tools_${authType.authType}'"
-				style="overflow-y:auto;overflow-x:hidden;height:fit;width:auto">
+	<div id="authTabView" class="easyui-tabs" data-options="fit:true">
+		<c:forEach items="${authTypeList}" var="authType" varStatus="status">
+			<div title="${authType.name}" 
+				data-options="${status.index == 0 ? 'selected:true' : ''}"
+				style="overflow-y:auto;overflow-x:hidden;">
 				<div class="datagrid-toolbar">
 			        <a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a>
 			        <a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a>

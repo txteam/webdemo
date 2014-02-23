@@ -93,9 +93,4 @@ public class MenuItemDataMapConverter implements Converter {
         return data;
     }
     
-    public static void main(String[] args) {
-        System.out.println(HashMap.class.isAssignableFrom(LinkedHashMap.class));
-        System.out.println(Map.class.isAssignableFrom(LinkedHashMap.class));
-    }
-    
 }

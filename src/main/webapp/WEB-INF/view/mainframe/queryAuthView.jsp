@@ -22,26 +22,24 @@ $(document).ready(function() {
 		tabs = $("#authTabView").tabs({
 			fit:true,
 			onSelect: function(title,index){
-				var target = this;
-				var $element = $(target);
-				var $tabPannel = $element.tabs('getSelected');
-				
-				$currentAuthTreeGridEl = $tabPannel.find("table.authTreeGrid");
-				
-				var isLoad = ($currentAuthTreeGridEl.attr('isLoad') == 'true');
-				var isConfigAble = ($currentAuthTreeGridEl.attr('configAble') == 'true');
-				var authType = $currentAuthTreeGridEl.attr('authType');
-				
-				//获取当前操作面板的TreeGrid句柄
-				
-				
-				//如果当前面板树尚未加载，就在此处进行加载
-				if(!isLoad){
-					initAuthTree($currentAuthTreeGridEl,authType,isConfigAble,authType2AuthItemListMap[authType]);
-					$currentAuthTreeGridEl.attr('isLoad','true');
-				}
+				loadCurrentAuthTree();
 			}
 		});
+		loadCurrentAuthTree();
+		function loadCurrentAuthTree(){
+			var $tabPannel = $("#authTabView").tabs('getSelected');
+			$currentAuthTreeGridEl = $tabPannel.find("table.authTreeGrid");
+			
+			var isLoad = ($currentAuthTreeGridEl.attr('isLoad') === 'true');
+			var isConfigAble = ($currentAuthTreeGridEl.attr('configAble') === 'true');
+			var authType = $currentAuthTreeGridEl.attr('authType');
+
+			//如果当前面板树尚未加载，就在此处进行加载
+			if(!isLoad){
+				initAuthTree($currentAuthTreeGridEl,authType,isConfigAble,authType2AuthItemListMap[authType]);
+				$currentAuthTreeGridEl.attr('isLoad','true');
+			}
+		}
 	});
 });
 //如果tabs初始化
@@ -155,11 +153,15 @@ function undo() {
 </script>
 </head>
 <body>
-<div id="authTabView" class="easyui-tabs">
-<c:forEach items="${authTypeList}" var="authType">
-	<div title="${authType.name}" style="overflow: hidden;height:fit;width:auto">
+<div id="authTabView" class="easyui-tabs" data-options="fit:true">
+<c:forEach items="${authTypeList}" 
+	var="authType" varStatus="status">
+	<div title="${authType.name}">
 		<table class="authTreeGrid"
-				isLoad="false" authType="${authType.authType}" configAble="${authType.configAble}"></table>
+				data-options="tools:'#tab_tools_${authType.authType}'"
+				isLoad="false" 
+				authType="${authType.authType}" 
+				configAble="${authType.configAble}"></table>
     </div> 
 </c:forEach>
 </div> 

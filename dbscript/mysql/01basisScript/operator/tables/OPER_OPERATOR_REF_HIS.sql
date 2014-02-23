@@ -4,7 +4,7 @@ CREATE TABLE OPER_OPERATOR_REF_HIS(
 	CREATEDATE timestamp not null,
 	OPERATORID varchar(64) not null,
 	REFID varchar(64) not null,
-	ENDDATE timestamp default sysdate not null,
+	ENDDATE timestamp,
 	REFTYPE varchar(255) not null
 );
 CREATE INDEX IDX_OPER_OPERREF_HIS_00 ON OPER_OPERATOR_REF(OPERATORID,REFTYPE);

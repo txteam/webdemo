@@ -97,7 +97,7 @@ public class MenuContext extends MenuContextConfigurator{
             return resList;
         }
         
-        List<MenuItem> menuTreeList = TreeUtils.changToTree(menuItemList);
+        List<MenuItem> menuTreeList = TreeUtils.changeToTree(menuItemList);
         return menuTreeList;
     }
     
@@ -160,7 +160,7 @@ public class MenuContext extends MenuContextConfigurator{
             }
         }
         
-        List<MenuItem> menuTreeList = TreeUtils.changToTree(resList);
+        List<MenuItem> menuTreeList = TreeUtils.changeToTree(resList);
         return menuTreeList;
     }
     
