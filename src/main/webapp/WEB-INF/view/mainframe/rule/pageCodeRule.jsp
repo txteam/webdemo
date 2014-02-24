@@ -42,6 +42,20 @@
 5、页面验证逻辑，要求在前段页面提供足够的js校验，尽量不要依赖提交以后后台出现的异常去显示校验结果
 		在部分业务逻辑，在做好页面验证的同时需要在对应controller中，应当提供对应的校验逻辑。
 	 	在添加，审批等业务逻辑中，应当对重复提交情况进行考虑，尽量利用one,等jquery原生函数进行解决。
+	 	
+6、在贷款单详细信息页面中的几个子页面间相互触发全局事件，触发全局事件的函数应该尽量将本页面的loanbillid
+	作为参数进行触发，而接受全局事件的函数应该首先从params中取出
+	loanbillid进行验证，看是否和本页面的loanbillid相等，若相等则进行后续工作，否则不予处理。此规
+	定的用意在于防止全局事件被多个loanbill详细页面监听，造成bug。例子如下：
+	//将loanbillid作为参数进行传递
+	$.triggerge('flushClientinfoHeaderDiv', {loanBillId : $('#loanBillId').val()});
+	//判断loanbillid是否相等
+	$.bindge('addLoanApplyTablePrintTab', function(event, params){
+			var loanBillId = params.loanBillId;
+			if(loanBillId == $('#loanBillId').val()) {
+				.........处理后续工作
+			}
+		});
 	
 ...
 后面补充 

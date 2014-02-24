@@ -40,7 +40,7 @@ $(document).ready(function() {
 		organizationId : $("#organizationId").val(),
 		eventName : "choosePostForQueryOperator",
 		contextPath : _contextPath,
-		title : "请选择上级组织",
+		title : "请选职位",
 		width : 750,
 		height : 400,
 		handler : function(post){
@@ -83,7 +83,7 @@ $(document).ready(function() {
 			orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
 		}
 		$("#organizationId").val('');
-		$('#dataGrid').datagrid('reload');
+		$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
 	}
 	
 	
@@ -104,8 +104,7 @@ $(document).ready(function() {
 		/* 分页数据载入 */
 		loadFilter: function(data){
 			var res = {total:0,rows:[]};
-			if(!$.ObjectUtils.isEmpty(data)
-					&& !$.ObjectUtils.isEmpty(data.list)){
+			if(!$.ObjectUtils.isEmpty(data)){
 				res['total'] = data.count;
 				res['rows'] = data.list;
 			}
@@ -201,9 +200,7 @@ $(document).ready(function() {
 	});
 	
 	$("#queryBtn").click(function(){
-		alert($('#queryForm').serialize());
-		alert($.toJsonString($('#queryForm').serializeObject()));
-		$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+		$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
 	});
 });
 

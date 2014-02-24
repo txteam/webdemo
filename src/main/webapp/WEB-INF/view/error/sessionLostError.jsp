@@ -16,7 +16,7 @@ $(document).ready(function(){
 			if(intervalHandler != null){
 				clearInterval(intervalHandler);
 			}
-			//$.triggerge('returnLoginPage');
+			$.triggerge('returnLoginPage');
 		}else{
 			seconds--;
 			$seconds.text(seconds);

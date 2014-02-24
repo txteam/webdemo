@@ -11,14 +11,18 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		parent.DialogUtils.progress('close');
+		DialogUtils.progress('close');
 		//验证器
 		$('#configPropertyForm').validator({
 			valid : function() {
+				DialogUtils.progress({
+			        text : '数据提交中，请等待....'
+				});
 				//表单验证通过，提交表单到服务器
 				$('#configPropertyForm').ajaxSubmit({
 					url : "${contextPath}/configuration/updateConfigPropertyValue.action",
 					success : function(data) {
+						DialogUtils.progress('close');
 						if (data) {
 							parent.DialogUtils.tip("修改配置属性成功.");
 							parent.DialogUtils.closeDialogById("updateConfigProperty");

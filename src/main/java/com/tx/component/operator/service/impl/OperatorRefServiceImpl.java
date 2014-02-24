@@ -9,8 +9,10 @@ package com.tx.component.operator.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -45,6 +47,53 @@ public class OperatorRefServiceImpl implements OperatorRefService {
     private OperatorRefDao operatorRefDao;
     
     /**
+     * @param refType
+     * @param refId
+     * @return
+     */
+    @Override
+    public Set<String> queryOperatorIdSetByRefId(String refType, String refId) {
+        AssertUtils.notEmpty(refType,"refType is empty.");
+        AssertUtils.notEmpty(refId,"refId is empty.");
+        
+        Map<String, Object> queryParams = new HashMap<String, Object>();
+        queryParams.put("refType", refType);
+        queryParams.put("refId", refId);
+        
+        List<OperatorRef> operatorRefList = this.operatorRefDao.queryOperatorRefList(queryParams);
+        Set<String> resSet = new HashSet<String>();
+        for(OperatorRef orTemp : operatorRefList){
+            resSet.add(orTemp.getOperatorId());
+        }
+        
+        return resSet;
+    }
+
+    /**
+     * @param refType
+     * @param operatorId
+     * @return
+     */
+    @Override
+    public Set<String> queryRefIdSetByOperatorId(String refType,
+            String operatorId) {
+        AssertUtils.notEmpty(refType,"refType is empty.");
+        AssertUtils.notEmpty(operatorId,"operatorId is empty.");
+        
+        Map<String, Object> queryParams = new HashMap<String, Object>();
+        queryParams.put("refType", refType);
+        queryParams.put("operatorId", operatorId);
+        
+        List<OperatorRef> operatorRefList = this.operatorRefDao.queryOperatorRefList(queryParams);
+        Set<String> resSet = new HashSet<String>();
+        for(OperatorRef orTemp : operatorRefList){
+            resSet.add(orTemp.getRefId());
+        }
+        
+        return resSet;
+    }
+
+    /**
       * 批量删除操作员引用id集合<br/>
       *<功能详细描述>
       * @param refType
@@ -55,14 +104,14 @@ public class OperatorRefServiceImpl implements OperatorRefService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    private void batchDeleteRefIdList(String refType,
-            String operatorId,List<String> refIdList){
-        if(CollectionUtils.isEmpty(refIdList)){
-            return ;
+    private void batchDeleteRefIdList(String refType, String operatorId,
+            List<String> refIdList) {
+        if (CollectionUtils.isEmpty(refIdList)) {
+            return;
         }
         
         List<OperatorRef> operatorRefList = new ArrayList<OperatorRef>();
-        for(String refIdTemp : refIdList){
+        for (String refIdTemp : refIdList) {
             operatorRefList.add(new OperatorRef(operatorId, refIdTemp, refType));
         }
         
@@ -80,14 +129,14 @@ public class OperatorRefServiceImpl implements OperatorRefService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    private void batchInsertRefIdList(String refType,
-            String operatorId,List<String> refIdList){
-        if(CollectionUtils.isEmpty(refIdList)){
-            return ;
+    private void batchInsertRefIdList(String refType, String operatorId,
+            List<String> refIdList) {
+        if (CollectionUtils.isEmpty(refIdList)) {
+            return;
         }
         
         List<OperatorRef> operatorRefList = new ArrayList<OperatorRef>();
-        for(String refIdTemp : refIdList){
+        for (String refIdTemp : refIdList) {
             operatorRefList.add(new OperatorRef(operatorId, refIdTemp, refType));
         }
         
@@ -97,20 +146,66 @@ public class OperatorRefServiceImpl implements OperatorRefService {
     /**
      * @param refType
      * @param operatorId
+     * @param addRefIdList
+     * @param deleteRefIdList
+     */
+    @Override
+    public void saveOperator2RefIdList(String refType, String operatorId,
+            List<String> addRefIdList, List<String> deleteRefIdList) {
+        //查询对应操作员原来对应的引用类型中引用id列表
+        List<OperatorRef> operatorRefList = queryOperatorRefListByOperatorId(refType,
+                operatorId);
+        Map<String, OperatorRef> refId2RefMapping = new HashMap<String, OperatorRef>();
+        List<String> srcRefIdList = new ArrayList<String>();
+        if (!CollectionUtils.isEmpty(operatorRefList)) {
+            for (OperatorRef operatorRefTemp : operatorRefList) {
+                srcRefIdList.add(operatorRefTemp.getRefId());
+                refId2RefMapping.put(operatorRefTemp.getRefId(),
+                        operatorRefTemp);
+            }
+        }
+        
+        //查询需要减少的
+        @SuppressWarnings("unchecked")
+        List<String> needDeleteRefIds = ListUtils.intersection(deleteRefIdList,
+                srcRefIdList);
+        @SuppressWarnings("unchecked")
+        List<String> needInsertRefIds = ListUtils.subtract(addRefIdList,
+                srcRefIdList);
+        
+        //批量删除引用id集合
+        batchDeleteRefIdList(refType, operatorId, needDeleteRefIds);
+        //将批量删除的引用插入引用历史表中
+        if (!CollectionUtils.isEmpty(needDeleteRefIds)) {
+            List<OperatorRef> deleteOperatorRef = new ArrayList<OperatorRef>();
+            for (String refIdTemp : needDeleteRefIds) {
+                deleteOperatorRef.add(refId2RefMapping.get(refIdTemp));
+            }
+            batchInsertOperatorRefHis(deleteOperatorRef);
+        }
+        //批量插入
+        batchInsertRefIdList(refType, operatorId, needInsertRefIds);
+    }
+    
+    /**
+     * @param refType
+     * @param operatorId
      * @param refIdList
      */
     @Transactional
     @Override
-    public void saveOperator2RefIdList(String refType,
-            String operatorId, List<String> refIdList) {
+    public void saveOperator2RefIdList(String refType, String operatorId,
+            List<String> refIdList) {
         //查询对应操作员原来对应的引用类型中引用id列表
-        List<OperatorRef> operatorRefList = queryOperatorRefListByOperatorId(refType, operatorId);
+        List<OperatorRef> operatorRefList = queryOperatorRefListByOperatorId(refType,
+                operatorId);
         Map<String, OperatorRef> refId2RefMapping = new HashMap<String, OperatorRef>();
         List<String> srcRefIdList = new ArrayList<String>();
-        if(!CollectionUtils.isEmpty(operatorRefList)){
-            for(OperatorRef operatorRefTemp : operatorRefList){
+        if (!CollectionUtils.isEmpty(operatorRefList)) {
+            for (OperatorRef operatorRefTemp : operatorRefList) {
                 srcRefIdList.add(operatorRefTemp.getRefId());
-                refId2RefMapping.put(operatorRefTemp.getRefId(), operatorRefTemp);
+                refId2RefMapping.put(operatorRefTemp.getRefId(),
+                        operatorRefTemp);
             }
         }
         
@@ -125,9 +220,9 @@ public class OperatorRefServiceImpl implements OperatorRefService {
         //批量删除引用id集合
         batchDeleteRefIdList(refType, operatorId, needDeleteRefIds);
         //将批量删除的引用插入引用历史表中
-        if(!CollectionUtils.isEmpty(needDeleteRefIds)){
+        if (!CollectionUtils.isEmpty(needDeleteRefIds)) {
             List<OperatorRef> deleteOperatorRef = new ArrayList<OperatorRef>();
-            for(String refIdTemp : needDeleteRefIds){
+            for (String refIdTemp : needDeleteRefIds) {
                 deleteOperatorRef.add(refId2RefMapping.get(refIdTemp));
             }
             batchInsertOperatorRefHis(deleteOperatorRef);
@@ -136,56 +231,100 @@ public class OperatorRefServiceImpl implements OperatorRefService {
         batchInsertRefIdList(refType, operatorId, needInsertRefIds);
     }
     
-   /**
-     * 批量删除操作员引用id集合<br/>
-     *<功能简述>
-     *<功能详细描述>
+    /**
+      * 批量删除操作员引用id集合<br/>
+      *<功能简述>
+      *<功能详细描述>
+      * @param refType
+      * @param refId
+      * @param OperatorIdList [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private void batchDeleteOperatorIdList(String refType, String refId,
+            List<String> OperatorIdList) {
+        if (CollectionUtils.isEmpty(OperatorIdList)) {
+            return;
+        }
+        
+        List<OperatorRef> operatorRefList = new ArrayList<OperatorRef>();
+        for (String operatorIdTemp : OperatorIdList) {
+            operatorRefList.add(new OperatorRef(operatorIdTemp, refId, refType));
+        }
+        
+        batchDeleteOperatorRef(operatorRefList);
+    }
+    
+    /**
+      * 批量插入引用id集合<br/>
+      *<功能详细描述>
+      * @param refType
+      * @param refId
+      * @param operatorId [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private void batchInsertOperatorIdList(String refType, String refId,
+            List<String> operatorId) {
+        if (CollectionUtils.isEmpty(operatorId)) {
+            return;
+        }
+        
+        List<OperatorRef> operatorRefList = new ArrayList<OperatorRef>();
+        for (String operatorIdTemp : operatorId) {
+            operatorRefList.add(new OperatorRef(operatorIdTemp, refId, refType));
+        }
+        
+        batchInsertOperatorRef(operatorRefList);
+    }
+    
+    /**
      * @param refType
      * @param refId
-     * @param OperatorIdList [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-   private void batchDeleteOperatorIdList(String refType,
-           String refId,List<String> OperatorIdList){
-       if(CollectionUtils.isEmpty(OperatorIdList)){
-           return ;
-       }
-       
-       List<OperatorRef> operatorRefList = new ArrayList<OperatorRef>();
-       for(String operatorIdTemp : OperatorIdList){
-           operatorRefList.add(new OperatorRef(operatorIdTemp, refId, refType));
-       }
-       
-       batchDeleteOperatorRef(operatorRefList);
-   }
-   
-   /**
-     * 批量插入引用id集合<br/>
-     *<功能详细描述>
-     * @param refType
-     * @param refId
-     * @param operatorId [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-   private void batchInsertOperatorIdList(String refType,
-           String refId,List<String> operatorId){
-       if(CollectionUtils.isEmpty(operatorId)){
-           return ;
-       }
-       
-       List<OperatorRef> operatorRefList = new ArrayList<OperatorRef>();
-       for(String operatorIdTemp : operatorId){
-           operatorRefList.add(new OperatorRef(operatorIdTemp, refId, refType));
-       }
-       
-       batchInsertOperatorRef(operatorRefList);
-   }
+     * @param addOperatorIdList
+     * @param deleteOperatorIdList
+     */
+    @Override
+    public void saveRefId2OperatorIdList(String refType, String refId,
+            List<String> addOperatorIdList, List<String> deleteOperatorIdList) {
+        //查询对应引用id原来对应的引用类型中操作员id列表
+        List<OperatorRef> operatorRefList = queryOperatorRefListByRefId(refType,
+                refId);
+        Map<String, OperatorRef> operatorId2RefMapping = new HashMap<String, OperatorRef>();
+        List<String> srcOperatorIdList = new ArrayList<String>();
+        if (!CollectionUtils.isEmpty(operatorRefList)) {
+            for (OperatorRef operatorRefTemp : operatorRefList) {
+                srcOperatorIdList.add(operatorRefTemp.getOperatorId());
+                operatorId2RefMapping.put(operatorRefTemp.getOperatorId(),
+                        operatorRefTemp);
+            }
+        }
+        
+        //查询需要减少的
+        @SuppressWarnings("unchecked")
+        List<String> needDeleteOperatorIds = ListUtils.intersection(deleteOperatorIdList,
+                srcOperatorIdList);
+        @SuppressWarnings("unchecked")
+        List<String> needInsertOperatorIds = ListUtils.subtract(addOperatorIdList,
+                srcOperatorIdList);
+        
+        //删除需要删除的
+        batchDeleteOperatorIdList(refType, refId, needDeleteOperatorIds);
+        //将批量删除的引用插入引用历史表中
+        if (!CollectionUtils.isEmpty(needDeleteOperatorIds)) {
+            List<OperatorRef> deleteOperatorRef = new ArrayList<OperatorRef>();
+            for (String operatorIdTemp : needDeleteOperatorIds) {
+                deleteOperatorRef.add(operatorId2RefMapping.get(operatorIdTemp));
+            }
+            batchInsertOperatorRefHis(deleteOperatorRef);
+        }
+        //插入新增的
+        batchInsertOperatorIdList(refType, refId, needInsertOperatorIds);
+    }
     
     /**
      * @param refType
@@ -194,16 +333,18 @@ public class OperatorRefServiceImpl implements OperatorRefService {
      */
     @Transactional
     @Override
-    public void saveRefId2OperatorIdList(String refType,
-            String refId, List<String> operatorIdList) {
+    public void saveRefId2OperatorIdList(String refType, String refId,
+            List<String> operatorIdList) {
         //查询对应引用id原来对应的引用类型中操作员id列表
-        List<OperatorRef> operatorRefList = queryOperatorRefListByRefId(refType, refId);
+        List<OperatorRef> operatorRefList = queryOperatorRefListByRefId(refType,
+                refId);
         Map<String, OperatorRef> operatorId2RefMapping = new HashMap<String, OperatorRef>();
         List<String> srcOperatorIdList = new ArrayList<String>();
-        if(!CollectionUtils.isEmpty(operatorRefList)){
-            for(OperatorRef operatorRefTemp : operatorRefList){
-                srcOperatorIdList.add(operatorRefTemp.getRefId());
-                operatorId2RefMapping.put(operatorRefTemp.getOperatorId(), operatorRefTemp);
+        if (!CollectionUtils.isEmpty(operatorRefList)) {
+            for (OperatorRef operatorRefTemp : operatorRefList) {
+                srcOperatorIdList.add(operatorRefTemp.getOperatorId());
+                operatorId2RefMapping.put(operatorRefTemp.getOperatorId(),
+                        operatorRefTemp);
             }
         }
         
@@ -218,9 +359,9 @@ public class OperatorRefServiceImpl implements OperatorRefService {
         //删除需要删除的
         batchDeleteOperatorIdList(refType, refId, needDeleteOperatorIds);
         //将批量删除的引用插入引用历史表中
-        if(!CollectionUtils.isEmpty(needDeleteOperatorIds)){
+        if (!CollectionUtils.isEmpty(needDeleteOperatorIds)) {
             List<OperatorRef> deleteOperatorRef = new ArrayList<OperatorRef>();
-            for(String operatorIdTemp : needDeleteOperatorIds){
+            for (String operatorIdTemp : needDeleteOperatorIds) {
                 deleteOperatorRef.add(operatorId2RefMapping.get(operatorIdTemp));
             }
             batchInsertOperatorRefHis(deleteOperatorRef);
@@ -370,8 +511,8 @@ public class OperatorRefServiceImpl implements OperatorRefService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<OperatorRef> queryOperatorRefListByRefId(
-            String refType, String refId) {
+    public List<OperatorRef> queryOperatorRefListByRefId(String refType,
+            String refId) {
         AssertUtils.notEmpty(refId, "refId is empty.");
         AssertUtils.notNull(refType, "refType is null.");
         
@@ -398,8 +539,8 @@ public class OperatorRefServiceImpl implements OperatorRefService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public List<OperatorRef> queryOperatorRefListByOperatorId(
-            String refType, String operatorId) {
+    public List<OperatorRef> queryOperatorRefListByOperatorId(String refType,
+            String operatorId) {
         AssertUtils.notEmpty(operatorId, "refId is empty.");
         AssertUtils.notNull(refType, "refType is null.");
         

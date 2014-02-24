@@ -661,7 +661,7 @@ var GlobalDialogUtils = null;
     	$.messager.prompt(title, msg, fn);
     };
     DialogUtils.prompt = function(title, msg, fn){
-    	GlobalDialogUtils.prompt(title, msg, fn);
+    	GlobalDialogUtils._prompt(title, msg, fn);
     };
     //window.prompt = function(msg,fn){
     //	$.messager.confirm("prompt", msg, fn);
@@ -678,10 +678,17 @@ var GlobalDialogUtils = null;
      * close: 关闭进度条窗体. 
      */
     DialogUtils._progress = function(){
-    	$.messager.progress.apply($.messager,arguments);
+    	$.messager.progress.apply($.messager,Array.prototype.slice.call(arguments));
     };
-    DialogUtils.progress = function(){
-    	GlobalDialogUtils.apply($.messager,arguments);
+    DialogUtils.progress = function(obj){
+    	if($.type(obj) === "string"){
+    		DialogUtils._progress(obj);
+    	}else{
+    		var opt = $.extend({},{
+    			interval: 100
+        	},obj);
+    		DialogUtils._progress(opt);
+    	}
     };
     
     /*
@@ -742,6 +749,7 @@ var GlobalDialogUtils = null;
     	   $.triggerge("close_dialog_" + dialogId);
     	}
     };
+    DialogUtils.closeById = DialogUtils.closeDialogById;
     /*
      * 打开对话框
      */

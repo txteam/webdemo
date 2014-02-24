@@ -12,8 +12,6 @@
 <script type="text/javascript" >
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
-	
-	
 	$("#chiefName").chooseOperator({
 		eventName : "chooseOperatorForAddOrganization",
 		contextPath : _contextPath,
@@ -108,11 +106,14 @@ $(document).ready(function(){
 	    		DialogUtils.alert('警告',"非分公司类型组织上级组织不允许为空",'warning');
 	    		return false;
 	    	}
-	    	
+	    	DialogUtils.progress({
+		        text : '数据提交中，请等待....'
+			});
 	        //表单验证通过，提交表单到服务器
 			$('#organizationForm').ajaxSubmit({
 			    url:"${contextPath}/organization/addOrganization.action",
 			    success: function(data) {
+			    	DialogUtils.progress('close');
 					if(data){
 						DialogUtils.tip("新增组织成功");
 						parent.DialogUtils.closeDialogById("addOrganization");

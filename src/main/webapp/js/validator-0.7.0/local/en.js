@@ -1,6 +1,6 @@
 /*********************************
  * Themes, rules, and i18n support
- * Locale: <%=local_string%>
+ * Locale: English
  *********************************/
 (function ($) {
     /* Global configuration
@@ -8,22 +8,13 @@
     $.validator.config({
         //stopOnError: false,
         //theme: 'yellow_right',
-        defaultMsg: "<%=defaultMsg%>",
-        loadingMsg: "<%=loadingMsg%>",
+        defaultMsg: "This field is not valid.",
+        loadingMsg: "Validating...",
         
         // Custom rules
         rules: {
-            digits: [/^\d*$/, "<%=digits%>"]
-            <% 
-            if (rules) {
-                for(var i in rules) {
-                    if ( typeof rules[i] === 'object' ) {
-                        echo( ',' + i + ': [' + rules[i][0].toString() + ', "' + rules[i][1] + '"]' );
-                    } else {
-                        echo( ',' + i + ': ' + rules[i].toString().replace(/\n\s{4}/g,'\n            ') );
-                    }
-            %>
-            <% }} %>
+            digits: [/^\d+$/, "Please enter only digits."]
+            
         }
     });
 
@@ -31,43 +22,43 @@
      */
     $.validator.config({
         messages: {
-            required: "<%=required%>",
-            remote: "<%=remote%>",
+            required: "This field is required.",
+            remote: "Please try another name.",
             integer: {
-                '*': "<%=integer_nzp%>",
-                '+': "<%=integer_p%>",
-                '+0': "<%=integer_pz%>",
-                '-': "<%=integer_n%>",
-                '-0': "<%=integer_nz%>"
+                '*': "Please enter an integer.",
+                '+': "Please enter a positive integer.",
+                '+0': "Please enter a positive integer or 0.",
+                '-': "Please enter a negative integer.",
+                '-0': "Please enter a negative integer or 0."
             },
             match: {
-                eq: "<%=match_eq%>",
-                neq: "<%=match_neq%>",
-                lt: "<%=match_lt%>",
-                gt: "<%=match_gt%>",
-                lte: "<%=match_lte%>",
-                gte: "<%=match_gte%>"
+                eq: "{0} must be equal to {1}.",
+                neq: "{0} must be not equal to {1}.",
+                lt: "{0} must be less than {1}.",
+                gt: "{0} must be greater than {1}.",
+                lte: "{0} must be less than or equal to {1}.",
+                gte: "{0} must be greater than or equal to {1}."
             },
             range: {
-                rg: "<%=range_rg%>",
-                gt: "<%=range_gt%>",
-                lt: "<%=range_lt%>"
+                rg: "Please enter a number between {1} and {2}.",
+                gt: "Please enter a number greater than or equal to {1}.",
+                lt: "Please enter a number less than or equal to {1}."
             },
             checked: {
-                eq: "<%=checked_eq%>",
-                rg: "<%=checked_rg%>",
-                gt: "<%=checked_gt%>",
-                lt: "<%=checked_lt%>"
+                eq: "Please check {1} items.",
+                rg: "Please check between {1} and {2} items.",
+                gt: "Please check at least {1} items.",
+                lt: "Please check no more than {1} items."
             },
             length: {
-                eq: "<%=length_eq%>",
-                rg: "<%=length_rg%>",
-                gt: "<%=length_gt%>",
-                lt: "<%=length_lt%>",
-                eq_2: "<%=length_eq_2%>",
-                rg_2: "<%=length_rg_2%>",
-                gt_2: "<%=length_gt_2%>",
-                lt_2: "<%=length_lt_2%>"
+                eq: "Please enter {1} characters.",
+                rg: "Please enter a value between {1} and {2} characters long.",
+                gt: "Please enter at least {1} characters.",
+                lt: "Please enter no more than {1} characters.",
+                eq_2: "",
+                rg_2: "",
+                gt_2: "",
+                lt_2: ""
             }
         }
     });

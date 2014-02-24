@@ -34,10 +34,14 @@ $(document).ready(function(){
 	//验证器
 	$('#virtualCenterForm').validator({
 	    valid: function(){
+	    	DialogUtils.progress({
+		        text : '数据提交中，请等待....'
+			});
 	        //表单验证通过，提交表单到服务器
 			$('#virtualCenterForm').ajaxSubmit({
 			    url:"${contextPath}/virtualCenter/addVirtualCenter.action",
 			    success: function(data) {
+			    	DialogUtils.progress('close');
 					if(data){
 						DialogUtils.tip("新增虚中心成功");
 						parent.DialogUtils.closeDialogById("addVirtualCenter");

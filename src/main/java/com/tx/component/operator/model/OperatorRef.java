@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 /**
  * 人员引用对象<br/>
+ *     代码逻辑中暂时不考虑对生效时间的兼容支持，等以后有相应需求时再进行添加<br/>
  * <功能详细描述>
  * 
  * @author  brady

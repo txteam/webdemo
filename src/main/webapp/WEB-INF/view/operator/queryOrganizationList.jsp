@@ -228,9 +228,6 @@ function editFun(id) {
 	});
 }
 function deleteFun(id,name) {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
@@ -247,11 +244,15 @@ function deleteFun(id,name) {
 			    		$.formatString("是否确认删除组织:[{0}]?",name), 
 			    function(data){
 			    	if(data){
+			    		DialogUtils.progress({
+			    	        text : '数据提交中，请等待....'
+			    		});
 			    		//如果确认删除对应组织
 			    		$.post(
 					    		'${contextPath}/organization/deleteOrganizationById.action',
 					    		{organizationId:id},
 					    		function(){
+					    			DialogUtils.progress('close');
 					    			DialogUtils.tip("删除组织成功");
 					    			$('#treeGrid').treegrid('reload');
 					    });
@@ -263,9 +264,6 @@ function deleteFun(id,name) {
 	});
 }
 function disableFun(id,name){
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
@@ -282,11 +280,15 @@ function disableFun(id,name){
 			    		$.formatString("是否确认禁用组织:[{0}]?",name), 
 			    function(data){
 			    	if(data){
+			    		DialogUtils.progress({
+			    	        text : '数据提交中，请等待....'
+			    		});
 			    		//如果确认删除对应组织
 			    		$.post(
 					    		'${contextPath}/organization/disableOrganizationById.action',
 					    		{organizationId:id},
 					    		function(){
+					    			DialogUtils.progress('close');
 					    			DialogUtils.tip("禁用组织成功");
 					    			$('#treeGrid').treegrid('reload');
 					    });
@@ -298,9 +300,6 @@ function disableFun(id,name){
 	});
 }
 function enableFun(id,name){
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
@@ -312,11 +311,15 @@ function enableFun(id,name){
     		$.formatString("是否确认启用组织:[{0}]?",name), 
     function(data){
     	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
     		//如果确认删除对应组织
     		$.post(
 		    		'${contextPath}/organization/enableOrganizationById.action',
 		    		{organizationId:id},
 		    		function(){
+		    			DialogUtils.progress('close');
 		    			DialogUtils.tip("启用组织成功");
 		    			$('#treeGrid').treegrid('reload');
 		    });

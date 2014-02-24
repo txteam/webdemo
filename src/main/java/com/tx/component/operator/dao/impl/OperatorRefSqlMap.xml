@@ -58,7 +58,7 @@
 	            AND TOR.EFFECTIVEDATE = #{effectiveDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType)">  
-	            AND TOR.REFTYPE = #{refType,javaType=com.tx.component.operator.model.OperatorRefTypeEnum}
+	            AND TOR.REFTYPE = #{refType}
 	        </if>
 		</trim>
 		<choose>  
@@ -94,7 +94,7 @@
 	            AND TOR.EFFECTIVEDATE = #{effectiveDate,javaType=java.util.Date}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType)">  
-	            AND TOR.REFTYPE = #{refType,javaType=com.tx.component.operator.model.OperatorRefTypeEnum}
+	            AND TOR.REFTYPE = #{refType}
 	        </if>
 		</trim>
 	</select>
@@ -173,7 +173,7 @@
 	    		EFFECTIVEDATE = #{effectiveDate,javaType=java.util.Date},
 	    	</if>	
 			<if test="_parameter.containsKey('refType')">
-	    		REFTYPE = #{refType,javaType=com.tx.component.operator.model.OperatorRefTypeEnum},
+	    		REFTYPE = #{refType,javaType=java.lang.String},
 	    	</if>	
 	    </trim>
 	    WHERE TOR.OPERATORID = #{operatorId} 

@@ -14,6 +14,7 @@ var $currentAuthTreeEl = null;
 var currentTree = null;
 var authType2AuthItemListMap = null;
 $(document).ready(function() {
+	parent.DialogUtils.progress('close');
 	$.post('${contextPath}/auth/queryPostAuthType2AuthItemListMap.action',{postId:'${postId}'},function(data){
 		authType2AuthItemListMap = data;
 		
@@ -83,6 +84,9 @@ function initAuthTree($currentAuthTreeEl,authType,configAble,authItemList){
 	});
 	
 	$("#confirmBtn_" + authType).click(function(){
+		DialogUtils.progress({
+	        text : '数据提交中，请等待....'
+		});
 		var $treeEL = $currentAuthTreeEl;
 		var checked = $treeEL.tree('getChecked',['checked','indeterminate']);
 		var authItemIds = [];
@@ -101,6 +105,7 @@ function initAuthTree($currentAuthTreeEl,authType,configAble,authItemList){
 					if(data){
 						parent.DialogUtils.tip("配置职位权限成功");
 					}
+					DialogUtils.progress('close');
 			    }
 		);
 	});

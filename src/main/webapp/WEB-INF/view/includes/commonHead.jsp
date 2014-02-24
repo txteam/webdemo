@@ -5,7 +5,7 @@
 <link rel="stylesheet" id="easyuiTheme" href="${pageContext.request.contextPath}/js/jquery-easyui-1.3.5/themes/<c:out value="${cookie.easyuiThemeName.value}" default="bootstrap"/>/easyui.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/js/jquery-easyui-extension/icons.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style/extEasyUIIcon.css" type="text/css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/js/validator-0.6.7/jquery.validator.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/validator-0.7.0/jquery.validator.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/commons.css">
 
 <script type="text/javascript">
@@ -28,8 +28,8 @@
 <!-- other -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/datePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.form.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/validator-0.6.7/src/jquery.validator.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/validator-0.6.7/local/zh_CN.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/validator-0.7.0/src/jquery.validator.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/validator-0.7.0/local/zh_CN.js"></script>
 <!-- customize -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/commons.js" charset="utf-8"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/components.js" charset="utf-8"></script>

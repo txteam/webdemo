@@ -6,12 +6,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>demo系统</title>
+
 <link rel="stylesheet" href="${contextPath }/css/mainframe/login.css" type="text/css" media="screen">
 	
 <script type="text/javascript" src="${contextPath }/js/jquery.min.js"></script>	
 <script type="text/javascript" src="${contextPath }/js/jquery-easyui-1.3.5/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="${contextPath }/js/validator-0.6.7/jquery.validator.js"></script>
-<script type="text/javascript" src="${contextPath }/js/validator-0.6.7/local/zh_CN.js"></script>
+<script type="text/javascript" src="${contextPath }/js/validator-0.7.0/jquery.validator.js"></script>
+<script type="text/javascript" src="${contextPath }/js/validator-0.7.0/local/zh_CN.js"></script>
 <script type="text/javascript">
 $(function() {
     var $dialog = $('<div/>');

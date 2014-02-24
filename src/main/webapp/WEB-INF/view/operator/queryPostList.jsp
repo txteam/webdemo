@@ -14,6 +14,8 @@ $.canDelete = false;
 $.canDisable = false;
 $.canModify = false;
 $.canEnable = false;
+$.configPostAuth = false;
+$.configPostOperator = false;
 <c:if test='${authContext.hasAuth("add_post")}'>
 	$.canAdd = true;
 </c:if>
@@ -28,6 +30,12 @@ $.canEnable = false;
 </c:if>
 <c:if test='${authContext.hasAuth("update_post")}'>
 	$.canModify = true;
+</c:if>
+<c:if test='${authContext.hasAuth("config_post_auth")}'>
+	$.configPostAuth = true;
+</c:if>
+<c:if test='${authContext.hasAuth("config_post_operator")}'>
+	$.configPostOperator = true;
 </c:if>
 
 var treeGrid = null;
@@ -137,8 +145,11 @@ $(document).ready(function() {
 					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
 					str += '&nbsp;';
 				}
-				if (true) {
+				if ($.configPostAuth) {
 					str += $.formatString('<img onclick="configPostAuth(\'{0}\',\'{1}\');" src="{2}" title="配置职位权限"/>', row.id, row.name,'${contextPath}/style/images/extjs_icons/database_key.png');
+				}
+				if ($.configPostOperator) {
+					str += $.formatString('<img onclick="configPostOperator(\'{0}\',\'{1}\');" src="{2}" title="配置职位人员"/>', row.id, row.name,'${contextPath}/style/images/extjs_icons/folder/folder_user.png');
 				}
 				return str;
 			}
@@ -246,9 +257,6 @@ function editFun(id) {
  * 删除职位
  */
 function deleteFun(id,name) {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
@@ -264,11 +272,15 @@ function deleteFun(id,name) {
 			    		$.formatString("是否确认删除职位_[{0}]?",name) , 
 			    function(data){
 			    	if(data){
+			    		DialogUtils.progress({
+			    	        text : '数据提交中，请等待....'
+			    		});
 			    		//如果确认删除对应职位
 			    		$.post(
 					    		'${contextPath}/post/deletePostById.action',
 					    		{postId:id},
 					    		function(){
+					    			DialogUtils.progress('close');
 					    			DialogUtils.tip("删除职位成功");
 					    			$('#treeGrid').treegrid('reload');
 					    });
@@ -280,9 +292,6 @@ function deleteFun(id,name) {
 	});
 }
 function disableFun(id,name){
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
@@ -299,11 +308,15 @@ function disableFun(id,name){
 			    		$.formatString("是否确认禁用职位:[{0}]?",name), 
 			    function(data){
 			    	if(data){
+			    		DialogUtils.progress({
+			    	        text : '数据提交中，请等待....'
+			    		});
 			    		//如果确认删除对应组织
 			    		$.post(
 					    		'${contextPath}/post/disablePostById.action',
 					    		{postId:id},
 					    		function(){
+					    			DialogUtils.progress('close');
 					    			DialogUtils.tip("禁用 职位成功");
 					    			$('#treeGrid').treegrid('reload');
 					    });
@@ -315,9 +328,6 @@ function disableFun(id,name){
 	});
 }
 function enableFun(id,name){
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
@@ -329,11 +339,15 @@ function enableFun(id,name){
     		$.formatString("是否确认启用 职位:[{0}]?",name), 
     function(data){
     	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
     		//如果确认删除对应组织
     		$.post(
 		    		'${contextPath}/post/enablePostById.action',
 		    		{postId:id},
 		    		function(){
+		    			DialogUtils.progress('close');
 		    			DialogUtils.tip("启用 职位成功");
 		    			$('#treeGrid').treegrid('reload');
 		    });
@@ -360,7 +374,31 @@ function configPostAuth(id,name){
 		"configPostAuth",
 		$.formatString("配置职位权限_[{0}]",name),
 		$.formatString("${contextPath}/auth/toConfigPostAuth.action?postId={0}",id),
-		400,450,function(){
+		450,500,function(){
+			//$('#treeGrid').treegrid('reload');
+			//alert('reload');
+		}
+	);
+}
+//配置职位人员
+function configPostOperator(id,name){
+	if (id == undefined) {
+		var rows = dataGrid.datagrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].name;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("请选择职位");
+		return ;
+	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	DialogUtils.openModalDialog(
+		"configPostOperator",
+		$.formatString("配置职位人员_[{0}]",name),
+		$.formatString("${contextPath}/Operator2Post/toConfigPostOperator.action?postId={0}",id),
+		900,550,function(){
 			//$('#treeGrid').treegrid('reload');
 			//alert('reload');
 		}

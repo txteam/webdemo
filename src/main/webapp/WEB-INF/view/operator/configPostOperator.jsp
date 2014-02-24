@@ -5,13 +5,47 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>queryOperatorList</title>
+<title>configPostOperator</title>
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
+var postId = '${postId}';
+var OperatorChooseManager = function(){
+};
+OperatorChooseManager.prototype._isInit = false;
+OperatorChooseManager.prototype._choosedOperatorIds = {};
+OperatorChooseManager.prototype._loadChoosedOperatorIds = function(loadCallback){
+	var _this = this;
+	$.post("${contextPath}/Operator2Post/queryOperatorIdSetByPostId.action?postId=${postId}", function(data){
+		$.each(data,function(i,operatorIdTemp){
+			_this._choosedOperatorIds[operatorIdTemp] = true;
+		});
+		_this._isInit= true;
+		loadCallback(_this._choosedOperatorIds);
+	});
+};
+OperatorChooseManager.prototype.load = function(loadCallback){
+	var _this = this;
+	if(_this._isInit){
+		loadCallback(_this._loadChoosedOperatorIds);
+	}else{
+		_this._loadChoosedOperatorIds(function(data){
+			loadCallback(data);
+		});
+	}
+};
+OperatorChooseManager.prototype.reset = function(){
+	var _this = this;
+	_this._choosedOperatorIds = {};
+	_this._isInit= false;
+};
+var operatorChooseManager = new OperatorChooseManager();
+
 var orgTree = null;
 var dataGrid = null;
 $(document).ready(function() {
+	parent.DialogUtils.progress('close');
+	
 	orgTree = $('#organizationTree').tree({
 		url : '${contextPath}/organization/queryOrganizationList.action',
 		idField : 'id',
@@ -22,9 +56,29 @@ $(document).ready(function() {
 		textField : 'name',
 		border : false,
 		onClick : function(node){
-			$('#dataGrid').datagrid('reload');
+			$('#organizationId').val(node.id);
+			var orgId = $('#organizationId').val();
+			var loginName = $('#loginName').val();
+			var userName =  $('#userName').val();
+			$('#dataGrid').datagrid('load',{
+				organizationId: orgId,
+				loginName: loginName,
+				userName: userName
+			});
 		}
 	});
+	
+	//将已经选中的操作员显示为选中状态
+	function selectChoosedOperator(){
+		operatorChooseManager.load(function(choosedOperatorIds){
+			var rows = dataGrid.datagrid('getRows');
+			$.each(rows,function(index,rowTemp){
+				if(choosedOperatorIds[rowTemp.id]){
+					dataGrid.datagrid('checkRow',index);
+				}
+			});
+		});
+	}
 	
 	dataGrid = $('#dataGrid').datagrid({
 		url : '${contextPath}/operator/queryOperatorPagedList.action',
@@ -35,28 +89,33 @@ $(document).ready(function() {
 		idField : 'id',
 		pageSize : 10,
 		pageList : [ 10, 20, 30, 40, 50 ],
-		checkOnSelect : false,
-		selectOnCheck : false,
+		checkOnSelect : true,
+		selectOnCheck : true,
 		nowrap : false,
 		striped : true,
-		singleSelect : true,
+		singleSelect : false,
 		/* 分页数据载入 */
 		loadFilter: function(data){
 			var res = {total:0,rows:[]};
 			if(!$.ObjectUtils.isEmpty(data)){
 				res['total'] = data.count;
-				res['rows'] = data.list;
+				res['rows'] = $.type(data.list) === 'array' ? data.list : [];
 			}
 			return res;
 		}, 
-		frozenColumns : [ [ {
+		frozenColumns : [[{
+			field : 'operatorIdCk',
+			title : '',
+			width : 180,
+			checkbox : true
+		}, {
 			title : '操作员id',
 			field : 'id',
 			width : 150,
 			hidden : true
 		},{
 			field : 'loginName',
-			title : '登录名',
+			title : '登录名11111111111',
 			width : 180
 		}]],
 		columns : [ [{
@@ -100,38 +159,60 @@ $(document).ready(function() {
 		},
 		onSelect: function(rowIndex, rowData){
 			$.triggerge("choose_operator_" + "${eventName}",[rowData]);
-		}
-		/*,
+		},
 		onLoadSuccess : function() {
 			parent.$.messager.progress('close');
-			$(this).treegrid('tooltip');
+			//$(this).treegrid('tooltip');
+			selectChoosedOperator();
 		}
-		*/
 	});
 	
 	$("#queryBtn").click(function(){
-		alert($('#queryForm').serialize());
-		alert($.toJsonString($('#queryForm').serializeObject()));
-		$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+		$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
 	});
 });
 function refreshTree(){
 	var selectedNode = orgTree.tree('getSelected');
 	orgTree.tree('reload');
-	if(selectedNode){
-		treeGrid.treegrid('load',{
-			organizationId: '',
-			parentPostId: ''
-		});
-
-	}
+	$("#organizationId").val('');
+	$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
 }
 function deselect(){
 	var selectedNode = orgTree.tree('getSelected');
 	if(selectedNode){
 		orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
-		treeGrid.treegrid('load',{});
 	}
+	$("#organizationId").val('');
+	$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
+}
+function submitConfigPostOperator(){
+	DialogUtils.progress({
+        text : '数据提交中，请等待....'
+	});
+	var checkedRows = dataGrid.datagrid('getChecked');
+	var checkedRowsMapping = {};
+	$.each(checkedRows,function(index,rowTemp){
+		checkedRowsMapping[rowTemp.id] = true;
+	});
+	var checkedOperatorIds = [];
+	var unCheckedOperatorIds = [];
+	var rows = dataGrid.datagrid('getRows');
+	$.each(rows,function(index,rowTemp){
+		if(checkedRowsMapping[rowTemp.id]){
+			checkedOperatorIds.push(rowTemp.id);
+		}else{
+			unCheckedOperatorIds.push(rowTemp.id);
+		}
+	});
+	$.post("${contextPath}/Operator2Post/configPostOperatorId.action",
+			{postId:postId,selectedOperatorId:checkedOperatorIds,unSelectedOperatorId:unCheckedOperatorIds}, 
+			function(data){
+		parent.DialogUtils.tip("配置职位人员成功");
+		DialogUtils.progress('close');
+	});
+}
+function cancelConfigPostOperator(){
+	DialogUtils.closeDialogById('configPostOperator');
 }
 </script>
 </head>
@@ -142,7 +223,7 @@ function deselect(){
 				{ iconCls : 'clear',handler : function() {deselect();} } ,
 				{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
 			]"
-			style="width:230px;">
+			style="width:180px;">
 			<ul id="organizationTree"></ul>
 		</div>
 	</c:if>
@@ -152,15 +233,16 @@ function deselect(){
 			<div data-options="region:'north',title:'查询条件',border:false" 
 				style="height: 85px; overflow: hidden;">
 				<form method="post" id="queryForm" name="queryForm" class="form">
+				<input id="organizationId" type="hidden" value="" name="organizationId" />
 				<!-- query condition -->
 				<div>
 					<table>
 						<tbody>
 						<tr>
 							<th class="narrow">登录名:</th>
-							<td><input name="loginName" class="text" type="text" value=''/></td>
+							<td><input id="loginName" name="loginName" class="text" type="text" value=''/></td>
 							<th class="narrow">姓名:</th>
-							<td><input name="userName" class="text" type="text" value=''/></td>
+							<td><input id="userName" name="userName" class="text" type="text" value=''/></td>
 						</tr>
 						<tr>
 							<td colspan="4" class="button operRow">
@@ -184,4 +266,14 @@ function deselect(){
 				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 		</div>
 	</div> 
+	
+	<div data-options="region:'south',split:false" style="height:31px">
+		<div class="easyui-layout" data-options="fit:true,border:false">
+			<div class="datagrid-toolbar" style="text-align:right;padding-right: 59px">
+				<a onclick="submitConfigPostOperator();" href="javascript:void(0);" class="easyui-linkbutton">提交</a>
+				&nbsp;
+				<a href="javascript:void(0);" class="easyui-linkbutton">退出</a>
+			</div>
+		</div>
+	</div>
 </body>

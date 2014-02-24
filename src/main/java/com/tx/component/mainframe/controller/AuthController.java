@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.auth.AuthConstant;
+import com.tx.component.auth.annotation.CheckOperateAuth;
 import com.tx.component.auth.model.AuthItem;
 import com.tx.component.auth.model.AuthTypeItem;
 import com.tx.component.mainframe.service.AuthManageService;
@@ -139,6 +140,7 @@ public class AuthController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @CheckOperateAuth(key = "config_post_auth", parentKey = "post_manage", name = "配置职位权限")
     @ResponseBody
     @RequestMapping("/savePost2AuthItemList")
     public boolean savePost2AuthItemList(

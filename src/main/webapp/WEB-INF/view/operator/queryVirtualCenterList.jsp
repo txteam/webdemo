@@ -94,9 +94,6 @@ function undo() {
  * 打开添加组织界面
  */
 function addFun(id) {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = treeGrid.treegrid('getSelections');
 		if(!$.ObjectUtils.isEmpty(rows)){
@@ -105,6 +102,9 @@ function addFun(id) {
 			id = ''
 		}
 	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
 	DialogUtils.openModalDialog(
 		"addVirtualCenter",
 		"添加虚中心",
@@ -114,13 +114,13 @@ function addFun(id) {
 	});
 }
 function editFun(id) {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
 	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
 	DialogUtils.openModalDialog(
 		"updateVirtualCenter",
 		"编辑虚中心",
@@ -130,9 +130,6 @@ function editFun(id) {
 	});
 }
 function deleteFun(id,name) {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
@@ -149,6 +146,9 @@ function deleteFun(id,name) {
 			    		$.formatString("是否确认删除虚中心:[{0}]?",name), 
 			    function(data){
 			    	if(data){
+			    		DialogUtils.progress({
+			    	        text : '数据提交中，请等待....'
+			    		});
 			    		//如果确认删除对应组织
 			    		$.post(
 					    		'${contextPath}/virtualCenter/deleteVirtualCenterById.action',
@@ -156,6 +156,7 @@ function deleteFun(id,name) {
 					    		function(){
 					    			DialogUtils.tip("删除虚中心成功");
 					    			$('#treeGrid').treegrid('reload');
+					    			DialogUtils.progress('close');
 					    });
 			    	}
 			    });

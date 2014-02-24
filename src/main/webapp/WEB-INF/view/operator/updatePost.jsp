@@ -59,9 +59,13 @@ $(document).ready(function(){
 	$('#postForm').validator({
 	    valid: function(){
 	        //表单验证通过，提交表单到服务器
+	        DialogUtils.progress({
+	            text : '数据提交中，请等待....'
+	    	});
 			$('#postForm').ajaxSubmit({
 			    url:"${contextPath}/post/updatePost.action",
 			    success: function(data) {
+			    	DialogUtils.progress('close');
 					if(data){
 						parent.DialogUtils.tip("修改职位信息成功");
 						parent.DialogUtils.closeDialogById("updatePost");

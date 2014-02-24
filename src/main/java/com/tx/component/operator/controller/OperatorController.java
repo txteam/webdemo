@@ -181,7 +181,7 @@ public class OperatorController {
                 userName,
                 code,
                 state,
-                pageIndex + 1,
+                ++pageIndex,
                 pageSize);
         return resPagedList;
     }
@@ -220,7 +220,7 @@ public class OperatorController {
                 userName,
                 code,
                 state,
-                pageIndex,
+                ++pageIndex,
                 pageSize);
         return resPagedList;
     }

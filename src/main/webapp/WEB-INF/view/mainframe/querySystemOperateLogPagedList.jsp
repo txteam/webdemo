@@ -30,8 +30,7 @@ $(document).ready(function(){
 		singleSelect : true,
 		loadFilter: function(data){
 			var res = {total:0,rows:[]};
-			if(!$.ObjectUtils.isEmpty(data)
-					&& !$.ObjectUtils.isEmpty(data.list)){
+			if(!$.ObjectUtils.isEmpty(data)){
 				res['total'] = data.count;
 				res['rows'] = data.list;
 			}

@@ -68,6 +68,17 @@ $(document).ready(function() {
 			title : '配置项名称',
 			width : 200
 		}, {
+			field : 'type',
+			title : '配置项类型',
+			width : 230,
+			formatter : function(value, row, index) {
+				if(row.type == '0'){
+					return '&nbsp;';
+				}else{
+					return row.target.configPropertyType;
+				}	
+			}
+		}, {
 			field : 'key',
 			title : '配置项key',
 			width : 230,

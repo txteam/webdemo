@@ -14,10 +14,14 @@ $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
 	$('#organizationForm').bind('valid.form', function(){
+			DialogUtils.progress({
+		        text : '数据提交中，请等待....'
+			});
 		    //ajax提交
 			$(this).ajaxSubmit({
 			    url:"${contextPath}/organization/updateOrganization.action",
 			    success: function(data) {
+			    	DialogUtils.progress('close');
 					if(data){
 						DialogUtils.tip("更新组织成功");
 						parent.DialogUtils.closeDialogById("updateOrganization");
@@ -66,7 +70,7 @@ $(document).ready(function(){
 					<th class="narrow">编号<span class="tRed">*</span></th>
 					<td>
 						<form:input path="code" cssClass="text"
-							data-rule="编号:required;digits;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code , id]" 
+							data-rule="编号:required;digits;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code, id]" 
 							data-tip="不能重复的数字"/>
 					</td>
 					<th class="narrow">别名:</th>

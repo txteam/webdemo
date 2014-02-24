@@ -12,6 +12,7 @@
 <script type="text/javascript" >
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
+	
 	$("#organizationName").chooseOrganization({
 		eventName : "chooseOrganizationForAddPost",
 		contextPath : _contextPath,
@@ -47,10 +48,14 @@ $(document).ready(function(){
 	//验证器
 	$('#postForm').validator({
 	    valid: function(){
+	    	DialogUtils.progress({
+	            text : '数据提交中，请等待....'
+	    	});
 	        //表单验证通过，提交表单到服务器
 			$('#postForm').ajaxSubmit({
 			    url:"${contextPath}/post/addPost.action",
 			    success: function(data) {
+			    	DialogUtils.progress('close');
 					if(data){
 						parent.DialogUtils.tip("新增组织成功");
 						parent.DialogUtils.closeDialogById("addPost");
