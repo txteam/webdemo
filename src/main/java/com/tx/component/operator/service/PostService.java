@@ -19,10 +19,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tx.component.mainframe.servicelog.SystemOperateLog;
 import com.tx.component.operator.dao.PostDao;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.Post;
+import com.tx.component.servicelog.context.ServiceLoggerContext;
 import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.core.util.MessageUtils;
 
 /**
  * Post的业务层
@@ -133,6 +136,12 @@ public class PostService {
         post.setFullName(postFullName);
         
         this.postDao.insertPost(post);
+        
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo",
+                        MessageUtils.createMessage("新增职位[{}]",
+                                new Object[] { post.getName() }), "新增职位", null));
     }
     
     /**
@@ -162,6 +171,14 @@ public class PostService {
         //删除
         Post condition = new Post();
         condition.setId(id);
+        
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo",
+                        MessageUtils.createMessage("删除职位[{}]",
+                                new Object[] { findPostById(id).getName() }),
+                        "删除职位", null));
+        
         int resInt = this.postDao.deletePost(condition);
         return resInt > 0;
     }
@@ -350,6 +367,11 @@ public class PostService {
         updateRowMap.put("fullName", post.getFullName());
         updateRowMap.put("code", post.getCode());
         
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo",
+                        MessageUtils.createMessage("更新职位[{}]",
+                                new Object[] { post.getName() }), "更新职位", null));
         int updateRowCount = this.postDao.updatePost(updateRowMap);
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
@@ -425,6 +447,13 @@ public class PostService {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("id", postId);
         params.put("valid", false);
+        
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo",
+                        MessageUtils.createMessage("禁用职位[{}]",
+                                new Object[] { findPostById(postId).getName() }), "禁用职位", null));
+        
         this.postDao.updatePost(params);
         
         return true;
@@ -447,10 +476,16 @@ public class PostService {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("id", postId);
         params.put("valid", true);
+        
+        //记录操作日志
+        ServiceLoggerContext.getLogger(SystemOperateLog.class)
+                .log(new SystemOperateLog("webdemo",
+                        MessageUtils.createMessage("启用职位[{}]",
+                                new Object[] { findPostById(postId).getName() }), "启用职位", null));
+        
         this.postDao.updatePost(params);
         
         return true;
     }
-    
     
 }

@@ -145,7 +145,7 @@ public class Operator2PostController {
       * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping("/configPostOperatorId")
+    @RequestMapping("/configOperatorPostId")
     @CheckOperateAuth(key = "config_operator_post", parentKey = "operator_manage", name = "配置人员职位")
     public boolean configOperatorPostId(
             @RequestParam("operatorId") String operatorId,

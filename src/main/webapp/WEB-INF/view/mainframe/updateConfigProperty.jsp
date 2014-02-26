@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		DialogUtils.progress('close');
+		parent.DialogUtils.progress('close');
 		//验证器
 		$('#configPropertyForm').validator({
 			valid : function() {

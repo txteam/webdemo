@@ -24,7 +24,7 @@
 			<auth key="config_config" name="配置项管理"></auth>
 			<auth key="basicdata_config" name="基础数据项管理"></auth>
 			<auth key="operator_config_center" name="操作员管理中心">
-				<auth key="post_manage" name="组织结构管理"></auth>
+				<auth key="post_manage" name="职位管理"></auth>
 				<auth key="operator_manage" name="操作员管理"></auth>
 				<auth key="auth_manage" name="权限管理"></auth>
 			</auth>

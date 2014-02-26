@@ -15,6 +15,8 @@ $.canDisable = false;
 $.canModify = false;
 $.canEnable = false;
 $.canUnlock = false;
+$.canConfigOperatorAuth = false;
+$.canConfigOperatorPost = false;
 <c:if test='${authContext.hasAuth("add_operator")}'>
 	$.canAdd = true;
 </c:if>
@@ -66,27 +68,10 @@ $(document).ready(function() {
 		border : false,
 		onClick : function(node){
 			$("#organizationId").val(node.id);
-			$('#dataGrid').datagrid('reload');
+			$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
 		}
 	});
-	function deselect(){
-		var selectedNode = orgTree.tree('getSelected');
-		if(selectedNode){
-			orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
-		}
-		$("#organizationId").val('');
-		$('#dataGrid').datagrid('reload');
-	}
-	function refreshTree(){
-		var selectedNode = orgTree.tree('getSelected');
-		if(selectedNode){
-			orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
-		}
-		$("#organizationId").val('');
-		$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
-	}
-	
-	
+
 	dataGrid = $('#dataGrid').datagrid({
 		url : '${contextPath}/operator/queryOperatorPagedListIncludeInvalid.action',
 		fit : true,
@@ -154,12 +139,12 @@ $(document).ready(function() {
 			width : 220,
 			formatter : function(value, row, index) {
 				var str = '';
-				if(!row.locked && $.canUnlock){
-					str += $.formatString('<img onclick="unlockFun(\'{0}\',\'{1}\');" src="{2}" title="解锁"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+				if(row.locked && $.canUnlock){
+					str += $.formatString('<img onclick="unlockFun(\'{0}\',\'{1}\');" src="{2}" title="解锁"/>', row.id, row.userName, '${contextPath}/style/images/extjs_icons/lock/lock_open.png');
 					str += '&nbsp;';
 				}
 				if(!row.valid && $.canEnable){
-					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.userName, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
 					str += '&nbsp;';
 				}
 				if($.canModify){
@@ -168,15 +153,18 @@ $(document).ready(function() {
 				}
 				
 				if($.canDelete){
-					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
+					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.userName, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
 					str += '&nbsp;';
 				}
 				if(row.valid && $.canDisable){
-					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.userName, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
 					str += '&nbsp;';
 				}
 				if (true) {
-					str += $.formatString('<img onclick="configPostAuth(\'{0}\',\'{1}\');" src="{2}" title="配置职位权限"/>', row.id, row.name,'${contextPath}/style/images/extjs_icons/database_key.png');
+					str += $.formatString('<img onclick="configOperatorAuth(\'{0}\',\'{1}\');" src="{2}" title="配置操作员权限"/>', row.id, row.userName,'${contextPath}/style/images/extjs_icons/database_key.png');
+				}
+				if (true) {
+					str += $.formatString('<img onclick="configOperatorPost(\'{0}\',\'{1}\');" src="{2}" title="配置操作员职位"/>', row.id, row.userName,'${contextPath}/style/images/extjs_icons/group/group.png');
 				}
 				return str;
 			}
@@ -204,38 +192,53 @@ $(document).ready(function() {
 	});
 });
 
-
+function deselect(){
+	var selectedNode = orgTree.tree('getSelected');
+	if(selectedNode){
+		orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
+	}
+	$("#organizationId").val('');
+	$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
+}
+function refreshTree(){
+	var selectedNode = orgTree.tree('getSelected');
+	if(selectedNode){
+		orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
+	}
+	$("#organizationId").val('');
+	$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
+}
 /*
  * 打开添加操作员界面
  */
 function addFun() {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	var organizationId = '';
 	var selectOrgRows = orgTree.tree('getSelected');
 	if(selectOrgRows && selectOrgRows.id){
 		organizationId = selectOrgRows.id;
 	}
-	GlobalDialogUtils.openModalDialog(
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	DialogUtils.openModalDialog(
 		"addOperator",
 		"添加人员",
 		$.formatString("${contextPath}/operator/toAddOperator.action?organizationId={1}",organizationId),
 		450,220,function(){
-		dataGrid.datagrid('reload');
+			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
 	});
 }
 /**
  * 打开编辑操作员页面
  */
 function editFun(id) {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = dataGrid.datagrid('getSelections');
 		id = rows[0].id;
 	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
 	DialogUtils.openModalDialog(
 		"updateOperator",
 		"编辑职位",
@@ -248,9 +251,6 @@ function editFun(id) {
  * 删除职位
  */
 function deleteFun(id,name) {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = dataGrid.datagrid('getSelections');
 		id = rows[0].id;
@@ -261,74 +261,98 @@ function deleteFun(id,name) {
     	$.formatString("是否确认删除操作员_[{0}]?",name) , 
     	function(data){
 	    	if(data){
+	    		DialogUtils.progress({
+	    	        text : '数据提交中，请等待....'
+	    		});
 	    		//如果确认删除对应职位
 	    		$.post(
 			    		'${contextPath}/operator/deleteOperatorById.action',
-			    		{postId:id},
+			    		{operatorId:id},
 			    		function(){
+			    			DialogUtils.progress('close');
 			    			DialogUtils.tip("删除操作员成功");
-			    			$('#treeGrid').treegrid('reload');
+			    			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
 			    });
 	    	}
     });
 }
 function disableFun(id,name){
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = dataGrid.datagrid('getSelections');
 		id = rows[0].id;
-		name = rows[0].name;
+		name = rows[0].userName;
 	}
 	//判断对应组织是否能被停用
-	$.post(
-		'${contextPath}/post/isDisableAble.action',
-		{postId: id},
-		function(data){
-			if(data){
-			    DialogUtils.confirm(
-			    		"确认提醒" , 
-			    		$.formatString("是否确认禁用职位:[{0}]?",name), 
-			    function(data){
-			    	if(data){
-			    		//如果确认删除对应组织
-			    		$.post(
-					    		'${contextPath}/post/disablePostById.action',
-					    		{postId:id},
-					    		function(){
-					    			DialogUtils.tip("禁用 职位成功");
-					    			$('#dataGrid').datagrid('reload');
-					    });
-			    	}
-			    });
-			}else{
-				DialogUtils.alert("提醒","该 职位存在尚未禁用的下级 职位，不能被禁用。","warning");
-			}
-	});
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认禁用操作员:[{0}]?",name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认删除对应组织
+    		$.post(
+		    		'${contextPath}/operator/disableOperatorById.action',
+		    		{operatorId:id},
+		    		function(){
+		    			DialogUtils.progress('close');
+		    			DialogUtils.tip("禁用禁用操作员成功");
+		    			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+		    });
+    	}
+    });
 }
 function enableFun(id,name){
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
 	if (id == undefined) {
 		var rows = dataGrid.datagrid('getSelections');
 		id = rows[0].id;
-		name = rows[0].name;
+		name = rows[0].userName;
 	}
 	//判断对应组织是否能被停用
     DialogUtils.confirm(
     		"确认提醒" , 
-    		$.formatString("是否确认启用 职位:[{0}]?",name), 
+    		$.formatString("是否确认启用操作员:[{0}]?",name), 
     function(data){
     	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
     		//如果确认删除对应组织
     		$.post(
-		    		'${contextPath}/post/enablePostById.action',
-		    		{postId:id},
+		    		'${contextPath}/operator/enableOperatorById.action',
+		    		{operatorId:id},
 		    		function(){
-		    			DialogUtils.tip("启用 职位成功");
-		    			$('#dataGrid').datagrid('reload');
+		    			DialogUtils.progress('close');
+		    			DialogUtils.tip("启用启用操作员成功");
+		    			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+		    });
+    	}
+    });
+}
+function unlockFun(id,name){
+	if (id == undefined) {
+		var rows = dataGrid.datagrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].userName;
+	}
+	//判断对应组织是否能被停用
+    DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认解锁操作员:[{0}]?",name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认删除对应组织
+    		$.post(
+		    		'${contextPath}/operator/unlockOperatorById.action',
+		    		{operatorId:id},
+		    		function(){
+		    			DialogUtils.progress('close');
+		    			DialogUtils.tip("解锁操作员成功");
+		    			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
 		    });
     	}
     });
@@ -336,26 +360,45 @@ function enableFun(id,name){
 /*
  * 配置职位权限
  */
-function configPostAuth(id,name){
+function configOperatorAuth(id,name){
 	if (id == undefined) {
 		var rows = dataGrid.datagrid('getSelections');
 		id = rows[0].id;
-		name = rows[0].name;
+		name = rows[0].userName;
 	}
 	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("请选择职位");
+		DialogUtils.alert("请选择人员");
 		return ;
 	}
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
 	DialogUtils.openModalDialog(
-		"configPostAuth",
-		$.formatString("配置职位权限_[{0}]",name),
-		$.formatString("${contextPath}/auth/toConfigPostAuth.action?postId={0}",id),
-		400,450,function(){
-			//$('#treeGrid').treegrid('reload');
-			//alert('reload');
+		"configOperatorAuth",
+		$.formatString("配置人员权限_[{0}]",name),
+		$.formatString("${contextPath}/auth/toConfigOperatorAuth.action?operatorId={0}",id),
+		450,500,function(){
+		}
+	);
+}
+function configOperatorPost(id,name){
+	if (id == undefined) {
+		var rows = dataGrid.datagrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].userName;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("请选择人员");
+		return ;
+	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	DialogUtils.openModalDialog(
+		"configOperatorAuth",
+		$.formatString("配置人员职位_[{0}]",name),
+		$.formatString("${contextPath}/Operator2Post/toConfigOperatorPost.action?operatorId={0}",id),
+		850,550,function(){
 		}
 	);
 }
@@ -425,9 +468,7 @@ function configPostAuth(id,name){
 			<c:if test='${authContext.hasAuth("add_operator") }'>
 				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
 			</c:if>
-			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
-			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
-			<a onclick="dataGrid.datagrid('reload');" href="javascript:void(0);" 
+			<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" 
 				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 		</div>
 	

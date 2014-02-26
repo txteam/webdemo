@@ -181,11 +181,11 @@ public class AuthManageService {
                 }
                 
                 if (refAuthIdSet.contains(authTemp.getId())) {
-                    //如果对应职位已经有对应权限
+                    //如果对应已经有对应权限
                     resMap.add(entryTemp.getKey(), new CheckAbleTreeNode(
                             authAdapter, authTemp, true));
                 } else {
-                    //如果对应职位没有有对应权限
+                    //如果对应没有有对应权限
                     resMap.add(entryTemp.getKey(), new CheckAbleTreeNode(
                             authAdapter, authTemp, false));
                 }

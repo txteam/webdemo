@@ -62,6 +62,7 @@ $(document).ready(function() {
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
+		striped : true,
 		iconField : function(item){
 			return 'group_group';	
 		},
@@ -226,7 +227,7 @@ function addFun(id) {
 			}
 		}
 	}
-	GlobalDialogUtils.openModalDialog(
+	DialogUtils.openModalDialog(
 		"addPost",
 		"添加职位",
 		$.formatString("${contextPath}/post/toAddPost.action?parentPostId={0}&organizationId={1}",id,organizationId),
@@ -398,7 +399,7 @@ function configPostOperator(id,name){
 		"configPostOperator",
 		$.formatString("配置职位人员_[{0}]",name),
 		$.formatString("${contextPath}/Operator2Post/toConfigPostOperator.action?postId={0}",id),
-		900,550,function(){
+		850,550,function(){
 			//$('#treeGrid').treegrid('reload');
 			//alert('reload');
 		}

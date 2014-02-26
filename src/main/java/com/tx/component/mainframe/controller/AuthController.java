@@ -129,6 +129,28 @@ public class AuthController {
     }
     
     /**
+     * 根据当前人员权限类型与权限列表<br/> 
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<AuthItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryOperatorAuthType2AuthItemListMap")
+    public Map<String, List<CheckAbleTreeNode>> queryOperatorAuthType2AuthItemListMap(
+            @RequestParam("operatorId") String operatorId) {
+        MultiValueMap<String, CheckAbleTreeNode> authType2AuthItemListMap = this.authManageService.queryAuthType2TreeNodeMapByRefId(AuthConstant.AUTHREFTYPE_OPERATOR,
+                operatorId,
+                false,
+                false,
+                true);
+        
+        return authType2AuthItemListMap;
+    }
+    
+    /**
       * 保存角色权限<br/>
       *<功能详细描述>
       * @param postId
@@ -157,6 +179,39 @@ public class AuthController {
         this.authManageService.saveRefId2AuthItemIdList(authType,
                 AuthConstant.AUTHREFTYPE_POST,
                 postId,
+                authIdList);
+        return true;
+    }
+    
+    /**
+     * 保存角色权限<br/>
+     *<功能详细描述>
+     * @param postId
+     * @param authType
+     * @param authItemIds
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @CheckOperateAuth(key = "config_post_auth", parentKey = "post_manage", name = "配置职位权限")
+    @ResponseBody
+    @RequestMapping("/saveOperator2AuthItemList")
+    public boolean saveOperator2AuthItemList(
+            @RequestParam("operatorId") String operatorId,
+            @RequestParam("authType") String authType,
+            @RequestParam(value = "authItemId[]", required = false) String[] authItemIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        List<String> authIdList = null;
+        if (authItemIds == null) {
+            authIdList = new ArrayList<String>();
+        } else {
+            authIdList = Arrays.asList(authItemIds);
+        }
+        this.authManageService.saveRefId2AuthItemIdList(authType,
+                AuthConstant.AUTHREFTYPE_OPERATOR,
+                operatorId,
                 authIdList);
         return true;
     }

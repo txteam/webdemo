@@ -32,5 +32,11 @@
 		<property name="sqlScriptEncoding" value="UTF-8"></property>
 		<property name="updateNotExistTableInContext" value="true"></property>
 	</bean>
+	
+	<bean id="localSqlUtils"
+		class="com.tx.core.util.LocalSqlUtilsFactory">
+		<property name="dataSourceType"
+			value="#{config.getValue('dataSource.dataSourceType')}"></property>	
+	</bean>
 
 </beans>

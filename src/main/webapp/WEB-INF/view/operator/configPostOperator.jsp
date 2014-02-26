@@ -157,12 +157,7 @@ $(document).ready(function() {
 				top : e.pageY
 			});
 		},
-		onSelect: function(rowIndex, rowData){
-			$.triggerge("choose_operator_" + "${eventName}",[rowData]);
-		},
 		onLoadSuccess : function() {
-			parent.$.messager.progress('close');
-			//$(this).treegrid('tooltip');
 			selectChoosedOperator();
 		}
 	});
@@ -260,8 +255,6 @@ function cancelConfigPostOperator(){
 		</div>
 		
 		<div id="toolbar" style="display: none;">
-			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
-			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
 			<a onclick="dataGrid.datagrid('reload');" href="javascript:void(0);" 
 				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 		</div>

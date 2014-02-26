@@ -16,6 +16,7 @@ $(document).ready(function() {
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
+		striped : true,
 		iconField : function(item){
 			return 'folder_user';	
 		},

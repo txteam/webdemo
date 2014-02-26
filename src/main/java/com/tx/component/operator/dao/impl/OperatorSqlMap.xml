@@ -107,7 +107,7 @@
 	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
-	            AND TO_.USERNAME LIKE #{userName,javaType=java.lang.String}
+	            AND TO_.USERNAME LIKE concat('%', #{userName}, '%')
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
 	            AND TO_.LOCKED = #{locked,javaType=boolean}
@@ -171,13 +171,17 @@
 	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
-	            AND TO_.USERNAME LIKE #{userName,javaType=java.lang.String}
+	            AND TO_.USERNAME LIKE concat('%', #{userName}, '%')
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
 	            AND TO_.LOCKED = #{locked,javaType=boolean}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
 	            AND TO_.LOGINNAME = #{loginName,javaType=java.lang.String}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOperatorId)">  
+	        	<![CDATA[ AND TO_.id <> #{excludeOperatorId,javaType=java.lang.String}]]>
+	            
 	        </if>
 		</trim>
 	</select>

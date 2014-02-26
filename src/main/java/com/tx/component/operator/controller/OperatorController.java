@@ -172,6 +172,7 @@ public class OperatorController {
         String userName = requestMap.get("userName");
         String code = requestMap.get("code");
         String stateValue = requestMap.get("state");
+        String postId = requestMap.get("postId");
         OperatorStateEnum state = EnumUtils.getEnumMap(OperatorStateEnum.class)
                 .get(stateValue);
         
@@ -181,6 +182,7 @@ public class OperatorController {
                 userName,
                 code,
                 state,
+                postId,
                 ++pageIndex,
                 pageSize);
         return resPagedList;

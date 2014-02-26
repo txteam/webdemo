@@ -6,6 +6,7 @@
  */
 package com.tx.component.operator.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -44,8 +45,10 @@ public class Operator2PostService {
      */
     public void configPostOperator(String postId, String[] selectOperatorIds,
             String[] unSelectOperatorIds) {
-        List<String> selectOperatorIdList = Arrays.asList(selectOperatorIds);
-        List<String> unSelectOperatorIdList = Arrays.asList(unSelectOperatorIds);
+        List<String> selectOperatorIdList = selectOperatorIds == null ? new ArrayList<String>()
+                : Arrays.asList(selectOperatorIds);
+        List<String> unSelectOperatorIdList = unSelectOperatorIds == null ? new ArrayList<String>()
+                : Arrays.asList(unSelectOperatorIds);
         this.operatorRefService.saveRefId2OperatorIdList(OperatorConstants.OPERATORREF_TYPE_POST,
                 postId,
                 selectOperatorIdList,
@@ -65,8 +68,10 @@ public class Operator2PostService {
      */
     public void configOperatorPost(String operatorId, String[] selectPostIds,
             String[] unSelectPostIds) {
-        List<String> selectPostIdList = Arrays.asList(selectPostIds);
-        List<String> unSelectPostIdList = Arrays.asList(unSelectPostIds);
+        List<String> selectPostIdList = selectPostIds == null ? new ArrayList<String>()
+                : Arrays.asList(selectPostIds);
+        List<String> unSelectPostIdList = unSelectPostIds == null ? new ArrayList<String>()
+                : Arrays.asList(unSelectPostIds);
         this.operatorRefService.saveOperator2RefIdList(OperatorConstants.OPERATORREF_TYPE_POST,
                 operatorId,
                 selectPostIdList,
@@ -75,6 +80,8 @@ public class Operator2PostService {
     
     /**
       * 获取拥有指定职位id的人员id集合
+      * DO:!!!人员本应不如此设计，不过在目前看来，人员暂时不会引起这里一次查询的人数使得系统不能负载的可能性
+      *             暂时如此设计即可
       *<功能详细描述>
       * @param postId
       * @return [参数说明]

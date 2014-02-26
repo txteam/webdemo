@@ -183,7 +183,6 @@ public class OperatorService {
         operator.setPwdUpdateDate(now);
         operator.setPwdErrCount(0);
         
-        operator.setName(operator.getUserName());
         //TODO:获取配置的默认密码并设值
         operator.setPassword("123321qQ");
         
@@ -263,7 +262,8 @@ public class OperatorService {
     */
     public PagedList<Operator> queryOperatorPagedListByOrganizationIdIncludeInvalid(
             String organizationId, String loginName, String userName,
-            String code, OperatorStateEnum state, int pageIndex, int pageSize) {
+            String code, OperatorStateEnum state, String postId, int pageIndex,
+            int pageSize) {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         if (!StringUtils.isEmpty(organizationId)) {
@@ -271,6 +271,11 @@ public class OperatorService {
         }
         params.put("loginName", loginName);
         params.put("userName", userName);
+        if(!StringUtils.isEmpty(postId)){
+            Map<String, String> refType2refIdMap = new HashMap<String, String>();
+            refType2refIdMap.put(OperatorConstants.OPERATORREF_TYPE_POST, postId);
+            params.put("refType2refIdMap", refType2refIdMap);
+        }
         //无default该方法查询出结果，可以包含valid:false的情况
         if (state != null) {
             switch (state) {
@@ -445,8 +450,10 @@ public class OperatorService {
         updateRowMap.put("id", operatorId);
         
         updateRowMap.put("lastUpdateDate", new Date());
-        updateRowMap.put("valid", false);
-        return true;
+        updateRowMap.put("valid", true);
+        updateRowMap.put("pwdErrCount", 0);
+        int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
+        return updateRowCount > 0;
     }
     
     /**

@@ -34,7 +34,7 @@ import com.tx.component.operator.service.PostService;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@CheckOperateAuth(key = "post_manage", parentKey = "operator_config_center", description = "职位管理", name = "职位管理")
+@CheckOperateAuth(key = "post_manage", parentKey = "operator_config_center", name = "职位管理")
 @Controller("newPostController")
 @RequestMapping("/post")
 public class PostController {

@@ -37,12 +37,12 @@ $(document).ready(function(){
 	        	text : '数据提交中，请等待....'
 	        });
 			$('#operatorForm').ajaxSubmit({
-			    url:"${contextPath}/operator/addOperator.action",
+			    url:"${contextPath}/operator/updateOperator.action",
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
-						parent.DialogUtils.tip("新增操作员成功");
-						parent.DialogUtils.closeDialogById("addOperator");
+						parent.DialogUtils.tip("修改操作员成功");
+						parent.DialogUtils.closeDialogById("updateOperator");
 					}
 			    } 
 			});
@@ -62,12 +62,13 @@ $(document).ready(function(){
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form:form id="operatorForm" method="post" cssClass="form"
 			modelAttribute="operator">
+			<form:hidden path="id"/>
 			<table>
 				<tr>
 					<th class="narrow" width="20%">登录名:<span class="tRed">*</span></th>
 					<td width="30%">
 						<form:input path="loginName"
-							data-rule="登录名:required;remote[get:${contextPath }/operator/loginNameIsExist.action, loginName]"
+							data-rule="登录名:required;remote[get:${contextPath }/operator/loginNameIsExist.action, loginName, id]"
 							data-tip="必填"/>
 					</td>
 					<th class="narrow" width="20%">姓名:<span class="tRed">*</span></th>
