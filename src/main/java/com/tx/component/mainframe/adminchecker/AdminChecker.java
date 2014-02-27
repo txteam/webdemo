@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.tx.component.auth.AuthConstant;
 
 /**
- * <功能简述>
+ * 自定义的超级管理员检核器<br/>
  * <功能详细描述>
  * 
  * @author  PengQingyang
@@ -19,7 +19,7 @@ import com.tx.component.auth.AuthConstant;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component
+@Component("adminChecker")
 public class AdminChecker implements
         com.tx.component.auth.context.adminchecker.AdminChecker {
     

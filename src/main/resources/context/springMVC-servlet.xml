@@ -56,12 +56,10 @@
 		</bean>
 		<!-- 向request写入contextPath常量 -->
 		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
-		<!-- 加入权限容器支持 -->
-		<bean class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor"></bean>
 		<!-- 业务日志支持拦截器 -->
 		<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
-		<!-- controller权限注解支持 -->
-		<bean class="com.tx.component.auth.springmvc.ControllerCheckOperateAuthInterceptor"></bean>
+		<ref bean="authContextSupportInterceptor"/>
+		<ref bean="controllerCheckOperateAuthInterceptor"/>
 	</mvc:interceptors>
 
 	<!-- 将jsp映射为controller -->
