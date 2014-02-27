@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>configPostOperator</title>
+<title>configOperatorPost</title>
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >

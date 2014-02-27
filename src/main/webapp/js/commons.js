@@ -344,6 +344,7 @@ if (browser.userAgent.indexOf('MSIE') > -1) {
      * ajax调用错误信息处理 
      */
     var easyuiErrorFunction = function(XMLHttpRequest,Status,errorThrown) {
+    	DialogUtils.progress('close');
         if (XMLHttpRequest.status == 501) {
             $.triggerge("sessionLost");
         } else if (XMLHttpRequest.status == 500) {
