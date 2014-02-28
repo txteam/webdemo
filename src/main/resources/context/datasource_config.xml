@@ -15,9 +15,10 @@
 	<entry key="dataSource.maxIdle">5</entry>
 	<entry key="dataSource.maxWait">5000</entry>
 	 -->
+	 
 	 <entry key="dataSource.dataSourceType">MYSQL</entry>
 
-	<entry key="dataSource.url">jdbc:mysql://115.29.174.120:3306/webdemo?characterEncoding=GBK</entry>
+	<entry key="dataSource.url"><![CDATA[jdbc:mysql://115.29.174.120:3306/webdemo?characterEncoding=GBK&zeroDateTimeBehavior=convertToNull]]></entry>
 	<entry key="dataSource.username">webdemo</entry>
 	<entry key="dataSource.password">webdemo</entry>
 	<entry key="dataSource.driverClassName">com.mysql.jdbc.Driver</entry>
@@ -26,4 +27,5 @@
 	<entry key="dataSource.maxActive">30</entry>
 	<entry key="dataSource.maxIdle">5</entry>
 	<entry key="dataSource.maxWait">5000</entry>
+	
 </properties>

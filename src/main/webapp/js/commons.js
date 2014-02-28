@@ -1010,11 +1010,11 @@ var GlobalDialogUtils = null;
 
 
 /**
- * 扩展treegrid 
+ * 扩展tree 
  * 使其支持平滑数据格式
  * 支持指定几个主要字段
  */
-$.fn.tree.defaults.loadFilter = function(data, parent) {
+$.fn.tree.defaults.loadFilter = function(data) {
     var opt = $(this).data().tree.options;
     var idField, textField, parentField,iconField,childrenField,checkedField;
     var notIncludeTarget =  opt.notIncludeTarget;
@@ -1086,7 +1086,7 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
  * 使其支持平滑数据格式
  * 支持指定几个主要字段
  */
-$.fn.treegrid.defaults.loadFilter = function(data, parentId) {
+$.fn.treegrid.defaults.loadFilter = function(data) {
     var opt = $(this).data().treegrid.options;
     var idField, textField, parentField,iconField,iconField;
     if (opt.parentField) {

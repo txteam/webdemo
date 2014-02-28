@@ -48,9 +48,7 @@
 				<array>
 					<bean
 						class="com.tx.core.mybatis.interceptor.PagedDiclectStatementHandlerInterceptor">
-						<property name="dataSourceType">
-							<bean class="org.hibernate.dialect.H2Dialect">
-							</bean>
+						<property name="dataSourceType" value="#{config.getValue('dataSource.dataSourceType')}">
 						</property>
 					</bean>
 				</array>

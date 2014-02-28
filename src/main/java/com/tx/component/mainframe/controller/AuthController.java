@@ -8,11 +8,14 @@ package com.tx.component.mainframe.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -39,6 +42,7 @@ import com.tx.component.operator.service.PostService;
  */
 @Controller("authControllerNew")
 @RequestMapping("/auth")
+@CheckOperateAuth(key = "auth_manage")
 public class AuthController {
     
     @Resource(name = "authManageService")
@@ -46,9 +50,6 @@ public class AuthController {
     
     @Resource(name = "postService")
     private PostService postService;
-    
-    //    @Resource(name = "organizationService")
-    //    private OrganizationService organizationService;
     
     /**
       * 跳转到查询权限视图<br/>
@@ -129,6 +130,59 @@ public class AuthController {
     }
     
     /**
+      * 保存角色权限<br/>
+      *<功能详细描述>
+      * @param postId
+      * @param authType
+      * @param authItemIds
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @CheckOperateAuth(key = "config_post_auth" ,name = "配置职位权限")
+    @RequestMapping("/savePost2AuthItemList")
+    public boolean savePost2AuthItemList(
+            @RequestParam("postId") String postId,
+            @RequestParam("authType") String authType,
+            @RequestParam(value = "authItemId[]", required = false) String[] authItemIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        List<String> authIdList = null;
+        if (authItemIds == null) {
+            authIdList = new ArrayList<String>();
+        } else {
+            authIdList = Arrays.asList(authItemIds);
+        }
+        this.authManageService.saveRefId2AuthItemIdList(authType,
+                AuthConstant.AUTHREFTYPE_POST,
+                postId,
+                authIdList);
+        return true;
+    }
+    
+    /**
+     * 跳转到配置操作员权限列表页面<br/>
+     *<功能详细描述>
+     * @param modelMap
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/toConfigOperatorAuth")
+    public String toConfigOperatorAuth(
+            @RequestParam("operatorId") String operatorId, ModelMap modelMap) {
+        List<AuthTypeItem> hasChildAuthTypeList = this.authManageService.queryCurrentOperatorAuthTypeItemOfHasChild();
+        
+        modelMap.put("operatorId", operatorId);
+        modelMap.put("authTypeList", hasChildAuthTypeList);
+        return "/mainframe/configOperatorAuth";
+    }
+    
+    /**
      * 根据当前人员权限类型与权限列表<br/> 
      *<功能详细描述>
      * @return [参数说明]
@@ -151,39 +205,6 @@ public class AuthController {
     }
     
     /**
-      * 保存角色权限<br/>
-      *<功能详细描述>
-      * @param postId
-      * @param authType
-      * @param authItemIds
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @CheckOperateAuth(key = "config_post_auth", parentKey = "post_manage", name = "配置职位权限")
-    @ResponseBody
-    @RequestMapping("/savePost2AuthItemList")
-    public boolean savePost2AuthItemList(
-            @RequestParam("postId") String postId,
-            @RequestParam("authType") String authType,
-            @RequestParam(value = "authItemId[]", required = false) String[] authItemIds,
-            @RequestParam() MultiValueMap<String, String> request) {
-        List<String> authIdList = null;
-        if (authItemIds == null) {
-            authIdList = new ArrayList<String>();
-        } else {
-            authIdList = Arrays.asList(authItemIds);
-        }
-        this.authManageService.saveRefId2AuthItemIdList(authType,
-                AuthConstant.AUTHREFTYPE_POST,
-                postId,
-                authIdList);
-        return true;
-    }
-    
-    /**
      * 保存角色权限<br/>
      *<功能详细描述>
      * @param postId
@@ -195,8 +216,8 @@ public class AuthController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    @CheckOperateAuth(key = "config_post_auth", parentKey = "post_manage", name = "配置职位权限")
     @ResponseBody
+    @CheckOperateAuth(key = "config_operator_auth" ,name = "配置人员权限")
     @RequestMapping("/saveOperator2AuthItemList")
     public boolean saveOperator2AuthItemList(
             @RequestParam("operatorId") String operatorId,
@@ -217,28 +238,9 @@ public class AuthController {
     }
     
     /**
-     * 跳转到配置操作员权限列表页面<br/>
-     *<功能详细描述>
-     * @param modelMap
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    @RequestMapping("/toConfigOperatorAuth")
-    public String toConfigOperatorAuth(String operatorId, ModelMap modelMap) {
-        List<AuthTypeItem> hasChildAuthTypeList = this.authManageService.queryCurrentOperatorAuthTypeItemOfHasChild();
-        
-        modelMap.put("operatorId", operatorId);
-        modelMap.put("authTypeList", hasChildAuthTypeList);
-        return "/mainframe/configOperatorAuth";
-    }
-    
-    /**
-      * 跳转到配置组织权限页面<br/>
+      * 跳转到配置权限人员页面<br/> 
       *<功能详细描述>
-      * @param organizationId
+      * @param operatorId
       * @param modelMap
       * @return [参数说明]
       * 
@@ -246,13 +248,152 @@ public class AuthController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/toConfigOrganizationAuth")
-    public String toConfigOrganizationAuth(String organizationId,
-            ModelMap modelMap) {
-        List<AuthTypeItem> hasChildAuthTypeList = this.authManageService.queryCurrentOperatorAuthTypeItemOfHasChild();
-        
-        modelMap.put("organizationId", organizationId);
-        modelMap.put("authTypeList", hasChildAuthTypeList);
-        return "/mainframe/configOrganizationAuth";
+    @RequestMapping("/toConfigAuthOperator")
+    public String toConfigAuthOperator(
+            @RequestParam("authItemId") String authItemId, ModelMap modelMap) {
+        modelMap.put("authItemId", authItemId);
+        return "/mainframe/configAuthOperator";
     }
+    
+    /**
+      * 保存权限项对应的人员id列表<br/>
+      *<功能详细描述>
+      * @param authItemId
+      * @param authRefType
+      * @param addRefIds
+      * @param deleteRefIds
+      * @param request
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @CheckOperateAuth(key = "config_auth_operator" ,name = "配置权限人员")
+    @RequestMapping("/saveAuthItem2OperatorIdList")
+    public boolean saveAuthItem2OperatorIdList(
+            @RequestParam("authItemIds[]") String[] authItemIds,
+            @RequestParam(value = "addRefIds[]", required = false) String[] addRefIds,
+            @RequestParam(value = "deleteRefIds[]", required = false) String[] deleteRefIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        if (addRefIds == null) {
+            addRefIds = new String[0];
+        }
+        if (deleteRefIds == null) {
+            deleteRefIds = new String[0];
+        }
+        List<String> addRefIdList = Arrays.asList(addRefIds);
+        List<String> deleteRefIdList = Arrays.asList(deleteRefIds);
+        this.authManageService.saveAuthItemId2RefIdList(AuthConstant.AUTHREFTYPE_OPERATOR,
+                authItemIds,
+                addRefIdList,
+                deleteRefIdList);
+        return true;
+    }
+    
+    /**
+      * 查询有该权限的人员集合<br/>
+      *<功能详细描述>
+      * @param authItemId
+      * @param operatorIds
+      * @return [参数说明]
+      * 
+      * @return Set<String> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryChoosedOperatorIdSetByAuthItemId")
+    public Set<String> queryChoosedOperatorIdSetByAuthItemId(
+            @RequestParam("authItemId") String authItemId,
+            @RequestParam(value = "operatorIds[]", required = false) String[] operatorIds) {
+        if (ArrayUtils.isEmpty(operatorIds)) {
+            return new HashSet<String>();
+        }
+        Set<String> operatorIdSet = this.authManageService.queryRefIdSetByAuthItemId(AuthConstant.AUTHREFTYPE_OPERATOR,
+                authItemId);
+        Set<String> choosedOperatorId = new HashSet<String>();
+        for (String operatorIdTemp : operatorIds) {
+            if (operatorIdSet.contains(operatorIdTemp)) {
+                choosedOperatorId.add(operatorIdTemp);
+            }
+        }
+        return choosedOperatorId;
+    }
+    
+    /**
+     * 跳转到配置权限职位页面<br/>
+      *<功能详细描述>
+      * @param authItemId
+      * @param modelMap
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toConfigAuthPost")
+    public String toConfigAuthPost(
+            @RequestParam("authItemId") String authItemId, ModelMap modelMap) {
+        modelMap.put("authItemId", authItemId);
+        return "/mainframe/configAuthPost";
+    }
+    
+    /**
+     * 保存权限项对应的职位id列表<br/>
+     *<功能详细描述>
+     * @param authItemId
+     * @param authRefType
+     * @param addRefIds
+     * @param deleteRefIds
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/saveAuthItem2PostIdList")
+    @CheckOperateAuth(key = "config_auth_post" ,name = "配置权限职位")
+    public boolean saveAuthItem2PostIdList(
+            @RequestParam("authItemIds[]") String[] authItemIds,
+            @RequestParam(value = "addRefIds[]", required = false) String[] addRefIds,
+            @RequestParam(value = "deleteRefIds[]", required = false) String[] deleteRefIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        if (addRefIds == null) {
+            addRefIds = new String[0];
+        }
+        if (deleteRefIds == null) {
+            deleteRefIds = new String[0];
+        }
+        List<String> addRefIdList = Arrays.asList(addRefIds);
+        List<String> deleteRefIdList = Arrays.asList(deleteRefIds);
+        this.authManageService.saveAuthItemId2RefIdList(AuthConstant.AUTHREFTYPE_POST,
+                authItemIds,
+                addRefIdList,
+                deleteRefIdList);
+        return true;
+    }
+    
+    /**
+     * 跳转到配置人员职位页面
+     *<功能详细描述>
+     * @param operatorId
+     * @return [参数说明]
+     * 
+     * @return Set<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/queryPostIdSetByAuthItemId")
+    public Set<String> queryPostIdSetByAuthItemId(
+            @RequestParam("authItemId") String authItemId) {
+        Set<String> postIdSet = this.authManageService.queryRefIdSetByAuthItemId(AuthConstant.AUTHREFTYPE_POST,
+                authItemId);
+        return postIdSet;
+    }
+    
 }

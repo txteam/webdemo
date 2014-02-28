@@ -1,17 +1,17 @@
 DROP TABLE OPER_EMPLOYEEINFO;
 CREATE TABLE OPER_EMPLOYEEINFO(
-	leavingDate timestamp,
+	leavingDate datetime,
 	sex smallint,
 	operatorid varchar(64),
 	code varchar(64),
-	officialDate timestamp,
-	entryDate timestamp,
-	trialPeriodEndDate timestamp,
+	officialDate datetime,
+	entryDate datetime,
+	trialPeriodEndDate datetime,
 	leaving smallint,
 	name varchar(64),
 	age smallint,
 	official smallint default 0 not null,
-	lastUpdatePhoneLinkInfoDate timestamp,
+	lastUpdatePhoneLinkInfoDate datetime,
 	cardNum varchar(255),
 	primary key(OPERATORID)
 );

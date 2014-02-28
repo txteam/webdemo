@@ -1,15 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:cache="http://www.springframework.org/schema/cache"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xmlns:cache="http://www.springframework.org/schema/cache"  
+    xsi:schemaLocation="  
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  
+            http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd"> 
 
-	<bean id="ehcacheManager"
+	<cache:annotation-driven cache-manager="cacheManager"
+		proxy-target-class="true"/>
+
+	<bean id="ehcacheManagerFactory"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="classpath:/ehcache.xml"></property>
-		<property name="cacheManagerName" value="ehcacheManager"></property>
+		<property name="configLocation">
+			<value>classpath:ehcache.xml</value>
+		</property>
+		<property name="cacheManagerName">
+			<value>ehcacheManage</value>
+		</property>
 	</bean>
+
+	<bean id="cacheManager" class="com.tx.core.spring.cache.EhCacheAutoCreatorCacheManager">
+		<property name="cacheManager">
+			<ref bean="ehcacheManagerFactory"/>
+		</property>
+	</bean>
+	<alias name="cacheManager" alias="ehcacheManager"/>
+	
 </beans>

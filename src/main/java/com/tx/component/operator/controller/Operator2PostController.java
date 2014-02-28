@@ -6,10 +6,12 @@
  */
 package com.tx.component.operator.controller;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -61,12 +63,12 @@ public class Operator2PostController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-   @RequestMapping("/toConfigOperatorPost")
-   public String toConfigOperatorPost(@RequestParam("operatorId") String operatorId,
-           ModelMap response) {
-       response.put("operatorId", operatorId);
-       return "/operator/configOperatorPost";
-   }
+    @RequestMapping("/toConfigOperatorPost")
+    public String toConfigOperatorPost(
+            @RequestParam("operatorId") String operatorId, ModelMap response) {
+        response.put("operatorId", operatorId);
+        return "/operator/configOperatorPost";
+    }
     
     /**
       * 根据职位id查询拥有改职位的操作员id集合 
@@ -78,12 +80,41 @@ public class Operator2PostController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @Deprecated
     @ResponseBody
     @RequestMapping("/queryOperatorIdSetByPostId")
     public Set<String> queryOperatorIdSetByPostId(
             @RequestParam("postId") String postId) {
         Set<String> operatorIdSet = this.operator2PostService.queryOperatorIdSetByPostId(postId);
         return operatorIdSet;
+    }
+    
+    /**
+     * 根据职位id查询拥有改职位的操作员id集合 
+     *<功能详细描述>
+     * @param postId
+     * @return [参数说明]
+     * 
+     * @return Set<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/queryChoosedOperatorIdSetByPostId")
+    public Set<String> queryChoosedOperatorIdSetByPostId(
+            @RequestParam("postId") String postId,
+            @RequestParam(value = "operatorIds[]", required = false) String[] operatorIds) {
+        if (ArrayUtils.isEmpty(operatorIds)) {
+            return new HashSet<String>();
+        }
+        Set<String> operatorIdSet = this.operator2PostService.queryOperatorIdSetByPostId(postId);
+        Set<String> choosedOperatorId = new HashSet<String>();
+        for (String operatorIdTemp : operatorIds) {
+            if (operatorIdSet.contains(operatorIdTemp)) {
+                choosedOperatorId.add(operatorIdTemp);
+            }
+        }
+        return choosedOperatorId;
     }
     
     /**

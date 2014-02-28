@@ -104,7 +104,7 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 			formatter : function(value, row, index) {
 				var str = '';
 				if (true) {
-					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="授权给职位"/>', row.id, '${contextPath}/style/images/extjs_icons/group/group_key.png');
+					str += $.formatString('<img onclick="configAuthOperator(\'{0}\',\'{1}\');" src="{2}" title="配置权限人员"/>', row.id, row.name,'${contextPath}/style/images/extjs_icons/folder/folder_user.png');
 				}
 				str += '&nbsp;';
 				if (true) {
@@ -149,6 +149,29 @@ function undo() {
 	} else {
 		$currentAuthTreeGridEl.treegrid('collapseAll');
 	}
+}
+function configAuthOperator(id,name){
+	DialogUtils.alert("该功能存在BUG,修正中。");
+	return ;
+	if (id == undefined) {
+		var rows = $currentAuthTreeGridEl.treegrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].name;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("请选择权限项");
+		return ;
+	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	DialogUtils.openModalDialog(
+		"configAuthOperator",
+		$.formatString("配置权限人员_[{0}]",name),
+		$.formatString("${contextPath}/auth/toConfigAuthOperator.action?authItemId={0}",id),
+		850,550,function(){
+		}
+	);
 }
 </script>
 </head>

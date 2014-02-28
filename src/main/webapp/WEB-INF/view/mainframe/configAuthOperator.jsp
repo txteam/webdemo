@@ -5,47 +5,33 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>configOperatorPost</title>
+<title>configPostOperator</title>
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
-var operatorId = '${operatorId}';
-var PostChooseManager = function(){
+var authItemId = '${authItemId}';
+var OperatorChooseManager = function(){
 };
-PostChooseManager.prototype._isInit = false;
-PostChooseManager.prototype._choosedOperatorIds = {};
-PostChooseManager.prototype._loadChoosedOperatorIds = function(loadCallback){
+OperatorChooseManager.prototype._loadChoosedOperatorIds = function(operatorIds,loadCallback){
 	var _this = this;
-	$.post("${contextPath}/Operator2Post/queryPostIdSetByOperatorId.action?operatorId=${operatorId}", 
-		function(data){
-			$.each(data,function(i,operatorIdTemp){
-				_this._choosedOperatorIds[operatorIdTemp] = true;
-			});
-			_this._isInit= true;
-			loadCallback(_this._choosedOperatorIds);
-		}
-	);
+	$.post("${contextPath}/auth/queryChoosedOperatorIdSetByAuthItemId.action", 
+			{'authItemId' : authItemId, 'operatorIds[]': operatorIds},function(data){
+		loadCallback(data);
+	});
 };
-PostChooseManager.prototype.load = function(loadCallback){
+OperatorChooseManager.prototype.check = function(operatorIds,loadCallback){
 	var _this = this;
-	if(_this._isInit){
-		loadCallback(_this._choosedOperatorIds);
-	}else{
-		_this._loadChoosedOperatorIds(function(data){
-			loadCallback(data);
-		});
+	if(!operatorIds){
+		operatorIds = [];
 	}
+	_this._loadChoosedOperatorIds(operatorIds,function(data){
+		loadCallback(data);
+	});
 };
-PostChooseManager.prototype.reset = function(){
-	var _this = this;
-	_this._choosedOperatorIds = {};
-	_this._isInit= false;
-};
-var postChooseManager = new PostChooseManager();
+var operatorChooseManager = new OperatorChooseManager();
 
 var orgTree = null;
-var treeGrid = null;
-var treegridRows = null;
+var dataGrid = null;
 $(document).ready(function() {
 	parent.DialogUtils.progress('close');
 	
@@ -63,7 +49,7 @@ $(document).ready(function() {
 			var orgId = $('#organizationId').val();
 			var loginName = $('#loginName').val();
 			var userName =  $('#userName').val();
-			$('#treeGrid').treegrid('load',{
+			$('#dataGrid').datagrid('load',{
 				organizationId: orgId,
 				loginName: loginName,
 				userName: userName
@@ -72,142 +58,116 @@ $(document).ready(function() {
 	});
 	
 	//将已经选中的操作员显示为选中状态
-	function selectChoosedPost(){
-		postChooseManager.load(function(choosedOperatorIds){
-			var rows = treegridRows;
-			$.each(rows,function(index,rowTemp){
-				if(choosedOperatorIds[rowTemp.id]){
-					treeGrid.treegrid('checkRow',rowTemp.id);
-				}
+	function selectChoosedOperator(){
+		var rows = dataGrid.datagrid('getRows');
+		
+		var operatorIds = [];
+		$.each(rows,function(index,rowTemp){
+			operatorIds.push(rowTemp.id);
+		});
+		operatorChooseManager.check(operatorIds,function(choosedOperatorIds){
+			$.each(choosedOperatorIds,function(index,choosedOperatorIdTemp){
+				$.each(rows,function(index,rowTemp){
+					if(choosedOperatorIdTemp == rowTemp.id){
+						dataGrid.datagrid('checkRow',index);
+					}
+				});
 			});
 		});
 	}
 	
-	treeGrid = $('#treeGrid').treegrid({
-		url : '${contextPath}/post/queryPostList.action',
-		idField : 'id',
-		parentField : 'parentId',
-		treeField : 'name',
-		checkOnSelect : true,
-		selectOnCheck : true,
-		singleSelect : false,
-		striped : true,
-		iconField : function(item){
-			return 'group_group';	
-		},
-		loadFilter : function(data){
-			if($.ObjectUtils.isEmpty(data)){
-				treegridRows = [];
-			}else{
-				treegridRows = data;
-			}
-			return $.fn.treegrid.defaults.loadFilter.call(this,data);
-		},
+	dataGrid = $('#dataGrid').datagrid({
+		url : '${contextPath}/operator/queryOperatorPagedList.action',
 		fit : true,
 		fitColumns : true,
 		border : false,
-		frozenColumns : [ [ {
+		pagination : true,
+		idField : 'id',
+		pageSize : 10,
+		pageList : [ 10, 20, 30, 40, 50 ],
+		checkOnSelect : true,
+		selectOnCheck : true,
+		nowrap : false,
+		striped : true,
+		singleSelect : false,
+		/* 分页数据载入 */
+		loadFilter: function(data){
+			var res = {total:0,rows:[]};
+			if(!$.ObjectUtils.isEmpty(data)
+					&& !$.ObjectUtils.isEmpty(data.list)){
+				res['total'] = data.count;
+				res['rows'] = data.list;
+			}
+			return res;
+		}, 
+		frozenColumns : [[{
 			field : 'operatorIdCk',
 			title : '',
 			width : 180,
 			checkbox : true
-		},{
-			title : '职位id',
+		}, {
+			title : '操作员id',
 			field : 'id',
 			width : 150,
 			hidden : true
 		},{
-			field : 'parentId',
-			title : '上级职位ID',
-			width : 150,
-			hidden : true
-		},{
-			field : 'name',
-			title : '职位名称',
-			width : 200
-		}, {
-			field : 'code',
-			title : '职位编号',
-			width : 230
-		},{
-			field : 'organization',
-			title : '所属组织',
-			formatter : function(value, row, index) {
-				if(value){
-					if(value.name){
-						return value.name;
-					}else{
-						return "";
-					}
-				}else{
-					return "";
-				}
-			}
-		}] ],
+			field : 'loginName',
+			title : '登录名',
+			width : 180
+		}]],
 		columns : [ [{
+			field : 'userName',
+			title : '姓名',
+			width : 180
+		},{
 			field : 'valid',
 			title : '是否有效',
-			width : 80,
+			width : 100,
 			formatter : function(value, row, index) {
 				var str = '';
-				if(value == '1'){
-					return "有效";
+				if(value == true){
+					return "是";
 				}else{
-					return "无效";
+					return "否";
 				}
 			}
 		},{
-			field : 'fullName',
-			title : '职位全称',
-			width : 150,
-			hidden : true
-		},{
-			field : 'remark',
-			title : '备注',
-			width : 200,
+			field : 'locked',
+			title : '是否锁定',
+			width : 100,
+			formatter : function(value, row, index) {
+				var str = '';
+				if(value == true){
+					return "是";
+				}else{
+					return "否";
+				}
+			}
 		}] ],
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {
 			e.preventDefault();
-			$(this).treegrid('unselectAll');
-			$(this).treegrid('select', row.id);
+			$(this).datagrid('unselectAll');
+			$(this).datagrid('select', row.id);
 			$('#menu').menu('show', {
 				left : e.pageX,
 				top : e.pageY
 			});
 		},
 		onLoadSuccess : function() {
-			treeGrid.treegrid('tooltip');
-			selectChoosedPost();
+			selectChoosedOperator();
 		}
 	});
 	
 	$("#queryBtn").click(function(){
-		$('#treeGrid').treegrid('load',$('#queryForm').serializeObject());
+		$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
 	});
 });
-function redo() {
-	var node = treeGrid.treegrid('getSelected');
-	if (node) {
-		treeGrid.treegrid('expandAll', node.id);
-	} else {
-		treeGrid.treegrid('expandAll');
-	}
-}
-function undo() {
-	var node = treeGrid.treegrid('getSelected');
-	if (node) {
-		treeGrid.treegrid('collapseAll', node.id);
-	} else {
-		treeGrid.treegrid('collapseAll');
-	}
-}
-
 function refreshTree(){
 	var selectedNode = orgTree.tree('getSelected');
 	orgTree.tree('reload');
 	$("#organizationId").val('');
-	$('#treeGrid').treegrid('load',$('#queryForm').serializeObject());
+	$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
 }
 function deselect(){
 	var selectedNode = orgTree.tree('getSelected');
@@ -215,32 +175,33 @@ function deselect(){
 		orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
 	}
 	$("#organizationId").val('');
-	$('#treeGrid').treegrid('load',$('#queryForm').serializeObject());
+	$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
 }
-function submitConfigOperatorPost(){
-	DialogUtils.progress({
-        text : '数据提交中，请等待....'
-	});
-	var checkedRows = treeGrid.treegrid('getChecked');
+function submitConfigAuthOperator(){
+	var checkedRows = dataGrid.datagrid('getChecked');
 	var checkedRowsMapping = {};
 	$.each(checkedRows,function(index,rowTemp){
 		checkedRowsMapping[rowTemp.id] = true;
 	});
-	var checkedPostIds = [];
-	var unCheckedPostIds = [];
-	var rows = treegridRows;
+	var checkedOperatorIds = [];
+	var unCheckedOperatorIds = [];
+	var rows = dataGrid.datagrid('getRows');
 	$.each(rows,function(index,rowTemp){
 		if(checkedRowsMapping[rowTemp.id]){
-			checkedPostIds.push(rowTemp.id);
+			checkedOperatorIds.push(rowTemp.id);
 		}else{
-			unCheckedPostIds.push(rowTemp.id);
+			unCheckedOperatorIds.push(rowTemp.id);
 		}
 	});
-	$.post("${contextPath}/Operator2Post/configOperatorPostId.action",
-			{operatorId:operatorId,selectedPostId:checkedPostIds,unSelectedPostId:unCheckedPostIds}, 
+	authItemIds = [];
+	
+	DialogUtils.progress({
+        text : '数据提交中，请等待....'
+	});
+	$.post("${contextPath}/auth/saveAuthItem2OperatorIdList.action",
+			{authItemIds:,addRefIds:checkedOperatorIds,deleteRefIds:unCheckedOperatorIds}, 
 			function(data){
-		postChooseManager.reset();
-		DialogUtils.tip("配置人员职位成功");
+		DialogUtils.tip("配置权限人员成功");
 		DialogUtils.progress('close');
 	});
 }
@@ -288,14 +249,12 @@ function cancelConfigPostOperator(){
 				</form>
 			</div>
 			<div data-options="region:'center',border:false">
-				<table id="treeGrid"></table>
+				<table id="dataGrid"></table>
 			</div>
 		</div>
 		
 		<div id="toolbar" style="display: none;">
-			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
-			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
-			<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" 
+			<a onclick="dataGrid.datagrid('reload');" href="javascript:void(0);" 
 				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 		</div>
 	</div> 
@@ -303,7 +262,7 @@ function cancelConfigPostOperator(){
 	<div data-options="region:'south',split:false" style="height:31px">
 		<div class="easyui-layout" data-options="fit:true,border:false">
 			<div class="datagrid-toolbar" style="text-align:right;padding-right: 59px">
-				<a onclick="submitConfigOperatorPost();" href="javascript:void(0);" class="easyui-linkbutton">提交</a>
+				<a onclick="submitConfigAuthOperator();" href="javascript:void(0);" class="easyui-linkbutton">提交</a>
 				&nbsp;
 				<a href="javascript:void(0);" class="easyui-linkbutton">退出</a>
 			</div>

@@ -42,21 +42,38 @@ public class OperatorRef {
     /** 生效时间 */
     private Date effectiveDate;
     
-    /** 失效时间 */
+    /** 系统自动判定的无效时间:系统在查询具体是否存在引用过程中将根据该时间动态计算 */
+    private Date invalidDate;
+    
+    /** 结束时间时间：具体对应到移动到_His表中的时间 */
     private Date endDate;
     
     /** <默认构造函数> */
     public OperatorRef() {
         super();
     }
-
-    /** <默认构造函数> */
-    public OperatorRef(String operatorId, String refId,
-            String refType) {
+    
+    /**
+     * <默认构造函数>
+     */
+    public OperatorRef(String operatorId, String refId, String refType) {
         super();
         this.operatorId = operatorId;
         this.refId = refId;
         this.refType = refType;
+    }
+
+    /** <默认构造函数> */
+    public OperatorRef(String operatorId, String refId, String refType,
+            Date effectiveDate, Date invalidDate) {
+        super();
+        Date now = new Date();
+        this.operatorId = operatorId;
+        this.refId = refId;
+        this.refType = refType;
+        this.effectiveDate = effectiveDate;
+        this.invalidDate = invalidDate;
+        this.createDate = now;
     }
 
     /**
@@ -142,4 +159,20 @@ public class OperatorRef {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    /**
+     * @return 返回 invalidDate
+     */
+    public Date getInvalidDate() {
+        return invalidDate;
+    }
+
+    /**
+     * @param 对invalidDate进行赋值
+     */
+    public void setInvalidDate(Date invalidDate) {
+        this.invalidDate = invalidDate;
+    }
+    
+    
 }

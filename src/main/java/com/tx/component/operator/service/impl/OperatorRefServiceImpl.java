@@ -6,6 +6,7 @@
  */
 package com.tx.component.operator.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tx.component.operator.dao.OperatorRefDao;
 import com.tx.component.operator.model.OperatorRef;
 import com.tx.component.operator.service.OperatorRefService;
+import com.tx.core.exceptions.SILException;
 import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.core.exceptions.util.ExceptionWrapperUtils;
 
 /**
  * OperatorRef的业务层
@@ -46,6 +50,18 @@ public class OperatorRefServiceImpl implements OperatorRefService {
     @Resource(name = "operatorRefDao")
     private OperatorRefDao operatorRefDao;
     
+    public static Date DEFAULT_INVALID_DATE = null;
+    
+    static {
+        try {
+            DEFAULT_INVALID_DATE = DateUtils.parseDate("9999-12-31 23:59:59",
+                    new String[] { "yyyy-MM-dd HH:mm:ss" });
+        } catch (ParseException e) {
+            throw ExceptionWrapperUtils.wrapperSILException(SILException.class,
+                    "parse date '9999-12-31 23:59:59' error");
+        }
+    }
+    
     /**
      * @param refType
      * @param refId
@@ -53,8 +69,8 @@ public class OperatorRefServiceImpl implements OperatorRefService {
      */
     @Override
     public Set<String> queryOperatorIdSetByRefId(String refType, String refId) {
-        AssertUtils.notEmpty(refType,"refType is empty.");
-        AssertUtils.notEmpty(refId,"refId is empty.");
+        AssertUtils.notEmpty(refType, "refType is empty.");
+        AssertUtils.notEmpty(refId, "refId is empty.");
         
         Map<String, Object> queryParams = new HashMap<String, Object>();
         queryParams.put("refType", refType);
@@ -62,13 +78,13 @@ public class OperatorRefServiceImpl implements OperatorRefService {
         
         List<OperatorRef> operatorRefList = this.operatorRefDao.queryOperatorRefList(queryParams);
         Set<String> resSet = new HashSet<String>();
-        for(OperatorRef orTemp : operatorRefList){
+        for (OperatorRef orTemp : operatorRefList) {
             resSet.add(orTemp.getOperatorId());
         }
         
         return resSet;
     }
-
+    
     /**
      * @param refType
      * @param operatorId
@@ -77,8 +93,8 @@ public class OperatorRefServiceImpl implements OperatorRefService {
     @Override
     public Set<String> queryRefIdSetByOperatorId(String refType,
             String operatorId) {
-        AssertUtils.notEmpty(refType,"refType is empty.");
-        AssertUtils.notEmpty(operatorId,"operatorId is empty.");
+        AssertUtils.notEmpty(refType, "refType is empty.");
+        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
         
         Map<String, Object> queryParams = new HashMap<String, Object>();
         queryParams.put("refType", refType);
@@ -86,13 +102,13 @@ public class OperatorRefServiceImpl implements OperatorRefService {
         
         List<OperatorRef> operatorRefList = this.operatorRefDao.queryOperatorRefList(queryParams);
         Set<String> resSet = new HashSet<String>();
-        for(OperatorRef orTemp : operatorRefList){
+        for (OperatorRef orTemp : operatorRefList) {
             resSet.add(orTemp.getRefId());
         }
         
         return resSet;
     }
-
+    
     /**
       * 批量删除操作员引用id集合<br/>
       *<功能详细描述>
@@ -130,14 +146,15 @@ public class OperatorRefServiceImpl implements OperatorRefService {
       * @see [类、类#方法、类#成员]
      */
     private void batchInsertRefIdList(String refType, String operatorId,
-            List<String> refIdList) {
+            List<String> refIdList, Date effectiveDate, Date invalidDate) {
         if (CollectionUtils.isEmpty(refIdList)) {
             return;
         }
         
         List<OperatorRef> operatorRefList = new ArrayList<OperatorRef>();
         for (String refIdTemp : refIdList) {
-            operatorRefList.add(new OperatorRef(operatorId, refIdTemp, refType));
+            operatorRefList.add(new OperatorRef(operatorId, refIdTemp, refType,
+                    effectiveDate, invalidDate));
         }
         
         batchInsertOperatorRef(operatorRefList);
@@ -149,9 +166,31 @@ public class OperatorRefServiceImpl implements OperatorRefService {
      * @param addRefIdList
      * @param deleteRefIdList
      */
+    @Transactional
     @Override
     public void saveOperator2RefIdList(String refType, String operatorId,
             List<String> addRefIdList, List<String> deleteRefIdList) {
+        saveOperator2RefIdList(refType,
+                operatorId,
+                addRefIdList,
+                deleteRefIdList,
+                new Date(),
+                DEFAULT_INVALID_DATE);
+    }
+    
+    /**
+     * @param refType
+     * @param operatorId
+     * @param addRefIdList
+     * @param deleteRefIdList
+     * @param effectiveDate
+     * @param invalidDate
+     */
+    @Transactional
+    @Override
+    public void saveOperator2RefIdList(String refType, String operatorId,
+            List<String> addRefIdList, List<String> deleteRefIdList,
+            Date effectiveDate, Date invalidDate) {
         //查询对应操作员原来对应的引用类型中引用id列表
         List<OperatorRef> operatorRefList = queryOperatorRefListByOperatorId(refType,
                 operatorId);
@@ -184,7 +223,11 @@ public class OperatorRefServiceImpl implements OperatorRefService {
             batchInsertOperatorRefHis(deleteOperatorRef);
         }
         //批量插入
-        batchInsertRefIdList(refType, operatorId, needInsertRefIds);
+        batchInsertRefIdList(refType,
+                operatorId,
+                needInsertRefIds,
+                effectiveDate,
+                invalidDate);
     }
     
     /**
@@ -196,6 +239,22 @@ public class OperatorRefServiceImpl implements OperatorRefService {
     @Override
     public void saveOperator2RefIdList(String refType, String operatorId,
             List<String> refIdList) {
+        saveOperator2RefIdList(refType,
+                operatorId,
+                refIdList,
+                new Date(),
+                DEFAULT_INVALID_DATE);
+    }
+    
+    /**
+     * @param refType
+     * @param operatorId
+     * @param refIdList
+     */
+    @Transactional
+    @Override
+    public void saveOperator2RefIdList(String refType, String operatorId,
+            List<String> refIdList, Date effectiveDate, Date invalidDate) {
         //查询对应操作员原来对应的引用类型中引用id列表
         List<OperatorRef> operatorRefList = queryOperatorRefListByOperatorId(refType,
                 operatorId);
@@ -228,7 +287,11 @@ public class OperatorRefServiceImpl implements OperatorRefService {
             batchInsertOperatorRefHis(deleteOperatorRef);
         }
         //批量插入
-        batchInsertRefIdList(refType, operatorId, needInsertRefIds);
+        batchInsertRefIdList(refType,
+                operatorId,
+                needInsertRefIds,
+                effectiveDate,
+                invalidDate);
     }
     
     /**
@@ -269,14 +332,15 @@ public class OperatorRefServiceImpl implements OperatorRefService {
       * @see [类、类#方法、类#成员]
      */
     private void batchInsertOperatorIdList(String refType, String refId,
-            List<String> operatorId) {
+            List<String> operatorId, Date effectiveDate, Date invalidDate) {
         if (CollectionUtils.isEmpty(operatorId)) {
             return;
         }
         
         List<OperatorRef> operatorRefList = new ArrayList<OperatorRef>();
         for (String operatorIdTemp : operatorId) {
-            operatorRefList.add(new OperatorRef(operatorIdTemp, refId, refType));
+            operatorRefList.add(new OperatorRef(operatorIdTemp, refId, refType,
+                    effectiveDate, invalidDate));
         }
         
         batchInsertOperatorRef(operatorRefList);
@@ -289,8 +353,30 @@ public class OperatorRefServiceImpl implements OperatorRefService {
      * @param deleteOperatorIdList
      */
     @Override
+    @Transactional
     public void saveRefId2OperatorIdList(String refType, String refId,
             List<String> addOperatorIdList, List<String> deleteOperatorIdList) {
+        saveRefId2OperatorIdList(refType,
+                refId,
+                addOperatorIdList,
+                deleteOperatorIdList,
+                new Date(),
+                DEFAULT_INVALID_DATE);
+    }
+    
+    /**
+     * @param refType
+     * @param refId
+     * @param addOperatorIdList
+     * @param deleteOperatorIdList
+     * @param effectiveDate
+     * @param invalidDate
+     */
+    @Override
+    @Transactional
+    public void saveRefId2OperatorIdList(String refType, String refId,
+            List<String> addOperatorIdList, List<String> deleteOperatorIdList,
+            Date effectiveDate, Date invalidDate) {
         //查询对应引用id原来对应的引用类型中操作员id列表
         List<OperatorRef> operatorRefList = queryOperatorRefListByRefId(refType,
                 refId);
@@ -323,7 +409,11 @@ public class OperatorRefServiceImpl implements OperatorRefService {
             batchInsertOperatorRefHis(deleteOperatorRef);
         }
         //插入新增的
-        batchInsertOperatorIdList(refType, refId, needInsertOperatorIds);
+        batchInsertOperatorIdList(refType,
+                refId,
+                needInsertOperatorIds,
+                effectiveDate,
+                invalidDate);
     }
     
     /**
@@ -335,6 +425,24 @@ public class OperatorRefServiceImpl implements OperatorRefService {
     @Override
     public void saveRefId2OperatorIdList(String refType, String refId,
             List<String> operatorIdList) {
+        saveRefId2OperatorIdList(refType,
+                refId,
+                operatorIdList,
+                new Date(),
+                DEFAULT_INVALID_DATE);
+    }
+    
+    /**
+     * @param refType
+     * @param refId
+     * @param operatorIdList
+     * @param effectiveDate
+     * @param invalidDate
+     */
+    @Transactional
+    @Override
+    public void saveRefId2OperatorIdList(String refType, String refId,
+            List<String> operatorIdList, Date effectiveDate, Date invalidDate) {
         //查询对应引用id原来对应的引用类型中操作员id列表
         List<OperatorRef> operatorRefList = queryOperatorRefListByRefId(refType,
                 refId);
@@ -367,7 +475,11 @@ public class OperatorRefServiceImpl implements OperatorRefService {
             batchInsertOperatorRefHis(deleteOperatorRef);
         }
         //插入新增的
-        batchInsertOperatorIdList(refType, refId, needInsertOperatorIds);
+        batchInsertOperatorIdList(refType,
+                refId,
+                needInsertOperatorIds,
+                effectiveDate,
+                invalidDate);
     }
     
     /**
@@ -381,6 +493,7 @@ public class OperatorRefServiceImpl implements OperatorRefService {
      * @exception throws
      * @see [类、类#方法、类#成员]
     */
+    @Transactional
     public void insertOperatorRef(OperatorRef operatorRef) {
         AssertUtils.notNull(operatorRef, "operatorRef is null.");
         AssertUtils.notEmpty(operatorRef.getOperatorId(),
@@ -422,6 +535,7 @@ public class OperatorRefServiceImpl implements OperatorRefService {
     /**
      * @param operatorRef
      */
+    @Transactional
     public void insertOperatorRefHis(OperatorRef operatorRef) {
         AssertUtils.notNull(operatorRef, "operatorRef is null.");
         AssertUtils.notEmpty(operatorRef.getOperatorId(),
@@ -441,6 +555,7 @@ public class OperatorRefServiceImpl implements OperatorRefService {
             return;
         }
         
+        Date now = new Date();
         for (OperatorRef operatorRefTemp : operatorRefs) {
             AssertUtils.notNull(operatorRefTemp, "operatorRef is null.");
             AssertUtils.notEmpty(operatorRefTemp.getOperatorId(),
@@ -449,6 +564,8 @@ public class OperatorRefServiceImpl implements OperatorRefService {
                     "operatorRef.i is empty.");
             AssertUtils.notNull(operatorRefTemp.getRefType(),
                     "operatorRef.refType is null.");
+            
+            operatorRefTemp.setEndDate(now);
         }
         this.operatorRefDao.batchInsertOperatorRefHis(operatorRefs);
     }

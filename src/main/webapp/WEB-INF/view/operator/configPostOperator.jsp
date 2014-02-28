@@ -12,32 +12,21 @@
 var postId = '${postId}';
 var OperatorChooseManager = function(){
 };
-OperatorChooseManager.prototype._isInit = false;
-OperatorChooseManager.prototype._choosedOperatorIds = {};
-OperatorChooseManager.prototype._loadChoosedOperatorIds = function(loadCallback){
+OperatorChooseManager.prototype._loadChoosedOperatorIds = function(operatorIds,loadCallback){
 	var _this = this;
-	$.post("${contextPath}/Operator2Post/queryOperatorIdSetByPostId.action?postId=${postId}", function(data){
-		$.each(data,function(i,operatorIdTemp){
-			_this._choosedOperatorIds[operatorIdTemp] = true;
-		});
-		_this._isInit= true;
-		loadCallback(_this._choosedOperatorIds);
+	$.post("${contextPath}/Operator2Post/queryChoosedOperatorIdSetByPostId.action", 
+			{'postId' : postId, 'operatorIds[]': operatorIds},function(data){
+		loadCallback(data);
 	});
 };
-OperatorChooseManager.prototype.load = function(loadCallback){
+OperatorChooseManager.prototype.check = function(operatorIds,loadCallback){
 	var _this = this;
-	if(_this._isInit){
-		loadCallback(_this._loadChoosedOperatorIds);
-	}else{
-		_this._loadChoosedOperatorIds(function(data){
-			loadCallback(data);
-		});
+	if(!operatorIds){
+		operatorIds = [];
 	}
-};
-OperatorChooseManager.prototype.reset = function(){
-	var _this = this;
-	_this._choosedOperatorIds = {};
-	_this._isInit= false;
+	_this._loadChoosedOperatorIds(operatorIds,function(data){
+		loadCallback(data);
+	});
 };
 var operatorChooseManager = new OperatorChooseManager();
 
@@ -70,12 +59,19 @@ $(document).ready(function() {
 	
 	//将已经选中的操作员显示为选中状态
 	function selectChoosedOperator(){
-		operatorChooseManager.load(function(choosedOperatorIds){
-			var rows = dataGrid.datagrid('getRows');
-			$.each(rows,function(index,rowTemp){
-				if(choosedOperatorIds[rowTemp.id]){
-					dataGrid.datagrid('checkRow',index);
-				}
+		var rows = dataGrid.datagrid('getRows');
+		
+		var operatorIds = [];
+		$.each(rows,function(index,rowTemp){
+			operatorIds.push(rowTemp.id);
+		});
+		operatorChooseManager.check(operatorIds,function(choosedOperatorIds){
+			$.each(choosedOperatorIds,function(index,choosedOperatorIdTemp){
+				$.each(rows,function(index,rowTemp){
+					if(choosedOperatorIdTemp == rowTemp.id){
+						dataGrid.datagrid('checkRow',index);
+					}
+				});
 			});
 		});
 	}
@@ -116,7 +112,7 @@ $(document).ready(function() {
 			hidden : true
 		},{
 			field : 'loginName',
-			title : '登录名11111111111',
+			title : '登录名',
 			width : 180
 		}]],
 		columns : [ [{
@@ -182,9 +178,6 @@ function deselect(){
 	$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
 }
 function submitConfigPostOperator(){
-	DialogUtils.progress({
-        text : '数据提交中，请等待....'
-	});
 	var checkedRows = dataGrid.datagrid('getChecked');
 	var checkedRowsMapping = {};
 	$.each(checkedRows,function(index,rowTemp){
@@ -200,10 +193,13 @@ function submitConfigPostOperator(){
 			unCheckedOperatorIds.push(rowTemp.id);
 		}
 	});
+	DialogUtils.progress({
+        text : '数据提交中，请等待....'
+	});
 	$.post("${contextPath}/Operator2Post/configPostOperatorId.action",
 			{postId:postId,selectedOperatorId:checkedOperatorIds,unSelectedOperatorId:unCheckedOperatorIds}, 
 			function(data){
-		parent.DialogUtils.tip("配置职位人员成功");
+		DialogUtils.tip("配置职位人员成功");
 		DialogUtils.progress('close');
 	});
 }

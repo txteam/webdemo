@@ -62,7 +62,7 @@ $(document).ready(function(){
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form:form id="operatorForm" method="post" cssClass="form"
 			modelAttribute="operator">
-			<table>
+			<table class="common_table">
 				<tr>
 					<th class="narrow" width="20%">登录名:<span class="tRed">*</span></th>
 					<td width="30%">

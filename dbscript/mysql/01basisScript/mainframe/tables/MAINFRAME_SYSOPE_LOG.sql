@@ -5,7 +5,7 @@ create table MAINFRAME_SYSOPE_LOG(
 	SYSTEMID varchar(64),
 	ORGANIZATIONID varchar(64),
 	MESSAGE varchar(255),
-	CREATEDATE timestamp default now(),
+	CREATEDATE default now(),
 	VCID varchar(64),
 	ID varchar(64) not null,
 	OPERATORID varchar(64),

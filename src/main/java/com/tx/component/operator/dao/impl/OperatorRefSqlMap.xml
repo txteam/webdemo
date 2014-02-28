@@ -18,15 +18,13 @@
 				TOR.REFID,
 				TOR.ENDDATE,
 				TOR.CREATEDATE,
+				TOR.INVALIDDATE,
 				TOR.EFFECTIVEDATE,
 				TOR.REFTYPE
 		  FROM OPER_OPERATOR_REF TOR
-		 WHERE
-		<trim prefixOverrides="AND | OR">
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
-	            AND TOR.OPERATORID = #{operatorId}
-	        </if>
-		</trim>
+		 WHERE TOR.OPERATORID = #{operatorId}
+		   AND TOR.REFTYPE = #{refType}
+		   AND TOR.REFID = #{refId}
 	</select>
 	
 	<!-- auto generate default query -->
@@ -38,6 +36,7 @@
 				TOR.REFID,
 				TOR.ENDDATE,
 				TOR.CREATEDATE,
+				TOR.INVALIDDATE,
 				TOR.EFFECTIVEDATE,
 				TOR.REFTYPE
 		  FROM OPER_OPERATOR_REF TOR
@@ -105,6 +104,7 @@
 		(
 			OPERATORID,
 			REFID,
+			INVALIDDATE,
 			ENDDATE,
 			CREATEDATE,
 			EFFECTIVEDATE,
@@ -114,6 +114,7 @@
 		(
 			#{operatorId},
 			#{refId},
+			#{invalidDate},
 			#{endDate},
 			#{createDate},
 			#{effectiveDate},
@@ -128,6 +129,7 @@
 		(
 			OPERATORID,
 			REFID,
+			INVALIDDATE,
 			ENDDATE,
 			CREATEDATE,
 			EFFECTIVEDATE,
@@ -137,6 +139,7 @@
 		(
 			#{operatorId},
 			#{refId},
+			#{invalidDate},
 			#{endDate},
 			#{createDate},
 			#{effectiveDate},
@@ -147,10 +150,16 @@
 	<!-- auto generate default delete -->
 	<delete id="deleteOperatorRef" 
 		parameterType="com.tx.component.operator.model.OperatorRef">
-		DELETE FROM OPER_OPERATOR_REF WHERE
-		<trim prefixOverrides="AND | OR">
+		DELETE FROM OPER_OPERATOR_REF
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
-	            AND OPERATORID = #{operatorId}
+	            AND OPERATORID = #{operatorId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
+	            AND REFID = #{refId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType)">  
+	            AND REFTYPE = #{refType}
 	        </if>
 		</trim>
 	</delete>
@@ -160,23 +169,19 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_OPERATOR_REF TOR
 	    <trim prefix="SET" suffixOverrides=",">
-			<if test="_parameter.containsKey('refId')">
-	    		REFID = #{refId,javaType=java.lang.String},
-	    	</if>	
 			<if test="_parameter.containsKey('endDate')">
 	    		ENDDATE = #{endDate,javaType=java.util.Date},
 	    	</if>	
-			<if test="_parameter.containsKey('createDate')">
-	    		CREATEDATE = #{createDate,javaType=java.util.Date},
+			<if test="_parameter.containsKey('invalidDate')">
+	    		INVALIDDATE = #{invalidDate,javaType=java.util.Date},
 	    	</if>	
 			<if test="_parameter.containsKey('effectiveDate')">
 	    		EFFECTIVEDATE = #{effectiveDate,javaType=java.util.Date},
-	    	</if>	
-			<if test="_parameter.containsKey('refType')">
-	    		REFTYPE = #{refType,javaType=java.lang.String},
-	    	</if>	
+	    	</if>
 	    </trim>
-	    WHERE TOR.OPERATORID = #{operatorId} 
+	    WHERE TOR.OPERATORID = #{operatorId}
+		   AND TOR.REFTYPE = #{refType}
+		   AND TOR.REFID = #{refId}
 	</update>  
 
 </mapper>
