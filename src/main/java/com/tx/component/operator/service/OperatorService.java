@@ -40,9 +40,6 @@ public class OperatorService {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(OperatorService.class);
     
-    @SuppressWarnings("unused")
-    private Logger serviceLogger;
-    
     @Resource(name = "operatorDao")
     private OperatorDao operatorDao;
     

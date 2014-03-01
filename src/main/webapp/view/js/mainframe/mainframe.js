@@ -288,7 +288,6 @@ $(function(){
                     if (_this.options && _this.options.onSelected && $.isFunction(_this.options.onSelected)) {
                         _this.options.onSelected.call(_this, menuItem);
                     }
-                    
                     var selectedPanel = _this.$menuAccordion.accordion('getPanel',title);
                     if(!selectedPanel._isInit){
                         var $menuTree = $('<ul name="menuTree"></ul>');
@@ -408,6 +407,7 @@ $(function(){
         var menu = new Menu({
             url: _queryMenuUrl,
             onSelected: function(menuItem){
+            	//alert(menuItem['attributes']	);
                 onSelectedMenuItem(menuItem);
             }
         });

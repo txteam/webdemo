@@ -59,10 +59,10 @@ function initAuthTree($currentAuthTreeEl,authType,configAble,authItemList){
 			return 'database_key';	
 		},
 		checkbox : true,
-		lines : true,
-		data: authItemList,
-		//不联动选中，允许仅含有顶级权限的情况
 		cascadeCheck : true,
+		lines : true,
+		onlyLeafCheck: false,
+		data: authItemList,
 		/*
 		onCheck: function(node, checked){
 			if(checked){

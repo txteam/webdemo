@@ -102,7 +102,12 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 			title : '操作',
 			width : 100,
 			formatter : function(value, row, index) {
-				var str = '';
+				var str = '&nbsp;';
+				if(!$.ObjectUtils.isEmpty(row.children)
+						|| !row.configAble
+						|| !row.valid){
+					return str;
+				}
 				if (true) {
 					str += $.formatString('<img onclick="configAuthOperator(\'{0}\',\'{1}\');" src="{2}" title="配置权限人员"/>', row.id, row.name,'${contextPath}/style/images/extjs_icons/folder/folder_user.png');
 				}
@@ -151,8 +156,6 @@ function undo() {
 	}
 }
 function configAuthOperator(id,name){
-	DialogUtils.alert("该功能存在BUG,修正中。");
-	return ;
 	if (id == undefined) {
 		var rows = $currentAuthTreeGridEl.treegrid('getSelections');
 		id = rows[0].id;

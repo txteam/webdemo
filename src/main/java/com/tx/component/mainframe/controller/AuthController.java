@@ -16,6 +16,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -25,11 +26,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.auth.AuthConstant;
 import com.tx.component.auth.annotation.CheckOperateAuth;
+import com.tx.component.auth.context.AuthContext;
 import com.tx.component.auth.model.AuthItem;
 import com.tx.component.auth.model.AuthTypeItem;
 import com.tx.component.mainframe.service.AuthManageService;
 import com.tx.component.mainframe.treeview.CheckAbleTreeNode;
 import com.tx.component.operator.service.PostService;
+import com.tx.core.TxConstants;
 
 /**
  * 权限显示层
@@ -142,7 +145,7 @@ public class AuthController {
       * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @CheckOperateAuth(key = "config_post_auth" ,name = "配置职位权限")
+    @CheckOperateAuth(key = "config_post_auth", name = "配置职位权限")
     @RequestMapping("/savePost2AuthItemList")
     public boolean savePost2AuthItemList(
             @RequestParam("postId") String postId,
@@ -217,7 +220,7 @@ public class AuthController {
      * @see [类、类#方法、类#成员]
     */
     @ResponseBody
-    @CheckOperateAuth(key = "config_operator_auth" ,name = "配置人员权限")
+    @CheckOperateAuth(key = "config_operator_auth", name = "配置人员权限")
     @RequestMapping("/saveOperator2AuthItemList")
     public boolean saveOperator2AuthItemList(
             @RequestParam("operatorId") String operatorId,
@@ -251,7 +254,26 @@ public class AuthController {
     @RequestMapping("/toConfigAuthOperator")
     public String toConfigAuthOperator(
             @RequestParam("authItemId") String authItemId, ModelMap modelMap) {
+        
+        Set<AuthItem> addAuthItems = this.authManageService.getParentAuthItems(authItemId);
+        Set<AuthItem> deleteAuthItems = this.authManageService.getChildAuthItems(authItemId);
+        
+        StringBuilder addAuthItemNameSb = new StringBuilder(
+                TxConstants.INITIAL_STR_LENGTH);
+        for (AuthItem authItemTemp : addAuthItems) {
+            addAuthItemNameSb.append(authItemTemp.getName()).append(",");
+        }
+        StringBuilder deleteAuthItemNameSb = new StringBuilder(
+                TxConstants.INITIAL_STR_LENGTH);
+        for (AuthItem authItemTemp : deleteAuthItems) {
+            deleteAuthItemNameSb.append(authItemTemp.getName()).append(",");
+        }
+        modelMap.put("authItemName", AuthContext.getContext().getAuthItemFromContextById(authItemId).getName());
         modelMap.put("authItemId", authItemId);
+        modelMap.put("addAuthItemNames",
+                StringUtils.substring(addAuthItemNameSb.toString(), 0, -1));
+        modelMap.put("deleteAuthItemNames",
+                StringUtils.substring(deleteAuthItemNameSb.toString(), 0, -1));
         return "/mainframe/configAuthOperator";
     }
     
@@ -270,10 +292,10 @@ public class AuthController {
       * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @CheckOperateAuth(key = "config_auth_operator" ,name = "配置权限人员")
+    @CheckOperateAuth(key = "config_auth_operator", name = "配置权限人员")
     @RequestMapping("/saveAuthItem2OperatorIdList")
     public boolean saveAuthItem2OperatorIdList(
-            @RequestParam("authItemIds[]") String[] authItemIds,
+            @RequestParam("authItemId") String authItemId,
             @RequestParam(value = "addRefIds[]", required = false) String[] addRefIds,
             @RequestParam(value = "deleteRefIds[]", required = false) String[] deleteRefIds,
             @RequestParam() MultiValueMap<String, String> request) {
@@ -286,7 +308,7 @@ public class AuthController {
         List<String> addRefIdList = Arrays.asList(addRefIds);
         List<String> deleteRefIdList = Arrays.asList(deleteRefIds);
         this.authManageService.saveAuthItemId2RefIdList(AuthConstant.AUTHREFTYPE_OPERATOR,
-                authItemIds,
+                authItemId,
                 addRefIdList,
                 deleteRefIdList);
         return true;
@@ -356,9 +378,9 @@ public class AuthController {
     */
     @ResponseBody
     @RequestMapping("/saveAuthItem2PostIdList")
-    @CheckOperateAuth(key = "config_auth_post" ,name = "配置权限职位")
+    @CheckOperateAuth(key = "config_auth_post", name = "配置权限职位")
     public boolean saveAuthItem2PostIdList(
-            @RequestParam("authItemIds[]") String[] authItemIds,
+            @RequestParam("authItemId") String authItemId,
             @RequestParam(value = "addRefIds[]", required = false) String[] addRefIds,
             @RequestParam(value = "deleteRefIds[]", required = false) String[] deleteRefIds,
             @RequestParam() MultiValueMap<String, String> request) {
@@ -371,7 +393,7 @@ public class AuthController {
         List<String> addRefIdList = Arrays.asList(addRefIds);
         List<String> deleteRefIdList = Arrays.asList(deleteRefIds);
         this.authManageService.saveAuthItemId2RefIdList(AuthConstant.AUTHREFTYPE_POST,
-                authItemIds,
+                authItemId,
                 addRefIdList,
                 deleteRefIdList);
         return true;

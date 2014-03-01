@@ -131,7 +131,7 @@ $(document).ready(function() {
                 var childWindowRefArr = this._childWindowLinkedList.iterator();
                 $.each(childWindowRefArr, function(i, childWindowRefTemp) {
                     if (childWindowRefTemp && childWindowRefTemp.$localEventHandle) {
-                        //console.log("window._$localEventHandle.trigger:" + _arguments[0]);
+                        console.log("window._$localEventHandle.trigger:" + _arguments[0]);
                         var $lehandle = childWindowRefTemp.$localEventHandle;
                         $lehandle.triggerHandler.apply($lehandle, _arguments);
                     }

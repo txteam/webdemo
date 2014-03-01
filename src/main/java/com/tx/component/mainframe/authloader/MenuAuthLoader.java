@@ -59,6 +59,7 @@ public class MenuAuthLoader implements AuthLoader {
     public Set<AuthItem> loadAuthItems() {
         Set<AuthItem> authItemSet = new HashSet<AuthItem>();
         Set<MenuItem> menuItemSet = new HashSet<MenuItem>();
+        Set<String> existAuthItemId = new HashSet<String>();
         Map<String, List<MenuItem>> menuType2MenuItemListMap = menuContext.getMenuType2MenuItemListMap();
         if(MapUtils.isEmpty(menuType2MenuItemListMap)){
             return authItemSet;
@@ -72,7 +73,7 @@ public class MenuAuthLoader implements AuthLoader {
         List<MenuItem> menuItemTreeList = TreeUtils.changeToTree(menuItemList);
         
         for(MenuItem menuItemTemp : menuItemTreeList){
-            authItemSet.addAll(createAuthItem(null, menuItemTemp));
+            iterateCreateAuthItem(authItemSet,existAuthItemId,null, menuItemTemp);
         }
         return authItemSet;
     }
@@ -88,16 +89,19 @@ public class MenuAuthLoader implements AuthLoader {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    private List<AuthItem> createAuthItem(AuthItem parentMenuAuthItem,
+    private void iterateCreateAuthItem(Set<AuthItem> authItemSet,Set<String> existAuthItemId,
+            AuthItem parentMenuAuthItem,
             MenuItem menuItem) {
         AssertUtils.notEmpty(menuItem, "menuItem is null");
-        List<AuthItem> resList = new ArrayList<AuthItem>();
         
         //根据菜单生成对应权限项
         AuthItemImpl authItem = null;
         List<String> authKeyList = menuItem.getAuthKeyList();
         if(authKeyList != null){
             for(String authKeyTemp : authKeyList){
+                if(existAuthItemId.contains(authKeyTemp)){
+                    continue;
+                }
                 authItem = new AuthItemImpl();
                 authItem.setAuthType(AuthTypeItemContext.getContext()
                         .registeAuthTypeItem("AUTHTYPE_OPERATE",
@@ -116,21 +120,20 @@ public class MenuAuthLoader implements AuthLoader {
                         : null);
                 authItem.setValid(true);
                 authItem.setViewAble(true);
-                resList.add(authItem);
+                
+                authItemSet.add(authItem);
+                existAuthItemId.add(authItem.getId());
             }
         }
-        parentMenuAuthItem = authItem == null ? parentMenuAuthItem : authItem;
         
+        parentMenuAuthItem = authItem == null ? parentMenuAuthItem : authItem;
         if(!CollectionUtils.isEmpty(menuItem.getChilds())){
             for(MenuItem childMenuItem : menuItem.getChilds()){
                 if(childMenuItem == null){
                     continue;
                 }
-                resList.addAll(createAuthItem(parentMenuAuthItem, childMenuItem));
+                iterateCreateAuthItem(authItemSet,existAuthItemId,parentMenuAuthItem, childMenuItem);
             }
         }
-        
-        
-        return resList;
     }
 }

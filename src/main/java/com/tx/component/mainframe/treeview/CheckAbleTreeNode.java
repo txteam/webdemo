@@ -36,6 +36,7 @@ public class CheckAbleTreeNode extends TreeNode {
             boolean checked) {
         super(adapter, obj);
         this.checked = checked;
+        //setName(getName() + this.checked);
     }
     
     /**

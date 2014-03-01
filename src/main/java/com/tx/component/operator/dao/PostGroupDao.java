@@ -11,7 +11,7 @@ import java.util.Map;
 
 import com.tx.core.mybatis.model.Order;
 import com.tx.core.paged.model.PagedList;
-import com.tx.component.operator.model.PostGroup;
+import com.tx.component.operator.model.PostType;
 
 /**
  * PostGroup持久层
@@ -35,7 +35,7 @@ public interface PostGroupDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public void insertPostGroup(PostGroup condition);
+    public void insertPostGroup(PostType condition);
     
     /**
       * 删除PostGroup对象
@@ -49,7 +49,7 @@ public interface PostGroupDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public int deletePostGroup(PostGroup condition);
+    public int deletePostGroup(PostType condition);
     
     /**
       * 查询PostGroup实体
@@ -63,7 +63,7 @@ public interface PostGroupDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public PostGroup findPostGroup(PostGroup condition);
+    public PostType findPostGroup(PostType condition);
     
     /**
       * 根据条件查询PostGroup列表
@@ -77,7 +77,7 @@ public interface PostGroupDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public List<PostGroup> queryPostGroupList(Map<String, Object> params);
+    public List<PostType> queryPostGroupList(Map<String, Object> params);
     
     /**
       * 根据指定查询条件以及排序列查询PostGroup列表
@@ -92,7 +92,7 @@ public interface PostGroupDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public List<PostGroup> queryPostGroupList(Map<String, Object> params,
+    public List<PostType> queryPostGroupList(Map<String, Object> params,
             List<Order> orderList);
     
     /**
@@ -122,7 +122,7 @@ public interface PostGroupDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public PagedList<PostGroup> queryPostGroupPagedList(Map<String, Object> params,
+    public PagedList<PostType> queryPostGroupPagedList(Map<String, Object> params,
             int pageIndex, int pageSize);
     
     /**
@@ -140,7 +140,7 @@ public interface PostGroupDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public PagedList<PostGroup> queryPostGroupPagedList(Map<String, Object> params,
+    public PagedList<PostType> queryPostGroupPagedList(Map<String, Object> params,
             int pageIndex, int pageSize, List<Order> orderList);
     
     

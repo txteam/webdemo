@@ -34,6 +34,7 @@ import com.tx.component.mainframe.treeview.CheckAbleTreeNodeAdapter;
 import com.tx.component.operator.service.OperatorService;
 import com.tx.component.operator.service.OrganizationService;
 import com.tx.component.operator.service.PostService;
+import com.tx.core.TxConstants;
 import com.tx.core.exceptions.util.AssertUtils;
 
 /**
@@ -59,6 +60,124 @@ public class AuthManageService {
     
     @Resource(name = "authContext")
     private AuthContext authContext;
+    
+    /**
+      * 根据权限项id获取其子集权限项集合<br/> 
+      *<功能详细描述>
+      * @param authItemId
+      * @return [参数说明]
+      * 
+      * @return Set<AuthItem> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public Set<AuthItem> getChildAuthItems(String authItemId) {
+        AssertUtils.notEmpty(authItemId, "authItemId is empty.");
+        AuthItem authItem = authContext.getAuthItemFromContextById(authItemId);
+        AssertUtils.notNull(authItem, "authItemId:{} is not exist.", authItemId);
+        
+        Set<String> parentAuthItemIdSet = new HashSet<String>();
+        parentAuthItemIdSet.add(authItemId);
+        MultiValueMap<String, AuthItem> parentId2AuthItemMap = new LinkedMultiValueMap<String, AuthItem>();
+        for (AuthItem authItemTemp : authContext.getAllAuthItemMapping()
+                .values()) {
+            parentId2AuthItemMap.add(authItemTemp.getParentId(), authItemTemp);
+        }
+        
+        Set<AuthItem> resSet = new HashSet<AuthItem>(
+                TxConstants.INITIAL_CONLLECTION_SIZE);
+        iterateChildAuthItem(parentId2AuthItemMap, parentAuthItemIdSet, resSet);
+        return resSet;
+    }
+    
+    /**
+      * 迭代获取子集权限项
+      *<功能详细描述>
+      * @param parentId2AuthItemMap
+      * @param parentAuthItemIdSet
+      * @param resSet [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private void iterateChildAuthItem(
+            MultiValueMap<String, AuthItem> parentId2AuthItemMap,
+            Set<String> parentAuthItemIdSet, Set<AuthItem> resSet) {
+        if (CollectionUtils.isEmpty(parentAuthItemIdSet)) {
+            return;
+        }
+        Set<String> newParentAuthItemIdSet = new HashSet<String>(
+                TxConstants.INITIAL_CONLLECTION_SIZE);
+        for (String parentAuthItemIdTemp : parentAuthItemIdSet) {
+            List<AuthItem> childAuthItems = parentId2AuthItemMap.get(parentAuthItemIdTemp);
+            if (CollectionUtils.isEmpty(childAuthItems)) {
+                continue;
+            }
+            for (AuthItem childAuthItemTemp : childAuthItems) {
+                String id = childAuthItemTemp.getId();
+                if (parentAuthItemIdSet.contains(id)) {
+                    //防止由于配置疏忽导致parentId = authItemId的情况，这样会引起无限迭代的
+                    //尽管已经在权限容器中加入了限制，这里也加入以下，避免这里的逻辑引起系统当机
+                    continue;
+                }
+                newParentAuthItemIdSet.add(id);
+                resSet.add(childAuthItemTemp);
+            }
+        }
+        iterateChildAuthItem(parentId2AuthItemMap,
+                newParentAuthItemIdSet,
+                resSet);
+    }
+    
+    /**
+      * 根据权限id获取器对应的父级权限项目集合<br/>
+      *<功能详细描述>
+      * @param authItemId
+      * @return [参数说明]
+      * 
+      * @return Set<AuthItem> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public Set<AuthItem> getParentAuthItems(String authItemId) {
+        AssertUtils.notEmpty(authItemId, "authItemId is empty.");
+        AuthItem authItem = authContext.getAuthItemFromContextById(authItemId);
+        AssertUtils.notNull(authItem, "authItemId:{} is not exist.", authItemId);
+        
+        Set<AuthItem> resSet = new HashSet<AuthItem>(
+                TxConstants.INITIAL_CONLLECTION_SIZE);
+        iterateParentAuthItem(authItem.getParentId(), resSet);
+        return resSet;
+    }
+    
+    /**
+      * 父级权限项
+      *<功能详细描述>
+      * @param authItemId
+      * @param res [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private void iterateParentAuthItem(String authItemId, Set<AuthItem> resSet) {
+        if (StringUtils.isEmpty(authItemId)
+                || authContext.getAuthItemFromContextById(authItemId) == null) {
+            return;
+        }
+        AuthItem authItem = authContext.getAuthItemFromContextById(authItemId);
+        resSet.add(authItem);
+        
+        //继续迭代寻找其父级权限项
+        String parentId = authItem.getParentId();
+        if (authItemId.equals(parentId)) {
+            //防止由于配置疏忽导致parentId = authItemId的情况，这样会引起无限迭代的
+            //尽管已经在权限容器中加入了限制，这里也加入以下，避免这里的逻辑引起系统当机
+            return;
+        }
+        iterateParentAuthItem(authItem.getParentId(), resSet);
+    }
     
     /**
      * 保存职位权限<br/>
@@ -103,20 +222,36 @@ public class AuthManageService {
       * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public void saveAuthItemId2RefIdList(String authRefType, String[] authItemIds,
+    public void saveAuthItemId2RefIdList(String authRefType, String authItemId,
             List<String> addRefIdList, List<String> deleteRefIdList) {
         AssertUtils.notEmpty(authRefType, "authRefType is empty");
-        AssertUtils.notEmpty(authItemIds, "authItemIds is empty");
+        AssertUtils.notEmpty(authItemId, "authItemId is empty");
         
-        for(String authItemId :authItemIds){
-            AuthItem authItem = authContext.getAuthItemFromContextById(authItemId);
-            AssertUtils.isTrue(authItem.isValid(), "authItemId is inValid.can not be configed.");
-            AssertUtils.isTrue(authItem.isConfigAble(), "authItemId is inValid.can not be configed.");
-            
-            authContext.saveAuthItemOfAuthRefIdList(authRefType,
-                    authItemId,
-                    addRefIdList,
-                    deleteRefIdList);
+        AuthItem authItem = authContext.getAuthItemFromContextById(authItemId);
+        AssertUtils.isTrue(authItem.isValid(),
+                "authItemId is inValid.can not be configed.");
+        AssertUtils.isTrue(authItem.isConfigAble(),
+                "authItemId is inValid.can not be configed.");
+        
+        Set<AuthItem> parentAuthItemSet = getParentAuthItems(authItemId);
+        Set<AuthItem> childAuthItems = getChildAuthItems(authItemId);
+        if (!CollectionUtils.isEmpty(parentAuthItemSet)) {
+            for (AuthItem addAuthItem : parentAuthItemSet) {
+                authContext.addAuthItemOfAuthRefIdList(authRefType,
+                        addAuthItem.getId(),
+                        addRefIdList);
+            }
+        }
+        authContext.saveAuthItemOfAuthRefIdList(authRefType,
+                authItemId,
+                addRefIdList,
+                deleteRefIdList);
+        if (!CollectionUtils.isEmpty(childAuthItems)) {
+            for (AuthItem deleteAuthItem : childAuthItems) {
+                authContext.deleteAuthItemOfAuthRefIdList(authRefType,
+                        deleteAuthItem.getId(),
+                        deleteRefIdList);
+            }
         }
     }
     
@@ -213,7 +348,7 @@ public class AuthManageService {
     }
     
     /**
-      * 差尊指定引用类型的引用id拥有的权限id集合
+      * 根据指定引用类型的引用id拥有的权限id集合
       *<功能详细描述>
       * @param refType
       * @param refId

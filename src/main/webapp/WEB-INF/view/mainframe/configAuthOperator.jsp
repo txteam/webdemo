@@ -10,6 +10,9 @@
 
 <script type="text/javascript" >
 var authItemId = '${authItemId}';
+var authItemName = '${authItemName}';
+var addAuthItemNames = '${addAuthItemNames}';
+var deleteAuthItemNames = '${deleteAuthItemNames}';
 var OperatorChooseManager = function(){
 };
 OperatorChooseManager.prototype._loadChoosedOperatorIds = function(operatorIds,loadCallback){
@@ -186,24 +189,42 @@ function submitConfigAuthOperator(){
 	var checkedOperatorIds = [];
 	var unCheckedOperatorIds = [];
 	var rows = dataGrid.datagrid('getRows');
+	
+	var addOperatorName = "&nbsp;" ;
+	var deleteOperatorName = "&nbsp;" ;
 	$.each(rows,function(index,rowTemp){
 		if(checkedRowsMapping[rowTemp.id]){
+			addOperatorName = addOperatorName + (checkedOperatorIds.length == 0 ? "" : "&nbsp;、&nbsp;") + rowTemp.userName;
 			checkedOperatorIds.push(rowTemp.id);
 		}else{
+			deleteOperatorName = deleteOperatorName + (unCheckedOperatorIds.length == 0 ? "" : "&nbsp;、&nbsp;") + rowTemp.userName;
 			unCheckedOperatorIds.push(rowTemp.id);
 		}
 	});
-	authItemIds = [];
 	
 	DialogUtils.progress({
         text : '数据提交中，请等待....'
 	});
 	$.post("${contextPath}/auth/saveAuthItem2OperatorIdList.action",
-			{authItemIds:,addRefIds:checkedOperatorIds,deleteRefIds:unCheckedOperatorIds}, 
+			{authItemId:authItemId,addRefIds:checkedOperatorIds,deleteRefIds:unCheckedOperatorIds}, 
 			function(data){
 		DialogUtils.tip("配置权限人员成功");
 		DialogUtils.progress('close');
 	});
+	/*
+	DialogUtils.confirm("确认提醒" , 
+	    	$.formatString("<br/>请求提交后,系统将会:<br/>为:{0}<br/>添加权限:<br/>{1}<br/>为:{2}<br/>去除权限:<br/>{3}<br/>是否确认?"
+	    			,addOperatorName,
+	    			authItemName + "," + addAuthItemNames,
+	    			deleteOperatorName,
+	    			authItemName + "," + deleteAuthItemNames) , 
+	    	function(data){
+		    	if(data){
+		    	}
+	    });
+	*/
+	
+
 }
 function cancelConfigPostOperator(){
 	DialogUtils.closeDialogById('configPostOperator');

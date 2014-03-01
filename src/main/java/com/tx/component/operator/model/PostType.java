@@ -6,11 +6,15 @@
  */
 package com.tx.component.operator.model;
 
+import java.sql.Date;
+
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 
  /**
-  * 职位组<br/>
+  * 职位类型（即为职位组）<br/>
+  *     与职位间的关系为1:n的关系，由职位模型中直接持有postTypeId即可<br/>
   *     作为职位的补充<br/>
   *     因业务需要（需要构建销售分组，催收分组等，用于绩效计算）<br/>
   *     
@@ -21,7 +25,8 @@ import javax.persistence.Id;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public class PostGroup {
+@Table(name="oper_post")
+public class PostType {
     
     /** 职位分组id */
     @Id
@@ -35,6 +40,9 @@ public class PostGroup {
     
     /** 职位分组是否有效 */
     private boolean valid;
+    
+    /** 创建日期 */
+    private Date createDate;
     
     /** 备注 */
     private String remark;
@@ -107,5 +115,19 @@ public class PostGroup {
      */
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }
