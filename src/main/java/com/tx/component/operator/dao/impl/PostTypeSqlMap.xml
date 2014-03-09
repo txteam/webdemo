@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="postType">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="postTypeMap" 
+		type="com.tx.component.operator.model.PostType">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findPostType" 
+		parameterType="com.tx.component.operator.model.PostType"
+		resultMap="postTypeMap">
+		SELECT 
+				TPT.ID,
+				TPT.VALID,
+				TPT.REMARK,
+				TPT.NAME,
+				TPT.CODE,
+				TPT.CREATEDATE,
+				TPT.LASTUPDATEDATE
+		  FROM OPER_POSTTYPE TPT
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TPT.ID = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryPostType" 
+		parameterType="java.util.Map"
+		resultMap="postTypeMap">
+		SELECT 
+				TPT.ID,
+				TPT.VALID,
+				TPT.REMARK,
+				TPT.NAME,
+				TPT.CODE,
+				TPT.CREATEDATE,
+				TPT.LASTUPDATEDATE
+		  FROM OPER_POSTTYPE TPT
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND TPT.VALID = #{valid,jdbcType=BIT} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND TPT.CODE = #{code,jdbcType=VARCHAR} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND TPT.NAME = #{name,jdbcType=VARCHAR} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND TPT.ID <> #{excludeId,javaType=java.lang.String} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            ORDER BY ID
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryPostTypeCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_POSTTYPE TPT
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND TPT.VALID = #{valid,jdbcType=BIT} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND TPT.CODE = #{code,jdbcType=VARCHAR} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND TPT.NAME = #{name,jdbcType=VARCHAR} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND TPT.ID <> #{excludeId,javaType=java.lang.String} ]]>
+			</if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertPostType" 
+		parameterType="com.tx.component.operator.model.PostType">
+		INSERT INTO OPER_POSTTYPE
+		(
+			ID,
+			VALID,
+			REMARK,
+			NAME,
+			CODE,
+			CREATEDATE,
+			LASTUPDATEDATE
+		)
+		VALUES
+		(
+			#{id},
+			#{valid},
+			#{remark},
+			#{name},
+			#{code},
+			#{createDate},
+			#{lastUpdateDate}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deletePostType" 
+		parameterType="com.tx.component.operator.model.PostType">
+		DELETE FROM OPER_POSTTYPE  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND ID = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updatePostType"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_POSTTYPE 
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('valid')">
+	    		VALID = #{valid,javaType=boolean},
+	    	</if>	
+			<if test="_parameter.containsKey('remark')">
+	    		REMARK = #{remark,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('name')">
+	    		NAME = #{name,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('code')">
+	    		CODE = #{code,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('createDate')">
+	    		CREATEDATE = #{createDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>	
+	    </trim>
+	    WHERE ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->
