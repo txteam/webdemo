@@ -28,13 +28,6 @@ public class GenerateCodeByJpaModelTest {
         JpaEntityFreeMarkerGenerator factory = new JpaEntityFreeMarkerGenerator();
         factory.setLoadTemplateClass(GenerateCodeByJpaModelTest.class);
         
-        factory.setDaoImplTemplateFilePath("mybatishelper/daoImpl.ftl");
-        factory.setDaoTemplateFilePath("mybatishelper/dao.ftl");
-        factory.setServiceTemplateFilePath("mybatishelper/service.ftl");
-        factory.setServiceTestTemplateFilePath("mybatishelper/serviceTest.ftl");
-        factory.setSqlMapTemplateFilePath("mybatishelper/sqlMap.ftl");
-        factory.setDbScriptTemplateFilePath("mybatishelper/dbscript.ftl");
-        
         //生成后在自己指定的文件夹中去找即可
         factory.generate(PostType.class, "d:/mybatis");
         factory.generateScript(PostType.class, "d:/mybatis","GBK");

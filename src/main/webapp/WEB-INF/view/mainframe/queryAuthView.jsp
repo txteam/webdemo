@@ -113,7 +113,7 @@ function initAuthTree($authTreeTableEl,authType,configAble,authItemList){
 				}
 				str += '&nbsp;';
 				if (true) {
-					str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="授权给人员"/>', row.id, '${contextPath}/style/images/extjs_icons/photoAndPic/picture_key.png');
+					str += $.formatString('<img onclick="configAuthPost(\'{0}\',\'{1}\');" src="{2}" title="配置权限职位"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/group/group.png');
 				}
 				return str;
 			}
@@ -172,6 +172,27 @@ function configAuthOperator(id,name){
 		"configAuthOperator",
 		$.formatString("配置权限人员_[{0}]",name),
 		$.formatString("${contextPath}/auth/toConfigAuthOperator.action?authItemId={0}",id),
+		850,550,function(){
+		}
+	);
+}
+function configAuthPost(id,name){
+	if (id == undefined) {
+		var rows = dataGrid.datagrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].name;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("请选择权限项");
+		return ;
+	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	DialogUtils.openModalDialog(
+		"configAuthPost",
+		$.formatString("配置权限职位_[{0}]",name),
+		$.formatString("${contextPath}/auth/toConfigAuthPost.action?authItemId={0}",id),
 		850,550,function(){
 		}
 	);

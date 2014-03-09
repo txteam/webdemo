@@ -33,6 +33,10 @@ $.canEnable = false;
 var virtualCenterTree = null;
 var treeGrid = null;
 $(document).ready(function() {
+	var  $editALink = $("#editALink");
+	var  $deleteALink = $("#deleteALink");
+	var  $enableALink = $("#enableALink");
+	var  $disableALink = $("#disableALink");
 	/*
 	virtualCenterTree = $('#virtualCenterTree').tree({
 		url : '${contextPath}/virtualCenter/queryVirtualCenterListByAuth.action',
@@ -131,27 +135,35 @@ $(document).ready(function() {
 			field : 'areaId',
 			title : '所在地',
 			width : 80
-		},{
+		}
+		<c:if test="${show_grid_action == true}">
+		,{
 			field : 'action',
 			title : '操作',
 			width : 50,
 			formatter : function(value, row, index) {
-				var str = '';
+				var str = '&nbsp;';
 				if(!row.valid && $.canEnable){
 					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+					str += '&nbsp;';
 				}
 				if($.canModify){
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
+					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/pencil.png');
+					str += '&nbsp;';
 				}
 				if($.canDelete){
 					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
+					str += '&nbsp;';
 				}
 				if(row.valid && $.canDisable){
 					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+					str += '&nbsp;';
 				}
 				return str;
 			}
-		}, {
+		}
+		</c:if>
+		, {
 			field : 'remark',
 			title : '备注',
 			width : 200,
@@ -167,9 +179,36 @@ $(document).ready(function() {
 				top : e.pageY
 			});
 		},
+		onDblClickRow : function(row){
+			editFun(row.id, row.name);
+		},
+		onClickRow: function(row){
+			$editALink.linkbutton('enable');
+			$deleteALink.linkbutton('enable');
+			
+			if(row.valid){
+				$enableALink.linkbutton('disable');
+				$enableALink.hide();
+				$disableALink.show();
+				$disableALink.linkbutton('enable');
+			}else{
+				$disableALink.linkbutton('disable');
+				$disableALink.hide();
+				$enableALink.show();
+				$enableALink.linkbutton('enable');
+			}
+		},
 		onLoadSuccess : function() {
 			parent.$.messager.progress('close');
 			$(this).treegrid('tooltip');
+			
+			$editALink.linkbutton('disable');
+			$deleteALink.linkbutton('disable');
+			
+			$enableALink.show();
+			$disableALink.show();
+			$enableALink.linkbutton('disable');
+			$disableALink.linkbutton('disable');
 		}
 	});
 });
@@ -361,23 +400,23 @@ function refreshTree(){
 		
 		<div id="toolbar" style="display: none;">
 			<c:if test='${authContext.hasAuth("add_organization") }'>
-				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">增加</a>
+				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("update_organization") }'>
+				<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("delete_organization") }'>
+				<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("enable_organization") }'>
+				<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("disable_organization") }'>
+				<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
 			</c:if>
 			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
 			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
 			<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
-		</div>
-	
-		<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
-			<c:if test='${authContext.hasAuth("add_organization")}'>
-				<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
-			</c:if>
-			<c:if test='${authContext.hasAuth("update_organization")}'>
-				<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
-			</c:if>
-			<c:if test='${authContext.hasAuth("delete_organization")}'>
-				<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
-			</c:if>
 		</div>
 	</div> 
 </body>

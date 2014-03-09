@@ -55,7 +55,13 @@
 			</property>
 		</bean>
 		<!-- 向request写入contextPath常量 -->
-		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor" />
+		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor">
+			<property name="injectAttributes">
+				<map>
+					<entry key="show_grid_action" value="true"></entry>
+				</map>
+			</property>
+		</bean>
 		<!-- 业务日志支持拦截器 -->
 		<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
 		<ref bean="authContextSupportInterceptor"/>

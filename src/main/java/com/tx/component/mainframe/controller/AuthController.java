@@ -358,7 +358,25 @@ public class AuthController {
     @RequestMapping("/toConfigAuthPost")
     public String toConfigAuthPost(
             @RequestParam("authItemId") String authItemId, ModelMap modelMap) {
+        Set<AuthItem> addAuthItems = this.authManageService.getParentAuthItems(authItemId);
+        Set<AuthItem> deleteAuthItems = this.authManageService.getChildAuthItems(authItemId);
+        
+        StringBuilder addAuthItemNameSb = new StringBuilder(
+                TxConstants.INITIAL_STR_LENGTH);
+        for (AuthItem authItemTemp : addAuthItems) {
+            addAuthItemNameSb.append(authItemTemp.getName()).append(",");
+        }
+        StringBuilder deleteAuthItemNameSb = new StringBuilder(
+                TxConstants.INITIAL_STR_LENGTH);
+        for (AuthItem authItemTemp : deleteAuthItems) {
+            deleteAuthItemNameSb.append(authItemTemp.getName()).append(",");
+        }
+        modelMap.put("authItemName", AuthContext.getContext().getAuthItemFromContextById(authItemId).getName());
         modelMap.put("authItemId", authItemId);
+        modelMap.put("addAuthItemNames",
+                StringUtils.substring(addAuthItemNameSb.toString(), 0, -1));
+        modelMap.put("deleteAuthItemNames",
+                StringUtils.substring(deleteAuthItemNameSb.toString(), 0, -1));
         return "/mainframe/configAuthPost";
     }
     

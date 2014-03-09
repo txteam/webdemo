@@ -270,7 +270,7 @@ public class AuthManageService {
         AssertUtils.notEmpty(authRefType, "authRefType is empty");
         AssertUtils.notEmpty(authItemId, "authItemId is empty");
         
-        List<AuthItemRef> authItemRef = authContext.queryAuthItemRefListByAuthRefTypeAndAuthItemId(AuthConstant.AUTHREFTYPE_OPERATOR,
+        List<AuthItemRef> authItemRef = authContext.queryAuthItemRefListByAuthRefTypeAndAuthItemId(authRefType,
                 authItemId);
         Set<String> resIdSet = new HashSet<String>();
         for (AuthItemRef authItemRefTemp : authItemRef) {

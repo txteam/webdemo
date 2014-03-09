@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>addPost</title>
+<title>updatePost</title>
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >

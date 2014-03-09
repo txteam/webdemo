@@ -139,9 +139,9 @@ public class PostService {
         
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo",
+                .log(new SystemOperateLog("webdemo", "新增职位",
                         MessageUtils.createMessage("新增职位[{}]",
-                                new Object[] { post.getName() }), "新增职位", null));
+                                new Object[] { post.getName() }), null));
     }
     
     /**
@@ -174,10 +174,10 @@ public class PostService {
         
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo",
+                .log(new SystemOperateLog("webdemo", "删除职位",
                         MessageUtils.createMessage("删除职位[{}]",
                                 new Object[] { findPostById(id).getName() }),
-                        "删除职位", null));
+                        null));
         
         int resInt = this.postDao.deletePost(condition);
         return resInt > 0;
@@ -369,9 +369,9 @@ public class PostService {
         
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo",
+                .log(new SystemOperateLog("webdemo", "更新职位",
                         MessageUtils.createMessage("更新职位[{}]",
-                                new Object[] { post.getName() }), "更新职位", null));
+                                new Object[] { post.getName() }), null));
         int updateRowCount = this.postDao.updatePost(updateRowMap);
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
@@ -440,6 +440,7 @@ public class PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @Transactional
     public boolean disableById(String postId) {
         AssertUtils.notEmpty(postId, "postId is empty.");
         
@@ -450,9 +451,12 @@ public class PostService {
         
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo",
+                .log(new SystemOperateLog(
+                        "webdemo",
+                        "禁用职位",
                         MessageUtils.createMessage("禁用职位[{}]",
-                                new Object[] { findPostById(postId).getName() }), "禁用职位", null));
+                                new Object[] { findPostById(postId).getName() }),
+                        null));
         
         this.postDao.updatePost(params);
         
@@ -469,6 +473,7 @@ public class PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @Transactional
     public boolean enableById(String postId) {
         AssertUtils.notEmpty(postId, "postId is empty.");
         
@@ -479,9 +484,12 @@ public class PostService {
         
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo",
+                .log(new SystemOperateLog(
+                        "webdemo",
+                        "启用职位",
                         MessageUtils.createMessage("启用职位[{}]",
-                                new Object[] { findPostById(postId).getName() }), "启用职位", null));
+                                new Object[] { findPostById(postId).getName() }),
+                        null));
         
         this.postDao.updatePost(params);
         

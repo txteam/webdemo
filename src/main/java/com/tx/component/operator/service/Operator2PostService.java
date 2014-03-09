@@ -45,7 +45,7 @@ public class Operator2PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @CacheEvict(value="operator2PostService",allEntries=true)
+    @CacheEvict(value = "operator2PostService", allEntries = true)
     public void configPostOperator(String postId, String[] selectOperatorIds,
             String[] unSelectOperatorIds) {
         List<String> selectOperatorIdList = selectOperatorIds == null ? new ArrayList<String>()
@@ -69,7 +69,7 @@ public class Operator2PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @CacheEvict(value="operator2PostService",allEntries=true)
+    @CacheEvict(value = "operator2PostService", allEntries = true)
     public void configOperatorPost(String operatorId, String[] selectPostIds,
             String[] unSelectPostIds) {
         List<String> selectPostIdList = selectPostIds == null ? new ArrayList<String>()
@@ -94,7 +94,7 @@ public class Operator2PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @Cacheable(value="operator2PostService",key="'queryOperatorIdSet_' + #postId")
+    @Cacheable(value = "operator2PostService", key = "'queryOperatorIdSet_' + #postId")
     public Set<String> queryOperatorIdSetByPostId(String postId) {
         Set<String> operatorIdSet = this.operatorRefService.queryOperatorIdSetByRefId(OperatorConstants.OPERATORREF_TYPE_POST,
                 postId);
@@ -111,7 +111,7 @@ public class Operator2PostService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    @Cacheable(value="operator2PostService",key="'queryPostIdSet_' + #operatorId")
+    @Cacheable(value = "operator2PostService", key = "'queryPostIdSet_' + #operatorId")
     public Set<String> queryPostIdSetByOperatorId(String operatorId) {
         Set<String> postIdSet = this.operatorRefService.queryRefIdSetByOperatorId(OperatorConstants.OPERATORREF_TYPE_POST,
                 operatorId);

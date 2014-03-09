@@ -164,7 +164,7 @@ public class OperatorController {
     @ResponseBody
     public PagedList<Operator> queryOperatorPagedListIncludeInvalid(
             @RequestParam Map<String, String> requestMap,
-            @RequestParam(value = "pageIndex", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             ModelMap responseMap) {
         String organizationId = requestMap.get("organizationId");
@@ -183,7 +183,7 @@ public class OperatorController {
                 code,
                 state,
                 postId,
-                ++pageIndex,
+                pageIndex,
                 pageSize);
         return resPagedList;
     }
@@ -205,7 +205,7 @@ public class OperatorController {
     @ResponseBody
     public PagedList<Operator> queryOperatorPagedList(
             @RequestParam Map<String, String> requestMap,
-            @RequestParam(value = "pageIndex", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             ModelMap responseMap) {
         String organizationId = requestMap.get("organizationId");
@@ -222,7 +222,7 @@ public class OperatorController {
                 userName,
                 code,
                 state,
-                ++pageIndex,
+                pageIndex,
                 pageSize);
         return resPagedList;
     }

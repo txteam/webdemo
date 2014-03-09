@@ -30,6 +30,10 @@
 					authKey="virtualCenter_manage"
 					href="/virtualCenter/toQueryVirtualCenterList.action" 
 					target="mainTabs"></menu>
+				<menu id="postType_config" text="职位类型管理" 
+					authKey="postType_manage"
+					href="/postType/toQueryPostTypeList.action" 
+					target="mainTabs"></menu>
 				<menu id="organization_config" text="组织结构管理" 
 					authKey="organization_manage"
 					href="/organization/toQueryOrganizationList.action" 

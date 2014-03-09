@@ -9,8 +9,24 @@
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
+$.canAdd = false;
+$.canDelete = false;
+$.canModify = false;
+<c:if test='${authContext.hasAuth("add_VirtualCenter")}'>
+	$.canAdd = true;
+</c:if>
+<c:if test='${authContext.hasAuth("delete_VirtualCenter")}'>
+	$.canDelete = true;
+</c:if>
+<c:if test='${authContext.hasAuth("update_VirtualCenter")}'>
+	$.canModify = true;
+</c:if>
+
 var treeGrid = null;
 $(document).ready(function() {
+	var $editALink = $("#editALink");
+	var $deleteALink = $("#deleteALink");
+	
 	treeGrid = $('#treeGrid').treegrid({
 		url : '${contextPath}/virtualCenter/queryVirtualCenterListByAuth.action',
 		idField : 'id',
@@ -42,14 +58,16 @@ $(document).ready(function() {
 			field : 'remark',
 			title : '备注',
 			width : 150
-		},{
+		}
+		<c:if test="${show_grid_action == true}">
+		,{
 			field : 'action',
 			title : '操作',
 			width : 50,
 			formatter : function(value, row, index) {
 				var str = '';
 				<c:if test="${true}">
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
+					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/pencil.png');
 				</c:if>
 				str += '&nbsp;';
 				<c:if test="${true}">
@@ -58,8 +76,17 @@ $(document).ready(function() {
 				str += '&nbsp;';
 				return str;
 			}
-		} ] ],
+		} 
+		</c:if>
+		]],
 		toolbar : '#toolbar',
+		onDblClickRow : function(row){
+			editFun(row.id, row.name);
+		},
+		onClickRow: function(row){
+			$editALink.linkbutton('enable');
+			$deleteALink.linkbutton('enable');
+		},
 		onContextMenu : function(e, row) {
 			e.preventDefault();
 			$(this).treegrid('unselectAll');
@@ -72,6 +99,8 @@ $(document).ready(function() {
 		onLoadSuccess : function() {
 			parent.$.messager.progress('close');
 			$(this).treegrid('tooltip');
+			$editALink.linkbutton('disable');
+			$deleteALink.linkbutton('disable');
 		}
 	});
 });
@@ -114,17 +143,22 @@ function addFun(id) {
 		$('#treeGrid').treegrid('reload');
 	});
 }
-function editFun(id) {
+function editFun(id,name) {
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
+		name = rows[0].name;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的虚中心");
+		return ;
 	}
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
 	DialogUtils.openModalDialog(
 		"updateVirtualCenter",
-		"编辑虚中心",
+		"编辑虚中心:"+name,
 		$.formatString("${contextPath}/virtualCenter/toUpdateVirtualCenter.action?virtualCenterId={0}",id),
 		600,175,function(){
 			$('#treeGrid').treegrid('reload');
@@ -135,6 +169,10 @@ function deleteFun(id,name) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的虚中心");
+		return ;
 	}
 	//判断对应组织是否能被停用
 	$.post(
@@ -176,8 +214,14 @@ function deleteFun(id,name) {
 	</div>
 	
 	<div id="toolbar" style="display: none;">
-		<c:if test="${true}">
-			<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
+		<c:if test='${authContext.hasAuth("add_VirtualCenter")}'>
+			<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+		</c:if>
+		<c:if test='${authContext.hasAuth("add_VirtualCenter")}'>
+			<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil',disabled:true">编辑</a>
+		</c:if>
+		<c:if test='${authContext.hasAuth("add_VirtualCenter")}'>
+			<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete',disabled:true">删除</a>
 		</c:if>
 		<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
 		<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
@@ -186,13 +230,13 @@ function deleteFun(id,name) {
 	</div>
 
 	<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
-		<c:if test="${true}">
-			<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
+		<c:if test='${authContext.hasAuth("add_VirtualCenter")}'>
+			<div onclick="addFun();" data-options="iconCls:'pencil_add'">新增</div>
 		</c:if>
-		<c:if test="${true}">
+		<c:if test='${authContext.hasAuth("update_VirtualCenter")}'>
 			<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
 		</c:if>
-		<c:if test="${true}">
+		<c:if test='${authContext.hasAuth("delete_VirtualCenter")}'>
 			<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
 		</c:if>
 	</div>

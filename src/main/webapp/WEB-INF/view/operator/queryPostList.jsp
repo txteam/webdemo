@@ -41,6 +41,13 @@ $.configPostOperator = false;
 var treeGrid = null;
 var orgTree = null;
 $(document).ready(function() {
+	var  $editALink = $("#editALink");
+	var  $deleteALink = $("#deleteALink");
+	var  $enableALink = $("#enableALink");
+	var  $disableALink = $("#disableALink");
+	var  $configPostAuthALink = $("#configPostAuthALink");
+	var  $configPostOperatorALink = $("#configPostOperatorALink");
+	
 	orgTree = $('#organizationPostTree').tree({
 		url : '${contextPath}/organization/queryOrganizationList.action',
 		idField : 'id',
@@ -123,7 +130,9 @@ $(document).ready(function() {
 			field : 'remark',
 			title : '备注',
 			width : 200,
-		},{
+		}
+		<c:if test="${show_grid_action == true}">
+		,{
 			field : 'action',
 			title : '操作',
 			width : 100,
@@ -134,7 +143,7 @@ $(document).ready(function() {
 					str += '&nbsp;';
 				}
 				if($.canModify){
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
+					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row.id, row.name, '${contextPath}/style/images/extjs_icons/pencil.png');
 					str += '&nbsp;';
 				}
 				
@@ -154,7 +163,9 @@ $(document).ready(function() {
 				}
 				return str;
 			}
-		} ] ],
+		}
+		</c:if>
+		]],
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {
 			e.preventDefault();
@@ -168,6 +179,38 @@ $(document).ready(function() {
 		onLoadSuccess : function() {
 			parent.$.messager.progress('close');
 			$(this).treegrid('tooltip');
+			
+			$editALink.linkbutton('disable');
+			$deleteALink.linkbutton('disable');
+			
+			$enableALink.show();
+			$disableALink.show();
+			$enableALink.linkbutton('disable');
+			$disableALink.linkbutton('disable');
+			
+			$configPostAuthALink.linkbutton('disable');
+			$configPostOperatorALink.linkbutton('disable');
+		},
+		onDblClickRow : function(row){
+			editFun(row.id, row.name);
+		},
+		onClickRow: function(row){
+			$editALink.linkbutton('enable');
+			$deleteALink.linkbutton('enable');
+			$configPostAuthALink.linkbutton('enable');;
+			$configPostOperatorALink.linkbutton('enable');
+			
+			if(row.valid){
+				$enableALink.linkbutton('disable');
+				$enableALink.hide();
+				$disableALink.show();
+				$disableALink.linkbutton('enable');
+			}else{
+				$disableALink.linkbutton('disable');
+				$disableALink.hide();
+				$enableALink.show();
+				$enableALink.linkbutton('enable');
+			}
 		}
 	});
 });
@@ -189,7 +232,6 @@ function deselect(){
 		treeGrid.treegrid('load',{});
 	}
 }
-
 function redo() {
 	var node = treeGrid.treegrid('getSelected');
 	if (node) {
@@ -206,7 +248,6 @@ function undo() {
 		treeGrid.treegrid('collapseAll');
 	}
 }
-
 /*
  * 打开添加职位界面
  */
@@ -238,17 +279,22 @@ function addFun(id) {
 /**
  * 打开编辑职位页面
  */
-function editFun(id) {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
+function editFun(id,name) {
 	if (id == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
+		name = rows[0].name;
 	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的职位");
+		return ;
+	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
 	DialogUtils.openModalDialog(
 		"updatePost",
-		"编辑职位",
+		"编辑职位:" + name,
 		$.formatString("${contextPath}/post/toUpdatePost.action?postId={0}",id),
 		450,220,function(){
 			$('#treeGrid').treegrid('reload');
@@ -262,6 +308,10 @@ function deleteFun(id,name) {
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的职位");
+		return ;
 	}
 	//判断对应职位是否能被停用
 	$.post(
@@ -297,6 +347,10 @@ function disableFun(id,name){
 		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的职位");
+		return ;
 	}
 	//判断对应组织是否能被停用
 	$.post(
@@ -334,6 +388,10 @@ function enableFun(id,name){
 		id = rows[0].id;
 		name = rows[0].name;
 	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的职位");
+		return ;
+	}
 	//判断对应组织是否能被停用
     DialogUtils.confirm(
     		"确认提醒" , 
@@ -360,12 +418,12 @@ function enableFun(id,name){
  */
 function configPostAuth(id,name){
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
 	}
 	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("请选择职位");
+		DialogUtils.alert("没有选中的职位");
 		return ;
 	}
 	DialogUtils.progress({
@@ -384,12 +442,12 @@ function configPostAuth(id,name){
 //配置职位人员
 function configPostOperator(id,name){
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = treeGrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
 	}
 	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("请选择职位");
+		DialogUtils.alert("没有选中的职位");
 		return ;
 	}
 	DialogUtils.progress({
@@ -426,7 +484,25 @@ function configPostOperator(id,name){
 		
 		<div id="toolbar" style="display: none;">
 			<c:if test='${authContext.hasAuth("add_post") }'>
-				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
+				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("update_post") }'>
+				<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("delete_post") }'>
+				<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("enable_post") }'>
+				<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("disable_post") }'>
+				<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("config_post_auth") }'>
+				<a id="configPostAuthALink" onclick="configPostAuth();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">配置职位权限</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("config_post_operator") }'>
+				<a id="configPostOperatorALink" onclick="configPostOperator();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置职位人员</a>
 			</c:if>
 			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
 			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
@@ -436,7 +512,7 @@ function configPostOperator(id,name){
 	
 		<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
 			<c:if test='${authContext.hasAuth("add_post")}'>
-				<div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
+				<div onclick="addFun();" data-options="iconCls:'pencil_add'">新增</div>
 			</c:if>
 			<c:if test='${authContext.hasAuth("update_post")}'>
 				<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>

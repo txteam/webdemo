@@ -9,36 +9,37 @@
 <%@include file="../includes/commonHead.jsp" %>
 
 <script type="text/javascript" >
-var operatorId = '${operatorId}';
+var authItemId = '${authItemId}';
+var authItemName = '${authItemName}';
+var addAuthItemNames = '${addAuthItemNames}';
+var deleteAuthItemNames = '${deleteAuthItemNames}';
 var PostChooseManager = function(){
 };
 PostChooseManager.prototype._isInit = false;
-PostChooseManager.prototype._choosedOperatorIds = {};
-PostChooseManager.prototype._loadChoosedOperatorIds = function(loadCallback){
+PostChooseManager.prototype._choosedPostds = {};
+PostChooseManager.prototype._loadChoosedPostIds = function(loadCallback){
 	var _this = this;
-	$.post("${contextPath}/Operator2Post/queryPostIdSetByOperatorId.action?operatorId=${operatorId}", 
+	$.post("${contextPath}/auth/queryPostIdSetByAuthItemId.action?authItemId=${authItemId}", 
 		function(data){
-			$.each(data,function(i,operatorIdTemp){
-				_this._choosedOperatorIds[operatorIdTemp] = true;
+			$.each(data,function(i,postIdTemp){
+				_this._choosedPostds[postIdTemp] = true;
 			});
 			_this._isInit= true;
-			loadCallback(_this._choosedOperatorIds);
+			loadCallback(_this._choosedPostds);
 		}
 	);
 };
 PostChooseManager.prototype.load = function(loadCallback){
 	var _this = this;
 	if(_this._isInit){
-		loadCallback(_this._choosedOperatorIds);
+		loadCallback(_this._choosedPostds);
 	}else{
-		_this._loadChoosedOperatorIds(function(data){
-			loadCallback(data);
-		});
+		_this._loadChoosedPostIds(loadCallback);
 	}
 };
 PostChooseManager.prototype.reset = function(){
 	var _this = this;
-	_this._choosedOperatorIds = {};
+	_this._choosedPostds = {};
 	_this._isInit= false;
 };
 var postChooseManager = new PostChooseManager();
@@ -73,10 +74,10 @@ $(document).ready(function() {
 	
 	//将已经选中的操作员显示为选中状态
 	function selectChoosedPost(){
-		postChooseManager.load(function(choosedOperatorIds){
+		postChooseManager.load(function(choosedPostIds){
 			var rows = treegridRows;
 			$.each(rows,function(index,rowTemp){
-				if(choosedOperatorIds[rowTemp.id]){
+				if(choosedPostIds[rowTemp.id]){
 					treeGrid.treegrid('checkRow',rowTemp.id);
 				}
 			});
@@ -236,16 +237,16 @@ function submitConfigOperatorPost(){
 			unCheckedPostIds.push(rowTemp.id);
 		}
 	});
-	$.post("${contextPath}/Operator2Post/configOperatorPostId.action",
-			{operatorId:operatorId,selectedPostId:checkedPostIds,unSelectedPostId:unCheckedPostIds}, 
+	$.post("${contextPath}/auth/saveAuthItem2PostIdList.action",
+			{authItemId:authItemId,selectedPostId:checkedPostIds,unSelectedPostId:unCheckedPostIds}, 
 			function(data){
 		postChooseManager.reset();
-		DialogUtils.tip("配置人员职位成功");
+		DialogUtils.tip("配置权限职位成功");
 		DialogUtils.progress('close');
 	});
 }
-function cancelConfigPostOperator(){
-	DialogUtils.closeDialogById('configPostOperator');
+function cancelConfigAuthPost(){
+	DialogUtils.closeDialogById('configAuthPost');
 }
 </script>
 </head>
@@ -305,7 +306,7 @@ function cancelConfigPostOperator(){
 			<div class="datagrid-toolbar" style="text-align:right;padding-right: 59px">
 				<a onclick="submitConfigOperatorPost();" href="javascript:void(0);" class="easyui-linkbutton">提交</a>
 				&nbsp;
-				<a href="javascript:void(0);" class="easyui-linkbutton">退出</a>
+				<a onclick="cancelConfigAuthPost()" href="javascript:void(0);" class="easyui-linkbutton">退出</a>
 			</div>
 		</div>
 	</div>

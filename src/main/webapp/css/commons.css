@@ -461,3 +461,9 @@ label.selected {
 	height: 12px;
 	font-size: 11px;
 }
+
+.nav_header{
+	width: 100%;
+	height: 21px;
+	vertical-align: middle;
+}

@@ -262,7 +262,7 @@ function cancelConfigPostOperator(){
 			<div class="datagrid-toolbar" style="text-align:right;padding-right: 59px">
 				<a onclick="submitConfigPostOperator();" href="javascript:void(0);" class="easyui-linkbutton">提交</a>
 				&nbsp;
-				<a href="javascript:void(0);" class="easyui-linkbutton">退出</a>
+				<a onclick="cancelConfigPostOperator()" href="javascript:void(0);" class="easyui-linkbutton">退出</a>
 			</div>
 		</div>
 	</div>

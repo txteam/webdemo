@@ -226,8 +226,8 @@ function submitConfigAuthOperator(){
 	
 
 }
-function cancelConfigPostOperator(){
-	DialogUtils.closeDialogById('configPostOperator');
+function cancelConfigAuthOperator(){
+	DialogUtils.closeDialogById('configAuthOperator');
 }
 </script>
 </head>
@@ -285,7 +285,7 @@ function cancelConfigPostOperator(){
 			<div class="datagrid-toolbar" style="text-align:right;padding-right: 59px">
 				<a onclick="submitConfigAuthOperator();" href="javascript:void(0);" class="easyui-linkbutton">提交</a>
 				&nbsp;
-				<a href="javascript:void(0);" class="easyui-linkbutton">退出</a>
+				<a onclick="cancelConfigAuthOperator()" href="javascript:void(0);" class="easyui-linkbutton">退出</a>
 			</div>
 		</div>
 	</div>

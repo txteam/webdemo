@@ -73,7 +73,7 @@
 	        </if>
 	        
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludePostId)">
-				<![CDATA[ AND TP.ID <> #{excludePostId,,javaType=java.lang.String} ]]>
+				<![CDATA[ AND TP.ID <> #{excludePostId,javaType=java.lang.String} ]]>
 			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TP.ID = #{id,javaType=java.lang.String}

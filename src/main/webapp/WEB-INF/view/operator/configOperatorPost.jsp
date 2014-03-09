@@ -13,32 +13,30 @@ var operatorId = '${operatorId}';
 var PostChooseManager = function(){
 };
 PostChooseManager.prototype._isInit = false;
-PostChooseManager.prototype._choosedOperatorIds = {};
-PostChooseManager.prototype._loadChoosedOperatorIds = function(loadCallback){
+PostChooseManager.prototype._choosedPostds = {};
+PostChooseManager.prototype._loadChoosedPostIds = function(loadCallback){
 	var _this = this;
 	$.post("${contextPath}/Operator2Post/queryPostIdSetByOperatorId.action?operatorId=${operatorId}", 
 		function(data){
-			$.each(data,function(i,operatorIdTemp){
-				_this._choosedOperatorIds[operatorIdTemp] = true;
+			$.each(data,function(i,postIdTemp){
+				_this._choosedPostds[postIdTemp] = true;
 			});
 			_this._isInit= true;
-			loadCallback(_this._choosedOperatorIds);
+			loadCallback(_this._choosedPostds);
 		}
 	);
 };
 PostChooseManager.prototype.load = function(loadCallback){
 	var _this = this;
 	if(_this._isInit){
-		loadCallback(_this._choosedOperatorIds);
+		loadCallback(_this._choosedPostds);
 	}else{
-		_this._loadChoosedOperatorIds(function(data){
-			loadCallback(data);
-		});
+		_this._loadChoosedPostIds(loadCallback);
 	}
 };
 PostChooseManager.prototype.reset = function(){
 	var _this = this;
-	_this._choosedOperatorIds = {};
+	_this._choosedPostds = {};
 	_this._isInit= false;
 };
 var postChooseManager = new PostChooseManager();
@@ -244,8 +242,8 @@ function submitConfigOperatorPost(){
 		DialogUtils.progress('close');
 	});
 }
-function cancelConfigPostOperator(){
-	DialogUtils.closeDialogById('configPostOperator');
+function cancelConfigOperatorPost(){
+	DialogUtils.closeDialogById('configOperatorPost');
 }
 </script>
 </head>
@@ -305,7 +303,7 @@ function cancelConfigPostOperator(){
 			<div class="datagrid-toolbar" style="text-align:right;padding-right: 59px">
 				<a onclick="submitConfigOperatorPost();" href="javascript:void(0);" class="easyui-linkbutton">提交</a>
 				&nbsp;
-				<a href="javascript:void(0);" class="easyui-linkbutton">退出</a>
+				<a onclick="cancelConfigOperatorPost()" href="javascript:void(0);" class="easyui-linkbutton">退出</a>
 			</div>
 		</div>
 	</div>

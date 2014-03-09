@@ -155,10 +155,9 @@ public class OrganizationService {
         
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo",
+                .log(new SystemOperateLog("webdemo", "新增组织",
                         MessageUtils.createMessage("新增组织[{}]",
-                                new Object[] { organization.getName() }),
-                        "新增组织", null));
+                                new Object[] { organization.getName() }), null));
     }
     
     /** 
@@ -404,10 +403,9 @@ public class OrganizationService {
         
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog("webdemo","更新组织",
+                .log(new SystemOperateLog("webdemo", "更新组织",
                         MessageUtils.createMessage("更新组织[{}]",
-                                new Object[] { organization.getName() }),
-                         null));
+                                new Object[] { organization.getName() }), null));
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
@@ -457,10 +455,11 @@ public class OrganizationService {
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
                 .log(new SystemOperateLog(
-                        "webdemo","停用组织",
+                        "webdemo",
+                        "停用组织",
                         MessageUtils.createMessage("停用组织[{}]",
                                 new Object[] { findOrganizationById(organizationId).getName() }),
-                         null));
+                        null));
         
         int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
         
@@ -487,10 +486,11 @@ public class OrganizationService {
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
                 .log(new SystemOperateLog(
-                        "webdemo","启用组织",
+                        "webdemo",
+                        "启用组织",
                         MessageUtils.createMessage("启用组织[{}]",
                                 new Object[] { findOrganizationById(organizationId).getName() }),
-                         null));
+                        null));
         
         int updateRowCount = this.organizationDao.updateOrganization(updateRowMap);
         
@@ -545,14 +545,11 @@ public class OrganizationService {
             return false;
         }
         
-        
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
-                .log(new SystemOperateLog(
-                        "webdemo","删除组织",
+                .log(new SystemOperateLog("webdemo", "删除组织",
                         MessageUtils.createMessage("删除组织[{}]",
-                                new Object[] { res.getName() }),
-                         null));
+                                new Object[] { res.getName() }), null));
         //将要删除的组织信息写入历史表中
         this.organizationDao.insertOrganizationToHis(res);
         

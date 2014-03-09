@@ -37,7 +37,7 @@ import com.tx.component.operator.service.VirtualCenterService;
  */
 @Controller("virtualCenterController")
 @RequestMapping("/virtualCenter")
-@CheckOperateAuth(key = "virtualCenter_manage")
+@CheckOperateAuth(key = "virtualCenter_manage",name="虚中心管理")
 public class VirtualCenterController {
     
     @Resource(name = "virtualCenterService")

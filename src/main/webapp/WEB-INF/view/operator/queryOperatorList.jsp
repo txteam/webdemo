@@ -396,7 +396,7 @@ function configOperatorPost(id,name){
         text : '加载中，请等待....'
 	});
 	DialogUtils.openModalDialog(
-		"configOperatorAuth",
+		"configOperatorPost",
 		$.formatString("配置人员职位_[{0}]",name),
 		$.formatString("${contextPath}/Operator2Post/toConfigOperatorPost.action?operatorId={0}",id),
 		850,550,function(){
@@ -469,7 +469,7 @@ function configOperatorPost(id,name){
 			<c:if test='${authContext.hasAuth("add_operator") }'>
 				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">添加</a>
 			</c:if>
-			<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" 
+			<a onclick="dataGrid.datagrid('reload');" href="javascript:void(0);" 
 				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 		</div>
 	
