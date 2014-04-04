@@ -8,8 +8,13 @@
 
 	<cache:annotation-driven cache-manager="cacheManager"
 		proxy-target-class="true"/>
-
-	<bean id="ehcacheManagerFactory"
+		
+	<bean id="cacheManager" class="com.tx.core.spring.cache.EhCacheAutoCreatorCacheManager">
+		<property name="cacheManager">
+			<ref bean="ehcacheManager"/>
+		</property>
+	</bean>
+	<bean id="ehcacheManager"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
 		<property name="configLocation">
 			<value>classpath:ehcache.xml</value>
@@ -18,12 +23,4 @@
 			<value>ehcacheManage</value>
 		</property>
 	</bean>
-
-	<bean id="cacheManager" class="com.tx.core.spring.cache.EhCacheAutoCreatorCacheManager">
-		<property name="cacheManager">
-			<ref bean="ehcacheManagerFactory"/>
-		</property>
-	</bean>
-	<alias name="cacheManager" alias="ehcacheManager"/>
-	
 </beans>
