@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configContext>
+	<configGroup name="测试上传功能配置">
+		<config>
+			<name>本地存放路径</name>
+			<key>test.upload.local.savePath</key>
+			<value>d:/uploadtest/</value>
+			<description>测试上传文件本地存放地址</description>
+		</config>
+	</configGroup>
+</configContext>
