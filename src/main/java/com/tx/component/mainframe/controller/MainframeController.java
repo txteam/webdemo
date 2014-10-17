@@ -6,18 +6,26 @@
  */
 package com.tx.component.mainframe.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,8 +39,10 @@ import com.tx.component.mainframe.model.MenuItem;
 import com.tx.component.mainframe.servicelog.LoginLog;
 import com.tx.component.operator.model.Operator;
 import com.tx.component.operator.model.Organization;
+import com.tx.component.operator.service.Operator2PostService;
 import com.tx.component.operator.service.OperatorService;
 import com.tx.component.operator.service.OrganizationService;
+import com.tx.component.operator.service.PostService;
 import com.tx.component.servicelog.context.ServiceLoggerContext;
 import com.tx.component.servicelog.logger.ServiceLogger;
 
@@ -54,6 +64,12 @@ public class MainframeController {
     
     @Resource(name = "operatorService")
     private OperatorService operatorService;
+    
+    @Resource(name = "postService")
+    private PostService postService;
+    
+    @Resource(name = "operator2PostService")
+    private Operator2PostService operator2PostService;
     
     @Resource(name = "organizationService")
     private OrganizationService organizationService;
@@ -87,6 +103,24 @@ public class MainframeController {
     @RequestMapping("/toSessionLostErrorPage")
     public String toSessionLostErrorPage(){
         return "/error/sessionLostError";
+    }
+    
+    /**
+      * 跳转到主页面中<br/> 
+      *<功能详细描述>
+      * @param model
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toMainframe")
+    public String toMainframe(Model model){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        model.addAttribute("now", df.format(new Date()));
+        
+        return "/mainframe/mainframe";
     }
     
     /**
@@ -129,11 +163,16 @@ public class MainframeController {
         //登录的标志
         model.addAttribute(WebContextUtils.SESSION_CURRENT_OPERATOR, oper);
         
-        //调用权限容器登录句柄
-        authContextLoginHandler(oper);
-        
         //web容器登录句柄，负责向容器中写入需要的会话信息
         webContextLoginHandler(oper);
+        
+        //如果密码没有修改过或者修改时间超过三个月
+        if (oper.getPwdUpdateDate() == null
+                || checkPwdUpdateDateIsAfterThirdMonth(oper.getPwdUpdateDate())) {
+            return "/operator/modifyPassword";
+        }
+        //调用权限容器登录句柄
+        authContextLoginHandler(oper);
         
         //这个时候记录日志中信息没有写进需要手动写入
         ServiceLogger<LoginLog> serviceLogger = ServiceLoggerContext.getLogger(LoginLog.class);
@@ -143,7 +182,25 @@ public class MainframeController {
         serviceLogger.log(new LoginLog("webdemo", LoginLog.LOGINTYPE_LOGIN,
                 "操作员{}登录系统", new Object[] { loginName }));
         
-        return "/mainframe/mainframe";
+        return "/mainframe/toMainframe";
+    }
+    
+    /**
+      * 检查密码修改时间是否超过三个月<br/>
+      *<功能详细描述>
+      * @param pwdUpdateDate
+      * @return [参数说明]
+      * 
+      * @return boolean [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    private boolean checkPwdUpdateDateIsAfterThirdMonth(Date pwdUpdateDate){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(pwdUpdateDate);
+        cal.add(Calendar.MONTH, 3);
+        Date afterThirdMonthDate = cal.getTime();
+        return new Date().after(afterThirdMonthDate);
     }
     
     /** 
@@ -162,7 +219,9 @@ public class MainframeController {
         //将当前组织写入会话中
         Organization currentOrg = this.organizationService.findOrganizationById(oper.getOrganization()
                 .getId());
-        WebContextUtils.putOganizationInSession(currentOrg);
+        if(currentOrg != null){
+            WebContextUtils.putOganizationInSession(currentOrg);
+        }
     }
     
     /**
@@ -195,16 +254,27 @@ public class MainframeController {
     private void authContextLoginHandler(Operator oper) {
         //初始化用户权限到当前会话中
         //authSessionContext.initCurrentUserAuthContextWhenLogin("123456");//初始化用户权限到当前会话中 
-        Map<String, String> refType2RefIdMapping = new HashMap<String, String>();
-        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR,
+        MultiValueMap<String, String> refType2RefIdMapping = new LinkedMultiValueMap<String, String>();
+        refType2RefIdMapping.add(AuthConstant.AUTHREFTYPE_OPERATOR,
                 oper.getId());
-        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR_TEMPORARY,
+        refType2RefIdMapping.add(AuthConstant.AUTHREFTYPE_OPERATOR_TEMPORARY,
                 oper.getId());
+        
+        Set<String> postIdSet = this.operator2PostService.queryPostIdSetByOperatorId(oper.getId());
+        if(!CollectionUtils.isEmpty(postIdSet)){
+            for(String postIdTemp : postIdSet){
+                refType2RefIdMapping.add(AuthConstant.AUTHREFTYPE_POST,
+                        postIdTemp);
+            }
+        }
+        
+//        refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_OPERATOR_TEMPORARY,
+//                oper.getId());
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_POST, postId);
         //refType2RefIdMapping.put(AuthConstant.AUTHREFTYPE_ORGANIZATION, loginOrganization.getId());
+        AuthSessionContext.putOperatorIdToSession(oper.getId());
         authContext.login(refType2RefIdMapping);
         //修改权限项记录日志会用到对应值
-        AuthSessionContext.putOperatorIdToSession(oper.getId());
     }
     
     /**
@@ -268,5 +338,35 @@ public class MainframeController {
         
         //mainMenuItemTreeList = TreeUtils.changToTree(mainMenuItemTreeList);
         return mainMenuItemTreeList;
+    }
+    
+    /**
+      * 获取系统当前时间
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/getDateTime")
+    public String getDateTime(){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(new Date());
+    }
+    
+    /**
+      * 跳转到sessionLostError页面
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toSessionLostError")
+    public String toSessionLostError(){
+        return "/error/sessionLostError";
     }
 }

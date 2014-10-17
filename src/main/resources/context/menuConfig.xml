@@ -5,6 +5,10 @@
 		<!-- 一级别菜单:系统配置 -->
 		<menu id="system_config" text="系统管理"
 			authKey="system_config">
+			<menu id="menu_test_upload" text="导入测试"
+				href="/testUpload/toTestUpload.action" authKey="menu_test_upload"
+				target="mainTabs" selectRefresh="false" />
+			
 			<menu id="menu_config" text="菜单管理"
 				href="/mainframe/toQueryAllMenuItemTreeList.action" authKey="menu_config"
 				target="mainTabs" selectRefresh="false" />

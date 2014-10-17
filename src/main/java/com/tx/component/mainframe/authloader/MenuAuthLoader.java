@@ -7,6 +7,7 @@
 package com.tx.component.mainframe.authloader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -56,26 +57,34 @@ public class MenuAuthLoader implements AuthLoader {
      * @return
      */
     @Override
-    public Set<AuthItem> loadAuthItems() {
-        Set<AuthItem> authItemSet = new HashSet<AuthItem>();
+    public Set<AuthItem> loadAuthItems(
+            Map<String, AuthItem> sourceAuthItemMapping) {
+        Map<String,AuthItemImpl> authItemMap = new HashMap<String,AuthItemImpl>();
         Set<MenuItem> menuItemSet = new HashSet<MenuItem>();
         Set<String> existAuthItemId = new HashSet<String>();
         Map<String, List<MenuItem>> menuType2MenuItemListMap = menuContext.getMenuType2MenuItemListMap();
-        if(MapUtils.isEmpty(menuType2MenuItemListMap)){
-            return authItemSet;
+        if (MapUtils.isEmpty(menuType2MenuItemListMap)) {
+            return new HashSet<>();
         }
         
         //将所有菜单去重归并并生成树形结构以便生成菜单树形结构
-        for(List<MenuItem> menuItemListTemp : menuType2MenuItemListMap.values()){
+        for (List<MenuItem> menuItemListTemp : menuType2MenuItemListMap.values()) {
             menuItemSet.addAll(menuItemListTemp);
         }
         List<MenuItem> menuItemList = new ArrayList<MenuItem>(menuItemSet);
         List<MenuItem> menuItemTreeList = TreeUtils.changeToTree(menuItemList);
         
-        for(MenuItem menuItemTemp : menuItemTreeList){
-            iterateCreateAuthItem(authItemSet,existAuthItemId,null, menuItemTemp);
+        for (MenuItem menuItemTemp : menuItemTreeList) {
+            iterateCreateAuthItem(authItemMap,
+                    existAuthItemId,
+                    null,
+                    menuItemTemp);
         }
-        return authItemSet;
+        Set<AuthItem> resSet = new HashSet<>();
+        for(AuthItem authItem :authItemMap.values()){
+            resSet.add(authItem);
+        }
+        return resSet;
     }
     
     /**
@@ -89,50 +98,56 @@ public class MenuAuthLoader implements AuthLoader {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    private void iterateCreateAuthItem(Set<AuthItem> authItemSet,Set<String> existAuthItemId,
-            AuthItem parentMenuAuthItem,
+    private void iterateCreateAuthItem(Map<String,AuthItemImpl> authItemMap,
+            Set<String> existAuthItemIdSet, AuthItem parentMenuAuthItem,
             MenuItem menuItem) {
         AssertUtils.notEmpty(menuItem, "menuItem is null");
         
         //根据菜单生成对应权限项
         AuthItemImpl authItem = null;
         List<String> authKeyList = menuItem.getAuthKeyList();
-        if(authKeyList != null){
-            for(String authKeyTemp : authKeyList){
-                if(existAuthItemId.contains(authKeyTemp)){
+        if (authKeyList != null) {
+            for (String authKeyTemp : authKeyList) {
+                if (existAuthItemIdSet.contains(authKeyTemp)) {
+                    authItem = authItemMap.get(authKeyTemp);
                     continue;
+                }else{
+                    authItem = new AuthItemImpl();
+                    authItem.setAuthType(AuthTypeItemContext.getContext()
+                            .registeAuthTypeItem("AUTHTYPE_OPERATE",
+                                    "操作权限",
+                                    "菜单操作权限",
+                                    true,
+                                    true)
+                            .getAuthType());
+                    authItem.setConfigAble(true);
+                    authItem.setDescription(MessageFormatter.arrayFormat("菜单[{}]的操作权限",
+                            new Object[] { menuItem.getText() })
+                            .getMessage());
+                    authItem.setEditAble(false);
+                    authItem.setId(authKeyTemp);
+                    authItem.setName(menuItem.getText());
+                    authItem.setParentId(parentMenuAuthItem != null ? parentMenuAuthItem.getId()
+                            : null);
+                    authItem.setValid(true);
+                    authItem.setViewAble(true);
+                    
+                    authItemMap.put(authItem.getId(),authItem);
+                    existAuthItemIdSet.add(authItem.getId());
                 }
-                authItem = new AuthItemImpl();
-                authItem.setAuthType(AuthTypeItemContext.getContext()
-                        .registeAuthTypeItem("AUTHTYPE_OPERATE",
-                                "操作权限",
-                                "菜单操作权限",
-                                true,
-                                true)
-                        .getAuthType());
-                authItem.setConfigAble(true);
-                authItem.setDescription(MessageFormatter.arrayFormat("菜单[{}]的操作权限",
-                        new Object[] { menuItem.getText() }).getMessage());
-                authItem.setEditAble(false);
-                authItem.setId(authKeyTemp);
-                authItem.setName(menuItem.getText());
-                authItem.setParentId(parentMenuAuthItem != null ? parentMenuAuthItem.getId()
-                        : null);
-                authItem.setValid(true);
-                authItem.setViewAble(true);
-                
-                authItemSet.add(authItem);
-                existAuthItemId.add(authItem.getId());
             }
         }
         
         parentMenuAuthItem = authItem == null ? parentMenuAuthItem : authItem;
-        if(!CollectionUtils.isEmpty(menuItem.getChilds())){
-            for(MenuItem childMenuItem : menuItem.getChilds()){
-                if(childMenuItem == null){
+        if (!CollectionUtils.isEmpty(menuItem.getChilds())) {
+            for (MenuItem childMenuItem : menuItem.getChilds()) {
+                if (childMenuItem == null) {
                     continue;
                 }
-                iterateCreateAuthItem(authItemSet,existAuthItemId,parentMenuAuthItem, childMenuItem);
+                iterateCreateAuthItem(authItemMap,
+                        existAuthItemIdSet,
+                        parentMenuAuthItem,
+                        childMenuItem);
             }
         }
     }
