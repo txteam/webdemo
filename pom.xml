@@ -14,6 +14,10 @@
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+		</dependency>
 		<!-- 加入druid数据源依赖包 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>

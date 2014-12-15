@@ -4,9 +4,9 @@
 	<comment>datasource_config</comment>	 
 	<entry key="dataSource.dataSourceType">MYSQL</entry>
 
-	<entry key="dataSource.url"><![CDATA[jdbc:mysql://115.29.174.120:3306/webdemo?characterEncoding=GBK&zeroDateTimeBehavior=convertToNull]]></entry>
-	<entry key="dataSource.username">webdemo</entry>
-	<entry key="dataSource.password">webdemo</entry>
+	<entry key="dataSource.url"><![CDATA[jdbc:mysql://localhost:3306/lms?characterEncoding=GBK&zeroDateTimeBehavior=convertToNull]]></entry>
+	<entry key="dataSource.username">lms</entry>
+	<entry key="dataSource.password">zzxx1122</entry>
 	<entry key="dataSource.driverClassName">com.mysql.jdbc.Driver</entry>
 	<entry key="dataSource.validationQuery">SELECT 1 </entry>
 	

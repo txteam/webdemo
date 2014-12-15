@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="personInfo">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="personInfoMap" 
+		type="com.tx.fetch.model.PersonInfo">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findPersonInfo" 
+		parameterType="com.tx.fetch.model.PersonInfo"
+		resultMap="personInfoMap">
+		SELECT 
+				TPI.ID,
+				TPI.IDCARDNUMBER,
+				TPI.INAME,
+				TPI.REGDATE,
+				TPI.DISRUPTTYPENAME,
+				TPI.SEXY,
+				TPI.CASECODE,
+				TPI.AREANAME,
+				TPI.DUTY,
+				TPI.PARTYTYPENAME,
+				TPI.COURTNAME,
+				TPI.PERFORMANCE,
+				TPI.GISTUNIT,
+				TPI.AGE,
+				TPI.GISTID,
+				TPI.PUBLISHDATE,
+				TPI.CARDNUM,
+				TPI.FOCUSNUMBER
+		  FROM FETCH_PERSON_INFO TPI
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TPI.ID = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            AND TPI.IDCARDNUMBER = #{idCardNumber}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(cardNum)">  
+	            AND TPI.CARDNUM = #{idCardNumber}
+	            AND TPI.INAME = #{iname}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryPersonInfo" 
+		parameterType="java.util.Map"
+		resultMap="personInfoMap">
+		SELECT 
+				TPI.ID,
+				TPI.IDCARDNUMBER,
+				TPI.INAME,
+				TPI.REGDATE,
+				TPI.DISRUPTTYPENAME,
+				TPI.SEXY,
+				TPI.CASECODE,
+				TPI.AREANAME,
+				TPI.DUTY,
+				TPI.PARTYTYPENAME,
+				TPI.COURTNAME,
+				TPI.PERFORMANCE,
+				TPI.GISTUNIT,
+				TPI.AGE,
+				TPI.GISTID,
+				TPI.PUBLISHDATE,
+				TPI.CARDNUM,
+				TPI.FOCUSNUMBER
+		  FROM FETCH_PERSON_INFO TPI
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TPI.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            AND TPI.IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(iname)">  
+	            AND TPI.INAME = #{iname,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(regDate)">  
+	            AND TPI.REGDATE = #{regDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(disruptTypeName)">  
+	            AND TPI.DISRUPTTYPENAME = #{disruptTypeName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sexy)">  
+	            AND TPI.SEXY = #{sexy,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(caseCode)">  
+	            AND TPI.CASECODE = #{caseCode,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(areaName)">  
+	            AND TPI.AREANAME = #{areaName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(duty)">  
+	            AND TPI.DUTY = #{duty,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(partyTypeName)">  
+	            AND TPI.PARTYTYPENAME = #{partyTypeName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(courtName)">  
+	            AND TPI.COURTNAME = #{courtName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(performance)">  
+	            AND TPI.PERFORMANCE = #{performance,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(gistUnit)">  
+	            AND TPI.GISTUNIT = #{gistUnit,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
+	            AND TPI.AGE = #{age,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(gistId)">  
+	            AND TPI.GISTID = #{gistId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(publishDate)">  
+	            AND TPI.PUBLISHDATE = #{publishDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(cardNum)">  
+	            AND TPI.CARDNUM = #{cardNum,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(focusNumber)">  
+	            AND TPI.FOCUSNUMBER = #{focusNumber,javaType=java.lang.String}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            ORDER BY ID
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryPersonInfoCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM FETCH_PERSON_INFO TPI
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TPI.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            AND TPI.IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(iname)">  
+	            AND TPI.INAME = #{iname,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(regDate)">  
+	            AND TPI.REGDATE = #{regDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(disruptTypeName)">  
+	            AND TPI.DISRUPTTYPENAME = #{disruptTypeName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sexy)">  
+	            AND TPI.SEXY = #{sexy,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(caseCode)">  
+	            AND TPI.CASECODE = #{caseCode,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(areaName)">  
+	            AND TPI.AREANAME = #{areaName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(duty)">  
+	            AND TPI.DUTY = #{duty,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(partyTypeName)">  
+	            AND TPI.PARTYTYPENAME = #{partyTypeName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(courtName)">  
+	            AND TPI.COURTNAME = #{courtName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(performance)">  
+	            AND TPI.PERFORMANCE = #{performance,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(gistUnit)">  
+	            AND TPI.GISTUNIT = #{gistUnit,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
+	            AND TPI.AGE = #{age,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(gistId)">  
+	            AND TPI.GISTID = #{gistId,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(publishDate)">  
+	            AND TPI.PUBLISHDATE = #{publishDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(cardNum)">  
+	            AND TPI.CARDNUM = #{cardNum,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(focusNumber)">  
+	            AND TPI.FOCUSNUMBER = #{focusNumber,javaType=java.lang.String}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertPersonInfo" 
+		parameterType="com.tx.fetch.model.PersonInfo">
+		INSERT INTO FETCH_PERSON_INFO
+		(
+			ID,
+			IDCARDNUMBER,
+			INAME,
+			REGDATE,
+			DISRUPTTYPENAME,
+			SEXY,
+			CASECODE,
+			AREANAME,
+			DUTY,
+			PARTYTYPENAME,
+			COURTNAME,
+			PERFORMANCE,
+			GISTUNIT,
+			AGE,
+			GISTID,
+			PUBLISHDATE,
+			CARDNUM,
+			FOCUSNUMBER
+		)
+		VALUES
+		(
+			#{id},
+			#{idCardNumber},
+			#{iname},
+			#{regDate},
+			#{disruptTypeName},
+			#{sexy},
+			#{caseCode},
+			#{areaName},
+			#{duty},
+			#{partyTypeName},
+			#{courtName},
+			#{performance},
+			#{gistUnit},
+			#{age},
+			#{gistId},
+			#{publishDate},
+			#{cardNum},
+			#{focusNumber}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deletePersonInfo" 
+		parameterType="com.tx.fetch.model.PersonInfo">
+		DELETE FROM FETCH_PERSON_INFO  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND ID = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updatePersonInfo"
+	    parameterType="java.util.Map">  
+	    UPDATE FETCH_PERSON_INFO
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('idCardNumber')">
+	    		IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('iname')">
+	    		INAME = #{iname,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('regDate')">
+	    		REGDATE = #{regDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('disruptTypeName')">
+	    		DISRUPTTYPENAME = #{disruptTypeName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('sexy')">
+	    		SEXY = #{sexy,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('caseCode')">
+	    		CASECODE = #{caseCode,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('areaName')">
+	    		AREANAME = #{areaName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('duty')">
+	    		DUTY = #{duty,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('partyTypeName')">
+	    		PARTYTYPENAME = #{partyTypeName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('courtName')">
+	    		COURTNAME = #{courtName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('performance')">
+	    		PERFORMANCE = #{performance,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('gistUnit')">
+	    		GISTUNIT = #{gistUnit,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('age')">
+	    		AGE = #{age,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('gistId')">
+	    		GISTID = #{gistId,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('publishDate')">
+	    		PUBLISHDATE = #{publishDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('cardNum')">
+	    		CARDNUM = #{cardNum,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('focusNumber')">
+	    		FOCUSNUMBER = #{focusNumber,javaType=java.lang.String},
+	    	</if>	
+	    </trim>
+	    WHERE ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->
