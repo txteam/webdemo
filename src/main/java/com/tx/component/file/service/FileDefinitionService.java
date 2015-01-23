@@ -6,21 +6,20 @@
  */
 package com.tx.component.file.service;
 
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.tx.component.file.dao.FileDefinitionDao;
 import com.tx.component.file.model.FileDefinition;
 import com.tx.core.exceptions.util.AssertUtils;
-import com.tx.core.paged.model.PagedList;
 
 /**
  * FileDefinition的业务层
@@ -31,7 +30,6 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("fileDefinitionService")
 public class FileDefinitionService {
     
     @SuppressWarnings("unused")
@@ -53,27 +51,56 @@ public class FileDefinitionService {
     */
     @Transactional
     public void insertFileDefinition(FileDefinition fileDefinition) {
-        //TODO:验证参数是否合法
         AssertUtils.notNull(fileDefinition, "fileDefinition is null.");
-        AssertUtils.notEmpty(fileDefinition.getId(), "fileDefinition.id is empty.");
+        AssertUtils.notEmpty(fileDefinition.getFilename(),
+                "fileDefinition.filename is null.");
+        AssertUtils.notEmpty(fileDefinition.getRelativePath(),
+                "fileDefinition.filename is null.");
         
-        //TODO: 设置默认数据
+        Date now = new Date();
+        fileDefinition.setCreateDate(now);
+        fileDefinition.setLastUpdateDate(now);
+        if (StringUtils.isEmpty(fileDefinition.getFilenameExtension())) {
+            fileDefinition.setFilenameExtension(StringUtils.getFilenameExtension(fileDefinition.getFilename()));
+        }
         
+        //设置默认数据
         this.fileDefinitionDao.insertFileDefinition(fileDefinition);
     }
-      
-     /**
-      * 根据id删除fileDefinition实例
-      * 1、如果入参数为空，则抛出异常
-      * 2、执行删除后，将返回数据库中被影响的条数
-      * @param id
-      * @return 返回删除的数据条数，<br/>
-      * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
-      * 这里讲通用生成的业务层代码定义为返回影响的条数
-      * @return int [返回类型说明]
-      * @exception throws 
+    
+    /**
+      * 将对应的记录移除到历史表<br/>
+      * <功能详细描述>
+      * @param fileDefinitionId [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @Transactional
+    public void moveToHisByFileDefinitionId(String fileDefinitionId) {
+        AssertUtils.notEmpty(fileDefinitionId, "fileDefinitionId is empty.");
+        FileDefinition fileDefinition = findFileDefinitionById(fileDefinitionId);
+        
+        Date now = new Date();
+        fileDefinition.setDeleteDate(now);
+        
+        this.fileDefinitionDao.insertFileDefinitionToHis(fileDefinition);
+        deleteById(fileDefinitionId);
+    }
+    
+    /**
+     * 根据id删除fileDefinition实例
+     * 1、如果入参数为空，则抛出异常
+     * 2、执行删除后，将返回数据库中被影响的条数
+     * @param id
+     * @return 返回删除的数据条数，<br/>
+     * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
+     * 这里讲通用生成的业务层代码定义为返回影响的条数
+     * @return int [返回类型说明]
+     * @exception throws 
+     * @see [类、类#方法、类#成员]
+    */
     @Transactional
     public int deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
@@ -105,75 +132,6 @@ public class FileDefinitionService {
     }
     
     /**
-      * 根据FileDefinition实体列表
-      * TODO:补充说明
-      * 
-      * <功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return List<FileDefinition> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public List<FileDefinition> queryFileDefinitionList(/*TODO:自己定义条件*/) {
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<FileDefinition> resList = this.fileDefinitionDao.queryFileDefinitionList(params);
-        
-        return resList;
-    }
-    
-    /**
-     * 分页查询FileDefinition实体列表
-     * TODO:补充说明
-     * 
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<FileDefinition> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public PagedList<FileDefinition> queryFileDefinitionPagedList(/*TODO:自己定义条件*/int pageIndex,
-            int pageSize) {
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<FileDefinition> resPagedList = this.fileDefinitionDao.queryFileDefinitionPagedList(params, pageIndex, pageSize);
-        
-        return resPagedList;
-    }
-    
-    /**
-      * 查询fileDefinition列表总条数
-      * TODO:补充说明
-      * <功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return int [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public int countFileDefinition(/*TODO:自己定义条件*/){
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.fileDefinitionDao.countFileDefinition(params);
-        
-        return res;
-    }
-    
-    /**
       * 根据id更新对象
       * <功能详细描述>
       * @param fileDefinition
@@ -185,32 +143,27 @@ public class FileDefinitionService {
      */
     @Transactional
     public boolean updateById(FileDefinition fileDefinition) {
-        //TODO:验证参数是否合法，必填字段是否填写，
+        //验证参数是否合法，必填字段是否填写，
         AssertUtils.notNull(fileDefinition, "fileDefinition is null.");
-        AssertUtils.notEmpty(fileDefinition.getId(), "fileDefinition.id is empty.");
+        AssertUtils.notEmpty(fileDefinition.getId(),
+                "fileDefinition.id is empty.");
         
-        
-        //TODO:生成需要更新字段的hashMap
+        //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", fileDefinition.getId());
         
-        //TODO:需要更新的字段
-		updateRowMap.put("savePath", fileDefinition.getSavePath());	
-		updateRowMap.put("createOperatorId", fileDefinition.getCreateOperatorId());	
-		updateRowMap.put("encoding", fileDefinition.getEncoding());	
-		updateRowMap.put("filename", fileDefinition.getFilename());	
-		updateRowMap.put("vcid", fileDefinition.getVcid());	
-		updateRowMap.put("organizationId", fileDefinition.getOrganizationId());	
-		updateRowMap.put("systemId", fileDefinition.getSystemId());	
-		updateRowMap.put("type", fileDefinition.getType());	
-		updateRowMap.put("createDate", fileDefinition.getCreateDate());	
-		updateRowMap.put("serviceType", fileDefinition.getServiceType());	
-		updateRowMap.put("lastUpdateOperatorId", fileDefinition.getLastUpdateOperatorId());	
-		updateRowMap.put("lastUpdateDate", fileDefinition.getLastUpdateDate());	
+        //需要更新的字段
+        updateRowMap.put("deleteDate", fileDefinition.getDeleteDate());
+        updateRowMap.put("relativePath", fileDefinition.getRelativePath());
+        updateRowMap.put("filenameExtension",
+                fileDefinition.getFilenameExtension());
+        updateRowMap.put("filename", fileDefinition.getFilename());
+        updateRowMap.put("createDate", fileDefinition.getCreateDate());
+        updateRowMap.put("lastUpdateDate", fileDefinition.getLastUpdateDate());
         
         int updateRowCount = this.fileDefinitionDao.updateFileDefinition(updateRowMap);
         
-        //TODO:如果需要大于1时，抛出异常并回滚，需要在这里修改
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
     }
 }

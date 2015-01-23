@@ -15,17 +15,13 @@
 		resultMap="fileDefinitionMap">
 		SELECT 
 				TFD.ID,
-				TFD.SAVEPATH,
-				TFD.CREATEOPERATORID,
-				TFD.ENCODING,
+				TFD.SYSTEM,
+				TFD.MODULE,
+				TFD.DELETEDATE,
+				TFD.RELATIVEPATH,
+				TFD.FILENAMEEXTENSION,
 				TFD.FILENAME,
-				TFD.VCID,
-				TFD.ORGANIZATIONID,
-				TFD.SYSTEMID,
-				TFD.TYPE,
 				TFD.CREATEDATE,
-				TFD.SERVICETYPE,
-				TFD.LASTUPDATEOPERATORID,
 				TFD.LASTUPDATEDATE
 		  FROM CORE_FILE_DEFINITION TFD
 		 WHERE
@@ -42,55 +38,39 @@
 		resultMap="fileDefinitionMap">
 		SELECT 
 				TFD.ID,
-				TFD.SAVEPATH,
-				TFD.CREATEOPERATORID,
-				TFD.ENCODING,
+				TFD.SYSTEM,
+				TFD.MODULE,
+				TFD.DELETEDATE,
+				TFD.RELATIVEPATH,
+				TFD.FILENAMEEXTENSION,
 				TFD.FILENAME,
-				TFD.VCID,
-				TFD.ORGANIZATIONID,
-				TFD.SYSTEMID,
-				TFD.TYPE,
 				TFD.CREATEDATE,
-				TFD.SERVICETYPE,
-				TFD.LASTUPDATEOPERATORID,
 				TFD.LASTUPDATEDATE
 		  FROM CORE_FILE_DEFINITION TFD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TFD.ID = #{id,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(savePath)">  
-	            AND TFD.SAVEPATH = #{savePath,javaType=java.lang.String}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(system)">  
+	            AND TFD.SYSTEM = #{system,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
-	            AND TFD.CREATEOPERATORID = #{createOperatorId,javaType=java.lang.String}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(module)">  
+	            AND TFD.MODULE = #{module,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(encoding)">  
-	            AND TFD.ENCODING = #{encoding,javaType=java.lang.String}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(deleteDate)">  
+	            AND TFD.DELETEDATE = #{deleteDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(relativePath)">  
+	            AND TFD.RELATIVEPATH = #{relativePath,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(filenameExtension)">  
+	            AND TFD.FILENAMEEXTENSION = #{filenameExtension,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(filename)">  
 	            AND TFD.FILENAME = #{filename,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
-	            AND TFD.VCID = #{vcid,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
-	            AND TFD.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(systemId)">  
-	            AND TFD.SYSTEMID = #{systemId,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            AND TFD.TYPE = #{type,javaType=java.lang.String}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
 	            AND TFD.CREATEDATE = #{createDate,javaType=java.util.Date}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(serviceType)">  
-	            AND TFD.SERVICETYPE = #{serviceType,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
-	            AND TFD.LASTUPDATEOPERATORID = #{lastUpdateOperatorId,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
 	            AND TFD.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
@@ -116,38 +96,26 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TFD.ID = #{id,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(savePath)">  
-	            AND TFD.SAVEPATH = #{savePath,javaType=java.lang.String}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(system)">  
+	            AND TFD.SYSTEM = #{system,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
-	            AND TFD.CREATEOPERATORID = #{createOperatorId,javaType=java.lang.String}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(module)">  
+	            AND TFD.MODULE = #{module,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(encoding)">  
-	            AND TFD.ENCODING = #{encoding,javaType=java.lang.String}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(deleteDate)">  
+	            AND TFD.DELETEDATE = #{deleteDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(relativePath)">  
+	            AND TFD.RELATIVEPATH = #{relativePath,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(filenameExtension)">  
+	            AND TFD.FILENAMEEXTENSION = #{filenameExtension,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(filename)">  
 	            AND TFD.FILENAME = #{filename,javaType=java.lang.String}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
-	            AND TFD.VCID = #{vcid,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
-	            AND TFD.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(systemId)">  
-	            AND TFD.SYSTEMID = #{systemId,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            AND TFD.TYPE = #{type,javaType=java.lang.String}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
 	            AND TFD.CREATEDATE = #{createDate,javaType=java.util.Date}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(serviceType)">  
-	            AND TFD.SERVICETYPE = #{serviceType,javaType=java.lang.String}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
-	            AND TFD.LASTUPDATEOPERATORID = #{lastUpdateOperatorId,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
 	            AND TFD.LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date}
@@ -161,33 +129,54 @@
 		INSERT INTO CORE_FILE_DEFINITION
 		(
 			ID,
-			SAVEPATH,
-			CREATEOPERATORID,
-			ENCODING,
+			SYSTEM,
+			MODULE,
+			DELETEDATE,
+			RELATIVEPATH,
+			FILENAMEEXTENSION,
 			FILENAME,
-			VCID,
-			ORGANIZATIONID,
-			SYSTEMID,
-			TYPE,
 			CREATEDATE,
-			SERVICETYPE,
-			LASTUPDATEOPERATORID,
 			LASTUPDATEDATE
 		)
 		VALUES
 		(
 			#{id},
-			#{savePath},
-			#{createOperatorId},
-			#{encoding},
+			#{system},
+			#{module},
+			#{deleteDate},
+			#{relativePath},
+			#{filenameExtension},
 			#{filename},
-			#{vcid},
-			#{organizationId},
-			#{systemId},
-			#{type},
 			#{createDate},
-			#{serviceType},
-			#{lastUpdateOperatorId},
+			#{lastUpdateDate}
+		)
+	</insert>
+	
+	<!-- auto generate default insert -->
+    <insert id="insertFileDefinitionToHis" 
+		parameterType="com.tx.component.file.model.FileDefinition">
+		INSERT INTO CORE_FILE_DEFINITION_HIS
+		(
+			ID,
+			SYSTEM,
+			MODULE,
+			DELETEDATE,
+			RELATIVEPATH,
+			FILENAMEEXTENSION,
+			FILENAME,
+			CREATEDATE,
+			LASTUPDATEDATE
+		)
+		VALUES
+		(
+			#{id},
+			#{system},
+			#{module},
+			#{deleteDate},
+			#{relativePath},
+			#{filenameExtension},
+			#{filename},
+			#{createDate},
 			#{lastUpdateDate}
 		)
 	</insert>
@@ -208,38 +197,26 @@
 	    parameterType="java.util.Map">  
 	    UPDATE CORE_FILE_DEFINITION
 	    <trim prefix="SET" suffixOverrides=",">
-			<if test="_parameter.containsKey('savePath')">
-	    		SAVEPATH = #{savePath,javaType=java.lang.String},
+			<if test="_parameter.containsKey('system')">
+	    		SYSTEM = #{system,javaType=java.lang.String},
 	    	</if>	
-			<if test="_parameter.containsKey('createOperatorId')">
-	    		CREATEOPERATORID = #{createOperatorId,javaType=java.lang.String},
+			<if test="_parameter.containsKey('module')">
+	    		MODULE = #{module,javaType=java.lang.String},
 	    	</if>	
-			<if test="_parameter.containsKey('encoding')">
-	    		ENCODING = #{encoding,javaType=java.lang.String},
+			<if test="_parameter.containsKey('deleteDate')">
+	    		DELETEDATE = #{deleteDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('relativePath')">
+	    		RELATIVEPATH = #{relativePath,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('filenameExtension')">
+	    		FILENAMEEXTENSION = #{filenameExtension,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('filename')">
 	    		FILENAME = #{filename,javaType=java.lang.String},
 	    	</if>	
-			<if test="_parameter.containsKey('vcid')">
-	    		VCID = #{vcid,javaType=java.lang.String},
-	    	</if>	
-			<if test="_parameter.containsKey('organizationId')">
-	    		ORGANIZATIONID = #{organizationId,javaType=java.lang.String},
-	    	</if>	
-			<if test="_parameter.containsKey('systemId')">
-	    		SYSTEMID = #{systemId,javaType=java.lang.String},
-	    	</if>	
-			<if test="_parameter.containsKey('type')">
-	    		TYPE = #{type,javaType=java.lang.String},
-	    	</if>	
 			<if test="_parameter.containsKey('createDate')">
 	    		CREATEDATE = #{createDate,javaType=java.util.Date},
-	    	</if>	
-			<if test="_parameter.containsKey('serviceType')">
-	    		SERVICETYPE = #{serviceType,javaType=java.lang.String},
-	    	</if>	
-			<if test="_parameter.containsKey('lastUpdateOperatorId')">
-	    		LASTUPDATEOPERATORID = #{lastUpdateOperatorId,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('lastUpdateDate')">
 	    		LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date},

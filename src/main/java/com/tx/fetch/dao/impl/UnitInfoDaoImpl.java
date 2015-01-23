@@ -13,14 +13,14 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.tx.fetch.dao.PersonInfoDao;
-import com.tx.fetch.model.PersonInfo;
+import com.tx.fetch.dao.UnitInfoDao;
+import com.tx.fetch.model.UnitInfo;
 import com.tx.core.mybatis.model.Order;
 import com.tx.core.mybatis.support.MyBatisDaoSupport;
 import com.tx.core.paged.model.PagedList;
 
 /**
- * PersonInfo持久层
+ * UnitInfo持久层
  * <功能详细描述>
  * 
  * @author  
@@ -28,8 +28,8 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("personInfoDao")
-public class PersonInfoDaoImpl implements PersonInfoDao {
+@Component("unitInfoDao")
+public class UnitInfoDaoImpl implements UnitInfoDao {
     
     @Resource(name = "myBatisDaoSupport")
     private MyBatisDaoSupport myBatisDaoSupport;
@@ -38,8 +38,8 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @param condition
      */
     @Override
-    public void batchInsertPersonInfo(List<PersonInfo> condition) {
-        this.myBatisDaoSupport.batchInsertUseUUID("personInfo.insertPersonInfo",
+    public void batchInsertUnitInfo(List<UnitInfo> condition) {
+        this.myBatisDaoSupport.batchInsertUseUUID("unitInfo.insertUnitInfo",
                 condition,
                 "id",
                 true);
@@ -49,8 +49,8 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @param condition
      */
     @Override
-    public void batchUpdatePersonInfo(List<Map<String, Object>> updateRowMapList) {
-        this.myBatisDaoSupport.batchUpdate("personInfo.updatePersonInfo",
+    public void batchUpdateUnitInfo(List<Map<String, Object>> updateRowMapList) {
+        this.myBatisDaoSupport.batchUpdate("unitInfo.updateUnitInfo",
                 updateRowMapList,
                 true);
     }
@@ -59,8 +59,8 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @param condition
      */
     @Override
-    public void insertPersonInfo(PersonInfo condition) {
-        this.myBatisDaoSupport.insertUseUUID("personInfo.insertPersonInfo",
+    public void insertUnitInfo(UnitInfo condition) {
+        this.myBatisDaoSupport.insertUseUUID("unitInfo.insertUnitInfo",
                 condition,
                 "id");
     }
@@ -70,8 +70,8 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @return
      */
     @Override
-    public int deletePersonInfo(PersonInfo condition) {
-        return this.myBatisDaoSupport.delete("personInfo.deletePersonInfo",
+    public int deleteUnitInfo(UnitInfo condition) {
+        return this.myBatisDaoSupport.delete("unitInfo.deleteUnitInfo",
                 condition);
     }
     
@@ -80,8 +80,8 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @return
      */
     @Override
-    public PersonInfo findPersonInfo(PersonInfo condition) {
-        return this.myBatisDaoSupport.<PersonInfo> find("personInfo.findPersonInfo",
+    public UnitInfo findUnitInfo(UnitInfo condition) {
+        return this.myBatisDaoSupport.<UnitInfo> find("unitInfo.findUnitInfo",
                 condition);
     }
     
@@ -90,8 +90,8 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @return
      */
     @Override
-    public List<PersonInfo> queryPersonInfoList(Map<String, Object> params) {
-        return this.myBatisDaoSupport.<PersonInfo> queryList("personInfo.queryPersonInfo",
+    public List<UnitInfo> queryUnitInfoList(Map<String, Object> params) {
+        return this.myBatisDaoSupport.<UnitInfo> queryList("unitInfo.queryUnitInfo",
                 params);
     }
     
@@ -101,35 +101,20 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @return
      */
     @Override
-    public List<PersonInfo> queryPersonInfoList(Map<String, Object> params,
+    public List<UnitInfo> queryUnitInfoList(Map<String, Object> params,
             List<Order> orderList) {
-        return this.myBatisDaoSupport.<PersonInfo> queryList("personInfo.queryPersonInfo",
+        return this.myBatisDaoSupport.<UnitInfo> queryList("unitInfo.queryUnitInfo",
                 params,
                 orderList);
     }
     
     /**
      * @param params
-     * @param pageIndex
-     * @param pageSize
      * @return
      */
     @Override
-    public PagedList<PersonInfo> queryDistinctPersonInfoPagedList(
-            Map<String, Object> params, int pageIndex, int pageSize) {
-        return this.myBatisDaoSupport.<PersonInfo> queryPagedList("personInfo.queryDistinctPersonInfo",
-                params,
-                pageIndex,
-                pageSize);
-    }
-    
-    /**
-     * @param params
-     * @return
-     */
-    @Override
-    public int countPersonInfo(Map<String, Object> params) {
-        return this.myBatisDaoSupport.<Integer> find("personInfo.queryPersonInfoCount",
+    public int countUnitInfo(Map<String, Object> params) {
+        return this.myBatisDaoSupport.<Integer> find("unitInfo.queryUnitInfoCount",
                 params);
     }
     
@@ -140,9 +125,24 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @return
      */
     @Override
-    public PagedList<PersonInfo> queryPersonInfoPagedList(
+    public PagedList<UnitInfo> queryUnitInfoPagedList(
             Map<String, Object> params, int pageIndex, int pageSize) {
-        return this.myBatisDaoSupport.<PersonInfo> queryPagedList("personInfo.queryPersonInfo",
+        return this.myBatisDaoSupport.<UnitInfo> queryPagedList("unitInfo.queryUnitInfo",
+                params,
+                pageIndex,
+                pageSize);
+    }
+    
+    /**
+     * @param params
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedList<UnitInfo> queryDistinctUnitInfoPagedList(
+            Map<String, Object> params, int pageIndex, int pageSize) {
+        return this.myBatisDaoSupport.<UnitInfo> queryPagedList("unitInfo.queryDistinctUnitInfo",
                 params,
                 pageIndex,
                 pageSize);
@@ -156,10 +156,10 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @return
      */
     @Override
-    public PagedList<PersonInfo> queryPersonInfoPagedList(
+    public PagedList<UnitInfo> queryUnitInfoPagedList(
             Map<String, Object> params, int pageIndex, int pageSize,
             List<Order> orderList) {
-        return this.myBatisDaoSupport.<PersonInfo> queryPagedList("personInfo.queryPersonInfo",
+        return this.myBatisDaoSupport.<UnitInfo> queryPagedList("unitInfo.queryUnitInfo",
                 params,
                 pageIndex,
                 pageSize,
@@ -171,8 +171,8 @@ public class PersonInfoDaoImpl implements PersonInfoDao {
      * @return
      */
     @Override
-    public int updatePersonInfo(Map<String, Object> updateRowMap) {
-        return this.myBatisDaoSupport.update("personInfo.updatePersonInfo",
+    public int updateUnitInfo(Map<String, Object> updateRowMap) {
+        return this.myBatisDaoSupport.update("unitInfo.updateUnitInfo",
                 updateRowMap);
     }
     

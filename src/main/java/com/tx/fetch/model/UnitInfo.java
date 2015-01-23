@@ -22,24 +22,22 @@ import javax.persistence.Table;
   * @since  [产品/模块版本]
   */
 @Entity
-@Table(name = "FETCH_PERSON_INFO")
-public class PersonInfo {
-    //{"id":740634,"iname":"秦天长","caseCode":"(2014)丰法民执字第00326号",
-    //"age":57,"sexy":"男","focusNumber":805,"cardNum":"5135211957****5090",
-    //"courtName":"丰都县人民法院","areaName":"重庆","partyTypeName":"580","
-    //gistId":"(2014)丰法民初字第00072号","regDate":"2014年06月20日","gistUnit":"丰都县人民法院",
-    //"duty":"法院生效裁判:调解","performance":"全部未履行",
-    //"disruptTypeName":"其他有履行能力而拒不履行生效法律文书确定义务","publishDate":"2014年12月07日"}
+@Table(name = "FETCH_UNIT_INFO")
+public class UnitInfo {
+    //{"id":833957,"iname":"广昌青湖钢厂","caseCode":"(2014)广法执字第00232号","
+    //focusNumber":95,"cardNum":"680926658","businessEntity":"万长荣",
+    //"courtName":"江西省广昌县人民法院","areaName":"江西","partyTypeName":"581","gistId":"（2014）广民初字第501号民事判决书",
+    //"regDate":"2014年11月28日","gistUnit":"江西省广昌县人民法院",
+    //"duty":"1.被告广昌青湖钢厂在本判决生效之日起七日内支付原告揭孝勇水泥款53300元；2.本案诉讼费1133元，财产保全费620元，由被告承担。",
+    //"performance":"全部未履行","disruptTypeName":"其它规避执行","publishDate":"2014年12月11日"}
     /*
-     create table FETCH_PERSON_INFO(
-        idCardNumber varchar(64),
+     create table FETCH_UNIT_INFO(
         id varchar(64),
         iname varchar(64),
         caseCode varchar(255),
-        age varchar(64),
-        sexy varchar(64),
         focusNumber varchar(64),
         cardNum varchar(64),
+        businessEntity varchar(64),
         courtName varchar(255),
         areaName varchar(255),
         partyTypeName varchar(64),
@@ -50,22 +48,16 @@ public class PersonInfo {
         performance varchar(255),
         disruptTypeName varchar(255),
         publishDate varchar(64),
-        pageIndex integer,
-        currentPageIndex integer,
-        exported bit,
-        exportedDate datetime,
-        fetchDate datetime,
+        int pageIndex,
+        int currentPageIndex,
         primary key id
      );
      */
-    /*
-update fetch_person_info set exportdate = '',exported= 1 where exported = 0,idcardnumber is not null;
-select count(1) from fetch_person_info;
+/*
 SELECT
     t.iname,
-    t.idCardNumber,
+    t.businessEntity,
     t.cardNum,
-    t.age,
     t.areaName,
     t.caseCode,
     t.courtName,
@@ -78,24 +70,18 @@ SELECT
     t.partyTypeName,
     t.performance,
     t.publishDate,
-    t.regDate,
-    t.sexy
+    t.regDate
 FROM
-    fetch_person_info t
+    fetch_unit_info t
 WHERE
-    t.exported = 1
-  and t.fetchDate = '2014-12-17'
-ORDER BY t.id
-limit 0,10000;
-     */
-    private String idCardNumber;
+    t.exported = 0;
+ */
     private String id;
     private String iname;
     private String caseCode;
-    private String age;
-    private String sexy;
     private String focusNumber;
     private String cardNum;
+    private String businessEntity;
     private String courtName;
     private String areaName;
     private String partyTypeName;
@@ -111,6 +97,7 @@ limit 0,10000;
     private boolean exported;
     private Date exportedDate;
     private Date fetchDate;
+    
     /**
      * @return 返回 pageIndex
      */
@@ -172,18 +159,6 @@ limit 0,10000;
         this.fetchDate = fetchDate;
     }
     /**
-     * @return 返回 idCardNumber
-     */
-    public String getIdCardNumber() {
-        return idCardNumber;
-    }
-    /**
-     * @param 对idCardNumber进行赋值
-     */
-    public void setIdCardNumber(String idCardNumber) {
-        this.idCardNumber = idCardNumber;
-    }
-    /**
      * @return 返回 id
      */
     public String getId() {
@@ -220,30 +195,6 @@ limit 0,10000;
         this.caseCode = caseCode;
     }
     /**
-     * @return 返回 age
-     */
-    public String getAge() {
-        return age;
-    }
-    /**
-     * @param 对age进行赋值
-     */
-    public void setAge(String age) {
-        this.age = age;
-    }
-    /**
-     * @return 返回 sexy
-     */
-    public String getSexy() {
-        return sexy;
-    }
-    /**
-     * @param 对sexy进行赋值
-     */
-    public void setSexy(String sexy) {
-        this.sexy = sexy;
-    }
-    /**
      * @return 返回 focusNumber
      */
     public String getFocusNumber() {
@@ -266,6 +217,18 @@ limit 0,10000;
      */
     public void setCardNum(String cardNum) {
         this.cardNum = cardNum;
+    }
+    /**
+     * @return 返回 businessEntity
+     */
+    public String getBusinessEntity() {
+        return businessEntity;
+    }
+    /**
+     * @param 对businessEntity进行赋值
+     */
+    public void setBusinessEntity(String businessEntity) {
+        this.businessEntity = businessEntity;
     }
     /**
      * @return 返回 courtName
@@ -387,6 +350,4 @@ limit 0,10000;
     public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
     }
-    
-    
 }

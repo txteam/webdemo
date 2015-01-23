@@ -4,17 +4,17 @@
  * 修改时间:  
  * <修改描述:>
  */
-package com.tx.component.file.dao;
+package com.tx.fetch.dao;
 
 import java.util.List;
 import java.util.Map;
 
 import com.tx.core.mybatis.model.Order;
 import com.tx.core.paged.model.PagedList;
-import com.tx.component.file.model.FileDefinition;
+import com.tx.fetch.model.UnitInfo;
 
 /**
- * FileDefinition持久层
+ * UnitInfo持久层
  * <功能详细描述>
  * 
  * @author  
@@ -22,10 +22,10 @@ import com.tx.component.file.model.FileDefinition;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface FileDefinitionDao {
-    
+public interface UnitInfoDao {
+
     /**
-      * 批量插入FileDefinition对象实体
+      * 批量插入UnitInfo对象实体
       * 1、auto generate
       * <功能详细描述>
       * @param condition [参数说明]
@@ -35,25 +35,24 @@ public interface FileDefinitionDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public void batchInsertFileDefinition(List<FileDefinition> condition);
+    public void batchInsertUnitInfo(List<UnitInfo> condition);    
     
     /**
-      * 批量更新FileDefinition实体，
+      * 批量更新UnitInfo实体，
       * auto generate
-      * 1、传入FileDefinition中主键不能为空
+      * 1、传入UnitInfo中主键不能为空
       * <功能详细描述>
-      * @param updateFileDefinitionRowMap
+      * @param updateUnitInfoRowMap
       * @return [参数说明]
       * 
       * @return int [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public void batchUpdateFileDefinition(
-            List<Map<String, Object>> updateRowMapList);
+    public void batchUpdateUnitInfo(List<Map<String,Object>> updateRowMapList);
     
     /**
-      * 插入FileDefinition对象实体
+      * 插入UnitInfo对象实体
       * 1、auto generate
       * <功能详细描述>
       * @param condition [参数说明]
@@ -63,22 +62,10 @@ public interface FileDefinitionDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public void insertFileDefinition(FileDefinition condition);
+    public void insertUnitInfo(UnitInfo condition);
     
     /**
-     * 插入FileDefinition对象实体
-     * 1、auto generate
-     * <功能详细描述>
-     * @param condition [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public void insertFileDefinitionToHis(FileDefinition condition);
-    
-    /**
-      * 删除FileDefinition对象
+      * 删除UnitInfo对象
       * 1、auto generate
       * 2、根据入参条件进行删除
       * <功能详细描述>
@@ -89,55 +76,54 @@ public interface FileDefinitionDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public int deleteFileDefinition(FileDefinition condition);
+    public int deleteUnitInfo(UnitInfo condition);
     
     /**
-      * 查询FileDefinition实体
+      * 查询UnitInfo实体
       * auto generate
       * <功能详细描述>
       * @param condition
       * @return [参数说明]
       * 
-      * @return FileDefinition [返回类型说明]
+      * @return UnitInfo [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public FileDefinition findFileDefinition(FileDefinition condition);
+    public UnitInfo findUnitInfo(UnitInfo condition);
     
     /**
-      * 根据条件查询FileDefinition列表
+      * 根据条件查询UnitInfo列表
       * auto generate
       * <功能详细描述>
       * @param params
       * @return [参数说明]
       * 
-      * @return List<FileDefinition> [返回类型说明]
+      * @return List<UnitInfo> [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public List<FileDefinition> queryFileDefinitionList(
-            Map<String, Object> params);
+    public List<UnitInfo> queryUnitInfoList(Map<String, Object> params);
     
     /**
-      * 根据指定查询条件以及排序列查询FileDefinition列表
+      * 根据指定查询条件以及排序列查询UnitInfo列表
       * auto generate
       * <功能详细描述>
       * @param params
       * @param orderList
       * @return [参数说明]
       * 
-      * @return List<FileDefinition> [返回类型说明]
+      * @return List<UnitInfo> [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public List<FileDefinition> queryFileDefinitionList(
-            Map<String, Object> params, List<Order> orderList);
+    public List<UnitInfo> queryUnitInfoList(Map<String, Object> params,
+            List<Order> orderList);
     
     /**
-      * 根据条件查询FileDefinition列表总数
+      * 根据条件查询UnitInfo列表总数
       * auto generated
       * <功能详细描述>
       * @param params
@@ -147,10 +133,10 @@ public interface FileDefinitionDao {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public int countFileDefinition(Map<String, Object> params);
+    public int countUnitInfo(Map<String, Object> params);
     
     /**
-      * 分页查询FileDefinition列表
+      * 分页查询UnitInfo列表
       * auto generate
       * <功能详细描述>
       * @param params
@@ -158,16 +144,33 @@ public interface FileDefinitionDao {
       * @param pageSize
       * @return [参数说明]
       * 
-      * @return PagedList<FileDefinition> [返回类型说明]
+      * @return PagedList<UnitInfo> [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public PagedList<FileDefinition> queryFileDefinitionPagedList(
-            Map<String, Object> params, int pageIndex, int pageSize);
+    public PagedList<UnitInfo> queryUnitInfoPagedList(Map<String, Object> params,
+            int pageIndex, int pageSize);
     
     /**
-      * 分页查询FileDefinition列表，传入排序字段
+     * 分页查询UnitInfo列表
+     * auto generate
+     * <功能详细描述>
+     * @param params
+     * @param pageIndex
+     * @param pageSize
+     * @return [参数说明]
+     * 
+     * @return PagedList<UnitInfo> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+   //auto generate
+   public PagedList<UnitInfo> queryDistinctUnitInfoPagedList(Map<String, Object> params,
+           int pageIndex, int pageSize);
+    
+    /**
+      * 分页查询UnitInfo列表，传入排序字段
       * auto generate
       * <功能详细描述>
       * @param params
@@ -176,26 +179,26 @@ public interface FileDefinitionDao {
       * @param orderList
       * @return [参数说明]
       * 
-      * @return PagedList<FileDefinition> [返回类型说明]
+      * @return PagedList<UnitInfo> [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public PagedList<FileDefinition> queryFileDefinitionPagedList(
-            Map<String, Object> params, int pageIndex, int pageSize,
-            List<Order> orderList);
+    public PagedList<UnitInfo> queryUnitInfoPagedList(Map<String, Object> params,
+            int pageIndex, int pageSize, List<Order> orderList);
+    
     
     /**
-      * 更新FileDefinition实体，
+      * 更新UnitInfo实体，
       * auto generate
-      * 1、传入FileDefinition中主键不能为空
+      * 1、传入UnitInfo中主键不能为空
       * <功能详细描述>
-      * @param updateFileDefinitionRowMap
+      * @param updateUnitInfoRowMap
       * @return [参数说明]
       * 
       * @return int [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public int updateFileDefinition(Map<String, Object> updateRowMap);
+    public int updateUnitInfo(Map<String, Object> updateRowMap);
 }

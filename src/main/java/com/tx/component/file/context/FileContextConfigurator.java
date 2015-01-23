@@ -6,12 +6,21 @@
  */
 package com.tx.component.file.context;
 
-import java.util.Map;
+import javax.sql.DataSource;
 
-import org.springframework.beans.BeansException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.tx.component.file.dao.impl.FileDefinitionDaoImpl;
+import com.tx.component.file.service.FileDefinitionService;
+import com.tx.core.dbscript.context.DBScriptExecutorContext;
+import com.tx.core.dbscript.model.DataSourceTypeEnum;
+import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.core.mybatis.support.MyBatisDaoSupport;
+import com.tx.core.mybatis.support.MyBatisDaoSupportHelper;
 
 /**
  * 文件容器配置器<br/>
@@ -21,35 +30,67 @@ import org.springframework.context.ApplicationContextAware;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class FileContextConfigurator implements InitializingBean,
-        ApplicationContextAware {
+@Configuration
+public class FileContextConfigurator implements InitializingBean {
     
-    /** spring容器句柄 */
-    protected ApplicationContext applicationContext;
+    protected Logger logger = LoggerFactory.getLogger(FileContext.class);
+    
+    @Bean(name = "fileDefinitionMyBatisDaoSupport")
+    public MyBatisDaoSupport fileDefinitionMyBatisDaoSupport() throws Exception {
+        MyBatisDaoSupport res = MyBatisDaoSupportHelper.buildMyBatisDaoSupport(this.mybatisConfigLocation,
+                new String[] { "classpath*:com/tx/component/file/**/*SqlMap.xml" },
+                dataSourceType,
+                dataSource);
+        return res;
+    }
+    
+    @Bean(name = "fileDefinitionDao")
+    public FileDefinitionDaoImpl fileDefinitionDao() {
+        FileDefinitionDaoImpl res = new FileDefinitionDaoImpl();
+        return res;
+    }
+    
+    @Bean(name = "fileDefinitionService")
+    public FileDefinitionService fileDefinitionService() {
+        FileDefinitionService res = new FileDefinitionService();
+        return res;
+    }
+    
+    /** 数据源 */
+    private DataSource dataSource;
+    
+    /** 数据源类型 */
+    private DataSourceTypeEnum dataSourceType;
+    
+    /** mybatis的配置文件所在目录 */
+    private String mybatisConfigLocation = "classpath:context/mybatis-config.xml";
+    
+    /** 数据脚本自动执行器 */
+    protected DBScriptExecutorContext dbScriptExecutorContext;
+    
+    /** 是否自动执行数据脚本 */
+    protected boolean databaseSchemaUpdate = false;
     
     /** 如果没有指定系统，则默认的系统id */
-    protected String defaultSystemId = "default";
+    protected String system = "default";
     
-    /** 本地文件存储的默认路径 */
-    protected String defaultPath;
+    /** 如果没有指定系统，则默认的系统id */
+    protected String module = "default";
     
-    /** 资源存储映射 serviceType : locationPath */
-    protected Map<String, String> locationMapping;
+    /** 本地文件存储容器的基础路径: */
+    protected String location;
     
-    /**
-     * @param applicationContext
-     * @throws BeansException
-     */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-            throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
+    /** 如果存在指定的driver则使用指定的driver,如果不存在，则使用defaultFileDefitionResourceDriver */
+    protected FileDefinitionResourceDriver driver;
+    
     /**
      * @throws Exception
      */
     @Override
     public void afterPropertiesSet() throws Exception {
+        AssertUtils.notNull(system, "system is null.");
+        AssertUtils.notNull(module, "module is null.");
+        AssertUtils.notEmpty(location, "location is empty.");
     }
+    
 }

@@ -31,23 +31,29 @@ import com.tx.core.paged.model.PagedList;
 @Component("fileDefinitionDao")
 public class FileDefinitionDaoImpl implements FileDefinitionDao {
     
-    @Resource(name = "myBatisDaoSupport")
+    @Resource(name = "fileDefinitionMyBatisDaoSupport")
     private MyBatisDaoSupport myBatisDaoSupport;
     
     /**
      * @param condition
      */
     @Override
-    public void batchInsertFileDefinition(List<FileDefinition> condition){
-        this.myBatisDaoSupport.batchInsertUseUUID("fileDefinition.insertFileDefinition", condition, "id",true);
+    public void batchInsertFileDefinition(List<FileDefinition> condition) {
+        this.myBatisDaoSupport.batchInsertUseUUID("fileDefinition.insertFileDefinition",
+                condition,
+                "id",
+                true);
     }
     
     /**
      * @param condition
      */
     @Override
-    public void batchUpdateFileDefinition(List<Map<String,Object>> updateRowMapList){
-        this.myBatisDaoSupport.batchUpdate("fileDefinition.updateFileDefinition", updateRowMapList,true);
+    public void batchUpdateFileDefinition(
+            List<Map<String, Object>> updateRowMapList) {
+        this.myBatisDaoSupport.batchUpdate("fileDefinition.updateFileDefinition",
+                updateRowMapList,
+                true);
     }
     
     /**
@@ -55,7 +61,18 @@ public class FileDefinitionDaoImpl implements FileDefinitionDao {
      */
     @Override
     public void insertFileDefinition(FileDefinition condition) {
-        this.myBatisDaoSupport.insertUseUUID("fileDefinition.insertFileDefinition", condition, "id");
+        this.myBatisDaoSupport.insertUseUUID("fileDefinition.insertFileDefinition",
+                condition,
+                "id");
+    }
+    
+    /**
+     * @param condition
+     */
+    @Override
+    public void insertFileDefinitionToHis(FileDefinition condition) {
+        this.myBatisDaoSupport.insert("fileDefinition.insertFileDefinitionToHis",
+                condition);
     }
     
     /**
@@ -64,7 +81,8 @@ public class FileDefinitionDaoImpl implements FileDefinitionDao {
      */
     @Override
     public int deleteFileDefinition(FileDefinition condition) {
-        return this.myBatisDaoSupport.delete("fileDefinition.deleteFileDefinition", condition);
+        return this.myBatisDaoSupport.delete("fileDefinition.deleteFileDefinition",
+                condition);
     }
     
     /**
@@ -73,7 +91,8 @@ public class FileDefinitionDaoImpl implements FileDefinitionDao {
      */
     @Override
     public FileDefinition findFileDefinition(FileDefinition condition) {
-        return this.myBatisDaoSupport.<FileDefinition> find("fileDefinition.findFileDefinition", condition);
+        return this.myBatisDaoSupport.<FileDefinition> find("fileDefinition.findFileDefinition",
+                condition);
     }
     
     /**
@@ -81,7 +100,8 @@ public class FileDefinitionDaoImpl implements FileDefinitionDao {
      * @return
      */
     @Override
-    public List<FileDefinition> queryFileDefinitionList(Map<String, Object> params) {
+    public List<FileDefinition> queryFileDefinitionList(
+            Map<String, Object> params) {
         return this.myBatisDaoSupport.<FileDefinition> queryList("fileDefinition.queryFileDefinition",
                 params);
     }
@@ -92,8 +112,8 @@ public class FileDefinitionDaoImpl implements FileDefinitionDao {
      * @return
      */
     @Override
-    public List<FileDefinition> queryFileDefinitionList(Map<String, Object> params,
-            List<Order> orderList) {
+    public List<FileDefinition> queryFileDefinitionList(
+            Map<String, Object> params, List<Order> orderList) {
         return this.myBatisDaoSupport.<FileDefinition> queryList("fileDefinition.queryFileDefinition",
                 params,
                 orderList);
@@ -116,8 +136,8 @@ public class FileDefinitionDaoImpl implements FileDefinitionDao {
      * @return
      */
     @Override
-    public PagedList<FileDefinition> queryFileDefinitionPagedList(Map<String, Object> params,
-            int pageIndex, int pageSize) {
+    public PagedList<FileDefinition> queryFileDefinitionPagedList(
+            Map<String, Object> params, int pageIndex, int pageSize) {
         return this.myBatisDaoSupport.<FileDefinition> queryPagedList("fileDefinition.queryFileDefinition",
                 params,
                 pageIndex,
@@ -132,8 +152,9 @@ public class FileDefinitionDaoImpl implements FileDefinitionDao {
      * @return
      */
     @Override
-    public PagedList<FileDefinition> queryFileDefinitionPagedList(Map<String, Object> params,
-            int pageIndex, int pageSize, List<Order> orderList) {
+    public PagedList<FileDefinition> queryFileDefinitionPagedList(
+            Map<String, Object> params, int pageIndex, int pageSize,
+            List<Order> orderList) {
         return this.myBatisDaoSupport.<FileDefinition> queryPagedList("fileDefinition.queryFileDefinition",
                 params,
                 pageIndex,
@@ -147,6 +168,7 @@ public class FileDefinitionDaoImpl implements FileDefinitionDao {
      */
     @Override
     public int updateFileDefinition(Map<String, Object> updateRowMap) {
-        return this.myBatisDaoSupport.update("fileDefinition.updateFileDefinition", updateRowMap);
+        return this.myBatisDaoSupport.update("fileDefinition.updateFileDefinition",
+                updateRowMap);
     }
 }

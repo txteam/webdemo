@@ -1,22 +1,24 @@
 /*
  * 描          述:  <描述>
  * 修  改   人:  Administrator
- * 修改时间:  2014年11月20日
+ * 修改时间:  2014年12月16日
  * <修改描述:>
  */
-package com.tx.component.attachment.service;
+package com.tx.component.attachment.model;
 
 
  /**
-  * 申请单附件业务层<br/>
+  * 附件关联类型枚举<br/>
   * <功能详细描述>
   * 
   * @author  Administrator
-  * @version  [版本号, 2014年11月20日]
+  * @version  [版本号, 2014年12月16日]
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public class BillAttachmentService {
+public enum AttachmentRefTypeEnum {
     
+    LOANBILL,
     
+    CLIENT;
 }

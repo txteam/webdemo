@@ -17,16 +17,21 @@
 				TPI.ID,
 				TPI.IDCARDNUMBER,
 				TPI.INAME,
+				TPI.CURRENTPAGEINDEX,
 				TPI.REGDATE,
+				TPI.EXPORTED,
+				TPI.EXPORTEDDATE,
+				TPI.FETCHDATE,
+				TPI.PAGEINDEX,
 				TPI.DISRUPTTYPENAME,
 				TPI.SEXY,
 				TPI.CASECODE,
 				TPI.AREANAME,
+				TPI.COURTNAME,
 				TPI.DUTY,
 				TPI.PARTYTYPENAME,
-				TPI.COURTNAME,
-				TPI.PERFORMANCE,
 				TPI.GISTUNIT,
+				TPI.PERFORMANCE,
 				TPI.AGE,
 				TPI.GISTID,
 				TPI.PUBLISHDATE,
@@ -49,6 +54,53 @@
 	</select>
 	
 	<!-- auto generate default query -->
+	<select id="queryDistinctPersonInfo" 
+		parameterType="java.util.Map"
+		resultMap="personInfoMap">
+		select DISTINCT
+			TPI.IDCARDNUMBER,
+			TPI.INAME
+		 FROM FETCH_PERSON_INFO TPI
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(exported)">  
+	            AND TPI.exported = #{exported,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumberIsNotNull)">  
+	            AND TPI.IDCARDNUMBER is not null
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            ORDER BY IDCARDNUMBER
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+	<select id="queryDistinctPersonInfoCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM 
+		(
+			SELECT DISTINCT
+				TPI.IDCARDNUMBER,
+				TPI.INAME
+			 FROM FETCH_PERSON_INFO TPI
+			<trim prefix="WHERE" prefixOverrides="AND | OR">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(exported)">  
+		            AND TPI.EXPORTED = #{exported,,javaType=boolean}
+		        </if>
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumberIsNotNull)">  
+		            AND TPI.IDCARDNUMBER is not null
+		        </if>
+			</trim>
+		) TTPI
+	</select>
+	
+	<!-- auto generate default query -->
 	<select id="queryPersonInfo" 
 		parameterType="java.util.Map"
 		resultMap="personInfoMap">
@@ -56,16 +108,21 @@
 				TPI.ID,
 				TPI.IDCARDNUMBER,
 				TPI.INAME,
+				TPI.CURRENTPAGEINDEX,
 				TPI.REGDATE,
+				TPI.EXPORTED,
+				TPI.EXPORTEDDATE,
+				TPI.FETCHDATE,
+				TPI.PAGEINDEX,
 				TPI.DISRUPTTYPENAME,
 				TPI.SEXY,
 				TPI.CASECODE,
 				TPI.AREANAME,
+				TPI.COURTNAME,
 				TPI.DUTY,
 				TPI.PARTYTYPENAME,
-				TPI.COURTNAME,
-				TPI.PERFORMANCE,
 				TPI.GISTUNIT,
+				TPI.PERFORMANCE,
 				TPI.AGE,
 				TPI.GISTID,
 				TPI.PUBLISHDATE,
@@ -73,6 +130,12 @@
 				TPI.FOCUSNUMBER
 		  FROM FETCH_PERSON_INFO TPI
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(exported)">  
+	            AND TPI.exported = #{exported,,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumberIsNotNull)">  
+	            AND TPI.IDCARDNUMBER is not null
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TPI.ID = #{id,javaType=java.lang.String}
 	        </if>
@@ -145,6 +208,12 @@
 		SELECT COUNT(1)
 		  FROM FETCH_PERSON_INFO TPI
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+	    	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(exported)">  
+	            AND TPI.exported = #{exported,,javaType=boolean}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumberIsNotNull)">  
+	            AND TPI.IDCARDNUMBER is not null
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TPI.ID = #{id,javaType=java.lang.String}
 	        </if>
@@ -210,16 +279,21 @@
 			ID,
 			IDCARDNUMBER,
 			INAME,
+			CURRENTPAGEINDEX,
 			REGDATE,
+			EXPORTED,
+			EXPORTEDDATE,
+			FETCHDATE,
+			PAGEINDEX,
 			DISRUPTTYPENAME,
 			SEXY,
 			CASECODE,
 			AREANAME,
+			COURTNAME,
 			DUTY,
 			PARTYTYPENAME,
-			COURTNAME,
-			PERFORMANCE,
 			GISTUNIT,
+			PERFORMANCE,
 			AGE,
 			GISTID,
 			PUBLISHDATE,
@@ -231,16 +305,21 @@
 			#{id},
 			#{idCardNumber},
 			#{iname},
+			#{currentPageIndex},
 			#{regDate},
+			#{exported},
+			#{exportedDate},
+			#{fetchDate},
+			#{pageIndex},
 			#{disruptTypeName},
 			#{sexy},
 			#{caseCode},
 			#{areaName},
+			#{courtName},
 			#{duty},
 			#{partyTypeName},
-			#{courtName},
-			#{performance},
 			#{gistUnit},
+			#{performance},
 			#{age},
 			#{gistId},
 			#{publishDate},
@@ -267,12 +346,27 @@
 	    <trim prefix="SET" suffixOverrides=",">
 			<if test="_parameter.containsKey('idCardNumber')">
 	    		IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String},
-	    	</if>	
+	    	</if>
 			<if test="_parameter.containsKey('iname')">
 	    		INAME = #{iname,javaType=java.lang.String},
 	    	</if>	
+			<if test="_parameter.containsKey('currentPageIndex')">
+	    		CURRENTPAGEINDEX = #{currentPageIndex,javaType=int},
+	    	</if>	
 			<if test="_parameter.containsKey('regDate')">
 	    		REGDATE = #{regDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('exported')">
+	    		EXPORTED = #{exported,javaType=boolean},
+	    	</if>	
+			<if test="_parameter.containsKey('exportedDate')">
+	    		EXPORTEDDATE = #{exportedDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('fetchDate')">
+	    		FETCHDATE = #{fetchDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('pageIndex')">
+	    		PAGEINDEX = #{pageIndex,javaType=int},
 	    	</if>	
 			<if test="_parameter.containsKey('disruptTypeName')">
 	    		DISRUPTTYPENAME = #{disruptTypeName,javaType=java.lang.String},
@@ -286,20 +380,20 @@
 			<if test="_parameter.containsKey('areaName')">
 	    		AREANAME = #{areaName,javaType=java.lang.String},
 	    	</if>	
+			<if test="_parameter.containsKey('courtName')">
+	    		COURTNAME = #{courtName,javaType=java.lang.String},
+	    	</if>	
 			<if test="_parameter.containsKey('duty')">
 	    		DUTY = #{duty,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('partyTypeName')">
 	    		PARTYTYPENAME = #{partyTypeName,javaType=java.lang.String},
 	    	</if>	
-			<if test="_parameter.containsKey('courtName')">
-	    		COURTNAME = #{courtName,javaType=java.lang.String},
+			<if test="_parameter.containsKey('gistUnit')">
+	    		GISTUNIT = #{gistUnit,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('performance')">
 	    		PERFORMANCE = #{performance,javaType=java.lang.String},
-	    	</if>	
-			<if test="_parameter.containsKey('gistUnit')">
-	    		GISTUNIT = #{gistUnit,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('age')">
 	    		AGE = #{age,javaType=java.lang.String},
@@ -323,5 +417,4 @@
 </mapper>
 <!--
 sqlMap生成描述:
-
 -->

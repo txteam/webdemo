@@ -9,83 +9,110 @@ package com.tx.component.file.model;
 import java.util.Date;
 
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import com.tx.component.file.context.FileDefinitionResource;
+import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 
- /**
-  * 文件定义<br/>
-  * @author  Administrator
-  * @version  [版本号, 2014年7月4日]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
+/**
+ * 文件定义<br/>
+ * @author  Administrator
+ * @version  [版本号, 2014年7月4日]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
 @Table(name = "CORE_FILE_DEFINITION")
 public class FileDefinition {
     
     /** 文件的存储id */
     private String id;
     
-    /** 所属系统 */
-    private String systemId;
+    /** 所属系统：容器初始化时唯一确定 */
+    private String system;
     
-    /** 文件名称 */
-    private String filename;
+    /** 所属模块:容器初始化时唯一确定，如果一个系统需要支撑多个模块 ,仅需要根据不同的module生成多个FileContext实现即可 */
+    private String module;
     
     /** 存储路径 */
-    private String savePath;
+    @UpdateAble
+    private String relativePath;
     
-    /** 文件的类型：jpg,png,... */
-    private String type;
+    /** 文件名称 */
+    @UpdateAble
+    private String filename;
     
-    /** 文件的业务类型 billAttachment,... */
-    private String serviceType;
+    /** 文件的后缀名 */
+    @UpdateAble
+    private String filenameExtension;
     
-    /** 文件对象编码：仅仅就是一个存储值，可以存，也可以不存入 */
-    private String encoding;
+    /** 文件访问的真正路径：由FileContext加工后才会生成，非持久化字段 */
+    @Transient
+    private FileDefinitionResource resource;
+    
+    /** 最后跟新时间 */
+    @UpdateAble
+    private Date lastUpdateDate;
     
     /** 创建时间 */
     private Date createDate;
     
-    /** 创建操作人员id */
-    private String createOperatorId;
+    /** 删除时间 */
+    private Date deleteDate;
     
-    /** 最后更新时间 */
-    private Date lastUpdateDate;
-    
-    /** 最后更新操作人员id */
-    private String lastUpdateOperatorId;
-    
-    /** 所属分公司 */
-    private String vcid;
-    
-    /** 所属组织  */
-    private String organizationId;
-
     /**
      * @return 返回 id
      */
     public String getId() {
         return id;
     }
-
+    
     /**
      * @param 对id进行赋值
      */
     public void setId(String id) {
         this.id = id;
     }
-
+    
     /**
-     * @return 返回 systemId
+     * @return 返回 system
      */
-    public String getSystemId() {
-        return systemId;
+    public String getSystem() {
+        return system;
+    }
+    
+    /**
+     * @param 对system进行赋值
+     */
+    public void setSystem(String system) {
+        this.system = system;
+    }
+    
+    /**
+     * @return 返回 module
+     */
+    public String getModule() {
+        return module;
+    }
+    
+    /**
+     * @param 对module进行赋值
+     */
+    public void setModule(String module) {
+        this.module = module;
+    }
+    
+    /**
+     * @return 返回 relativePath
+     */
+    public String getRelativePath() {
+        return relativePath;
     }
 
     /**
-     * @param 对systemId进行赋值
+     * @param 对relativePath进行赋值
      */
-    public void setSystemId(String systemId) {
-        this.systemId = systemId;
+    public void setRelativePath(String relativePath) {
+        this.relativePath = relativePath;
     }
 
     /**
@@ -94,105 +121,63 @@ public class FileDefinition {
     public String getFilename() {
         return filename;
     }
-
+    
     /**
      * @param 对filename进行赋值
      */
     public void setFilename(String filename) {
         this.filename = filename;
     }
-
+    
     /**
-     * @return 返回 savePath
+     * @return 返回 filenameExtension
      */
-    public String getSavePath() {
-        return savePath;
+    public String getFilenameExtension() {
+        return filenameExtension;
     }
-
+    
     /**
-     * @param 对savePath进行赋值
+     * @param 对filenameExtension进行赋值
      */
-    public void setSavePath(String savePath) {
-        this.savePath = savePath;
+    public void setFilenameExtension(String filenameExtension) {
+        this.filenameExtension = filenameExtension;
     }
-
-    /**
-     * @return 返回 type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param 对type进行赋值
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * @return 返回 serviceType
-     */
-    public String getServiceType() {
-        return serviceType;
-    }
-
-    /**
-     * @param 对serviceType进行赋值
-     */
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
-    }
-
-    /**
-     * @return 返回 encoding
-     */
-    public String getEncoding() {
-        return encoding;
-    }
-
-    /**
-     * @param 对encoding进行赋值
-     */
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
-    }
-
+    
     /**
      * @return 返回 createDate
      */
     public Date getCreateDate() {
         return createDate;
     }
-
+    
     /**
      * @param 对createDate进行赋值
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-
+    
     /**
-     * @return 返回 createOperatorId
+     * @return 返回 deleteDate
      */
-    public String getCreateOperatorId() {
-        return createOperatorId;
+    public Date getDeleteDate() {
+        return deleteDate;
     }
-
+    
     /**
-     * @param 对createOperatorId进行赋值
+     * @param 对deleteDate进行赋值
      */
-    public void setCreateOperatorId(String createOperatorId) {
-        this.createOperatorId = createOperatorId;
+    public void setDeleteDate(Date deleteDate) {
+        this.deleteDate = deleteDate;
     }
-
+    
     /**
      * @return 返回 lastUpdateDate
      */
     public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
-
+    
     /**
      * @param 对lastUpdateDate进行赋值
      */
@@ -201,44 +186,16 @@ public class FileDefinition {
     }
 
     /**
-     * @return 返回 lastUpdateOperatorId
+     * @return 返回 resource
      */
-    public String getLastUpdateOperatorId() {
-        return lastUpdateOperatorId;
+    public FileDefinitionResource getResource() {
+        return resource;
     }
 
     /**
-     * @param 对lastUpdateOperatorId进行赋值
+     * @param 对resource进行赋值
      */
-    public void setLastUpdateOperatorId(String lastUpdateOperatorId) {
-        this.lastUpdateOperatorId = lastUpdateOperatorId;
-    }
-
-    /**
-     * @return 返回 vcid
-     */
-    public String getVcid() {
-        return vcid;
-    }
-
-    /**
-     * @param 对vcid进行赋值
-     */
-    public void setVcid(String vcid) {
-        this.vcid = vcid;
-    }
-
-    /**
-     * @return 返回 organizationId
-     */
-    public String getOrganizationId() {
-        return organizationId;
-    }
-
-    /**
-     * @param 对organizationId进行赋值
-     */
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
+    public void setResource(FileDefinitionResource resource) {
+        this.resource = resource;
     }
 }

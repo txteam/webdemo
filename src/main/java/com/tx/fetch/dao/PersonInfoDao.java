@@ -153,6 +153,23 @@ public interface PersonInfoDao {
             int pageIndex, int pageSize);
     
     /**
+     * 分页查询PersonInfo列表
+     * auto generate
+     * <功能详细描述>
+     * @param params
+     * @param pageIndex
+     * @param pageSize
+     * @return [参数说明]
+     * 
+     * @return PagedList<PersonInfo> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+   //auto generate
+   public PagedList<PersonInfo> queryDistinctPersonInfoPagedList(Map<String, Object> params,
+           int pageIndex, int pageSize);
+    
+    /**
       * 分页查询PersonInfo列表，传入排序字段
       * auto generate
       * <功能详细描述>

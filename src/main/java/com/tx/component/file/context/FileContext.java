@@ -6,11 +6,12 @@
  */
 package com.tx.component.file.context;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.core.io.Resource;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.component.file.model.FileDefinition;
 
@@ -33,8 +34,15 @@ import com.tx.component.file.model.FileDefinition;
  */
 public class FileContext extends FileContextBuilder {
     
+    private static Map<String, FileContext> contextMapping = new HashMap<String, FileContext>();
+    
+    protected FileContext context;
+    
     /**
-      * 文件存放<br/>
+      * 保存文件<br/>
+      *    如果文件已经存在，则复写当前文件<br/>
+      *    如果文件不存在，则创建文件后写入<br/>
+      *    如果对应文件所在的文件夹不存在，对应文件夹会自动创建<br/>
       * <功能详细描述>
       * @param file
       * @return [参数说明]
@@ -43,55 +51,81 @@ public class FileContext extends FileContextBuilder {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public FileDefinition saveFile(File file) {
-        
-        return null;
+    @Transactional
+    public FileDefinition save(String relativePath, String filename,
+            InputStream input) {
+        FileDefinition fileDefinition = doSaveFile(relativePath,
+                filename,
+                input);
+        return fileDefinition;
     }
     
-    public FileDefinition saveFile(InputStream in, String fileName) {
-        
-        return null;
+    /**
+      * 保存文件<br/>
+      *    如果文件已经存在，则会抛出ResourceIsExistException<br/>
+      *    如果文件不存在，则创建文件后写入<br/>
+      *    如果对应文件所在的文件夹不存在，对应文件夹会自动创建<br/>
+      *<功能详细描述>
+      * @param relativePath
+      * @param filename
+      * @param input
+      * @return [参数说明]
+      * 
+      * @return FileDefinition [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public FileDefinition add(String relativePath, String filename,
+            InputStream input) {
+        FileDefinition fileDefinition = doAddFile(relativePath, filename, input);
+        return fileDefinition;
     }
     
-    public FileDefinition saveFile(Resource resource) {
-        try {
-            resource.getFilename();
-            InputStream in = resource.getInputStream();
-            
-        } catch (IOException e) {
-            
-        }
-        
-        return null;
+    /**
+      * 根据文件定义id删除对应的文件定义及对应的资源<br/>
+      * <功能详细描述>
+      * @param fileDefinitionId [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public void deleteByFileDefinitionId(String fileDefinitionId) {
+        doDeleteFileByFileDefinitionId(fileDefinitionId);
     }
     
-    public FileDefinition findFile(String fileDefinitionId) {
-        return null;
+    /**
+      * 根据文件定义id获取对应的文件定义实例对象<br/>
+      * <功能详细描述>
+      * @param fileDefinitionId
+      * @return [参数说明]
+      * 
+      * @return FileDefinition [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public FileDefinition findByFileDefinitionId(String fileDefinitionId) {
+        FileDefinition res = doFindFileDefinitionByFileDefinitionId(fileDefinitionId);
+        return res;
     }
     
-    public InputStream getFileInputStream() {
-        return null;
+    /**
+      * 根据文件定义id获取文件定义对应的资源<br/> 
+      * <功能详细描述>
+      * @param fileDefinitionId
+      * @return [参数说明]
+      * 
+      * @return Resource [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public Resource getResourceByFileDefinitionId(String fileDefinitionId) {
+        FileDefinition res = doFindFileDefinitionByFileDefinitionId(fileDefinitionId);
+        Resource resResource = res.getResource();
+        return resResource;
     }
-    
-    public InputStream getFileInputStreamByFileDefinitionId(
-            String fileDefinitionId) {
-        return null;
-    }
-    
-    public File getFile() {
-        return null;
-    }
-    
-    public File getFileByFileDefinitionId(String fileDefinitionId) {
-        return null;
-    }
-    
-    public Resource getFileResource() {
-        return null;
-    }
-    
-    public Resource getFileResourceByFileDefinitionId(String fileDefinitionId) {
-        return null;
-    }
-    
 }
