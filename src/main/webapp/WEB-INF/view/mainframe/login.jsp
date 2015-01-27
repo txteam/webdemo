@@ -49,18 +49,29 @@ $(function() {
 
 
 $(document).ready(function() {
+	// 错误提示
+	var errorMsg = '${errorMsg}';
+	if(errorMsg != null  && errorMsg != '' && errorMsg !='undefined' ){
+		alert(errorMsg);
+	}
+	// 登陆按钮单击
 	$("#loginBtn").click(function() {
-		var $form = $("form");
-		$form.attr("action","${contextPath}/mainframe/login.action");
-		$("form").submit();
+		$("#form-body").submit();
 	});
 });
+
+// 回车事件
+function keyDown(){
+	if(event.keyCode == 13){
+		$("#form-body").submit();
+	}
+}
 </script>
 <style type="text/css">
 
 </style>	
     <body style="width: 100%;height: 100%;overflow: hidden;padding: 0;margin: 0;">
-        <form id="form-body" method="post" style="display: none;"
+        <form id="form-body" method="post" action="${contextPath}/mainframe/login.action" style="height:150px"
         	data-validator-option="{stopOnError:false, timely:true}">
             <ul>
                 <li>

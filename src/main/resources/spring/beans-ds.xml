@@ -39,8 +39,8 @@
 			<property name="mapperLocations">
 				<array>
 					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
-					<value>classpath*:com/tx/los/**/*SqlMap.xml</value>
-					<value>classpath*:com/boda/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/webdemo/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/fetch/**/*SqlMap.xml</value>
 				</array>
 			</property>
 			<property name="failFast" value="true"></property>
@@ -96,6 +96,7 @@
 
 		<bean id="initDBScriptExcutor" class="com.tx.core.dbscript.executor.DBScriptAutoExecutor">
 			<property name="sqlScriptEncoding" value="GBK"></property>
+			<property name="ignoreFailedDrops" value="false"></property>
 			<property name="dataSource">
 				<ref bean="h2DataSource" />
 			</property>
@@ -115,8 +116,8 @@
 			<property name="mapperLocations">
 				<array>
 					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
-					<value>classpath*:com/tx/los/**/*SqlMap.xml</value>
-					<value>classpath*:com/boda/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/webdemo/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/fetch/**/*SqlMap.xml</value>
 				</array>
 			</property>
 			<property name="failFast" value="true"></property>
