@@ -37,10 +37,14 @@ public class FileContextConfigurator implements InitializingBean {
     
     @Bean(name = "fileDefinitionMyBatisDaoSupport")
     public MyBatisDaoSupport fileDefinitionMyBatisDaoSupport() throws Exception {
+        // FIXME Rain 这里有问题. 如果 dataSource 为空.(这个方法的调用在自动注入参数之前)就会报错,询问彭总后再修改
+        if (this.dataSource == null) {
+            return null;
+        }
         MyBatisDaoSupport res = MyBatisDaoSupportHelper.buildMyBatisDaoSupport(this.mybatisConfigLocation,
                 new String[] { "classpath*:com/tx/component/file/**/*SqlMap.xml" },
-                dataSourceType,
-                dataSource);
+                this.dataSourceType,
+                this.dataSource);
         return res;
     }
     
@@ -78,7 +82,7 @@ public class FileContextConfigurator implements InitializingBean {
     protected String module = "default";
     
     /** 本地文件存储容器的基础路径: */
-    protected String location;
+    //    protected String location;
     
     /** 如果存在指定的driver则使用指定的driver,如果不存在，则使用defaultFileDefitionResourceDriver */
     protected FileDefinitionResourceDriver driver;
@@ -90,7 +94,28 @@ public class FileContextConfigurator implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         AssertUtils.notNull(system, "system is null.");
         AssertUtils.notNull(module, "module is null.");
-        AssertUtils.notEmpty(location, "location is empty.");
+        //        AssertUtils.notEmpty(location, "location is empty.");
+    }
+    
+    /**
+     * @param 对dataSource进行赋值
+     */
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+    
+    /**
+     * @param 对dataSourceType进行赋值
+     */
+    public void setDataSourceType(DataSourceTypeEnum dataSourceType) {
+        this.dataSourceType = dataSourceType;
+    }
+    
+    /**
+     * @param 对mybatisConfigLocation进行赋值
+     */
+    public void setMybatisConfigLocation(String mybatisConfigLocation) {
+        this.mybatisConfigLocation = mybatisConfigLocation;
     }
     
 }

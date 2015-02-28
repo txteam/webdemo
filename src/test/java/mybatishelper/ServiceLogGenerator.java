@@ -28,7 +28,7 @@ public class ServiceLogGenerator {
     
     public static void main(String[] args) {
         Class<?> serviceLogType = SystemOperateLog.class;
-        String resultFolderPath = "d:/servicelog";
+        String resultFolderPath = "/Users/rain/Develop/servicelog";
         
         JpaMetaClass<?> jpaMetaClass = JpaMetaClass.forClass(serviceLogType);
         String dbScript = TXServiceLogDBScriptHelper.generateDBScriptContent(serviceLogType,

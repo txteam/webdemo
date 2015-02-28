@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.tx.component.file.dao.FileDefinitionDao;
 import com.tx.component.file.model.FileDefinition;
@@ -28,7 +29,7 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("fileDefinitionDao")
+@Repository("fileDefinitionDao")
 public class FileDefinitionDaoImpl implements FileDefinitionDao {
     
     @Resource(name = "fileDefinitionMyBatisDaoSupport")

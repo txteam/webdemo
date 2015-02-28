@@ -272,6 +272,38 @@ create table OPER_POST_HIS(
 	fullName varchar2(255),
 	primary key(ID)
 );
+--*****************************************************************************
+-- 单据附件表: ATTA_ATTACHMENT
+--*****************************************************************************
+create table ATTA_ATTACHMENT(
+	DELETEDATE timestamp,
+	FILENAMEEXTENSION varchar(255),
+	FILENAME varchar(64),
+	SERVICETYPE varchar(255),
+	PREID varchar(64),
+	LASTUPDATEOPERATORID varchar(64),
+	NEXTID varchar(64),
+	CREATEDATE timestamp,
+	CREATEOPERATORID varchar(64),
+	ID varchar(64),
+	PARENTID varchar(64),
+	LASTUPDATEDATE timestamp,
+	DELETEOPERATORID varchar(64),
+	FILEID varchar(64),
+	primary key(ID)
+);
+comment on table ATTA_ATTACHMENT is '单据附件表';
+--*****************************************************************************
+-- 单据附件关联表: ATTA_ATTACHMENT_REF
+--*****************************************************************************
+create table ATTA_ATTACHMENT_REF(
+	ID varchar(64),
+	ATTACHMENTID varchar(64),
+	REFID varchar(64),
+	REFTYPE varchar(255),
+	primary key(ID)
+);
+comment on table ATTA_ATTACHMENT_REF is '单据附件关联表';
 --****************************************************************************
 -- 表：OPER_VC
 --****************************************************************************

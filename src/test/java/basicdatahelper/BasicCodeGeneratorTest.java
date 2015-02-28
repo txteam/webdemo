@@ -25,7 +25,7 @@ public class BasicCodeGeneratorTest {
         //基础数据类
         Class<?> basicDataType = PostType.class;
         //基础数据逻辑代码生成存放目录
-        String codeBaseFolder = "d:/basicdata";
+        String codeBaseFolder = "/Users/rain/Develop/basicdata";
         //基础数据生成逻辑代码对应的数据库类型(mysql与oracle)在sqlMap中组装like条件是不一致的
         DataSourceTypeEnum dataSourceType = DataSourceTypeEnum.MYSQL;
         //基础数据唯一键数组uniqueGetterNamesArray

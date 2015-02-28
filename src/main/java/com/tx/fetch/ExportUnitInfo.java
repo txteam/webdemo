@@ -114,7 +114,7 @@ public class ExportUnitInfo {
     }
     
     public static void main(String[] args) throws IOException {
-        File personInfoExportFoler = new File("d:/export/unitinfo");
+        File personInfoExportFoler = new File("/Users/rain/Develop/export/unitinfo");
         if(!personInfoExportFoler.exists()){
             FileUtils.forceMkdir(personInfoExportFoler);
         }

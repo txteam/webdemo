@@ -8,6 +8,7 @@ package com.tx.component.attachment.service;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tx.component.attachment.facade.AttachmentFacade;
@@ -23,6 +24,7 @@ import com.tx.component.file.context.FileContext;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
+@Service("loanBillAttachmentService")
 public class LoanBillAttachmentService {
     
     @Resource(name = "loanBillFileContext")

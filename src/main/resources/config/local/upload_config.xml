@@ -4,7 +4,7 @@
 		<config>
 			<name>本地存放路径</name>
 			<key>test.upload.local.savePath</key>
-			<value>d:/uploadtest/</value>
+			<value>/Users/rain/Develop/uploadtest/</value>
 			<description>测试上传文件本地存放地址</description>
 		</config>
 	</configGroup>

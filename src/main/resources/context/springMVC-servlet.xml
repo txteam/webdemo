@@ -38,7 +38,7 @@
 	<mvc:annotation-driven />
 	 -->
 	<!-- 配置扫描 -->
-	<context:component-scan base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator"
+	<context:component-scan base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator,com.tx.component.attachment,com.tx.component.file"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />

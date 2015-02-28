@@ -144,12 +144,15 @@ public class FileContextBuilder extends FileContextConfigurator implements
     }
     
     /**
-      * 保存文件，允许存在的文件写入
-      * <功能详细描述>
-      * @param inputStream [参数说明]
+     * 
+      *<保存文件，允许存在的文件写入>
+      *<功能详细描述>
+      * @param relativePath
+      * @param filename
+      * @param input
+      * @return [参数说明]
       * 
-      * @return void [返回类型说明]
-     * @throws IOException 
+      * @return FileDefinition [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */

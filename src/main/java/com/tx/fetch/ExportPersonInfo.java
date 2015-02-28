@@ -89,7 +89,7 @@ public class ExportPersonInfo {
     }
     
     public static void main(String[] args) throws IOException {
-        File personInfoExportFoler = new File("d:/export/personinfo");
+        File personInfoExportFoler = new File("/Users/rain/Develop/export/personinfo");
         if(!personInfoExportFoler.exists()){
             FileUtils.forceMkdir(personInfoExportFoler);
         }

@@ -69,7 +69,7 @@
 				</list>
 			</property>
 		</bean>
-		<alias name="tx.dataSource" alias="dataSource" />
+		<alias alias="dataSource" name="tx.dataSource" />
 
 		<bean id="h2DataSource" class="com.alibaba.druid.pool.DruidDataSource"
 			init-method="init" destroy-method="close">
@@ -180,6 +180,6 @@
 			<!-- 慢查询sql打印 -->
 			<property name="connectionProperties" value="druid.stat.slowSqlMillis=100" />
 		</bean>
-		<alias name="tx.dataSource" alias="dataSource" />
+		<alias alias="dataSource" name="tx.dataSource" />
 	</beans>
 </beans>

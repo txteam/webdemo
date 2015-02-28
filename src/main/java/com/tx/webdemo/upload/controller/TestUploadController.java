@@ -66,13 +66,14 @@ public class TestUploadController {
     
     @ResponseBody
     @RequestMapping("/multiUpload")
-    public boolean multiUpload(@RequestParam(value = "loanBillId") String loanBillId,
+    public boolean multiUpload(
+            @RequestParam(value = "loanBillId") String loanBillId,
             @RequestParam(value = "processDefFile") CommonsMultipartFile[] processDefFiles) {
         String path = savePath;
         try {
             FileUtils.forceMkdir(new File(path));
             
-            for(CommonsMultipartFile processDefFileTemp : processDefFiles){
+            for (CommonsMultipartFile processDefFileTemp : processDefFiles) {
                 String fileName = processDefFileTemp.getFileItem().getName();
                 File saveFile = new File(path + "/" + fileName);
                 
