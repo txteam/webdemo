@@ -6,7 +6,6 @@
  */
 package com.tx.component.file.context;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
@@ -147,12 +146,11 @@ public class FileContextBuilder extends FileContextConfigurator implements
      * 
       *<保存文件，允许存在的文件写入>
       *<功能详细描述>
-      * @param relativePath
-      * @param filename
-      * @param input
-      * @return [参数说明]
+      * @param relativePath 存储路径
+      * @param filename 文件名
+      * @param input 文件流
+      * @return 文件定义的实体
       * 
-      * @return FileDefinition [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */

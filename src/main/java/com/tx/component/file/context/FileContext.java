@@ -44,12 +44,11 @@ public class FileContext extends FileContextBuilder {
       *    如果文件已经存在，则复写当前文件<br/>
       *    如果文件不存在，则创建文件后写入<br/>
       *    如果对应文件所在的文件夹不存在，对应文件夹会自动创建<br/>
-      * @param relativePath 
-      * @param filename
-      * @param input
-      * @return [参数说明]
+      * @param relativePath 存储路径,此存储路径为文件全路径包括扩展名
+      * @param filename 文件名,此文件的实际文件名称
+      * @param input 文件流
+      * @return 文件定义的实体
       * 
-      * @return FileDefinition [返回类型说明]
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */

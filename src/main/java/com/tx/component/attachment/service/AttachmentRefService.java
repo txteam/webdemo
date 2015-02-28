@@ -14,11 +14,12 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.component.attachment.dao.AttachmentRefDao;
 import com.tx.component.attachment.model.AttachmentRef;
+import com.tx.component.attachment.model.AttachmentRefTypeEnum;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 
@@ -31,7 +32,7 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Component("attachmentRefService")
+@Service("attachmentRefService")
 public class AttachmentRefService {
     
     @SuppressWarnings("unused")
@@ -55,25 +56,24 @@ public class AttachmentRefService {
     public void insertAttachmentRef(AttachmentRef attachmentRef) {
         //TODO:验证参数是否合法
         AssertUtils.notNull(attachmentRef, "attachmentRef is null.");
-        AssertUtils.notEmpty(attachmentRef.getId(), "attachmentRef.id is empty.");
-        
-        //TODO: 设置默认数据
+        AssertUtils.notEmpty(attachmentRef.getId(),
+                "attachmentRef.id is empty.");
         
         this.attachmentRefDao.insertAttachmentRef(attachmentRef);
     }
-      
-     /**
-      * 根据id删除attachmentRef实例
-      * 1、如果入参数为空，则抛出异常
-      * 2、执行删除后，将返回数据库中被影响的条数
-      * @param id
-      * @return 返回删除的数据条数，<br/>
-      * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
-      * 这里讲通用生成的业务层代码定义为返回影响的条数
-      * @return int [返回类型说明]
-      * @exception throws 
-      * @see [类、类#方法、类#成员]
-     */
+    
+    /**
+     * 根据id删除attachmentRef实例
+     * 1、如果入参数为空，则抛出异常
+     * 2、执行删除后，将返回数据库中被影响的条数
+     * @param id
+     * @return 返回删除的数据条数，<br/>
+     * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
+     * 这里讲通用生成的业务层代码定义为返回影响的条数
+     * @return int [返回类型说明]
+     * @exception throws 
+     * @see [类、类#方法、类#成员]
+    */
     @Transactional
     public int deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
@@ -138,15 +138,17 @@ public class AttachmentRefService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public PagedList<AttachmentRef> queryAttachmentRefPagedList(/*TODO:自己定义条件*/int pageIndex,
-            int pageSize) {
+    public PagedList<AttachmentRef> queryAttachmentRefPagedList(
+    /*TODO:自己定义条件*/int pageIndex, int pageSize) {
         //TODO:判断条件合法性
         
         //TODO:生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         
         //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<AttachmentRef> resPagedList = this.attachmentRefDao.queryAttachmentRefPagedList(params, pageIndex, pageSize);
+        PagedList<AttachmentRef> resPagedList = this.attachmentRefDao.queryAttachmentRefPagedList(params,
+                pageIndex,
+                pageSize);
         
         return resPagedList;
     }
@@ -161,7 +163,7 @@ public class AttachmentRefService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public int countAttachmentRef(/*TODO:自己定义条件*/){
+    public int countAttachmentRef(/*TODO:自己定义条件*/) {
         //TODO:判断条件合法性
         
         //TODO:生成查询条件
@@ -187,21 +189,43 @@ public class AttachmentRefService {
     public boolean updateById(AttachmentRef attachmentRef) {
         //TODO:验证参数是否合法，必填字段是否填写，
         AssertUtils.notNull(attachmentRef, "attachmentRef is null.");
-        AssertUtils.notEmpty(attachmentRef.getId(), "attachmentRef.id is empty.");
-        
+        AssertUtils.notEmpty(attachmentRef.getId(),
+                "attachmentRef.id is empty.");
         
         //TODO:生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", attachmentRef.getId());
         
         //TODO:需要更新的字段
-		updateRowMap.put("attachmentId", attachmentRef.getAttachmentId());	
-		updateRowMap.put("refId", attachmentRef.getRefId());	
-		updateRowMap.put("refType", attachmentRef.getRefType());	
+        updateRowMap.put("attachmentId", attachmentRef.getAttachmentId());
+        updateRowMap.put("refId", attachmentRef.getRefId());
+        updateRowMap.put("refType", attachmentRef.getRefType());
         
         int updateRowCount = this.attachmentRefDao.updateAttachmentRef(updateRowMap);
         
         //TODO:如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
+    }
+    
+    /**
+     * 
+      *<插入单据附件数据引用数据>
+      *<功能详细描述>
+      * @param attachmentId 单据附件 id
+      * @param refType 数据引用类型枚举
+      * @param refId 数据引用 id 值
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public void insertAttachmentRefByAttachment(String attachmentId,
+            AttachmentRefTypeEnum refType, String refId) {
+        AttachmentRef ref = new AttachmentRef();
+        ref.setAttachmentId(attachmentId);
+        ref.setRefId(refId);
+        ref.setRefType(refType);
+        this.insertAttachmentRef(ref);
     }
 }

@@ -37,6 +37,7 @@ public interface FileDefinitionResourceDriver {
       * 存储文件<br/>
       *    如果文件已经存在，则进行替换
       *    如果不存在，则新建后进行写入
+      *    如果目录不存在,则自动创建目录
       * <功能详细描述>
       * @param fileDefinition
       * @param input

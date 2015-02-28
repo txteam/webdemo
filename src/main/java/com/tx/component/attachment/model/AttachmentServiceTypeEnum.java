@@ -6,16 +6,15 @@
  */
 package com.tx.component.attachment.model;
 
-
- /**
-  * 单据附件类型枚举<br/>
-  * <功能详细描述>
-  * 
-  * @author  Administrator
-  * @version  [版本号, 2014年11月20日]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
+/**
+ * 单据附件类型枚举<br/>
+ * <功能详细描述>
+ * 
+ * @author  Administrator
+ * @version  [版本号, 2014年11月20日]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
 public enum AttachmentServiceTypeEnum {
     
     收入证明,

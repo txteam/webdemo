@@ -105,17 +105,13 @@ public class DefaultFileDefinitionResourceDriver implements
         return resFileDefinitionResource;
     }
     
-    /**
-     * @param fileDefinition
-     * @param input
-     * @return
-     */
+    
     @Override
     public FileDefinitionResource save(FileDefinition fileDefinition,
             InputStream input) {
-        validateFileDefinition(fileDefinition);
+        validateFileDefinition(fileDefinition); // 检查文件合法性
         
-        String relativePath = fileDefinition.getRelativePath();
+        String relativePath = fileDefinition.getRelativePath(); // 存储路径
         FileSystemResource resource = (FileSystemResource) this.contextLocationResource.createRelative(relativePath);
         //如果对应的文件资源已经存在，则进行替换
         try {

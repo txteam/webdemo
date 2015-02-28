@@ -37,6 +37,7 @@ public class FileContextConfigurator implements InitializingBean {
     
     @Bean(name = "fileDefinitionMyBatisDaoSupport")
     public MyBatisDaoSupport fileDefinitionMyBatisDaoSupport() throws Exception {
+        System.out.println("方法调用顺序 : fileDefinitionMyBatisDaoSupport()");
         // FIXME Rain 这里有问题. 如果 dataSource 为空.(这个方法的调用在自动注入参数之前)就会报错,询问彭总后再修改
         if (this.dataSource == null) {
             return null;
@@ -101,6 +102,7 @@ public class FileContextConfigurator implements InitializingBean {
      * @param 对dataSource进行赋值
      */
     public void setDataSource(DataSource dataSource) {
+        System.out.println("方法调用顺序 : setDataSource()");
         this.dataSource = dataSource;
     }
     
@@ -117,5 +119,21 @@ public class FileContextConfigurator implements InitializingBean {
     public void setMybatisConfigLocation(String mybatisConfigLocation) {
         this.mybatisConfigLocation = mybatisConfigLocation;
     }
+
+    /**
+     * @param 对system进行赋值
+     */
+    public void setSystem(String system) {
+        this.system = system;
+    }
+
+    /**
+     * @param 对module进行赋值
+     */
+    public void setModule(String module) {
+        this.module = module;
+    }
+    
+    
     
 }

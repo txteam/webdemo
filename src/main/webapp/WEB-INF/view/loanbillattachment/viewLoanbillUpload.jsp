@@ -51,7 +51,9 @@ $(document).ready(function(){
 <div class="easyui-layout" data-options="fit : true,border : false">
 	<div data-options="region:'center',border:true">
 		<form id="uploafForm" class="form">
-			<input type="hidden" id="requestId" name="requestId"  value="${requestId }">
+		<input type="hidden" id="serviceType" name="serviceType"  value="loanBillUploadTestType">
+			<input type="hidden" id="loanBillId" name="loanBillId"  value="0000000000000000">
+			<input type="hidden" id="clientId" name="clientId"  value="0000000000000000">
 		 	<table style="border: 0px;">
 		 		<tr>
 		 			<td width="60%">&nbsp;</td>

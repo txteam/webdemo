@@ -19,6 +19,8 @@
 		</property>
 		<property name="dataSourceType"
 			value="#{config.getValue('dataSource.dataSourceType')}"></property>
+		<property name="system" value="LoanBillAttachmentSystem" />
+		<property name="module" value="LoanBillAttachmentModule" />
 	</bean>
 
 	<bean id="config" class="com.tx.core.util.PropertiesReader">

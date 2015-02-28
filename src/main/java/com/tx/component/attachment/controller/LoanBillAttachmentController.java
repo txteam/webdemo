@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -43,13 +44,6 @@ public class LoanBillAttachmentController {
     @Resource(name = "loanBillAttachmentService")
     private LoanBillAttachmentService loanBillAttachmentService;
     
-    @Resource(name = "loanBillFileContext")
-    private FileContext fileContext;
-    
-    /**单据附件保存地址 */
-    private String savePath = ConfigContext.getContext()
-            .getConfigPropertyValueByKey("test.upload.local.savePath");
-    
     /**
      * 
       *<单据附件上传页面>
@@ -62,7 +56,6 @@ public class LoanBillAttachmentController {
      */
     @RequestMapping("/toViewLoanbillUpload")
     public String toViewLoanBillAttachmentUpload(Model requestAttrs) {
-        System.out.println("requestmapping - toViewLoanBillAttachmentUpload");
         return "/loanbillattachment/viewLoanbillUpload";
     }
     
@@ -81,24 +74,22 @@ public class LoanBillAttachmentController {
     @ResponseBody
     @RequestMapping("/doUpload")
     public boolean upload(
-            @RequestParam(value = "requestId") String requestId,
+            @RequestParam(value = "serviceType") String serviceType,
+            @RequestParam(value = "loanBillId") String loanBillId,
+            @RequestParam(value = "clientId") String clientId,
             @RequestParam(value = "processDefFile") CommonsMultipartFile processDefFile) {
-        String path = savePath;
+        
         try {
-            FileUtils.forceMkdir(new File(path));
-            
-            fileContext.save(relativePath, filename, input)
-            
-            String fileName = processDefFile.getFileItem().getName();
-            File saveFile = new File(path + "/" + fileName);
-            
-            IOUtils.copy(processDefFile.getFileItem().getInputStream(),
-                    new FileOutputStream(saveFile));
-        } catch (IOException e) {
-            throw ExceptionWrapperUtils.wrapperIOException(e,
-                    "make dir error.",
-                    path);
+            loanBillAttachmentService.saveLoanBillAttachment(processDefFile,
+                    serviceType,
+                    loanBillId,
+                    clientId);
+        } catch (Exception e) {
+            // FIXME 何雨 在次框架下 异常不知道这么处理
+            e.printStackTrace();
+            return false;
         }
+        
         return true;
     }
     
@@ -113,7 +104,7 @@ public class LoanBillAttachmentController {
     */
     @RequestMapping("/toViewLoanbills")
     public String toViewLoanBillAttachments(Model requestAttrs) {
-        System.out.println("requestmapping - toViewLoanBillAttachments");
+        
         return "/loanbillattachment/viewLoanBills";
     }
     

@@ -102,42 +102,42 @@ public class FileDefinition {
     }
     
     /**
-     * @return 返回 relativePath
+     * @return 返回 存储路径
      */
     public String getRelativePath() {
         return relativePath;
     }
 
     /**
-     * @param 对relativePath进行赋值
+     * @param 对 存储路径 进行赋值
      */
     public void setRelativePath(String relativePath) {
         this.relativePath = relativePath;
     }
 
     /**
-     * @return 返回 filename
+     * @return 返回 文件名
      */
     public String getFilename() {
         return filename;
     }
     
     /**
-     * @param 对filename进行赋值
+     * @param 对 文件名 进行赋值
      */
     public void setFilename(String filename) {
         this.filename = filename;
     }
     
     /**
-     * @return 返回 filenameExtension
+     * @return 返回 文件的后缀名
      */
     public String getFilenameExtension() {
         return filenameExtension;
     }
     
     /**
-     * @param 对filenameExtension进行赋值
+     * @param 对 文件的后缀名 进行赋值
      */
     public void setFilenameExtension(String filenameExtension) {
         this.filenameExtension = filenameExtension;
