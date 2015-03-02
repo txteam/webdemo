@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import com.tx.component.attachment.dao.AttachmentDao;
-import com.tx.component.attachment.dao.AttachmentRefDao;
 import com.tx.component.attachment.model.Attachment;
 import com.tx.component.attachment.model.AttachmentRef;
 import com.tx.component.attachment.model.AttachmentRefTypeEnum;
@@ -52,13 +50,9 @@ public class LoanBillAttachmentService {
     @Resource(name = "loanBillFileContext")
     private FileContext fileContext;
     
-    /**单据附件 Dao*/
-    @Resource(name = "attachmentDao")
-    private AttachmentDao attachmentDao;
-    
-    /**单据附件数据引用 Dao*/
-    @Resource(name = "attachmentRefDao")
-    private AttachmentRefDao AttachmentRefDao;
+    /** 单据附件业务层 */
+    @Resource(name = "attachmentService")
+    private AttachmentService attachmentService;
     
     /**单据附件数据引用处理器*/
     @Resource(name = "attachmentRefService")
@@ -90,42 +84,17 @@ public class LoanBillAttachmentService {
         AssertUtils.notEmpty(loanBillId, "loanBillId is empty.");
         AssertUtils.notEmpty(clientInfoId, "clientInfoId is empty.");
         
+        //利用map存放，上一张，以及下一张的图片名称，便于生成图片之间的级联关系
         Map<String, Attachment> attachmentsMap = new HashMap<>();
         Map<Attachment, String> attachmentsPreFileNameMap = new HashMap<>();
         Map<Attachment, String> attachmentsNextFileNameMap = new HashMap<>();
         for (CommonsMultipartFile fileTemp : processDefFiles) {
-            FileItem fileItem = fileTemp.getFileItem();
-            String fileName = fileItem.getName();
-            String filenameExtension = org.springframework.util.StringUtils.getFilenameExtension(fileItem.getName());
-            String[] fileNames = StringUtils.splitPreserveAllTokens(fileName,
-                    "_");
-            AssertUtils.isTrue(fileNames.length >= 3 ,"fileNames length < 3,fileName :{}",fileName);
-            String currentFileName = fileNames[0];
-            String preFileName = fileNames[1];
-            String nextFileName = fileNames[2];
-            
-            StringBuilder sb = new StringBuilder(TxConstants.INITIAL_STR_LENGTH);
-            sb.append(loanBillAttachmentSaveBasePath).append("/");
-            sb.append(clientInfoId).append("/");
-            sb.append(serviceType).append("/");
-            sb.append(currentFileName).append(".").append(filenameExtension);
-            
-            // 保存附件(保存附件描述到数据库,保存附件到存储设备)
-            FileDefinition fileDef = null;
-            try {
-                fileDef = fileContext.save(sb.toString(),
-                        currentFileName + "." + filenameExtension,
-                        fileTemp.getInputStream());
-            } catch (IOException e) {
-                throw ExceptionWrapperUtils.wrapperIOException(e,
-                        e.getMessage());
-            }
-            
-            // 保存单据附件信息
-            Attachment attachment = buildAttachment(fileDef, serviceType);
-            attachmentsMap.put(currentFileName, attachment);
-            attachmentsPreFileNameMap.put(attachment, preFileName);
-            attachmentsNextFileNameMap.put(attachment, nextFileName);
+            saveAttachmentFile(serviceType,
+                    clientInfoId,
+                    attachmentsMap,
+                    attachmentsPreFileNameMap,
+                    attachmentsNextFileNameMap,
+                    fileTemp);
         }
         
         //处理附件的上一张，下一张
@@ -143,6 +112,62 @@ public class LoanBillAttachmentService {
             refList.add(buildAttachmentRef(attTemp, AttachmentRefTypeEnum.CLIENT, clientInfoId));
             refList.add(buildAttachmentRef(attTemp, AttachmentRefTypeEnum.LOANBILL, loanBillId));
         }
+        this.attachmentService.batchInsertAttachment(new ArrayList<>(attachmentsMap.values()));
+        this.attachmentRefService.batchInsertAttachmentRef(refList);
+    }
+
+    
+     /** 
+      * 将附件对应的文件存放于文件容器中<br/>
+      * <功能详细描述>
+      * @param serviceType
+      * @param clientInfoId
+      * @param attachmentsMap
+      * @param attachmentsPreFileNameMap
+      * @param attachmentsNextFileNameMap
+      * @param fileTemp [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+      */
+    private void saveAttachmentFile(AttachmentServiceTypeEnum serviceType,
+            String clientInfoId, Map<String, Attachment> attachmentsMap,
+            Map<Attachment, String> attachmentsPreFileNameMap,
+            Map<Attachment, String> attachmentsNextFileNameMap,
+            CommonsMultipartFile fileTemp) {
+        FileItem fileItem = fileTemp.getFileItem();
+        String fileName = fileItem.getName();
+        String filenameExtension = org.springframework.util.StringUtils.getFilenameExtension(fileItem.getName());
+        String[] fileNames = StringUtils.splitPreserveAllTokens(fileName,
+                "_");
+        AssertUtils.isTrue(fileNames.length >= 3 ,"fileNames length < 3,fileName :{}",fileName);
+        String currentFileName = fileNames[0];
+        String preFileName = fileNames[1];
+        String nextFileName = fileNames[2];
+        
+        StringBuilder sb = new StringBuilder(TxConstants.INITIAL_STR_LENGTH);
+        sb.append(loanBillAttachmentSaveBasePath).append("/");
+        sb.append(clientInfoId).append("/");
+        sb.append(serviceType).append("/");
+        sb.append(currentFileName).append(".").append(filenameExtension);
+        
+        // 保存附件(保存附件描述到数据库,保存附件到存储设备)
+        FileDefinition fileDef = null;
+        try {
+            fileDef = fileContext.save(sb.toString(),
+                    currentFileName + "." + filenameExtension,
+                    fileTemp.getInputStream());
+        } catch (IOException e) {
+            throw ExceptionWrapperUtils.wrapperIOException(e,
+                    e.getMessage());
+        }
+        
+        // 保存单据附件信息
+        Attachment attachment = buildAttachment(fileDef, serviceType);
+        attachmentsMap.put(currentFileName, attachment);
+        attachmentsPreFileNameMap.put(attachment, preFileName);
+        attachmentsNextFileNameMap.put(attachment, nextFileName);
     }
     
     /**
