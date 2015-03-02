@@ -17,7 +17,47 @@ package com.tx.component.attachment.model;
  */
 public enum AttachmentServiceTypeEnum {
     
-    收入证明,
+    INCOME_PROOF("INCOME_PROOF","收入证明"),
     
-    申请单;
+    LOAN_BILL("INCOME_PROOF","申请单"),
+    
+    IDENTITY_PROOF("IDENTITY_PROOF","身份证明");
+    
+    private String code;
+    
+    private String name;
+
+    /** <默认构造函数> */
+    private AttachmentServiceTypeEnum(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    /**
+     * @return 返回 code
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * @param 对code进行赋值
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
+     * @return 返回 name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param 对name进行赋值
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 }

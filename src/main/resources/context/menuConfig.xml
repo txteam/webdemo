@@ -6,8 +6,8 @@
 		<menu id="system_config" text="系统管理" authKey="system_config">
 
 			<menu id="menu_test_loanbillupload" text="单据附件导入"
-				href="/loanBillAttachment/toViewLoanbillUpload.action"
-				authKey="menu_test_loanbillupload" target="mainTabs" selectRefresh="false" />
+				href="/loanBillAttachment/toTestLoanBillAttachmentUpload.action"
+				authKey="TO_TEST_LOANBILL_ATTACHMENT_UPLOAD" target="mainTabs" selectRefresh="false" />
 
 			<menu id="menu_test_loanbills" text="附件列表"
 				href="/loanBillAttachment/toViewLoanbills.action" authKey="menu_test_loanbills"

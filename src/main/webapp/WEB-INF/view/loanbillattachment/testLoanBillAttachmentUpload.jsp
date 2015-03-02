@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html>
@@ -43,6 +44,14 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$("#toUploadLoanBillAttachments").click(function(){
+		GlobalDialogUtils.openModalDialog(
+			"uploadLoanBillAttachments",
+			"上传附件",
+			$.formatString("${contextPath}/loanBillAttachment/toUploadLoanBillAttachments.action?serviceType={0}&loanBillId={1}&clientInfoId={2}",$("#serviceType").val(),"111","111"),
+			800,600,function(){
+		});
+	});
 })
 </script>
 </head>
@@ -51,7 +60,6 @@ $(document).ready(function(){
 <div class="easyui-layout" data-options="fit : true,border : false">
 	<div data-options="region:'center',border:true">
 		<form id="uploafForm" class="form">
-		<input type="hidden" id="serviceType" name="serviceType"  value="loanBillUploadTestType">
 			<input type="hidden" id="loanBillId" name="loanBillId"  value="0000000000000000">
 			<input type="hidden" id="clientId" name="clientId"  value="0000000000000000">
 		 	<table style="border: 0px;">
@@ -72,6 +80,16 @@ $(document).ready(function(){
 		 		</tr>
 		 	</table>
 		</form>
+		<br/>
+		<div>
+			<select class="select" id="serviceType" name="serviceType">
+				<c:forEach items="${serviceTypes }" var="serviceTypeTemp">
+					<option value="${serviceTypeTemp.code }">${serviceTypeTemp.name }</option>
+				</c:forEach>
+			</select>
+			<a id="toUploadLoanBillAttachments" class="easyui-linkbutton">跳转到上传附件</a>
+		</div>
+		
     </div>
 </div>
 </body>
