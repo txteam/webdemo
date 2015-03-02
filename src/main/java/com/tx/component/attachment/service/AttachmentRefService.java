@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.component.attachment.dao.AttachmentRefDao;
 import com.tx.component.attachment.model.AttachmentRef;
-import com.tx.component.attachment.model.AttachmentRefTypeEnum;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 
@@ -54,12 +53,32 @@ public class AttachmentRefService {
     */
     @Transactional
     public void insertAttachmentRef(AttachmentRef attachmentRef) {
-        //TODO:验证参数是否合法
+        //验证参数是否合法
         AssertUtils.notNull(attachmentRef, "attachmentRef is null.");
-        AssertUtils.notEmpty(attachmentRef.getId(),
-                "attachmentRef.id is empty.");
         
         this.attachmentRefDao.insertAttachmentRef(attachmentRef);
+    }
+    
+    /**
+      * 批量插入附件引用<br/>
+      * <功能详细描述>
+      * @param attachmentRefList [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public void batchInsertAttachmentRef(List<AttachmentRef> attachmentRefList) {
+        //验证参数是否合法
+        AssertUtils.notEmpty(attachmentRefList, "attachmentRefList is empty.");
+        
+        for (AttachmentRef ref : attachmentRefList) {
+            AssertUtils.notEmpty(ref.getAttachmentId(),
+                    "attachmentRef.attachmentId is empty.");
+        }
+        
+        this.attachmentRefDao.batchInsertAttachmentRef(attachmentRefList);
     }
     
     /**
@@ -207,25 +226,4 @@ public class AttachmentRefService {
         return updateRowCount >= 1;
     }
     
-    /**
-     * 
-      *<插入单据附件数据引用数据>
-      *<功能详细描述>
-      * @param attachmentId 单据附件 id
-      * @param refType 数据引用类型枚举
-      * @param refId 数据引用 id 值
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @Transactional
-    public void insertAttachmentRefByAttachment(String attachmentId,
-            AttachmentRefTypeEnum refType, String refId) {
-        AttachmentRef ref = new AttachmentRef();
-        ref.setAttachmentId(attachmentId);
-        ref.setRefId(refId);
-        ref.setRefType(refType);
-        this.insertAttachmentRef(ref);
-    }
 }

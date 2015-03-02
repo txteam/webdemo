@@ -6,6 +6,7 @@
  */
 package com.tx.component.attachment.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,27 +54,51 @@ public class AttachmentService {
     */
     @Transactional
     public void insertAttachment(Attachment attachment) {
-        //TODO:验证参数是否合法
+        //验证参数是否合法
         AssertUtils.notNull(attachment, "attachment is null.");
-        AssertUtils.notEmpty(attachment.getId(), "attachment.id is empty.");
         
-        //TODO: 设置默认数据
+        Date now = new Date();
+        attachment.setCreateDate(now);
+        attachment.setLastUpdateDate(now);
         
         this.attachmentDao.insertAttachment(attachment);
     }
-      
-     /**
-      * 根据id删除attachment实例
-      * 1、如果入参数为空，则抛出异常
-      * 2、执行删除后，将返回数据库中被影响的条数
-      * @param id
-      * @return 返回删除的数据条数，<br/>
-      * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
-      * 这里讲通用生成的业务层代码定义为返回影响的条数
-      * @return int [返回类型说明]
-      * @exception throws 
+    
+    /**
+      * 批量插入附件对象<br/>
+      * <功能详细描述>
+      * @param attachmentList [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @Transactional
+    public void batchInsertAttachment(List<Attachment> attachmentList) {
+        //验证参数是否合法
+        AssertUtils.notEmpty(attachmentList, "attachmentList is null.");
+        
+        for (Attachment attachment : attachmentList) {
+            Date now = new Date();
+            attachment.setCreateDate(now);
+            attachment.setLastUpdateDate(now);
+        }
+        
+        this.attachmentDao.batchInsertAttachment(attachmentList);
+    }
+    
+    /**
+     * 根据id删除attachment实例
+     * 1、如果入参数为空，则抛出异常
+     * 2、执行删除后，将返回数据库中被影响的条数
+     * @param id
+     * @return 返回删除的数据条数，<br/>
+     * 有些业务场景，如果已经被别人删除同样也可以认为是成功的
+     * 这里讲通用生成的业务层代码定义为返回影响的条数
+     * @return int [返回类型说明]
+     * @exception throws 
+     * @see [类、类#方法、类#成员]
+    */
     @Transactional
     public int deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
@@ -138,15 +163,17 @@ public class AttachmentService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public PagedList<Attachment> queryAttachmentPagedList(/*TODO:自己定义条件*/int pageIndex,
-            int pageSize) {
+    public PagedList<Attachment> queryAttachmentPagedList(
+    /*TODO:自己定义条件*/int pageIndex, int pageSize) {
         //TODO:判断条件合法性
         
         //TODO:生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         
         //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<Attachment> resPagedList = this.attachmentDao.queryAttachmentPagedList(params, pageIndex, pageSize);
+        PagedList<Attachment> resPagedList = this.attachmentDao.queryAttachmentPagedList(params,
+                pageIndex,
+                pageSize);
         
         return resPagedList;
     }
@@ -161,7 +188,7 @@ public class AttachmentService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public int countAttachment(/*TODO:自己定义条件*/){
+    public int countAttachment(/*TODO:自己定义条件*/) {
         //TODO:判断条件合法性
         
         //TODO:生成查询条件
@@ -189,25 +216,25 @@ public class AttachmentService {
         AssertUtils.notNull(attachment, "attachment is null.");
         AssertUtils.notEmpty(attachment.getId(), "attachment.id is empty.");
         
-        
         //TODO:生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", attachment.getId());
         
         //TODO:需要更新的字段
-		updateRowMap.put("deleteOperatorId", attachment.getDeleteOperatorId());	
-		updateRowMap.put("createOperatorId", attachment.getCreateOperatorId());	
-		updateRowMap.put("deleteDate", attachment.getDeleteDate());	
-		updateRowMap.put("nextId", attachment.getNextId());	
-		updateRowMap.put("serviceType", attachment.getServiceType());	
-		updateRowMap.put("lastUpdateOperatorId", attachment.getLastUpdateOperatorId());	
-		updateRowMap.put("lastUpdateDate", attachment.getLastUpdateDate());	
-		updateRowMap.put("fileId", attachment.getFileId());	
-		updateRowMap.put("parentId", attachment.getParentId());	
-		updateRowMap.put("filename", attachment.getFilename());	
-		updateRowMap.put("filenameExtension", attachment.getFilenameExtension());	
-		updateRowMap.put("createDate", attachment.getCreateDate());	
-		updateRowMap.put("preId", attachment.getPreId());	
+        updateRowMap.put("deleteOperatorId", attachment.getDeleteOperatorId());
+        updateRowMap.put("createOperatorId", attachment.getCreateOperatorId());
+        updateRowMap.put("deleteDate", attachment.getDeleteDate());
+        updateRowMap.put("nextId", attachment.getNextId());
+        updateRowMap.put("serviceType", attachment.getServiceType());
+        updateRowMap.put("lastUpdateOperatorId",
+                attachment.getLastUpdateOperatorId());
+        updateRowMap.put("lastUpdateDate", attachment.getLastUpdateDate());
+        updateRowMap.put("fileId", attachment.getFileId());
+        updateRowMap.put("parentId", attachment.getParentId());
+        updateRowMap.put("filename", attachment.getFilename());
+        updateRowMap.put("filenameExtension", attachment.getFilenameExtension());
+        updateRowMap.put("createDate", attachment.getCreateDate());
+        updateRowMap.put("preId", attachment.getPreId());
         
         int updateRowCount = this.attachmentDao.updateAttachment(updateRowMap);
         

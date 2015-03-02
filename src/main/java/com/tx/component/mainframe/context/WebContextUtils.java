@@ -19,6 +19,7 @@ import com.tx.component.auth.context.AuthContext;
 import com.tx.component.operator.model.Operator;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.Post;
+import com.tx.core.exceptions.SILException;
 import com.tx.core.exceptions.util.AssertUtils;
 
 /**
@@ -108,6 +109,9 @@ public class WebContextUtils {
      */
     public static String getCurrentVcid() {
         HttpSession session = getSession(true);
+        if(null == session ){
+            return null;
+        }
         
         String vcid = (String) session.getAttribute(SESSION_CURRENT_VCID);
         return vcid;
@@ -124,9 +128,27 @@ public class WebContextUtils {
      */
     public static Organization getCurrentOrganization() {
         HttpSession session = getSession(true);
-        
+        if(null == session ){
+            return null;
+        }
         Organization currentOrganization = (Organization) session.getAttribute(SESSION_CURRENT_ORGANIZATION);
         return currentOrganization;
+    }
+    
+    public static String getCurrentOrganizationId() {
+        Organization organization = getCurrentOrganization();
+        String organizationId = organization == null ? null
+                : organization.getId();
+        return organizationId;
+    }
+    
+    public static String getServletContextPath() {
+        return "d:/servletContext";
+        //throw new SILException("未实现的临时方法");
+    }
+    
+    public static Post getCurrentPost() {
+        throw new SILException("未实现的临时方法");
     }
     
     /**
@@ -140,9 +162,27 @@ public class WebContextUtils {
     */
     public static Operator getCurrentOperator() {
         HttpSession session = getSession(true);
-        
+        if(null == session ){
+            return null;
+        }
         Operator currentOperator = (Operator) session.getAttribute(SESSION_CURRENT_OPERATOR);
         return currentOperator;
+    }
+    
+    /**
+      * 获取当前操作人员的id
+      *<功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public static String getCurrentOperatorId() {
+        Operator currentOperator = getCurrentOperator();
+        String currentOperatorId = currentOperator == null ? null
+                : currentOperator.getId();
+        return currentOperatorId;
     }
     
     /**

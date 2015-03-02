@@ -23,13 +23,17 @@ $(document).ready(function(){
 	var flashvars = {
 	};
 	var params = {
-		menu: "false",
-		scale: "noScale",
-		allowFullscreen: "false",
-		allowScriptAccess: "always",
-		bgcolor: "#fff",
-		wmode: "direct"
-	};
+			menu: "false",
+			scale: "noScale",
+			allowFullscreen: "false",
+			allowScriptAccess: "always",
+			bgcolor: "#fff",
+			bordercolor: "0x686768",
+			wmode: "direct" // can cause issues with FP settings & webcam
+		};
+	function returnVar(varName) { 
+        return params[varName]; 
+	}
 	var attributes = {
 		id:"ScanUploader",
 		name:"ScanUploader"
@@ -50,9 +54,10 @@ $(document).ready(function(){
 	        return document[movieName];
 	    }
 	}
- 	function sendclick(){
- 		thisMovie("ScanUploader").SetParameter("UPLOADURL", "${pageContext.request.contextPath}/loanBillAttachment/uploadLoanBillAttachments.action");
- 	}
+	setTimeout(function(){
+		thisMovie("ScanUploader").SetParameter("UPLOADURL", "${pageContext.request.contextPath}/loanBillAttachment/uploadLoanBillAttachments.action?serviceType=INCOME_PROOF&clientInfoId=2222")
+		//thisMovie("ScanUploader").SetParameter("UPLOADURL", "${pageContext.request.contextPath}/loanBillAttachment/uploadLoanBillAttachments.action?serviceType=INCOME_PROOF&loanBillId=333311112222&clientInfoId=2222")
+	},5000)
 })
 </script>
 </head>

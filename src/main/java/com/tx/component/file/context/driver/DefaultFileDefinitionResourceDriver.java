@@ -47,6 +47,14 @@ public class DefaultFileDefinitionResourceDriver implements
         AssertUtils.notEmpty(path, "location is empty.");
         this.path = path;
         this.contextLocationResource = new FileSystemResource(this.path);
+        if (!this.contextLocationResource.exists()) {
+            try {
+                FileUtils.forceMkdir(new File(path));
+            } catch (IOException e) {
+                throw ExceptionWrapperUtils.wrapperIOException(e,
+                        e.getMessage());
+            }
+        }
     }
     
     /** <默认构造函数> */
@@ -104,7 +112,6 @@ public class DefaultFileDefinitionResourceDriver implements
                 resource);
         return resFileDefinitionResource;
     }
-    
     
     @Override
     public FileDefinitionResource save(FileDefinition fileDefinition,

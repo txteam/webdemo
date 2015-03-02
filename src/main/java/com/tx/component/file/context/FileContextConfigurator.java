@@ -6,6 +6,7 @@
  */
 package com.tx.component.file.context;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.tx.component.file.context.driver.DefaultFileDefinitionResourceDriver;
 import com.tx.component.file.dao.impl.FileDefinitionDaoImpl;
 import com.tx.component.file.service.FileDefinitionService;
 import com.tx.core.dbscript.context.DBScriptExecutorContext;
@@ -37,11 +39,6 @@ public class FileContextConfigurator implements InitializingBean {
     
     @Bean(name = "fileDefinitionMyBatisDaoSupport")
     public MyBatisDaoSupport fileDefinitionMyBatisDaoSupport() throws Exception {
-        System.out.println("方法调用顺序 : fileDefinitionMyBatisDaoSupport()");
-        // FIXME Rain 这里有问题. 如果 dataSource 为空.(这个方法的调用在自动注入参数之前)就会报错,询问彭总后再修改
-        if (this.dataSource == null) {
-            return null;
-        }
         MyBatisDaoSupport res = MyBatisDaoSupportHelper.buildMyBatisDaoSupport(this.mybatisConfigLocation,
                 new String[] { "classpath*:com/tx/component/file/**/*SqlMap.xml" },
                 this.dataSourceType,
@@ -62,19 +59,21 @@ public class FileContextConfigurator implements InitializingBean {
     }
     
     /** 数据源 */
+    @Resource(name = "dataSource")
     private DataSource dataSource;
     
+    /** 数据脚本自动执行器 */
+    @Resource(name = "dbScriptExecutorContext")
+    protected DBScriptExecutorContext dbScriptExecutorContext;
+    
     /** 数据源类型 */
-    private DataSourceTypeEnum dataSourceType;
+    private DataSourceTypeEnum dataSourceType = DataSourceTypeEnum.MYSQL;
     
     /** mybatis的配置文件所在目录 */
     private String mybatisConfigLocation = "classpath:context/mybatis-config.xml";
     
-    /** 数据脚本自动执行器 */
-    protected DBScriptExecutorContext dbScriptExecutorContext;
-    
     /** 是否自动执行数据脚本 */
-    protected boolean databaseSchemaUpdate = false;
+    protected boolean databaseSchemaUpdate = true;
     
     /** 如果没有指定系统，则默认的系统id */
     protected String system = "default";
@@ -83,7 +82,7 @@ public class FileContextConfigurator implements InitializingBean {
     protected String module = "default";
     
     /** 本地文件存储容器的基础路径: */
-    //    protected String location;
+    protected String location = "d:/test";
     
     /** 如果存在指定的driver则使用指定的driver,如果不存在，则使用defaultFileDefitionResourceDriver */
     protected FileDefinitionResourceDriver driver;
@@ -95,14 +94,16 @@ public class FileContextConfigurator implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         AssertUtils.notNull(system, "system is null.");
         AssertUtils.notNull(module, "module is null.");
-        //        AssertUtils.notEmpty(location, "location is empty.");
+        
+        if(driver == null){
+            this.driver = new DefaultFileDefinitionResourceDriver(location);
+        }
     }
     
     /**
      * @param 对dataSource进行赋值
      */
     public void setDataSource(DataSource dataSource) {
-        System.out.println("方法调用顺序 : setDataSource()");
         this.dataSource = dataSource;
     }
     
@@ -133,7 +134,4 @@ public class FileContextConfigurator implements InitializingBean {
     public void setModule(String module) {
         this.module = module;
     }
-    
-    
-    
 }

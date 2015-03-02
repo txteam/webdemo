@@ -11,7 +11,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.tx.component.file.dao.FileDefinitionDao;

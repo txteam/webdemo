@@ -87,40 +87,6 @@ public class LoanBillAttachmentController {
     }
     
     /**
-     * 
-      *<上传>
-      *<功能详细描述>
-      * @param requestId
-      * @param processDefFile
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @ResponseBody
-    @RequestMapping("/doUpload")
-    public boolean upload(
-            @RequestParam(value = "serviceType") String serviceType,
-            @RequestParam(value = "loanBillId") String loanBillId,
-            @RequestParam(value = "clientId") String clientId,
-            @RequestParam(value = "processDefFile") CommonsMultipartFile processDefFile) {
-        
-        try {
-            loanBillAttachmentService.saveLoanBillAttachment(processDefFile,
-                    serviceType,
-                    loanBillId,
-                    clientId);
-        } catch (Exception e) {
-            // FIXME 何雨 在次框架下 异常不知道这么处理
-            e.printStackTrace();
-            return false;
-        }
-        
-        return true;
-    }
-    
-    /**
       * 跳转到单据附件预览页面<br/>
       * <功能详细描述>
       * @return [参数说明]
@@ -132,11 +98,11 @@ public class LoanBillAttachmentController {
     @ResponseBody
     @RequestMapping("/uploadLoanBillAttachments")
     public boolean uploadLoanBillAttachments(
-            @RequestParam(value = "processDefFile") CommonsMultipartFile[] processDefFile,
-            @RequestParam(value = "serviceType") String serviceType,
+            @RequestParam(value = "processDefFile") CommonsMultipartFile[] processDefFiles,
+            @RequestParam(value = "serviceType") AttachmentServiceTypeEnum serviceType,
             @RequestParam(value = "loanBillId") String loanBillId,
-            @RequestParam(value = "clientinfoId", required = false) String clientinfoId) {
-        
+            @RequestParam(value = "clientInfoId") String clientInfoId) {
+        this.loanBillAttachmentService.saveLoanBillAttachments(processDefFiles, serviceType, loanBillId, clientInfoId);
         return true;
     }
 }
