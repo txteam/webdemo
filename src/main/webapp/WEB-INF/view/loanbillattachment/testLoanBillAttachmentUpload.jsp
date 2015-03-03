@@ -89,7 +89,12 @@ $(document).ready(function(){
 			</select>
 			<a id="toUploadLoanBillAttachments" class="easyui-linkbutton">跳转到上传附件</a>
 		</div>
-		
+		<br/>
+		<div>
+			contextPath + /fileContext/resource/imageResource?fileDefinitionId=123
+			<br>
+			contextPath + /fileContext/resource/thumbnailImageResource?fileDefinitionId=123
+		</div>
     </div>
 </div>
 </body>

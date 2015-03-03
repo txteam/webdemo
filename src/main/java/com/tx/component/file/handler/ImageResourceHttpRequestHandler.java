@@ -29,6 +29,14 @@ public class ImageResourceHttpRequestHandler extends ResourceHttpRequestHandler 
     private FileContext fileContext;
     
     /**
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        //覆写该方法去除locations必填的设定
+    }
+    
+    /**
      * @param request
      * @return
      */
@@ -40,10 +48,13 @@ public class ImageResourceHttpRequestHandler extends ResourceHttpRequestHandler 
         }
         //根据fileDefinitionId获取对应的资源
         Resource resource = fileContext.getResourceByFileDefinitionId(fileDefinitionId);
+        if(resource == null || !resource.exists()){
+            return null;
+        }
         //返回图片资源
         return resource;
     }
-
+    
     /**
      * @return 返回 fileContext
      */
@@ -57,4 +68,8 @@ public class ImageResourceHttpRequestHandler extends ResourceHttpRequestHandler 
     public void setFileContext(FileContext fileContext) {
         this.fileContext = fileContext;
     }
+
+
+
+    
 }

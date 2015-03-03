@@ -15,30 +15,21 @@
 	<!-- 补充说明：多个HandlerMapping的执行顺序问题： DefaultAnnotationHandlerMapping的order属性值是：0 
 		<mvc:resources/ >自动注册的 SimpleUrlHandlerMapping的order属性值是： 2147483646 <mvc:default-servlet-handler/>自动注册 
 		的SimpleUrlHandlerMapping 的order属性值是： 2147483647 HandlerMapping转到org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler处理 -->
-	<!-- 
-	静态资源映射 
-	<mvc:resources mapping="/images/**" location="/resources/images/"
-		cache-period="31556926" />
-	<mvc:resources mapping="/jquery-ui/**" location="/resources/jquery-ui/"
-		cache-period="31556926" />
-	<mvc:resources mapping="/wijmo/**" location="/resources/wijmo/"
-		cache-period="31556926" />
-	<mvc:resources mapping="/bootstrap/**" location="/resources/bootstrap/"
-		cache-period="31556926" />
-	<mvc:resources mapping="/components/**" location="/resources/components/"
-		cache-period="1"/>
-	<mvc:resources mapping="/css/**" location="/resources/css/" />
-	<mvc:resources mapping="/js/**" location="/resources/js/" />
-	-->
+	<!-- 静态资源映射 <mvc:resources mapping="/images/**" location="/resources/images/" 
+		cache-period="31556926" /> <mvc:resources mapping="/jquery-ui/**" location="/resources/jquery-ui/" 
+		cache-period="31556926" /> <mvc:resources mapping="/wijmo/**" location="/resources/wijmo/" 
+		cache-period="31556926" /> <mvc:resources mapping="/bootstrap/**" location="/resources/bootstrap/" 
+		cache-period="31556926" /> <mvc:resources mapping="/components/**" location="/resources/components/" 
+		cache-period="1"/> <mvc:resources mapping="/css/**" location="/resources/css/" 
+		/> <mvc:resources mapping="/js/**" location="/resources/js/" /> -->
 	<!-- <mvc:default-servlet-handler /> -->
 	<mvc:resources mapping="/view/js/**" location="/resources/js/" />
 
 	<!-- 需要添加该驱动，支持多个convertor的添加 -->
-	<!-- 
-	<mvc:annotation-driven />
-	 -->
+	<!-- <mvc:annotation-driven /> -->
 	<!-- 配置扫描 -->
-	<context:component-scan base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator,com.tx.component.attachment,com.tx.component.file"
+	<context:component-scan
+		base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator,com.tx.component.attachment,com.tx.component.file"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
@@ -55,7 +46,8 @@
 			</property>
 		</bean>
 		<!-- 向request写入contextPath常量 -->
-		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor">
+		<bean
+			class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor">
 			<property name="injectAttributes">
 				<map>
 					<entry key="show_grid_action" value="true"></entry>
@@ -63,13 +55,14 @@
 			</property>
 		</bean>
 		<!-- 业务日志支持拦截器 -->
-		<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
-		<ref bean="authContextSupportInterceptor"/>
-		<ref bean="controllerCheckOperateAuthInterceptor"/>
+		<bean
+			class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
+		<ref bean="authContextSupportInterceptor" />
+		<ref bean="controllerCheckOperateAuthInterceptor" />
 	</mvc:interceptors>
 
 	<!-- 将jsp映射为controller -->
-	<!-- 为方便权限控制，限制jsp直接访问  -->
+	<!-- 为方便权限控制，限制jsp直接访问 -->
 	<!-- 属性转换器 -->
 	<!-- 属性转换器 -->
 	<bean id="conversionService"
@@ -77,10 +70,14 @@
 		<property name="converters">
 			<list>
 				<!-- request to object -->
-				<bean class="org.springframework.core.convert.support.StringToBooleanConverter"></bean>
-				<bean class="org.springframework.core.convert.support.StringToCharacterConverter"></bean>
-				<bean class="org.springframework.core.convert.support.StringToNumberConverterFactory"></bean>
-				<bean class="org.springframework.core.convert.support.StringToEnumConverterFactory"></bean>
+				<bean
+					class="org.springframework.core.convert.support.StringToBooleanConverter"></bean>
+				<bean
+					class="org.springframework.core.convert.support.StringToCharacterConverter"></bean>
+				<bean
+					class="org.springframework.core.convert.support.StringToNumberConverterFactory"></bean>
+				<bean
+					class="org.springframework.core.convert.support.StringToEnumConverterFactory"></bean>
 				<!-- <bean class="org.springframework.core.convert.support.StringToArrayConverter"></bean> -->
 				<!-- <bean class="org.springframework.core.convert.support.StringToCollectionConverter"></bean> -->
 				<!-- <bean class="org.springframework.core.convert.support.StringToPropertiesConverter"></bean> -->
@@ -105,32 +102,53 @@
 				class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 		</property>
 		<property name="conversionService">
-			<ref bean="conversionService"/>
+			<ref bean="conversionService" />
 		</property>
 	</bean>
-	
+
+	<bean id="imageResourceHttpRequestHandler"
+		class="com.tx.component.file.handler.ImageResourceHttpRequestHandler">
+	</bean>
+	<bean id="thumbnailResourceHttpRequestHandler"
+		class="com.tx.component.file.handler.ThumbnailResourceHttpRequestHandler">
+	</bean>
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="order" value="0"></property>
+		<property name="urlMap">
+			<props>
+				<prop key="/fileContext/resource/imageResource">imageResourceHttpRequestHandler</prop>
+				<prop key="/fileContext/resource/thumbnailImageResource">thumbnailResourceHttpRequestHandler</prop>
+			</props>
+		</property>
+	</bean>
 	<!-- 将类及方法映射controller -->
 	<bean id="requestMappingHandlerMapping"
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="order" value="1"></property>
 	</bean>
 	<bean id="requestMappingHandlerAdapter"
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="webBindingInitializer">
-			<ref bean="webBindingInitializer"/>
+			<ref bean="webBindingInitializer" />
 		</property>
 		<property name="messageConverters">
 			<list>
-				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"></bean>
-				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<bean
+					class="org.springframework.http.converter.ByteArrayHttpMessageConverter"></bean>
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
 					<property name="supportedMediaTypes">
 						<list>
 							<value>text/plain;charset=UTF-8</value>
 						</list>
 					</property>
 				</bean>
-				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
-				<bean class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"></bean>
-				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+				<bean
+					class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
+				<bean
+					class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"></bean>
+				<bean
+					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
 				</bean>
 				<bean class="org.springframework.http.converter.FormHttpMessageConverter"></bean>
 			</list>
@@ -148,7 +166,8 @@
 	<bean id="exceptionResolver"
 		class="com.tx.core.springmvc.exceptionresolver.SimpleHandlerExceptionResolver">
 		<property name="warnLogCategory">
-			<value>org.springframework.web.servlet.handler.simplemappingexceptionresolver</value>
+			<value>org.springframework.web.servlet.handler.simplemappingexceptionresolver
+			</value>
 		</property>
 		<property name="defaultErrorView">
 			<value>error/error</value>
@@ -163,7 +182,8 @@
 		</property>
 		<property name="exceptionMappings">
 			<props>
-				<prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error/maxUploadExceeded</prop>
+				<prop
+					key="org.springframework.web.multipart.MaxUploadSizeExceededException">error/maxUploadExceeded</prop>
 				<prop key="com.tx.component.mainframe.exception.SessionLostException">error/sessionLostError</prop>
 			</props>
 		</property>
