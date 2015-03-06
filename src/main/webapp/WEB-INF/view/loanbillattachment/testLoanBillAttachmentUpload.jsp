@@ -49,7 +49,7 @@ $(document).ready(function(){
 			"uploadLoanBillAttachments",
 			"上传附件",
 			$.formatString("${contextPath}/loanBillAttachment/toUploadLoanBillAttachments.action?serviceType={0}&loanBillId={1}&clientInfoId={2}",$("#serviceType").val(),"111","111"),
-			800,600,function(){
+			1200,800,function(){
 		});
 	});
 })

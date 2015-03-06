@@ -17,30 +17,31 @@ body{
 }
 </style>
 <script type="text/javascript">
+var flashvars = {
+};
+var params = {
+	width: 1200,
+	menu: "false",
+	scale: "noScale",
+	allowFullscreen: "false",
+	allowScriptAccess: "always",
+	//bgcolor: "0x98C77C",
+	//bordercolor: "0x686768",
+	wmode: "direct"
+};
+function returnVar(varName) { 
+    return params[varName]; 
+}
+var attributes = {
+	id:"ScanUploader",
+	name:"ScanUploader"
+};
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
-	var flashvars = {
-	};
-	var params = {
-			menu: "false",
-			scale: "noScale",
-			allowFullscreen: "false",
-			allowScriptAccess: "always",
-			bgcolor: "#fff",
-			bordercolor: "0x686768",
-			wmode: "direct" // can cause issues with FP settings & webcam
-		};
-	function returnVar(varName) { 
-        return params[varName]; 
-	}
-	var attributes = {
-		id:"ScanUploader",
-		name:"ScanUploader"
-	};
 	swfobject.embedSWF(
 		"${pageContext.request.contextPath}/js/components/attachmentupload/ScanUploader.swf", 
-		"altContent", "785", "560", "10.0.0", 
+		"altContent", "1185", "760", "10.0.0", 
 		"${pageContext.request.contextPath}/js/components/attachmentupload/expressInstall.swf", 
 		flashvars, params, attributes);
 	function thisMovie(movieName) 
