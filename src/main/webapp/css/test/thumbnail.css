@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+
+#canvas {
+	
+}
+
+#leftDiv {
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 200px;
+	position: fixed;
+	background-color: red;
+	float: left;
+	float: left;
+	width: 200px;
+}
+
+#centerDiv {
+	top: 0px;
+	left: 400px;
+	width: 200px;
+	height: 200px;
+	position: fixed;
+	background-color: green;
+}
+
+#rightDiv {
+	top: 0px;
+	left: 800px;
+	width: 200px;
+	height: 200px;
+	position: fixed;
+	background-color: yellow;
+}

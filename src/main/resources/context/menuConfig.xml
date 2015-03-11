@@ -12,6 +12,10 @@
 			<menu id="menu_test_loanbills" text="附件列表"
 				href="/loanBillAttachment/toViewLoanbills.action" authKey="menu_test_loanbills"
 				target="mainTabs" selectRefresh="false" />
+				
+			<menu id="menu_test_photoalbum" text="图片相册"
+				href="/loanBillAttachment/testPhotoAlbum.action" authKey="menu_test_photoalbum"
+				target="mainTabs" selectRefresh="false" />				
 
 			<menu id="menu_config" text="菜单管理"
 				href="/mainframe/toQueryAllMenuItemTreeList.action" authKey="menu_config"
