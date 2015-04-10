@@ -40,7 +40,7 @@
 				<array>
 					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
 					<value>classpath*:com/tx/webdemo/**/*SqlMap.xml</value>
-					<value>classpath*:com/tx/fetch/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/router/**/*SqlMap.xml</value>
 				</array>
 			</property>
 			<property name="failFast" value="true"></property>
@@ -73,9 +73,9 @@
 
 		<bean id="h2DataSource" class="com.alibaba.druid.pool.DruidDataSource"
 			init-method="init" destroy-method="close">
-			<property name="url" value="jdbc:h2:mem:webdemo" />
-			<property name="username" value="webdemo" />
-			<property name="password" value="webdemo" />
+			<property name="url" value="jdbc:h2:mem:atta" />
+			<property name="username" value="atta" />
+			<property name="password" value="atta" />
 			<property name="driverClassName" value="org.h2.Driver" />
 			<property name="validationQuery" value="SELECT 1 "></property>
 	
@@ -102,7 +102,7 @@
 			</property>
 			<property name="initScriptLocations">
 				<list>
-					<value>classpath:dbscript/oracleStandard.sql</value>
+					<value>classpath:dbscript/h2.sql</value>
 				</list>
 			</property>
 		</bean>
@@ -117,7 +117,7 @@
 				<array>
 					<value>classpath*:com/tx/component/**/*SqlMap.xml</value>
 					<value>classpath*:com/tx/webdemo/**/*SqlMap.xml</value>
-					<value>classpath*:com/tx/fetch/**/*SqlMap.xml</value>
+					<value>classpath*:com/tx/router/**/*SqlMap.xml</value>
 				</array>
 			</property>
 			<property name="failFast" value="true"></property>
@@ -144,16 +144,28 @@
 			</property>
 		</bean>
 		 -->
-		 <bean id="tx.dataSource" class="com.tx.core.datasource.DataSourceFactoryBean">
+		 <bean id="tx.dataSource" class="com.tx.core.datasource.DataSourceFactoryBean" depends-on="tx.initDBScriptExcutor">
 			<property name="supportP6spy" value="true"></property>
 			<property name="datasourceFinderList">
 				<list>
-					<bean
-						class="com.tx.core.datasource.finder.DelegatingDataSourceImplFinder">
+					<bean class="com.tx.core.datasource.finder.DelegatingDataSourceImplFinder">
 						<property name="srcDatasource">
 							<ref bean="druidDataSource" />
 						</property>
 					</bean>
+				</list>
+			</property>
+		</bean>
+		
+		<bean id="tx.initDBScriptExcutor" class="com.tx.core.dbscript.executor.DBScriptAutoExecutor">
+			<property name="sqlScriptEncoding" value="GBK"></property>
+			<property name="ignoreFailedDrops" value="false"></property>
+			<property name="dataSource">
+				<ref bean="druidDataSource" />
+			</property>
+			<property name="initScriptLocations">
+				<list>
+					<value>classpath:dbscript/mysql.sql</value>
 				</list>
 			</property>
 		</bean>

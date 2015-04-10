@@ -4,7 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="ognl" uri="http://com.tx.core/taglib/ognl" %>
 <!DOCTYPE html >
 <html>
 <head>
@@ -185,19 +184,6 @@ $(document).ready(function() {
 	<button id="add" type="button">增加</button>
 	&nbsp;&nbsp;
 	<button id="add" type="button">删除</button>
-	<!--  
-	<--ognl:if test="@com.tx.component.auth.context.AuthContext@getContext().isHasAuth('auth_config_manage')">
-		<button id="add1" type="button">增加1</button>
-	<--/ognl:if>
-	<--ognl:choose>
-		<--ognl:when test="@com.tx.component.auth.context.AuthContext@getContext().isHasAuth('this_not_exist_auth')">
-			<button id="add1" type="button">增加2</button>
-		<--/ognl:when>
-		<--ognl:otherwise>
-			<button id="add1" type="button">增加3</button>
-		<--/ognl:otherwise>
-	<--/ognl:choose>
-	-->
 </div>
 </div>
 </form:form>

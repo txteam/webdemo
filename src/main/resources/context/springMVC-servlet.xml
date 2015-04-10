@@ -55,8 +55,7 @@
 			</property>
 		</bean>
 		<!-- 业务日志支持拦截器 -->
-		<bean
-			class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
+		<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
 		<ref bean="authContextSupportInterceptor" />
 		<ref bean="controllerCheckOperateAuthInterceptor" />
 	</mvc:interceptors>
