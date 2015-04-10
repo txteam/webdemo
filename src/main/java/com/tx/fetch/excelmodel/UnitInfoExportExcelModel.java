@@ -12,7 +12,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import com.tx.core.support.poi.excel.model.ExportExcelModel;
-import com.tx.fetch.model.PersonInfo;
 import com.tx.fetch.model.UnitInfo;
 
 

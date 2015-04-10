@@ -40,6 +40,7 @@ public class ThumbnailResourceHttpRequestHandler extends ResourceHttpRequestHand
     @Override
     public void afterPropertiesSet() throws Exception {
         //覆写该方法去除locations必填的设定
+        
     }
     
     /**

@@ -20,7 +20,7 @@ body{
 var flashvars = {
 };
 var params = {
-	width: 1200,
+	width: 800,
 	menu: "false",
 	scale: "noScale",
 	allowFullscreen: "false",
