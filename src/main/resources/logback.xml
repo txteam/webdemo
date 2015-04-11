@@ -3,7 +3,7 @@
 
 	<property name="contentName" value="webdemo" />
 	<property name="commonPattern" value=" [%thread] %-5level %logger{100} - %msg%n" />
-	<property name="logfile" value="~/Develop/logs/webdemo" />
+	<property name="logfile" value="D:/logs/webdemo" />
 	<property name="maxLogFileSize" value="10MB"></property>
 	<property name="maxLogFileNum" value="3"></property>
 	<timestamp key="date" datePattern="yyyy-MM-dd HH:mm:ss"/>

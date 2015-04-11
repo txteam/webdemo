@@ -105,4 +105,9 @@ public class LoanBillAttachmentController {
         this.loanBillAttachmentService.saveLoanBillAttachments(processDefFiles, serviceType, loanBillId, clientInfoId);
         return true;
     }
+    
+    @RequestMapping("/testPhotoAlbum")
+    public String testPhotoAlbum(){
+        return "/loanbillattachment/testPhotoAlbum";
+    }
 }
