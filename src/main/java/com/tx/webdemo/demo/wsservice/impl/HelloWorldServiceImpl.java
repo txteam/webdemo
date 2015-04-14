@@ -26,8 +26,7 @@ import com.tx.webdemo.demo.wsservice.HelloWorldService;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-@Component("helloWorld")
-@WebService(name = "HelloWorld", targetNamespace = "tx", endpointInterface = "com.tx.webdemo.demo.wsservice.HelloWorldService")
+@Component("helloWorldService")
 public class HelloWorldServiceImpl implements HelloWorldService {
     
     /* 是否需要引入日志记录，根据具体业务定，这里是为了打印启动加载情况才加入的  */
@@ -40,8 +39,6 @@ public class HelloWorldServiceImpl implements HelloWorldService {
     /**
      * @return
      */
-    @WebMethod(operationName = "getHelloWorld")
-    @WebResult(name = "executeXMLReturn", targetNamespace = "tx")
     public String getHelloWorld() {
         return "hello world";
     }
