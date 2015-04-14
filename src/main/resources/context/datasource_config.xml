@@ -4,7 +4,7 @@
 	<comment>datasource_config</comment>	 
 	<entry key="dataSource.dataSourceType">MYSQL</entry>
 
-	<entry key="dataSource.url"><![CDATA[jdbc:mysql://localhost:3306/lms?characterEncoding=GBK&zeroDateTimeBehavior=convertToNull]]></entry>
+	<entry key="dataSource.url"><![CDATA[jdbc:mysql://192.168.85.103:3306/router?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull]]></entry>
 	<entry key="dataSource.username">lms</entry>
 	<entry key="dataSource.password">zzxx1122</entry>
 	<entry key="dataSource.driverClassName">com.mysql.jdbc.Driver</entry>
