@@ -1,53 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
-		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context-3.1.xsd       
 		http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		">
 
+	<!-- spring缓存工厂 -->
 	<bean id="authItemEhcache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-		<property name="cacheManager">
-			<ref bean="ehcacheManager" />
-		</property>
+		<!-- 缓存管理器 -->
+		<property name="cacheManager" ref="ehcacheManager" />
 	</bean>
 
-	<!-- authContext -->
+	<!-- 权限容器配置器 -->
 	<bean id="authContextConfigurator" class="com.tx.component.auth.context.AuthContextConfigurator">
+		<!-- 默认的权限检查器 -->
 		<property name="defaultAuthChecker">
-			<bean
-				class="com.tx.component.auth.context.authchecker.impl.DefaultAuthChecker"></bean>
+			<bean class="com.tx.component.auth.context.authchecker.impl.DefaultAuthChecker" />
 		</property>
-		<property name="ehcache">
-			<ref bean="authItemEhcache"/>
-		</property>
-		<property name="dbScriptExecutorContext">
-			<ref bean="dbScriptExecutorContext" />
-		</property>
-		<property name="dataSource">
-			<ref bean="dataSource" />
-		</property>
-		<property name="systemId" value="testauth" />
+		<!-- 权限项缓存对应的缓存生成器  -->
+		<property name="ehcache" ref="authItemEhcache" />
+		<!-- 数据脚本自动执行器 -->
+		<property name="dbScriptExecutorContext" ref="dbScriptExecutorContext" />
+		<!-- 数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 系统id -->
+		<property name="systemId" value="webdemo" />
+		<!-- 表后缀名 -->
 		<property name="tableSuffix" value="_webdemo" />
-		<property name="databaseSchemaUpdate" value="true"></property>
+		<!-- 数据库脚本是否自动执行 -->
+		<property name="databaseSchemaUpdate" value="true" />
 	</bean>
 
-	<!-- authLoaders -->
-	<bean id="authLoader"
-		class="com.tx.component.auth.context.loader.impl.ControllerCheckOperateAuthLoader">
+	<!-- 权限加载器 -->
+	<bean id="authLoader" class="com.tx.component.auth.context.loader.impl.ControllerCheckOperateAuthLoader">
+		<!-- 加载类基础包 -->
 		<property name="basePackages">
 			<value>com.tx.component,com.tx.webdemo</value>
 		</property>
 	</bean>
 
-	<!-- interceptors -->
-	<bean id="authContextSupportInterceptor"
-		class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor">
-		<property name="authContext">
-			<ref bean="authContext" />
-		</property>
+	<!-- 权限容器拦截器支持器 -->
+	<bean id="authContextSupportInterceptor" class="com.tx.component.auth.springmvc.AuthContextSupportInterceptor">
+		<!-- 权限容器 -->
+		<property name="authContext" ref="authContext" />
 	</bean>
-	<bean id="controllerCheckOperateAuthInterceptor"
-		class="com.tx.component.auth.springmvc.ControllerCheckOperateAuthInterceptor"></bean>
+	
+	<!-- 控制器中，操作权限校验切面 -->
+	<bean id="controllerCheckOperateAuthInterceptor" class="com.tx.component.auth.springmvc.ControllerCheckOperateAuthInterceptor" />
 </beans>

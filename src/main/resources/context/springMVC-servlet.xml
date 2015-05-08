@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="  
        http://www.springframework.org/schema/beans  
@@ -28,171 +30,174 @@
 	<!-- 需要添加该驱动，支持多个convertor的添加 -->
 	<!-- <mvc:annotation-driven /> -->
 	<!-- 配置扫描 -->
-	<context:component-scan
-		base-package="com.tx.webdemo,com.tx.component.mainframe,com.tx.component.operator,com.tx.component.attachment,com.tx.component.file"
-		use-default-filters="false">
-		<context:include-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
+	<context:component-scan base-package="
+			com.tx.component.mainframe,
+			com.tx.component.operator,
+			com.tx.webdemo
+			" use-default-filters="false">
+		<!-- 仅仅扫描Controller -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
 	<!--添加拦截器，类级别的处理器映射 -->
 	<mvc:interceptors>
 		<!-- 如果出现异常，异常日志记录拦截 -->
-		<bean class="com.tx.core.springmvc.interceptor.ExceptionLoggerInterceptor"></bean>
+		<bean class="com.tx.core.springmvc.interceptor.ExceptionLoggerInterceptor" />
 		<!-- 校验会话拦截器 -->
 		<bean class="com.tx.component.mainframe.interceptor.SessionCheckInterceptor">
+			<!-- 配置文件 -->
 			<property name="configLocaton">
 				<value>classpath:context/session-check.xml</value>
 			</property>
 		</bean>
-		<!-- 向request写入contextPath常量 -->
-		<bean
-			class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor">
+		<!-- 向request写入contextPath常量,会自动注入"contextPath" 项目路径 -->
+		<bean class="com.tx.core.springmvc.interceptor.RequestInjectAttributeInterceptor">
+			<!-- 是否覆盖注入,当为false时,如果key存在且对应value不为null则注入,true则直接覆盖 -->
+			<property name="cover" value="true" />
+			<!-- 向rquest注入的常量 -->
 			<property name="injectAttributes">
 				<map>
-					<entry key="show_grid_action" value="true"></entry>
+					<entry key="show_grid_action" value="true" />
 				</map>
 			</property>
 		</bean>
+		
 		<!-- 业务日志支持拦截器 -->
-		<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor"></bean>
+		<bean class="com.tx.component.servicelog.defaultimpl.TXServiceLoggerInterceptor" />
+		<!-- 权限拦截器 -->
 		<ref bean="authContextSupportInterceptor" />
 		<ref bean="controllerCheckOperateAuthInterceptor" />
 	</mvc:interceptors>
 
-	<!-- 将jsp映射为controller -->
-	<!-- 为方便权限控制，限制jsp直接访问 -->
-	<!-- 属性转换器 -->
-	<!-- 属性转换器 -->
-	<bean id="conversionService"
-		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+	<!-- 类型转换器 -->
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
 		<property name="converters">
 			<list>
-				<!-- request to object -->
-				<bean
-					class="org.springframework.core.convert.support.StringToBooleanConverter"></bean>
-				<bean
-					class="org.springframework.core.convert.support.StringToCharacterConverter"></bean>
-				<bean
-					class="org.springframework.core.convert.support.StringToNumberConverterFactory"></bean>
-				<bean
-					class="org.springframework.core.convert.support.StringToEnumConverterFactory"></bean>
-				<!-- <bean class="org.springframework.core.convert.support.StringToArrayConverter"></bean> -->
-				<!-- <bean class="org.springframework.core.convert.support.StringToCollectionConverter"></bean> -->
-				<!-- <bean class="org.springframework.core.convert.support.StringToPropertiesConverter"></bean> -->
+				<!-- 数据类型转换器-字符串2布尔 -->
+				<bean class="org.springframework.core.convert.support.StringToBooleanConverter" />
+				<!-- 数据类型转换器-字符串2字符 -->
+				<bean class="org.springframework.core.convert.support.StringToCharacterConverter" />
+				<!-- 数据类型转换器-字符串2数字 -->
+				<bean class="org.springframework.core.convert.support.StringToNumberConverterFactory" />
+				<!-- 数据类型转换器-字符串2枚举 -->
+				<bean class="org.springframework.core.convert.support.StringToEnumConverterFactory" />
+				<!-- 数据类型转换器-字符串2日期 -->
+				<bean class="com.tx.core.springmvc.support.StringToDateConverter" />
+				<!-- <bean class="org.springframework.core.convert.support.StringToArrayConverter" /> -->
+				<!-- <bean class="org.springframework.core.convert.support.StringToCollectionConverter" /> -->
+				<!-- <bean class="org.springframework.core.convert.support.StringToPropertiesConverter" /> -->
 				<!-- object to string -->
-				<!-- <bean class="org.springframework.core.convert.support.EnumToStringConverter"></bean> -->
-				<!-- bean class="org.springframework.core.convert.support.ObjectToStringConverter"></bean -->
-				<!-- <bean class="org.springframework.core.convert.support.PropertiesToStringConverter"></bean> -->
+				<!-- <bean class="org.springframework.core.convert.support.EnumToStringConverter" /> -->
+				<!-- bean class="org.springframework.core.convert.support.ObjectToStringConverter" /> -->
+				<!-- <bean class="org.springframework.core.convert.support.PropertiesToStringConverter" /> -->
 				<!-- other -->
-				<!-- <bean class="org.springframework.core.convert.support.CharacterToNumberFactory"></bean> -->
-				<!-- <bean class="org.springframework.core.convert.support.NumberToNumberConverterFactory"></bean> -->
-				<!-- <bean class="org.springframework.core.convert.support.NumberToCharacterConverter"></bean> -->
-				<!-- customize -->
-				<bean class="com.tx.core.springmvc.support.StringToDateConverter"></bean>
+				<!-- <bean class="org.springframework.core.convert.support.CharacterToNumberFactory" /> -->
+				<!-- <bean class="org.springframework.core.convert.support.NumberToNumberConverterFactory" /> -->
+				<!-- <bean class="org.springframework.core.convert.support.NumberToCharacterConverter" /> -->
 			</list>
 		</property>
 	</bean>
-	<!-- 注册属性转换以及验证功能 -->
-	<bean id="webBindingInitializer"
-		class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+	
+	<!-- 注册类型转换以及验证功能 -->
+	<bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+		<!-- 校验器 -->
 		<property name="validator">
-			<bean id="validator"
-				class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+			<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 		</property>
+		<!-- 类型转换器 -->
 		<property name="conversionService">
 			<ref bean="conversionService" />
 		</property>
 	</bean>
 
-	<bean id="imageResourceHttpRequestHandler"
-		class="com.tx.component.file.handler.ImageResourceHttpRequestHandler">
-	</bean>
-	<bean id="thumbnailResourceHttpRequestHandler"
-		class="com.tx.component.file.handler.ThumbnailResourceHttpRequestHandler">
-	</bean>
-	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<property name="order" value="0"></property>
-		<property name="urlMap">
-			<props>
-				<prop key="/fileContext/resource/imageResource">imageResourceHttpRequestHandler</prop>
-				<prop key="/fileContext/resource/thumbnailImageResource">thumbnailResourceHttpRequestHandler</prop>
-			</props>
-		</property>
-	</bean>
+	<!-- 资源映射 -->
+<!-- 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"> -->
+<!-- 		<property name="order" value="0" /> -->
+<!-- 		<property name="urlMap"> -->
+<!-- 			<props> -->
+<!-- 				<prop key="/fileContext/resource/imageResource">imageResourceHttpRequestHandler</prop> -->
+<!-- 				<prop key="/fileContext/resource/thumbnailImageResource">thumbnailResourceHttpRequestHandler</prop> -->
+<!-- 			</props> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	
 	<!-- 将类及方法映射controller -->
-	<bean id="requestMappingHandlerMapping"
-		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-		<property name="order" value="1"></property>
+	<bean id="requestMappingHandlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<!-- 执行排序 -->
+		<property name="order" value="1" />
 	</bean>
-	<bean id="requestMappingHandlerAdapter"
-		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-		<property name="webBindingInitializer">
-			<ref bean="webBindingInitializer" />
-		</property>
+	
+	<!-- 将类及方法映射controller适配器 -->
+	<bean id="requestMappingHandlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<!-- 注册类型转换以及验证功能 -->
+		<property name="webBindingInitializer" ref="webBindingInitializer" />
+		<!-- 信息转换器 -->
 		<property name="messageConverters">
 			<list>
-				<bean
-					class="org.springframework.http.converter.ByteArrayHttpMessageConverter"></bean>
-				<bean
-					class="org.springframework.http.converter.StringHttpMessageConverter">
+				<!-- 字符串消息,一般用在html上 -->
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<!-- 支持的消息类型 -->
 					<property name="supportedMediaTypes">
 						<list>
+							<!-- utf-8编码的文本 -->
 							<value>text/plain;charset=UTF-8</value>
 						</list>
 					</property>
 				</bean>
-				<bean
-					class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
-				<bean
-					class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"></bean>
-				<bean
-					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-				</bean>
-				<bean class="org.springframework.http.converter.FormHttpMessageConverter"></bean>
+				<!-- 字节消息 -->
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<!-- xml消息 -->
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				<!-- xml消息(已过时) -->
+				<bean class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter" />
+				<!-- json消息 -->
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+				<!-- 文件消息 -->
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
 			</list>
 		</property>
 	</bean>
 
 	<!-- 支持文件上传 -->
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 默认编码 -->
 		<property name="defaultEncoding" value="UTF-8" />
-		<!-- max size 5M -->
+		<!-- 最大上传文件大小(单位:b) 5M -->
 		<property name="maxUploadSize" value="50000000" />
 	</bean>
-	<!-- 异常处理 -->
-	<bean id="exceptionResolver"
-		class="com.tx.core.springmvc.exceptionresolver.SimpleHandlerExceptionResolver">
-		<property name="warnLogCategory">
-			<value>org.springframework.web.servlet.handler.simplemappingexceptionresolver
-			</value>
-		</property>
-		<property name="defaultErrorView">
-			<value>error/error</value>
-		</property>
-		<property name="defaultStatusCode">
-			<value>500</value>
-		</property>
+	
+	<!-- 简单的异常处理器 -->
+	<bean id="exceptionResolver" class="com.tx.core.springmvc.exceptionresolver.SimpleHandlerExceptionResolver">
+		<!-- 警告日志 -->
+		<property name="warnLogCategory" value="org.springframework.web.servlet.handler.simplemappingexceptionresolver" />
+		<!-- 默认错误页面路径 -->
+		<property name="defaultErrorView" value="error/error" />
+		<!-- 默认状态代码 -->
+		<property name="defaultStatusCode" value="500" />
+		<!-- 状态代码 -->
 		<property name="statusCodes">
 			<map>
-				<entry key="error/sessionLostError" value="501"></entry>
+				<entry key="error/sessionLostError" value="501" />
 			</map>
 		</property>
+		<!-- 异常映射 -->
 		<property name="exceptionMappings">
 			<props>
-				<prop
-					key="org.springframework.web.multipart.MaxUploadSizeExceededException">error/maxUploadExceeded</prop>
+				<!-- 上传文件异常 -->
+				<prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error/maxUploadExceeded</prop>
+				<!-- Session丢失异常 -->
 				<prop key="com.tx.component.mainframe.exception.SessionLostException">error/sessionLostError</prop>
 			</props>
 		</property>
 	</bean>
 
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass"
-			value="org.springframework.web.servlet.view.JstlView" />
+	<!-- 页面路径转换器 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 页面类 -->
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<!-- 前缀 -->
 		<property name="prefix" value="/WEB-INF/view/" />
+		<!-- 后缀 -->
 		<property name="suffix" value=".jsp" />
 	</bean>
 </beans>
