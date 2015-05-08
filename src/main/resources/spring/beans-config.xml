@@ -15,14 +15,14 @@
 		<property name="configPropertiesPersisterList">
 			<list>
 				<!-- 基础配置属性解析器 -->
-				<bean class="com.tx.component.configuration.persister.LocalConfigPropertiesPersister">
+				<bean id="localConfigPropertiesPersister" class="com.tx.component.configuration.persister.LocalConfigPropertiesPersister">
 					<!-- 配置文件 -->
 					<property name="location">
 						<value>classpath:config/local/*.xml</value>
 					</property>
 				</bean>
 				<!-- 全局配置属性持久器 -->
-				<bean class="com.tx.component.configuration.persister.GlobalConfigPropertiesPersister">
+				<bean id="globalConfigPropertiesPersister" class="com.tx.component.configuration.persister.GlobalConfigPropertiesPersister">
 					<!-- 脚本执行器容器 -->
 					<property name="dbScriptExecutorContext" ref="dbScriptExecutorContext" />
 					<!-- 数据源 -->

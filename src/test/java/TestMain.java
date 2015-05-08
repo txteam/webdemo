@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.IOException;
 
 public class TestMain {
@@ -9,8 +8,8 @@ public class TestMain {
         //        System.out.println(ff.isFile());
         //        ff.createNewFile();
         
-        int v = 100 > (10 - 5) ? (10 - 5) : 100;
-        System.out.println(v);
+//        int v = 100 > (10 - 5) ? (10 - 5) : 100;
+//        System.out.println(v);
         
         //        thumbNailCount = maxThumbNailCount > imageCount - firstImageIndex ? imageCount
         //                - firstImageIndex

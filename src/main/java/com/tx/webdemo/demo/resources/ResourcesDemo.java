@@ -9,8 +9,6 @@ package com.tx.webdemo.demo.resources;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
-import org.springframework.context.support.GenericApplicationContext;
 
 
  /**
@@ -24,11 +22,11 @@ import org.springframework.context.support.GenericApplicationContext;
   */
 public class ResourcesDemo implements ApplicationContextAware{
     
-    private ApplicationContext applicationContext;
-    
-    private GenericApplicationContext genericApplicationContext;
-    
-    private ClassPathBeanDefinitionScanner scanner;
+//    private ApplicationContext applicationContext;
+//    
+//    private GenericApplicationContext genericApplicationContext;
+//    
+//    private ClassPathBeanDefinitionScanner scanner;
     
     /**
      * @param applicationContext

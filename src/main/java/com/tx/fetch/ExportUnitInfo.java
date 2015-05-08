@@ -42,6 +42,7 @@ import com.tx.fetch.service.UnitInfoService;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
+@SuppressWarnings("unused")
 public class ExportUnitInfo {
     
     private static boolean statleCheckingEnabled = true;

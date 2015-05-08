@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.tx.component.auth.AuthConstant;
 import com.tx.component.auth.context.AuthContext;
 import com.tx.component.auth.context.AuthSessionContext;
 import com.tx.component.auth.context.AuthTypeItemContext;

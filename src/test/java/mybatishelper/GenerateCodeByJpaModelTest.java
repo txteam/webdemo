@@ -6,7 +6,6 @@
  */
 package mybatishelper;
 
-import com.tx.component.attachment.model.AttachmentRef;
 import com.tx.core.generator.JpaEntityFreeMarkerGenerator;
 
 
@@ -27,8 +26,8 @@ public class GenerateCodeByJpaModelTest {
         factory.setLoadTemplateClass(GenerateCodeByJpaModelTest.class);
         
         //生成后在自己指定的文件夹中去找即可
-        factory.generate(AttachmentRef.class, "/Users/rain/Develop/mybatis");
-        factory.generateScript(AttachmentRef.class, "/Users/rain/Develop/mybatis","GBK");
+//        factory.generate(AttachmentRef.class, "/Users/rain/Develop/mybatis");
+//        factory.generateScript(AttachmentRef.class, "/Users/rain/Develop/mybatis","GBK");
         
         System.out.println("success");
     }

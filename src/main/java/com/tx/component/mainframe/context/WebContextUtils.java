@@ -59,8 +59,8 @@ public class WebContextUtils {
       * @see [类、类#方法、类#成员]
      */
     public static boolean isOrganizationChief() {
-        Operator currentOperator = getCurrentOperator();
-        Organization currentOrganization = getCurrentOrganization();
+//        Operator currentOperator = getCurrentOperator();
+//        Organization currentOrganization = getCurrentOrganization();
         
         //TODO:XXX
         

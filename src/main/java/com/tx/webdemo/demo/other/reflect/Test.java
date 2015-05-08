@@ -21,7 +21,7 @@ import com.tx.core.datasource.DataSourceFactoryBean;
 public class Test {
     public static void main(String[] args) throws Exception{
         try {
-            Class c = Class.forName("com.tx.core.datasource.DataSourceFactoryBean");
+            Class<?> c = Class.forName("com.tx.core.datasource.DataSourceFactoryBean");
             DataSourceFactoryBean d = (DataSourceFactoryBean)c.newInstance();
             System.out.println(d.getObjectType());
             

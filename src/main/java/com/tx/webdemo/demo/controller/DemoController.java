@@ -147,6 +147,7 @@ public class DemoController {
         return "/demo/demoPagedList";
     }
     
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception{
         MenuItemConfig mic = new MenuItemConfig();
         mic.setId("test");

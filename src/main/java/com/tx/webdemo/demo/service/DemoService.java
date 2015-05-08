@@ -107,7 +107,7 @@ public class DemoService {
         //TODO:判断条件合法性
         
         //TODO:生成查询条件
-        Map<String, Object> params = new HashMap();
+        Map<String, Object> params = new HashMap<String,Object>();
         
         //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<Demo> resList = this.demoDao.queryDemoList(params);

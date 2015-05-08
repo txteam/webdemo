@@ -1,5 +1,5 @@
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	<comment>datasource_config</comment>	
 	<!-- 数据库类型 --> 

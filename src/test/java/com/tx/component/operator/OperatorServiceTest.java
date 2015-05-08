@@ -6,24 +6,19 @@
  */
 package com.tx.component.operator;
 
-import java.util.List;
-import java.util.UUID;
-
 import javax.annotation.Resource;
 
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.tx.component.operator.model.Operator;
 import com.tx.component.operator.service.OperatorService;
-import com.tx.core.paged.model.PagedList;
-import com.tx.core.util.UUIDUtils;
 
 
  /**

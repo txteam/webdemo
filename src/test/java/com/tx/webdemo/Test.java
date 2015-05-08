@@ -6,8 +6,6 @@
  */
 package com.tx.webdemo;
 
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.util.UrlPathHelper;
 
 
  /**
@@ -28,8 +26,8 @@ public class Test {
     }
     
     public static void main(String[] args) {
-        UrlPathHelper t = new UrlPathHelper();
-        MockHttpServletRequest request = new MockHttpServletRequest();
+//        UrlPathHelper t = new UrlPathHelper();
+//        MockHttpServletRequest request = new MockHttpServletRequest();
     }
     
 }

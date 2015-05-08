@@ -77,11 +77,12 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
-	<servlet>
-		<servlet-name>cxf</servlet-name>
-		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>cxf</servlet-name> -->
+<!-- 		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class> -->
+<!-- 		<load-on-startup>1</load-on-startup> -->
+<!-- 	</servlet> -->
+
 	<servlet>
 		<servlet-name>springMVC</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -89,7 +90,7 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/classes/context/springMVC-servlet.xml</param-value>
 		</init-param>
-		<load-on-startup>2</load-on-startup>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<!-- 配置静态资源不经过spring mvc -->
 	<!-- druid监控页面，使用${pageContext.request.contextPath}/druid/index.html访问 -->
@@ -98,14 +99,14 @@
 		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
 	</servlet>
 
-	<servlet-mapping>
-		<servlet-name>cxf</servlet-name>
-		<url-pattern>/services/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>cxf</servlet-name>
-		<url-pattern>/services/cxf/*</url-pattern>
-	</servlet-mapping>
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>cxf</servlet-name> -->
+<!-- 		<url-pattern>/services/*</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>cxf</servlet-name> -->
+<!-- 		<url-pattern>/services/cxf/*</url-pattern> -->
+<!-- 	</servlet-mapping> -->
 	
 	<servlet-mapping>
 		<servlet-name>druidStatView</servlet-name>

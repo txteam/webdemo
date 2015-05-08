@@ -6,10 +6,6 @@
  */
 package com.tx.webdemo.demo.wsservice.impl;
 
-import javax.jws.WebMethod;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
