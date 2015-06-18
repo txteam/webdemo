@@ -435,6 +435,11 @@ public class FetchPersonInfo {
 	}
 
 	public static void main(String[] args) throws HttpException, IOException {
-		FetchPersonInfo.fetch();
+		//FetchPersonInfo.fetch();
+	    
+	    String realIdCardNumber = parseRealIdCardNumber("徐天贵",
+                "5102121960****0812");
+
+        System.out.println(realIdCardNumber);
 	}
 }

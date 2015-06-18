@@ -4,7 +4,7 @@ create table MAINFRAME_LOGIN_LOG(
 	SYSTEMID varchar(64),
 	ORGANIZATIONID varchar(64),
 	MESSAGE varchar(255),
-	CREATEDATE  default now(),
+	CREATEDATE datetime default now(),
 	VCID varchar(64),
 	LOGINTYPE smallint not null,
 	ID varchar(64)  not null,
