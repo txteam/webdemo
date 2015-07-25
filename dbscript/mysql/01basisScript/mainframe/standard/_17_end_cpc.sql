@@ -1,1 +1,1 @@
---prompt "webdemo模块:创建包  end...";
+-- prompt "webdemo模块:创建包  end...";

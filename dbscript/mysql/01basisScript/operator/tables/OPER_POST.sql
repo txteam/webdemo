@@ -1,4 +1,3 @@
-DROP TABLE OPER_POST;
 CREATE TABLE OPER_POST(
 	id varchar(64) not null,
 	valid smallint default 1 not null,

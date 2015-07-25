@@ -16,6 +16,7 @@
 		resultMap="virtualCenterMap">
 		SELECT 
 				TVC.ID,
+				TVC.CODE,
 				TVC.PARENTID,
 				TVC.REMARK,
 				TVC.NAME
@@ -34,6 +35,7 @@
 		resultMap="virtualCenterMap">
 		SELECT 
 				TVC.ID,
+				TVC.CODE,
 				TVC.PARENTID,
 				TVC.REMARK,
 				TVC.NAME
@@ -90,6 +92,7 @@
 		INSERT INTO OPER_VC
 		(
 			ID,
+			CODE,
 			PARENTID,
 			REMARK,
 			NAME
@@ -97,6 +100,7 @@
 		VALUES
 		(
 			#{id},
+			#{code},
 			#{parentId},
 			#{remark},
 			#{name}
@@ -121,6 +125,9 @@
 	    <trim prefix="SET" suffixOverrides=",">
 			<if test="_parameter.containsKey('parentId')">
 	    		PARENTID = #{parentId,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('code')">
+	    		CODE = #{code,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('remark')">
 	    		REMARK = #{remark,javaType=java.lang.String},

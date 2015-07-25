@@ -18,6 +18,7 @@ package com.tx.component.operator.model;
 public enum ChiefTypeEnum {
     /** */
     职位,
+    
     /** */
     人员;
 }

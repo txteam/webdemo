@@ -4,7 +4,7 @@
  * 修改时间:  2013-10-8
  * <修改描述:>
  */
-package mybatishelper;
+package generator;
 
 import org.apache.commons.lang.StringUtils;
 

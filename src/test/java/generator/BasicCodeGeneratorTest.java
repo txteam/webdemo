@@ -4,7 +4,7 @@
  * 修改时间:  2014年3月2日
  * <修改描述:>
  */
-package basicdatahelper;
+package generator;
 
 import com.tx.component.basicdata.generator.BasicDataCodeGenerator;
 import com.tx.component.operator.model.PostType;

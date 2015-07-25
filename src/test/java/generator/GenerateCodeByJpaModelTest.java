@@ -4,7 +4,7 @@
  * 修改时间:  2012-12-11
  * <修改描述:>
  */
-package mybatishelper;
+package generator;
 
 import com.tx.core.generator.JpaEntityFreeMarkerGenerator;
 

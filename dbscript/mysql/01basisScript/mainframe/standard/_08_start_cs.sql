@@ -1,1 +1,1 @@
---prompt "webdemo模块:创建sequence  start...";
+-- prompt "webdemo模块:创建sequence  start...";

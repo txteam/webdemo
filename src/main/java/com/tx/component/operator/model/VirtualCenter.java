@@ -51,6 +51,11 @@ public class VirtualCenter implements TreeAble<List<VirtualCenter>, VirtualCente
     private String name;
     
     /**
+     * 虚中心编码
+     */
+    private String code;
+    
+    /**
      * 虚中心说明
      */
     private String remark;
@@ -129,5 +134,19 @@ public class VirtualCenter implements TreeAble<List<VirtualCenter>, VirtualCente
      */
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    /**
+     * @return 返回 code
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * @param 对code进行赋值
+     */
+    public void setCode(String code) {
+        this.code = code;
     }
 }
