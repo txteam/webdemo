@@ -5,11 +5,11 @@
 	<!-- 数据库类型 --> 
 	<entry key="dataSource.dataSourceType">MYSQL</entry>
 	<!-- 数据库地址 -->
-	<entry key="dataSource.url"><![CDATA[jdbc:mysql://192.168.85.103:3306/webdemo?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull]]></entry>
+	<entry key="dataSource.url"><![CDATA[jdbc:mysql://localhost:3306/webdemo?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull]]></entry>
 	<!-- 账号 -->
-	<entry key="dataSource.username">lms</entry>
+	<entry key="dataSource.username">webdemo</entry>
 	<!-- 密码 -->
-	<entry key="dataSource.password">zzxx1122</entry>
+	<entry key="dataSource.password">webdemo</entry>
 	<!-- 驱动 -->
 	<entry key="dataSource.driverClassName">com.mysql.jdbc.Driver</entry>
 	<!-- 连接测试语句 -->
