@@ -5,7 +5,7 @@
 	<!-- 数据库类型 --> 
 	<entry key="dataSource.dataSourceType">MYSQL</entry>
 	<!-- 数据库地址 -->
-	<entry key="dataSource.url"><![CDATA[jdbc:mysql://192.168.85.103:3306/router?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull]]></entry>
+	<entry key="dataSource.url"><![CDATA[jdbc:mysql://192.168.85.103:3306/webdemo?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull]]></entry>
 	<!-- 账号 -->
 	<entry key="dataSource.username">lms</entry>
 	<!-- 密码 -->
