@@ -318,28 +318,30 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
+		<!-- jstl的类库，包含TLD 和标记句柄。 -->
 		<dependency>
-			<!-- jstl的类库，包含TLD 和标记句柄。 -->
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jsp-api</artifactId>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>ognl</groupId>
-			<artifactId>ognl</artifactId>
 		</dependency>
 
 		<!-- jdbc -->
@@ -350,6 +352,23 @@
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc14</artifactId>
+		</dependency>
+
+		<!-- elasticsearch -->
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-elasticsearch</artifactId>
+			<version>1.2.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.thihy</groupId>
+			<artifactId>elasticsearch-analysis-paoding</artifactId>
+			<version>1.4.1.6</version>
 		</dependency>
 
 		<!-- junit -->

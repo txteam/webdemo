@@ -1,5 +1,5 @@
-DROP TABLE OPER_OPERATOR_HIS;
-CREATE TABLE OPER_OPERATOR_HIS(
+drop table if exists oper_operator_his;
+CREATE TABLE oper_operator_his(
 	id varchar(64),
 	valid smallint DEFAULT 1 NOT NULL,
 	pwdErrCount smallint,

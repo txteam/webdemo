@@ -92,7 +92,7 @@ CREATE TABLE OPER_OPERATOR(
 	examinePwd varchar(255),
 	loginName varchar(64)  not null,
 	primary key(ID)
-) comment='系统使用人员信息表';
+);
 create unique index idx_oper_oper_00 on OPER_OPERATOR(loginName);
 create index idx_oper_oper_01 on OPER_OPERATOR(loginName,password);
 
@@ -342,16 +342,16 @@ insert into OPER_POST(id,parentId,name,organizationId,code,remark)
 insert into OPER_POST(id,parentId,name,organizationId,code,remark)
 	values('10000003010103','100000030101','助理工程师','1000000',null,'集团公司系统开发部助理工程师');
 commit;
-INSERT INTO OPER_VC(ID,PARENTID,NAME,REMARK)
-	values('001',null,'集团公司','集团公司');
-INSERT INTO OPER_VC(ID,PARENTID,NAME,REMARK)
-	values('00101','001','分公司一','分公司一');
-INSERT INTO OPER_VC(ID,PARENTID,NAME,REMARK)
-	values('00102','001','分公司二','分公司二');
-INSERT INTO OPER_VC(ID,PARENTID,NAME,REMARK)
-	values('002','001','合作方公司A','合作方公司A');
-INSERT INTO OPER_VC(ID,PARENTID,NAME,REMARK)
-	values('003','001','合作方公司B','合作方公司B');
+INSERT INTO OPER_VC(ID,CODE,PARENTID,NAME,REMARK)
+	values('001','001',null,'集团公司','集团公司');
+INSERT INTO OPER_VC(ID,CODE,PARENTID,NAME,REMARK)
+	values('00101','00101','001','分公司一','分公司一');
+INSERT INTO OPER_VC(ID,CODE,PARENTID,NAME,REMARK)
+	values('00102','00102','001','分公司二','分公司二');
+INSERT INTO OPER_VC(ID,CODE,PARENTID,NAME,REMARK)
+	values('002','002','001','合作方公司A','合作方公司A');
+INSERT INTO OPER_VC(ID,CODE,PARENTID,NAME,REMARK)
+	values('003','003','001','合作方公司B','合作方公司B');
 commit;
 -- prompt "webdemo模块:初始化基础数据  end...";
 -- prompt "webdemo模块:创建任务job  end...";

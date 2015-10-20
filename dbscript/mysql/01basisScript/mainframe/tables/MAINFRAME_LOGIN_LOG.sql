@@ -1,15 +1,16 @@
-drop table MAINFRAME_LOGIN_LOG;
-create table MAINFRAME_LOGIN_LOG(
-	CLIENTIPADDRESS varchar(255),
-	SYSTEMID varchar(64),
-	ORGANIZATIONID varchar(64),
-	MESSAGE varchar(255),
-	CREATEDATE datetime default now(),
-	VCID varchar(64),
-	LOGINTYPE smallint not null,
-	ID varchar(64)  not null,
-	OPERATORID varchar(64),
-	OPERATORNAME varchar(64),
-	OPERATORLOGINNAME varchar(64),
-	primary key(ID)
+drop table if exists mainframe_login_log;
+CREATE TABLE mainframe_login_log(
+	id varchar(64)  NOT NULL,
+	vcid varchar(64), 								-- 虚中心
+	createDate datetime NOT NULL DEFAULT sysdate(),	-- 创建时间
+	loginType TINYINT(1) NOT NULL,
+	clientIpAddress varchar(255),
+	systemId varchar(64),
+	organizationId varchar(64),
+	message varchar(255),
+	operatorId varchar(64),
+	operatorName varchar(64),
+	operatorLoginName varchar(64),
+	primary key(id)
 );
+

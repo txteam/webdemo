@@ -1,5 +1,5 @@
-DROP TABLE OPER_EMPLOYEEINFO_HIS;
-CREATE TABLE OPER_EMPLOYEEINFO_HIS(
+drop table if exists oper_employeeinfo_his;
+CREATE TABLE oper_employeeinfo_his(
 	leavingDate datetime,
 	sex smallint,
 	operatorid varchar(64),

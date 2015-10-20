@@ -6,5 +6,5 @@ create table OPER_VC(
 	remark varchar(2000),		-- ÐéÖÐÐÄ±¸×¢
 	primary key(ID)
 );
-create unique index idx_OPER_VC on OPER_VC(name);
-create unique index idx_OPER_VC on OPER_VC(code);
+create unique index IDX_OPER_VC_01 on OPER_VC(name);
+create unique index IDX_OPER_VC_02 on OPER_VC(code);

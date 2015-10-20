@@ -1,5 +1,5 @@
-DROP TABLE OPER_OPERATOR_REF_HIS;
-CREATE TABLE OPER_OPERATOR_REF_HIS(
+drop table if exists oper_operator_ref_his;
+CREATE TABLE oper_operator_ref_his(
 	EFFECTIVEDATE datetime,
 	CREATEDATE datetime not null,
 	OPERATORID varchar(64) not null,
