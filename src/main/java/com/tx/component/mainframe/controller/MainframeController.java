@@ -42,7 +42,7 @@ import com.tx.component.operator.service.OperatorService;
 import com.tx.component.operator.service.OrganizationService;
 import com.tx.component.operator.service.PostService;
 import com.tx.component.servicelog.context.ServiceLoggerContext;
-import com.tx.component.servicelog.logger.ServiceLogger;
+import com.tx.component.servicelog.context.logger.ServiceLogger;
 
 /**
  * 登录功能入口

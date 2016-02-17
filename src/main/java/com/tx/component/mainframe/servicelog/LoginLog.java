@@ -9,7 +9,7 @@ package com.tx.component.mainframe.servicelog;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.tx.component.servicelog.defaultimpl.TXBaseServiceLog;
+import com.tx.component.servicelog.logger.TXBaseServiceLog;
 
 /**
  * 登录日志<br/>
