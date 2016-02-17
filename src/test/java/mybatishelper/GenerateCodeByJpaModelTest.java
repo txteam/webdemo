@@ -7,6 +7,8 @@
 package mybatishelper;
 
 import com.tx.core.generator.JpaEntityFreeMarkerGenerator;
+import com.tx.core.util.MD5Utils;
+import com.tx.fetchhccredit.model.HCLoanAccountView;
 
 
  /**
@@ -21,14 +23,18 @@ import com.tx.core.generator.JpaEntityFreeMarkerGenerator;
 public class GenerateCodeByJpaModelTest {
     
     public static void main(String[] args) {
+        Class<?> type = HCLoanAccountView.class;
+        String folderPath = "d:/mybatis";
         
         JpaEntityFreeMarkerGenerator factory = new JpaEntityFreeMarkerGenerator();
         factory.setLoadTemplateClass(GenerateCodeByJpaModelTest.class);
         
         //生成后在自己指定的文件夹中去找即可
-//        factory.generate(AttachmentRef.class, "/Users/rain/Develop/mybatis");
-//        factory.generateScript(AttachmentRef.class, "/Users/rain/Develop/mybatis","GBK");
+        factory.generate(type, folderPath,true);
+        factory.generateScript(type, folderPath,"GBK");
         
         System.out.println("success");
+        
+        System.out.println(MD5Utils.encode("123321qQ"));
     }
 }

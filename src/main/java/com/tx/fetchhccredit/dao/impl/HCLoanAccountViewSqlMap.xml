@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hCLoanAccountView">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="hCLoanAccountViewMap" 
+		type="com.tx.fetchhccredit.model.HCLoanAccountView">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findHCLoanAccountView" 
+		parameterType="com.tx.fetchhccredit.model.HCLoanAccountView"
+		resultMap="hCLoanAccountViewMap">
+		SELECT 
+				THCLAV.ID,
+				THCLAV.IDCARDNUMBER,
+				THCLAV.STATUS,
+				THCLAV.CUSTOMERSERVICEMANAGER,
+				THCLAV.APPLYDATE,
+				THCLAV.DISTRICTNAME,
+				THCLAV.CREDITPRODUCTNAME,
+				THCLAV.CUSTOMERSERVICEOFFICER,
+				THCLAV.LOANBILLNUMBER,
+				THCLAV.PHONENUMBER,
+				THCLAV.CLIENTNAME,
+				THCLAV.BRANCHNAME,
+				THCLAV.CUSTOMERSERVICETEAMMANAGER
+		  FROM HC_LA_LOANACCOUNT THCLAV
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND THCLAV.ID = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryHCLoanAccountView" 
+		parameterType="java.util.Map"
+		resultMap="hCLoanAccountViewMap">
+		SELECT 
+				THCLAV.ID,
+				THCLAV.IDCARDNUMBER,
+				THCLAV.STATUS,
+				THCLAV.CUSTOMERSERVICEMANAGER,
+				THCLAV.APPLYDATE,
+				THCLAV.DISTRICTNAME,
+				THCLAV.CREDITPRODUCTNAME,
+				THCLAV.CUSTOMERSERVICEOFFICER,
+				THCLAV.LOANBILLNUMBER,
+				THCLAV.PHONENUMBER,
+				THCLAV.CLIENTNAME,
+				THCLAV.BRANCHNAME,
+				THCLAV.CUSTOMERSERVICETEAMMANAGER
+		  FROM HC_LA_LOANACCOUNT THCLAV
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND THCLAV.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            AND THCLAV.IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(status)">  
+	            AND THCLAV.STATUS = #{status,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceManager)">  
+	            AND THCLAV.CUSTOMERSERVICEMANAGER = #{customerServiceManager,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(applyDate)">  
+	            AND THCLAV.APPLYDATE = #{applyDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtName)">  
+	            AND THCLAV.DISTRICTNAME = #{districtName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditProductName)">  
+	            AND THCLAV.CREDITPRODUCTNAME = #{creditProductName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceOfficer)">  
+	            AND THCLAV.CUSTOMERSERVICEOFFICER = #{customerServiceOfficer,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanBillNumber)">  
+	            AND THCLAV.LOANBILLNUMBER = #{loanBillNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phoneNumber)">  
+	            AND THCLAV.PHONENUMBER = #{phoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            AND THCLAV.CLIENTNAME = #{clientName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(branchName)">  
+	            AND THCLAV.BRANCHNAME = #{branchName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceTeamManager)">  
+	            AND THCLAV.CUSTOMERSERVICETEAMMANAGER = #{customerServiceTeamManager,javaType=java.lang.String}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            ORDER BY ID
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryHCLoanAccountViewCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM HC_LA_LOANACCOUNT THCLAV
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND THCLAV.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            AND THCLAV.IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(status)">  
+	            AND THCLAV.STATUS = #{status,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceManager)">  
+	            AND THCLAV.CUSTOMERSERVICEMANAGER = #{customerServiceManager,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(applyDate)">  
+	            AND THCLAV.APPLYDATE = #{applyDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtName)">  
+	            AND THCLAV.DISTRICTNAME = #{districtName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditProductName)">  
+	            AND THCLAV.CREDITPRODUCTNAME = #{creditProductName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceOfficer)">  
+	            AND THCLAV.CUSTOMERSERVICEOFFICER = #{customerServiceOfficer,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanBillNumber)">  
+	            AND THCLAV.LOANBILLNUMBER = #{loanBillNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phoneNumber)">  
+	            AND THCLAV.PHONENUMBER = #{phoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            AND THCLAV.CLIENTNAME = #{clientName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(branchName)">  
+	            AND THCLAV.BRANCHNAME = #{branchName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceTeamManager)">  
+	            AND THCLAV.CUSTOMERSERVICETEAMMANAGER = #{customerServiceTeamManager,javaType=java.lang.String}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertHCLoanAccountView" 
+		parameterType="com.tx.fetchhccredit.model.HCLoanAccountView">
+		INSERT INTO HC_LA_LOANACCOUNT
+		(
+			ID,
+			IDCARDNUMBER,
+			STATUS,
+			CUSTOMERSERVICEMANAGER,
+			APPLYDATE,
+			DISTRICTNAME,
+			CREDITPRODUCTNAME,
+			CUSTOMERSERVICEOFFICER,
+			LOANBILLNUMBER,
+			PHONENUMBER,
+			CLIENTNAME,
+			BRANCHNAME,
+			CUSTOMERSERVICETEAMMANAGER
+		)
+		VALUES
+		(
+			#{id},
+			#{idCardNumber},
+			#{status},
+			#{customerServiceManager},
+			#{applyDate},
+			#{districtName},
+			#{creditProductName},
+			#{customerServiceOfficer},
+			#{loanBillNumber},
+			#{phoneNumber},
+			#{clientName},
+			#{branchName},
+			#{customerServiceTeamManager}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deleteHCLoanAccountView" 
+		parameterType="com.tx.fetchhccredit.model.HCLoanAccountView">
+		DELETE FROM HC_LA_LOANACCOUNT  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND ID = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updateHCLoanAccountView"
+	    parameterType="java.util.Map">  
+	    UPDATE hc_la_loanAccount
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('idCardNumber')">
+	    		IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('status')">
+	    		STATUS = #{status,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('customerServiceManager')">
+	    		CUSTOMERSERVICEMANAGER = #{customerServiceManager,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('applyDate')">
+	    		APPLYDATE = #{applyDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('districtName')">
+	    		DISTRICTNAME = #{districtName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('creditProductName')">
+	    		CREDITPRODUCTNAME = #{creditProductName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('customerServiceOfficer')">
+	    		CUSTOMERSERVICEOFFICER = #{customerServiceOfficer,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('loanBillNumber')">
+	    		LOANBILLNUMBER = #{loanBillNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('phoneNumber')">
+	    		PHONENUMBER = #{phoneNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('clientName')">
+	    		CLIENTNAME = #{clientName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('branchName')">
+	    		BRANCHNAME = #{branchName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('customerServiceTeamManager')">
+	    		CUSTOMERSERVICETEAMMANAGER = #{customerServiceTeamManager,javaType=java.lang.String},
+	    	</if>	
+	    </trim>
+	    WHERE ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->
