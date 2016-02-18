@@ -8,6 +8,7 @@ package mybatishelper;
 
 import com.tx.core.generator.JpaEntityFreeMarkerGenerator;
 import com.tx.core.util.MD5Utils;
+import com.tx.fetchhccredit.model.HCLoanAccountDetailView;
 import com.tx.fetchhccredit.model.HCLoanAccountView;
 
 
@@ -23,7 +24,7 @@ import com.tx.fetchhccredit.model.HCLoanAccountView;
 public class GenerateCodeByJpaModelTest {
     
     public static void main(String[] args) {
-        Class<?> type = HCLoanAccountView.class;
+        Class<?> type = HCLoanAccountDetailView.class;
         String folderPath = "d:/mybatis";
         
         JpaEntityFreeMarkerGenerator factory = new JpaEntityFreeMarkerGenerator();

@@ -1,3 +1,9 @@
+/*
+ * 描          述:  <描述>
+ * 修  改   人:  Administrator
+ * 修改时间:  2016年2月18日
+ * <修改描述:>
+ */
 package com.tx.fetchhccredit.service;
 
 import java.io.IOException;
@@ -7,12 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
@@ -24,12 +27,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jettison.json.JSONException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.helpers.MessageFormatter;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.dao.DataAccessException;
@@ -40,20 +38,21 @@ import com.tx.core.dbscript.model.DataSourceTypeEnum;
 import com.tx.core.mybatis.support.MyBatisDaoSupport;
 import com.tx.core.mybatis.support.MyBatisDaoSupportHelper;
 import com.tx.core.paged.model.PagedList;
-import com.tx.fetchhccredit.dao.HCLoanAccountViewDao;
-import com.tx.fetchhccredit.dao.impl.HCLoanAccountViewDaoImpl;
+import com.tx.fetchhccredit.dao.HCLoanAccountDetailViewDao;
+import com.tx.fetchhccredit.dao.impl.HCLoanAccountDetailViewDaoImpl;
+import com.tx.fetchhccredit.model.HCLoanAccountDetailView;
 import com.tx.fetchhccredit.model.HCLoanAccountView;
 
 /**
-  * 提取贷款账户信息<br/>
-  * <功能详细描述>
-  * 
-  * @author  Administrator
-  * @version  [版本号, 2016年2月17日]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
+ * 提取贷款账户详情视图<br/>
+ * <功能详细描述>
+ * 
+ * @author  Administrator
+ * @version  [版本号, 2016年2月18日]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
  */
-public class FetchHCLoanAccountView {
+public class FetchHCLoanAccountDetailView {
     
     private static final String driverClassName = "com.mysql.jdbc.Driver";
     
@@ -63,9 +62,11 @@ public class FetchHCLoanAccountView {
     
     private static final String url = "jdbc:mysql://127.0.0.1:3306/fetch_data?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull";
     
-    private static String createHCLoanAccountViewSql = "CREATE TABLE hc_la_loanaccount ( id VARCHAR (64) NOT NULL, loanBillNumber VARCHAR (64), STATUS VARCHAR (64), idCardNumber VARCHAR (64), clientName VARCHAR (64), districtName VARCHAR (64), branchName VARCHAR (64), phoneNumber VARCHAR (64), applyDate VARCHAR (64), creditProductName VARCHAR (64), customerServiceOfficer VARCHAR (64), customerServiceManager VARCHAR (64), customerServiceTeamManager VARCHAR (64), PRIMARY KEY (id))";
+    private static String createHCLoanAccountDetailViewSql = "CREATE TABLE hc_la_loanaccount_detail ( id VARCHAR (64) NOT NULL, loanBillNumber VARCHAR (64), STATUS VARCHAR (64), createOperatorName VARCHAR (64), createDate VARCHAR (64), creditProductName VARCHAR (64), totalPeriod VARCHAR (64), interestRate VARCHAR (64), uses VARCHAR (64), loanAmount VARCHAR (64), maxMonthlyRepayAmount VARCHAR (64), spouseName VARCHAR (64), spouseWorkUnitPhoneNumber VARCHAR (32), spouseTelePhoneNumber VARCHAR (32), idCardType VARCHAR (64), idCardNumber VARCHAR (64), clientName VARCHAR (32), hasHouse VARCHAR (32), applyDate VARCHAR (32), refuseOtherReason VARCHAR (255), linkInfo VARCHAR (255), districtName VARCHAR (64), patchReason VARCHAR (255), linkManPhoneNumber1 VARCHAR (32), linkManPhoneNumber2 VARCHAR (32), linkManPhoneNumber3 VARCHAR (32), linkManPhoneNumber4 VARCHAR (32), kinPhoneNumber1 VARCHAR (32), kinPhoneNumber2 VARCHAR (32), kinPhoneNumber3 VARCHAR (32), kinPhoneNumber4 VARCHAR (32), firstTrialOperator VARCHAR (32), firstTrialDate VARCHAR (32), finalTrialOperator VARCHAR (32), finalTrialDate VARCHAR (32), workUnitInfo VARCHAR (255), workUnitPhoneNumber VARCHAR (64), workUnitIndustry VARCHAR (255), workInfo VARCHAR (128), refuseReason VARCHAR (255), sex VARCHAR (32), hasMortgage VARCHAR (32), patchDate VARCHAR (32), urgent varchar(32), housePhoneNumber VARCHAR (32), telePhoneNumber VARCHAR (32), startLiveDate VARCHAR (32), customerServiceOfficer VARCHAR (64), customerServiceTeamManager VARCHAR (64), customerServiceManager VARCHAR (64), serviceClientName VARCHAR (64), remark VARCHAR (2000), MONTH VARCHAR (32), PRIMARY KEY (ID))";
     
-    private static String queryUrl = "http://crm6xs.credithc.com/index.php/historyData/historyList/pagesize/{}/p/{}";
+    private static String queryDetailUrl = "http://crm6xs.credithc.com/index.php/historyData/showMes/his_id/{}";
+    
+    private static String queryDetailIdSql = "SELECT t.id FROM hc_la_loanaccount t WHERE NOT EXISTS ( SELECT 1 FROM hc_la_loanaccount_detail td WHERE td.id = td.id ) LIMIT 10";
     
     private static HttpClient httpClient;
     
@@ -87,24 +88,24 @@ public class FetchHCLoanAccountView {
     
     private static JdbcTemplate jdbcTemplate = null;
     
-    private static HCLoanAccountViewService hcLoanAccountViewService;
+    private static HCLoanAccountDetailViewService hcLoanAccountDetailViewService;
     
-    public synchronized static TaskExecutor getTaskExecutor() {
-        if (FetchHCLoanAccountView.taskExecutor != null) {
-            return FetchHCLoanAccountView.taskExecutor;
+    private synchronized static TaskExecutor getTaskExecutor() {
+        if (taskExecutor != null) {
+            return taskExecutor;
         }
         ThreadPoolTaskExecutor taskExecutorTemp = new ThreadPoolTaskExecutor();
         taskExecutorTemp.setCorePoolSize(maxTaskPoolSize);
         taskExecutorTemp.setMaxPoolSize(maxTaskPoolSize);
         taskExecutorTemp.afterPropertiesSet();
         
-        FetchHCLoanAccountView.taskExecutor = taskExecutorTemp;
+        taskExecutor = taskExecutorTemp;
         return taskExecutorTemp;
     }
     
     private synchronized static HttpConnectionManager getHttpConnectionManager() {
-        if (FetchHCLoanAccountView.httpConnectionManager != null) {
-            return FetchHCLoanAccountView.httpConnectionManager;
+        if (httpConnectionManager != null) {
+            return httpConnectionManager;
         }
         MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
         connectionManager.getParams().setConnectionTimeout(timout);
@@ -115,7 +116,7 @@ public class FetchHCLoanAccountView {
         connectionManager.getParams()
                 .setDefaultMaxConnectionsPerHost(maxConnectionsPerHost);
         
-        FetchHCLoanAccountView.httpConnectionManager = connectionManager;
+        httpConnectionManager = connectionManager;
         return connectionManager;
     }
     
@@ -262,8 +263,8 @@ public class FetchHCLoanAccountView {
         return res;
     }
     
-    private static HCLoanAccountViewDao getHCLoanAccountViewDao() {
-        HCLoanAccountViewDaoImpl dao = new HCLoanAccountViewDaoImpl();
+    private static HCLoanAccountDetailViewDao getHCLoanAccountDetailViewDao() {
+        HCLoanAccountDetailViewDaoImpl dao = new HCLoanAccountDetailViewDaoImpl();
         try {
             dao.setMyBatisDaoSupport(getMyBatisDaoSupport());
         } catch (Exception e) {
@@ -272,13 +273,13 @@ public class FetchHCLoanAccountView {
         return dao;
     }
     
-    private static HCLoanAccountViewService getHCLoanAccountViewService() {
-        if (hcLoanAccountViewService != null) {
-            return hcLoanAccountViewService;
+    private static HCLoanAccountDetailViewService getHCLoanAccountDetailViewService() {
+        if (hcLoanAccountDetailViewService != null) {
+            return hcLoanAccountDetailViewService;
         }
-        HCLoanAccountViewService res = new HCLoanAccountViewService(
-                getHCLoanAccountViewDao());
-        hcLoanAccountViewService = res;
+        HCLoanAccountDetailViewService res = new HCLoanAccountDetailViewService(
+                getHCLoanAccountDetailViewDao());
+        hcLoanAccountDetailViewService = res;
         return res;
     }
     
@@ -291,141 +292,57 @@ public class FetchHCLoanAccountView {
         return post(url, params, 0);
     }
     
-    public static PagedList<HCLoanAccountView> parseHCLoanAccountViews(
-            int pageSize, int pageIndex) throws HttpException, IOException {
-        PagedList<HCLoanAccountView> pagedList = new PagedList<>();
-        pagedList.setPageSize(pageSize);
-        pagedList.setPageIndex(pageIndex);
+    public static HCLoanAccountDetailView parseHCLoanAccountDetailViews(
+            String clientId) throws HttpException, IOException {
+        String detailUrl = MessageFormatter.arrayFormat(queryDetailUrl,
+                new Object[] { clientId }).getMessage();
         
-        String postUrl = MessageFormatter.arrayFormat(queryUrl,
-                new Object[] { pageSize, pageIndex }).getMessage();
-        String htmlContent = get(postUrl);
-        if (htmlContent == null) {
-            return null;
-        }
+        String detailHtmlContent = get(detailUrl);
         
-        Document doc = Jsoup.parse(htmlContent);
-        Elements personMoreEles = doc.select("div.relativeBOX");
-        Element personMoreEle = personMoreEles.get(0);
-        Elements trTags = personMoreEle.getElementsByTag("tr");
-        if (trTags.size() == 0) {
-            return pagedList;
-        }
-        List<HCLoanAccountView> laList = new ArrayList<>();
-        for (Element trTemp : trTags) {
-            Elements tdEles = trTemp.getElementsByTag("td");
-            if (tdEles.size() == 0) {
-                // 跳过th
-                continue;
-            }
-            String ahref = tdEles.get(12)
-                    .getElementsByTag("a")
-                    .get(0)
-                    .attr("href");
-            String[] hrefArr = ahref.split("/");
-            String id = hrefArr[hrefArr.length - 1];
-            String districtName = tdEles.get(0).text();
-            String status = tdEles.get(1).text();
-            String branchName = tdEles.get(2).text();
-            String clientName = tdEles.get(3).text();
-            String loanBillNumber = tdEles.get(4).text();
-            String idCardNumber = tdEles.get(5).text();
-            String phoneNumber = tdEles.get(6).text();
-            String applyDate = tdEles.get(7).text();
-            String creditProductName = tdEles.get(8).text();
-            String customerServiceOfficer = tdEles.get(9).text();
-            String customerServiceManager = tdEles.get(10).text();
-            String customerServiceTeamManager = tdEles.get(11).text();
-            
-            HCLoanAccountView la = new HCLoanAccountView(id, status,
-                    districtName, branchName, clientName, loanBillNumber,
-                    idCardNumber, phoneNumber, applyDate, creditProductName,
-                    customerServiceOfficer, customerServiceManager,
-                    customerServiceTeamManager);
-            
-            laList.add(la);
-        }
-        pagedList.setList(laList);
+        HCLoanAccountDetailView detail = HCLoanAccountDetailParser.parse(clientId,
+                detailHtmlContent);
         
-        Element pagedEle = personMoreEles.get(1);
-        String text = pagedEle.text();
-        
-        System.out.println(text);
-        //376385 条记录 1/37639 页 下一页  1  2   3   4   5  下5页 最后一页 跳转至第 页 每页显示 10203060120150180200 条数据
-        //String test = "376385 条记录 1/376 页 下一页  1  2   3   4   5  下5页 最后一页 跳转至第 页 每页显示 10203060120150180200 条数据";
-        Matcher m = pagedInfoPattern.matcher(text);
-        if (m.matches()) {
-            pagedList.setCount(NumberUtils.toInt(m.group(1)));
-        }
-        return pagedList;
-    }
-    
-    private static Pattern pagedInfoPattern = Pattern.compile("^\\D*?(\\d+?)\\D.+?(\\d+?)/(\\d+?)\\D.+?页.+?$");
-    
-    public static void main11(String[] args) {
-        String test = "376385 条记录 1/376 页 下一页  1  2   3   4   5  下5页 最后一页 跳转至第 页 每页显示 10203060120150180200 条数据";
-        Matcher m = pagedInfoPattern.matcher(test);
-        System.out.println(m.matches());
-        System.out.println(m.group(1));
-        System.out.println(m.group(2));
-        System.out.println(m.group(3));
+        return detail;
     }
     
     public static void startFetch() throws HttpException, IOException,
             JSONException {
+        JdbcTemplate jt = getJdbcTemplate();
+        try {
+            jt.execute(createHCLoanAccountDetailViewSql);
+        } catch (DataAccessException e) {
+            //donothing
+        }
+        
         HttpClient hc = getHttpClient();
-        
         HCLoginHelper loginHelper = new HCLoginHelper(hc);
-        
         if (loginHelper.login()) {
-            JdbcTemplate jt = getJdbcTemplate();
-            try {
-                jt.execute(createHCLoanAccountViewSql);
-            } catch (DataAccessException e) {
-                //donothing
-            }
-            //HCLoanAccountViewService service = getHCLoanAccountViewService();
-            
-            PagedList<HCLoanAccountView> resPagedList = null;
-            boolean hasNext = true;
-            int pageIndex = 1;
-            int pageSize = 1000;
-            do {
-                resPagedList = parseHCLoanAccountViews(pageSize, pageIndex);
-                insertToHcLoanAccountView(resPagedList.getList());
+            //以下部分重复即可
+            List<String> idList = jt.queryForList(queryDetailIdSql,
+                    String.class);
+            for (String idTemp : idList) {
+                HCLoanAccountDetailView detail = parseHCLoanAccountDetailViews(idTemp);
                 
-                pageIndex++;
-                int pageCount = ((resPagedList.getCount() % resPagedList.getPageSize()) == 0) ? (int) (resPagedList.getCount() / resPagedList.getPageSize())
-                        : (int) (resPagedList.getCount() / resPagedList.getPageSize()) + 1;
-                if (pageIndex <= pageCount) {
-                    hasNext = true;
-                } else {
-                    hasNext = false;
-                }
-            } while (hasNext);
+                insertToHcLoanAccountDetailView(detail);
+            }
         }
     }
     
-    private static void insertToHcLoanAccountView(List<HCLoanAccountView> laList) {
-        if (CollectionUtils.isEmpty(laList)) {
-            return;
+    private static void insertToHcLoanAccountDetailView(
+            HCLoanAccountDetailView laTemp) {
+        HCLoanAccountDetailViewService service = getHCLoanAccountDetailViewService();
+        
+        HCLoanAccountDetailView findLa = service.findHCLoanAccountDetailViewById(laTemp.getId());
+        if (findLa == null) {
+            service.insertHCLoanAccountDetailView(laTemp);
         }
-        HCLoanAccountViewService service = getHCLoanAccountViewService();
-        //for (HCLoanAccountView laTemp : laList) {
-        //            HCLoanAccountView findLa = service.findHCLoanAccountViewById(laTemp.getId());
-        //            if (findLa == null) {
-        //                service.insertHCLoanAccountView(laTemp);
-        //            }
-        //}
-        service.batchInsertHCLoanAccountView(laList);
     }
     
     @SuppressWarnings("static-access")
     public static void main(String[] args) throws HttpException, IOException,
             JSONException {
         try {
-            FetchHCLoanAccountView fetch = new FetchHCLoanAccountView();
-            fetch.startFetch();
+            FetchHCLoanAccountDetailView.startFetch();
         } catch (Exception e) {
             e.printStackTrace();
         }

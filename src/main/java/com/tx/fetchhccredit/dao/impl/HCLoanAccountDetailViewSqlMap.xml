@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hCLoanAccountDetailView">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="hCLoanAccountDetailViewMap" 
+		type="com.tx.fetchhccredit.model.HCLoanAccountDetailView">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findHCLoanAccountDetailView" 
+		parameterType="com.tx.fetchhccredit.model.HCLoanAccountDetailView"
+		resultMap="hCLoanAccountDetailViewMap">
+		SELECT 
+				THCLADV.ID,
+				THCLADV.REMARK,
+				THCLADV.PATCHREASON,
+				THCLADV.WORKUNITPHONENUMBER,
+				THCLADV.SPOUSEWORKUNITPHONENUMBER,
+				THCLADV.HASHOUSE,
+				THCLADV.STATUS,
+				THCLADV.HASMORTGAGE,
+				THCLADV.CUSTOMERSERVICEMANAGER,
+				THCLADV.APPLYDATE,
+				THCLADV.SPOUSENAME,
+				THCLADV.FIRSTTRIALDATE,
+				THCLADV.DISTRICTNAME,
+				THCLADV.MONTH,
+				THCLADV.PATCHDATE,
+				THCLADV.IDCARDTYPE,
+				THCLADV.HOUSEPHONENUMBER,
+				THCLADV.IDCARDNUMBER,
+				THCLADV.SEX,
+				THCLADV.LOANAMOUNT,
+				THCLADV.USES,
+				THCLADV.REFUSEOTHERREASON,
+				THCLADV.LINKMANPHONENUMBER3,
+				THCLADV.LINKMANPHONENUMBER4,
+				THCLADV.LINKMANPHONENUMBER1,
+				THCLADV.LINKMANPHONENUMBER2,
+				THCLADV.CUSTOMERSERVICEOFFICER,
+				THCLADV.CREDITPRODUCTNAME,
+				THCLADV.FINALTRIALOPERATOR,
+				THCLADV.CLIENTNAME,
+				THCLADV.KINPHONENUMBER1,
+				THCLADV.KINPHONENUMBER2,
+				THCLADV.CREATEDATE,
+				THCLADV.TOTALPERIOD,
+				THCLADV.KINPHONENUMBER3,
+				THCLADV.KINPHONENUMBER4,
+				THCLADV.TELEPHONENUMBER,
+				THCLADV.FIRSTTRIALOPERATOR,
+				THCLADV.URGENT,
+				THCLADV.SPOUSETELEPHONENUMBER,
+				THCLADV.MAXMONTHLYREPAYAMOUNT,
+				THCLADV.WORKUNITINDUSTRY,
+				THCLADV.CREATEOPERATORNAME,
+				THCLADV.WORKUNITINFO,
+				THCLADV.INTERESTRATE,
+				THCLADV.FINALTRIALDATE,
+				THCLADV.WORKINFO,
+				THCLADV.LOANBILLNUMBER,
+				THCLADV.REFUSEREASON,
+				THCLADV.CUSTOMERSERVICETEAMMANAGER,
+				THCLADV.STARTLIVEDATE,
+				THCLADV.LINKINFO,
+				THCLADV.SERVICECLIENTNAME
+		  FROM HC_LA_LOANACCOUNT_DETAIL THCLADV
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND THCLADV.ID = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryHCLoanAccountDetailView" 
+		parameterType="java.util.Map"
+		resultMap="hCLoanAccountDetailViewMap">
+		SELECT 
+				THCLADV.ID,
+				THCLADV.REMARK,
+				THCLADV.PATCHREASON,
+				THCLADV.WORKUNITPHONENUMBER,
+				THCLADV.SPOUSEWORKUNITPHONENUMBER,
+				THCLADV.HASHOUSE,
+				THCLADV.STATUS,
+				THCLADV.HASMORTGAGE,
+				THCLADV.CUSTOMERSERVICEMANAGER,
+				THCLADV.APPLYDATE,
+				THCLADV.SPOUSENAME,
+				THCLADV.FIRSTTRIALDATE,
+				THCLADV.DISTRICTNAME,
+				THCLADV.MONTH,
+				THCLADV.PATCHDATE,
+				THCLADV.IDCARDTYPE,
+				THCLADV.HOUSEPHONENUMBER,
+				THCLADV.IDCARDNUMBER,
+				THCLADV.SEX,
+				THCLADV.LOANAMOUNT,
+				THCLADV.USES,
+				THCLADV.REFUSEOTHERREASON,
+				THCLADV.LINKMANPHONENUMBER3,
+				THCLADV.LINKMANPHONENUMBER4,
+				THCLADV.LINKMANPHONENUMBER1,
+				THCLADV.LINKMANPHONENUMBER2,
+				THCLADV.CUSTOMERSERVICEOFFICER,
+				THCLADV.CREDITPRODUCTNAME,
+				THCLADV.FINALTRIALOPERATOR,
+				THCLADV.CLIENTNAME,
+				THCLADV.KINPHONENUMBER1,
+				THCLADV.KINPHONENUMBER2,
+				THCLADV.CREATEDATE,
+				THCLADV.TOTALPERIOD,
+				THCLADV.KINPHONENUMBER3,
+				THCLADV.KINPHONENUMBER4,
+				THCLADV.TELEPHONENUMBER,
+				THCLADV.FIRSTTRIALOPERATOR,
+				THCLADV.URGENT,
+				THCLADV.SPOUSETELEPHONENUMBER,
+				THCLADV.MAXMONTHLYREPAYAMOUNT,
+				THCLADV.WORKUNITINDUSTRY,
+				THCLADV.CREATEOPERATORNAME,
+				THCLADV.WORKUNITINFO,
+				THCLADV.INTERESTRATE,
+				THCLADV.FINALTRIALDATE,
+				THCLADV.WORKINFO,
+				THCLADV.LOANBILLNUMBER,
+				THCLADV.REFUSEREASON,
+				THCLADV.CUSTOMERSERVICETEAMMANAGER,
+				THCLADV.STARTLIVEDATE,
+				THCLADV.LINKINFO,
+				THCLADV.SERVICECLIENTNAME
+		  FROM HC_LA_LOANACCOUNT_DETAIL THCLADV
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND THCLADV.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            AND THCLADV.REMARK = #{remark,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(patchReason)">  
+	            AND THCLADV.PATCHREASON = #{patchReason,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(workUnitPhoneNumber)">  
+	            AND THCLADV.WORKUNITPHONENUMBER = #{workUnitPhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(spouseWorkUnitPhoneNumber)">  
+	            AND THCLADV.SPOUSEWORKUNITPHONENUMBER = #{spouseWorkUnitPhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(hasHouse)">  
+	            AND THCLADV.HASHOUSE = #{hasHouse,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(status)">  
+	            AND THCLADV.STATUS = #{status,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(hasMortgage)">  
+	            AND THCLADV.HASMORTGAGE = #{hasMortgage,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceManager)">  
+	            AND THCLADV.CUSTOMERSERVICEMANAGER = #{customerServiceManager,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(applyDate)">  
+	            AND THCLADV.APPLYDATE = #{applyDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(spouseName)">  
+	            AND THCLADV.SPOUSENAME = #{spouseName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(firstTrialDate)">  
+	            AND THCLADV.FIRSTTRIALDATE = #{firstTrialDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtName)">  
+	            AND THCLADV.DISTRICTNAME = #{districtName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(month)">  
+	            AND THCLADV.MONTH = #{month,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(patchDate)">  
+	            AND THCLADV.PATCHDATE = #{patchDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            AND THCLADV.IDCARDTYPE = #{idCardType,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(housePhoneNumber)">  
+	            AND THCLADV.HOUSEPHONENUMBER = #{housePhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            AND THCLADV.IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
+	            AND THCLADV.SEX = #{sex,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAmount)">  
+	            AND THCLADV.LOANAMOUNT = #{loanAmount,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refuseOtherReason)">  
+	            AND THCLADV.REFUSEOTHERREASON = #{refuseOtherReason,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkManPhoneNumber3)">  
+	            AND THCLADV.LINKMANPHONENUMBER3 = #{linkManPhoneNumber3,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkManPhoneNumber4)">  
+	            AND THCLADV.LINKMANPHONENUMBER4 = #{linkManPhoneNumber4,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkManPhoneNumber1)">  
+	            AND THCLADV.LINKMANPHONENUMBER1 = #{linkManPhoneNumber1,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkManPhoneNumber2)">  
+	            AND THCLADV.LINKMANPHONENUMBER2 = #{linkManPhoneNumber2,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceOfficer)">  
+	            AND THCLADV.CUSTOMERSERVICEOFFICER = #{customerServiceOfficer,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditProductName)">  
+	            AND THCLADV.CREDITPRODUCTNAME = #{creditProductName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(finalTrialOperator)">  
+	            AND THCLADV.FINALTRIALOPERATOR = #{finalTrialOperator,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            AND THCLADV.CLIENTNAME = #{clientName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(kinPhoneNumber1)">  
+	            AND THCLADV.KINPHONENUMBER1 = #{kinPhoneNumber1,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(kinPhoneNumber2)">  
+	            AND THCLADV.KINPHONENUMBER2 = #{kinPhoneNumber2,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
+	            AND THCLADV.CREATEDATE = #{createDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(totalPeriod)">  
+	            AND THCLADV.TOTALPERIOD = #{totalPeriod,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(kinPhoneNumber3)">  
+	            AND THCLADV.KINPHONENUMBER3 = #{kinPhoneNumber3,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(kinPhoneNumber4)">  
+	            AND THCLADV.KINPHONENUMBER4 = #{kinPhoneNumber4,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(telePhoneNumber)">  
+	            AND THCLADV.TELEPHONENUMBER = #{telePhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(firstTrialOperator)">  
+	            AND THCLADV.FIRSTTRIALOPERATOR = #{firstTrialOperator,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(spouseTelePhoneNumber)">  
+	            AND THCLADV.SPOUSETELEPHONENUMBER = #{spouseTelePhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxMonthlyRepayAmount)">  
+	            AND THCLADV.MAXMONTHLYREPAYAMOUNT = #{maxMonthlyRepayAmount,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(workUnitIndustry)">  
+	            AND THCLADV.WORKUNITINDUSTRY = #{workUnitIndustry,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorName)">  
+	            AND THCLADV.CREATEOPERATORNAME = #{createOperatorName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(workUnitInfo)">  
+	            AND THCLADV.WORKUNITINFO = #{workUnitInfo,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(interestRate)">  
+	            AND THCLADV.INTERESTRATE = #{interestRate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(finalTrialDate)">  
+	            AND THCLADV.FINALTRIALDATE = #{finalTrialDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(workInfo)">  
+	            AND THCLADV.WORKINFO = #{workInfo,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanBillNumber)">  
+	            AND THCLADV.LOANBILLNUMBER = #{loanBillNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refuseReason)">  
+	            AND THCLADV.REFUSEREASON = #{refuseReason,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceTeamManager)">  
+	            AND THCLADV.CUSTOMERSERVICETEAMMANAGER = #{customerServiceTeamManager,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(startLiveDate)">  
+	            AND THCLADV.STARTLIVEDATE = #{startLiveDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkInfo)">  
+	            AND THCLADV.LINKINFO = #{linkInfo,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(serviceClientName)">  
+	            AND THCLADV.SERVICECLIENTNAME = #{serviceClientName,javaType=java.lang.String}
+	        </if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY #{orderSql}
+	        </when>
+	        <otherwise>  
+	            ORDER BY ID
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryHCLoanAccountDetailViewCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM HC_LA_LOANACCOUNT_DETAIL THCLADV
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND THCLADV.ID = #{id,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            AND THCLADV.REMARK = #{remark,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(patchReason)">  
+	            AND THCLADV.PATCHREASON = #{patchReason,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(workUnitPhoneNumber)">  
+	            AND THCLADV.WORKUNITPHONENUMBER = #{workUnitPhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(spouseWorkUnitPhoneNumber)">  
+	            AND THCLADV.SPOUSEWORKUNITPHONENUMBER = #{spouseWorkUnitPhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(hasHouse)">  
+	            AND THCLADV.HASHOUSE = #{hasHouse,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(status)">  
+	            AND THCLADV.STATUS = #{status,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(hasMortgage)">  
+	            AND THCLADV.HASMORTGAGE = #{hasMortgage,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceManager)">  
+	            AND THCLADV.CUSTOMERSERVICEMANAGER = #{customerServiceManager,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(applyDate)">  
+	            AND THCLADV.APPLYDATE = #{applyDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(spouseName)">  
+	            AND THCLADV.SPOUSENAME = #{spouseName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(firstTrialDate)">  
+	            AND THCLADV.FIRSTTRIALDATE = #{firstTrialDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtName)">  
+	            AND THCLADV.DISTRICTNAME = #{districtName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(month)">  
+	            AND THCLADV.MONTH = #{month,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(patchDate)">  
+	            AND THCLADV.PATCHDATE = #{patchDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            AND THCLADV.IDCARDTYPE = #{idCardType,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(housePhoneNumber)">  
+	            AND THCLADV.HOUSEPHONENUMBER = #{housePhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            AND THCLADV.IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
+	            AND THCLADV.SEX = #{sex,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAmount)">  
+	            AND THCLADV.LOANAMOUNT = #{loanAmount,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refuseOtherReason)">  
+	            AND THCLADV.REFUSEOTHERREASON = #{refuseOtherReason,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkManPhoneNumber3)">  
+	            AND THCLADV.LINKMANPHONENUMBER3 = #{linkManPhoneNumber3,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkManPhoneNumber4)">  
+	            AND THCLADV.LINKMANPHONENUMBER4 = #{linkManPhoneNumber4,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkManPhoneNumber1)">  
+	            AND THCLADV.LINKMANPHONENUMBER1 = #{linkManPhoneNumber1,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkManPhoneNumber2)">  
+	            AND THCLADV.LINKMANPHONENUMBER2 = #{linkManPhoneNumber2,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceOfficer)">  
+	            AND THCLADV.CUSTOMERSERVICEOFFICER = #{customerServiceOfficer,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditProductName)">  
+	            AND THCLADV.CREDITPRODUCTNAME = #{creditProductName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(finalTrialOperator)">  
+	            AND THCLADV.FINALTRIALOPERATOR = #{finalTrialOperator,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            AND THCLADV.CLIENTNAME = #{clientName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(kinPhoneNumber1)">  
+	            AND THCLADV.KINPHONENUMBER1 = #{kinPhoneNumber1,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(kinPhoneNumber2)">  
+	            AND THCLADV.KINPHONENUMBER2 = #{kinPhoneNumber2,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
+	            AND THCLADV.CREATEDATE = #{createDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(totalPeriod)">  
+	            AND THCLADV.TOTALPERIOD = #{totalPeriod,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(kinPhoneNumber3)">  
+	            AND THCLADV.KINPHONENUMBER3 = #{kinPhoneNumber3,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(kinPhoneNumber4)">  
+	            AND THCLADV.KINPHONENUMBER4 = #{kinPhoneNumber4,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(telePhoneNumber)">  
+	            AND THCLADV.TELEPHONENUMBER = #{telePhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(firstTrialOperator)">  
+	            AND THCLADV.FIRSTTRIALOPERATOR = #{firstTrialOperator,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(spouseTelePhoneNumber)">  
+	            AND THCLADV.SPOUSETELEPHONENUMBER = #{spouseTelePhoneNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxMonthlyRepayAmount)">  
+	            AND THCLADV.MAXMONTHLYREPAYAMOUNT = #{maxMonthlyRepayAmount,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(workUnitIndustry)">  
+	            AND THCLADV.WORKUNITINDUSTRY = #{workUnitIndustry,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorName)">  
+	            AND THCLADV.CREATEOPERATORNAME = #{createOperatorName,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(workUnitInfo)">  
+	            AND THCLADV.WORKUNITINFO = #{workUnitInfo,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(interestRate)">  
+	            AND THCLADV.INTERESTRATE = #{interestRate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(finalTrialDate)">  
+	            AND THCLADV.FINALTRIALDATE = #{finalTrialDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(workInfo)">  
+	            AND THCLADV.WORKINFO = #{workInfo,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanBillNumber)">  
+	            AND THCLADV.LOANBILLNUMBER = #{loanBillNumber,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refuseReason)">  
+	            AND THCLADV.REFUSEREASON = #{refuseReason,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(customerServiceTeamManager)">  
+	            AND THCLADV.CUSTOMERSERVICETEAMMANAGER = #{customerServiceTeamManager,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(startLiveDate)">  
+	            AND THCLADV.STARTLIVEDATE = #{startLiveDate,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkInfo)">  
+	            AND THCLADV.LINKINFO = #{linkInfo,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(serviceClientName)">  
+	            AND THCLADV.SERVICECLIENTNAME = #{serviceClientName,javaType=java.lang.String}
+	        </if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertHCLoanAccountDetailView" 
+		parameterType="com.tx.fetchhccredit.model.HCLoanAccountDetailView">
+		INSERT INTO HC_LA_LOANACCOUNT_DETAIL
+		(
+			ID,
+			REMARK,
+			PATCHREASON,
+			WORKUNITPHONENUMBER,
+			SPOUSEWORKUNITPHONENUMBER,
+			HASHOUSE,
+			STATUS,
+			HASMORTGAGE,
+			CUSTOMERSERVICEMANAGER,
+			APPLYDATE,
+			SPOUSENAME,
+			FIRSTTRIALDATE,
+			DISTRICTNAME,
+			MONTH,
+			PATCHDATE,
+			IDCARDTYPE,
+			HOUSEPHONENUMBER,
+			IDCARDNUMBER,
+			SEX,
+			LOANAMOUNT,
+			USES,
+			REFUSEOTHERREASON,
+			LINKMANPHONENUMBER3,
+			LINKMANPHONENUMBER4,
+			LINKMANPHONENUMBER1,
+			LINKMANPHONENUMBER2,
+			CUSTOMERSERVICEOFFICER,
+			CREDITPRODUCTNAME,
+			FINALTRIALOPERATOR,
+			CLIENTNAME,
+			KINPHONENUMBER1,
+			KINPHONENUMBER2,
+			CREATEDATE,
+			TOTALPERIOD,
+			KINPHONENUMBER3,
+			KINPHONENUMBER4,
+			TELEPHONENUMBER,
+			FIRSTTRIALOPERATOR,
+			URGENT,
+			SPOUSETELEPHONENUMBER,
+			MAXMONTHLYREPAYAMOUNT,
+			WORKUNITINDUSTRY,
+			CREATEOPERATORNAME,
+			WORKUNITINFO,
+			INTERESTRATE,
+			FINALTRIALDATE,
+			WORKINFO,
+			LOANBILLNUMBER,
+			REFUSEREASON,
+			CUSTOMERSERVICETEAMMANAGER,
+			STARTLIVEDATE,
+			LINKINFO,
+			SERVICECLIENTNAME
+		)
+		VALUES
+		(
+			#{id},
+			#{remark},
+			#{patchReason},
+			#{workUnitPhoneNumber},
+			#{spouseWorkUnitPhoneNumber},
+			#{hasHouse},
+			#{status},
+			#{hasMortgage},
+			#{customerServiceManager},
+			#{applyDate},
+			#{spouseName},
+			#{firstTrialDate},
+			#{districtName},
+			#{month},
+			#{patchDate},
+			#{idCardType},
+			#{housePhoneNumber},
+			#{idCardNumber},
+			#{sex},
+			#{loanAmount},
+			#{uses},
+			#{refuseOtherReason},
+			#{linkManPhoneNumber3},
+			#{linkManPhoneNumber4},
+			#{linkManPhoneNumber1},
+			#{linkManPhoneNumber2},
+			#{customerServiceOfficer},
+			#{creditProductName},
+			#{finalTrialOperator},
+			#{clientName},
+			#{kinPhoneNumber1},
+			#{kinPhoneNumber2},
+			#{createDate},
+			#{totalPeriod},
+			#{kinPhoneNumber3},
+			#{kinPhoneNumber4},
+			#{telePhoneNumber},
+			#{firstTrialOperator},
+			#{urgent},
+			#{spouseTelePhoneNumber},
+			#{maxMonthlyRepayAmount},
+			#{workUnitIndustry},
+			#{createOperatorName},
+			#{workUnitInfo},
+			#{interestRate},
+			#{finalTrialDate},
+			#{workInfo},
+			#{loanBillNumber},
+			#{refuseReason},
+			#{customerServiceTeamManager},
+			#{startLiveDate},
+			#{linkInfo},
+			#{serviceClientName}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deleteHCLoanAccountDetailView" 
+		parameterType="com.tx.fetchhccredit.model.HCLoanAccountDetailView">
+		DELETE FROM HC_LA_LOANACCOUNT_DETAIL  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND ID = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updateHCLoanAccountDetailView"
+	    parameterType="java.util.Map">  
+	    UPDATE hc_la_loanAccount_detail
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('remark')">
+	    		REMARK = #{remark,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('patchReason')">
+	    		PATCHREASON = #{patchReason,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('workUnitPhoneNumber')">
+	    		WORKUNITPHONENUMBER = #{workUnitPhoneNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('spouseWorkUnitPhoneNumber')">
+	    		SPOUSEWORKUNITPHONENUMBER = #{spouseWorkUnitPhoneNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('hasHouse')">
+	    		HASHOUSE = #{hasHouse,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('status')">
+	    		STATUS = #{status,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('hasMortgage')">
+	    		HASMORTGAGE = #{hasMortgage,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('customerServiceManager')">
+	    		CUSTOMERSERVICEMANAGER = #{customerServiceManager,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('applyDate')">
+	    		APPLYDATE = #{applyDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('spouseName')">
+	    		SPOUSENAME = #{spouseName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('firstTrialDate')">
+	    		FIRSTTRIALDATE = #{firstTrialDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('districtName')">
+	    		DISTRICTNAME = #{districtName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('month')">
+	    		MONTH = #{month,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('patchDate')">
+	    		PATCHDATE = #{patchDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('idCardType')">
+	    		IDCARDTYPE = #{idCardType,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('housePhoneNumber')">
+	    		HOUSEPHONENUMBER = #{housePhoneNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('idCardNumber')">
+	    		IDCARDNUMBER = #{idCardNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('sex')">
+	    		SEX = #{sex,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('loanAmount')">
+	    		LOANAMOUNT = #{loanAmount,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('uses')">
+	    		USES = #{uses,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('refuseOtherReason')">
+	    		REFUSEOTHERREASON = #{refuseOtherReason,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('linkManPhoneNumber3')">
+	    		LINKMANPHONENUMBER3 = #{linkManPhoneNumber3,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('linkManPhoneNumber4')">
+	    		LINKMANPHONENUMBER4 = #{linkManPhoneNumber4,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('linkManPhoneNumber1')">
+	    		LINKMANPHONENUMBER1 = #{linkManPhoneNumber1,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('linkManPhoneNumber2')">
+	    		LINKMANPHONENUMBER2 = #{linkManPhoneNumber2,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('customerServiceOfficer')">
+	    		CUSTOMERSERVICEOFFICER = #{customerServiceOfficer,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('creditProductName')">
+	    		CREDITPRODUCTNAME = #{creditProductName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('finalTrialOperator')">
+	    		FINALTRIALOPERATOR = #{finalTrialOperator,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('clientName')">
+	    		CLIENTNAME = #{clientName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('kinPhoneNumber1')">
+	    		KINPHONENUMBER1 = #{kinPhoneNumber1,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('kinPhoneNumber2')">
+	    		KINPHONENUMBER2 = #{kinPhoneNumber2,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('createDate')">
+	    		CREATEDATE = #{createDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('totalPeriod')">
+	    		TOTALPERIOD = #{totalPeriod,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('kinPhoneNumber3')">
+	    		KINPHONENUMBER3 = #{kinPhoneNumber3,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('kinPhoneNumber4')">
+	    		KINPHONENUMBER4 = #{kinPhoneNumber4,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('telePhoneNumber')">
+	    		TELEPHONENUMBER = #{telePhoneNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('firstTrialOperator')">
+	    		FIRSTTRIALOPERATOR = #{firstTrialOperator,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('spouseTelePhoneNumber')">
+	    		SPOUSETELEPHONENUMBER = #{spouseTelePhoneNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('maxMonthlyRepayAmount')">
+	    		MAXMONTHLYREPAYAMOUNT = #{maxMonthlyRepayAmount,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('workUnitIndustry')">
+	    		WORKUNITINDUSTRY = #{workUnitIndustry,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('createOperatorName')">
+	    		CREATEOPERATORNAME = #{createOperatorName,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('workUnitInfo')">
+	    		WORKUNITINFO = #{workUnitInfo,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('interestRate')">
+	    		INTERESTRATE = #{interestRate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('finalTrialDate')">
+	    		FINALTRIALDATE = #{finalTrialDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('workInfo')">
+	    		WORKINFO = #{workInfo,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('loanBillNumber')">
+	    		LOANBILLNUMBER = #{loanBillNumber,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('refuseReason')">
+	    		REFUSEREASON = #{refuseReason,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('customerServiceTeamManager')">
+	    		CUSTOMERSERVICETEAMMANAGER = #{customerServiceTeamManager,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('startLiveDate')">
+	    		STARTLIVEDATE = #{startLiveDate,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('linkInfo')">
+	    		LINKINFO = #{linkInfo,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('serviceClientName')">
+	    		SERVICECLIENTNAME = #{serviceClientName,javaType=java.lang.String},
+	    	</if>	
+	    </trim>
+	    WHERE ID = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->

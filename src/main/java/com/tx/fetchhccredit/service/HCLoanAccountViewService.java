@@ -52,7 +52,8 @@ public class HCLoanAccountViewService {
     }
     
     @Transactional
-    public void batchInsertHCLoanAccountView(List<HCLoanAccountView> hcLoanAccountViews) {
+    public void batchInsertHCLoanAccountView(
+            List<HCLoanAccountView> hcLoanAccountViews) {
         
         this.hCLoanAccountViewDao.batchInsertHCLoanAccountView(hcLoanAccountViews);
     }
@@ -72,7 +73,7 @@ public class HCLoanAccountViewService {
         */
     @Transactional
     public void insertHCLoanAccountView(HCLoanAccountView hCLoanAccountView) {
-        //TODO:验证参数是否合法
+        //验证参数是否合法
         AssertUtils.notNull(hCLoanAccountView, "hCLoanAccountView is null.");
         AssertUtils.notEmpty(hCLoanAccountView.getId(),
                 "hCLoanAccountView.id is empty.");
@@ -160,13 +161,10 @@ public class HCLoanAccountViewService {
      * @see [类、类#方法、类#成员]
     */
     public PagedList<HCLoanAccountView> queryHCLoanAccountViewPagedList(
-    /*TODO:自己定义条件*/int pageIndex, int pageSize) {
-        //TODO:判断条件合法性
-        
-        //TODO:生成查询条件
+            int pageIndex, int pageSize) {
         Map<String, Object> params = new HashMap<String, Object>();
         
-        //TODO:根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         PagedList<HCLoanAccountView> resPagedList = this.hCLoanAccountViewDao.queryHCLoanAccountViewPagedList(params,
                 pageIndex,
                 pageSize);
