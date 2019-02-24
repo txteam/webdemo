@@ -6,11 +6,14 @@
  */
 package com.tx.webdemo.demo.service;
 
+<<<<<<< HEAD
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+=======
+>>>>>>> branch 'master' of https://github.com/txteam/webdemo.git
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,9 +25,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+<<<<<<< HEAD
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.mybatis.model.BatchResult;
 import com.tx.core.paged.model.PagedList;
+=======
+import com.tx.webdemo.demo.annotation.DemoAnotation;
+>>>>>>> branch 'master' of https://github.com/txteam/webdemo.git
 import com.tx.webdemo.demo.dao.DemoDao;
 import com.tx.webdemo.demo.model.Demo;
 
@@ -51,6 +58,7 @@ public class DemoService {
     @Resource(name = "demoDao")
     private DemoDao demoDao;
     
+<<<<<<< HEAD
     /**
       * 根据Id查询Demo实体
       * 1、当id为empty时返回null
@@ -65,6 +73,20 @@ public class DemoService {
     public Demo findDemoById(String id) {
         if (StringUtils.isEmpty(id)) {
             return null;
+=======
+    public DemoService(){
+        logger.info("Instance DemoService............................");
+    }
+    
+    @Transactional
+    @DemoAnotation
+    public void insertDemo(Demo demo) {
+        //验证参数: demo.name  password 不能为空
+        if (demo == null || StringUtils.isEmpty(demo.getName())
+                || StringUtils.isEmpty(demo.getPassowrd())) {
+//            throw new ParameterIsEmptyException(
+//                    "demo.name or password is not empty.");
+>>>>>>> branch 'master' of https://github.com/txteam/webdemo.git
         }
         
         Demo condition = new Demo();
