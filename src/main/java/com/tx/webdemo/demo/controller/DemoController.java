@@ -6,6 +6,7 @@
  */
 package com.tx.webdemo.demo.controller;
 
+import java.awt.MenuItem;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tx.component.mainframe.config.MenuItemConfig;
 import com.tx.component.mainframe.context.MenuContext;
 import com.tx.component.mainframe.model.DefaultMenuItem;
-import com.tx.component.mainframe.model.MenuItem;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.tree.util.TreeUtils;
 import com.tx.webdemo.demo.model.Demo;
@@ -100,12 +100,12 @@ public class DemoController {
     @RequestMapping("/queryAuthTreeDemo")
     public String queryAuthTreeDemo(Model model){
         
-        //列表向树的转换属于业务逻辑应该写在业务层，这里写这里只是为了显示
-        List<MenuItem> menuItemList = MenuContext.getContext().getMenuItemListFromCurrentSession(MenuItem.TYPE_MAIN_MENU);
+//        //列表向树的转换属于业务逻辑应该写在业务层，这里写这里只是为了显示
+//        List<MenuItem> menuItemList = MenuContext.getContext().getMenuItemListFromCurrentSession(MenuItem.TYPE_MAIN_MENU);
+//        
+//        List<MenuItem> menuItemTreeList = TreeUtils.changeToTree(menuItemList);
         
-        List<MenuItem> menuItemTreeList = TreeUtils.changeToTree(menuItemList);
-        
-        model.addAttribute("menuItemTreeList", menuItemTreeList);
+//        model.addAttribute("menuItemTreeList", menuItemTreeList);
         
         return "/demo/demoAuthTree";
     }

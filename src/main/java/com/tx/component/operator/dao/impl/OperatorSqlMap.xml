@@ -17,19 +17,21 @@
 		resultMap="operatorMap">
 		SELECT 
 				TO_.ID,
+				TO_.VCID,
 				TO_.MAINPOSTID AS mainPost_id,
+				TO_.ORGANIZATIONID AS organization_id,
 				TO_.VALID,
 				TO_.PWDERRCOUNT,
 				TO_.HISTORYPWD,
 				TO_.INVALIDDATE,
 				TO_.LASTUPDATEDATE,
-				TO_.ORGANIZATIONID AS organization_id,
 				TO_.PWDUPDATEDATE,
 				TO_.USERNAME,
 				TO_.LOCKED,
 				TO_.CREATEDATE,
 				TO_.EXAMINEPWD,
-				TO_.LOGINNAME
+				TO_.LOGINNAME,
+				TO_.PASSWORD
 		  FROM OPER_OPERATOR TO_
 		 WHERE
 		<trim prefixOverrides="AND | OR">
@@ -51,77 +53,93 @@
 		resultMap="operatorMap">
 		SELECT 
 				TO_.ID,
+				TO_.VCID,
 				TO_.MAINPOSTID AS mainPost_id,
+				TO_.ORGANIZATIONID AS organization_id,
 				TO_.VALID,
 				TO_.PWDERRCOUNT,
 				TO_.HISTORYPWD,
 				TO_.INVALIDDATE,
 				TO_.LASTUPDATEDATE,
-				TO_.ORGANIZATIONID AS organization_id,
 				TO_.PWDUPDATEDATE,
 				TO_.USERNAME,
 				TO_.LOCKED,
 				TO_.CREATEDATE,
 				TO_.EXAMINEPWD,
-				TO_.LOGINNAME
+				TO_.LOGINNAME,
+				TO_.PASSWORD
 		  FROM OPER_OPERATOR TO_
 	    <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType2refIdMap)">  
-        	LEFT JOIN OPER_OPERATOR_REF TOR ON (TO_ID = TOR.OPERATORID)
+        	LEFT JOIN OPER_OPERATOR_REF TOR ON (TO_.ID = TOR.OPERATORID)
 	    </if>
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<!-- 如果条件指定了组织id则使用传入的组织id -->
-			<if test="organization == null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
-					AND TO_.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
-				</if>
-				<!-- 如果没有指定，仅能查询当前组织及其子级组织的数据，如果拥有查询所有职位组织的权限，则不根据组织id去查询 -->
-				<if test="@com.tx.core.util.OgnlUtils@isEmpty(organizationId)">
-					AND TO_.ORGANIZATIONID IN 
-		        	<foreach 
-		        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryOrganizationIdList()"
-		        		item="organizationId" open="(" close=")" separator=",">
-		        		'${organizationId}'
-		        	</foreach>
-				</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
+				AND TO_.VCID = #{vcid,javaType=java.lang.String}
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
+				AND TO_.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
 			</if>
 	        <if test="organization != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
 		            AND TO_.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
 		        </if>
 	        </if>
-		    <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType2refIdMap)">  
-	        	AND
-	        	<foreach collection="refType2RefIdMap.entrySet()" item="entryTemp" open="(" close=")" separator="or">
-					(TOR.REFTYPE = #{entryTemp.key} AND TOR.REFID = #{entryTemp.value})
-				</foreach>
-		    </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPostId)">  
+	            AND TO_.MAINPOSTID = #{mainPostId,javaType=java.lang.String}
 	        </if>
 			<if test="mainPost != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
 		            AND TO_.MAINPOSTID = #{mainPost.id,javaType=java.lang.String}
 		        </if>
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOperatorId)">
+				<![CDATA[ AND TO_.ID <> #{excludeOperatorId,javaType=java.lang.String} ]]>
+			</if>	        
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            AND TO_.VALID = #{valid,javaType=boolean}
+	            <![CDATA[ AND TO_.VALID = #{valid,jdbcType=BIT} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            <![CDATA[ AND TO_.LOCKED = #{locked,jdbcType=BIT} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
 	            AND TO_.USERNAME LIKE concat('%', #{userName}, '%')
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
-	            AND TO_.LOCKED = #{locked,javaType=boolean}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
 	            AND TO_.LOGINNAME = #{loginName,javaType=java.lang.String}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType2refIdMap)">  
+	        	AND <foreach collection="refType2refIdMap.entrySet()" 
+	        	item="entryTemp" open="(" close=")" 
+	        	separator="or">(TOR.REFTYPE = #{entryTemp.key} AND TOR.REFID = #{entryTemp.value})</foreach>
+		    </if>
+	       	<if test="@auth.AuthContextUtils@isQueryByAuth('vcid')">  
+	           <if test="@auth.AuthContextUtils@isNotEmptyOfQueryAuthRefIds('vcid')">
+	               AND TVC.VCID IN <foreach collection="@auth.AuthContextUtils@getQueryAuthRefIds('vcid')" 
+                   		item="refId" open="(" close=")" separator=",">#{refId}</foreach>
+	           </if>
+	           <if test="@auth.AuthContextUtils@isEmptyOfQueryAuthRefIds('vcid')">
+                   AND TVC.VCID = ''
+               </if>
+            </if>
+            <if test="@auth.AuthContextUtils@isQueryByAuth('organizationId')">  
+	           <if test="@auth.AuthContextUtils@isNotEmptyOfQueryAuthRefIds('organizationId')">
+	               AND TVC.ORGANIZATIONID IN <foreach collection="@auth.AuthContextUtils@getQueryAuthRefIds('organizationId')" 
+                   		item="refId" open="(" close=")" separator=",">#{refId}</foreach>
+	           </if>
+	           <if test="@auth.AuthContextUtils@isEmptyOfQueryAuthRefIds('organizationId')">
+                   AND TVC.ORGANIZATIONID = ''
+               </if>
+            </if>
 		</trim>
 		<choose>  
 	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
 	            ORDER BY #{orderSql}
 	        </when>
 	        <otherwise>  
-	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	            ORDER BY LOGINNAME
 	        </otherwise>  
 	    </choose>
 	</select>
@@ -132,57 +150,70 @@
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
 		  FROM OPER_OPERATOR TO_
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType2refIdMap)">  
+        	LEFT JOIN OPER_OPERATOR_REF TOR ON (TO_.ID = TOR.OPERATORID)
+	    </if>
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<!-- 如果条件指定了组织id则使用传入的组织id -->
-			<if test="organization == null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
-					AND TO_.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
-				</if>
-				<!-- 如果没有指定，仅能查询当前组织及其子级组织的数据，如果拥有查询所有职位组织的权限，则不根据组织id去查询 -->
-				<if test="@com.tx.core.util.OgnlUtils@isEmpty(organizationId)">
-					AND TO_.ORGANIZATIONID IN 
-		        	<foreach 
-		        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryOrganizationIdList()"
-		        		item="organizationId" open="(" close=")" separator=",">
-		        		'${organizationId}'
-		        	</foreach>
-				</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
+				AND TO_.VCID = #{vcid,javaType=java.lang.String}
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
+				AND TO_.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
 			</if>
 	        <if test="organization != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
 		            AND TO_.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
 		        </if>
 	        </if>
-		    <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType2refIdMap)">  
-	        	AND
-	        	<foreach collection="refType2RefIdMap.entrySet()" item="entryTemp" open="(" close=")" separator="or">
-					(TOR.REFTYPE = #{entryTemp.key} AND TOR.REFID = #{entryTemp.value})
-				</foreach>
-		    </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPostId)">  
+	            AND TO_.MAINPOSTID = #{mainPostId,javaType=java.lang.String}
 	        </if>
 			<if test="mainPost != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
 		            AND TO_.MAINPOSTID = #{mainPost.id,javaType=java.lang.String}
 		        </if>
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOperatorId)">
+				<![CDATA[ AND TO_.ID <> #{excludeOperatorId,javaType=java.lang.String} ]]>
+			</if>	     	        
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            AND TO_.VALID = #{valid,javaType=boolean}
+	            <![CDATA[ AND TO_.VALID = #{valid,jdbcType=BIT} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            <![CDATA[ AND TO_.LOCKED = #{locked,jdbcType=BIT} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
 	            AND TO_.USERNAME LIKE concat('%', #{userName}, '%')
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
-	            AND TO_.LOCKED = #{locked,javaType=boolean}
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
 	            AND TO_.LOGINNAME = #{loginName,javaType=java.lang.String}
 	        </if>
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOperatorId)">  
-	        	<![CDATA[ AND TO_.id <> #{excludeOperatorId,javaType=java.lang.String}]]>
-	            
-	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType2refIdMap)">  
+	        	AND <foreach collection="refType2refIdMap.entrySet()" 
+	        	item="entryTemp" open="(" close=")" 
+	        	separator="or">(TOR.REFTYPE = #{entryTemp.key} AND TOR.REFID = #{entryTemp.value})</foreach>
+		    </if>
+	       	<if test="@auth.AuthContextUtils@isQueryByAuth('vcid')">  
+	           <if test="@auth.AuthContextUtils@isNotEmptyOfQueryAuthRefIds('vcid')">
+	               AND TVC.VCID IN <foreach collection="@auth.AuthContextUtils@getQueryAuthRefIds('vcid')" 
+                   		item="refId" open="(" close=")" separator=",">#{refId}</foreach>
+	           </if>
+	           <if test="@auth.AuthContextUtils@isEmptyOfQueryAuthRefIds('vcid')">
+                   AND TVC.VCID = ''
+               </if>
+            </if>
+            <if test="@auth.AuthContextUtils@isQueryByAuth('organizationId')">  
+	           <if test="@auth.AuthContextUtils@isNotEmptyOfQueryAuthRefIds('organizationId')">
+	               AND TVC.ORGANIZATIONID IN <foreach collection="@auth.AuthContextUtils@getQueryAuthRefIds('organizationId')" 
+                   		item="refId" open="(" close=")" separator=",">#{refId}</foreach>
+	           </if>
+	           <if test="@auth.AuthContextUtils@isEmptyOfQueryAuthRefIds('organizationId')">
+                   AND TVC.ORGANIZATIONID = ''
+               </if>
+            </if>
 		</trim>
 	</select>
     
@@ -192,6 +223,7 @@
 		INSERT INTO OPER_OPERATOR
 		(
 			ID,
+			VCID,
 			MAINPOSTID,
 			VALID,
 			PWDERRCOUNT,
@@ -210,6 +242,7 @@
 		VALUES
 		(
 			#{id},
+			#{vcid},
 			<if test="mainPost != null">
 				#{mainPost.id},
 	        </if>
@@ -253,17 +286,9 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_OPERATOR TO_
 	    <trim prefix="SET" suffixOverrides=",">
-			<if test="_parameter.containsKey('mainPost')">
-				<if test="mainPost != null">
-					MAINPOSTID = #{mainPost.id,javaType=java.lang.String},
-		        </if>
-		        <if test="mainPost == null">
-					MAINPOSTID = #{mainPost,javaType=java.lang.String},
-		        </if>
+	    	<if test="_parameter.containsKey('vcid')">
+	    		VCID = #{vcid,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('valid')">
-	    		VALID = #{valid,javaType=boolean},
-	    	</if>	
 			<if test="_parameter.containsKey('pwdErrCount')">
 	    		PWDERRCOUNT = #{pwdErrCount,javaType=java.lang.Integer},
 	    	</if>	
@@ -278,7 +303,15 @@
 	    	</if>	
 			<if test="_parameter.containsKey('lastUpdateDate')">
 	    		LASTUPDATEDATE = #{lastUpdateDate,javaType=java.util.Date},
-	    	</if>	
+	    	</if>
+	    	<if test="_parameter.containsKey('mainPost')">
+				<if test="mainPost != null">
+					MAINPOSTID = #{mainPost.id,javaType=java.lang.String},
+		        </if>
+		        <if test="mainPost == null">
+					MAINPOSTID = #{mainPost,javaType=java.lang.String},
+		        </if>
+	    	</if>
 			<if test="_parameter.containsKey('organization')">
 				<if test="organization != null">
 					ORGANIZATIONID = #{organization.id,javaType=java.lang.String},
@@ -293,12 +326,12 @@
 			<if test="_parameter.containsKey('userName')">
 	    		USERNAME = #{userName,javaType=java.lang.String},
 	    	</if>	
+	    	<if test="_parameter.containsKey('valid')">
+	    		VALID = #{valid,javaType=boolean},
+	    	</if>
 			<if test="_parameter.containsKey('locked')">
 	    		LOCKED = #{locked,javaType=boolean},
-	    	</if>	
-			<if test="_parameter.containsKey('createDate')">
-	    		CREATEDATE = #{createDate,javaType=java.util.Date},
-	    	</if>	
+	    	</if>
 			<if test="_parameter.containsKey('examinePwd')">
 	    		EXAMINEPWD = #{examinePwd,javaType=java.lang.String},
 	    	</if>

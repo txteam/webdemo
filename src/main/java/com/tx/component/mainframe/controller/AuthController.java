@@ -15,7 +15,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,6 +32,7 @@ import com.tx.component.auth.model.AuthTypeItem;
 import com.tx.component.mainframe.service.AuthManageService;
 import com.tx.component.mainframe.treeview.CheckAbleTreeNode;
 import com.tx.component.operator.service.PostService;
+import com.tx.component.operator.service.RoleService;
 import com.tx.core.TxConstants;
 
 /**
@@ -43,7 +44,7 @@ import com.tx.core.TxConstants;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Controller("authControllerNew")
+@Controller("authController")
 @RequestMapping("/auth")
 @CheckOperateAuth(key = "auth_manage")
 public class AuthController {
@@ -53,6 +54,9 @@ public class AuthController {
     
     @Resource(name = "postService")
     private PostService postService;
+    
+    @Resource(name = "roleService")
+    private RoleService roleService;
     
     /**
       * 跳转到查询权限视图<br/>
@@ -111,6 +115,28 @@ public class AuthController {
     }
     
     /**
+      * 跳转到配置角色权限页面 
+      *<功能详细描述>
+      * @param postId
+      * @param modelMap
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toConfigRoleAuth")
+    public String toConfigRoleAuth(@RequestParam("roleId") String roleId,
+            ModelMap modelMap) {
+        List<AuthTypeItem> hasChildAuthTypeList = this.authManageService.queryCurrentOperatorAuthTypeItemOfHasChild();
+        
+        modelMap.put("roleId", roleId);
+        modelMap.put("role", this.roleService.findById(roleId));
+        modelMap.put("authTypeList", hasChildAuthTypeList);
+        return "/mainframe/configRoleAuth";
+    }
+    
+    /**
      * 根据当前人员权限类型与权限列表<br/> 
      *<功能详细描述>
      * @return [参数说明]
@@ -126,7 +152,29 @@ public class AuthController {
         MultiValueMap<String, CheckAbleTreeNode> authType2AuthItemListMap = this.authManageService.queryAuthType2TreeNodeMapByRefId(AuthConstant.AUTHREFTYPE_POST,
                 postId,
                 false,
+                true,
+                true);
+        
+        return authType2AuthItemListMap;
+    }
+    
+    /**
+     * 根据当前人员权限类型与权限列表<br/> 
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<AuthItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryRoleAuthType2AuthItemListMap")
+    public Map<String, List<CheckAbleTreeNode>> queryRoleAuthType2AuthItemListMap(
+            @RequestParam("roleId") String roleId) {
+        MultiValueMap<String, CheckAbleTreeNode> authType2AuthItemListMap = this.authManageService.queryAuthType2TreeNodeMapByRefId(AuthConstant.AUTHREFTYPE_ROLE,
+                roleId,
                 false,
+                true,
                 true);
         
         return authType2AuthItemListMap;
@@ -161,6 +209,39 @@ public class AuthController {
         this.authManageService.saveRefId2AuthItemIdList(authType,
                 AuthConstant.AUTHREFTYPE_POST,
                 postId,
+                authIdList);
+        return true;
+    }
+    
+    /**
+     * 保存角色权限<br/>
+     *<功能详细描述>
+     * @param postId
+     * @param authType
+     * @param authItemIds
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @CheckOperateAuth(key = "config_role_auth", name = "配置角色权限")
+    @RequestMapping("/saveRole2AuthItemList")
+    public boolean saveRole2AuthItemList(
+            @RequestParam("roleId") String roleId,
+            @RequestParam("authType") String authType,
+            @RequestParam(value = "authItemId[]", required = false) String[] authItemIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        List<String> authIdList = null;
+        if (authItemIds == null) {
+            authIdList = new ArrayList<String>();
+        } else {
+            authIdList = Arrays.asList(authItemIds);
+        }
+        this.authManageService.saveRefId2AuthItemIdList(authType,
+                AuthConstant.AUTHREFTYPE_ROLE,
+                roleId,
                 authIdList);
         return true;
     }
@@ -201,7 +282,7 @@ public class AuthController {
         MultiValueMap<String, CheckAbleTreeNode> authType2AuthItemListMap = this.authManageService.queryAuthType2TreeNodeMapByRefId(AuthConstant.AUTHREFTYPE_OPERATOR,
                 operatorId,
                 false,
-                false,
+                true,
                 true);
         
         return authType2AuthItemListMap;
@@ -268,7 +349,9 @@ public class AuthController {
         for (AuthItem authItemTemp : deleteAuthItems) {
             deleteAuthItemNameSb.append(authItemTemp.getName()).append(",");
         }
-        modelMap.put("authItemName", AuthContext.getContext().getAuthItemFromContextById(authItemId).getName());
+        modelMap.put("authItemName", AuthContext.getContext()
+                .getAuthItemFromContextById(authItemId)
+                .getName());
         modelMap.put("authItemId", authItemId);
         modelMap.put("addAuthItemNames",
                 StringUtils.substring(addAuthItemNameSb.toString(), 0, -1));
@@ -371,7 +454,9 @@ public class AuthController {
         for (AuthItem authItemTemp : deleteAuthItems) {
             deleteAuthItemNameSb.append(authItemTemp.getName()).append(",");
         }
-        modelMap.put("authItemName", AuthContext.getContext().getAuthItemFromContextById(authItemId).getName());
+        modelMap.put("authItemName", AuthContext.getContext()
+                .getAuthItemFromContextById(authItemId)
+                .getName());
         modelMap.put("authItemId", authItemId);
         modelMap.put("addAuthItemNames",
                 StringUtils.substring(addAuthItemNameSb.toString(), 0, -1));
@@ -436,4 +521,97 @@ public class AuthController {
         return postIdSet;
     }
     
+    /**
+     * 跳转到配置权限职位页面<br/>
+      *<功能详细描述>
+      * @param authItemId
+      * @param modelMap
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toConfigAuthRole")
+    public String toConfigAuthRole(
+            @RequestParam("authItemId") String authItemId, ModelMap modelMap) {
+        Set<AuthItem> addAuthItems = this.authManageService.getParentAuthItems(authItemId);
+        Set<AuthItem> deleteAuthItems = this.authManageService.getChildAuthItems(authItemId);
+        
+        StringBuilder addAuthItemNameSb = new StringBuilder(
+                TxConstants.INITIAL_STR_LENGTH);
+        for (AuthItem authItemTemp : addAuthItems) {
+            addAuthItemNameSb.append(authItemTemp.getName()).append(",");
+        }
+        StringBuilder deleteAuthItemNameSb = new StringBuilder(
+                TxConstants.INITIAL_STR_LENGTH);
+        for (AuthItem authItemTemp : deleteAuthItems) {
+            deleteAuthItemNameSb.append(authItemTemp.getName()).append(",");
+        }
+        modelMap.put("authItemName", AuthContext.getContext()
+                .getAuthItemFromContextById(authItemId)
+                .getName());
+        modelMap.put("authItemId", authItemId);
+        modelMap.put("addAuthItemNames",
+                StringUtils.substring(addAuthItemNameSb.toString(), 0, -1));
+        modelMap.put("deleteAuthItemNames",
+                StringUtils.substring(deleteAuthItemNameSb.toString(), 0, -1));
+        return "/mainframe/configAuthRole";
+    }
+    
+    /**
+     * 保存权限项对应的职位id列表<br/>
+     *<功能详细描述>
+     * @param authItemId
+     * @param authRefType
+     * @param addRefIds
+     * @param deleteRefIds
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/saveAuthItem2RoleIdList")
+    @CheckOperateAuth(key = "config_auth_role", name = "配置权限职位")
+    public boolean saveAuthItem2RoleIdList(
+            @RequestParam("authItemId") String authItemId,
+            @RequestParam(value = "addRefIds[]", required = false) String[] addRefIds,
+            @RequestParam(value = "deleteRefIds[]", required = false) String[] deleteRefIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        if (addRefIds == null) {
+            addRefIds = new String[0];
+        }
+        if (deleteRefIds == null) {
+            deleteRefIds = new String[0];
+        }
+        List<String> addRefIdList = Arrays.asList(addRefIds);
+        List<String> deleteRefIdList = Arrays.asList(deleteRefIds);
+        this.authManageService.saveAuthItemId2RefIdList(AuthConstant.AUTHREFTYPE_ROLE,
+                authItemId,
+                addRefIdList,
+                deleteRefIdList);
+        return true;
+    }
+    
+    /**
+     * 跳转到配置人员职位页面
+     *<功能详细描述>
+     * @param operatorId
+     * @return [参数说明]
+     * 
+     * @return Set<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/queryRoleIdSetByAuthItemId")
+    public Set<String> queryRoleIdSetByAuthItemId(
+            @RequestParam("authItemId") String authItemId) {
+        Set<String> postIdSet = this.authManageService.queryRefIdSetByAuthItemId(AuthConstant.AUTHREFTYPE_ROLE,
+                authItemId);
+        return postIdSet;
+    }
 }

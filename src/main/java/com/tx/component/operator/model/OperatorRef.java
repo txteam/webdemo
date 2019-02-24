@@ -23,7 +23,7 @@ import javax.persistence.Table;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "OPER_OPERATOR_REF")
+@Table(name = "oper_operator_ref")
 public class OperatorRef {
     
     /** 操作员id */

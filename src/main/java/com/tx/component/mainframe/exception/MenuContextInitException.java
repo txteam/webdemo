@@ -27,30 +27,28 @@ public class MenuContextInitException extends SILException{
      * @return
      */
     @Override
-    protected String doGetErrorCode() {
-        return "MENU_CONTEXT_INIT_ERROR";
+    protected Integer errorCode() {
+        // TODO Auto-generated method stub
+        return super.errorCode();
     }
-
-    /**
-     * @return
-     */
-    @Override
-    protected String doGetErrorMessage() {
-        return "菜单容器初始化异常";
-    }
-
+    
     /** <默认构造函数> */
-    public MenuContextInitException(String message, Object[] parameters) {
-        super(message, parameters);
+    public MenuContextInitException() {
+        super();
+        // TODO Auto-generated constructor stub
     }
 
     /** <默认构造函数> */
     public MenuContextInitException(String message, Throwable cause) {
         super(message, cause);
+        // TODO Auto-generated constructor stub
     }
 
     /** <默认构造函数> */
     public MenuContextInitException(String message) {
         super(message);
+        // TODO Auto-generated constructor stub
     }
+    
+    
 }

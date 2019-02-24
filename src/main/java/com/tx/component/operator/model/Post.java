@@ -18,8 +18,6 @@ import javax.persistence.Transient;
 
 import com.tx.core.tree.model.TreeAble;
 
-
-
  /**
   * 职位<br/>
   *     职位和组织的关系<br/>
@@ -47,6 +45,9 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
     /** id */
     @Id
     private String id;
+    
+    /** vcid */
+    private String vcid;
     
     /** 上级职位id */
     private String parentId;
@@ -78,6 +79,7 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
     /**
      * @return 返回 childs
      */
+    @Override
     public List<Post> getChilds() {
         return childs;
     }
@@ -85,6 +87,7 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
     /**
      * @param 对childs进行赋值
      */
+    @Override
     public void setChilds(List<Post> childs) {
         this.childs = childs;
     }
@@ -92,6 +95,7 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
     /**
      * @return 返回 id
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -148,6 +152,7 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
     /**
      * @return 返回 parentId
      */
+    @Override
     public String getParentId() {
         return parentId;
     }
@@ -199,5 +204,19 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
      */
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    /**
+     * @return 返回 vcid
+     */
+    public String getVcid() {
+        return vcid;
+    }
+
+    /**
+     * @param 对vcid进行赋值
+     */
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
     }
 }

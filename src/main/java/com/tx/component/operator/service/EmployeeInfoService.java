@@ -37,10 +37,6 @@ public class EmployeeInfoService {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(EmployeeInfoService.class);
     
-    @SuppressWarnings("unused")
-    //@Resource(name = "serviceLogger")
-    private Logger serviceLogger;
-    
     @Resource(name = "employeeInfoDao")
     private EmployeeInfoDao employeeInfoDao;
     
@@ -57,9 +53,11 @@ public class EmployeeInfoService {
     */
     @Transactional
     public void insertEmployeeInfo(EmployeeInfo employeeInfo) {
-        //TODO:验证参数是否合法，必填字段是否填写，
+        //TODO:验证参数是否合法
         AssertUtils.notNull(employeeInfo, "employeeInfo is null.");
         AssertUtils.notEmpty(employeeInfo.getOperatorId(), "employeeInfo.operatorId is empty.");
+        
+        //TODO: 设置默认数据
         
         this.employeeInfoDao.insertEmployeeInfo(employeeInfo);
     }
@@ -101,7 +99,9 @@ public class EmployeeInfoService {
         
         EmployeeInfo condition = new EmployeeInfo();
         condition.setOperatorId(operatorId);
-        return this.employeeInfoDao.findEmployeeInfo(condition);
+        
+        EmployeeInfo res = this.employeeInfoDao.findEmployeeInfo(condition);
+        return res;
     }
     
     /**
@@ -196,17 +196,18 @@ public class EmployeeInfoService {
         
         //TODO:需要更新的字段
 		updateRowMap.put("leavingDate", employeeInfo.getLeavingDate());	
+		updateRowMap.put("phoneNumber", employeeInfo.getPhoneNumber());	
 		updateRowMap.put("sex", employeeInfo.getSex());	
 		updateRowMap.put("code", employeeInfo.getCode());	
 		updateRowMap.put("entryDate", employeeInfo.getEntryDate());	
 		updateRowMap.put("officialDate", employeeInfo.getOfficialDate());	
 		updateRowMap.put("trialPeriodEndDate", employeeInfo.getTrialPeriodEndDate());	
 		updateRowMap.put("leaving", employeeInfo.isLeaving());	
-		updateRowMap.put("age", employeeInfo.getAge());	
+		updateRowMap.put("email", employeeInfo.getEmail());	
 		updateRowMap.put("name", employeeInfo.getName());	
-		updateRowMap.put("official", employeeInfo.isOfficial());	
-		updateRowMap.put("lastUpdatePhoneLinkInfoDate", employeeInfo.getLastUpdatePhoneLinkInfoDate());	
-		updateRowMap.put("cardNum", employeeInfo.getCardNum());	
+		updateRowMap.put("age", employeeInfo.getAge());	
+		updateRowMap.put("official", employeeInfo.isOfficial());
+		updateRowMap.put("idCardNumber", employeeInfo.getIdCardNumber());
         
         int updateRowCount = this.employeeInfoDao.updateEmployeeInfo(updateRowMap);
         

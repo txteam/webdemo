@@ -19,7 +19,6 @@ import com.tx.component.auth.context.AuthContext;
 import com.tx.component.operator.model.Operator;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.Post;
-import com.tx.core.exceptions.SILException;
 import com.tx.core.exceptions.util.AssertUtils;
 
 /**
@@ -47,25 +46,6 @@ public class WebContextUtils {
     
     /** 获取当前虚中心 */
     public static final String SESSION_CURRENT_VCID = "vcid";
-    
-    /**
-      * 当前登录人员是否是所属组织主管 
-      *<功能简述>
-      *<功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public static boolean isOrganizationChief() {
-//        Operator currentOperator = getCurrentOperator();
-//        Organization currentOrganization = getCurrentOrganization();
-        
-        //TODO:XXX
-        
-        return true;
-    }
     
     /**
       * 判断是否有权限<br/>
@@ -99,8 +79,8 @@ public class WebContextUtils {
     }
     
     /**
-      *<功能简述>
-      *<功能详细描述>
+      * 获取当前登录人员的虚中心id如果不存在则返回null
+      * <功能详细描述>
       * @return [参数说明]
       * 
       * @return String [返回类型说明]
@@ -118,8 +98,8 @@ public class WebContextUtils {
     }
     
     /**
-      * 从会话中获取当前组织<br/>
-      *<功能详细描述>
+      * 从会话中获取当前登录人员所属组织<br/>
+      * <功能详细描述>
       * @return [参数说明]
       * 
       * @return Organization [返回类型说明]
@@ -135,6 +115,15 @@ public class WebContextUtils {
         return currentOrganization;
     }
     
+    /**
+      * 获取当前组织id<br/>
+      * <功能详细描述>
+      * @return [参数说明]
+      * 
+      * @return String [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
     public static String getCurrentOrganizationId() {
         Organization organization = getCurrentOrganization();
         String organizationId = organization == null ? null
@@ -142,18 +131,9 @@ public class WebContextUtils {
         return organizationId;
     }
     
-    public static String getServletContextPath() {
-        return "d:/servletContext";
-        //throw new SILException("未实现的临时方法");
-    }
-    
-    public static Post getCurrentPost() {
-        throw new SILException("未实现的临时方法");
-    }
-    
     /**
      * 从会话中获取当前登录人员
-     *<功能详细描述>
+     * <功能详细描述>
      * @return [参数说明]
      * 
      * @return Operator [返回类型说明]
@@ -171,7 +151,7 @@ public class WebContextUtils {
     
     /**
       * 获取当前操作人员的id
-      *<功能详细描述>
+      * <功能详细描述>
       * @return [参数说明]
       * 
       * @return String [返回类型说明]

@@ -13,8 +13,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.cxf.common.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.id.UUIDHexGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -6,12 +6,15 @@
  */
 package com.tx.component.operator.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +25,10 @@ import com.tx.component.operator.OperatorConstants;
 import com.tx.component.operator.dao.OperatorDao;
 import com.tx.component.operator.model.Operator;
 import com.tx.component.operator.model.OperatorStateEnum;
+import com.tx.component.operator.model.Organization;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
+import com.tx.core.util.MD5Utils;
 
 /**
  * Operator的业务层
@@ -43,12 +48,18 @@ public class OperatorService {
     @Resource(name = "operatorDao")
     private OperatorDao operatorDao;
     
+    @Resource(name = "organizationService")
+    private OrganizationService organizationService;
+    
+    @Resource(name = "postService")
+    private PostService postService;
+    
     /** 校验密码最大错误次数 */
     private int checkPasswordMaxErrorCount = 3;
     
     /**
       * 判断登录名是否已经存在<br/>
-      *<功能详细描述>
+      * <功能详细描述>
       * @param loginName
       * @return [参数说明]
       * 
@@ -69,7 +80,7 @@ public class OperatorService {
     
     /**
       * 校验用户名密码
-      *<功能详细描述>
+      * <功能详细描述>
       * @param loginName
       * @param password
       * @return [参数说明]
@@ -111,7 +122,7 @@ public class OperatorService {
         AssertUtils.notEmpty(password, "password is empty");
         
         //根据用户名查询用户
-        Operator res = findOperatorByLoginName(loginName);
+        Operator res = findByLoginName(loginName);
         //如果不存在对应用户名则直接返回
         if (res == null) {
             return false;
@@ -120,7 +131,7 @@ public class OperatorService {
         //校验密码是否正确
         Operator condition = new Operator();
         condition.setLoginName(loginName);
-        condition.setPassword(password);
+        condition.setPassword(MD5Utils.encode(password));
         Operator oper = this.operatorDao.findOperator(condition);
         if (oper != null) {
             //如果密码正确
@@ -138,8 +149,7 @@ public class OperatorService {
             updateRowMap.put("id", res.getId());
             updateRowMap.put("pwdErrCount", errorCount);
             if (errorCount > checkPasswordMaxErrorCount) {
-                updateRowMap.put("locked",
-                        OperatorConstants.OPERATOR_LOCKED_TRUE);
+                updateRowMap.put("locked", true);
             }
             this.operatorDao.updateOperator(updateRowMap);
             return false;
@@ -158,21 +168,20 @@ public class OperatorService {
      * @see [类、类#方法、类#成员]
     */
     @Transactional
-    public void insertOperator(Operator operator) {
+    public void insert(Operator operator) {
         AssertUtils.notNull(operator, "operator is null.");
-        AssertUtils.notEmpty(operator.getLoginName(),
-                "operator.loginName is empty.");
+        AssertUtils.notEmpty(operator.getLoginName(), "operator.loginName is empty.");
         //        AssertUtils.notEmpty(operator.getPassword(),
         //                "operator.password is empty.");
         
         //业务意义上的验证
         //新增人员需要指定人员所属组织<br/>
-        AssertUtils.notNull(operator.getOrganization(),
-                "operator.organization is null.");
-        AssertUtils.notEmpty(operator.getOrganization().getId(),
-                "operator.organization.id is empty.");
+        AssertUtils.notNull(operator.getOrganization(), "operator.organization is null.");
+        AssertUtils.notEmpty(operator.getOrganization().getId(), "operator.organization.id is empty.");
         
-        //TODO:密码加密
+        Organization org = this.organizationService.findById(operator.getOrganization().getId());
+        operator.setVcid(org.getVcid());
+        
         //写入默认时间
         Date now = new Date();
         operator.setCreateDate(now);
@@ -180,8 +189,9 @@ public class OperatorService {
         operator.setPwdUpdateDate(now);
         operator.setPwdErrCount(0);
         
-        //TODO:获取配置的默认密码并设值
-        operator.setPassword("123321qQ");
+        //密码加密
+        //获取配置的默认密码并设值
+        operator.setPassword(MD5Utils.encode("123456"));
         
         this.operatorDao.insertOperator(operator);
     }
@@ -219,7 +229,7 @@ public class OperatorService {
       * @exception throws 可能存在数据库访问异常DataAccessException
       * @see [类、类#方法、类#成员]
      */
-    public Operator findOperatorById(String id) {
+    public Operator findById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
         
         Operator condition = new Operator();
@@ -238,11 +248,12 @@ public class OperatorService {
      * @exception throws 可能存在数据库访问异常DataAccessException
      * @see [类、类#方法、类#成员]
     */
-    public Operator findOperatorByLoginName(String loginName) {
+    public Operator findByLoginName(String loginName) {
         AssertUtils.notEmpty(loginName, "loginName is empty.");
         
         Operator condition = new Operator();
         condition.setLoginName(loginName);
+        
         return this.operatorDao.findOperator(condition);
     }
     
@@ -257,10 +268,9 @@ public class OperatorService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public PagedList<Operator> queryOperatorPagedListByOrganizationIdIncludeInvalid(
-            String organizationId, String loginName, String userName,
-            String code, OperatorStateEnum state, String postId, int pageIndex,
-            int pageSize) {
+    @Transactional
+    public PagedList<Operator> queryOperatorPagedListByOrganizationIdIncludeInvalid(String organizationId, String loginName,
+            String userName, String code, OperatorStateEnum state, String postId, int pageIndex, int pageSize) {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         if (!StringUtils.isEmpty(organizationId)) {
@@ -268,7 +278,7 @@ public class OperatorService {
         }
         params.put("loginName", loginName);
         params.put("userName", userName);
-        if(!StringUtils.isEmpty(postId)){
+        if (!StringUtils.isEmpty(postId)) {
             Map<String, String> refType2refIdMap = new HashMap<String, String>();
             refType2refIdMap.put(OperatorConstants.OPERATORREF_TYPE_POST, postId);
             params.put("refType2refIdMap", refType2refIdMap);
@@ -290,9 +300,15 @@ public class OperatorService {
             }
         }
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<Operator> resPagedList = this.operatorDao.queryOperatorPagedList(params,
-                pageIndex,
-                pageSize);
+        PagedList<Operator> resPagedList = this.operatorDao.queryOperatorPagedList(params, pageIndex, pageSize);
+        if (!CollectionUtils.isEmpty(resPagedList.getList())) {
+            for (Operator oper : resPagedList.getList()) {
+                oper.setOrganization(this.organizationService.findById(oper.getOrganization().getId()));
+                if (oper.getMainPost() != null && !StringUtils.isEmpty(oper.getMainPost().getId())) {
+                    oper.setMainPost(this.postService.findPostById(oper.getMainPost().getId()));
+                }
+            }
+        }
         return resPagedList;
     }
     
@@ -307,8 +323,7 @@ public class OperatorService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public PagedList<Operator> queryOperatorPagedListByOrganizationId(
-            String organizationId, String loginName, String userName,
+    public PagedList<Operator> queryOperatorPagedListByOrganizationId(String organizationId, String loginName, String userName,
             String code, OperatorStateEnum state, int pageIndex, int pageSize) {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
@@ -333,9 +348,15 @@ public class OperatorService {
         }
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<Operator> resPagedList = this.operatorDao.queryOperatorPagedList(params,
-                pageIndex,
-                pageSize);
+        PagedList<Operator> resPagedList = this.operatorDao.queryOperatorPagedList(params, pageIndex, pageSize);
+        if (!CollectionUtils.isEmpty(resPagedList.getList())) {
+            for (Operator oper : resPagedList.getList()) {
+                oper.setOrganization(this.organizationService.findById(oper.getOrganization().getId()));
+                if (oper.getMainPost() != null && !StringUtils.isEmpty(oper.getMainPost().getId())) {
+                    oper.setMainPost(this.postService.findPostById(oper.getMainPost().getId()));
+                }
+            }
+        }
         return resPagedList;
     }
     
@@ -385,8 +406,7 @@ public class OperatorService {
         //验证参数是否合法，必填字段是否填写，
         AssertUtils.notNull(operator, "operator is null.");
         AssertUtils.notEmpty(operator.getId(), "operator.id is empty.");
-        AssertUtils.notEmpty(operator.getLoginName(),
-                "operator.loginName is empty.");
+        AssertUtils.notEmpty(operator.getLoginName(), "operator.loginName is empty.");
         
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
@@ -395,6 +415,7 @@ public class OperatorService {
         //需要更新的字段
         Date now = new Date();
         updateRowMap.put("lastUpdateDate", now);
+        updateRowMap.put("mainPost", operator.getMainPost());
         updateRowMap.put("organization", operator.getOrganization());
         updateRowMap.put("userName", operator.getUserName());
         updateRowMap.put("name", operator.getUserName());
@@ -403,6 +424,28 @@ public class OperatorService {
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
+    }
+    
+    /**
+     * 
+      *<功能简述>
+      *<功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return List<Operator> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<Operator> queryOperatorListByOrganizationId(String organizationId) {
+        if (StringUtils.isEmpty(organizationId)) {
+            return new ArrayList<Operator>();
+        }
+        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("organizationId", organizationId);
+        
+        return operatorDao.queryOperatorList(params);
     }
     
     /**
@@ -415,6 +458,7 @@ public class OperatorService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @Transactional
     public boolean disableOperatorById(String operatorId) {
         AssertUtils.notEmpty(operatorId, "operatorId is empty.");
         
@@ -441,6 +485,7 @@ public class OperatorService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @Transactional
     public boolean enableOperatorById(String operatorId) {
         AssertUtils.notEmpty(operatorId, "operatorId is empty.");
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
@@ -463,13 +508,27 @@ public class OperatorService {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
+    @Transactional
     public boolean unlockOperatorById(String operatorId) {
         AssertUtils.notEmpty(operatorId, "operatorId is empty.");
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", operatorId);
-        
         updateRowMap.put("lastUpdateDate", new Date());
         updateRowMap.put("locked", false);
+        @SuppressWarnings("unused")
+        int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
+        return true;
+    }
+    
+    @Transactional
+    public boolean resetPasswordOperatorById(String operatorId) {
+        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", operatorId);
+        updateRowMap.put("lastUpdateDate", new Date());
+        updateRowMap.put("password", MD5Utils.encode("123456"));
+        @SuppressWarnings("unused")
+        int updateRowCount = this.operatorDao.updateOperator(updateRowMap);
         return true;
     }
 }

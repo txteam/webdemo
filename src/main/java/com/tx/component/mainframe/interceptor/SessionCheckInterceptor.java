@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
@@ -27,6 +27,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.quartz.SimpleThreadPoolTaskExecutor;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,6 +36,7 @@ import com.tx.component.mainframe.exception.SessionLostException;
 import com.tx.core.exceptions.SILException;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.exceptions.util.ExceptionWrapperUtils;
+import com.tx.core.util.MessageUtils;
 
 /**
  * 会话校验拦截器<br/>
@@ -47,8 +49,7 @@ import com.tx.core.exceptions.util.ExceptionWrapperUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class SessionCheckInterceptor implements HandlerInterceptor,
-        InitializingBean {
+public class SessionCheckInterceptor implements HandlerInterceptor, InitializingBean {
     
     /** 日志记录器 */
     //private static Logger logger = LoggerFactory.getLogger(SessionCheckInterceptor.class);
@@ -62,11 +63,11 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
     /** 配置实例 */
     private SessionCheckConfig config;
     
-    /** 无需进行会话校验的路径缓存大小 */
-    private int maxNeedSessionCheckPathCacheSize = 500;
-    
     /** 需进行会话校验的路径缓存大小 */
-    private int maxNotNeedSessionCheckPathCacheSize = 1000;
+    private int maxNeedSessionCheckPathCacheSize = 40960;
+    
+    /** 无需进行会话校验的路径缓存大小 */
+    private int maxNotNeedSessionCheckPathCacheSize = 10000;
     
     /**
      * @throws Exception
@@ -74,9 +75,7 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
     @Override
     public void afterPropertiesSet() throws Exception {
         AssertUtils.notNull(configLocaton, "configLocaton is null");
-        AssertUtils.isExist(configLocaton,
-                "configLocaton:{} is not exist.",
-                new Object[] { configLocaton });
+        AssertUtils.isExist(configLocaton, "configLocaton:{} is not exist.", new Object[] { configLocaton });
         
         config = new SessionCheckConfig(configLocaton);
     }
@@ -122,8 +121,8 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
      * @throws Exception
      */
     @Override
-    public boolean preHandle(HttpServletRequest request,
-            HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
         //获取当前请求资源路径
         String path = getServletPath(request);
         //如果无需进行校验则继续执行后续逻辑
@@ -134,8 +133,7 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
             if (!isSessionInvalid(request)) {
                 return true;
             } else {
-                throw new SessionLostException("访问路径：{}时发生会话丢失",
-                        new Object[] { path });
+                throw new SessionLostException(MessageUtils.format("访问路径：{}时发生会话丢失", new Object[] { path }));
             }
         }
     }
@@ -148,8 +146,7 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
      * @throws Exception
      */
     @Override
-    public void postHandle(HttpServletRequest request,
-            HttpServletResponse response, Object handler,
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
             ModelAndView modelAndView) throws Exception {
     }
     
@@ -161,8 +158,7 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
      * @throws Exception
      */
     @Override
-    public void afterCompletion(HttpServletRequest request,
-            HttpServletResponse response, Object handler, Exception ex)
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
     }
     
@@ -204,8 +200,7 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
     /**
      * @param 对maxNeedSessionCheckPathCacheSize进行赋值
      */
-    public void setMaxNeedSessionCheckPathCacheSize(
-            int maxNeedSessionCheckPathCacheSize) {
+    public void setMaxNeedSessionCheckPathCacheSize(int maxNeedSessionCheckPathCacheSize) {
         this.maxNeedSessionCheckPathCacheSize = maxNeedSessionCheckPathCacheSize;
     }
     
@@ -219,8 +214,7 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
     /**
      * @param 对maxNotNeedSessionCheckPathCacheSize进行赋值
      */
-    public void setMaxNotNeedSessionCheckPathCacheSize(
-            int maxNotNeedSessionCheckPathCacheSize) {
+    public void setMaxNotNeedSessionCheckPathCacheSize(int maxNotNeedSessionCheckPathCacheSize) {
         this.maxNotNeedSessionCheckPathCacheSize = maxNotNeedSessionCheckPathCacheSize;
     }
     
@@ -238,31 +232,25 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
         /** 例外路径正则表达式 */
         private List<Pattern> excludePathPatterns = new ArrayList<Pattern>();
         
-        private Map<String, Pattern> notNeedSessionCheckPathLRUMapCache;
+        private Map<String, String> notNeedSessionCheckPathLRUMapCache;
         
-        private Map<String, Pattern> needSessionCheckPathLRUMapCache;
+        private Map<String, String> needSessionCheckPathLRUMapCache;
         
         /**
          * <默认构造函数>
          */
-        @SuppressWarnings("unchecked")
         public SessionCheckConfig(Resource configFileResource) {
-            AssertUtils.isExist(configFileResource,
-                    "configFileResource is not exist");
+            AssertUtils.isExist(configFileResource, "configFileResource is not exist");
             
-            notNeedSessionCheckPathLRUMapCache = new LRUMap(
-                    maxNotNeedSessionCheckPathCacheSize);
-            needSessionCheckPathLRUMapCache = new LRUMap(
-                    maxNeedSessionCheckPathCacheSize);
+            notNeedSessionCheckPathLRUMapCache = new LRUMap<>(maxNotNeedSessionCheckPathCacheSize);
+            needSessionCheckPathLRUMapCache = new LRUMap<>(maxNeedSessionCheckPathCacheSize);
             
             InputStream configFileIN = null;
             try {
                 configFileIN = configFileResource.getInputStream();
                 init(configFileIN);
             } catch (Exception e) {
-                throw ExceptionWrapperUtils.wrapperSILException(SILException.class,
-                        "会话校验拦截器初始化异常",
-                        e);
+                throw ExceptionWrapperUtils.wrapperSILException(SILException.class, "会话校验拦截器初始化异常", e);
             } finally {
                 IOUtils.closeQuietly(configFileIN);
             }
@@ -278,8 +266,7 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
           * @exception throws [异常类型] [异常说明]
           * @see [类、类#方法、类#成员]
          */
-        private void init(InputStream configFileInputStream)
-                throws DocumentException {
+        private void init(InputStream configFileInputStream) throws DocumentException {
             SAXReader reader = new SAXReader();
             Document doc = reader.read(configFileInputStream);
             Element root = doc.getRootElement(); // 取根元素
@@ -341,13 +328,55 @@ public class SessionCheckInterceptor implements HandlerInterceptor,
             }
             
             if (matches) {
+                notNeedSessionCheckPathLRUMapCache.put(path, path);
                 //命中计数
                 notNeedSessionCheckPathLRUMapCache.get(path);
             } else {
+                needSessionCheckPathLRUMapCache.put(path, path);
                 //命中计数
                 needSessionCheckPathLRUMapCache.get(path);
             }
             return matches;
         }
+    }
+    
+    public static void main(String[] args) throws Exception {
+        //Thread.currentThread().setDaemon(true);
+        
+        SimpleThreadPoolTaskExecutor executor = new SimpleThreadPoolTaskExecutor();
+        executor.setMakeThreadsDaemons(true);
+        executor.setThreadCount(50);
+        executor.afterPropertiesSet();
+        
+        System.out.println("start");
+        
+        final Map<Integer, String> resMap = new LRUMap<>(1000);
+        
+        System.out.println(resMap.size());
+        
+        int total = 200;
+        while (total > 0) {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < 500; i++) {
+                        int random = (int) Math.abs((Math.random() * 50000));
+                        String randomStr = String.valueOf(random);
+                        if (resMap.containsKey(randomStr.hashCode())) {
+                            resMap.get(randomStr.hashCode());
+                        } else {
+                            synchronized (resMap) {
+                                resMap.put(randomStr.hashCode(), randomStr);
+                            }
+                        }
+                    }
+                    System.out.println(" resMap.size: " + resMap.size());
+                }
+            });
+            total--;
+            System.out.println("total: " + total);
+        }
+        
+        System.out.println("main end resMap.size(): " + resMap.size());
     }
 }

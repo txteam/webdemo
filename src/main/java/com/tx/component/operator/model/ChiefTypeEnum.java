@@ -17,8 +17,34 @@ package com.tx.component.operator.model;
  */
 public enum ChiefTypeEnum {
     /** */
-    职位,
+    POST("POST","职位"),
     
     /** */
-    人员;
+    OPERATOR("OPERATOR","人员");
+    
+    /** key值 */
+    private final String key;
+    
+    /** name值 */
+    private final String name;
+
+    /** <默认构造函数> */
+    private ChiefTypeEnum(String key, String name) {
+        this.key = key;
+        this.name = name;
+    }
+
+    /**
+     * @return 返回 key
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * @return 返回 name
+     */
+    public String getName() {
+        return name;
+    }
 }

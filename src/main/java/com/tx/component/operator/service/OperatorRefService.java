@@ -202,7 +202,7 @@ public interface OperatorRefService {
     
     /**
       * 删除操作员引用
-      *<功能详细描述>
+      * <功能详细描述>
       * @param operatorRef [参数说明]
       * 
       * @return void [返回类型说明]

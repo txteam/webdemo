@@ -7,6 +7,7 @@
 package com.tx.component.mainframe.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,8 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -62,7 +64,7 @@ public class AuthManageService {
     
     /**
       * 根据权限项id获取其子集权限项集合<br/> 
-      *<功能详细描述>
+      * <功能详细描述>
       * @param authItemId
       * @return [参数说明]
       * 
@@ -292,17 +294,20 @@ public class AuthManageService {
      */
     private boolean isNeedSkip(
             MultiValueMap<String, AuthItem> parentKey2AuthItemMultiValueMap,
-            AuthItem authItem, boolean isIncludeInvalid,
-            boolean isIncludeCanNotConfigAble, boolean isIncludeCanNotEditAble) {
+            AuthItem authItem, Boolean isIncludeInvalid,
+            Boolean isIncludeCanNotConfigAble, Boolean isIncludeCanNotEditAble) {
         //非虚拟权限
         if (!authItem.isVirtual()) {
-            if (!isIncludeInvalid && !authItem.isValid()) {
+            if (isIncludeInvalid != null && !isIncludeInvalid
+                    && !authItem.isValid()) {
                 return true;
             }
-            if (!isIncludeCanNotConfigAble && !authItem.isConfigAble()) {
+            if (isIncludeCanNotConfigAble != null && !isIncludeCanNotConfigAble
+                    && !authItem.isConfigAble()) {
                 return true;
             }
-            if (!isIncludeCanNotEditAble && !authItem.isEditAble()) {
+            if (isIncludeCanNotEditAble && !isIncludeCanNotEditAble
+                    && !authItem.isEditAble()) {
                 return true;
             }
             return false;
@@ -317,13 +322,16 @@ public class AuthManageService {
         }
         for (AuthItem authItemTemp : childAuthItemList) {
             if (!authItemTemp.isVirtual()) {
-                if (!isIncludeInvalid && !authItemTemp.isValid()) {
+                if (isIncludeInvalid && !isIncludeInvalid
+                        && !authItemTemp.isValid()) {
                     continue;
                 }
-                if (!isIncludeCanNotConfigAble && !authItemTemp.isConfigAble()) {
+                if (isIncludeCanNotConfigAble && !isIncludeCanNotConfigAble
+                        && !authItemTemp.isConfigAble()) {
                     continue;
                 }
-                if (!isIncludeCanNotEditAble && !authItemTemp.isEditAble()) {
+                if (isIncludeCanNotEditAble && !isIncludeCanNotEditAble
+                        && !authItemTemp.isEditAble()) {
                     continue;
                 }
                 return false;
@@ -390,6 +398,9 @@ public class AuthManageService {
         
         MultiValueMap<String, AuthItem> res = new LinkedMultiValueMap<String, AuthItem>();
         for (AuthItem authItem : erpetualAuthItemList) {
+            if (authItem == null) {
+                continue;
+            }
             AuthTypeItem authTypeAuth = authTypeMap.get(authItem.getAuthType());
             boolean authTypeIsViewAble = authTypeAuth != null
                     && authTypeAuth.isViewAble() ? true : false;
@@ -445,8 +456,8 @@ public class AuthManageService {
      * @see [类、类#方法、类#成员]
     */
     public MultiValueMap<String, CheckAbleTreeNode> queryAuthType2TreeNodeMapByRefId(
-            String refType, String refId, boolean isIncludeInvalid,
-            boolean isIncludeCanNotConfigAble, boolean isIncludeCanNotEditAble) {
+            String refType, String refId, Boolean isIncludeInvalid,
+            Boolean isIncludeCanNotConfigAble, Boolean isIncludeCanNotEditAble) {
         AssertUtils.notEmpty(refId, "refId is empty.");
         AssertUtils.notEmpty(refType, "refType is empty.");
         
@@ -493,6 +504,22 @@ public class AuthManageService {
                             authAdapter, authTemp, false));
                 }
             }
+        }
+        return sortAuthType2NodeMultiValueMap(resMap);
+    }
+    
+    private MultiValueMap<String, CheckAbleTreeNode> sortAuthType2NodeMultiValueMap(
+            MultiValueMap<String, CheckAbleTreeNode> sourceMap) {
+        MultiValueMap<String, CheckAbleTreeNode> resMap = new LinkedMultiValueMap<String, CheckAbleTreeNode>();
+        List<AuthTypeItem> keyList = new ArrayList<>();
+        for (String authTypeTemp : sourceMap.keySet()) {
+            keyList.add(AuthTypeItemContext.getContext()
+                    .getAllAuthTypeItemMap()
+                    .get(authTypeTemp));
+        }
+        Collections.sort(keyList,OrderComparator.INSTANCE);
+        for(AuthTypeItem atTemp : keyList){
+            resMap.put(atTemp.getAuthType(), sourceMap.get(atTemp.getAuthType()));
         }
         return resMap;
     }

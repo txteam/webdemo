@@ -33,8 +33,7 @@ import com.tx.core.paged.model.PagedList;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-//TODO:指定自动生成的权限上级权限,以及对应的权限名称
-@CheckOperateAuth(key = "postType_manage", name = "postType管理")
+@CheckOperateAuth(key = "postType_manage", name = "职位类型管理")
 @Controller("postTypeController")
 @RequestMapping("/postType")
 public class PostTypeController {
@@ -131,11 +130,9 @@ public class PostTypeController {
         
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {
-        	//TODO:修改验证重复成功提示信息
-            resMap.put("ok", "可用的postType name");
+            resMap.put("ok", "可用的职位类型名称");
         } else {
-        	//TODO:修改验证重复失败提示信息
-            resMap.put("error", "已经存在的postType name");
+            resMap.put("error", "已经存在的职位类型名称");
         }
         return resMap;
     }
@@ -166,11 +163,9 @@ public class PostTypeController {
         
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {
-        	//TODO:修改验证重复成功提示信息
-            resMap.put("ok", "可用的postType code");
+            resMap.put("ok", "可用的职位类型 code");
         } else {
-        	//TODO:修改验证重复失败提示信息
-            resMap.put("error", "已经存在的postType code");
+            resMap.put("error", "已经存在的职位类型 code");
         }
         return resMap;
     }
@@ -312,8 +307,7 @@ public class PostTypeController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    //TODO:修改删增加权限名称
-    @CheckOperateAuth(key = "add_postType", name = "增加PostType")
+    @CheckOperateAuth(key = "add_postType", name = "增加职位类型")
     @RequestMapping("/addPostType")
     @ResponseBody
     public boolean addPostType(PostType postType) {
@@ -331,8 +325,7 @@ public class PostTypeController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    //TODO:修改删编辑权限名称
-    @CheckOperateAuth(key = "update_postType", name = "编辑PostType")
+    @CheckOperateAuth(key = "update_postType", name = "编辑职位类型")
     @RequestMapping("/updatePostType")
     @ResponseBody
     public boolean updatePostType(PostType postType) {
@@ -351,8 +344,7 @@ public class PostTypeController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    //TODO:修改删除权限名称
-    @CheckOperateAuth(key = "delete_postType", name = "删除PostType")
+    @CheckOperateAuth(key = "delete_postType", name = "删除职位类型",configAble=false)
     @ResponseBody
     @RequestMapping("/deletePostTypeById")
     public boolean deletePostTypeById(@RequestParam(value = "postTypeId") String postTypeId) {
@@ -369,8 +361,7 @@ public class PostTypeController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    //TODO:修改禁用权限名称
-    @CheckOperateAuth(key = "disable_postType", name = "禁用PostType")
+    @CheckOperateAuth(key = "disable_postType", name = "禁用职位类型")
     @ResponseBody
     @RequestMapping("/disablePostTypeById")
     public boolean disablePostTypeById(@RequestParam(value = "postTypeId") String postTypeId) {
@@ -388,8 +379,7 @@ public class PostTypeController {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    //TODO:修改启用权限名称
-    @CheckOperateAuth(key = "enable_postType", name = "启用PostType")
+    @CheckOperateAuth(key = "enable_postType", name = "启用职位类型")
     @ResponseBody
     @RequestMapping("/enablePostTypeById")
     public boolean enablePostTypeById(@RequestParam(value = "postTypeId") String postTypeId) {

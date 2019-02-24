@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -111,7 +111,7 @@ public class OperatorRefServiceImpl implements OperatorRefService {
     
     /**
       * 批量删除操作员引用id集合<br/>
-      *<功能详细描述>
+      * <功能详细描述>
       * @param refType
       * @param operatorId
       * @param refIdList [参数说明]

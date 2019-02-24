@@ -84,7 +84,7 @@ public class PostService {
             return;
         }
         
-        Organization org = this.organizationService.findOrganizationById(post.getOrganization()
+        Organization org = this.organizationService.findById(post.getOrganization()
                 .getId());
         if (org != null) {
             post.setOrganization(org);
@@ -115,11 +115,12 @@ public class PostService {
         
         post.setValid(true);
         //查询所在组织
-        Organization org = this.organizationService.findOrganizationById(post.getOrganization()
+        Organization org = this.organizationService.findById(post.getOrganization()
                 .getId());
         AssertUtils.notNull(org,
                 "post.organization.id:{} is not exist.",
                 post.getOrganization().getId());
+        post.setVcid(org.getVcid());
         
         //父级组织应该与指定的组织一致
         if (!StringUtils.isEmpty(post.getParentId())) {
@@ -127,8 +128,6 @@ public class PostService {
             AssertUtils.notNull(parentPost,
                     "parentPostId:{} is not exist.",
                     post.getParentId());
-            AssertUtils.isTrue(org.getId().equals(parentPost.getOrganization()
-                    .getId()));
         }
         
         //生成职位全名
@@ -140,7 +139,7 @@ public class PostService {
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
                 .log(new SystemOperateLog("webdemo", "新增职位",
-                        MessageUtils.createMessage("新增职位[{}]",
+                        MessageUtils.format("新增职位[{}]",
                                 new Object[] { post.getName() }), null));
     }
     
@@ -175,7 +174,7 @@ public class PostService {
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
                 .log(new SystemOperateLog("webdemo", "删除职位",
-                        MessageUtils.createMessage("删除职位[{}]",
+                        MessageUtils.format("删除职位[{}]",
                                 new Object[] { findPostById(id).getName() }),
                         null));
         
@@ -370,7 +369,7 @@ public class PostService {
         //记录操作日志
         ServiceLoggerContext.getLogger(SystemOperateLog.class)
                 .log(new SystemOperateLog("webdemo", "更新职位",
-                        MessageUtils.createMessage("更新职位[{}]",
+                        MessageUtils.format("更新职位[{}]",
                                 new Object[] { post.getName() }), null));
         int updateRowCount = this.postDao.updatePost(updateRowMap);
         
@@ -454,7 +453,7 @@ public class PostService {
                 .log(new SystemOperateLog(
                         "webdemo",
                         "禁用职位",
-                        MessageUtils.createMessage("禁用职位[{}]",
+                        MessageUtils.format("禁用职位[{}]",
                                 new Object[] { findPostById(postId).getName() }),
                         null));
         
@@ -487,7 +486,7 @@ public class PostService {
                 .log(new SystemOperateLog(
                         "webdemo",
                         "启用职位",
-                        MessageUtils.createMessage("启用职位[{}]",
+                        MessageUtils.format("启用职位[{}]",
                                 new Object[] { findPostById(postId).getName() }),
                         null));
         

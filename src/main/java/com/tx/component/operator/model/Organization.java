@@ -9,11 +9,15 @@ package com.tx.component.operator.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import com.tx.core.tree.model.TreeAble;
 import com.tx.core.util.ObjectUtils;
 
@@ -39,31 +43,34 @@ import com.tx.core.util.ObjectUtils;
  */
 @Entity
 @Table(name = "OPER_ORGANIZATION")
-public class Organization implements TreeAble<List<Organization>, Organization>,Serializable {
+@XStreamAlias("organization")
+public class Organization implements TreeAble<List<Organization>, Organization>, Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = -6369964838562412893L;
-
-    /** 主管类型：人员 */
-    public static final int CHIEFTYPE_OPERATOR = 0;
-    
-    /** 主管类型：职位 */
-    public static final int CHIEFTYPE_POST = 1;
     
     /** 组织唯一键 */
     @Id
+    @XStreamAsAttribute
     private String id;
     
     /** 父组织id */
     private String parentId;
     
     /** */
+    @XStreamAsAttribute
     private String vcid;
     
+    /**公司id*/
+    @Column(name = "companyId")
+    private Organization company;
+    
     /** 编码 */
+    @XStreamAsAttribute
     private String code;
     
     /** 名称 */
+    @XStreamAsAttribute
     private String name;
     
     /** 全称 */
@@ -93,7 +100,7 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     /** 
      * 主管类型 人员 职位
      */
-    private ChiefTypeEnum chiefType = ChiefTypeEnum.人员;
+    private ChiefTypeEnum chiefType = ChiefTypeEnum.OPERATOR;
     
     /**
      * 与主管类型对应的主键：
@@ -105,6 +112,7 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     
     /** 子级组织集合 */
     @Transient
+    @XStreamImplicit(itemFieldName = "organization")
     private List<Organization> childs;
     
     /**
@@ -190,14 +198,14 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     public void setAddress(String address) {
         this.address = address;
     }
-
+    
     /**
      * @return 返回 type
      */
     public OrganizationTypeEnum getType() {
         return type;
     }
-
+    
     /**
      * @param 对type进行赋值
      */
@@ -211,14 +219,14 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     public String getDistrictId() {
         return districtId;
     }
-
+    
     /**
      * @param 对districtId进行赋值
      */
     public void setDistrictId(String districtId) {
         this.districtId = districtId;
     }
-
+    
     /**
      * @return 返回 alias
      */
@@ -253,7 +261,7 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     public String getRemark() {
         return remark;
     }
-
+    
     /**
      * @param 对remark进行赋值
      */
@@ -267,28 +275,28 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     public ChiefTypeEnum getChiefType() {
         return chiefType;
     }
-
+    
     /**
      * @param 对chiefType进行赋值
      */
     public void setChiefType(ChiefTypeEnum chiefType) {
         this.chiefType = chiefType;
     }
-
+    
     /**
      * @return 返回 chiefId
      */
     public String getChiefId() {
         return chiefId;
     }
-
+    
     /**
      * @param 对chiefId进行赋值
      */
     public void setChiefId(String chiefId) {
         this.chiefId = chiefId;
     }
-
+    
     /**
      * @return 返回 childs
      */
@@ -309,28 +317,28 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     public String getVcid() {
         return vcid;
     }
-
+    
     /**
      * @param 对vcid进行赋值
      */
     public void setVcid(String vcid) {
         this.vcid = vcid;
     }
-
+    
     /**
      * @return 返回 valid
      */
     public boolean isValid() {
         return valid;
     }
-
+    
     /**
      * @param 对valid进行赋值
      */
     public void setValid(boolean valid) {
         this.valid = valid;
     }
-
+    
     /**
      * @param obj
      * @return
@@ -346,5 +354,13 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     @Override
     public int hashCode() {
         return ObjectUtils.generateHashCode(super.hashCode(), this, "id");
+    }
+    
+    public Organization getCompany() {
+        return company;
+    }
+    
+    public void setCompany(Organization company) {
+        this.company = company;
     }
 }

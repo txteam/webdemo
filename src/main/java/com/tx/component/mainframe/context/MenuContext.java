@@ -92,7 +92,7 @@ public class MenuContext extends MenuContextConfigurator{
         
         //根据权限及菜单配置生成最终权限列表
         List<MenuItem> resList = new ArrayList<MenuItem>();
-        List<MenuItem> menuItemList = getMenuType2MenuItemListMap().get(menuType);
+        List<MenuItem> menuItemList = getMenuItemListByMenuType(menuType);
         if(menuItemList == null){
             return resList;
         }
@@ -116,7 +116,7 @@ public class MenuContext extends MenuContextConfigurator{
         
         //根据权限及菜单配置生成最终权限列表
         //List<MenuItem> resList = new ArrayList<MenuItem>();
-        List<MenuItem> menuItemList = getMenuType2MenuItemListMap().get(menuType);
+        List<MenuItem> menuItemList = getMenuItemListByMenuType(menuType);
         
         return menuItemList;
     }
@@ -138,12 +138,12 @@ public class MenuContext extends MenuContextConfigurator{
         
         //根据权限及菜单配置生成最终权限列表
         List<MenuItem> resList = new ArrayList<MenuItem>();
-        List<MenuItem> menuItemList = getMenuType2MenuItemListMap().get(menuType);
+        List<MenuItem> menuItemList = getMenuItemListByMenuType(menuType);
         if(menuItemList == null){
             return resList;
         }
         
-        for (MenuItem menuItemTemp : getMenuType2MenuItemListMap().get(menuType)) {
+        for (MenuItem menuItemTemp : menuItemList) {
             if (menuItemTemp.getAuthKeyList() == null
                     || menuItemTemp.getAuthKeyList().size() == 0) {
                 //如果对应菜单未配置权限，无需鉴权
@@ -179,7 +179,7 @@ public class MenuContext extends MenuContextConfigurator{
         
         //根据权限及菜单配置生成最终权限列表
         List<MenuItem> resList = new ArrayList<MenuItem>();
-        for (MenuItem menuItemTemp : getMenuType2MenuItemListMap().get(menuType)) {
+        for (MenuItem menuItemTemp : getMenuItemListByMenuType(menuType)) {
             if (menuItemTemp.getAuthKeyList() == null
                     || menuItemTemp.getAuthKeyList().size() == 0) {
                 //如果对应菜单未配置权限，无需鉴权

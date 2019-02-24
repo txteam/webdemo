@@ -38,7 +38,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
      * @param condition
      */
     @Override
-    public void insertOrganization(Organization organization) {
+    public void insert(Organization organization) {
         this.myBatisDaoSupport.insert("organization.insertOrganization",
                 organization);
     }
@@ -146,5 +146,11 @@ public class OrganizationDaoImpl implements OrganizationDao {
     public int updateOrganization(Map<String, Object> updateRowMap) {
         return this.myBatisDaoSupport.update("organization.updateOrganization",
                 updateRowMap);
+    }
+
+    @Override
+    public void batchUpdateOrganization(
+            List<Map<String, Object>> updateRowMapList) {
+        this.myBatisDaoSupport.batchUpdate("organization.updateOrganization", updateRowMapList, true);
     }
 }

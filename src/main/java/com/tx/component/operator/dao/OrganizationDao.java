@@ -35,7 +35,7 @@ public interface OrganizationDao {
       * @see [类、类#方法、类#成员]
      */
     //auto generate
-    public void insertOrganization(Organization condition);
+    public void insert(Organization condition);
     
     /**
      * 插入Organization对象实体
@@ -170,4 +170,15 @@ public interface OrganizationDao {
       * @see [类、类#方法、类#成员]
      */
     public int updateOrganization(Map<String, Object> updateRowMap);
+    
+    /**
+      * 批量更新Organization实体
+      *<功能详细描述>
+      * @param updateRowMapList [参数说明]
+      * 
+      * @return void [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public void batchUpdateOrganization(List<Map<String, Object>> updateRowMapList);
 }

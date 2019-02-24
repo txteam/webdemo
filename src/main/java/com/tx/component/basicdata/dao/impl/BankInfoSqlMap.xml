@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bankInfo">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="bankInfoMap" 
+		type="com.tx.component.basicdata.model.BankInfo">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="findBankInfo" 
+		parameterType="com.tx.component.basicdata.model.BankInfo"
+		resultMap="bankInfoMap">
+		SELECT 
+				TBI.id,
+				TBI.logoFileId,
+				TBI.valid,
+				TBI.aliases,
+				TBI.code,
+				TBI.createDate,
+				TBI.institutionLoginUrl,
+				TBI.lastUpdateDate,
+				TBI.logoUrl,
+				TBI.modifyAble,
+				TBI.name,
+				TBI.personalLoginUrl,
+				TBI.remark
+		  FROM BD_BANKINFO TBI
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND TBI.ID = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">
+	            AND TBI.code = #{code}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="queryBankInfo" 
+		parameterType="java.util.Map"
+		resultMap="bankInfoMap">
+		SELECT 
+				TBI.id,
+				TBI.logoFileId,
+				TBI.valid,
+				TBI.aliases,
+				TBI.code,
+				TBI.createDate,
+				TBI.institutionLoginUrl,
+				TBI.lastUpdateDate,
+				TBI.logoUrl,
+				TBI.modifyAble,
+				TBI.name,
+				TBI.personalLoginUrl,
+				TBI.remark
+		  FROM BD_BANKINFO TBI
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND TBI.MODIFYABLE = #{modifyAble} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND TBI.VALID = #{valid} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND TBI.CODE = #{code} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(aliases)">  
+	            <![CDATA[ AND TBI.ALIASES = #{aliases} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND TBI.NAME = #{name} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND TBI.ID <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
+	            ORDER BY ${orderSql}
+	        </when>
+	        <otherwise>  
+	            ORDER BY ID
+	        </otherwise>  
+	    </choose>
+	</select>
+	
+		<!-- auto generate default count -->
+	<select id="queryBankInfoCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM BD_BANKINFO TBI
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND TBI.MODIFYABLE = #{modifyAble} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND TBI.VALID = #{valid} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND TBI.CODE = #{code} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(aliases)">  
+	            <![CDATA[ AND TBI.ALIASES = #{aliases} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND TBI.NAME = #{name} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND TBI.ID <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+    
+    <!-- auto generate default insert -->
+    <insert id="insertBankInfo" 
+		parameterType="com.tx.component.basicdata.model.BankInfo">
+		INSERT INTO BD_BANKINFO
+		(
+			id,
+			logoFileId,
+			valid,
+			aliases,
+			code,
+			createDate,
+			institutionLoginUrl,
+			lastUpdateDate,
+			logoUrl,
+			modifyAble,
+			name,
+			personalLoginUrl,
+			remark
+		)
+		VALUES
+		(
+			#{id},
+			#{logoFileId},
+			#{valid},
+			#{aliases},
+			#{code},
+			#{createDate},
+			#{institutionLoginUrl},
+			#{lastUpdateDate},
+			#{logoUrl},
+			#{modifyAble},
+			#{name},
+			#{personalLoginUrl},
+			#{remark}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="deleteBankInfo" 
+		parameterType="com.tx.component.basicdata.model.BankInfo">
+		DELETE FROM BD_BANKINFO  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+
+	<!-- auto generate default update -->
+	<update id="updateBankInfo"
+	    parameterType="java.util.Map">  
+	    UPDATE BD_BANKINFO 
+	    <trim prefix="SET" suffixOverrides=",">
+			<!--<if test="_parameter.containsKey('createDate')"> -->
+			<!--	createDate = #{createDate,javaType=java.util.Date}, -->
+			<!--</if>	 -->
+			<!--<if test="_parameter.containsKey('code')"> -->
+			<!--	code = #{code,javaType=java.lang.String}, -->
+			<!--</if> -->
+			<if test="_parameter.containsKey('valid')">
+	    		valid = #{valid,javaType=boolean},
+	    	</if>
+	    	<if test="_parameter.containsKey('modifyAble')">
+	    		modifyAble = #{modifyAble,javaType=boolean},
+	    	</if>	
+	    	<if test="_parameter.containsKey('name')">
+	    		name = #{name,javaType=java.lang.String},
+	    	</if>		
+			<if test="_parameter.containsKey('aliases')">
+	    		aliases = #{aliases,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('personalLoginUrl')">
+	    		personalLoginUrl = #{personalLoginUrl,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('institutionLoginUrl')">
+	    		institutionLoginUrl = #{institutionLoginUrl,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>	
+	    	<if test="_parameter.containsKey('logoFileId')">
+	    		logoFileId = #{logoFileId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('logoUrl')">
+	    		logoUrl = #{logoUrl,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('remark')">
+	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>	
+	    </trim>
+	    WHERE id = #{id} 
+	</update>  
+
+</mapper>
+<!--
+sqlMap生成描述:
+
+-->

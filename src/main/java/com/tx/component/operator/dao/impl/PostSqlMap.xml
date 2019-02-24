@@ -20,6 +20,7 @@
 		resultMap="postMap">
 		SELECT 
 				TP.ID,
+				TP.VCID,
 				TP.VALID,
 				TP.PARENTID,
 				TP.ORGANIZATIONID AS organization_id,
@@ -42,6 +43,7 @@
 		resultMap="postMap">
 		SELECT 
 				TP.ID,
+				TP.VCID,
 				TP.VALID,
 				TP.PARENTID,
 				TP.ORGANIZATIONID AS organization_id,
@@ -51,33 +53,12 @@
 				TP.CODE
 		  FROM OPER_POST TP
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<!-- 如果条件指定了组织id则使用传入的组织id -->
-			<if test="organization == null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
-					AND TP.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
-				</if>
-				<!-- 如果没有指定，仅能查询当前组织及其子级组织的数据，如果拥有查询所有职位组织的权限，则不根据组织id去查询 -->
-				<if test="@com.tx.core.util.OgnlUtils@isEmpty(organizationId)">
-					AND TP.ORGANIZATIONID IN 
-		        	<foreach 
-		        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryOrganizationIdList()"
-		        		item="organizationId" open="(" close=")" separator=",">
-		        		'${organizationId}'
-		        	</foreach>
-				</if>
-			</if>
-	        <if test="organization != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            AND TP.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
-		        </if>
-	        </if>
-	        
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludePostId)">
-				<![CDATA[ AND TP.ID <> #{excludePostId,javaType=java.lang.String} ]]>
-			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TP.ID = #{id,javaType=java.lang.String}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludePostId)">
+				<![CDATA[ AND TP.ID <> #{excludePostId,javaType=java.lang.String} ]]>
+			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TP.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
@@ -87,6 +68,23 @@
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            AND TP.VALID = #{valid,javaType=java.lang.Boolean}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
+				AND TP.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
+			</if>
+			<choose>
+				<when test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
+					AND TP.VCID = #{vcid,javaType=java.lang.String}
+				</when>
+				<when test="@auth.AuthContextUtils@isQueryByAuth('vcid')">  
+		           <if test="@auth.AuthContextUtils@isNotEmptyOfQueryAuthRefIds('vcid')">
+		               AND TP.vcid IN <foreach collection="@auth.AuthContextUtils@getQueryAuthRefIds('vcid')" 
+	                   		item="refId" open="(" close=")" separator=",">#{refId}</foreach>
+		           </if>
+		           <if test="@auth.AuthContextUtils@isEmptyOfQueryAuthRefIds('vcid')">
+	                   AND TP.vcid = ''
+	               </if>
+	            </when>
+			</choose>
 		</trim>
 		<choose>  
 	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
@@ -105,33 +103,12 @@
 		SELECT COUNT(1)
 		  FROM OPER_POST TP
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<!-- 如果条件指定了组织id则使用传入的组织id -->
-			<if test="organization == null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
-					AND TP.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
-				</if>
-				<!-- 如果没有指定，仅能查询当前组织及其子级组织的数据，如果拥有查询所有职位组织的权限，则不根据组织id去查询 -->
-				<if test="@com.tx.core.util.OgnlUtils@isEmpty(organizationId)">
-					AND TP.ORGANIZATIONID IN 
-		        	<foreach 
-		        		collection="@com.tx.component.mainframe.context.WebContext@getContext().queryOrganizationIdList()"
-		        		item="organizationId" open="(" close=")" separator=",">
-		        		'${organizationId}'
-		        	</foreach>
-				</if>
-			</if>
-	        <if test="organization != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            AND TP.ORGANIZATIONID = #{organization.id,javaType=java.lang.String}
-		        </if>
-	        </if>
-	        
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludePostId)">
-				<![CDATA[ AND TP.ID <> #{excludePostId,,javaType=java.lang.String} ]]>
-			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TP.ID = #{id,javaType=java.lang.String}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludePostId)">
+				<![CDATA[ AND TP.ID <> #{excludePostId,javaType=java.lang.String} ]]>
+			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TP.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
@@ -141,6 +118,23 @@
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            AND TP.VALID = #{valid,javaType=java.lang.Boolean}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">
+				AND TP.ORGANIZATIONID = #{organizationId,javaType=java.lang.String}
+			</if>
+			<choose>
+				<when test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
+					AND TP.VCID = #{vcid,javaType=java.lang.String}
+				</when>
+				<when test="@auth.AuthContextUtils@isQueryByAuth('vcid')">  
+		           <if test="@auth.AuthContextUtils@isNotEmptyOfQueryAuthRefIds('vcid')">
+		               AND TP.vcid IN <foreach collection="@auth.AuthContextUtils@getQueryAuthRefIds('vcid')" 
+	                   		item="refId" open="(" close=")" separator=",">#{refId}</foreach>
+		           </if>
+		           <if test="@auth.AuthContextUtils@isEmptyOfQueryAuthRefIds('vcid')">
+	                   AND TP.vcid = ''
+	               </if>
+	            </when>
+			</choose>
 		</trim>
 	</select>
     
@@ -150,6 +144,7 @@
 		INSERT INTO OPER_POST
 		(
 			ID,
+			VCID,
 			VALID,
 			PARENTID,
 			ORGANIZATIONID,
@@ -161,6 +156,7 @@
 		VALUES
 		(
 			#{id},
+			#{vcid},
 			#{valid},
 			#{parentId},
 			<if test="organization != null">
@@ -182,6 +178,7 @@
 		INSERT INTO OPER_POST_HIS
 		(
 			ID,
+			VCID,
 			VALID,
 			PARENTID,
 			ORGANIZATIONID,
@@ -193,6 +190,7 @@
 		VALUES
 		(
 			#{id},
+			#{vcid},
 			#{valid},
 			#{parentId},
 			<if test="organization != null">
@@ -224,15 +222,20 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_POST TP
 	    <trim prefix="SET" suffixOverrides=",">
-	    	<if test="organization != null">
-				ORGANIZATIONID = #{organization.id,javaType=java.lang.String},
-	        </if>
 			<if test="_parameter.containsKey('parentId')">
 	    		PARENTID = #{parentId,javaType=java.lang.String},
 	    	</if>
 	    	<if test="_parameter.containsKey('valid')">
 	    		VALID = #{valid,javaType=java.lang.Boolean},
 	    	</if>
+			<if test="_parameter.containsKey('organization')">
+				<if test="organization != null">
+					ORGANIZATIONID = #{organization.id,javaType=java.lang.String},
+		        </if>
+		        <if test="organization == null">
+					ORGANIZATIONID = #{organization,javaType=java.lang.String},
+		        </if>
+	    	</if>  	
 			<if test="_parameter.containsKey('remark')">
 	    		REMARK = #{remark,javaType=java.lang.String},
 	    	</if>	
@@ -246,7 +249,7 @@
 	    		CODE = #{code,javaType=java.lang.String},
 	    	</if>	
 	    </trim>
-	    WHERE TP.ID = #{id} 
+	    WHERE TP.ID = #{id}
 	</update>  
 
 </mapper>

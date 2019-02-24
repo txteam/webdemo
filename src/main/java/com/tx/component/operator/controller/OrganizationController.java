@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.auth.annotation.CheckOperateAuth;
+import com.tx.component.mainframe.AuthConstants;
 import com.tx.component.mainframe.treeview.TreeNode;
 import com.tx.component.operator.model.ChiefTypeEnum;
 import com.tx.component.operator.model.Organization;
 import com.tx.component.operator.model.OrganizationTypeEnum;
+import com.tx.component.operator.model.VirtualCenter;
 import com.tx.component.operator.service.OrganizationService;
 import com.tx.component.operator.service.VirtualCenterService;
 
@@ -38,7 +40,7 @@ import com.tx.component.operator.service.VirtualCenterService;
  */
 @Controller("newOrganizationController")
 @RequestMapping("/organization")
-@CheckOperateAuth(key = "organization_manage", parentKey = "operator_config_center", description = "组织结构管理", name = "组织结构管理")
+@CheckOperateAuth(key = "organization_manage", description = "组织结构管理", name = "组织结构管理")
 public class OrganizationController {
     
     @Resource(name = "organizationService")
@@ -70,23 +72,64 @@ public class OrganizationController {
      * @see [类、类#方法、类#成员]
     */
     @RequestMapping("/toAddOrganization")
-    public String toAddOrganization(
-            @RequestParam(value = "parentOrganizationId", required = false) String parentOrganizationId,
+    public String toAddOrganization(@RequestParam(value = "parentOrganizationId", required = false) String parentOrganizationId,
             ModelMap response) {
-        response.put("organization", new Organization());
+        Organization newOrg = new Organization();
+        response.put("organization", newOrg);
         response.put("chiefTypes", ChiefTypeEnum.values());
         response.put("organizationTypes", OrganizationTypeEnum.values());
         if (!StringUtils.isEmpty(parentOrganizationId)) {
-            Organization parentOrganization = this.organizationService.findOrganizationById(parentOrganizationId);
+            Organization parentOrganization = this.organizationService.findById(parentOrganizationId);
             response.put("parentOrganization", parentOrganization);
+            newOrg.setVcid(parentOrganization.getVcid());
         }
+        
+        //查询有效的虚中心集合
+        List<VirtualCenter> virtualCenterList = this.virtualCenterService
+                .queryVirtualCenterByAuth(AuthConstants.ORG_VC_DATA_AUTH);
+        response.put("virtualCenterList", virtualCenterList);
         
         return "/operator/addOrganization";
     }
     
     /**
+     * 添加组织结构页面
+     * <功能详细描述>
+     * @param organization [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @CheckOperateAuth(key = "add_organization", name = "增加组织")
+    @RequestMapping("/addOrganization")
+    @ResponseBody
+    public boolean addOrganization(Organization organization) {
+        this.organizationService.insert(organization);
+        
+        return true;
+    }
+    
+    /**
+      * 获取组织实例<br/>
+      * <功能详细描述>
+      * @param organizationId
+      * @return [参数说明]
+      * 
+      * @return Organization [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/findOrganizationById")
+    @ResponseBody
+    public Organization findOrganizationById(@RequestParam(value = "organizationId") String organizationId) {
+        Organization org = this.organizationService.findById(organizationId);
+        return org;
+    }
+    
+    /**
      * 查询所有组织的树列表<br/>
-     *<功能详细描述>
+     * <功能详细描述>
      * @return [参数说明]
      * 
      * @return List<Organization> [返回类型说明]
@@ -113,58 +156,20 @@ public class OrganizationController {
       * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdateOrganization")
-    public String toUpdateOrganization(
-            @RequestParam("organizationId") String organizationId,
-            ModelMap modelMap) {
-        Organization resOrganization = this.organizationService.findOrganizationById(organizationId);
+    public String toUpdateOrganization(@RequestParam("organizationId") String organizationId, ModelMap modelMap) {
+        Organization resOrganization = this.organizationService.findById(organizationId);
         modelMap.put("organization", resOrganization);
         modelMap.put("chiefTypes", ChiefTypeEnum.values());
         modelMap.put("organizationTypes", OrganizationTypeEnum.values());
         modelMap.put("parentOrganizationName",
                 StringUtils.isEmpty(resOrganization.getParentId()) ? ""
-                        : this.organizationService.findOrganizationById(resOrganization.getParentId())
-                                .getName());
-        modelMap.put("virtualCenter",
-                this.virtualCenterService.findVirtualCenterById(resOrganization.getVcid()));
-        
+                        : this.organizationService.findById(resOrganization.getParentId()).getName());
+        modelMap.put("virtualCenter", this.virtualCenterService.findVirtualCenterById(resOrganization.getVcid()));
         modelMap.put("organization", resOrganization);
+        //查询有效的虚中心集合
+        List<VirtualCenter> virtualCenterList = this.virtualCenterService.queryVirtualCenter(true);
+        modelMap.put("virtualCenterList", virtualCenterList);
         return "/operator/updateOrganization";
-    }
-    
-    /**
-      * 跳转到选择组织页面
-      *<功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return String [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/toChooseOrgnization")
-    public String toChooseOrgnization(
-            @RequestParam(value = "eventName", required = false) String chooseEventName,
-            ModelMap responseMap) {
-        responseMap.put("eventName", chooseEventName);
-        return "/operator/chooseOrganization";
-    }
-    
-    /**
-      * 查询组织职位树数据列表
-      *     一般服务于选择组织树
-      *     不包含已经禁用的组织
-      *<功能详细描述>
-      * @return [参数说明]
-      * 
-      * @return List<OrganizationPostTreeNode> [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    @ResponseBody
-    @RequestMapping("/queryOrganizationPostTreeNodeList")
-    public List<TreeNode> queryOrganizationPostTreeNodeList() {
-        List<TreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeList();
-        
-        return resList;
     }
     
     /**
@@ -184,22 +189,54 @@ public class OrganizationController {
         return orgList;
     }
     
+    @RequestMapping("/queryCompanyOrganizationList")
+    @ResponseBody
+    public List<Organization> queryCompanyOrganizationList() {
+        //        List<Organization> orgList = this.organizationService.queryOrganizationByOrganizationTypes(new OrganizationTypeEnum[] {
+        //                OrganizationTypeEnum.公司, OrganizationTypeEnum.分公司 },
+        //                true);
+        //        
+        //        return orgList;
+        return null;
+    }
+    
     /**
-     * 添加组织结构页面
+     * 查询分公司
      *<功能详细描述>
-     * @param organization [参数说明]
+     * @return [参数说明]
      * 
-     * @return void [返回类型说明]
+     * @return List<Organization> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    @CheckOperateAuth(key = "add_organization", name = "增加组织")
-    @RequestMapping("/addOrganization")
     @ResponseBody
-    public boolean addOrganization(Organization organization) {
-        this.organizationService.insertOrganization(organization);
-        
-        return true;
+    @RequestMapping("/queryBranchCompanyOrganizationList")
+    public List<Organization> queryBranchCompanyOrganizationList(@RequestParam(value = "vcid", required = false) String vcid) {
+        //        List<Organization> resList = this.organizationService.queryOrganizationByTypeAndVcid(OrganizationTypeEnum.分公司,
+        //                vcid,
+        //                true);
+        //        return resList;
+        return null;
+    }
+    
+    /**
+      * 根据vcid查询分行
+      *<功能详细描述>
+      * @param parentId
+      * @return [参数说明]
+      * 
+      * @return List<Organization> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryOrganizationListByParentId")
+    public List<Organization> queryOrganizationListByParentId(
+            @RequestParam(value = "parentId", required = false) String parentId) {
+        List<Organization> resList = this.organizationService.queryOrganizationListByParentId(OrganizationTypeEnum.部门,
+                true,
+                parentId);
+        return resList;
     }
     
     /**
@@ -213,11 +250,9 @@ public class OrganizationController {
     */
     @ResponseBody
     @RequestMapping("/organizationCodeIsExist")
-    public Map<String, String> organizationCodeIsExist(
-            @RequestParam("code") String code,
+    public Map<String, String> organizationCodeIsExist(@RequestParam("code") String code,
             @RequestParam(value = "id", required = false) String excludeOrganizationId) {
-        boolean resFlag = this.organizationService.organizationCodeIsExist(code,
-                excludeOrganizationId);
+        boolean resFlag = this.organizationService.organizationCodeIsExist(code, excludeOrganizationId);
         Map<String, String> resMap = new HashMap<String, String>();
         if (!resFlag) {
             resMap.put("ok", "");
@@ -257,8 +292,7 @@ public class OrganizationController {
     */
     @ResponseBody
     @RequestMapping("/isDeleteAble")
-    public boolean isDeleteAble(
-            @RequestParam("organizationId") String organizationId) {
+    public boolean isDeleteAble(@RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.isDeleteAble(organizationId);
         
         //如果存在尚未停用的下级组织则不能被停用
@@ -281,8 +315,7 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping("/isDisableAble")
-    public boolean isDisableAble(
-            @RequestParam("organizationId") String organizationId) {
+    public boolean isDisableAble(@RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.isDisableAble(organizationId);
         
         //如果存在尚未停用的下级组织则不能被停用
@@ -306,8 +339,7 @@ public class OrganizationController {
     @CheckOperateAuth(key = "delete_organization", name = "删除组织", configAble = false)
     @ResponseBody
     @RequestMapping("/deleteOrganizationById")
-    public boolean deleteOrganizationById(
-            @RequestParam("organizationId") String organizationId) {
+    public boolean deleteOrganizationById(@RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.deleteById(organizationId);
         
         return resFlag;
@@ -326,8 +358,7 @@ public class OrganizationController {
     @CheckOperateAuth(key = "disable_organization", name = "禁用组织")
     @ResponseBody
     @RequestMapping("/disableOrganizationById")
-    public boolean disableOrganizationById(
-            @RequestParam("organizationId") String organizationId) {
+    public boolean disableOrganizationById(@RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.disableOrganizationById(organizationId);
         
         return resFlag;
@@ -346,11 +377,44 @@ public class OrganizationController {
     @CheckOperateAuth(key = "enable_organization", name = "启用组织")
     @ResponseBody
     @RequestMapping("/enableOrganizationById")
-    public boolean enableOrganizationById(
-            @RequestParam("organizationId") String organizationId) {
+    public boolean enableOrganizationById(@RequestParam("organizationId") String organizationId) {
         boolean resFlag = this.organizationService.enableOrganizationById(organizationId);
         
         return resFlag;
     }
     
+    /**
+     * 跳转到选择组织页面
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/toChooseOrgnization")
+    public String toChooseOrgnization(@RequestParam(value = "eventName", required = false) String chooseEventName,
+            ModelMap responseMap) {
+        responseMap.put("eventName", chooseEventName);
+        return "/operator/chooseOrganization";
+    }
+    
+    /**
+     * 查询组织职位树数据列表
+     *     一般服务于选择组织树
+     *     不包含已经禁用的组织
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<OrganizationPostTreeNode> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/queryOrganizationPostTreeNodeList")
+    public List<TreeNode> queryOrganizationPostTreeNodeList() {
+        List<TreeNode> resList = this.organizationService.queryOrganizationPostTreeNodeList();
+        
+        return resList;
+    }
 }

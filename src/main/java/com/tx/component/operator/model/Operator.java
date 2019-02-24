@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 
  /**
   * 操作员<br/>
@@ -29,7 +31,7 @@ import javax.persistence.Transient;
   * @since  [产品/模块版本]
   */
 @Entity
-@Table(name = "OPER_OPERATOR")
+@Table(name = "oper_operator")
 public class Operator implements Serializable{
     
     /** 注释内容 */
@@ -39,10 +41,18 @@ public class Operator implements Serializable{
     @Id
     private String id;
     
-    /**登录名*/
+    /** 所属虚中心id */
+    private String vcid;
+    
+    /** 所属组织: 在代码中控制组织id不能为空，考虑到超级管理员的组织为空的情况,由界面中创建的人员组织id不能为空 */
+    @ManyToOne
+    @JoinColumn(name="organizationId")
+    private Organization organization;
+    
+    /** 登录名 */
     private String loginName;
     
-    /**用户名*/
+    /** 用户名 */
     private String userName;
     
     /** 密码 */
@@ -60,6 +70,9 @@ public class Operator implements Serializable{
     /**是否可用*/
     private boolean valid = true;
     
+    /** 账户是否被锁定 */
+    private boolean locked = false;
+    
     /** 创建时间  */
     private Date createDate;
     
@@ -70,23 +83,12 @@ public class Operator implements Serializable{
     private Date pwdUpdateDate;
     
     /** 失效时间 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date invalidDate;
-    
-    /** 账户是否被锁定 */
-    private boolean locked = false;
     
     /** 员工信息,如果为公司员工，则该信息不为空  */
     @Transient
     private EmployeeInfo employeeInfo;
-    
-    /** 
-     * 所属组织 
-     * 在代码中控制组织id不能为空，考虑到超级管理员的组织为空的情况
-     * 由界面中创建的人员组织id不能为空
-     */
-    @ManyToOne
-    @JoinColumn(name="organizationId")
-    private Organization organization;
     
     /** 主要职位 */
     @ManyToOne
@@ -96,6 +98,10 @@ public class Operator implements Serializable{
     /** 职位 */
     @ManyToMany
     private List<Post> postList;
+    
+    /** 职位 */
+    @ManyToMany
+    private List<Role> roleList;
 
     /**
      * @return 返回 id
@@ -109,6 +115,20 @@ public class Operator implements Serializable{
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * @return 返回 vcid
+     */
+    public String getVcid() {
+        return vcid;
+    }
+
+    /**
+     * @param 对vcid进行赋值
+     */
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
     }
 
     /**
@@ -179,6 +199,20 @@ public class Operator implements Serializable{
      */
     public void setExaminePwd(String examinePwd) {
         this.examinePwd = examinePwd;
+    }
+
+    /**
+     * @return 返回 pwdErrCount
+     */
+    public Integer getPwdErrCount() {
+        return pwdErrCount;
+    }
+
+    /**
+     * @param 对pwdErrCount进行赋值
+     */
+    public void setPwdErrCount(Integer pwdErrCount) {
+        this.pwdErrCount = pwdErrCount;
     }
 
     /**
@@ -266,20 +300,6 @@ public class Operator implements Serializable{
     }
 
     /**
-     * @return 返回 pwdErrCount
-     */
-    public Integer getPwdErrCount() {
-        return pwdErrCount;
-    }
-
-    /**
-     * @param 对pwdErrCount进行赋值
-     */
-    public void setPwdErrCount(Integer pwdErrCount) {
-        this.pwdErrCount = pwdErrCount;
-    }
-
-    /**
      * @return 返回 employeeInfo
      */
     public EmployeeInfo getEmployeeInfo() {
@@ -308,6 +328,20 @@ public class Operator implements Serializable{
     }
 
     /**
+     * @return 返回 mainPost
+     */
+    public Post getMainPost() {
+        return mainPost;
+    }
+
+    /**
+     * @param 对mainPost进行赋值
+     */
+    public void setMainPost(Post mainPost) {
+        this.mainPost = mainPost;
+    }
+
+    /**
      * @return 返回 postList
      */
     public List<Post> getPostList() {
@@ -322,16 +356,16 @@ public class Operator implements Serializable{
     }
 
     /**
-     * @return 返回 mainPost
+     * @return 返回 roleList
      */
-    public Post getMainPost() {
-        return mainPost;
+    public List<Role> getRoleList() {
+        return roleList;
     }
 
     /**
-     * @param 对mainPost进行赋值
+     * @param 对roleList进行赋值
      */
-    public void setMainPost(Post mainPost) {
-        this.mainPost = mainPost;
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
     }
 }

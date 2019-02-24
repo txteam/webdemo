@@ -26,21 +26,26 @@ public class SessionLostException extends SILException {
      * @return
      */
     @Override
-    protected String doGetErrorCode() {
-        return "SESSION_LOST_ERROR";
+    protected Integer errorCode() {
+        return -1;
     }
     
     /**
      * @return
      */
     @Override
-    protected String doGetErrorMessage() {
+    protected String errorMessage() {
         return "用户登录超时，请重新登录";
     }
 
     /** <默认构造函数> */
-    public SessionLostException(String message, Object[] parameters) {
-        super(message, parameters);
+    public SessionLostException() {
+        super();
+    }
+
+    /** <默认构造函数> */
+    public SessionLostException(String message, Throwable cause) {
+        super(message, cause);
     }
 
     /** <默认构造函数> */

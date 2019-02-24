@@ -16,17 +16,20 @@
 		SELECT 
 				TEI.OPERATORID,
 				TEI.LEAVINGDATE,
+				TEI.PHONE,
 				TEI.SEX,
 				TEI.CODE,
 				TEI.ENTRYDATE,
 				TEI.OFFICIALDATE,
 				TEI.TRIALPERIODENDDATE,
 				TEI.LEAVING,
-				TEI.AGE,
+				TEI.EMAIL,
 				TEI.NAME,
+				TEI.AGE,
 				TEI.OFFICIAL,
 				TEI.LASTUPDATEPHONELINKINFODATE,
-				TEI.CARDNUM
+				TEI.CARDNUM,
+				TEI.RTX
 		  FROM OPER_EMPLOYEEINFO TEI
 		 WHERE
 		<trim prefixOverrides="AND | OR">
@@ -43,17 +46,20 @@
 		SELECT 
 				TEI.OPERATORID,
 				TEI.LEAVINGDATE,
+				TEI.PHONE,
 				TEI.SEX,
 				TEI.CODE,
 				TEI.ENTRYDATE,
 				TEI.OFFICIALDATE,
 				TEI.TRIALPERIODENDDATE,
 				TEI.LEAVING,
-				TEI.AGE,
+				TEI.EMAIL,
 				TEI.NAME,
+				TEI.AGE,
 				TEI.OFFICIAL,
 				TEI.LASTUPDATEPHONELINKINFODATE,
-				TEI.CARDNUM
+				TEI.CARDNUM,
+				TEI.RTX
 		  FROM OPER_EMPLOYEEINFO TEI
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
@@ -61,6 +67,9 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(leavingDate)">  
 	            AND TEI.LEAVINGDATE = #{leavingDate,javaType=java.util.Date}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phone)">  
+	            AND TEI.PHONE = #{phone,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
 	            AND TEI.SEX = #{sex,javaType=int}
@@ -80,11 +89,14 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(leaving)">  
 	            AND TEI.LEAVING = #{leaving,javaType=boolean}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
-	            AND TEI.AGE = #{age,javaType=int}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
+	            AND TEI.EMAIL = #{email,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TEI.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
+	            AND TEI.AGE = #{age,javaType=int}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(official)">  
 	            AND TEI.OFFICIAL = #{official,javaType=boolean}
@@ -95,13 +107,16 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(cardNum)">  
 	            AND TEI.CARDNUM = #{cardNum,javaType=java.lang.String}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(rtx)">  
+	            AND TEI.RTX = #{rtx,javaType=java.lang.String}
+	        </if>
 		</trim>
 		<choose>  
 	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
 	            ORDER BY #{orderSql}
 	        </when>
 	        <otherwise>  
-	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	            ORDER BY OPERATORID
 	        </otherwise>  
 	    </choose>
 	</select>
@@ -119,6 +134,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(leavingDate)">  
 	            AND TEI.LEAVINGDATE = #{leavingDate,javaType=java.util.Date}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phone)">  
+	            AND TEI.PHONE = #{phone,javaType=java.lang.String}
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
 	            AND TEI.SEX = #{sex,javaType=int}
 	        </if>
@@ -137,11 +155,14 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(leaving)">  
 	            AND TEI.LEAVING = #{leaving,javaType=boolean}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
-	            AND TEI.AGE = #{age,javaType=int}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
+	            AND TEI.EMAIL = #{email,javaType=java.lang.String}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            AND TEI.NAME = #{name,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
+	            AND TEI.AGE = #{age,javaType=int}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(official)">  
 	            AND TEI.OFFICIAL = #{official,javaType=boolean}
@@ -151,6 +172,9 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(cardNum)">  
 	            AND TEI.CARDNUM = #{cardNum,javaType=java.lang.String}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(rtx)">  
+	            AND TEI.RTX = #{rtx,javaType=java.lang.String}
 	        </if>
 		</trim>
 	</select>
@@ -162,40 +186,46 @@
 		(
 			OPERATORID,
 			LEAVINGDATE,
+			PHONE,
 			SEX,
 			CODE,
 			ENTRYDATE,
 			OFFICIALDATE,
 			TRIALPERIODENDDATE,
 			LEAVING,
-			AGE,
+			EMAIL,
 			NAME,
+			AGE,
 			OFFICIAL,
 			LASTUPDATEPHONELINKINFODATE,
-			CARDNUM
+			CARDNUM,
+			RTX
 		)
 		VALUES
 		(
 			#{operatorId},
 			#{leavingDate},
+			#{phone},
 			#{sex},
 			#{code},
 			#{entryDate},
 			#{officialDate},
 			#{trialPeriodEndDate},
 			#{leaving},
-			#{age},
+			#{email},
 			#{name},
+			#{age},
 			#{official},
 			#{lastUpdatePhoneLinkInfoDate},
-			#{cardNum}
+			#{cardNum},
+			#{rtx}
 		)
 	</insert>
 	
 	<!-- auto generate default delete -->
 	<delete id="deleteEmployeeInfo" 
 		parameterType="com.tx.component.operator.model.EmployeeInfo">
-		DELETE FROM OPER_EMPLOYEEINFO WHERE
+		DELETE FROM OPER_EMPLOYEEINFO  WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
 	            AND OPERATORID = #{operatorId}
@@ -206,10 +236,13 @@
 	<!-- auto generate default update -->
 	<update id="updateEmployeeInfo"
 	    parameterType="java.util.Map">  
-	    UPDATE OPER_EMPLOYEEINFO TEI
+	    UPDATE OPER_EMPLOYEEINFO
 	    <trim prefix="SET" suffixOverrides=",">
 			<if test="_parameter.containsKey('leavingDate')">
 	    		LEAVINGDATE = #{leavingDate,javaType=java.util.Date},
+	    	</if>	
+			<if test="_parameter.containsKey('phone')">
+	    		PHONE = #{phone,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('sex')">
 	    		SEX = #{sex,javaType=int},
@@ -229,11 +262,14 @@
 			<if test="_parameter.containsKey('leaving')">
 	    		LEAVING = #{leaving,javaType=boolean},
 	    	</if>	
-			<if test="_parameter.containsKey('age')">
-	    		AGE = #{age,javaType=int},
+			<if test="_parameter.containsKey('email')">
+	    		EMAIL = #{email,javaType=java.lang.String},
 	    	</if>	
 			<if test="_parameter.containsKey('name')">
 	    		NAME = #{name,javaType=java.lang.String},
+	    	</if>	
+			<if test="_parameter.containsKey('age')">
+	    		AGE = #{age,javaType=int},
 	    	</if>	
 			<if test="_parameter.containsKey('official')">
 	    		OFFICIAL = #{official,javaType=boolean},
@@ -244,8 +280,11 @@
 			<if test="_parameter.containsKey('cardNum')">
 	    		CARDNUM = #{cardNum,javaType=java.lang.String},
 	    	</if>	
+			<if test="_parameter.containsKey('rtx')">
+	    		RTX = #{rtx,javaType=java.lang.String},
+	    	</if>	
 	    </trim>
-	    WHERE TEI.OPERATORID = #{operatorId} 
+	    WHERE OPERATORID = #{operatorId} 
 	</update>  
 
 </mapper>

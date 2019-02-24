@@ -103,7 +103,7 @@ public interface MenuItem extends TreeAble<List<MenuItem>, MenuItem>,Cloneable {
      * 打开类型 ： mainTabs,openDialog,triggerGlobalEvent
      * @return 返回 target
      */
-    public String getTarget();
+    public String getMenuTarget();
 
     /**
      * mainTabs时：选中后是否需要刷新

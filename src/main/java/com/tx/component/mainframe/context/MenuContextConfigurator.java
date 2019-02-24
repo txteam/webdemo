@@ -16,7 +16,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -34,6 +34,7 @@ import com.tx.component.mainframe.model.DefaultMenuItem;
 import com.tx.component.mainframe.model.MenuItem;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.exceptions.util.ExceptionWrapperUtils;
+import com.tx.core.util.ObjectUtils;
 import com.tx.core.util.XstreamUtils;
 
 /**
@@ -143,8 +144,7 @@ public class MenuContextConfigurator implements InitializingBean,
         List<MenuItem> menuItemList = null;
         if (!menuType2MenuItemListMap.containsKey(menusItemType)) {
             menuItemList = new ArrayList<MenuItem>();
-        }
-        else {
+        } else {
             menuItemList = menuType2MenuItemListMap.get(menusItemType);
         }
         
@@ -183,7 +183,7 @@ public class MenuContextConfigurator implements InitializingBean,
         menu.setText(menuItemConfig.getText());
         menu.setTips(menuItemConfig.getTips());
         
-        menu.setTarget(menuItemConfig.getTarget());
+        menu.setMenuTarget(menuItemConfig.getTarget());
         menu.setSelectRefresh(menuItemConfig.isSelectRefresh());
         menu.setOpenNewEveryTime(menuItemConfig.isOpenNewEveryTime());
         
@@ -207,16 +207,17 @@ public class MenuContextConfigurator implements InitializingBean,
         if (!StringUtils.isEmpty(menuItemConfig.getAuthKey())) {
             menu.setAuthKeyList(Arrays.asList(StringUtils.splitByWholeSeparatorPreserveAllTokens(menuItemConfig.getAuthKey(),
                     ",")));
-        }else{
-            if(parentMenuItem != null){
+        } else {
+            if (parentMenuItem != null) {
                 menu.setAuthKeyList(parentMenuItem.getAuthKeyList());
             }
         }
         
         //如果菜单id重复，认为是配置存在问题，这里抛出异常，启动时解决
         AssertUtils.isTrue(!mainMenuItemList.contains(menu),
-                new MenuContextInitException("菜单id重复,重复id为："
-                        + menuItemConfig.getId()));
+                MenuContextInitException.class,
+                "菜单id重复,重复id为：{}",
+                new Object[] { menuItemConfig.getId() });
         mainMenuItemList.add(menu);
         
         if (menuItemConfig.getChilds() != null
@@ -254,20 +255,35 @@ public class MenuContextConfigurator implements InitializingBean,
             in = menuConfigResource.getInputStream();
             MenuConfig res = (MenuConfig) menuConfigXstream.fromXML(in);
             return res;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw ExceptionWrapperUtils.wrapperIOException(e,
                     "read menuConfigResource exception.");
-        }
-        finally {
+        } finally {
             IOUtils.closeQuietly(in);
         }
     }
-
+    
     /**
      * @return 返回 menuType2MenuItemListMap
      */
     public Map<String, List<MenuItem>> getMenuType2MenuItemListMap() {
-        return menuType2MenuItemListMap;
+        Map<String, List<MenuItem>> cloneMap = ObjectUtils.deepClone(menuType2MenuItemListMap);
+        return cloneMap;
+    }
+    
+    /**
+      * 根据菜单类型
+      * <功能详细描述>
+      * @param menuType
+      * @return [参数说明]
+      * 
+      * @return List<MenuItem> [返回类型说明]
+      * @exception throws [异常类型] [异常说明]
+      * @see [类、类#方法、类#成员]
+     */
+    public List<MenuItem> getMenuItemListByMenuType(String menuType) {
+        List<MenuItem> menuItemList = menuType2MenuItemListMap.get(menuType);
+        List<MenuItem> cloneMenuItemList = ObjectUtils.deepClone(menuItemList);
+        return cloneMenuItemList;
     }
 }

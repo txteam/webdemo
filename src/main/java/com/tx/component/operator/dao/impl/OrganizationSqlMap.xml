@@ -11,6 +11,7 @@
 	<!-- auto generate default resultMap -->
 	<resultMap id="organizationMap" 
 		type="com.tx.component.operator.model.Organization">
+		<result column="company_id" property="company.id"/>
 	</resultMap>
 	
 	<!-- auto generate default find -->
@@ -29,15 +30,22 @@
 				TO_.PARENTID,
 				TO_.DISTRICTID,
 				TO_.ADDRESS,
-				TO_.CHIEFTYPE,
 				TO_.NAME,
+				TO_.COMPANYID AS company_id,
 				TO_.FULLNAME,
+				TO_.CHIEFTYPE,
 				TO_.CHIEFID
 		  FROM OPER_ORGANIZATION TO_
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            AND TO_.VCID = #{vcid}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND TO_.CODE = #{code}
 	        </if>
 		</trim>
 	</select>
@@ -61,25 +69,22 @@
 				TO_.CHIEFTYPE,
 				TO_.NAME,
 				TO_.FULLNAME,
+				TO_.COMPANYID AS company_id,
 				TO_.CHIEFID
 		  FROM OPER_ORGANIZATION TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<!-- 如果没有查询所有组织的权限，则仅能查询当前虚中心的组织 -->
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
-				<![CDATA[ AND TO_.VCID = #{vcid,javaType=java.lang.String} ]]>
-			</if>
-			<if test="@com.tx.core.util.OgnlUtils@isEmpty(vcid) &amp;&amp; 
-						@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
-				<if test="!@com.tx.component.mainframe.context.WebContextUtils@hasAuth('query_all_org')">
-					AND TO_.VCID = #{@com.tx.component.mainframe.context.WebContextUtils@getCurrentVcid()}
-				</if>
-			</if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
-				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,javaType=java.lang.String} ]]>
-			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
+				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,javaType=java.lang.String} ]]>
+			</if>
+	       	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(companyId)">  
+	            AND TO_.COMPANYID = #{companyId,javaType=java.lang.String}
+	        </if>			
+	       	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(company)">  
+	            AND TO_.COMPANYID = #{company.id,javaType=java.lang.String}
+	        </if>						
 	       	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TO_.CODE = #{code,javaType=java.lang.String}
 	        </if>
@@ -89,6 +94,10 @@
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationTypeEnum}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationTypes)">  
+	            AND TO_.TYPE IN
+	            <foreach collection="organizationTypes" separator="," open="(" close=")" item="organizationTypeTemp">#{organizationTypeTemp,javaType=com.tx.component.operator.model.OrganizationTypeEnum}</foreach>
+	        </if>	        
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TO_.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
@@ -100,14 +109,28 @@
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
 	            AND TO_.CHIEFID = #{chiefId,javaType=java.lang.String}
-	        </if>		
+	        </if>
+	        <choose>
+	        	<when test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
+	        		AND TO_.VCID = #{vcid,javaType=java.lang.String}
+	        	</when>
+	        	<when test="@auth.AuthContextUtils@isQueryByAuth('vcid')">
+	        		<if test="@auth.AuthContextUtils@isNotEmptyOfQueryAuthRefIds('vcid')">
+		               AND TO_.VCID IN <foreach collection="@auth.AuthContextUtils@getQueryAuthRefIds('vcid')" 
+	                   		item="refId" open="(" close=")" separator=",">#{refId}</foreach>
+		           </if>
+		           <if test="@auth.AuthContextUtils@isEmptyOfQueryAuthRefIds('vcid')">
+	                   AND TO_.VCID = ''
+	               </if>
+	        	</when>
+	        </choose>
 		</trim>
 		<choose>  
 	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
 	            ORDER BY #{orderSql}
 	        </when>
 	        <otherwise>  
-	            <!-- //TODO:ADD DEFAULT ORDER COLUMN OR DONOTHING! -->
+	            ORDER BY id
 	        </otherwise>  
 	    </choose>
 	</select>
@@ -119,32 +142,31 @@
 		SELECT COUNT(1)
 		  FROM OPER_ORGANIZATION TO_
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<!-- 如果没有查询所有组织的权限，则仅能查询当前虚中心的组织 -->
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
-				<![CDATA[ AND TO_.VCID = #{vcid,javaType=java.lang.String} ]]>
-			</if>
-			<if test="@com.tx.core.util.OgnlUtils@isEmpty(vcid) &amp;&amp; 
-						@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
-				<if test="!@com.tx.component.mainframe.context.WebContextUtils@hasAuth('query_all_org')">
-					AND TO_.VCID = #{@com.tx.component.mainframe.context.WebContextUtils@getCurrentVcid()}
-				</if>
-			</if>
-			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
-				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,javaType=java.lang.String} ]]>
-			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND TO_.ID = #{id,javaType=java.lang.String}
 	        </if>
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeOrganizationId)">
+				<![CDATA[ AND TO_.ID <> #{excludeOrganizationId,javaType=java.lang.String} ]]>
+			</if>
+	       	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            AND TO_.CODE = #{code,javaType=java.lang.String}
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            AND TO_.VALID = #{valid,javaType=boolean}
 	        </if>
+	       	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(companyId)">  
+	            AND TO_.COMPANYID = #{companyId,javaType=java.lang.String}
+	        </if>			
+	       	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(company)">  
+	            AND TO_.COMPANYID = #{company.id,javaType=java.lang.String}
+	        </if>				        
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            AND TO_.TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationTypeEnum}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationTypes)">  
+	            AND TO_.TYPE IN
+	            <foreach collection="organizationTypes" separator="," open="(" close=")" item="organizationTypeTemp">#{organizationTypeTemp,javaType=com.tx.component.operator.model.OrganizationTypeEnum}</foreach>
+	        </if>	        
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            AND TO_.PARENTID = #{parentId,javaType=java.lang.String}
 	        </if>
@@ -156,7 +178,21 @@
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
 	            AND TO_.CHIEFID = #{chiefId,javaType=java.lang.String}
-	        </if>		
+	        </if>
+	        <choose>
+	        	<when test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
+	        		AND TO_.VCID = #{vcid,javaType=java.lang.String}
+	        	</when>
+	        	<when test="@auth.AuthContextUtils@isQueryByAuth('vcid')">
+	        		<if test="@auth.AuthContextUtils@isNotEmptyOfQueryAuthRefIds('vcid')">
+		               AND TO_.VCID IN <foreach collection="@auth.AuthContextUtils@getQueryAuthRefIds('vcid')" 
+	                   		item="refId" open="(" close=")" separator=",">#{refId}</foreach>
+		           </if>
+		           <if test="@auth.AuthContextUtils@isEmptyOfQueryAuthRefIds('vcid')">
+	                   AND TO_.VCID = ''
+	               </if>
+	        	</when>
+	        </choose>
 		</trim>
 	</select>
 	
@@ -179,7 +215,8 @@
 			CHIEFTYPE,
 			NAME,
 			FULLNAME,
-			CHIEFID
+			CHIEFID,
+			COMPANYID
 		)
 		VALUES
 		(
@@ -197,7 +234,8 @@
 			#{chiefType},
 			#{name},
 			#{fullName},
-			#{chiefId}
+			#{chiefId},
+			#{company.id}
 		)
 	</insert>
     
@@ -220,7 +258,8 @@
 			CHIEFTYPE,
 			NAME,
 			FULLNAME,
-			CHIEFID
+			CHIEFID,
+			COMPANYID
 		)
 		VALUES
 		(
@@ -238,7 +277,8 @@
 			#{chiefType},
 			#{name},
 			#{fullName},
-			#{chiefId}
+			#{chiefId},
+			#{company.id}
 		)
 	</insert>
 	
@@ -275,10 +315,7 @@
 	    	</if>	
 			<if test="_parameter.containsKey('type')">
 	    		TYPE = #{type,javaType=com.tx.component.operator.model.OrganizationTypeEnum},
-	    	</if>	
-			<if test="_parameter.containsKey('parentId')">
-	    		PARENTID = #{parentId,javaType=java.lang.String},
-	    	</if>	
+	    	</if>
 			<if test="_parameter.containsKey('districtId')">
 	    		DISTRICTID = #{districtId,javaType=java.lang.String},
 	    	</if>	
@@ -294,6 +331,9 @@
 			<if test="_parameter.containsKey('fullName')">
 	    		FULLNAME = #{fullName,javaType=java.lang.String},
 	    	</if>	
+			<if test="_parameter.containsKey('company')">
+				COMPANYID = #{company.id,javaType=java.lang.String},
+	    	</if>	    	
 			<if test="_parameter.containsKey('chiefId')">
 	    		CHIEFID = #{chiefId,javaType=java.lang.String},
 	    	</if>	

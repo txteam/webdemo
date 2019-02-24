@@ -95,7 +95,7 @@ public class PostController {
             response.put("parentPost", parentPost);
             response.put("organization", parentPost.getOrganization());
         } else if (!StringUtils.isEmpty(organizationId)) {
-            Organization organization = this.organizationService.findOrganizationById(organizationId);
+            Organization organization = this.organizationService.findById(organizationId);
             response.put("organization", organization);
         }
         response.put("post", new Post());
