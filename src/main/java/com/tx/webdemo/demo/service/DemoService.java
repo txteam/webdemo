@@ -47,6 +47,7 @@ public class DemoService {
     //@Resource(name = "serviceLogger")
     private Logger serviceLogger;
     
+    
     @Resource(name = "demoDao")
     private DemoDao demoDao;
     
