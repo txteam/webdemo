@@ -1,0 +1,281 @@
+package com.tx.local.security.config;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.util.DigestUtils;
+
+import com.tx.local.security.service.OperatorUserDetailService;
+import com.tx.local.security.strategy.UserSessionAuthenticationStrategy;
+
+/**
+ * SpringSecurity本地权限定制<br/>
+ * <功能详细描述>
+ * 
+ * @author  Administrator
+ * @version  [版本号, 2018年7月7日]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+    
+    protected static Logger logger = LoggerFactory
+            .getLogger(WebSecurityConfiguration.class);
+    
+    @Autowired
+    private UserSessionAuthenticationStrategy userSessionAuthenticationStrategy;
+    
+    @Resource(name = "userDetailService")
+    private OperatorUserDetailService userDetailService;
+    
+    /** 登录处理链接 */
+    private String loginProcessingUrl = "/doLogin";
+    
+    /**
+     * webSecurity配置
+     * @param web
+     * @throws Exception
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/webjars/**",
+                "css/**",
+                "images/**",
+                "js/**",
+                "uploads/**",
+                "/**/*.js",
+                "/**/*.css",
+                "/**/*.jpg",
+                "/**/*.png",
+                "/**/*.woff2");
+    }
+    
+    /**
+     * 用户验证
+     * @param auth
+     * @throws Exception
+     */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+        AuthenticationProvider upProvider = usernamePasswordAuthenticationProvider();
+        //注入Provider
+        auth.authenticationProvider(upProvider);
+    }
+    
+    /**
+     * 生成UsernamePasswordAuthenticationProvider<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return DaoAuthenticationProvider [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean
+    public DaoAuthenticationProvider usernamePasswordAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        // 设置userDetailsService
+        provider.setUserDetailsService(userDetailService);
+        // 禁止隐藏用户未找到异常
+        provider.setHideUserNotFoundExceptions(false);
+        // 使用BCrypt进行密码的hash
+        provider.setPasswordEncoder(md5PasswordEncoder());
+        return provider;
+    }
+    
+    /**
+     * 密码验证器<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return PasswordEncoder [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("md5PasswordEncoder")
+    public PasswordEncoder md5PasswordEncoder() {
+        PasswordEncoder encoder = new PasswordEncoder() {
+            
+            @Override
+            public boolean matches(CharSequence rawPassword,
+                    String encodedPassword) {
+                if (rawPassword == null) {
+                    //如果为空
+                    return false;
+                }
+                //全不为空
+                String rawEncodedPassword = DigestUtils
+                        .md5DigestAsHex(rawPassword.toString().getBytes());
+                if (StringUtils.equalsAnyIgnoreCase(rawEncodedPassword,
+                        encodedPassword)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            
+            @Override
+            public String encode(CharSequence rawPassword) {
+                String encodePassword = DigestUtils
+                        .md5DigestAsHex(rawPassword.toString().getBytes());
+                return encodePassword;
+            }
+        };
+        return encoder;
+    }
+    
+    /**
+     * httpSecurity配置
+     * @param httpSecurity
+     * @throws Exception
+     */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        //关闭csrf(跨域请求伪造),内部管理系统每次请求没有必要都需要带一个签名token如果需要也问题不大，待access_token机制加入以后再进行调整
+        http.csrf().disable();
+        
+        //配置session
+        //ALWAYS:总是创建HttpSession
+        //IF_REQUIRED:Spring Security只会在需要时创建一个HttpSession
+        //NEVER:Spring Security不会创建HttpSession，但如果它已经存在，将可以使用HttpSession
+        //STATELESS:Spring Security永远不会创建HttpSession，它不会使用HttpSession来获取SecurityContext
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionAuthenticationStrategy(
+                        userSessionAuthenticationStrategy);
+        
+        //logout配置
+        http.logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+        //http.logout().disable();
+        //.and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
+        //        http.logout().logoutUrl("/logout").permitAll().logoutSuccessHandler(
+        //                (request, response, authentication) -> {
+        //                    logger.info("登出成功：" + authentication.getName());
+        //                    
+        //                    response.setContentType("application/json;charset=utf-8");
+        //                    PrintWriter out = response.getWriter();
+        //                    out.write("{\"status\":\"ok\",\"msg\":\"登录成功\"}");
+        //                    out.flush();
+        //                    out.close();
+        //                });
+        
+        //所有请求都允许访问
+        //允许直接访问的链接
+        http.authorizeRequests()
+                .antMatchers("/", "/index", "/loginer", "/login", "/toLogin")
+                .permitAll()
+                .antMatchers("/error/**")
+                .permitAll()
+                .antMatchers("/captcha/**")
+                .permitAll()
+                .antMatchers(this.loginProcessingUrl)
+                .permitAll()
+                .antMatchers("/test/**")
+                .permitAll()
+                .antMatchers("/test/authentication/**")
+                .authenticated()
+                .antMatchers("/oauth/authorize")
+                .permitAll()
+                .anyRequest()
+                .authenticated();//其他请求需要鉴权
+        
+        //login配置
+        //http.formLogin().disable();
+        http.formLogin()
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .loginPage("/login")
+                .loginProcessingUrl(this.loginProcessingUrl)
+                .permitAll()
+                .successHandler(successHandler)
+                .failureHandler(failureHandler);
+        
+        //iframe header disable
+        http.headers().frameOptions().disable();
+        
+        //用户名密码验证前先验证  验证码
+        //        http.addFilterBefore(captchaValidateAuthenticationFilter(),
+        //                UsernamePasswordAuthenticationFilter.class);
+        
+    }
+    
+    //    /**
+    //     * 验证码验证过滤器<br/>
+    //     * <功能详细描述>
+    //     * @return [参数说明]
+    //     * 
+    //     * @return CaptchaValidateAuthenticationFilter [返回类型说明]
+    //     * @exception throws [异常类型] [异常说明]
+    //     * @see [类、类#方法、类#成员]
+    //     */
+    //    @Bean
+    //    public CaptchaValidateAuthenticationFilter captchaValidateAuthenticationFilter() {
+    //        CaptchaValidateAuthenticationFilter filter = new CaptchaValidateAuthenticationFilter(
+    //                this.loginProcessingUrl);
+    //        filter.setCaptchaCodeParameter(CaptchaConstants.REQUEST_LOGIN_CAPTCHA_CODE_KEY);
+    //        filter.setCaptchaCodeSessionKey(CaptchaConstants.SESSION_LOGIN_CAPTCHA_CODE_KEY);
+    //        filter.setAuthenticationFailureHandler(this.failureHandler);
+    //        return filter;
+    //    }
+    
+    /** 登录成功处理句柄  */
+    private AuthenticationSuccessHandler successHandler = new AuthenticationSuccessHandler() {
+        
+        @Override
+        public void onAuthenticationSuccess(HttpServletRequest request,
+                HttpServletResponse response, Authentication authentication)
+                throws IOException, ServletException {
+            logger.info("登录成功：" + authentication.getName());
+            
+            response.setContentType("application/json;charset=utf-8");
+            PrintWriter out = response.getWriter();
+            out.write("{\"status\":\"ok\",\"msg\":\"登录成功\"}");
+            out.flush();
+            out.close();
+        }
+    };
+    
+    /** 登录失败处理句柄 */
+    private AuthenticationFailureHandler failureHandler = new AuthenticationFailureHandler() {
+        
+        @Override
+        public void onAuthenticationFailure(HttpServletRequest request,
+                HttpServletResponse response, AuthenticationException exception)
+                throws IOException, ServletException {
+            logger.warn("登录失败：" + exception.getMessage());
+            
+            response.setContentType("application/json;charset=utf-8");
+            PrintWriter out = response.getWriter();
+            out.write("{\"status\":\"error\",\"msg\":\"用户名或密码错误\"}");
+            out.flush();
+            out.close();
+        }
+    };
+}

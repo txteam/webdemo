@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>JS/jQuery图片查看器viewer.js演示-自定义方法_sucaihuo</title>
+<link rel="stylesheet" href="css/viewer.min.css">
+<style>
+* { margin: 0; padding: 0;}
+#sucaihuo { width: 700px; margin: 0 auto; font-size: 0;}
+#sucaihuo li { display: inline-block; width: 32%; margin-left: 1%; padding-top: 1%;}
+#sucaihuo li img { width: 100%;}
+
+.btns { position: relative; z-index: 10000; width: 700px; margin: 0 auto; text-align: center;}
+.btns a { display: inline-block; width: 70px; margin-top: 15px; line-height: 26px; font-size: 12px; color: #fff; background-color: #21b384; text-decoration: none;}
+.btns a:hover { background-color: #1fa67a;}
+</style>
+</head>
+
+<body>
+<h1>自定义方法</h1>
+
+<ul id="sucaihuo">
+	<li><img data-original="img/tibet-1.jpg" src="img/thumbnails/tibet-1.jpg" alt="图片1"></li>
+	<li><img data-original="img/tibet-2.jpg" src="img/thumbnails/tibet-2.jpg" alt="图片2"></li>
+	<li><img data-original="img/tibet-3.jpg" src="img/thumbnails/tibet-3.jpg" alt="图片3"></li>
+	<li><img data-original="img/tibet-4.jpg" src="img/thumbnails/tibet-4.jpg" alt="图片4"></li>
+	<li><img data-original="img/tibet-5.jpg" src="img/thumbnails/tibet-5.jpg" alt="图片5"></li>
+	<li><img data-original="img/tibet-6.jpg" src="img/thumbnails/tibet-6.jpg" alt="图片6"></li>
+</ul>
+
+<div class="btns">
+	<a id="btn1" href="javascript:">show()</a>
+	<a id="btn2" href="javascript:">hide()</a>
+	<a id="btn3" href="javascript:">view()</a>
+	<a id="btn4" href="javascript:">next()</a>
+	<a id="btn5" href="javascript:">prev()</a>
+	<a id="btn6" href="javascript:">move()</a>
+	<a id="btn7" href="javascript:">moveTo()</a>
+	<a id="btn8" href="javascript:">zoom()</a>
+	<a id="btn9" href="javascript:">zoomTo()</a>
+	<a id="btn10" href="javascript:">rotate()</a>
+	<a id="btn11" href="javascript:">rotateTo()</a>
+	<a id="btn12" href="javascript:">scale()</a>
+	<a id="btn13" href="javascript:">scaleX()</a>
+	<a id="btn14" href="javascript:">scaleY()</a>
+	<a id="btn15" href="javascript:">play()</a>
+	<a id="btn16" href="javascript:">stop()</a>
+	<a id="btn17" href="javascript:">full()</a>
+	<a id="btn18" href="javascript:">exit()</a>
+	<a id="btn19" href="javascript:">tooltip()</a>
+	<a id="btn20" href="javascript:">toggle()</a>
+	<a id="btn21" href="javascript:">reset()</a>
+	<a id="btn22" href="javascript:">destroy()</a>
+</div>
+
+<script src="js/viewer.min.js"></script>
+<script>
+var viewer = new Viewer(document.getElementById('sucaihuo'), {
+	url: 'data-original'
+});
+
+document.getElementById('btn1').onclick = function() {
+	viewer.show();
+}
+
+document.getElementById('btn2').onclick = function() {
+	viewer.hide();
+}
+
+document.getElementById('btn3').onclick = function() {
+	viewer.view(5);
+}
+
+document.getElementById('btn4').onclick = function() {
+	viewer.next();
+}
+
+document.getElementById('btn5').onclick = function() {
+	viewer.prev();
+}
+
+document.getElementById('btn6').onclick = function() {
+	viewer.move(-10, 0);
+}
+
+document.getElementById('btn7').onclick = function() {
+	viewer.moveTo(0, 0);
+}
+
+document.getElementById('btn8').onclick = function() {
+	viewer.zoom(0.1);
+}
+
+document.getElementById('btn9').onclick = function() {
+	viewer.zoomTo(1);
+}
+
+document.getElementById('btn10').onclick = function() {
+	viewer.rotate(90);
+}
+
+document.getElementById('btn11').onclick = function() {
+	viewer.rotateTo(180);
+}
+
+document.getElementById('btn12').onclick = function() {
+	viewer.scale(-1);
+}
+
+document.getElementById('btn13').onclick = function() {
+	viewer.scaleX(-1);
+}
+
+document.getElementById('btn14').onclick = function() {
+	viewer.scaleY(-1);
+}
+
+document.getElementById('btn15').onclick = function() {
+	viewer.play();
+}
+
+document.getElementById('btn16').onclick = function() {
+	viewer.stop();
+}
+
+document.getElementById('btn17').onclick = function() {
+	viewer.full();
+}
+
+document.getElementById('btn18').onclick = function() {
+	viewer.exit();
+}
+
+document.getElementById('btn19').onclick = function() {
+	viewer.tooltip();
+}
+
+document.getElementById('btn20').onclick = function() {
+	viewer.toggle();
+}
+
+document.getElementById('btn21').onclick = function() {
+	viewer.reset();
+}
+
+document.getElementById('btn22').onclick = function() {
+	viewer.destroy();
+}
+</script>
+<script type="text/javascript" src="http://shouce.ren/static/ad/gg.js"></script></body>
+</html>

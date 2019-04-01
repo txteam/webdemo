@@ -1,0 +1,114 @@
+debug: false
+
+#server
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  port: ${app.server.port}
+  # 为了在研发期间能够及时发现contextPath引起的路径错乱这里增加context-path设置
+  context-path: ${app.server.contextPath}
+  # session:
+  #  cookie:
+  #    name: tx_webdemo
+
+spring:
+  application:
+    name: webdemo
+  #http配置
+  http:
+    #替代：CharacterEncodingFilter
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    #替代： multipartResolver的实现
+    multipart:
+      enabled: true
+      resolve-lazily: true
+      #1M,0.5M
+      file-size-threshold: 524288
+      #单个文件的最大大小
+      max-file-size: 10485760
+      #单个请求的最大的大小,如果是同时上传多个文件,多个文件大小之和
+      #50 * 1024 * 1024  52428800  50M
+      max-request-size: 52428800
+  #spring.aop配置
+  aop:
+    #是否支持@EnableAspectJAutoProxy，默认为: true
+    auto: true
+    #true为使用CGLIB代理，false为JDK代理，默认为false
+    proxy-target-class: true
+  #jpa
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  #spring.datasource配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      db-type: mysql
+      driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+      url: ${app.jdbc.url}
+      username: ${app.jdbc.username}
+      password: ${app.jdbc.password}
+      # 指定连接池等待连接返回的最大等待时间，毫秒单位 60000
+      max-wait: 60000
+      # 最大激活连接数
+      max-active: 20
+      # 指定启动连接池时，初始建立的连接数量 5
+      initial-size: 5
+      # 指定连接池最小的空闲连接数量 5
+      min-idle: 5
+      validation-query: SELECT 1 FROM DUAL
+      # 获取连接时候验证，会影响性能
+      # validation-query有值时，test-on-borrow会默认为true.
+      # spring.datasource.tomcat.test-on-borrow=
+      # spring.datasource.tomcat.test-on-connect=
+      # spring.datasource.tomcat.test-on-return=
+      test-on-borrow: false
+      test-on-return: false
+      # 验证连接的有效性
+      test-while-idle: true
+      # 空闲连接回收的时间间隔，与test-while-idle一起使用，设置5分钟 60000,间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      pool-prepared-statements: true
+      max-open-prepared-statements: 50
+      max-pool-prepared-statement-per-connection-size: 20
+      #一个连接在池中最小生存的时间，单位是毫秒 
+      min-evictable-idle-time-millis: 300000
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙 stat,wall,log4j
+      filters: stat,wall
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connection-properties: 'druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000'
+      #filter:
+      #  slf4j:
+      #    enabled: true
+      stat-view-servlet:
+        enabled: true
+        url-pattern: '/druid/*'
+        # IP白名单(没有配置或者为空，则允许所有访问)
+        allow: 'localhost,127.0.0.1'
+        # IP黑名单 (存在共同时，deny优先于allow)
+        # deny: 配置路由ip?
+        login-username: admin
+        login-password: 123321qQ
+        # 禁用HTML页面上的“Reset All”功能
+        reset-enable: false
+      web-stat-filter:
+        enabled: true
+        url-pattern: '/*'
+        exclusions: '*.js*,.css,*.gif,*.jpg,*.bmp,*.png,*.ico,/druid/*'
+  thymeleaf:
+    cache: false
+    #prefix需要以/结束，DefaultErrorViewResolver中的实现为"error/xxx"
+    prefix: classpath:/templates/
+    suffix: .html
+    #mode: HTML5
+    #encoding: UTF-8
+    #content-type: text/html
+    

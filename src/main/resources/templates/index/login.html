@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>WS运营管理系统--登录</title>
+
+<!-- css -->
+<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/themes/uimaker/easyui.css" th:href="@{/webjars/themes/uimaker/easyui.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/uimaker.css" th:href="@{/webjars/uimaker.css}"/>
+
+<!-- jquery -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+<!-- easyui -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+<!-- other -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+</head>
+
+<body style="background:#0a73bc; overflow:hidden;">
+	<!--loginbg start-->
+	<div class="loginbg">
+	    <!--login start-->
+		<div class="login">
+	    
+	    	<!--loginbox start-->
+	        <div class="loginbox">
+	        
+	        	<div class="loginleft"><h2>Easyui蓝色风格模板</h2></div>
+	            
+	            <div class="loginright">
+	            
+	            	<span class="loginlogo"></span>
+	                
+	                <ul class="userlogin">
+	                <li><p class="loginuser"><i class="iconfont">&#xe602;</i></p><cite><input class="easyui-textbox" value="用户名"  style="width:100%; height:40px;"></cite></li>
+	                <li><p class="loginpassword"><i class="iconfont">&#xe616;</i></p><cite><input class="easyui-textbox" value="密码" style="width:100%; height:40px;"></cite></li>
+	                <li><a  class="loginbtn" href="main.html">登录</a></li>
+	                <li><em><input class="easyui-checkbox" name="fruit" value="Apple"></em><b>记住我的信息</b></li>
+	                </ul>
+	                
+	            </div>
+	            
+	        </div>
+	        <!--loginbox end-->
+	        
+	        <div class="loginshadow"></div>  
+	    
+	    </div>
+	    <!--login end-->
+	    
+	    <div class="loginfooter"> CopyRight 2019&nbsp;&nbsp;版权所有&nbsp;&nbsp;cqtianxin.com&nbsp;&nbsp;WEBDEMO&nbsp;&nbsp;禁止网络转载&nbsp;&nbsp;渝ICP备0xxxxxxx号</div>
+    </div>    
+    <!--loginbg end-->
+</body>
+
+</html>
+
+<script th:inline="javascript" type="text/javascript">
+/*<![CDATA[*/
+$(function(){
+	$(".loginbg").jParticle({
+		background: "#0a73bc",
+		color: "#fff"
+	});
+});
+//设置div高度自适应浏览器
+$(window).resize(function(e) {
+	$(".loginbg").height($(window).height());    
+}).resize();
+//登录方法
+function loginFun(){
+	$("#form-body").submit();
+}
+//回车事件
+function keyOnClick(e){
+    var theEvent = window.event || e;
+    var code = theEvent.keyCode || theEvent.which;
+    if (code==13) {  //回车键的键值为13
+    	loginFun();  //调用登录方法
+    }
+}
+//页面加载完后的逻辑处理
+$(document).ready(function() {
+	var $formBody = $('#form-body');
+    var $errorMessage = $('#errorMessage');
+    
+    //验证提示信息样式自定义
+    $formBody.validator({
+        stopOnError: false, //关闭此开关，以便一次性显示所有消息
+        msgMaker: false,    //不要自动生成消息
+        invalid: function(form, errors){
+            var html = '';
+            $.map(errors, function(msg){
+                html += msg + ' ; ';
+            });
+            $errorMessage.find("span").html(html);
+        	$errorMessage.show();
+        },
+        valid: function(){
+        	$errorMessage.hide();
+        	//DialogUtils.progress({
+	        //	text : '数据提交中，请等待....'
+	        //});
+	        $formBody.ajaxSubmit({
+			    url:/*[[@{/mainframe/login.action}]]*/'',
+			    success: function(data) {
+			    	DialogUtils.progress('close');
+					if(data.result){
+						window.location.href = "/" + data.data;
+					}else{
+						if($.ObjectUtils.isEmpty(data.data)){
+							$errorMessage.find("span").html(data.errorMessage);
+				        	$errorMessage.show();
+						}else{
+							window.location.href = "/" + data.data;
+						}
+					}
+			    } 
+			});
+			return false;
+	    }
+    });
+    
+	// 登陆按钮单击
+	$("#loginBtn").click(function() {
+		$("#form-body").submit();
+	});
+});
+/*]]>*/
+</script>

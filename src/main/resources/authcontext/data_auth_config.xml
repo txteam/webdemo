@@ -2,19 +2,6 @@
 <!-- 数据权限配置 -->
 <auths>
 	<authType key="AUTHTYPE_DATA">
-		<!-- 系统维护数据权限 -->
-		<auth key="system_data_auth" name="系统维护数据权限" virtual="true">
-			<auth key="virtualCenter" name="虚拟中心数据权限" virtual="true">
-				<auth key="query_all_vc" name="查询所有虚中心" configAble="false"
-					description="具有该权限能够查看所有的虚中心，否则仅能查看当前人员所在虚中心">
-				</auth>
-			</auth>
-			<auth key="organization" name="组织数据权限" virtual="true">
-				<auth key="query_all_org" name="查询所有组织" configAble="false"
-					description="具有该权限能够查询所有的组织，否则仅能查询所属虚中心组织">
-				</auth>
-			</auth>
-		</auth>
-		
+		<!-- 系统维护数据权限 -->		
 	</authType>
 </auths>
