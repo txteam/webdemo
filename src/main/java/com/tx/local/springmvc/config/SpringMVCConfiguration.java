@@ -92,7 +92,8 @@ public class SpringMVCConfiguration extends WebMvcConfigurerAdapter
                 .setCachePeriod(86400);
         
         //WebMvcAutoConfiguration中覆写了webjars的的读取方法需要覆写回来
-        Integer cachePeriod = 86400;
+        //FIXME:临时将缓存时间调整为0
+        Integer cachePeriod = 0;//86400;
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/static/webjars/")
                 .setCachePeriod(cachePeriod);

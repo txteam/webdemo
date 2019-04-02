@@ -1,0 +1,21 @@
+/*login*/
+.login{height:434px;width:758px; margin:auto; position:absolute; left:50%; top:50%; margin:-217px 0 0 -379px;}
+.loginbox{height:406px; background-color:#fff; background-image:url(../images/loginimg.png); background-repeat:no-repeat;}
+.loginshadow{height:28px; background:url(../../images/shadow.png) no-repeat;}
+.loginleft{width:245px; height:65px;background:url(../../images/logintext.png) no-repeat top left;margin-left:55px; margin-top:167px; float:left;}
+.loginleft h2{font-size:18px; color:#fff; font-weight:normal; padding-top:38px;}
+.loginright{float:right; width:306px;margin-right:75px;margin-top:60px;}
+.loginlogo{width:138px; height:36px; background:url(../../images/loginlogo.png) no-repeat;display:block}
+.userlogin{margin-top:40px;}
+.userlogin li{width:306px;height:40px; margin-bottom:24px;}
+.userlogin li p{display:block;float:left; width:42px; height:40px; line-height:40px; color:#fff; font-size:18px; text-align:center;}
+.loginuser{background:#0076c8;}
+.loginpassword{background:#d63737;}
+.userlogin li cite{display:block; float:left; width:264px;}
+.loginbtn{display:block; width:306px; height:40px; background:#0a73bc; text-align:center; line-height:40px;font-size:16px;}
+.loginbtn:hover{background:#2c3950;}
+.userlogin li em{display:block; float:left; margin-right:8px;}
+.userlogin li b{font-size:12px; color:#415372; display:block; float:left; height:20px; line-height:20px;}
+.loginfooter{color:#a5c1df;font-size:12px; position:absolute; bottom:80px; text-align:center; width:100%;}
+.userlogin>li>cite>.textbox{border-left:0;}
+/*20190318新增*/
