@@ -37,23 +37,24 @@
 	        <div class="loginbox">
 	        
 	        	<div class="loginleft"><h2>Easyui蓝色风格模板</h2></div>
-	            
 	            <div class="loginright">
-	            
 	            	<span class="loginlogo"></span>
-	                
 	                <ul class="userlogin">
-	                <li><p class="loginuser"><i class="iconfont">&#xe602;</i></p><cite><input class="easyui-textbox" value="用户名"  style="width:100%; height:40px;"></cite></li>
-	                <li><p class="loginpassword"><i class="iconfont">&#xe616;</i></p><cite><input class="easyui-textbox" value="密码" style="width:100%; height:40px;"></cite></li>
-	                <li><a  class="loginbtn" href="main.html">登录</a></li>
+	                <li>
+	                	<p class="loginuser"><i class="iconfont">&#xe602;</i></p>
+	                	<cite><input class="easyui-textbox" value="用户名"  style="width:100%; height:40px;"></cite>
+	                </li>
+	                <li>
+	                	<p class="loginpassword"><i class="iconfont">&#xe616;</i></p>
+	                	<cite><input class="easyui-textbox" value="密码" style="width:100%; height:40px;"></cite>
+	                </li>
+	                <li><a  class="loginbtn" href="webdemo/mainframe/mainframe">登录</a></li>
 	                <li><em><input class="easyui-checkbox" name="fruit" value="Apple"></em><b>记住我的信息</b></li>
 	                </ul>
-	                
 	            </div>
 	            
 	        </div>
 	        <!--loginbox end-->
-	        
 	        <div class="loginshadow"></div>  
 	    
 	    </div>
@@ -78,6 +79,7 @@ $(function(){
 $(window).resize(function(e) {
 	$(".loginbg").height($(window).height());    
 }).resize();
+
 //登录方法
 function loginFun(){
 	$("#form-body").submit();

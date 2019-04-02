@@ -1,6 +1,6 @@
 /*login*/
 .login{height:434px;width:758px; margin:auto; position:absolute; left:50%; top:50%; margin:-217px 0 0 -379px;}
-.loginbox{height:406px; background-color:#fff; background-image:url(../images/loginimg.png); background-repeat:no-repeat;}
+.loginbox{height:406px; background-color:#fff; background-image:url(../../images/loginimg.png); background-repeat:no-repeat;}
 .loginshadow{height:28px; background:url(../../images/shadow.png) no-repeat;}
 .loginleft{width:245px; height:65px;background:url(../../images/logintext.png) no-repeat top left;margin-left:55px; margin-top:167px; float:left;}
 .loginleft h2{font-size:18px; color:#fff; font-weight:normal; padding-top:38px;}
