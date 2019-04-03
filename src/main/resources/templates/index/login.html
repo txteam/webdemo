@@ -25,6 +25,9 @@
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/jparticle.jquery.min.js" th:src="@{/webjars/js/jparticle.jquery.min.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+
+<style type="text/css">
+</style>
 </head>
 
 <body style="background:#0a73bc; overflow:hidden;">
@@ -32,7 +35,8 @@
 	<div class="loginbg">
 	    <!--login start-->
 		<div class="login">
-	    
+		
+	    	<form id="loginform" name="loginform" method="post">
 	    	<!--loginbox start-->
 	        <div class="loginbox">
 	        
@@ -42,19 +46,21 @@
 	                <ul class="userlogin">
 	                <li>
 	                	<p class="loginuser"><i class="iconfont">&#xe602;</i></p>
-	                	<cite><input class="easyui-textbox" value="用户名"  style="width:100%; height:40px;"></cite>
+	                	<cite><input name="username" class="easyui-textbox" value="admin"  style="width:100%; height:40px;"></cite>
 	                </li>
 	                <li>
 	                	<p class="loginpassword"><i class="iconfont">&#xe616;</i></p>
-	                	<cite><input class="easyui-textbox" value="密码" style="width:100%; height:40px;"></cite>
+	                	<cite><input name="password" class="easyui-textbox" value="123321qQ" style="width:100%; height:40px;"></cite>
 	                </li>
-	                <li><a  class="loginbtn" href="webdemo/mainframe/mainframe">登录</a></li>
+	                <li><a id="loginbtn" class="loginbtn" href="javascript:void(0);">登录</a></li>
 	                <li><em><input class="easyui-checkbox" name="fruit" value="Apple"></em><b>记住我的信息</b></li>
 	                </ul>
 	            </div>
 	            
 	        </div>
+	        </form>
 	        <!--loginbox end-->
+	        
 	        <div class="loginshadow"></div>  
 	    
 	    </div>
@@ -82,7 +88,7 @@ $(window).resize(function(e) {
 
 //登录方法
 function loginFun(){
-	$("#form-body").submit();
+	$("#loginform").submit();
 }
 //回车事件
 function keyOnClick(e){
@@ -94,7 +100,7 @@ function keyOnClick(e){
 }
 //页面加载完后的逻辑处理
 $(document).ready(function() {
-	var $formBody = $('#form-body');
+	var $formBody = $('#loginform');
     var $errorMessage = $('#errorMessage');
     
     //验证提示信息样式自定义
@@ -115,7 +121,7 @@ $(document).ready(function() {
 	        //	text : '数据提交中，请等待....'
 	        //});
 	        $formBody.ajaxSubmit({
-			    url:/*[[@{/mainframe/login.action}]]*/'',
+			    url:/*[[@{/mainframe/doLogin}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data.result){
@@ -135,8 +141,8 @@ $(document).ready(function() {
     });
     
 	// 登陆按钮单击
-	$("#loginBtn").click(function() {
-		$("#form-body").submit();
+	$("#loginbtn").click(function() {
+		$("#loginform").submit();
 	});
 });
 /*]]>*/
