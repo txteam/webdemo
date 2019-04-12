@@ -71,7 +71,7 @@ public class OperatorUserDetail implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-        boolean isNonExpired = !this.user.isValid();
+        boolean isNonExpired = this.user.isValid();
         return isNonExpired;
     }
     
@@ -88,7 +88,7 @@ public class OperatorUserDetail implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return this.user != null;
+        return this.user != null && this.user.isValid();
     }
     
     /**

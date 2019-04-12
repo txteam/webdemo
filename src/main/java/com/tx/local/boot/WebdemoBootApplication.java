@@ -34,11 +34,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 //@EnableEurekaClient
 //@EnableFeignClients
-@SpringBootApplication(scanBasePackages = { "com.tx.local.app",
-        "com.tx.component.mainframe", "com.tx.component.operator",
-        "com.tx.local.security", "com.tx.local.springmvc" })
-@EntityScan(basePackages = { "com.tx.local.app" })
-@EnableJpaRepositories(basePackages = { "com.tx.local.app" })
+@SpringBootApplication(scanBasePackages = { "com.tx.component.mainframe",
+        "com.tx.component.operator", "com.tx.local.security",
+        "com.tx.local.springmvc" })
+@EntityScan(basePackages = { "com.tx.local.demo" })
+@EnableJpaRepositories(basePackages = { "com.tx.local.demo" })
 @EnableSwagger2
 public class WebdemoBootApplication {
     

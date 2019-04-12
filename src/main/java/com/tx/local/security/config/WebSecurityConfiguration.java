@@ -8,13 +8,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -256,7 +263,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             
             response.setContentType("application/json;charset=utf-8");
             PrintWriter out = response.getWriter();
-            out.write("{\"status\":\"ok\",\"msg\":\"登录成功\"}");
+            out.write(
+                    "{\"status\":\"success\",\"msg\":\"登录成功\",\"data\":\"mainframe/mainframe\"}");
             out.flush();
             out.close();
         }
@@ -271,11 +279,56 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 throws IOException, ServletException {
             logger.warn("登录失败：" + exception.getMessage());
             
+            String errorMessage = loginErrorMessage(exception);
+            
             response.setContentType("application/json;charset=utf-8");
             PrintWriter out = response.getWriter();
-            out.write("{\"status\":\"error\",\"msg\":\"用户名或密码错误\"}");
+            out.write(
+                    "{\"status\":\"error\",\"msg\":\"" + errorMessage + "\"}");
             out.flush();
             out.close();
         }
     };
+    
+    /**
+     * 解析登录异常信息<br/>
+     * <功能详细描述>
+     * @param exception
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static String loginErrorMessage(AuthenticationException exception) {
+        String errorMessage = "用户名或密码错误.";
+        if (exception == null) {
+            errorMessage = "系统内部错误，请联系管理员.";
+            return errorMessage;
+        }
+        Class<? extends AuthenticationException> exceptionClass = exception
+                .getClass();
+        if (ClassUtils.isAssignable(exceptionClass,
+                AccountStatusException.class)) {
+            errorMessage = "用户账户状态异常.";
+            if (ClassUtils.isAssignable(exceptionClass,
+                    AccountExpiredException.class)) {
+                errorMessage = "用户账户已过期.";
+            } else if (ClassUtils.isAssignable(exceptionClass,
+                    LockedException.class)) {
+                errorMessage = "用户账户已锁定.";
+            } else if (ClassUtils.isAssignable(exceptionClass,
+                    DisabledException.class)) {
+                errorMessage = "用户账户已锁定.";
+            } else if (ClassUtils.isAssignable(exceptionClass,
+                    CredentialsExpiredException.class)) {
+                errorMessage = "用户授权已过期，请重新登录.";
+            }
+        } else if (ClassUtils.isAssignable(exceptionClass,
+                AuthenticationCredentialsNotFoundException.class)) {
+            errorMessage = "用户授权不存在，非法授权或已过期授权，请重新登录.";
+        }
+        
+        return errorMessage;
+    }
 }

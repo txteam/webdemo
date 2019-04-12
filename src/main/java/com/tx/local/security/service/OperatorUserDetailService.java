@@ -51,8 +51,10 @@ public class OperatorUserDetailService implements UserDetailsService {
         Operator user = new Operator();
         user.setLoginName("admin");
         //System.out.println((new Md5PasswordEncoder()).encodePassword("123456", ""));
-        user.setPassword("e10adc3949ba59abbe56e057f20f883e");
+        user.setPassword("E10ADC3949BA59ABBE56E057F20F883E");
         user.setId("1");
+        user.setValid(true);
+        user.setLocked(false);
         
         Collection<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_OPERATOR_ADMIN"));//用户所拥有的角色信息

@@ -8,13 +8,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
 <!-- css -->
-<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/themes/uimaker/easyui.css" th:href="@{/webjars/themes/uimaker/easyui.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+<link rel="stylesheet" type="text/css" href="../../css/uimaker.css" th:href="@{/css/uimaker.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui-extension/icons.css" th:href="@{/webjars/js/jquery-easyui-extension/icons.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/style/extEasyUIIcon.css" th:href="@{/webjars/style/extEasyUIIcon.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+
 <!-- jquery -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
 <!-- jqueryui -->
@@ -22,7 +25,6 @@
 <!-- easyui -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/plugins/jquery.layout.js" th:src="@{/webjars/js/jquery-easyui/plugins/jquery.layout.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/extEasyUI.js" th:src="@{/webjars/js/extEasyUI.js}"></script>
 <!-- other -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/extEasyUI.js}"></script>
@@ -30,139 +32,228 @@
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/extEasyUI.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/extEasyUI.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+
 <!-- customize -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui-datagridview/datagrid-groupview.js" th:src="@{/webjars/js/jquery-easyui-datagridview/datagrid-groupview.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 var _contextPath = /*[[@{/}]]*/'';
 /*]]>*/
 </script>
+
+<!-- script type="text/javascript" charset="utf-8" src="../../mainframe/mainframe.js" th:src="@{/mainframe/mainframe.js}"></script  -->
 </head>
-
-<link rel="stylesheet" type="text/css" href="../../webjars/themes/black/css/base.css" th:href="@{/webjars/themes/black/css/base.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/themes/black/css/platform.css" th:href="@{/webjars/themes/black/css/platform.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/uimaker/easyui.css" th:href="@{/webjars/uimaker/easyui.css}"/>
-<script type="text/javascript" charset="utf-8" src="../../mainframe/mainframe.js" th:src="@{/mainframe/mainframe.js}"></script>
-
 <body>
-<div class="container">
-	<div id="pf-hd">
-		<div class="pf-logo">
-			<img alt="logo" src="../../webjars/images/main/main_logo.png" th:src="@{/webjars/images/main/main_logo.png}"/>
-		</div>
-		<div class="pf-nav-wrap">
-			<!--<div class="pf-nav-ww">-->
-			<div class="pf-nav-ww">
-				<ul class="pf-nav"></ul>
-			</div>
-			<!--</div>-->
-			<a href="javascript:;" class="pf-nav-prev disabled iconfont">&#xe606;</a>
-			<a href="javascript:;" class="pf-nav-next iconfont">&#xe607;</a>
-		</div>
-		<div class="pf-user">
-			<div class="pf-user-photo">
-				<img alt="" src="../../webjars/images/main/user.png" th:src="@{/webjars/images/main/user.png}"/>
-			</div>
-			<h4 class="pf-user-name ellipsis">${operator.loginName }</h4>
-			<i class="iconfont xiala">&#xe607;</i>
-			<div class="pf-user-panel">
-				<ul class="pf-user-opt">
+	<div data-options="region:'north',border:false" class="header">
+    	<div class="logo"><img src="images/logo.png"></div>
+        <ul class="nav">
+	        <li><a href="#"><i class="iconfont">&#xe617;</i>项目</a></li>
+	        <li><a href="mobile/index.html" class="selected"><i class="iconfont">&#xe681;</i>手机</a></li>
+	        <li><a href="#"><i class="iconfont">&#xe78e;</i>统计</a></li>
+	        <li><a href="#"><i class="iconfont">&#xe605;</i>设置</a></li>
+	        <li><a href="#"><i class="iconfont">&#xe61b;</i>更新</a></li>
+        </ul>
+        
+        <div class="topright">
+            <ul class="toptool">
+            <li><a href="#"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
+            <li><a href="#"><i class="iconfont">&#xe60c;</i></a><em class="gcolor">5</em></li>
+            <li><a href="#"><i class="iconfont">&#xe61a;</i></a></li>
+            <li><span class="userface"><i class="iconfont">&#xe60d;</i></span><a href="#"><font>Admin&nbsp;&nbsp;<i class="iconfont userdown">&#xe618;</i></font></a></li>
+            </ul>
+        </div>
+    </div>
+    
+	<div data-options="region:'west',split:true,border:false,title:'管理菜单',iconCls:'icon-yingyong-copy'" class="left">
+    	<div class="easyui-accordion"  data-options="border:false" style="width:100%; height:750px;">
+			<div title="组件" data-options="iconCls:'icon-Components'" style="overflow:auto;">
+	        	<ul class="easyui-tree">
 					<li>
-						<a href="javascript:;">
-							<i class="iconfont">&#xe60d;</i>
-							<span class="pf-opt-name">用户信息</span>
-						</a>
-					</li>
-					<li class="pf-modify-pwd">
-						<a href="http://www.uimaker.com">
-							<i class="iconfont">&#xe634;</i> 
-							<span class="pf-opt-name">修改密码</span>
-						</a>
-					</li>
-					<li class="pf-logout">
-						<a href="logout.action"> 
-							<i class="iconfont">&#xe60e;</i> 
-							<span class="pf-opt-name">退出</span>
-						</a>
+						<span>Easyui</span>
+						<ul>  
+							<li>
+								<span>基础</span>
+								<ul>
+									<li><a href="#" onclick="addTab('可放置','droppable.html')">可放置</a></li>
+	                                <li><a href="#" onclick="addTab('可拖动','draggable.html')">可拖动</a></li>
+	                                <li><a href="#" onclick="addTab('可调整大小','resizable.html')">可调整大小</a></li>
+	                                <li><a href="#" onclick="addTab('分页','pagination.html')">分页</a></li>
+	                                <li><a href="#" onclick="addTab('搜索框','searchbox.html')">搜索框</a></li>
+	                                <li><a href="#" onclick="addTab('进度条','progressbar.html')">进度条</a></li>
+	                                <li><a href="#" onclick="addTab('提示框','tooltip.html')">提示框</a></li>
+								</ul>
+							</li>
+							<li style=" display:none">
+								<span>布局</span>
+								<ul>
+									<li><a href="#" onclick="addTab('面板','panel.html')">面板</a></li>
+	                                <li><a href="#" onclick="addTab('选项卡','tabs.html')">选项卡</a></li>
+	                                <li><a href="#" onclick="addTab('折叠面板','accordion.html')">折叠面板</a></li>
+	                                <li><a href="#" onclick="addTab('布局','layout.html')">布局</a></li>
+								</ul>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</div>
-		</div>
-	</div>
-	<div id="pf-bd">
-		<div class="pf-sider-wrap"></div>
-		<div id="pf-page">
-			<div id="index_tabs" class="easyui-tabs1" style="width:100%;height:100%;">
-				<div title="主查询" data-options="border:false" style="overflow: hidden;">
-					<iframe src="${contextPath }/masterquery/toMasterQuerier.action" frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
-				</div>
+			<div title="表单" data-options="iconCls:'icon-biaodan'" style=" overflow:auto;">
+	        	<ul class="easyui-tree">
+					<li><a href="#" onclick="addTab('表单','form.html')">表单</a></li>
+	                <li><a href="#" onclick="addTab('验证框','validatebox.html')">验证框</a></li>
+	                <li><a href="#" onclick="addTab('文本框','textbox.html')">文本框</a></li>
+	                <li><a href="#" onclick="addTab('密码框','passwordbox.html')">密码框</a></li>
+	                <li><a href="#" onclick="addTab('格式框','maskedbox.html')">格式框</a></li>
+	                <li><a href="#" onclick="addTab('组合','combo.html')">组合</a></li>
+	                <li><a href="#" onclick="addTab('组合框','combobox.html')">组合框</a></li>
+	                <li><a href="#" onclick="addTab('组合树','combotree.html')">组合树</a></li>
+	                <li><a href="#" onclick="addTab('组合网格','combogrid.html')">组合网格</a></li>
+	                <li><a href="#" onclick="addTab('组合树网格','combotreegrid.html')">组合树网格</a></li>
+	                <li><a href="#" onclick="addTab('标签框','tagbox.html')">标签框</a></li>
+	                <li><a href="#" onclick="addTab('数字框','numberbox.html')">数字框</a></li>
+	                <li><a href="#" onclick="addTab('日期框','datebox.html')">日期框</a></li>
+	                <li><a href="#" onclick="addTab('日期时间框','datetimebox.html')">日期时间框</a></li>
+	                <li><a href="#" onclick="addTab('日期时间微调','datetimespinner.html')">日期时间微调</a></li>
+	                <li><a href="#" onclick="addTab('日历','calendar.html')">日历</a></li>
+	                <li><a href="#" onclick="addTab('数值微调','numberspinner.html')">数值微调</a></li>
+	                <li><a href="#" onclick="addTab('时间微调','timespinner.html')">时间微调</a></li>
+	                <li><a href="#" onclick="addTab('滑块','slider.html')">滑块</a></li>
+	                <li><a href="#" onclick="addTab('文件框','filebox.html')">文件框</a></li>
+	                <li><a href="#" onclick="addTab('复选框','checkbox.html')">复选框</a></li>
+	                <li><a href="#" onclick="addTab('单选框','radiobutton.html')">单选框</a></li>
+				</ul>
+			</div>
+			<div title="常用控件" data-options="iconCls:'icon-zujian-'" style="overflow:auto;">
+	        	<ul class="easyui-tree">
+	            	<li>
+	                    <span>菜单按钮</span>
+	                    <ul>
+	                    <li><a href="#" onclick="addTab('菜单','menu.html')">菜单</a></li>
+	                    <li><a href="#" onclick="addTab('侧边菜单','sidemenu.html')">侧边菜单</a></li>
+	                    <li><a href="#" onclick="addTab('按钮','linkbutton.html')">按钮</a></li>
+	                    <li><a href="#" onclick="addTab('菜单按钮','menubutton.html')">菜单按钮</a></li>
+	                    <li><a href="#" onclick="addTab('分割按钮','splitbutton.html')">分割按钮</a></li>
+	                    <li><a href="#" onclick="addTab('开关按钮','switchbutton.html')">开关按钮</a></li>
+	                    </ul>
+	                </li>
+	                <li>
+	                    <span>窗口</span>
+	                    <ul>
+	                    <li><a href="#" onclick="addTab('窗口','window.html')">窗口</a></li>
+	                    <li><a href="#" onclick="addTab('对话框','dialog.html')">对话框</a></li>
+	                    <li><a href="#" onclick="addTab('消息提示','messager.html')">消息提示</a></li>
+	                    </ul>	
+	                </li>                
+				</ul>		
+			</div>
+	        <div title="网格和树" data-options="iconCls:'icon-zujian-shu'" style="overflow:auto;">
+	        	<ul class="easyui-tree">
+					<li><a href="#" onclick="addTab('数据网格','datagrid.html')">数据网格</a></li>
+	                <li><a href="#" onclick="addTab('数据列表','datalist.html')">数据列表</a></li>
+	                <li><a href="#" onclick="addTab('属性网格','propertygrid.html')">属性网格</a></li>
+	                <li><a href="#" onclick="addTab('树','tree.html')">树</a></li>
+	                <li><a href="#" onclick="addTab('树形网格','treegrid.html')">树形网格</a></li>
+				</ul>		
+			</div>
+	        <div title="应用" data-options="iconCls:'icon-bianji'" style="overflow:auto;">
+	        	<ul class="easyui-tree">
+	                <li><a href="#" onclick="addTab('图标','icon.html')">图标</a></li>
+	                <li><a href="#" onclick="addTab('404页','404.html')">404页</a></li>
+				</ul>		
 			</div>
 		</div>
+    
+    </div>
+    
+	<div data-options="region:'south',border:false"  class="footer">
+    	<span class="fleft"><i class="iconfont">&#xe622;</i>easyui蓝色风格模板</span>
+        <span class="fright">uimaker版权所有<i class="iconfont">&#xe620;</i></span>
+    </div>
+   
+	<div data-options="region:'center',border:false" class="center">
+    
+    	<div id="index_tabs">
+			<div title="首页"><iframe src="default.html" id="iframe" name="right" width="100%" height="100%" frameborder="0" scrolling="auto"></iframe></div>
+       	</div>    
 	</div>
-	<div id="pf-ft">
-		<div class="system-name">
-			<i class="iconfont">&#xe6fe;</i> 
-			<span>信息管理系统&nbsp;v1.0</span>
-		</div>
-		<div class="copyright-name">
-			<span>CopyRight&nbsp;2017&nbsp;&nbsp;txteam.com&nbsp;版权所有</span> <i
-				class="iconfont">&#xe6ff;</i>
-		</div>
-	</div>
-</div>
 <div id="mm" class="easyui-menu tabs-menu" style="width:120px;">
      <div id="mm-tabclose">关闭</div>
      <div id="mm-tabcloseall">关闭所有</div>
      <div id="mm-tabcloseother">关闭其他</div> 
 </div>
-</body> 
+    
+</body>
+
 </html>
 
 <script type="text/javascript" th:inline="javascript">
-/*<![CDATA[*/
-$(window).resize(function(){
-	$('.tabs-panels').height($("#pf-page").height()-46);
-	$('.panel-body').height($("#pf-page").height()-76)
-}).resize();
-var page = 0,
-    pages = ($('.pf-nav').height() / 70) - 1;
-if(pages === 0){
-  $('.pf-nav-prev,.pf-nav-next').hide();
-}
-
-//退出系统
-function logoutFun(){
-	DialogUtils.confirm("","是否确认退出系统",function(flag){
-		if(flag){
-			window.location.href = _contextPath + "/mainframe/logout.action";
-		}
-	});
-}
-$.bindge("logout",logoutFun);
-
-//修改密码
-function modifyPasswordFun(){
-	DialogUtils.openModalDialog(
-			"modifyPassword",
-			"修改密码",
-			$.formatString("${contextPath}/operator/toModifyPassword.action"),
-			450,150,function(){
-		});
-}
-$.bindge("modifyPassword",modifyPasswordFun);
-
-//加载菜单
-$(document).ready(function(){
-	/*
-	$.post("${contextPath}/menu/queryTreeListByAuth.action",function(menus){
-		var menu = new tx.Menu({
-			menus:menus
-	    });
-	});
-	*/
+var $container = $('body');
+$container.layout({
+	fit : true
 });
-/*]]>*/
+
+var $indexTabs = $('#index_tabs');
+var euiIndexTabs = null;
+var $indexTabsMenu = $('#index_tabsMenu');
+
+/**
+ * 初始化页面tabs 
+ */
+euiIndexTabs = $indexTabs.tabs({
+    fit : true,
+    border : false,
+    //tabHeight: 44,
+    onBeforeClose: function(title,index){
+    	$.triggerge('mainframe_tab_before_close',[{title:title,index:index}]);
+    },
+    onSelect:function(title){
+		var selectedTab = $indexTabs.tabs('getTab',title);
+		var $iframe = $(selectedTab).find("iframe.mainframeTab");
+		if($iframe.attr('refreshWhenSelect') && $iframe.attr('refreshWhenSelect') === 'true'){
+			$iframe.attr('src',$iframe.attr('newSrc'));
+		}
+	},
+    onContextMenu : function(e, title) {
+        e.preventDefault();
+    	if($(e.target).closest('li').size() > 0 || $(e.target).is('li')){
+    		$('#mm').menu('show', {
+	             left: e.pageX,
+	             top: e.pageY,
+	         });
+    		var subtitle = $(e.target).closest('li').size() ? $(e.target).closest('li') : $(e.target);
+    		$('#mm').data("currtab",subtitle.text());
+    	}
+    }
+});
+//关闭当前
+$('#mm-tabclose').click(function(){
+    var currtab_title = $('#mm').data("currtab");
+    var t = $(".easyui-tabs1:visible").tabs('getTab', currtab_title);
+    if (t.panel('options').closable) {
+    	$(".easyui-tabs1:visible").tabs('close',currtab_title);
+    }
+});
+//全部关闭
+$('#mm-tabcloseall').click(function(){
+    $(".easyui-tabs1:visible").find('.tabs li').each(function(i,n){
+    	var currtab_title = $(n).text();
+    	var t = $(".easyui-tabs1:visible").tabs('getTab', currtab_title);
+        if (t.panel('options').closable) {
+        	$(".easyui-tabs1:visible").tabs('close',currtab_title);
+        }
+    });    
+});
+//关闭除当前之外的TAB
+$('#mm-tabcloseother').click(function(){
+    var currtab_title = $('#mm').data("currtab");
+    $(".easyui-tabs1:visible").find('.tabs li').each(function(i,n){
+    	var tab_title_temp = $(n).text();
+    	var t = $(".easyui-tabs1:visible").tabs('getTab', tab_title_temp);
+        if (tab_title_temp != currtab_title && t.panel('options').closable) {
+        	$(".easyui-tabs1:visible").tabs('close',tab_title_temp);
+        }
+    }); 
+    $(".easyui-tabs1:visible").tabs('select', currtab_title);
+});
 </script>
