@@ -1,7 +1,7 @@
 /**
- * EasyUI for jQuery 1.5.3
+ * EasyUI for jQuery 1.7.6
  * 
- * Copyright (c) 2009-2017 www.jeasyui.com. All rights reserved.
+ * Copyright (c) 2009-2019 www.jeasyui.com. All rights reserved.
  *
  * Licensed under the freeware license: http://www.jeasyui.com/license_freeware.php
  * To use it on other terms please contact us: info@jeasyui.com
@@ -43,7 +43,7 @@ function _7(){
 $(document).unbind(".messager");
 };
 function _8(_9){
-var _a=$.extend({},$.messager.defaults,{modal:false,shadow:false,draggable:false,resizable:false,closed:true,style:{left:"",top:"",right:0,zIndex:$.fn.window.defaults.zIndex++,bottom:-document.body.scrollTop-document.documentElement.scrollTop},title:"",width:250,height:100,minHeight:0,showType:"slide",showSpeed:600,content:_9.msg,timeout:4000},_9);
+var _a=$.extend({},$.messager.defaults,{modal:false,shadow:false,draggable:false,resizable:false,closed:true,style:{left:"",top:"",right:0,zIndex:$.fn.window.defaults.zIndex++,bottom:-document.body.scrollTop-document.documentElement.scrollTop},title:"",width:300,height:150,minHeight:0,showType:"slide",showSpeed:600,content:_9.msg,timeout:4000},_9);
 var _b=$("<div class=\"messager-body\"></div>").appendTo("body");
 _b.dialog($.extend({},_a,{noheader:(_a.title?false:true),openAnimation:(_a.showType),closeAnimation:(_a.showType=="show"?"hide":_a.showType),openDuration:_a.showSpeed,closeDuration:_a.showSpeed,onOpen:function(){
 _b.dialog("dialog").hover(function(){
