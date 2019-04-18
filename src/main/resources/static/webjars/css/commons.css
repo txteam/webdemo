@@ -3,7 +3,6 @@
 frameset {border:0;margin:0;padding:0;border-style: none;z-index: 0;}
 frame {border:0;margin:0;padding:0;border-style: none;z-index: 0;}
 iframe {border:0;margin:0;padding:0;border-style: none;z-index: 0;position: relative;/*overflow: hidden;*/}
-
 /* 定义通用页面样式  */
 * {
 	border:0;margin:0;padding:0;
@@ -18,12 +17,7 @@ iframe {border:0;margin:0;padding:0;border-style: none;z-index: 0;position: rela
 	scrollbar-darkshadow-color:#C0C0C0; /*右一*/  
 	scrollbar-track-color:#151a24; /*滑道*/ 
 }
-/*
-html{overflow-x:hidden;}
-body{margin:0 auto;min-width:980px;font-family:"Microsoft YaHei","iconfont"!important}
-*/
 
-.body {overflow-y: auto;}
 ul{display:block;margin:0;padding:0;list-style:none;}
 li{display:block;margin:0;padding:0;list-style: none;}
 img {border: none;}
@@ -31,63 +25,13 @@ dl,dt,dd{margin:0;padding:0;display:block;}
 a{text-decoration:none;color:#fff;outline:none;blr:expression(this.onFocus=this.blur());}
 a:focus{text-decoration:none;outline:none;}
 a:hover{text-decoration:none;}
-/*a {color: #000;text-decoration: none;}*/
 table{border-collapse:collapse;border-spacing: 0;}
-
-/*iconfont*/
-@font-face {
-	font-family: "iconfont";
-    src: url('../font/iconfont.eot'); /* IE9*/
-    src: url('../font/iconfont.eot#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('../font/iconfont.woff') format('woff'), /* chrome, firefox */
-    url('../font/iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-    url('../font/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
-}
-.iconfont {
-	font-size:16px;
-	font-family:"iconfont" !important;
-    font-style:normal;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-stroke-width: 0.2px;
-    -moz-osx-font-smoothing: grayscale;	
-}
 
 /*scrollbar*/
 ::-webkit-scrollbar-track-piece {background-color:#fff;-webkit-border-radius:0}
 ::-webkit-scrollbar {width:9px;height:9px}
 ::-webkit-scrollbar-thumb {height:50px;background-color:#e3e6e8;-webkit-border-radius:6px;outline:2px solid #fff;outline-offset:-2px;border:2px solid #fff;filter:alpha(opacity=50);-moz-opacity:0.5;-khtml-opacity:0.5;opacity:0.5}
 ::-webkit-scrollbar-thumb:hover {height:50px;background-color:#0076c8;-webkit-border-radius:6px}
-
-
-
-/* main */
-.header{background:#0076c8;height:50px; overflow:hidden;}
-.left{width:200px;background:#fff; overflow:hidden;}
-.footer{height:26px;background:#e3e6e8;color:#525e75;overflow:hidden;}
-.center{background:#191f2a;}
-.logo{padding-left:20px; margin-top:10px; float:left; width:179px;}
-.nav li{float:left;}
-.nav li a{display:block; height:48px; line-height:48px; background:#0076c8;padding:0 15px; color:#fff; border-left:solid 1px #0165ab;border-top:solid 2px #0076c8;}
-.nav li a i{color:#fff; padding-right:8px;font-size:24px; display:block; float:left; height:48px; line-height:48px;}
-.nav li a.selected,.nav li a:hover{background:#005d9e;color:#fff;border-left:solid 1px #0165ab;border-top:solid 2px #fff;}
-.nav li a.selected i,.nav li a:hover i{color:#fff;}
-.topright{float:right}
-.toptool li {float:left; color:#536383;line-height:50px; padding:0 10px; position:relative;}
-.toptool li a i{font-size:20px;}
-.toptool li a{color:#fff;}
-.toptool li a:hover{color:#0594f7;}
-.toptool li em{display:block;font-size:9px; font-family: "arial"; color:#fff; background:#d63737; height:12px; line-height:12px; position:absolute; z-index:100; top:13px; right:6px; padding:0 2px; border-radius:2px; font-style:normal;}
-.toptool li em.gcolor{background:#0da827;}
-.userface{display:block;width:25px; height:25px; line-height:25px; background:url(../images/userbg.png) no-repeat; margin-top:13px;font-size:14px; color:#0397fe; text-align:center; float:left;}
-.userface i{font-size:12px;}
-.userdown{font-size:10px;}
-.toptool li font{font-size:14px; display:block; float:left; padding:0 8px;}
-.toptool li a i.userdown{-webkit-transform-origin-x: 0;-webkit-transform: scale(0.60);font-size:14px;}
-.fleft,.fright{display:block; float:left; height:26px; line-height:26px; color:#415372;font-size:12px;}
-.fright{float:right;}
-.fleft>.iconfont{padding:0 5px; font-size:12px;}
-.fright>.iconfont{float:right; margin-top:2px;}
-#tt .tabs-panels>.panel>.panel-body{overflow:hidden;}
 
 /*default*/
 .toollist{overflow:hidden;padding-top:8px; padding-left:8px;}
