@@ -49,7 +49,6 @@
  */
 $.fn.panel.defaults.loadingMessage = '加载中....';
 $.fn.datagrid.defaults.loadMsg = '加载中....';
-
 //$.fn.numberbox.defaults.doSize = false;
 
 /**

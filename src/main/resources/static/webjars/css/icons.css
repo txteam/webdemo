@@ -18,6 +18,7 @@
 
 .logo {background: url('../../images/logo.jpg') no-repeat;}
 
+.icon-down-arrow:before { content: "&#xe6a7;"; }
 .icon-sousuo:before { content: "\e600"; }
 .icon-suo:before { content: "\e616"; }
 .icon-22:before { content: "\e60c"; }

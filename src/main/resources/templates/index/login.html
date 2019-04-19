@@ -12,7 +12,7 @@
 <link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/themes/uimaker/easyui.css" th:href="@{/webjars/themes/uimaker/easyui.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/css/icon.css" th:href="@{/webjars/css/icon.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
 <link rel="stylesheet" type="text/css" href="../../css/login.css" th:href="@{/css/login.css}"/>
 
 <!-- jquery -->
@@ -48,6 +48,7 @@ $(document).ready(function() {
 		shadow: false,
 		noheader: true
     });
+    $dialog.dialog('center');
     
     var resizeTimer = null;
     $(window).resize(function() {
@@ -72,12 +73,6 @@ $(document).ready(function() {
     /*QRcode角标翻页 end*/
 });
 	
-//登录方法
-function loginFun(){
-	
-	
-	$("#loginform").submit();
-}
 //回车事件
 function keyOnClick(e){
     var theEvent = window.event || e;
@@ -86,20 +81,28 @@ function keyOnClick(e){
     	loginFun();  //调用登录方法
     }
 }
+//登录方法
+function loginFun(){
+	$("#loginform").submit();
+}
 //页面加载完后的逻辑处理
 $(document).ready(function() {
 	var $formBody = $('#loginform');
     var $errorMessage = $('#error-message');
     
     function showErrorMessage(message){
-    	//$errorMessage.find("span").html(message);
-    	//$errorMessage.show();
-        //* icon:warning显示icon图片,可用值有: error,question,info,warning.
-    	DialogUtils.alert("登陆失败",message,"error");
+    	var msgHtml = "<b></b>" + message;
+    	$errorMessage.html(msgHtml);
+    	$errorMessage.show();
+    	//DialogUtils.alert("登陆失败",message,"error");
     }
+    //隐藏错误信息
     function hideErrorMessage(){
-    	//$errorMessage.hide();
+    	$errorMessage.hide();
     }
+  	
+    
+    
     //验证提示信息样式自定义
     $formBody.validator({
         stopOnError: false, //关闭此开关，以便一次性显示所有消息
@@ -150,7 +153,7 @@ $(document).ready(function() {
 <!--loginbg start-->
 <div class="loginbg">
     <!--login start-->
-	<div class="login">
+	<div class="login" style="display: none;">
     	<!--loginbox start-->
         <div class="loginbox">
         	<form id="loginform" name="loginform" method="post">
@@ -167,7 +170,7 @@ $(document).ready(function() {
 			            	<span class="loginlogo"></span>
 			            	
 			            	<div class="message-wrap">
-			            		<div class="error-message" style="display:none"><b></b>测试错误信息.asdfasdf测sdfasdf测试错误信息.测试错误信息.测试错误信息.测试错误信息.测</div>
+			            		<div class="error-message" style="display: none;"><b></b></div>
 			            	</div>
 			            	
 			                <ul class="userlogin">
