@@ -12,7 +12,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.tx.component.operator.model.Operator;
+import com.tx.local.operator.model.Operator;
 
 /**
  * 基础用户详情<br/>

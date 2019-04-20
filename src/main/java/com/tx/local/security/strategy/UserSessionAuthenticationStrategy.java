@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.stereotype.Component;
 
-import com.tx.component.operator.model.Operator;
+import com.tx.local.operator.model.Operator;
 import com.tx.local.security.SecurityConstants;
 import com.tx.local.security.model.OperatorUserDetail;
 

@@ -161,12 +161,13 @@ $(document).ready(function(){
 <div id="index_layout">
 	<div id="pf-hd" data-options="region:'north',border:false" class="header">
 		<div class="logo"><img src="../../images/logo.png" th:src="@{/images/logo.png}"></div>
+		
         <ul class="nav">
-	        <li><a href="#"><i class="iconfont">&#xe617;</i>项目</a></li>
-	        <li><a href="mobile/index.html" class="selected"><i class="iconfont">&#xe681;</i>手机</a></li>
-	        <li><a href="#"><i class="iconfont">&#xe78e;</i>统计</a></li>
-	        <li><a href="#"><i class="iconfont">&#xe605;</i>设置</a></li>
-	        <li><a href="#"><i class="iconfont">&#xe61b;</i>更新</a></li>
+        	<li><a href="javascript:void(0);"><i class="iconfont">&#xe617;</i>工作台</a></li>
+	        <li><a href="javascript:void(0);"><i class="iconfont">&#xe60e;</i>范例</a></li>
+	        <li><a href="javascript:void(0);"><i class="iconfont">&#xe78e;</i>报表</a></li>
+	        <li><a href="javascript:void(0);"><i class="iconfont">&#xe613;</i>日志</a></li>
+	        <li><a href="javascript:void(0);"><i class="iconfont">&#xe605;</i>配置</a></li>
         </ul>
         
         <div class="topright">
@@ -179,7 +180,7 @@ $(document).ready(function(){
         </div>
 	</div>
 	
-	<div data-options="region:'west',split:true,border:false,title:'管理菜单',iconCls:'icon-yingyong-copy'" class="left">
+	<div data-options="region:'west',split:true,border:false,title:'菜单',iconCls:'icon-yingyong-copy'" class="left">
     	<div class="easyui-accordion"  data-options="border:false" style="width:100%; height:750px;">
 			<div title="组件" data-options="iconCls:'icon-Components'" style="overflow:auto;">
 	        	<ul class="easyui-tree">
@@ -282,7 +283,7 @@ $(document).ready(function(){
 	<div data-options="region:'center',border:false" class="center">
     	<div id="index_tabs">
 			<div title="首页">
-				<iframe src="default.html" id="iframe" name="right" width="100%" height="98%" frameborder="0" scrolling="auto"></iframe>
+				<iframe src="default.html" th:src="@{/workbench/}" id="iframe" name="right" width="100%" height="98%" frameborder="0" scrolling="auto"></iframe>
 			</div>
        	</div>    
 	</div>

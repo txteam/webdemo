@@ -213,6 +213,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated();//其他请求需要鉴权
         
+        //http.authorizeRequests().antMatchers("")
+        //.hasIpAddress(ipaddressExpression)
+        //.hasRole(role)
+        //.hasAuthority(authority)
+        //hasAnyRole(roles)
+        //.hasAnyAuthority(authorities)
+        
         //login配置
         //http.formLogin().disable();
         http.formLogin()

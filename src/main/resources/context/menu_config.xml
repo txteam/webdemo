@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu_config>
+
+	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示 -->
+	<catalog id="nav_catalog">
+		<menu id="workbench_nav_menu" text="工作台" icon="&#xe617;" link="workbench_catalog"/>
+		<menu id="example_nav_menu" text="范例" icon="&#xe60e;" auth="example_menu_authentication" />
+		<menu id="report_nav_menu" text="报表" icon="&#xe78e;" />
+		<menu id="log_nav_menu" text="日志" icon="&#xe613;" />
+		<menu id="config_nav_menu" text="配置" icon="&#xe605;" auth="config_menu_authentication" />
+	</catalog>
+	
+	<catalog id="workbench_catalog" auth="config_menu_authentication">
+		<!-- 控制面板 -->
+		<menu id="control_panel_menu" text="控制面板">
+			<menu id="personal_center_menu" text="个人中心">
+				<menu id="calandar_menu" text="行事历"></menu>
+				<menu id="notepad_menu" text="记事本"></menu>
+				<menu id="modify_password_menu" text="修改密码"></menu>
+				<menu id="modify_myself_info_menu" text="修改个人信息"></menu>
+				<menu id="my_post_menu" text="我的职位"></menu>
+				<menu id="my_auth_menu" text="我的权限"></menu>
+			</menu>
+			<menu id="logout_center_menu" text="注销">
+				<menu id="lock_window_menu" text="锁定窗口" target="triggerGlobalEvent" eventType="logout"></menu>
+				<menu id="re_login_menu" text="重新登录" target="triggerGlobalEvent" eventType="logout"></menu>
+				<menu id="logout_menu" text="退出系统" target="triggerGlobalEvent" eventType="logout"></menu>
+			</menu>
+		</menu>
+	</catalog>
+
+	<catalog id="config_catalog" auth="config_menu_authentication">
+		<!-- 控制面板 -->
+		<menu id="control_panel_menu" text="控制面板">
+			<menu id="personal_center_menu" text="个人中心">
+				<menu id="calandar_menu" text="行事历"></menu>
+				<menu id="notepad_menu" text="记事本"></menu>
+				<menu id="modify_password_menu" text="修改密码"></menu>
+				<menu id="modify_myself_info_menu" text="修改个人信息"></menu>
+				<menu id="my_post_menu" text="我的职位"></menu>
+				<menu id="my_auth_menu" text="我的权限"></menu>
+			</menu>
+			<menu id="logout_center_menu" text="注销">
+				<menu id="lock_window_menu" text="锁定窗口" target="triggerGlobalEvent" eventType="logout"></menu>
+				<menu id="re_login_menu" text="重新登录" target="triggerGlobalEvent" eventType="logout"></menu>
+				<menu id="logout_menu" text="退出系统" target="triggerGlobalEvent" eventType="logout"></menu>
+			</menu>
+		</menu>
+	</catalog>
+
+	<catalog id="example_catalog">
+		<menu id="coding_helper_menu" text="编码帮助">
+			<menu id="coding_standard_menu" text="编码规范">
+				<menu id="java_coding_standard_menu" text="java编码规范" href="/standard/java" />
+				<menu id="database_coding_standard_menu" text="数据库编码规范" href="/standard/database" />
+				<menu id="page_coding_standard_menu" text="页面编码规范" href="/standard/page" />
+				<menu id="naming_standard_menu" text="命名规范" href="/standard/naming" />
+			</menu>
+			<menu id="coding_api_menu" text="编码API">
+				<menu id="web_validate_example_menu" text="验证功能" href="http://niceue.com/validator/#plugin_usage" target="mainTabs"/>
+				<menu id="my97_date_menu" text="日期控件" href="http://www.my97.net/dp/demo/index.htm" target="mainTabs"/>
+			</menu>
+			<menu id="coding_reference_menu" text="编码参考">
+				<menu id="menu_helper_menu" text="置配菜单" href="/helper/menuConfigHelper" target="mainTabs"/>
+				<menu id="auth_helper_menu" text="配置权限" href="/helper/authConfigHelper" target="mainTabs"/>
+				<menu id="basicdata_helper_menu" text="基础数据" href="/helper/basicdataHelper" target="mainTabs"/>
+				<menu id="servicelog_helper_menu" text="业务日志" href="/helper/serviceLogHelper" target="mainTabs"/>
+			</menu>
+		</menu>
+		<menu id="exp_main_menu" text="主页">
+			<menu id="exp_main1_menu" text="主页一" href="/example/main/main1" />
+			<menu id="exp_main2_menu" text="主页二" href="/example/main/main2" />
+			<menu id="exp_main3_menu" text="主页三" href="/example/main/main3" />
+			<menu id="exp_main4_menu" text="主页四" href="/example/main/main4" />
+		</menu>
+		<menu id="exp_component_menu" text="组件">
+			<menu id="exp_comp_static_grid_menu" text="静态表格" href="/example/component/grid/static" />
+			<menu id="exp_comp_data_grid_menu" text="数据表格">
+				<menu id="exp_comp_simple_data_grid_menu" text="简单表格" href="/example/component/grid/data/simple" />
+			</menu>
+		</menu>
+		<menu id="exp_config_menu" text="设置">
+			<menu id="exp_system_config_menu" text="系统设置">
+				<menu id="menu_test_loanbillupload" text="单据附件导入" href="" />
+			</menu>
+		</menu>
+	</catalog>
+
+</menu_config>
