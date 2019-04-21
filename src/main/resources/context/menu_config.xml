@@ -4,10 +4,10 @@
 	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示 -->
 	<catalog id="nav_catalog">
 		<menu id="workbench_nav_menu" text="工作台" icon="&#xe617;" link="workbench_catalog"/>
-		<menu id="example_nav_menu" text="范例" icon="&#xe60e;" auth="example_menu_authentication" />
+		<menu id="example_nav_menu" text="范例" icon="&#xe60e;" link="example_catalog" roles="super_admin"/>
 		<menu id="report_nav_menu" text="报表" icon="&#xe78e;" />
 		<menu id="log_nav_menu" text="日志" icon="&#xe613;" />
-		<menu id="config_nav_menu" text="配置" icon="&#xe605;" auth="config_menu_authentication" />
+		<menu id="config_nav_menu" text="配置" icon="&#xe605;" authorities="config_menu_auth" />
 	</catalog>
 	
 	<catalog id="workbench_catalog" auth="config_menu_authentication">
@@ -48,7 +48,7 @@
 		</menu>
 	</catalog>
 
-	<catalog id="example_catalog">
+	<catalog id="example_catalog" roles="super_admin">
 		<menu id="coding_helper_menu" text="编码帮助">
 			<menu id="coding_standard_menu" text="编码规范">
 				<menu id="java_coding_standard_menu" text="java编码规范" href="/standard/java" />
