@@ -40,7 +40,8 @@ public class MenuCatalogConfig {
     private String type;
     
     /** 菜单对应权限 */
-    @XStreamConverter(MenuCatalogConfigAttributesMapConverter.class)
+    @XStreamAsAttribute
+    @XStreamConverter(value = MenuCatalogAttributesMapConverter.class)
     private Map<String, String> attributes;
     
     /** 菜单对应权限 */
@@ -94,14 +95,14 @@ public class MenuCatalogConfig {
     public String getType() {
         return type;
     }
-
+    
     /**
      * @param 对type进行赋值
      */
     public void setType(String type) {
         this.type = type;
     }
-
+    
     /**
      * @return 返回 attributes
      */
@@ -122,28 +123,28 @@ public class MenuCatalogConfig {
     public String getAuthorities() {
         return authorities;
     }
-
+    
     /**
      * @param 对authorities进行赋值
      */
     public void setAuthorities(String authorities) {
         this.authorities = authorities;
     }
-
+    
     /**
      * @return 返回 roles
      */
     public String getRoles() {
         return roles;
     }
-
+    
     /**
      * @param 对roles进行赋值
      */
     public void setRoles(String roles) {
         this.roles = roles;
     }
-
+    
     /**
      * @return 返回 menuList
      */

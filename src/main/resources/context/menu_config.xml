@@ -2,12 +2,12 @@
 <menu_config>
 
 	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示 -->
-	<catalog id="nav_catalog">
+	<catalog id="nav_catalog" type="nav">
 		<menu id="workbench_nav_menu" text="工作台" icon="&#xe617;" link="workbench_catalog"/>
 		<menu id="example_nav_menu" text="范例" icon="&#xe60e;" link="example_catalog" roles="super_admin"/>
-		<menu id="report_nav_menu" text="报表" icon="&#xe78e;" />
-		<menu id="log_nav_menu" text="日志" icon="&#xe613;" />
-		<menu id="config_nav_menu" text="配置" icon="&#xe605;" authorities="config_menu_auth" />
+		<menu id="report_nav_menu" text="报表" icon="&#xe78e;" link="report_catalog"/>
+		<menu id="log_nav_menu" text="日志" icon="&#xe613;" link="log_catalog"/>
+		<menu id="config_nav_menu" text="配置" icon="&#xe605;" link="config_catalog" authorities="config_menu_auth" />
 	</catalog>
 	
 	<catalog id="workbench_catalog" auth="config_menu_authentication">

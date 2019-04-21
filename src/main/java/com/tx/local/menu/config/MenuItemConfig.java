@@ -61,6 +61,7 @@ public class MenuItemConfig {
     private String type;
     
     /** 菜单配置项额外属性 */
+    @XStreamAsAttribute
     @XStreamConverter(MenuItemConfigAttributesMapConverter.class)
     private Map<String, String> attributes;
     

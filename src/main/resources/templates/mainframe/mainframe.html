@@ -6,17 +6,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
 <!-- css -->
+<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/themes/uimaker/easyui.css" th:href="@{/webjars/themes/uimaker/easyui.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
 <link rel="stylesheet" type="text/css" href="../../css/mainframe.css" th:href="@{/css/mainframe.css}"/>
-
-<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
-
 <!-- jquery -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
 <!-- jqueryui -->
@@ -26,14 +22,10 @@
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
 <!-- other -->
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/extEasyUI.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/extEasyUI.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/extEasyUI.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/extEasyUI.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
 <!-- customize -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
@@ -42,119 +34,322 @@ var _contextPath = /*[[@{/}]]*/'';
 </script>
 
 <script type="text/javascript" th:inline="javascript">
+var $mainframe = $("<div/>");
 $(document).ready(function(){
 	var $index_layout = $('#index_layout');
 	$index_layout.layout({
 		fit : true
 	});
-	
 	var $index_tabs = $('#index_tabs');
 	var $index_tabs_menu = $('#index_tabs_menu');
-    var euiIndexTabsMenu = $index_tabs_menu.menu();
-	/**
-	 * 初始化页面tabs 
-	 */
-	var euiIndexTabs = $index_tabs.tabs({
+    var etabsmenu = $index_tabs_menu.menu();
+	/** 初始化页面tabs */
+	var etabs = $index_tabs.tabs({
 	    fit : true,
 	    border : false,
 	    //tabHeight: 44,
-	    onBeforeClose: function(title,index){
+	    onBeforeClose:function(title,index){
         	$.triggerge('mainframe_tab_before_close',[{title:title,index:index}]);
         },
-        onSelect:function(title){
-			var selectedTab = $indexTabs.tabs('getTab',title);
-			var $iframe = $(selectedTab).find("iframe.mainframeTab");
-			if($iframe.attr('refreshWhenSelect') && $iframe.attr('refreshWhenSelect') === 'true'){
-				$iframe.attr('src',$iframe.attr('newSrc'));
+        onSelect:function(title,index){
+			var selectedTab = $index_tabs.tabs('getTab',title);
+			
+			var $iframe = $(selectedTab).find("iframe.mainframe_tab");
+			if($iframe.attr('refresh') && $iframe.attr('refresh') === 'true'){
+				$iframe.attr('src',$iframe.attr('newsrc'));
 			}
 		},
-        onContextMenu : function(e, title) {
+        onContextMenu:function(e,title,index) {
             e.preventDefault();
-            euiIndexTabsMenu.menu('show', {
+            $index_tabs_menu.menu('show', {
                 left : e.pageX,
                 top : e.pageY
-            }).data('tabTitle', title);
-        },
+            });
+        }
+		,tools:'#tabs-tool'
+		/*,
         tools : [{
-            iconCls : 'database_refresh',
+            iconCls : 'transmit',
             handler : function() {
-                var href = euiIndexTabs.tabs('getSelected').panel('options').href;
-                if (href) {
-                    /*说明tab是以href方式引入的目标页面*/
-                    var index = euiIndexTabs.tabs('getTabIndex', euiIndexTabs.tabs('getSelected'));
-                    euiIndexTabs.tabs('getTab', index).panel('refresh');
-                } else {
-                    /*说明tab是以content方式引入的目标页面*/
-                    var panel = euiIndexTabs.tabs('getSelected').panel('panel');
-                    var frame = panel.find('iframe');
-                    try {
-                        if (frame.length > 0) {
-                            for (var i = 0; i < frame.length; i++) {
-                                frame[i].contentWindow.document.write('');
-                                frame[i].contentWindow.close();
-                                frame[i].src = frame[i].src;
-                            }
-                            if (navigator.userAgent.indexOf("MSIE") > 0) {// IE特有回收内存方法
-                                try {
-                                    CollectGarbage();
-                                } catch (e) {
-                                }
-                            }
-                        }
-                    } catch (e) {
-                    }
-                }
+            	refreshSelectedTab();
             }
         }, {
-            iconCls : 'delete',
-            handler : function() {
-                var index = euiIndexTabs.tabs('getTabIndex', euiIndexTabs.tabs('getSelected'));
-                var tab = euiIndexTabs.tabs('getTab', index);
-                if (tab.panel('options').closable) {
-                    euiIndexTabs.tabs('close', index);
-                } else {
-                    $.messager.alert('提示', '[' + tab.panel('options').title + ']不可以被关闭！', 'error');
-                }
+            iconCls : 'cog',
+            handler : function(e) {
+            	e.preventDefault();
+            	//alert($.toJsonString(e));
+            	var x =  e.pageX;//e.pageX _$this.position().bottom;
+            	var y = e.pageY;//_$this.position().right; //e.pageY
+            	etabsmenu.menu('show', {
+                    left : x,
+                    top : y
+                });
             }
         }]
+		*/
 	});
-	
-	
-	
+	function refreshSelectedTab(){
+		var href = etabs.tabs('getSelected').panel('options').href;
+        if (href) {
+            /*说明tab是以href方式引入的目标页面*/
+            var index = etabs.tabs('getTabIndex', etabs.tabs('getSelected'));
+            etabs.tabs('getTab', index).panel('refresh');
+        } else {
+            /*说明tab是以content方式引入的目标页面*/
+            var panel = etabs.tabs('getSelected').panel('panel');
+            var frame = panel.find('iframe');
+            try {
+                if (frame.length > 0) {
+                    for (var i = 0; i < frame.length; i++) {
+                        frame[i].contentWindow.document.write('');
+                        frame[i].contentWindow.close();
+                        frame[i].src = frame[i].src;
+                    }
+                    if (navigator.userAgent.indexOf("MSIE") > 0) {// IE特有回收内存方法
+                        try {CollectGarbage();} catch (e) {}
+                    }
+                }
+            } catch (e) {}
+        }
+	}
+	$('#tabs-tool-menu').click(function(e){
+		e.preventDefault();
+		var _$this = $(this);
+    	//var x = $('#tabs-tool-menu').position().left + _$this.width();
+    	//var y = $('#tabs-tool-menu').position().top - _$this.height();
+    	var x =  e.pageX;
+    	var y = e.pageY;
+    	etabsmenu.menu('show', {
+            left : x,
+            top : y
+        });
+	});
+	$('#tabs-tool-refresh').click(function(){
+		refreshSelectedTab();
+	});
+	$('#refresh').click(function(){
+		refreshSelectedTab();
+	});
 	//关闭当前
-	$('#mm-tabclose').click(function(){
-	    var currtab_title = $('#mm').data("currtab");
-	    var t = $(".easyui-tabs1:visible").tabs('getTab', currtab_title);
-	    if (t.panel('options').closable) {
-	    	$(".easyui-tabs1:visible").tabs('close',currtab_title);
-	    }
+	$('#close_current').click(function(){
+		var selected_index = etabs.tabs('getTabIndex', etabs.tabs('getSelected'));
+        var tab = etabs.tabs('getTab', selected_index);
+        if (tab.panel('options').closable) {
+            etabs.tabs('close', selected_index);
+        } else {
+            //$.messager.alert('提示', '[' + tab.panel('options').title + ']不可以被关闭！', 'error');
+        }
+	});
+	//关闭其他
+	$('#close_other').click(function(){
+		var selected_index = etabs.tabs('getTabIndex', etabs.tabs('getSelected'));
+		$.each(etabs.tabs('tabs'),function(i,tab){
+			var index_temp = etabs.tabs('getTabIndex', tab);
+			if (tab.panel('options').closable && index_temp != selected_index) {
+	            etabs.tabs('close', index_temp);
+	        }
+	    });
 	});
 	//全部关闭
-	$('#mm-tabcloseall').click(function(){
-	    $(".easyui-tabs1:visible").find('.tabs li').each(function(i,n){
-	    	var currtab_title = $(n).text();
-	    	var t = $(".easyui-tabs1:visible").tabs('getTab', currtab_title);
-	        if (t.panel('options').closable) {
-	        	$(".easyui-tabs1:visible").tabs('close',currtab_title);
+	$('#close_all').click(function(){
+		$.each(etabs.tabs('tabs'),function(i,tab){
+			var index_temp = etabs.tabs('getTabIndex', tab);
+			if (tab.panel('options').closable) {
+	            etabs.tabs('close', index_temp);
 	        }
-	    });    
+	    });   
 	});
-	//关闭除当前之外的TAB
-	$('#mm-tabcloseother').click(function(){
-	    var currtab_title = $('#mm').data("currtab");
-	    $(".easyui-tabs1:visible").find('.tabs li').each(function(i,n){
-	    	var tab_title_temp = $(n).text();
-	    	var t = $(".easyui-tabs1:visible").tabs('getTab', tab_title_temp);
-	        if (tab_title_temp != currtab_title && t.panel('options').closable) {
-	        	$(".easyui-tabs1:visible").tabs('close',tab_title_temp);
-	        }
-	    }); 
-	    $(".easyui-tabs1:visible").tabs('select', currtab_title);
-	});
+});
+
+$mainframe.bind("addOrSelectTab", function(event, options) {
+    var options = $.extend({}, {
+    	id: null,
+        title: "",
+        href: null,
+        refreshWhenSelect: false,
+        iconCls: null,
+        contentText : null
+    }, options);
+    
+    //如果指定tab已经存在，则直接将该tab选中即可
+    if ($indexTabs.tabs('exists', options.title)) {
+    	var selectedTab = $indexTabs.tabs('getTab',options.title);
+			var $iframe = $(selectedTab).find("iframe.mainframeTab");
+			var oldSrc = $iframe.attr('src');
+			if($iframe.attr('refresh') === 'true'){
+				$iframe.attr('newsrc',options.href);
+			}else{
+				$iframe.attr('src',options.href);
+			}
+        $indexTabs.tabs('select', options.title);
+        //如果已经存在直接关闭加载进度条
+        DialogUtils.progress('close');
+        return false;
+    } else if (options.href) {
+        //以iframe的形式显示tab
+        var newIframe = '<iframe src="' + options.href + '" width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>';
+        if(options.refreshWhenSelect){
+        	newIframe = '<iframe src=' + options.href + ' newsrc="' + options.href + '" refresh="true" width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>';
+        }
+        $indexTabs.tabs('add', {
+            title : options.title,
+            closable : true,
+            iconCls : options.iconCls,
+            content : newIframe,
+            border : false,
+            fit : true
+        });
+    }
+});
+$mainframe.bind("refreshTab", function(event, options) {
+    var options = $.extend({}, {
+        title : "",
+        href : null,
+        iconCls : null,
+        contentText : null
+    }, options);
+    
+    //如果指定tab已经存在，则直接将该tab选中即可
+    if ($indexTabs.tabs('exists', options.title)) {
+        //TODO:后续加入，根据tab中如果存在refreshOnEverySelected属性时每次选中均刷新的逻辑<br/>
+        $indexTabs.tabs('select', options.title);
+        var tab = $indexTabs.tabs('getTab', options.title);
+        if($(tab).find("iframe.mainframeTab") > 0){
+            var $iframe = $(tab).find("iframe.mainframeTab");
+            if(!$.ObjectUtils.isEmpty(options.href)){
+                $iframe.attr("src",options.href);
+            }else{
+                var srcTemp = $iframe.attr("src");
+                $iframe.attr("src",srcTemp);
+            }
+        }
+        //如果已经存在直接关闭加载进度条
+        DialogUtils.progress('close');
+        return false;
+    }
+});
+$mainframe.bind("closeSelectedTab",function(event){
+	//console.info($indexTabs.tabs("getSelected").title);
+	var tab = $indexTabs.tabs('getSelected');  
+    var index = $indexTabs.tabs('getTabIndex',tab);  
+	$indexTabs.tabs('close',index);
+});
+$mainframe.bind("closeTab",function(event, options){
+	var options = $.extend({}, {
+        title : ""
+    }, options);
+	console.log('closeTab:' + options.title);
+	//如果指定tab已经存在，则直接将该tab选中即可
+    if ($indexTabs.tabs('exists', options.title)) {
+    	$indexTabs.tabs('close', options.title);
+        return false;
+    }
 });
 </script>
 
 <!-- script type="text/javascript" charset="utf-8" src="../../mainframe/mainframe.js" th:src="@{/mainframe/mainframe.js}"></script  -->
+<script type="text/javascript" th:inline="javascript">
+$(function(){
+	function onTabMenuClick(menu,$el){
+		
+	}
+	function onDialogMenuClick(menu,$el){
+		
+	}
+	function onNavMenuClick(menu,$el){
+		
+	}
+	function onEventMenuClick(menu,$el){
+		
+	}
+	function onDefaultMenuClick(menu,$el){
+		
+	}
+	function bindMenuEvent($el,menu){
+		//将数据封闭入闭包中
+		$el.click({'menu': menu},function(event){
+			var menu = event.data.menu;
+			var $el = $(this);
+			if(menu.type == 'tab'){
+				onTabMenuClick(menu,$el);
+			}else if(menu.type == 'dialog'){
+				onDialogMenuClick(menu,$el);
+			}else if(menu.type == 'nav'){
+				onNavMenuClick(menu,$el);
+			}else if(menu.type == 'event'){
+				onEventMenuClick(menu,$el);
+			}else{
+				onDefaultMenuClick(menu,$el);
+			}
+		});
+	}
+	$.widget("txcomponent.topnavmenu",{
+		options: {
+			url : ""
+		},
+		_create: function(){
+			var _this = this;
+			var _options = _this.options;
+			var _element = _this.element;
+			_this._load();
+		},
+		_load: function(){
+			var _this = this;
+			var _options = _this.options;
+			var _url = _options.url;
+			$.post(_url,function(menus){
+				$.each(menus,function(index,menu){
+					_this._addMenu(menu);
+				});
+			});
+		},
+		_addMenu: function(menu){
+			//<li><a href="javascript:void(0);"><i class="iconfont">&#xe617;</i>工作台</a></li>
+			var _this = this;
+			var _options = _this.options;
+			var _url = _options.url;
+			var _element = _this.element;
+			
+			var menuoption = $.extend({
+				href: 'javascript:void(0);',
+				icon: '&#xe60e;',
+				text: ''
+			},menu);
+			
+			var $a = $('<a>').attr('href',menuoption.href).append('<i class="iconfont">' + menuoption.icon + '</i>' + menuoption.text);
+			var $li = $('<li>').append($a);
+			$(_element).append($li);
+			
+			$a.click(function(){
+				$(_element).children("li").children("a").removeClass("selected");	
+				$(this).addClass("selected");
+			});
+			bindMenuEvent($li,menuoption);
+		},
+	    destroy : function(){
+	    	var _this = this;
+			var _element = _this.element;
+			
+			//移除内部内容
+			$(_element).empty();
+	    }
+	});
+});
+$(document).ready(function(){
+	
+});
+</script>
+<script th:inline="javascript" type="text/javascript">
+/*<![CDATA[*/
+//页面加载完后的逻辑处理
+$(document).ready(function() {
+	$(".nav").topnavmenu({
+		url: /*[[@{/menu/queryListBySecurity?catalog=nav_catalog}]]*/''
+	});
+});
+/*]]>*/
+</script>
+
 </head>
 <body>
 <div id="index_layout">
@@ -162,19 +357,17 @@ $(document).ready(function(){
 		<div class="logo"><img src="../../images/logo.png" th:src="@{/images/logo.png}"></div>
 		
         <ul class="nav">
-        	<li><a href="javascript:void(0);"><i class="iconfont">&#xe617;</i>工作台</a></li>
-	        <li><a href="javascript:void(0);"><i class="iconfont">&#xe60e;</i>范例</a></li>
-	        <li><a href="javascript:void(0);"><i class="iconfont">&#xe78e;</i>报表</a></li>
-	        <li><a href="javascript:void(0);"><i class="iconfont">&#xe613;</i>日志</a></li>
-	        <li><a href="javascript:void(0);"><i class="iconfont">&#xe605;</i>配置</a></li>
         </ul>
         
         <div class="topright">
             <ul class="toptool">
-            <li><a href="#"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
-            <li><a href="#"><i class="iconfont">&#xe60c;</i></a><em class="gcolor">5</em></li>
-            <li><a href="#"><i class="iconfont">&#xe61a;</i></a></li>
-            <li><span class="userface"><i class="iconfont">&#xe60d;</i></span><a href="#"><font>Admin&nbsp;&nbsp;<i class="iconfont userdown">&#xe618;</i></font></a></li>
+	            <li><a href="#"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
+	            <li><a href="#"><i class="iconfont">&#xe621;</i></a><em class="gcolor">5</em></li>
+	            <li>
+	            	<span class="userface"><i class="iconfont">&#xe60d;</i></span>
+	            	<a href="javascript:void(0);"><font>admin&nbsp;&nbsp;<i class="iconfont userdown">&#xe618;</i></font></a>
+	            </li>
+	            <li><a href="#"><i class="iconfont">&#xe61a;</i></a></li>
             </ul>
         </div>
 	</div>
@@ -280,25 +473,30 @@ $(document).ready(function(){
     </div>
 	
 	<div data-options="region:'center',border:false" class="center">
-    	<div id="index_tabs">
+    	<div id="index_tabs" class="index_tabs">
 			<div title="首页">
-				<iframe src="default.html" th:src="@{/workbench/}" id="iframe" name="right" width="100%" height="98%" frameborder="0" scrolling="auto"></iframe>
+				<iframe id="default" name="right" src="default.html" th:src="@{/workbench/}"  width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>
 			</div>
        	</div>    
 	</div>
 	
 	<div data-options="region:'south',border:false"  class="footer">
-    	<span class="fleft"><i class="iconfont">&#xe622;</i>webdemo模板</span>
+    	<span class="fleft"><i class="iconfont">&#xe622;</i>webdemo模板 </span>
         <span class="fright">cqtianxin版权所有<i class="iconfont">&#xe620;</i></span>
     </div>
 </div>
 
+<div id="tabs-tool" style="display: none;">
+	<a href="javascript:void(0);" id="tabs-tool-refresh" class="easyui-linkbutton" plain="true" iconCls="transmit"></a>
+	<a href="javascript:void(0);" id="tabs-tool-menu" class="easyui-linkbutton" plain="true" iconCls="cog"></a>
+</div>
+
 <div id="index_tabs_menu" style="width: 120px; display: none;">
-	<div title="refresh" data-options="iconCls:'transmit'">刷新</div>
+	<div id="refresh" data-options="iconCls:'transmit'">刷新</div>
 	<div class="menu-sep"></div>
-	<div title="close" data-options="iconCls:'delete'">关闭</div>
-	<div title="closeOther" data-options="iconCls:'delete'">关闭其他</div>
-	<div title="closeAll" data-options="iconCls:'delete'">关闭所有</div>
+	<div id="close_current" data-options="iconCls:'delete'">关闭当前标签页</div>
+	<div id="close_other" data-options="iconCls:'delete'">关闭其他标签页</div>
+	<div id="close_all" data-options="iconCls:'delete'">关闭所有标签页</div>
 </div>
 
 </body>

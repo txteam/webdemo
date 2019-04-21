@@ -31,8 +31,10 @@ import com.tx.core.exceptions.util.ExceptionWrapperUtils;
 import com.tx.core.util.MessageUtils;
 import com.tx.core.util.XstreamUtils;
 import com.tx.local.menu.config.MenuCatalogConfig;
+import com.tx.local.menu.config.MenuCatalogAttributesMapConverter;
 import com.tx.local.menu.config.MenuConfig;
 import com.tx.local.menu.config.MenuItemConfig;
+import com.tx.local.menu.config.MenuItemConfigAttributesMapConverter;
 import com.tx.local.menu.exception.MenuContextInitException;
 import com.tx.local.menu.model.Menu;
 import com.tx.local.menu.model.MenuCatalogItem;
@@ -58,6 +60,11 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
     /** menuConfig的读取器 */
     protected static final XStream menuConfigXstream = XstreamUtils
             .getXstream(MenuConfig.class);
+    
+    static {
+        menuConfigXstream.registerConverter(new MenuCatalogAttributesMapConverter());
+        menuConfigXstream.registerConverter(new MenuItemConfigAttributesMapConverter());
+    }
     
     /** spring容器句柄 */
     protected static ApplicationContext applicationContext;
@@ -277,6 +284,8 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
                             menu.getText() });
             logger.error(errorMessage);
             throw new MenuContextInitException(errorMessage);
+        }else{
+            menuList.add(menu);
         }
         
         MenuNode mn = new MenuNode(menu);

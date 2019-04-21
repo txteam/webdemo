@@ -30,7 +30,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class MenuCatalogConfigAttributesMapConverter implements Converter {
+public class MenuCatalogAttributesMapConverter implements Converter {
     
     //菜单项目配置属性映射
     private static final Map<String, PropertyDescriptor> TYPE_PD_MAP = new HashMap<>();
@@ -47,7 +47,7 @@ public class MenuCatalogConfigAttributesMapConverter implements Converter {
     }
     
     /** <默认构造函数> */
-    public MenuCatalogConfigAttributesMapConverter() {
+    public MenuCatalogAttributesMapConverter() {
         super();
     }
     

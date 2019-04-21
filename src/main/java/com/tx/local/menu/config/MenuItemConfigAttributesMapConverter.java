@@ -56,7 +56,7 @@ public class MenuItemConfigAttributesMapConverter implements Converter {
     @SuppressWarnings("rawtypes")
     @Override
     public boolean canConvert(Class type) {
-        return ClassUtils.isAssignable(Map.class, type);
+        return ClassUtils.isAssignable(type,Map.class);
     }
     
     /**
