@@ -8,7 +8,16 @@ package com.tx.local.menu.model;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 菜单项默认实现<br/>
@@ -19,8 +28,7 @@ import java.util.Map;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class MenuItem
-        implements Menu, Serializable {
+public class MenuItem implements Menu, Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = -6052627407144634479L;
@@ -32,6 +40,7 @@ public class MenuItem
     private String parentId;
     
     /** 父菜单类型 */
+    @JsonIgnore
     private MenuCatalogItem catalog;
     
     /** 菜单名 */
@@ -53,16 +62,110 @@ public class MenuItem
     private boolean modifyAble = false;
     
     /** 参数 */
-    private final Map<String, String> attributes = new HashMap<String, String>();
+    private Map<String, String> attributes;
     
     /** 菜单对应权限 */
-    private String[] authorities;
+    private Set<String> authorities;
     
     /** 菜单对应权限 */
-    private String[] roles;
+    private Set<String> roles;
     
     /** 打开类型 ： tab,nav,event,dialog */
     private String type = "tab";
+    
+    /**
+     * @return 返回 type
+     */
+    public String getType() {
+        if (!StringUtils.isEmpty(this.type)) {
+            return this.type;
+        } else {
+            return this.catalog.getType();
+        }
+    }
+    
+    /**
+     * @return 返回 attributes
+     */
+    public Map<String, String> getAttributes() {
+        if (this.attributes == null) {
+            this.attributes = new HashMap<>();
+        }
+        if (!MapUtils.isEmpty(this.catalog.getAttributes())) {
+            for (Entry<String, String> entryTemp : this.catalog.getAttributes()
+                    .entrySet()) {
+                if (this.attributes.containsKey(entryTemp.getKey())) {
+                    continue;
+                }
+                this.attributes.put(entryTemp.getKey(), entryTemp.getValue());
+            }
+        }
+        return this.attributes;
+    }
+    
+    /**
+     * @return 返回 roles
+     */
+    public Set<String> getRoles() {
+        if (this.roles == null) {
+            this.roles = new HashSet<String>();
+        }
+        if (CollectionUtils.isEmpty(this.catalog.getRoles())) {
+            for (String roleTemp : this.catalog.getRoles()) {
+                if (this.roles.contains(roleTemp)) {
+                    continue;
+                }
+                this.roles.add(roleTemp);
+            }
+        }
+        return roles;
+    }
+    
+    /**
+     * @return 返回 authorities
+     */
+    public Set<String> getAuthorities() {
+        if (this.authorities == null) {
+            this.authorities = new HashSet<String>();
+        }
+        if (CollectionUtils.isEmpty(this.catalog.getAuthorities())) {
+            for (String authorityTemp : this.catalog.getAuthorities()) {
+                if (this.authorities.contains(authorityTemp)) {
+                    continue;
+                }
+                this.authorities.add(authorityTemp);
+            }
+        }
+        return authorities;
+    }
+    
+    /**
+     * @param 对type进行赋值
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    /**
+     * @param 对attributes进行赋值
+     */
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes == null ? new HashMap<>() : attributes;
+    }
+    
+    /**
+     * @param 对roles进行赋值
+     */
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+    
+    /**
+     * @param 对authorities进行赋值
+     */
+    public void setAuthorities(Set<String> authorities) {
+        this.authorities = authorities;
+    }
     
     /**
      * @return 返回 id
@@ -76,20 +179,6 @@ public class MenuItem
      */
     public void setId(String id) {
         this.id = id;
-    }
-    
-    /**
-     * @return 返回 roles
-     */
-    public String[] getRoles() {
-        return roles;
-    }
-    
-    /**
-     * @param 对roles进行赋值
-     */
-    public void setRoles(String[] roles) {
-        this.roles = roles;
     }
     
     /**
@@ -202,44 +291,6 @@ public class MenuItem
      */
     public void setModifyAble(boolean modifyAble) {
         this.modifyAble = modifyAble;
-    }
-    
-    /**
-     * @return 返回 authorities
-     */
-    public String[] getAuthorities() {
-        return authorities;
-    }
-    
-    /**
-     * @param 对authorities进行赋值
-     */
-    public void setAuthorities(String[] authorities) {
-        this.authorities = authorities;
-    }
-    
-    /**
-     * @return 返回 type
-     */
-    public String getType() {
-        return type;
-    }
-    
-    /**
-     * @param 对type进行赋值
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-    
-    /**
-     * @return 返回 attributes
-     */
-    public Map<String, String> getAttributes() {
-        Map<String, String> resMap = new HashMap<>();
-        resMap.putAll(this.catalog.getAttributes());
-        resMap.putAll(this.attributes);
-        return resMap;
     }
     
     /**

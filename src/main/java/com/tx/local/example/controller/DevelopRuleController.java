@@ -22,59 +22,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/standardRule")
 public class DevelopRuleController {
     
-    /**
-     * 跳转到编码规范页面<br/>
-     *<功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/javaCodeRule")
-    public String javaCodeRule() {
-        return "/mainframe/rule/javaCodeRule";
-    }
     
-    /**
-     * 跳转到数据库编码规范<br/>
-     *<功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/databaseCodeRule")
-    public String databaseCodeRule() {
-        return "/mainframe/rule/databaseCodeRule";
-    }
-    
-    /**
-     * 跳转到项目命名规范<br/>
-     *<功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/projectNamedRule")
-    public String projectNamedRule() {
-        return "/mainframe/rule/projectNamedRule";
-    }
-    
-    /**
-     * 页面编码规范
-     *<功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/pageCodeRule")
-    public String pageCodeRule() {
-        return "/mainframe/rule/pageCodeRule";
-    }
 }

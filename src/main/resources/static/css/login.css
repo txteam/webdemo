@@ -1,9 +1,23 @@
 /*login*/
+/* 定义通用页面样式  */
 * {
 	border:0;margin:0;padding:0;
-	font-size: 14px;
+	font-size: 12px;
 	font-family: "Microsoft YaHei","iconfont"!important, Arial, Helvetica, sans-serif;
+	/*IE滚动条*/
+	scrollbar-face-color:#2c3950; /*面子*/  
+	scrollbar-arrow-color:#C0C0C0; /*箭头*/  
+	scrollbar-3dlight-color:#C0C0C0; /*最外左*/  
+	scrollbar-highlight-color:#2c3950; /*左二*/  
+	scrollbar-shadow-color:#2c3950; /*右二*/  
+	scrollbar-darkshadow-color:#C0C0C0; /*右一*/  
+	scrollbar-track-color:#151a24; /*滑道*/ 
 }
+::-webkit-scrollbar-track-piece {background-color:#fff;-webkit-border-radius:0}
+::-webkit-scrollbar {width:9px;height:9px}
+::-webkit-scrollbar-thumb {height:50px;background-color:#e3e6e8;-webkit-border-radius:6px;outline:2px solid #fff;outline-offset:-2px;border:2px solid #fff;filter:alpha(opacity=50);-moz-opacity:0.5;-khtml-opacity:0.5;opacity:0.5}
+::-webkit-scrollbar-thumb:hover {height:50px;background-color:#0076c8;-webkit-border-radius:6px}
+
 html{overflow-x:hidden;overflow-y:hidden }/*去横向滚动条*/
 body{margin:0 auto;min-width:980px;font-family:"Microsoft YaHei","iconfont"!important}
 

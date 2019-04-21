@@ -7,6 +7,9 @@
 package com.tx.local.menu.model;
 
 import java.util.Map;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 菜单项目接口<br/>
@@ -32,9 +35,15 @@ public interface Menu {
     public String getParentId();
     
     /**
-     * 菜单类目<br/>
-     * @return 返回 type
+     * 获取菜单所属类目<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return MenuCatalogItem [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
      */
+    @JsonIgnore
     public MenuCatalogItem getCatalog();
     
     /**
@@ -110,7 +119,7 @@ public interface Menu {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public String[] getAuthorities();
+    public Set<String> getAuthorities();
     
     /**
      * 拥有的角色<br/>
@@ -121,5 +130,5 @@ public interface Menu {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public String[] getRoles();
+    public Set<String> getRoles();
 }

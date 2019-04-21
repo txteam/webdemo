@@ -9,12 +9,13 @@ package com.tx.local.menu.context;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -127,6 +128,7 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         for (MenuCatalogConfig catalogTemp : menuConfig.getCatalogList()) {
             String catalogUpperCase = catalogTemp.getId().toUpperCase();
             
+            logger.info("   ...加载菜单分类: catalog: [{}]", catalogTemp.getId());
             //构建菜单目录项目
             MenuCatalogItem catalog = doBuildMenuCatalogItem(catalogTemp);
             List<Menu> menuList = new ArrayList<>();
@@ -228,39 +230,49 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
     private MenuNode doBuildMenuNode(List<Menu> menuList,
             MenuCatalogItem catalog, Menu parent, MenuItemConfig menuConfig) {
         MenuItem menu = new MenuItem();
+        
+        menu.setCatalog(catalog);
+        
         menu.setId(menuConfig.getId());
         menu.setText(menuConfig.getText());
         menu.setHref(menuConfig.getHref());
         menu.setIcon(menuConfig.getIcon());
         menu.setTips(menuConfig.getTips());
         menu.setType(menuConfig.getType());
-        if (!MapUtils.isEmpty(menuConfig.getAttributes())) {
-            menu.getAttributes().putAll(menuConfig.getAttributes());
-        }
-        
-        if (parent != null) {
-            menu.setParentId(parent.getId());
-        }
+        menu.setAttributes(menuConfig.getAttributes());
         
         if (!StringUtils.isEmpty(menuConfig.getAuthorities())) {
             String[] authorities = StringUtils
                     .splitByWholeSeparatorPreserveAllTokens(
                             menuConfig.getAuthorities(), ",");
+            
             if (!ArrayUtils.isEmpty(authorities)) {
-                menu.setAuthorities(authorities);
+                catalog.setAuthorities(
+                        new HashSet<>(Arrays.asList(authorities)));
             }
         }
         if (!StringUtils.isEmpty(menuConfig.getRoles())) {
             String[] rolse = StringUtils.splitByWholeSeparatorPreserveAllTokens(
                     menuConfig.getRoles(), ",");
             if (!ArrayUtils.isEmpty(rolse)) {
-                menu.setRoles(rolse);
+                catalog.setRoles(new HashSet<>(Arrays.asList(rolse)));
             }
         }
+        if (parent != null) {
+            menu.setParentId(parent.getId());
+            //当存在父级菜单时，父级菜单需要的权限以及角色，都需要附给子级菜单
+            menu.getAuthorities().addAll(parent.getAuthorities());
+            menu.getRoles().addAll(parent.getRoles());
+        }
+        
+        logger.info("   ......加载菜单项: catalog:[{}] | id:[{}] text:[{}]",
+                catalog.getId(),
+                menu.getId(),
+                menu.getText());
         
         if (menuList.contains(menu)) {
             String errorMessage = MessageUtils.format(
-                    "重复菜单项: 菜单分类:{} 菜单ID:{} 菜单名:{}",
+                    "   ......加载菜单项错误: 重复菜单项: 菜单分类:{} 菜单ID:{} 菜单名:{}",
                     new Object[] { menu.getCatalog().getId(), menu.getId(),
                             menu.getText() });
             logger.error(errorMessage);
@@ -292,8 +304,25 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         MenuCatalogItem catalog = new MenuCatalogItem();
         catalog.setId(catalogConfigTemp.getId());
         catalog.setText(catalogConfigTemp.getText());
-        if (!MapUtils.isEmpty(catalogConfigTemp.getAttributes())) {
-            catalog.getAttributes().putAll(catalogConfigTemp.getAttributes());
+        
+        catalog.setType(catalogConfigTemp.getType());
+        catalog.setAttributes(catalogConfigTemp.getAttributes());
+        
+        if (!StringUtils.isEmpty(catalogConfigTemp.getAuthorities())) {
+            String[] authorities = StringUtils
+                    .splitByWholeSeparatorPreserveAllTokens(
+                            catalogConfigTemp.getAuthorities(), ",");
+            if (!ArrayUtils.isEmpty(authorities)) {
+                catalog.setAuthorities(
+                        new HashSet<>(Arrays.asList(authorities)));
+            }
+        }
+        if (!StringUtils.isEmpty(catalogConfigTemp.getRoles())) {
+            String[] roles = StringUtils.splitByWholeSeparatorPreserveAllTokens(
+                    catalogConfigTemp.getRoles(), ",");
+            if (!ArrayUtils.isEmpty(roles)) {
+                catalog.setRoles(new HashSet<>(Arrays.asList(roles)));
+            }
         }
         return catalog;
     }

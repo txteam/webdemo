@@ -9,6 +9,7 @@ package com.tx.local.menu.model;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.tree.model.TreeAble;
@@ -129,14 +130,14 @@ public class MenuNode
     /**
      * @return 返回 roles
      */
-    public String[] getRoles() {
+    public Set<String> getRoles() {
         return this.menu.getRoles();
     }
     
     /**
      * @return 返回 authorities
      */
-    public String[] getAuthorities() {
+    public Set<String> getAuthorities() {
         return this.menu.getAuthorities();
     }
     

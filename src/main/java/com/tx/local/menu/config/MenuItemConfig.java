@@ -13,8 +13,8 @@ import java.util.Map;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * 菜单配置<br/>
@@ -61,7 +61,7 @@ public class MenuItemConfig {
     private String type;
     
     /** 菜单配置项额外属性 */
-    @XStreamOmitField
+    @XStreamConverter(MenuItemConfigAttributesMapConverter.class)
     private Map<String, String> attributes;
     
     /** 子菜单项 */

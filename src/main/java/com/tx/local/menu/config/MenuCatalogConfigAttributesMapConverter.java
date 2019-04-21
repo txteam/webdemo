@@ -6,14 +6,14 @@
  */
 package com.tx.local.menu.config;
 
+import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.springframework.beans.BeanUtils;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -30,12 +30,26 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class MenuItemDataMapConverter implements Converter {
+public class MenuCatalogConfigAttributesMapConverter implements Converter {
     
-    /**
-     * 解析data的正则表达式<br/>
-     */
-    private static Pattern dataPatter = Pattern.compile("^data[(.+?)]$");
+    //菜单项目配置属性映射
+    private static final Map<String, PropertyDescriptor> TYPE_PD_MAP = new HashMap<>();
+    
+    static {
+        for (PropertyDescriptor pdTemp : BeanUtils
+                .getPropertyDescriptors(MenuCatalogConfig.class)) {
+            if (pdTemp.getReadMethod() == null
+                    || pdTemp.getWriteMethod() == null) {
+                continue;
+            }
+            TYPE_PD_MAP.put(pdTemp.getName(), pdTemp);
+        }
+    }
+    
+    /** <默认构造函数> */
+    public MenuCatalogConfigAttributesMapConverter() {
+        super();
+    }
     
     /**
      * @param type
@@ -62,11 +76,13 @@ public class MenuItemDataMapConverter implements Converter {
         
         //如果不为空
         Map<String, String> data = (Map<String, String>) source;
-        
         //遍历数据，写入动态参数
         for (Entry<String, String> entryTemp : data.entrySet()) {
-            writer.addAttribute("data[" + entryTemp.getKey() + "]",
-                    entryTemp.getValue());
+            String key = entryTemp.getKey();
+            if (TYPE_PD_MAP.containsKey(key)) {
+                continue;
+            }
+            writer.addAttribute(entryTemp.getKey(), entryTemp.getValue());
         }
     }
     
@@ -79,15 +95,16 @@ public class MenuItemDataMapConverter implements Converter {
     public Object unmarshal(HierarchicalStreamReader reader,
             UnmarshallingContext context) {
         Map<String, String> data = new HashMap<String, String>();
+        
         @SuppressWarnings("unchecked")
         Iterator<String> attNameIterator = reader.getAttributeNames();
-        while(attNameIterator.hasNext()){
+        while (attNameIterator.hasNext()) {
             String attNameTemp = attNameIterator.next();
-            Matcher mTemp = dataPatter.matcher(attNameTemp);
-            if(!mTemp.matches()){
+            if (TYPE_PD_MAP.containsKey(attNameTemp)) {
                 continue;
             }
-            data.put(mTemp.group(1), reader.getAttribute(attNameTemp));
+            
+            data.put(attNameTemp, reader.getAttribute(attNameTemp));
         }
         return data;
     }

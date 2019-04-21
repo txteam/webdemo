@@ -12,8 +12,8 @@ import java.util.Map;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * 菜单项配置
@@ -35,9 +35,21 @@ public class MenuCatalogConfig {
     @XStreamAsAttribute
     private String text;
     
+    /** 打开类型 ： nav,dialog,tab,event */
+    @XStreamAsAttribute
+    private String type;
+    
     /** 菜单对应权限 */
-    @XStreamOmitField
+    @XStreamConverter(MenuCatalogConfigAttributesMapConverter.class)
     private Map<String, String> attributes;
+    
+    /** 菜单对应权限 */
+    @XStreamAsAttribute
+    private String authorities;
+    
+    /** 菜单对应权限 */
+    @XStreamAsAttribute
+    private String roles;
     
     @XStreamImplicit(itemFieldName = "menu")
     private List<MenuItemConfig> menuList;
@@ -77,6 +89,20 @@ public class MenuCatalogConfig {
     }
     
     /**
+     * @return 返回 type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param 对type进行赋值
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
      * @return 返回 attributes
      */
     public Map<String, String> getAttributes() {
@@ -90,6 +116,34 @@ public class MenuCatalogConfig {
         this.attributes = attributes;
     }
     
+    /**
+     * @return 返回 authorities
+     */
+    public String getAuthorities() {
+        return authorities;
+    }
+
+    /**
+     * @param 对authorities进行赋值
+     */
+    public void setAuthorities(String authorities) {
+        this.authorities = authorities;
+    }
+
+    /**
+     * @return 返回 roles
+     */
+    public String getRoles() {
+        return roles;
+    }
+
+    /**
+     * @param 对roles进行赋值
+     */
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
     /**
      * @return 返回 menuList
      */
