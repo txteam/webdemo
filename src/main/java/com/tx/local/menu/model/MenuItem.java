@@ -40,7 +40,6 @@ public class MenuItem implements Menu, Serializable {
     private String parentId;
     
     /** 父菜单类型 */
-    @JsonIgnore
     private MenuCatalogItem catalog;
     
     /** 菜单名 */
@@ -110,7 +109,7 @@ public class MenuItem implements Menu, Serializable {
         if (this.roles == null) {
             this.roles = new HashSet<String>();
         }
-        if (CollectionUtils.isEmpty(this.catalog.getRoles())) {
+        if (!CollectionUtils.isEmpty(this.catalog.getRoles())) {
             for (String roleTemp : this.catalog.getRoles()) {
                 if (this.roles.contains(roleTemp)) {
                     continue;
@@ -128,7 +127,7 @@ public class MenuItem implements Menu, Serializable {
         if (this.authorities == null) {
             this.authorities = new HashSet<String>();
         }
-        if (CollectionUtils.isEmpty(this.catalog.getAuthorities())) {
+        if (!CollectionUtils.isEmpty(this.catalog.getAuthorities())) {
             for (String authorityTemp : this.catalog.getAuthorities()) {
                 if (this.authorities.contains(authorityTemp)) {
                     continue;
@@ -198,6 +197,7 @@ public class MenuItem implements Menu, Serializable {
     /**
      * @return 返回 catalog
      */
+    @JsonIgnore
     public MenuCatalogItem getCatalog() {
         return catalog;
     }

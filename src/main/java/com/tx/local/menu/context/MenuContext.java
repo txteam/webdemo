@@ -111,6 +111,9 @@ public class MenuContext extends MenuContextBuilder {
         
         //根据权限及菜单配置生成最终权限列表
         List<MenuNode> menuNodeList = new ArrayList<>();//(menuType);
+        if (this.catalog2nodesMap.containsKey(catalog.toUpperCase())) {
+            menuNodeList.addAll(this.catalog2nodesMap.get(catalog.toUpperCase()));
+        }
         
         return menuNodeList;
     }

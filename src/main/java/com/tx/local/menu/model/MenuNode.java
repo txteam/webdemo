@@ -7,10 +7,14 @@
 package com.tx.local.menu.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.tree.model.TreeAble;
 
@@ -123,6 +127,7 @@ public class MenuNode
     /**
      * @return 返回 catalog
      */
+    @JsonIgnore
     public MenuCatalogItem getCatalog() {
         return this.menu.getCatalog();
     }
@@ -146,6 +151,33 @@ public class MenuNode
      */
     public List<MenuNode> getChilds() {
         return childs;
+    }
+    
+    /**
+     * @return 返回 childMenuList
+     */
+    public List<Menu> getMenuList() {
+        List<Menu> resList = new ArrayList<Menu>();
+        if (!CollectionUtils.isEmpty(this.childs)) {
+            for (MenuNode mn : this.childs) {
+                resList.add(mn);
+                resList.addAll(mn.getMenuList());
+            }
+        }
+        return resList;
+    }
+    
+    /**
+     * @return 返回 childMenuList
+     */
+    public List<Menu> getChildMenuList() {
+        List<Menu> resList = new ArrayList<Menu>();
+        if (!CollectionUtils.isEmpty(this.childs)) {
+            for (MenuNode mn : this.childs) {
+                resList.add(mn);
+            }
+        }
+        return resList;
     }
     
     /**

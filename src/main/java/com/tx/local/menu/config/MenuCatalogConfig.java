@@ -24,6 +24,7 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@XStreamConverter(value = MenuCatalogConfigConverter.class)
 @XStreamAlias("catalog")
 public class MenuCatalogConfig {
     
@@ -40,8 +41,6 @@ public class MenuCatalogConfig {
     private String type;
     
     /** 菜单对应权限 */
-    @XStreamAsAttribute
-    @XStreamConverter(value = MenuCatalogAttributesMapConverter.class)
     private Map<String, String> attributes;
     
     /** 菜单对应权限 */

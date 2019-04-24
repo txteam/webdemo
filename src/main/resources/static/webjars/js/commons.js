@@ -171,11 +171,10 @@ function amountLtoU(amount) {
     //如果window中对应对象不存在，则进行创建
     if (!$localEventHandle) {
         if (!window.$localEventHandle) {
-            window.$localEventHandle = $("<_localEventHandle/>");
+            window.$localEventHandle = $("<_local/>");
         }
         $localEventHandle = window.$localEventHandle;
     }
-    //console.log("$localEventHandle init success. $localEventHandle.size:" + $localEventHandle.size());
     /**
      * 定义全局事件管理器
      */

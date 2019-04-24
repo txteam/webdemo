@@ -12,14 +12,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 
-import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter;
+import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.mapper.Mapper;
 
 /**
  * 让菜单项目支持data放入任意值的设定<br/>
@@ -30,14 +34,16 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class MenuItemConfigAttributesMapConverter implements Converter {
+public class MenuCatalogConfigConverter extends AbstractReflectionConverter {
     
     //菜单项目配置属性映射
     private static final Map<String, PropertyDescriptor> TYPE_PD_MAP = new HashMap<>();
     
-    static{
-        for(PropertyDescriptor pdTemp : BeanUtils.getPropertyDescriptors(MenuItemConfig.class)){
-            if(pdTemp.getReadMethod() == null || pdTemp.getWriteMethod() == null){
+    static {
+        for (PropertyDescriptor pdTemp : BeanUtils
+                .getPropertyDescriptors(MenuCatalogConfig.class)) {
+            if (pdTemp.getReadMethod() == null
+                    || pdTemp.getWriteMethod() == null) {
                 continue;
             }
             TYPE_PD_MAP.put(pdTemp.getName(), pdTemp);
@@ -45,8 +51,9 @@ public class MenuItemConfigAttributesMapConverter implements Converter {
     }
     
     /** <默认构造函数> */
-    public MenuItemConfigAttributesMapConverter() {
-        super();
+    public MenuCatalogConfigConverter(Mapper mapper,
+            ReflectionProvider reflectionProvider) {
+        super(mapper, reflectionProvider);
     }
     
     /**
@@ -56,7 +63,8 @@ public class MenuItemConfigAttributesMapConverter implements Converter {
     @SuppressWarnings("rawtypes")
     @Override
     public boolean canConvert(Class type) {
-        return ClassUtils.isAssignable(type,Map.class);
+        return canAccess(type)
+                && MenuCatalogConfig.class.isAssignableFrom(type);
     }
     
     /**
@@ -73,15 +81,24 @@ public class MenuItemConfigAttributesMapConverter implements Converter {
         }
         
         //如果不为空
-        Map<String, String> data = (Map<String, String>) source;
+        BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(source);
+        Map<String, String> attributesMap = (Map<String, String>) bw
+                .getPropertyDescriptor("attributes");
         //遍历数据，写入动态参数
-        for (Entry<String, String> entryTemp : data.entrySet()) {
+        if (MapUtils.isEmpty(attributesMap)) {
+            return;
+        }
+        for (Entry<String, String> entryTemp : attributesMap.entrySet()) {
             String key = entryTemp.getKey();
-            if(TYPE_PD_MAP.containsKey(key)){
+            if (TYPE_PD_MAP.containsKey(key)) {
+                //已经存在的属性不进行重复写入
                 continue;
             }
             writer.addAttribute(entryTemp.getKey(), entryTemp.getValue());
         }
+        
+        //调用超类写入
+        super.marshal(source, writer, context);
     }
     
     /**
@@ -92,19 +109,23 @@ public class MenuItemConfigAttributesMapConverter implements Converter {
     @Override
     public Object unmarshal(HierarchicalStreamReader reader,
             UnmarshallingContext context) {
-        Map<String, String> data = new HashMap<String, String>();
+        MenuCatalogConfig catalog = (MenuCatalogConfig) super.unmarshal(reader,
+                context);
         
+        Map<String, String> attributesMap = new HashMap<String, String>();
         @SuppressWarnings("unchecked")
         Iterator<String> attNameIterator = reader.getAttributeNames();
         while (attNameIterator.hasNext()) {
             String attNameTemp = attNameIterator.next();
-            if(TYPE_PD_MAP.containsKey(attNameTemp)){
+            String value = reader.getAttribute(attNameTemp);
+            if (TYPE_PD_MAP.containsKey(attNameTemp)) {
                 continue;
             }
-            
-            data.put(attNameTemp, reader.getAttribute(attNameTemp));
+            attributesMap.put(attNameTemp, value);
         }
-        return data;
+        catalog.setAttributes(attributesMap);
+        
+        return catalog;
     }
     
 }

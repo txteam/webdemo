@@ -7,11 +7,14 @@
 package com.tx.local.menu.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -51,9 +54,9 @@ public class MenuCatalogItem implements Serializable {
     @JsonIgnore
     private List<Menu> menuList;
     
-    /** 菜单节点清单(不包含子节点的子节点，以树结构存放数据) */
+    /** 菜单节点清单(不包含子节点的子节点，以树结构存放数据):直接子节点 */
     @JsonIgnore
-    private List<MenuNode> menuNodeList;
+    private List<MenuNode> childrenMenuNodeList;
     
     /**
      * @return 返回 id
@@ -101,7 +104,7 @@ public class MenuCatalogItem implements Serializable {
      * @return 返回 authorities
      */
     public Set<String> getAuthorities() {
-        if(this.authorities == null){
+        if (this.authorities == null) {
             this.authorities = new HashSet<>();
         }
         return authorities;
@@ -118,7 +121,7 @@ public class MenuCatalogItem implements Serializable {
      * @return 返回 roles
      */
     public Set<String> getRoles() {
-        if(this.roles == null){
+        if (this.roles == null) {
             this.roles = new HashSet<>();
         }
         return roles;
@@ -149,6 +152,7 @@ public class MenuCatalogItem implements Serializable {
     /**
      * @return 返回 menuList
      */
+    @JsonIgnore
     public List<Menu> getMenuList() {
         return menuList;
     }
@@ -161,17 +165,32 @@ public class MenuCatalogItem implements Serializable {
     }
     
     /**
-     * @return 返回 menuNodeList
+     * @return 返回 childrenMenuNodeList
      */
-    public List<MenuNode> getMenuNodeList() {
-        return menuNodeList;
+    @JsonIgnore
+    public List<MenuNode> getChildrenMenuNodeList() {
+        return childrenMenuNodeList;
     }
     
     /**
-     * @param 对menuNodeList进行赋值
+     * @param 对childrenMenuNodeList进行赋值
      */
-    public void setMenuNodeList(List<MenuNode> menuNodeList) {
-        this.menuNodeList = menuNodeList;
+    public void setChildrenMenuNodeList(List<MenuNode> childrenMenuNodeList) {
+        this.childrenMenuNodeList = childrenMenuNodeList;
+    }
+    
+    /**
+     * @return 返回 childMenuList
+     */
+    @JsonIgnore
+    public List<Menu> getChildrenMenuList() {
+        List<Menu> resList = new ArrayList<Menu>();
+        if (!CollectionUtils.isEmpty(this.childrenMenuNodeList)) {
+            for (MenuNode mn : this.childrenMenuNodeList) {
+                resList.add(mn);
+            }
+        }
+        return resList;
     }
     
     /**

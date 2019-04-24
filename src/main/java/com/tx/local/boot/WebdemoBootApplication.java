@@ -34,7 +34,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 //@EnableEurekaClient
 //@EnableFeignClients
-@SpringBootApplication(scanBasePackages = { "com.tx.local.example",
+@SpringBootApplication(scanBasePackages = { "com.tx.local.coding",
         "com.tx.local.loginaccount", "com.tx.local.mainframe",
         "com.tx.local.menu", "com.tx.local.operator", "com.tx.local.security",
         "com.tx.local.springmvc" })

@@ -67,26 +67,6 @@ $(document).ready(function(){
             });
         }
 		,tools:'#tabs-tool'
-		/*,
-        tools : [{
-            iconCls : 'transmit',
-            handler : function() {
-            	refreshSelectedTab();
-            }
-        }, {
-            iconCls : 'cog',
-            handler : function(e) {
-            	e.preventDefault();
-            	//alert($.toJsonString(e));
-            	var x =  e.pageX;//e.pageX _$this.position().bottom;
-            	var y = e.pageY;//_$this.position().right; //e.pageY
-            	etabsmenu.menu('show', {
-                    left : x,
-                    top : y
-                });
-            }
-        }]
-		*/
 	});
 	function refreshSelectedTab(){
 		var href = etabs.tabs('getSelected').panel('options').href;
@@ -159,172 +139,164 @@ $(document).ready(function(){
 	        }
 	    });   
 	});
-});
-
-$mainframe.bind("addOrSelectTab", function(event, options) {
-    var options = $.extend({}, {
-    	id: null,
-        title: "",
-        href: null,
-        refreshWhenSelect: false,
-        iconCls: null,
-        contentText : null
-    }, options);
-    
-    //如果指定tab已经存在，则直接将该tab选中即可
-    if ($indexTabs.tabs('exists', options.title)) {
-    	var selectedTab = $indexTabs.tabs('getTab',options.title);
-			var $iframe = $(selectedTab).find("iframe.mainframeTab");
-			var oldSrc = $iframe.attr('src');
-			if($iframe.attr('refresh') === 'true'){
-				$iframe.attr('newsrc',options.href);
-			}else{
-				$iframe.attr('src',options.href);
-			}
-        $indexTabs.tabs('select', options.title);
-        //如果已经存在直接关闭加载进度条
-        DialogUtils.progress('close');
-        return false;
-    } else if (options.href) {
-        //以iframe的形式显示tab
-        var newIframe = '<iframe src="' + options.href + '" width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>';
-        if(options.refreshWhenSelect){
-        	newIframe = '<iframe src=' + options.href + ' newsrc="' + options.href + '" refresh="true" width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>';
-        }
-        $indexTabs.tabs('add', {
-            title : options.title,
-            closable : true,
-            iconCls : options.iconCls,
-            content : newIframe,
-            border : false,
-            fit : true
-        });
-    }
-});
-$mainframe.bind("refreshTab", function(event, options) {
-    var options = $.extend({}, {
-        title : "",
-        href : null,
-        iconCls : null,
-        contentText : null
-    }, options);
-    
-    //如果指定tab已经存在，则直接将该tab选中即可
-    if ($indexTabs.tabs('exists', options.title)) {
-        //TODO:后续加入，根据tab中如果存在refreshOnEverySelected属性时每次选中均刷新的逻辑<br/>
-        $indexTabs.tabs('select', options.title);
-        var tab = $indexTabs.tabs('getTab', options.title);
-        if($(tab).find("iframe.mainframeTab") > 0){
-            var $iframe = $(tab).find("iframe.mainframeTab");
-            if(!$.ObjectUtils.isEmpty(options.href)){
-                $iframe.attr("src",options.href);
-            }else{
-                var srcTemp = $iframe.attr("src");
-                $iframe.attr("src",srcTemp);
-            }
-        }
-        //如果已经存在直接关闭加载进度条
-        DialogUtils.progress('close');
-        return false;
-    }
-});
-$mainframe.bind("closeSelectedTab",function(event){
-	//console.info($indexTabs.tabs("getSelected").title);
-	var tab = $indexTabs.tabs('getSelected');  
-    var index = $indexTabs.tabs('getTabIndex',tab);  
-	$indexTabs.tabs('close',index);
-});
-$mainframe.bind("closeTab",function(event, options){
-	var options = $.extend({}, {
-        title : ""
-    }, options);
-	console.log('closeTab:' + options.title);
-	//如果指定tab已经存在，则直接将该tab选中即可
-    if ($indexTabs.tabs('exists', options.title)) {
-    	$indexTabs.tabs('close', options.title);
-        return false;
-    }
+	
+	function addTab(event, options){
+		var options = $.extend({}, {
+	    	id: null,
+	        title: "",
+	        href: null,
+	        refreshWhenSelect: false,
+	        iconCls: null,
+	        contentText : null
+	    }, options);
+	    
+	    //如果指定tab已经存在，则直接将该tab选中即可
+	    if ($indexTabs.tabs('exists', options.title)) {
+	    	var selectedTab = $indexTabs.tabs('getTab',options.title);
+				var $iframe = $(selectedTab).find("iframe.mainframe_tab");
+				var oldSrc = $iframe.attr('src');
+				if($iframe.attr('refresh') === 'true'){
+					$iframe.attr('newsrc',options.href);
+				}else{
+					$iframe.attr('src',options.href);
+				}
+	        $indexTabs.tabs('select', options.title);
+	        //如果已经存在直接关闭加载进度条
+	        DialogUtils.progress('close');
+	        return false;
+	    } else if (options.href) {
+	        //以iframe的形式显示tab
+	        var newIframe = '<iframe src="' + options.href + '" width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>';
+	        if(options.refreshWhenSelect){
+	        	newIframe = '<iframe src=' + options.href + ' newsrc="' + options.href + '" refresh="true" width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>';
+	        }
+	        $indexTabs.tabs('add', {
+	            title : options.title,
+	            closable : true,
+	            iconCls : options.iconCls,
+	            content : newIframe,
+	            border : false,
+	            fit : true
+	        });
+	    }
+	}
+	$mainframe.bind("addTab", addTab);
+	$mainframe.bind("addOrSelectTab", addTab);
+	$mainframe.bind("refreshTab", function(event, options) {
+	    var options = $.extend({}, {
+	        title : "",
+	        href : null,
+	        iconCls : null,
+	        contentText : null
+	    }, options);
+	    
+	    //如果指定tab已经存在，则直接将该tab选中即可
+	    if ($indexTabs.tabs('exists', options.title)) {
+	        //TODO:后续加入，根据tab中如果存在refreshOnEverySelected属性时每次选中均刷新的逻辑<br/>
+	        $indexTabs.tabs('select', options.title);
+	        var tab = $indexTabs.tabs('getTab', options.title);
+	        if($(tab).find("iframe.mainframe_tab") > 0){
+	            var $iframe = $(tab).find("iframe.mainframe_tab");
+	            if(!$.ObjectUtils.isEmpty(options.href)){
+	                $iframe.attr("src",options.href);
+	            }else{
+	                var srcTemp = $iframe.attr("src");
+	                $iframe.attr("src",srcTemp);
+	            }
+	        }
+	        //如果已经存在直接关闭加载进度条
+	        DialogUtils.progress('close');
+	        return false;
+	    }
+	});
+	$mainframe.bind("closeSelectedTab",function(event){
+		//console.info($indexTabs.tabs("getSelected").title);
+		var tab = $indexTabs.tabs('getSelected');  
+	    var index = $indexTabs.tabs('getTabIndex',tab);  
+		$indexTabs.tabs('close',index);
+	});
+	$mainframe.bind("closeTab",function(event, options){
+		var options = $.extend({}, {
+	        title : ""
+	    }, options);
+		console.log('closeTab:' + options.title);
+		//如果指定tab已经存在，则直接将该tab选中即可
+	    if ($indexTabs.tabs('exists', options.title)) {
+	    	$indexTabs.tabs('close', options.title);
+	        return false;
+	    }
+	});
 });
 </script>
 
 <!-- script type="text/javascript" charset="utf-8" src="../../mainframe/mainframe.js" th:src="@{/mainframe/mainframe.js}"></script  -->
 <script type="text/javascript" th:inline="javascript">
 $(function(){
-	function onTabMenuClick(menu,$el){
-		
-	}
-	function onDialogMenuClick(menu,$el){
-		
-	}
-	function onNavMenuClick(menu,$el){
-		
-	}
-	function onEventMenuClick(menu,$el){
-		
-	}
-	function onDefaultMenuClick(menu,$el){
-		
-	}
-	function bindMenuEvent($el,menu){
-		//将数据封闭入闭包中
-		$el.click({'menu': menu},function(event){
-			var menu = event.data.menu;
-			var $el = $(this);
-			if(menu.type == 'tab'){
-				onTabMenuClick(menu,$el);
-			}else if(menu.type == 'dialog'){
-				onDialogMenuClick(menu,$el);
-			}else if(menu.type == 'nav'){
-				onNavMenuClick(menu,$el);
-			}else if(menu.type == 'event'){
-				onEventMenuClick(menu,$el);
-			}else{
-				onDefaultMenuClick(menu,$el);
-			}
-		});
-	}
-	$.widget("txcomponent.topnavmenu",{
+	$.widget("txcomponent.top_menu",{
 		options: {
-			url : ""
+			url : "",
+			onSelect: null
 		},
 		_create: function(){
 			var _this = this;
 			var _options = _this.options;
 			var _element = _this.element;
+			
 			_this._load();
 		},
 		_load: function(){
 			var _this = this;
 			var _options = _this.options;
 			var _url = _options.url;
-			$.post(_url,function(menus){
-				$.each(menus,function(index,menu){
-					_this._addMenu(menu);
-				});
+			
+			//同步执行
+			$.ajax({
+			   type: "GET",
+			   async: false,
+			   url: _url,
+			   success: function(menus){
+				   $.each(menus,function(index,menuTemp){
+						var menu = $.extend({
+							href: 'javascript:void(0);',
+							icon: '&#xe60e;',
+							text: '' 
+						},menuTemp);
+						
+						_this._addMenu(menu);
+					});
+			   }
 			});
 		},
 		_addMenu: function(menu){
-			//<li><a href="javascript:void(0);"><i class="iconfont">&#xe617;</i>工作台</a></li>
 			var _this = this;
 			var _options = _this.options;
 			var _url = _options.url;
 			var _element = _this.element;
 			
-			var menuoption = $.extend({
-				href: 'javascript:void(0);',
-				icon: '&#xe60e;',
-				text: ''
-			},menu);
-			
-			var $a = $('<a>').attr('href',menuoption.href).append('<i class="iconfont">' + menuoption.icon + '</i>' + menuoption.text);
+			var $a = $('<a>').attr('href',menu.href).append('<i class="iconfont">' + menu.icon + '</i>' + menu.text);
 			var $li = $('<li>').append($a);
 			$(_element).append($li);
 			
-			$a.click(function(){
-				$(_element).children("li").children("a").removeClass("selected");	
-				$(this).addClass("selected");
+			_this.element.bind('_select_' + menu.id,{'menu': menu,'$el':$li},function(event){
+				var menu = event.data.menu;
+				var $el = event.data.$el;
+				
+				$(_element).children("li").children("a").removeClass("selected");
+				$el.children("a").addClass("selected");
+				
+				_this.options.onSelect(menu,$li);
 			});
-			bindMenuEvent($li,menuoption);
+			$li.click({'menu': menu},function(event){
+				var menu = event.data.menu;
+				_this.element.trigger('_select_' + menu.id);
+			});
+		},
+		//服务于默认选中菜单时调用的方法
+		select: function(id){
+			var _this = this;
+			var _element = _this.element;
+			
+			_this.element.trigger('_select_' + id);
 		},
 	    destroy : function(){
 	    	var _this = this;
@@ -332,20 +304,192 @@ $(function(){
 			
 			//移除内部内容
 			$(_element).empty();
+			//调用默认实现
+			$.Widget.prototype.destroy.call(this);
 	    }
 	});
-});
-$(document).ready(function(){
-	
+	$.widget("txcomponent.left_menu",{
+		options: {
+			url: "",
+			default_catalog: "",
+			onAccordionItemSelect: null
+		},
+		_catalog2accordionMap: {},
+		_create: function(){
+			var _this = this;
+			var _options = _this.options;
+			var _element = _this.element;
+			
+			_this._load();
+		},
+		_load: function(){
+			var _this = this;
+			var _options = _this.options;
+			
+			_this.createAccordion(_options.default_catalog);
+		},
+		createAccordion: function(catalog){
+			var _this = this;
+			var _options = _this.options;
+			var _element = _this.element;
+			
+			if($.ObjectUtils.isEmpty(catalog)){
+				return ;
+			}
+			if(_this._catalog2accordionMap[catalog] != null){
+				$.each(_this._catalog2accordionMap,function(cat,$acc_menu_catalog){
+					$acc_menu_catalog.hide();
+				});
+				_this._catalog2accordionMap[catalog].show();
+				return ;
+			}
+			
+			var _url = _options.url + "?catalog=" + catalog;
+			//同步执行
+			$.ajax({
+			   	type: "GET",
+			   	url: _url,
+			   	async: false,
+			   	success: function(menuMapList){
+				   	if($.ObjectUtils.isEmpty(menuMapList)){
+						return ;
+					}
+				   	
+				  	//隐藏已显示的菜单
+					$.each(_this._catalog2accordionMap,function(cat,$accordionTemp){
+						$accordionTemp.hide();
+					});
+					var $accordion = $('<div style="width:100%; height:750px;"></div>').attr("id",catalog).appendTo(_this.element);
+					_this._catalog2accordionMap[catalog] = $accordion;
+					$accordion.accordion({
+			            fit : true,
+			            border : false,
+			            onSelect : function(title, index) {
+			                //得到选中的面板
+			                var menu = $accordion.data('item_' + index);
+			            	$accordion.trigger('_select_' + menu.id);
+			            }
+			        });
+					
+				   	$.each(menuMapList,function(index,menuMapTemp){
+						var menu = $.extend({
+							href: 'javascript:void(0);',
+							icon: 'icon-Components',
+							text: '' 
+						},menuMapTemp.menu);
+						
+						$accordion.data('item_' + index,menu);
+						$accordion.bind('_select_' + menu.id,{menu: menu},function(event){
+							var menu = event.data.menu;
+							
+							_options.onAccordionItemSelect(menu);
+						});
+						_this._addAccordionItem($accordion,menu,index);
+						_this._createTree($accordion,menu,menuMapTemp.menuList,index)
+					});
+			   }
+			});
+		},
+		_addAccordionItem: function($accordion,menu,index){
+			var _this = this;
+			var _options = _this.options;
+			var _url = _options.url;
+			var _element = _this.element;
+            
+            $accordion.accordion('add', {
+                title : menu.text,
+                closable : false,
+                selected : index == 0 ? true : false,
+                iconCls: "icon-Components",
+                content : '<ul id="' + menu.id + '_tree"></ul>'
+            });
+		},
+		_createTree: function($accordion,menu,menuList,index){
+			var _this = this;
+			var _options = _this.options;
+			var _url = _options.url;
+			var _element = _this.element;
+			
+			if($.ObjectUtils.isEmpty(menuList)){
+				return ;
+			}
+			
+			var $ul = $accordion.find("#" + menu.id + '_tree');
+			$ul.tree({
+            	idField: 'id',
+            	childrenField: 'childs',
+            	/*
+            	iconField: function(row){
+                    if($.ObjectUtils.isEmpty(row.childs)){
+                        return "database";
+                    }else{
+                        return "database_gear";
+                    }
+            	},
+            	*/
+                data: menuList,
+                onClick: function(node){
+                }
+            });
+		},
+	    destroy : function(){
+	    	var _this = this;
+			var _element = _this.element;
+			
+			//移除内部内容
+			$(_element).empty();
+			//调用默认实现
+			$.Widget.prototype.destroy.call(this);
+	    }
+	});
 });
 </script>
 <script th:inline="javascript" type="text/javascript">
 /*<![CDATA[*/
 //页面加载完后的逻辑处理
 $(document).ready(function() {
-	$(".nav").topnavmenu({
-		url: /*[[@{/menu/queryListBySecurity?catalog=nav_catalog}]]*/''
+	function onTabMenuClick(menu){
+		
+	}
+	function onDialogMenuClick(menu){
+		
+	}
+	function onNavMenuClick(menu){
+		if(!menu || !menu.attributes || !menu.attributes.link){
+			return ;
+		}
+		$(".left").left_menu('createAccordion',menu.attributes.link);
+	}
+	function onEventMenuClick(menu){
+		
+	}
+	function onDefaultMenuClick(menu){
+		
+	}
+	var onMenuSelect = function(menu){
+		if(menu.type == 'tab'){
+			onTabMenuClick(menu);
+		}else if(menu.type == 'dialog'){
+			onDialogMenuClick(menu);
+		}else if(menu.type == 'nav'){
+			onNavMenuClick(menu);
+		}else if(menu.type == 'event'){
+			onEventMenuClick(menu);
+		}else{
+			onDefaultMenuClick(menu);
+		}
+	}
+	$(".nav").top_menu({
+		url: /*[[@{/menu/queryMenuListBySecurity?catalog=nav_catalog}]]*/'',
+		onSelect: onMenuSelect
 	});
+	$(".left").left_menu({
+		default_catalog: 'workbench_catalog',
+		url: /*[[@{/menu/queryMenuMapListBySecurity}]]*/'',
+		onAccordionItemSelect: onMenuSelect
+	});
+	//默认选中菜单工作台: workbench_nav_menu
+	$(".nav").top_menu('select','workbench_nav_menu');
 });
 /*]]>*/
 </script>
@@ -373,103 +517,6 @@ $(document).ready(function() {
 	</div>
 	
 	<div data-options="region:'west',split:true,border:false,title:'菜单',iconCls:'icon-yingyong-copy'" class="left">
-    	<div class="easyui-accordion"  data-options="border:false" style="width:100%; height:750px;">
-			<div title="组件" data-options="iconCls:'icon-Components'" style="overflow:auto;">
-	        	<ul class="easyui-tree">
-					<li>
-						<span>Easyui</span>
-						<ul>  
-							<li>
-								<span>基础</span>
-								<ul>
-									<li><a href="#" onclick="addTab('可放置','droppable.html')">可放置</a></li>
-	                                <li><a href="#" onclick="addTab('可拖动','draggable.html')">可拖动</a></li>
-	                                <li><a href="#" onclick="addTab('可调整大小','resizable.html')">可调整大小</a></li>
-	                                <li><a href="#" onclick="addTab('分页','pagination.html')">分页</a></li>
-	                                <li><a href="#" onclick="addTab('搜索框','searchbox.html')">搜索框</a></li>
-	                                <li><a href="#" onclick="addTab('进度条','progressbar.html')">进度条</a></li>
-	                                <li><a href="#" onclick="addTab('提示框','tooltip.html')">提示框</a></li>
-								</ul>
-							</li>
-							<li style=" display:none">
-								<span>布局</span>
-								<ul>
-									<li><a href="#" onclick="addTab('面板','panel.html')">面板</a></li>
-	                                <li><a href="#" onclick="addTab('选项卡','tabs.html')">选项卡</a></li>
-	                                <li><a href="#" onclick="addTab('折叠面板','accordion.html')">折叠面板</a></li>
-	                                <li><a href="#" onclick="addTab('布局','layout.html')">布局</a></li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			<div title="表单" data-options="iconCls:'icon-biaodan'" style=" overflow:auto;">
-	        	<ul class="easyui-tree">
-					<li><a href="#" onclick="addTab('表单','form.html')">表单</a></li>
-	                <li><a href="#" onclick="addTab('验证框','validatebox.html')">验证框</a></li>
-	                <li><a href="#" onclick="addTab('文本框','textbox.html')">文本框</a></li>
-	                <li><a href="#" onclick="addTab('密码框','passwordbox.html')">密码框</a></li>
-	                <li><a href="#" onclick="addTab('格式框','maskedbox.html')">格式框</a></li>
-	                <li><a href="#" onclick="addTab('组合','combo.html')">组合</a></li>
-	                <li><a href="#" onclick="addTab('组合框','combobox.html')">组合框</a></li>
-	                <li><a href="#" onclick="addTab('组合树','combotree.html')">组合树</a></li>
-	                <li><a href="#" onclick="addTab('组合网格','combogrid.html')">组合网格</a></li>
-	                <li><a href="#" onclick="addTab('组合树网格','combotreegrid.html')">组合树网格</a></li>
-	                <li><a href="#" onclick="addTab('标签框','tagbox.html')">标签框</a></li>
-	                <li><a href="#" onclick="addTab('数字框','numberbox.html')">数字框</a></li>
-	                <li><a href="#" onclick="addTab('日期框','datebox.html')">日期框</a></li>
-	                <li><a href="#" onclick="addTab('日期时间框','datetimebox.html')">日期时间框</a></li>
-	                <li><a href="#" onclick="addTab('日期时间微调','datetimespinner.html')">日期时间微调</a></li>
-	                <li><a href="#" onclick="addTab('日历','calendar.html')">日历</a></li>
-	                <li><a href="#" onclick="addTab('数值微调','numberspinner.html')">数值微调</a></li>
-	                <li><a href="#" onclick="addTab('时间微调','timespinner.html')">时间微调</a></li>
-	                <li><a href="#" onclick="addTab('滑块','slider.html')">滑块</a></li>
-	                <li><a href="#" onclick="addTab('文件框','filebox.html')">文件框</a></li>
-	                <li><a href="#" onclick="addTab('复选框','checkbox.html')">复选框</a></li>
-	                <li><a href="#" onclick="addTab('单选框','radiobutton.html')">单选框</a></li>
-				</ul>
-			</div>
-			<div title="常用控件" data-options="iconCls:'icon-zujian-'" style="overflow:auto;">
-	        	<ul class="easyui-tree">
-	            	<li>
-	                    <span>菜单按钮</span>
-	                    <ul>
-	                    <li><a href="#" onclick="addTab('菜单','menu.html')">菜单</a></li>
-	                    <li><a href="#" onclick="addTab('侧边菜单','sidemenu.html')">侧边菜单</a></li>
-	                    <li><a href="#" onclick="addTab('按钮','linkbutton.html')">按钮</a></li>
-	                    <li><a href="#" onclick="addTab('菜单按钮','menubutton.html')">菜单按钮</a></li>
-	                    <li><a href="#" onclick="addTab('分割按钮','splitbutton.html')">分割按钮</a></li>
-	                    <li><a href="#" onclick="addTab('开关按钮','switchbutton.html')">开关按钮</a></li>
-	                    </ul>
-	                </li>
-	                <li>
-	                    <span>窗口</span>
-	                    <ul>
-	                    <li><a href="#" onclick="addTab('窗口','window.html')">窗口</a></li>
-	                    <li><a href="#" onclick="addTab('对话框','dialog.html')">对话框</a></li>
-	                    <li><a href="#" onclick="addTab('消息提示','messager.html')">消息提示</a></li>
-	                    </ul>	
-	                </li>                
-				</ul>		
-			</div>
-	        <div title="网格和树" data-options="iconCls:'icon-zujian-shu'" style="overflow:auto;">
-	        	<ul class="easyui-tree">
-					<li><a href="#" onclick="addTab('数据网格','datagrid.html')">数据网格</a></li>
-	                <li><a href="#" onclick="addTab('数据列表','datalist.html')">数据列表</a></li>
-	                <li><a href="#" onclick="addTab('属性网格','propertygrid.html')">属性网格</a></li>
-	                <li><a href="#" onclick="addTab('树','tree.html')">树</a></li>
-	                <li><a href="#" onclick="addTab('树形网格','treegrid.html')">树形网格</a></li>
-				</ul>		
-			</div>
-	        <div title="应用" data-options="iconCls:'icon-bianji'" style="overflow:auto;">
-	        	<ul class="easyui-tree">
-	                <li><a href="#" onclick="addTab('图标','icon.html')">图标</a></li>
-	                <li><a href="#" onclick="addTab('404页','404.html')">404页</a></li>
-				</ul>		
-			</div>
-		</div>
-    
     </div>
 	
 	<div data-options="region:'center',border:false" class="center">

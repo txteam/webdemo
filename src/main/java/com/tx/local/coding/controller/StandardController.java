@@ -4,7 +4,7 @@
  * 修改时间:  2019年4月19日
  * <修改描述:>
  */
-package com.tx.local.example.controller;
+package com.tx.local.coding.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +31,9 @@ public class StandardController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/coding/java")
-    public String javaCodingStandard() {
-        return "/example/standard/javacoding";
+    @RequestMapping("/java")
+    public String java() {
+        return "/coding/standard/javacoding";
     }
     
     /**
@@ -45,9 +45,9 @@ public class StandardController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/coding/database")
-    public String databaseCodingStandard() {
-        return "/mainframe/standard/databasecoding";
+    @RequestMapping("/database")
+    public String database() {
+        return "/coding/standard/database";
     }
     
     /**
@@ -59,9 +59,9 @@ public class StandardController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/projectNamedRule")
-    public String projectNamedRule() {
-        return "/mainframe/standard/projectNamedRule";
+    @RequestMapping("/naming")
+    public String naming() {
+        return "/coding/standard/naming";
     }
     
     /**
@@ -73,8 +73,8 @@ public class StandardController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/pageCodeRule")
-    public String pageCodeRule() {
-        return "/mainframe/standard/pageCodeRule";
+    @RequestMapping("/page")
+    public String page() {
+        return "/coding/standard/page";
     }
 }

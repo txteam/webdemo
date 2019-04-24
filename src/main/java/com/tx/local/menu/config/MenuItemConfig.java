@@ -25,6 +25,7 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@XStreamConverter(value = MenuItemConfigConverter.class)
 @XStreamAlias("menu")
 public class MenuItemConfig {
     
@@ -61,8 +62,6 @@ public class MenuItemConfig {
     private String type;
     
     /** 菜单配置项额外属性 */
-    @XStreamAsAttribute
-    @XStreamConverter(MenuItemConfigAttributesMapConverter.class)
     private Map<String, String> attributes;
     
     /** 子菜单项 */

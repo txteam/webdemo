@@ -31,10 +31,8 @@ import com.tx.core.exceptions.util.ExceptionWrapperUtils;
 import com.tx.core.util.MessageUtils;
 import com.tx.core.util.XstreamUtils;
 import com.tx.local.menu.config.MenuCatalogConfig;
-import com.tx.local.menu.config.MenuCatalogAttributesMapConverter;
 import com.tx.local.menu.config.MenuConfig;
 import com.tx.local.menu.config.MenuItemConfig;
-import com.tx.local.menu.config.MenuItemConfigAttributesMapConverter;
 import com.tx.local.menu.exception.MenuContextInitException;
 import com.tx.local.menu.model.Menu;
 import com.tx.local.menu.model.MenuCatalogItem;
@@ -60,11 +58,6 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
     /** menuConfig的读取器 */
     protected static final XStream menuConfigXstream = XstreamUtils
             .getXstream(MenuConfig.class);
-    
-    static {
-        menuConfigXstream.registerConverter(new MenuCatalogAttributesMapConverter());
-        menuConfigXstream.registerConverter(new MenuItemConfigAttributesMapConverter());
-    }
     
     /** spring容器句柄 */
     protected static ApplicationContext applicationContext;
@@ -139,16 +132,16 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
             //构建菜单目录项目
             MenuCatalogItem catalog = doBuildMenuCatalogItem(catalogTemp);
             List<Menu> menuList = new ArrayList<>();
-            List<MenuNode> menuNodeList = doBuildMenuNodeList(menuList,
+            List<MenuNode> childrenMenuNodeList = doBuildMenuNodeList(menuList,
                     catalog,
                     null,
                     catalogTemp.getMenuList());
-            catalog.setMenuList(menuList);
-            catalog.setMenuNodeList(menuNodeList);
             
+            catalog.setMenuList(menuList);
+            catalog.setChildrenMenuNodeList(childrenMenuNodeList);
             catalogMap.put(catalogUpperCase, catalog);
             catalog2menuListMap.put(catalogUpperCase, menuList);
-            catalog2menuNodeListMap.put(catalogUpperCase, menuNodeList);
+            catalog2menuNodeListMap.put(catalogUpperCase, childrenMenuNodeList);
         }
         
         this.catalogMap = catalogMap;
@@ -239,7 +232,6 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         MenuItem menu = new MenuItem();
         
         menu.setCatalog(catalog);
-        
         menu.setId(menuConfig.getId());
         menu.setText(menuConfig.getText());
         menu.setHref(menuConfig.getHref());
@@ -254,7 +246,7 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
                             menuConfig.getAuthorities(), ",");
             
             if (!ArrayUtils.isEmpty(authorities)) {
-                catalog.setAuthorities(
+                menu.setAuthorities(
                         new HashSet<>(Arrays.asList(authorities)));
             }
         }
@@ -262,11 +254,12 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
             String[] rolse = StringUtils.splitByWholeSeparatorPreserveAllTokens(
                     menuConfig.getRoles(), ",");
             if (!ArrayUtils.isEmpty(rolse)) {
-                catalog.setRoles(new HashSet<>(Arrays.asList(rolse)));
+                menu.setRoles(new HashSet<>(Arrays.asList(rolse)));
             }
         }
         if (parent != null) {
             menu.setParentId(parent.getId());
+            
             //当存在父级菜单时，父级菜单需要的权限以及角色，都需要附给子级菜单
             menu.getAuthorities().addAll(parent.getAuthorities());
             menu.getRoles().addAll(parent.getRoles());
@@ -284,7 +277,7 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
                             menu.getText() });
             logger.error(errorMessage);
             throw new MenuContextInitException(errorMessage);
-        }else{
+        } else {
             menuList.add(menu);
         }
         
@@ -313,7 +306,6 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         MenuCatalogItem catalog = new MenuCatalogItem();
         catalog.setId(catalogConfigTemp.getId());
         catalog.setText(catalogConfigTemp.getText());
-        
         catalog.setType(catalogConfigTemp.getType());
         catalog.setAttributes(catalogConfigTemp.getAttributes());
         

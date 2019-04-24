@@ -4,83 +4,135 @@
 	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示 -->
 	<catalog id="nav_catalog" type="nav">
 		<menu id="workbench_nav_menu" text="工作台" icon="&#xe617;" link="workbench_catalog"/>
-		<menu id="example_nav_menu" text="范例" icon="&#xe60e;" link="example_catalog" roles="super_admin"/>
-		<menu id="report_nav_menu" text="报表" icon="&#xe78e;" link="report_catalog"/>
-		<menu id="log_nav_menu" text="日志" icon="&#xe613;" link="log_catalog"/>
-		<menu id="config_nav_menu" text="配置" icon="&#xe605;" link="config_catalog" authorities="config_menu_auth" />
+		<menu id="report_nav_menu" text="报表" icon="&#xe78e;" link="report_catalog" authorities="report_nav_menu_auth"/>
+		<menu id="log_nav_menu" text="日志" icon="&#xe613;" link="log_catalog" authorities="log_nav_menu_auth"/><!-- 系统日志 -->
+		<menu id="config_nav_menu" text="配置" icon="&#xe605;" link="config_catalog" authorities="config_nav_menu_auth" /><!-- 系统配置 -->
+		<menu id="debug_nav_menu" text="调试" icon="&#xe6bf;" link="debug_catalog" roles="super_admin"/><!-- 调试 -->
+		<menu id="coding_nav_menu" text="编码" icon="&#xe60e;" link="coding_catalog" roles="super_admin"/><!-- 编码 -->
 	</catalog>
 	
-	<catalog id="workbench_catalog" auth="config_menu_authentication">
+	<!-- 工作台 -->
+	<catalog id="workbench_catalog" auth="config_menu_authentication" type="tab">
 		<!-- 控制面板 -->
 		<menu id="control_panel_menu" text="控制面板">
 			<menu id="personal_center_menu" text="个人中心">
 				<menu id="calandar_menu" text="行事历"></menu>
 				<menu id="notepad_menu" text="记事本"></menu>
-				<menu id="modify_password_menu" text="修改密码"></menu>
 				<menu id="modify_myself_info_menu" text="修改个人信息"></menu>
-				<menu id="my_post_menu" text="我的职位"></menu>
-				<menu id="my_auth_menu" text="我的权限"></menu>
+				<menu id="modify_password_menu" text="修改密码"></menu>
 			</menu>
-			<menu id="logout_center_menu" text="注销">
-				<menu id="lock_window_menu" text="锁定窗口" target="triggerGlobalEvent" eventType="logout"></menu>
-				<menu id="re_login_menu" text="重新登录" target="triggerGlobalEvent" eventType="logout"></menu>
-				<menu id="logout_menu" text="退出系统" target="triggerGlobalEvent" eventType="logout"></menu>
-			</menu>
+			<menu id="lock_window_menu" text="锁定窗口" type="event" event="logout"></menu>
+			<menu id="relogin_menu" text="重新登录" type="event" event="logout"></menu>
+			<menu id="logout_menu" text="退出系统" type="event" event="logout"></menu>
 		</menu>
 	</catalog>
-
-	<catalog id="config_catalog" auth="config_menu_authentication">
-		<!-- 控制面板 -->
-		<menu id="control_panel_menu" text="控制面板">
-			<menu id="personal_center_menu" text="个人中心">
-				<menu id="calandar_menu" text="行事历"></menu>
-				<menu id="notepad_menu" text="记事本"></menu>
-				<menu id="modify_password_menu" text="修改密码"></menu>
-				<menu id="modify_myself_info_menu" text="修改个人信息"></menu>
-				<menu id="my_post_menu" text="我的职位"></menu>
-				<menu id="my_auth_menu" text="我的权限"></menu>
-			</menu>
-			<menu id="logout_center_menu" text="注销">
-				<menu id="lock_window_menu" text="锁定窗口" target="triggerGlobalEvent" eventType="logout"></menu>
-				<menu id="re_login_menu" text="重新登录" target="triggerGlobalEvent" eventType="logout"></menu>
-				<menu id="logout_menu" text="退出系统" target="triggerGlobalEvent" eventType="logout"></menu>
-			</menu>
+	
+	<!-- 系统日志 -->
+	<catalog id="log_catalog" type="tab">
+		<menu id="system_operate_logs_menu" text="系统操作日志">
+			<menu id="query_login_log" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action"></menu>
+			<menu id="query_systemOper_log" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList.action"></menu>
+		</menu>
+		<menu id="interface message_logs_menu" text="接口报文日志">
+			<menu id="query_login_log" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action" type="tab"></menu>
+			<menu id="query_systemOper_log" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList.action"></menu>
 		</menu>
 	</catalog>
-
-	<catalog id="example_catalog" roles="super_admin">
+	
+	<!-- 系统日志菜单分类 -->
+	<catalog id="config_catalog" authorities="config_menu_authentication">
+		<menu id="system_monitor_menu" text="系统监控" authorities="system_monitor_menuauth" type="tab" selectRefresh="false">
+			<menu id="druid_monitor_menu" text="druid监控视图" href="/druid"></menu>
+			<menu id="JavaMelody_monitor_menu" text="JavaMelody监控视图" href="/monitoring"></menu>
+		</menu>
+		<menu id="system_config_manage_menu" text="系统配置" authorities="system_config_manage_menuauth" type="tab">
+			<menu id="menu_manage_menu" text="菜单管理" authorities="menu_manage_menuauth" href="/mainframe/toQueryAllMenuItemTreeList" type="tab" selectRefresh="false" />
+			<menu id="config_manage_menu" text="配置项管理" authorities="config_manage_menuauth" href="/configuration/toQueryConfigProperty.action" type="tab" selectRefresh="false" />
+		</menu>
+		<menu id="operator_manage_center_menu" text="用户管理" authorities="operator_manage_center_menuauth" type="tab">
+			<menu id="organization_manage_menu" text="组织结构管理" authorities="organization_manage_menuauth" href="/organization/toQueryOrganizationList.action" type="tab"></menu>
+			<menu id="virtualCenter_manage_menu" text="虚中心管理" authorities="virtualCenter_manage_menuauth" href="/virtualCenter/toQueryVirtualCenterList.action" type="tab"></menu>
+			<menu id="auth_manage_menu" text="权限管理" authorities="auth_manage_menuauth" href="/auth/toQueryAuthView.action" type="tab"></menu>
+			<menu id="role_manage_menu" text="角色管理" authorities="role_manage_menuauth" href="/role/toQueryRoleList.action" type="tab"></menu>
+			<menu id="post_manage_menu" text="职位管理" authorities="post_manage_menuauth" href="/post/toQueryPostList.action" type="tab"></menu>
+			<menu id="operator_manage_menu" text="用户管理" authorities="operator_manage_menuauth" href="/operator/toQueryOperatorList.action" type="tab"></menu>
+		</menu>
+		<menu id="basicdata_manage_center_menu" text="基础数据管理" authorities="basicdata_manage_center_menuauth" type="tab" selectRefresh="false">
+			<menu id="basicDataType_manage_menu" text="基础数据类型管理" authorities="basicdatatype_manage_menuauth" href="/basicDataType/toQueryBasicDataTypeList.action" type="tab"></menu>
+			<menu id="basicData_manage_menu" text="数据字典管理" authorities="basicData_manage_menuauth" href="/basicData/toBasicDataMainframe.action" type="tab"></menu>
+			<menu id="district_manage_menu" text="区域管理" authorities="basicdata_manage_menuauth" href="/district/toQueryDistrictTreeList.action" type="tab"></menu>
+			<menu id="bankInfo_manage_menu" text="银行信息管理" authorities="bankInfo_manage_menuauth" href="/bankInfo/toQueryBankInfoList.action" type="tab"></menu>
+		</menu>
+		<menu id="servicelog_query_center" text="业务日志查询" type="tab" authorities="servicelog_query_center">
+			<menu id="query_login_log" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action" type="tab"></menu>
+			<menu id="query_systemOper_log" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList.action" type="tab"></menu>
+		</menu>
+	</catalog>
+	
+	<!-- 系统配置菜单分类 -->
+	<catalog id="config_catalog" authorities="config_nav_menu_auth">
+		<menu id="system_monitor_menu" text="系统监控" authorities="system_monitor_menuauth" type="tab" selectRefresh="false">
+			<menu id="druid_monitor_menu" text="druid监控视图" href="/druid"></menu>
+			<menu id="JavaMelody_monitor_menu" text="JavaMelody监控视图" href="/monitoring"></menu>
+		</menu>
+		<menu id="system_config_manage_menu" text="系统配置" authorities="system_config_manage_menuauth" type="tab">
+			<menu id="menu_manage_menu" text="菜单管理" authorities="menu_manage_menuauth" href="/mainframe/toQueryAllMenuItemTreeList" type="tab" selectRefresh="false" />
+			<menu id="config_manage_menu" text="配置项管理" authorities="config_manage_menuauth" href="/configuration/toQueryConfigProperty.action" type="tab" selectRefresh="false" />
+		</menu>
+		<menu id="operator_manage_center_menu" text="用户管理" authorities="operator_manage_center_menuauth" type="tab">
+			<menu id="organization_manage_menu" text="组织结构管理" authorities="organization_manage_menuauth" href="/organization/toQueryOrganizationList.action" type="tab"></menu>
+			<menu id="virtualCenter_manage_menu" text="虚中心管理" authorities="virtualCenter_manage_menuauth" href="/virtualCenter/toQueryVirtualCenterList.action" type="tab"></menu>
+			<menu id="auth_manage_menu" text="权限管理" authorities="auth_manage_menuauth" href="/auth/toQueryAuthView.action" type="tab"></menu>
+			<menu id="role_manage_menu" text="角色管理" authorities="role_manage_menuauth" href="/role/toQueryRoleList.action" type="tab"></menu>
+			<menu id="post_manage_menu" text="职位管理" authorities="post_manage_menuauth" href="/post/toQueryPostList.action" type="tab"></menu>
+			<menu id="operator_manage_menu" text="用户管理" authorities="operator_manage_menuauth" href="/operator/toQueryOperatorList.action" type="tab"></menu>
+		</menu>
+		<menu id="basicdata_manage_center_menu" text="基础数据管理" authorities="basicdata_manage_center_menuauth" type="tab" selectRefresh="false">
+			<menu id="basicDataType_manage_menu" text="基础数据类型管理" authorities="basicdatatype_manage_menuauth" href="/basicDataType/toQueryBasicDataTypeList.action" type="tab"></menu>
+			<menu id="basicData_manage_menu" text="数据字典管理" authorities="basicData_manage_menuauth" href="/basicData/toBasicDataMainframe.action" type="tab"></menu>
+			<menu id="district_manage_menu" text="区域管理" authorities="basicdata_manage_menuauth" href="/district/toQueryDistrictTreeList.action" type="tab"></menu>
+			<menu id="bankInfo_manage_menu" text="银行信息管理" authorities="bankInfo_manage_menuauth" href="/bankInfo/toQueryBankInfoList.action" type="tab"></menu>
+		</menu>
+		<menu id="servicelog_query_center" text="业务日志查询" type="tab" authorities="servicelog_query_center">
+			<menu id="query_login_log" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action" type="tab"></menu>
+			<menu id="query_systemOper_log" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList.action" type="tab"></menu>
+		</menu>
+	</catalog>
+	
+	<!-- 编码 -->
+	<catalog id="coding_catalog" roles="super_admin" type="tab">
 		<menu id="coding_helper_menu" text="编码帮助">
 			<menu id="coding_standard_menu" text="编码规范">
-				<menu id="java_coding_standard_menu" text="java编码规范" href="/standard/java" />
+				<menu id="naming_standard_menu" text="命名规范" href="/standard/naming" />
+				<menu id="java_coding_standard_menu" text="Java编码规范" href="/standard/java" />
 				<menu id="database_coding_standard_menu" text="数据库编码规范" href="/standard/database" />
 				<menu id="page_coding_standard_menu" text="页面编码规范" href="/standard/page" />
-				<menu id="naming_standard_menu" text="命名规范" href="/standard/naming" />
 			</menu>
 			<menu id="coding_api_menu" text="编码API">
-				<menu id="web_validate_example_menu" text="验证功能" href="http://niceue.com/validator/#plugin_usage" target="mainTabs"/>
-				<menu id="my97_date_menu" text="日期控件" href="http://www.my97.net/dp/demo/index.htm" target="mainTabs"/>
+				<menu id="web_validate_example_menu" text="验证功能" href="http://niceue.com/validator/#plugin_usage" type="tab"/>
+				<menu id="my97_date_menu" text="日期控件" href="http://www.my97.net/dp/demo/index.htm" type="tab"/>
 			</menu>
 			<menu id="coding_reference_menu" text="编码参考">
-				<menu id="menu_helper_menu" text="置配菜单" href="/helper/menuConfigHelper" target="mainTabs"/>
-				<menu id="auth_helper_menu" text="配置权限" href="/helper/authConfigHelper" target="mainTabs"/>
-				<menu id="basicdata_helper_menu" text="基础数据" href="/helper/basicdataHelper" target="mainTabs"/>
-				<menu id="servicelog_helper_menu" text="业务日志" href="/helper/serviceLogHelper" target="mainTabs"/>
+				<menu id="menu_helper_menu" text="置配菜单" href="/helper/menuConfigHelper" type="tab"/>
+				<menu id="auth_helper_menu" text="配置权限" href="/helper/authConfigHelper" type="tab"/>
+				<menu id="basicdata_helper_menu" text="基础数据" href="/helper/basicdataHelper" type="tab"/>
+				<menu id="servicelog_helper_menu" text="业务日志" href="/helper/serviceLogHelper" type="tab"/>
 			</menu>
 		</menu>
-		<menu id="exp_main_menu" text="主页">
-			<menu id="exp_main1_menu" text="主页一" href="/example/main/main1" />
-			<menu id="exp_main2_menu" text="主页二" href="/example/main/main2" />
-			<menu id="exp_main3_menu" text="主页三" href="/example/main/main3" />
-			<menu id="exp_main4_menu" text="主页四" href="/example/main/main4" />
+		<menu id="demo_main_menu" text="主页">
+			<menu id="demo_main1_menu" text="主页一" href="/demo/main/main1" />
+			<menu id="demo_main2_menu" text="主页二" href="/demo/main/main2" />
+			<menu id="demo_main3_menu" text="主页三" href="/demo/main/main3" />
+			<menu id="demo_main4_menu" text="主页四" href="/demo/main/main4" />
 		</menu>
-		<menu id="exp_component_menu" text="组件">
-			<menu id="exp_comp_static_grid_menu" text="静态表格" href="/example/component/grid/static" />
-			<menu id="exp_comp_data_grid_menu" text="数据表格">
-				<menu id="exp_comp_simple_data_grid_menu" text="简单表格" href="/example/component/grid/data/simple" />
+		<menu id="demo_component_menu" text="组件">
+			<menu id="demo_comp_static_grid_menu" text="静态表格" href="/demo/component/grid/static" />
+			<menu id="demo_comp_data_grid_menu" text="数据表格">
+				<menu id="demo_comp_simple_data_grid_menu" text="简单表格" href="/demo/component/grid/data/simple" />
 			</menu>
 		</menu>
-		<menu id="exp_config_menu" text="设置">
-			<menu id="exp_system_config_menu" text="系统设置">
+		<menu id="demo_config_menu" text="设置">
+			<menu id="demo_system_config_menu" text="系统设置">
 				<menu id="menu_test_loanbillupload" text="单据附件导入" href="" />
 			</menu>
 		</menu>

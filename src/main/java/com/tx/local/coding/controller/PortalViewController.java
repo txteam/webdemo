@@ -4,7 +4,7 @@
  * 修改时间:  2013-8-23
  * <修改描述:>
  */
-package com.tx.local.example.controller;
+package com.tx.local.coding.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
