@@ -37,6 +37,7 @@ public class MenuNode
     private final Menu menu;
     
     /** 子菜单集合 */
+    @JsonIgnore
     private List<MenuNode> childs;
     
     /** <默认构造函数> */
@@ -156,28 +157,28 @@ public class MenuNode
     /**
      * @return 返回 childMenuList
      */
-    public List<Menu> getMenuList() {
-        List<Menu> resList = new ArrayList<Menu>();
-        if (!CollectionUtils.isEmpty(this.childs)) {
-            for (MenuNode mn : this.childs) {
-                resList.add(mn);
-                resList.addAll(mn.getMenuList());
-            }
-        }
+    public List<MenuNode> getMenuList() {
+        List<MenuNode> resList = new ArrayList<MenuNode>();
+        doGetMenuList(resList, getChilds());
         return resList;
     }
     
     /**
-     * @return 返回 childMenuList
+     * 迭代获取所有子节点菜单<br/>
+     * <功能详细描述> [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
      */
-    public List<Menu> getChildMenuList() {
-        List<Menu> resList = new ArrayList<Menu>();
-        if (!CollectionUtils.isEmpty(this.childs)) {
-            for (MenuNode mn : this.childs) {
-                resList.add(mn);
-            }
+    private void doGetMenuList(List<MenuNode> resList, List<MenuNode> childs) {
+        if (CollectionUtils.isEmpty(childs)) {
+            return;
         }
-        return resList;
+        for (MenuNode mn : childs) {
+            resList.add(mn);
+            doGetMenuList(resList, mn.getChilds());
+        }
     }
     
     /**

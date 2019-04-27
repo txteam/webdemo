@@ -4,7 +4,7 @@
  * 修改时间:  2019年4月19日
  * <修改描述:>
  */
-package com.tx.local.coding.controller;
+package com.tx.local.documentation.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +33,7 @@ public class StandardController {
      */
     @RequestMapping("/java")
     public String java() {
-        return "/coding/standard/javacoding";
+        return "/documentation/standard/java";
     }
     
     /**
@@ -47,7 +47,7 @@ public class StandardController {
      */
     @RequestMapping("/database")
     public String database() {
-        return "/coding/standard/database";
+        return "/documentation/standard/database";
     }
     
     /**
@@ -61,7 +61,7 @@ public class StandardController {
      */
     @RequestMapping("/naming")
     public String naming() {
-        return "/coding/standard/naming";
+        return "/documentation/standard/naming";
     }
     
     /**
@@ -75,6 +75,6 @@ public class StandardController {
      */
     @RequestMapping("/page")
     public String page() {
-        return "/coding/standard/page";
+        return "/documentation/standard/page";
     }
 }

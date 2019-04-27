@@ -8,7 +8,7 @@
 		<menu id="log_nav_menu" text="日志" icon="&#xe613;" link="log_catalog" authorities="log_nav_menu_auth"/><!-- 系统日志 -->
 		<menu id="config_nav_menu" text="配置" icon="&#xe605;" link="config_catalog" authorities="config_nav_menu_auth" /><!-- 系统配置 -->
 		<menu id="debug_nav_menu" text="调试" icon="&#xe6bf;" link="debug_catalog" roles="super_admin"/><!-- 调试 -->
-		<menu id="coding_nav_menu" text="编码" icon="&#xe60e;" link="coding_catalog" roles="super_admin"/><!-- 编码 -->
+		<menu id="documentation_nav_menu" text="文档" icon="&#xe60e;" link="documentation_catalog" roles="super_admin"/><!-- 编码 -->
 	</catalog>
 	
 	<!-- 工作台 -->
@@ -30,12 +30,11 @@
 	<!-- 系统日志 -->
 	<catalog id="log_catalog" type="tab">
 		<menu id="system_operate_logs_menu" text="系统操作日志">
-			<menu id="query_login_log" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action"></menu>
-			<menu id="query_systemOper_log" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList.action"></menu>
+			<menu id="login_log_menu" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList"></menu>
+			<menu id="system_operate_log_menu" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList"></menu>
 		</menu>
 		<menu id="interface message_logs_menu" text="接口报文日志">
-			<menu id="query_login_log" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action" type="tab"></menu>
-			<menu id="query_systemOper_log" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList.action"></menu>
+			<menu id="test_log_menu" text="测试接口日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action"></menu>
 		</menu>
 	</catalog>
 	
@@ -93,24 +92,20 @@
 			<menu id="district_manage_menu" text="区域管理" authorities="basicdata_manage_menuauth" href="/district/toQueryDistrictTreeList.action" type="tab"></menu>
 			<menu id="bankInfo_manage_menu" text="银行信息管理" authorities="bankInfo_manage_menuauth" href="/bankInfo/toQueryBankInfoList.action" type="tab"></menu>
 		</menu>
-		<menu id="servicelog_query_center" text="业务日志查询" type="tab" authorities="servicelog_query_center">
-			<menu id="query_login_log" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action" type="tab"></menu>
-			<menu id="query_systemOper_log" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList.action" type="tab"></menu>
-		</menu>
 	</catalog>
 	
 	<!-- 编码 -->
-	<catalog id="coding_catalog" roles="super_admin" type="tab">
-		<menu id="coding_helper_menu" text="编码帮助">
+	<catalog id="documentation_catalog" roles="super_admin" type="tab">
+		<menu id="coding_documentation_menu" text="documentation">
 			<menu id="coding_standard_menu" text="编码规范">
 				<menu id="naming_standard_menu" text="命名规范" href="/standard/naming" />
 				<menu id="java_coding_standard_menu" text="Java编码规范" href="/standard/java" />
 				<menu id="database_coding_standard_menu" text="数据库编码规范" href="/standard/database" />
 				<menu id="page_coding_standard_menu" text="页面编码规范" href="/standard/page" />
 			</menu>
-			<menu id="coding_api_menu" text="编码API">
-				<menu id="web_validate_example_menu" text="验证功能" href="http://niceue.com/validator/#plugin_usage" type="tab"/>
-				<menu id="my97_date_menu" text="日期控件" href="http://www.my97.net/dp/demo/index.htm" type="tab"/>
+			<menu id="documentation_link_menu" text="编码API">
+				<menu id="nice_validate_link_menu" text="验证功能" href="http://niceue.com/validator/#plugin_usage"/>
+				<menu id="my97_date_link_menu" text="日期控件" href="http://www.my97.net/dp/demo/index.htm"/>
 			</menu>
 			<menu id="coding_reference_menu" text="编码参考">
 				<menu id="menu_helper_menu" text="置配菜单" href="/helper/menuConfigHelper" type="tab"/>
@@ -119,21 +114,18 @@
 				<menu id="servicelog_helper_menu" text="业务日志" href="/helper/serviceLogHelper" type="tab"/>
 			</menu>
 		</menu>
-		<menu id="demo_main_menu" text="主页">
-			<menu id="demo_main1_menu" text="主页一" href="/demo/main/main1" />
-			<menu id="demo_main2_menu" text="主页二" href="/demo/main/main2" />
-			<menu id="demo_main3_menu" text="主页三" href="/demo/main/main3" />
-			<menu id="demo_main4_menu" text="主页四" href="/demo/main/main4" />
-		</menu>
-		<menu id="demo_component_menu" text="组件">
-			<menu id="demo_comp_static_grid_menu" text="静态表格" href="/demo/component/grid/static" />
-			<menu id="demo_comp_data_grid_menu" text="数据表格">
-				<menu id="demo_comp_simple_data_grid_menu" text="简单表格" href="/demo/component/grid/data/simple" />
+		<menu id="demo_menu" text="demo">
+			<menu id="demo_main_menu" text="主页">
+				<menu id="demo_main1_menu" text="主页一" href="/demo/main/main1" />
+				<menu id="demo_main2_menu" text="主页二" href="/demo/main/main2" />
+				<menu id="demo_main3_menu" text="主页三" href="/demo/main/main3" />
+				<menu id="demo_main4_menu" text="主页四" href="/demo/main/main4" />
 			</menu>
-		</menu>
-		<menu id="demo_config_menu" text="设置">
-			<menu id="demo_system_config_menu" text="系统设置">
-				<menu id="menu_test_loanbillupload" text="单据附件导入" href="" />
+			<menu id="demo_component_menu" text="组件">
+				<menu id="demo_comp_static_grid_menu" text="静态表格" href="/demo/component/grid/static" />
+				<menu id="demo_comp_data_grid_menu" text="数据表格">
+					<menu id="demo_comp_simple_data_grid_menu" text="简单表格" href="/demo/component/grid/data/simple" />
+				</menu>
 			</menu>
 		</menu>
 	</catalog>

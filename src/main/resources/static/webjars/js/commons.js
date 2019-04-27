@@ -1,91 +1,3 @@
-function baseJsonformatter(value, row, index){
-    if($.ObjectUtils.isEmpty(value)){
-        text = '';
-    }else if(typeof value.name !='undefined'){
-        return value.name;
-    }else{
-        return value;
-
-    }
-}
-function escapeFormatter(value, row, index) {  
-    if (value === undefined) {  
-        return value;  
-    }else {  
-    	value = value === null ? "" : value;  
-    	value =value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g,"&gt;")  
-        	.replace(/"/g, "&quot;").replace(/'/g, "&#39;");      // &，大于，小于，双引号，单引号
-        return value;
-    }  
-}
-/**
- * 格式化时间
- * @param value
- * @param row
- * @param index
- * @returns {string}
- */
-function dateFormatter(value, row, index){
-    var text = '';
-    if($.ObjectUtils.isEmpty(value)){
-        text = '';
-    }else{
-        var date = new Date();
-        date.setTime(value);
-        text = date.format('yyyy-MM-dd hh:mm:ss');
-    }
-    return text;
-}
-/**
- * 忽略对内容中有标签的解析
- * @param value
- * @param row
- * @param index
- * @returns {string}
- */
-function ignoreTagFormatter(value,row,index){
-	value = "<xmp>" + (value == null ? "" : value)  + "</xmp>";
-    return value;
-}
-/**
- * 对数字格式化函数
- * @param value
- * @param row
- * @param index
- * @returns {string}
- */
-function numberFormatter(value,row,index){
-	value = "<p style='text-align: right;padding-right:5px;'>" + (value == null ? "" : value) + "</p>";
-    return value;
-}
-/**
- * 格式化金额
- * @param value
- * @param row
- * @param index
- * @returns {String}
- */
-function moneyFormatter(value,row,index){
-	value = "<p style='text-align: right;padding-right:5px;color:#fc8813;font-weight:bolder;'>"+formatCurrency(value)+"</p>";
-    return value;
-}
-
-function formatCurrency(num) {
-    num = num.toString().replace(/\$|\,/g,'');
-    if(isNaN(num))
-        num = "0";
-    sign = (num == (num = Math.abs(num)));
-    num = Math.floor(num*100+0.50000000001);
-    cents = num%100;
-    num = Math.floor(num/100).toString();
-    if(cents<10)
-        cents = "0" + cents;
-    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
-        num = num.substring(0,num.length-(4*i+3))+','+
-            num.substring(num.length-(4*i+3));
-    return (((sign)?'':'-') + num + '.' + cents);
-}
-
 //,formatter :baseJsonformatter;
 /************ 用于统一页面样式 ************** */
 $(window).resize(function(){
@@ -97,73 +9,18 @@ $(window).resize(function(){
 		$(document).trigger('onStopResize');
 	},200);
 });
-$.extend($.fn.linkbutton.defaults.options, {
-	size : ''
-});
-/**
- * 
- * 金额格式化
- * @param money
- * @param n
- * @returns {String}
- */
-function formatterMoney(money, n)  
-{  
-   n = n > 0 && n <= 20 ? n : 2;  
-   money = parseFloat((money + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";  
-   var l = money.split(".")[0].split("").reverse(),  
-   r = money.split(".")[1];  
-   t = "";  
-   for(i = 0; i < l.length; i ++ )  
-   {  
-      t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");  
-   }  
-   return t.split("").reverse().join("") + "." + r;  
-}  
-
+//$.extend($.fn.linkbutton.defaults.options, {size : ''});
 $(document).ready(function() {
     try{
         if(window.parent && window.parent.DiologUtils){
-            window.parent.DiologUtils.progress('close');
+            window.parent.DialogUtils.progress('close');
         }
     }catch(e){}
 });
-/**
- * 金额大写
- * @param _this
- * @returns {String}
- */
-function amountLtoU(amount) {
-		if($.ObjectUtils.isEmpty(amount)){
-			return "";
-		}
-		if(isNaN(amount)){
-			return "无效数值！";
-		}
-		var strPrefix="";
-		if(amount<0)strPrefix ="(负)";
-		amount=Math.abs(amount);
-		if(amount>=1000000000000)return "无效数值！";
-		var strOutput = "";
-		var strUnit = '仟佰拾亿仟佰拾万仟佰拾元角分';
-	    var strCapDgt='零壹贰叁肆伍陆柒捌玖';
-	    amount += "00";
-		 var intPos = amount.indexOf('.');
-		 if (intPos >= 0){
-			 amount = amount.substring(0, intPos) + amount.substr(intPos + 1, 2);
-		 }
-		 strUnit = strUnit.substr(strUnit.length - amount.length);
-		 for (var i=0; i < amount.length; i++){
-				 strOutput += strCapDgt.substr(amount.substr(i,1),1) + strUnit.substr(i,1);
-		 }
-		return strPrefix+strOutput.replace(/零角零分$/, '整').replace(/零[仟佰拾]/g, '零').replace(/零{2,}/g, '零').replace(/零([亿|万])/g, '$1').replace(/零+元/, '元').replace(/亿零{0,3}万/, '亿').replace(/^元/, "零元");
-}
-
 /** 
  * 提供跨页面的事件广播支持
  * 客户端统一事件管理器
  */
-
 (function($, undefined) {
     //为当前页面定制，本地事件
     var $localEventHandle = null;
@@ -189,9 +46,8 @@ function amountLtoU(amount) {
                 break;
             }
         } catch (e) {
-            //do nothing
+        	//do nothing
         }
-
         if (!_globalEventManagerWin_.closed && _globalEventManagerWin_.parent != null && _globalEventManagerWin_.parent != _globalEventManagerWin_) {
             _globalEventManagerWin_ = _globalEventManagerWin_.parent;
         } else if (!_globalEventManagerWin_.closed && _globalEventManagerWin_.opener != null && _globalEventManagerWin_.opener != _globalEventManagerWin_) {
@@ -272,7 +128,6 @@ function amountLtoU(amount) {
                     }
                 });
             };
-
             /**
              * 事件管理器全局对象
              */
@@ -316,6 +171,19 @@ function amountLtoU(amount) {
     $.bindGE = $.bindge = $.bindGlobalEvent;
     $.unbindGE = $.unbindge = $.unbindGlobalEvent;
     $.oneGE = $.onege = $.oneGlobalEvent;
+    //页面加载完后的逻辑处理
+	//function test(a,b,c){
+	//	alert(a + " : " + b + " : " + c);
+	//}
+	//var fun = function a(){	
+	//}
+	//test.call(fun,1,2,3);
+	//test.apply(fun,[1,2,3]);
+	//function test2(a,b,c){
+	//	test.apply(fun,arguments);
+	//}
+	//test2(1,2,3);
+	//test2(1,2);
 })(jQuery); 
 
 
@@ -369,6 +237,27 @@ if (browser.userAgent.indexOf('MSIE') > -1) {
  * 扩展jquery 
  */
 (function($, undefined){
+	String.prototype.startWith=function(str){     
+	  var reg=new RegExp("^"+str);     
+	  return reg.test(this);        
+	};
+	String.prototype.endWith=function(str){     
+	  var reg=new RegExp(str+"$");     
+	  return reg.test(this);        
+	};
+	
+	$.toArray = function(s){
+	    try{
+	    return Array.prototype.slice.call(s);
+	    } catch(e){
+	    var arr = [];
+	    for(var i = 0,len = s.length; i < len; i++){
+	    //arr.push(s[i]);
+	    arr[i] = s[i];  //据说这样比push快
+	    }
+	    return arr;
+	    }
+	};
 	$.StringUtils = {};
 	$.StringUtils.subEndStr = function(sourceString,length,end){
 		if(length == undefined){

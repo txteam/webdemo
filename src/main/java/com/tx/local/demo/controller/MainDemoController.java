@@ -4,7 +4,7 @@
  * 修改时间:  2013-8-23
  * <修改描述:>
  */
-package com.tx.local.coding.controller;
+package com.tx.local.demo.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
   */
 @Controller
 @RequestMapping("/portal")
-public class PortalViewController {
+public class MainDemoController {
     
     /**
       * 显示portalIndex

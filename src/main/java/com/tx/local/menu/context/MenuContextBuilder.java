@@ -138,7 +138,8 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
                     catalogTemp.getMenuList());
             
             catalog.setMenuList(menuList);
-            catalog.setChildrenMenuNodeList(childrenMenuNodeList);
+            catalog.setChilds(childrenMenuNodeList);
+            
             catalogMap.put(catalogUpperCase, catalog);
             catalog2menuListMap.put(catalogUpperCase, menuList);
             catalog2menuNodeListMap.put(catalogUpperCase, childrenMenuNodeList);

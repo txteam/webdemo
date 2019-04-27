@@ -7,14 +7,11 @@
 package com.tx.local.menu.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections4.CollectionUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -56,7 +53,7 @@ public class MenuCatalogItem implements Serializable {
     
     /** 菜单节点清单(不包含子节点的子节点，以树结构存放数据):直接子节点 */
     @JsonIgnore
-    private List<MenuNode> childrenMenuNodeList;
+    private List<MenuNode> childs;
     
     /**
      * @return 返回 id
@@ -165,32 +162,18 @@ public class MenuCatalogItem implements Serializable {
     }
     
     /**
-     * @return 返回 childrenMenuNodeList
+     * @return 返回 childs
      */
     @JsonIgnore
-    public List<MenuNode> getChildrenMenuNodeList() {
-        return childrenMenuNodeList;
+    public List<MenuNode> getChilds() {
+        return childs;
     }
     
     /**
-     * @param 对childrenMenuNodeList进行赋值
+     * @param 对childs进行赋值
      */
-    public void setChildrenMenuNodeList(List<MenuNode> childrenMenuNodeList) {
-        this.childrenMenuNodeList = childrenMenuNodeList;
-    }
-    
-    /**
-     * @return 返回 childMenuList
-     */
-    @JsonIgnore
-    public List<Menu> getChildrenMenuList() {
-        List<Menu> resList = new ArrayList<Menu>();
-        if (!CollectionUtils.isEmpty(this.childrenMenuNodeList)) {
-            for (MenuNode mn : this.childrenMenuNodeList) {
-                resList.add(mn);
-            }
-        }
-        return resList;
+    public void setChilds(List<MenuNode> childs) {
+        this.childs = childs;
     }
     
     /**
