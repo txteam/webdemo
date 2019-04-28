@@ -92,11 +92,11 @@ spring:
         enabled: true
         url-pattern: '/druid/*'
         # IP白名单(没有配置或者为空，则允许所有访问)
-        allow: 'localhost,127.0.0.1'
+        # allow: 'localhost,127.0.0.1'
         # IP黑名单 (存在共同时，deny优先于allow)
         # deny: 配置路由ip?
-        login-username: admin
-        login-password: 123321qQ
+        # login-username: admin
+        # login-password: 123321qQ
         # 禁用HTML页面上的“Reset All”功能
         reset-enable: false
       web-stat-filter:

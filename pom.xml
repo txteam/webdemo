@@ -24,11 +24,11 @@
 	</properties>
 
 	<dependencies>
-		<!-- javamelody -->
+		<!-- javamelody 1.72后续版本，需要spring-boot2 -->
 		<dependency>
 			<groupId>net.bull.javamelody</groupId>
-			<artifactId>javamelody-core</artifactId>
-			<version>1.47.0</version>
+			<artifactId>javamelody-spring-boot-starter</artifactId>
+			<version>1.72.0</version>
 		</dependency>
 
 		<!-- druid -->
@@ -58,7 +58,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
+
 		<!-- redis -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -262,7 +262,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<profiles>
 		<profile>
 			<id>dev</id>

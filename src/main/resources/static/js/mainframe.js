@@ -93,7 +93,8 @@ $(function(){
 	            try {
 	                if (frames.length > 0) {
 	                    for (var i = 0; i < frames.length; i++) {
-	                    	var $frame = frames[i];
+	                    	var $frame = $(frames[i]);
+	                    	//alert('$frame.size()=' + $frame.size());
 	                    	if($frame.attr('newsrc')){
 	                    		$frame.attr('src',$frame.attr('newsrc'));
 	                    	}else{
@@ -418,16 +419,15 @@ $(function(){
 						
 						//树节点
 						var $tree = $accordion.find("#" + menu.id + '_tree');
-						_this._createTree($tree,menuMapTemp.menuList);
+						_this._createTree(menu.id,$tree,menuMapTemp.menuList);
 						
-						_element.bind('_unselect_other_tree',{menu: menu,$tree: $tree},function(event,currentTreeMenuId){
+						_element.bind('_unselect_other_tree',{menu: menu,$tree: $tree},function(event,accordingItemMenuId){
 							var menu = event.data.menu;
 							var $tree = event.data.$tree;
-							if(menu.id != currentTreeMenuId){
-								$tree.find(".tree-node").filter(".tree-node-selected").removeClass("tree-node-selected");
-							}else{
-								alert(menu.id + " | " + currentTreeMenuId);
+							if(menu.id == accordingItemMenuId ){
+								return true;
 							}
+							$tree.find(".tree-node-selected").removeClass("tree-node-selected");
 						});
 					});
 			   }
@@ -447,7 +447,7 @@ $(function(){
                 content : '<ul id="' + menu.id + '_tree"></ul>'
             });
 		},
-		_createTree: function($tree,menuList){
+		_createTree: function(accordingItemMenuId,$tree,menuList){
 			var _this = this;
 			var _options = _this.options;
 			var _element = _this.element;
@@ -479,8 +479,9 @@ $(function(){
 				//绑定事件
 				$tree.bind('_select_' + menuTemp.id,{menu: menuTemp},function(event){
 					var menu = event.data.menu;
+					
 					//触发取消其他树节点选中效果
-					//_element.trigger('_unselect_other_tree',menu.id);
+					_element.trigger('_unselect_other_tree',accordingItemMenuId);
 					//触发菜单选中方法
 					_this.options.onSelect(menu);
 				});
@@ -558,7 +559,7 @@ $(document).ready(function() {
 	}
 	$(".nav").top_menu({
 		//url: /*[[@{/menu/queryMenuListBySecurity?catalog=nav_catalog}]]*/'',
-		url: _contextPath + 'menu/queryMenuListBySecurity?catalog=nav_catalog',
+		url: _contextPath + 'menu/queryMenuListBySecurity?catalog=operator_nav_catalog',
 		onSelect: onMenuSelect
 	});
 	$(".left").left_menu({
@@ -568,6 +569,6 @@ $(document).ready(function() {
 		onSelect: onMenuSelect
 	});
 	//默认选中菜单工作台: workbench_nav_menu
-	$(".nav").top_menu('select','workbench_nav_menu');
+	$(".nav").top_menu('select','operator_workbench_nav_menu');
 });
 

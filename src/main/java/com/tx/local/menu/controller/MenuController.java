@@ -50,9 +50,9 @@ public class MenuController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    @RequestMapping("/toQueryMenuItemTreeList")
-    public String toQueryMenuItemTreeList() {
-        return "mainframe/queryMenuItemTreeList";
+    @RequestMapping("/toQueryMenuTreeList")
+    public String toQueryMenuTreeList() {
+        return "mainframe/queryMenuTreeList";
     }
     
     /**
@@ -102,6 +102,7 @@ public class MenuController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
+    @SuppressWarnings("unused") 
     @ResponseBody
     @RequestMapping("/queryMenuListBySecurity")
     public List<Menu> queryMenuListBySecurity(
@@ -147,7 +148,7 @@ public class MenuController {
         return resList;
     }
     
-    
+    @SuppressWarnings("unused") 
     @ResponseBody
     @RequestMapping("/queryMenuMapListBySecurity")
     public List<Map<String, Object>> queryMenuMapListBySecurity(
@@ -198,7 +199,6 @@ public class MenuController {
         return resList;
     }
     
-    
     /**
      * 根据当前的登录人员的权限项加载菜单树
      * <功能详细描述>
@@ -208,6 +208,7 @@ public class MenuController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
+    @SuppressWarnings("unused") 
     @ResponseBody
     @RequestMapping("/queryMenuNodeListBySecurity")
     public List<MenuNode> queryMenuNodeListBySecurity(

@@ -2,8 +2,8 @@
 <menu_config>
 
 	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示 -->
-	<catalog id="nav_catalog" type="nav">
-		<menu id="workbench_nav_menu" text="工作台" icon="&#xe617;" link="workbench_catalog"/>
+	<catalog id="operator_nav_catalog" type="nav">
+		<menu id="operator_workbench_nav_menu" text="工作台" icon="&#xe617;" link="operator_workbench_catalog"/>
 		<menu id="report_nav_menu" text="报表" icon="&#xe78e;" link="report_catalog" authorities="report_nav_menu_auth"/>
 		<menu id="log_nav_menu" text="日志" icon="&#xe613;" link="log_catalog" authorities="log_nav_menu_auth"/><!-- 系统日志 -->
 		<menu id="config_nav_menu" text="配置" icon="&#xe605;" link="config_catalog" authorities="config_nav_menu_auth" /><!-- 系统配置 -->
@@ -12,7 +12,7 @@
 	</catalog>
 	
 	<!-- 工作台 -->
-	<catalog id="workbench_catalog" auth="config_menu_authentication" type="tab">
+	<catalog id="operator_workbench_catalog" auth="config_menu_authentication" type="tab">
 		<!-- 控制面板 -->
 		<menu id="control_panel_menu" text="控制面板">
 			<menu id="personal_center_menu" text="个人中心">
@@ -38,59 +38,29 @@
 		</menu>
 	</catalog>
 	
-	<!-- 系统日志菜单分类 -->
-	<catalog id="config_catalog" authorities="config_menu_authentication">
-		<menu id="system_monitor_menu" text="系统监控" authorities="system_monitor_menuauth" type="tab" selectRefresh="false">
-			<menu id="druid_monitor_menu" text="druid监控视图" href="/druid"></menu>
-			<menu id="JavaMelody_monitor_menu" text="JavaMelody监控视图" href="/monitoring"></menu>
-		</menu>
-		<menu id="system_config_manage_menu" text="系统配置" authorities="system_config_manage_menuauth" type="tab">
-			<menu id="menu_manage_menu" text="菜单管理" authorities="menu_manage_menuauth" href="/mainframe/toQueryAllMenuItemTreeList" type="tab" selectRefresh="false" />
-			<menu id="config_manage_menu" text="配置项管理" authorities="config_manage_menuauth" href="/configuration/toQueryConfigProperty.action" type="tab" selectRefresh="false" />
-		</menu>
-		<menu id="operator_manage_center_menu" text="用户管理" authorities="operator_manage_center_menuauth" type="tab">
-			<menu id="organization_manage_menu" text="组织结构管理" authorities="organization_manage_menuauth" href="/organization/toQueryOrganizationList.action" type="tab"></menu>
-			<menu id="virtualCenter_manage_menu" text="虚中心管理" authorities="virtualCenter_manage_menuauth" href="/virtualCenter/toQueryVirtualCenterList.action" type="tab"></menu>
-			<menu id="auth_manage_menu" text="权限管理" authorities="auth_manage_menuauth" href="/auth/toQueryAuthView.action" type="tab"></menu>
-			<menu id="role_manage_menu" text="角色管理" authorities="role_manage_menuauth" href="/role/toQueryRoleList.action" type="tab"></menu>
-			<menu id="post_manage_menu" text="职位管理" authorities="post_manage_menuauth" href="/post/toQueryPostList.action" type="tab"></menu>
-			<menu id="operator_manage_menu" text="用户管理" authorities="operator_manage_menuauth" href="/operator/toQueryOperatorList.action" type="tab"></menu>
-		</menu>
-		<menu id="basicdata_manage_center_menu" text="基础数据管理" authorities="basicdata_manage_center_menuauth" type="tab" selectRefresh="false">
-			<menu id="basicDataType_manage_menu" text="基础数据类型管理" authorities="basicdatatype_manage_menuauth" href="/basicDataType/toQueryBasicDataTypeList.action" type="tab"></menu>
-			<menu id="basicData_manage_menu" text="数据字典管理" authorities="basicData_manage_menuauth" href="/basicData/toBasicDataMainframe.action" type="tab"></menu>
-			<menu id="district_manage_menu" text="区域管理" authorities="basicdata_manage_menuauth" href="/district/toQueryDistrictTreeList.action" type="tab"></menu>
-			<menu id="bankInfo_manage_menu" text="银行信息管理" authorities="bankInfo_manage_menuauth" href="/bankInfo/toQueryBankInfoList.action" type="tab"></menu>
-		</menu>
-		<menu id="servicelog_query_center" text="业务日志查询" type="tab" authorities="servicelog_query_center">
-			<menu id="query_login_log" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action" type="tab"></menu>
-			<menu id="query_systemOper_log" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList.action" type="tab"></menu>
-		</menu>
-	</catalog>
-	
 	<!-- 系统配置菜单分类 -->
 	<catalog id="config_catalog" authorities="config_nav_menu_auth">
-		<menu id="system_monitor_menu" text="系统监控" authorities="system_monitor_menuauth" type="tab" selectRefresh="false">
+		<menu id="system_monitor_menu" text="系统监控" authorities="system_monitor_authentication" type="tab" selectRefresh="false">
 			<menu id="druid_monitor_menu" text="druid监控视图" href="/druid"></menu>
 			<menu id="JavaMelody_monitor_menu" text="JavaMelody监控视图" href="/monitoring"></menu>
 		</menu>
-		<menu id="system_config_manage_menu" text="系统配置" authorities="system_config_manage_menuauth" type="tab">
-			<menu id="menu_manage_menu" text="菜单管理" authorities="menu_manage_menuauth" href="/mainframe/toQueryAllMenuItemTreeList" type="tab" selectRefresh="false" />
-			<menu id="config_manage_menu" text="配置项管理" authorities="config_manage_menuauth" href="/configuration/toQueryConfigProperty.action" type="tab" selectRefresh="false" />
+		<menu id="system_config_manage_menu" text="系统配置" authorities="system_config_manage_authentication" type="tab">
+			<menu id="menu_manage_menu" text="菜单管理" authorities="menu_manage_authentication" href="/menu/toQueryMenuTreeList"/>
+			<menu id="config_manage_menu" text="配置项管理" authorities="config_manage_authentication" href="/config/toQueryConfigList"/>
 		</menu>
-		<menu id="operator_manage_center_menu" text="用户管理" authorities="operator_manage_center_menuauth" type="tab">
-			<menu id="organization_manage_menu" text="组织结构管理" authorities="organization_manage_menuauth" href="/organization/toQueryOrganizationList.action" type="tab"></menu>
-			<menu id="virtualCenter_manage_menu" text="虚中心管理" authorities="virtualCenter_manage_menuauth" href="/virtualCenter/toQueryVirtualCenterList.action" type="tab"></menu>
-			<menu id="auth_manage_menu" text="权限管理" authorities="auth_manage_menuauth" href="/auth/toQueryAuthView.action" type="tab"></menu>
-			<menu id="role_manage_menu" text="角色管理" authorities="role_manage_menuauth" href="/role/toQueryRoleList.action" type="tab"></menu>
-			<menu id="post_manage_menu" text="职位管理" authorities="post_manage_menuauth" href="/post/toQueryPostList.action" type="tab"></menu>
-			<menu id="operator_manage_menu" text="用户管理" authorities="operator_manage_menuauth" href="/operator/toQueryOperatorList.action" type="tab"></menu>
+		<menu id="basicdata_manage_center_menu" text="基础数据管理" authorities="basicdata_manage_center_authentication" type="tab" selectRefresh="false">
+			<menu id="basicDataType_manage_menu" text="基础数据类型管理" authorities="basicdatatype_manage_authentication" href="/basicDataType/toQueryBasicDataTypeList.action" type="tab"></menu>
+			<menu id="basicData_manage_menu" text="数据字典管理" authorities="basicData_manage_authentication" href="/basicData/toBasicDataMainframe.action" type="tab"></menu>
+			<menu id="district_manage_menu" text="区域管理" authorities="basicdata_manage_authentication" href="/district/toQueryDistrictTreeList.action" type="tab"></menu>
+			<menu id="bankInfo_manage_menu" text="银行信息管理" authorities="bankInfo_manage_authentication" href="/bankInfo/toQueryBankInfoList.action" type="tab"></menu>
 		</menu>
-		<menu id="basicdata_manage_center_menu" text="基础数据管理" authorities="basicdata_manage_center_menuauth" type="tab" selectRefresh="false">
-			<menu id="basicDataType_manage_menu" text="基础数据类型管理" authorities="basicdatatype_manage_menuauth" href="/basicDataType/toQueryBasicDataTypeList.action" type="tab"></menu>
-			<menu id="basicData_manage_menu" text="数据字典管理" authorities="basicData_manage_menuauth" href="/basicData/toBasicDataMainframe.action" type="tab"></menu>
-			<menu id="district_manage_menu" text="区域管理" authorities="basicdata_manage_menuauth" href="/district/toQueryDistrictTreeList.action" type="tab"></menu>
-			<menu id="bankInfo_manage_menu" text="银行信息管理" authorities="bankInfo_manage_menuauth" href="/bankInfo/toQueryBankInfoList.action" type="tab"></menu>
+		<menu id="operator_manage_center_menu" text="用户管理" authorities="operator_manage_center_authentication" type="tab">
+			<menu id="virtualCenter_manage_menu" text="虚中心管理" authorities="virtualCenter_manage_authentication" href="/virtualCenter/toQueryVirtualCenterList.action" type="tab"></menu>
+			<menu id="organization_manage_menu" text="组织结构管理" authorities="organization_manage_authentication" href="/organization/toQueryOrganizationList.action" type="tab"></menu>
+			<menu id="auth_manage_menu" text="权限管理" authorities="auth_manage_authentication" href="/auth/toQueryAuthView.action" type="tab"></menu>
+			<menu id="role_manage_menu" text="角色管理" authorities="role_manage_authentication" href="/role/toQueryRoleList.action" type="tab"></menu>
+			<menu id="post_manage_menu" text="职位管理" authorities="post_manage_authentication" href="/post/toQueryPostList.action" type="tab"></menu>
+			<menu id="operator_manage_menu" text="用户管理" authorities="operator_manage_authentication" href="/operator/toQueryOperatorList.action" type="tab"></menu>
 		</menu>
 	</catalog>
 	
