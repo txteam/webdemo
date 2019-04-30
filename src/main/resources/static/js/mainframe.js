@@ -73,10 +73,12 @@ $(function(){
 		$('#tabs_tool_menu').click(function(e){
 			e.preventDefault();
 			var _$this = $(this);
-	    	//var x = $('#tabs-tool-menu').position().left + _$this.width();
-	    	//var y = $('#tabs-tool-menu').position().top - _$this.height();
-	    	var x =  e.pageX;
-	    	var y = e.pageY;
+			//var X = $('#img').offset().top;var Y = $('#img').offset().left;
+	    	var x = _$this.offset().left + _$this.width() - 50;
+	    	var y = _$this.offset().top + _$this.height();
+	    	//alert(x + " : " + y);
+	    	//var x =  e.pageX;
+	    	//var y = e.pageY;
 	    	$index_tabs_menu.menu('show', {
 	            left : x,
 	            top : y
@@ -570,5 +572,28 @@ $(document).ready(function() {
 	});
 	//默认选中菜单工作台: workbench_nav_menu
 	$(".nav").top_menu('select','operator_workbench_nav_menu');
+	
+	/* 最大化窗口 */
+	$("#screen_handle").on("click", function (e) {
+		e.preventDefault();
+		
+		if (!$(this).find('i').hasClass("icon-screen-restore")) {
+			var docElm = document.documentElement;
+			var full = docElm.requestFullScreen || docElm.webkitRequestFullScreen ||
+			docElm.mozRequestFullScreen || docElm.msRequestFullscreen;
+			"undefined" !== typeof full && full && full.call(docElm);
+			
+			$(this).find('i').removeClass("icon-screen-full");
+			$(this).find('i').addClass("icon-screen-restore");
+		} else {
+			document.exitFullscreen ? document.exitFullscreen()
+					: document.mozCancelFullScreen ? document.mozCancelFullScreen()
+					: document.webkitCancelFullScreen ? document.webkitCancelFullScreen()
+					: document.msExitFullscreen && document.msExitFullscreen();
+					
+			$(this).find('i').removeClass("icon-screen-restore");
+			$(this).find('i').addClass("icon-screen-full");
+	    }
+	});
 });
 

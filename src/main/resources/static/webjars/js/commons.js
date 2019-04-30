@@ -1160,7 +1160,7 @@ $.fn.tree.defaults.loadFilter = function(data) {
                 if(!notIncludeTarget){
                 	data[i]['attributes'] = data[i];
                 } 
-                data[i]['text'] = $.isFunction(textField) ? iconField.call(textField,data[i]) : data[i][textField];
+                data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
                 data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
                 tmpMap[data[i][parentField]]['checked'] = false;
@@ -1168,7 +1168,7 @@ $.fn.tree.defaults.loadFilter = function(data) {
             	if(!notIncludeTarget){
             		data[i]['attributes'] = data[i];
                 }
-                data[i]['text'] = $.isFunction(textField) ? iconField.call(textField,data[i]) : data[i][textField];
+                data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
                 data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 data[i]['checked'] = data[i][checkedField];
                 treeData.push(data[i]);
@@ -1186,7 +1186,7 @@ $.fn.tree.defaults.loadFilter = function(data) {
             if(!notIncludeTarget){
             	item['attributes'] = item;
             }
-            item['text'] = $.isFunction(textField) ? iconField.call(textField,data[i]) : data[i][textField];
+            item['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
             item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
             item['children'] = item[childrenField];
             if(!$.ObjectUtils.isEmpty(item['children'])){
@@ -1227,11 +1227,11 @@ $.fn.treegrid.defaults.loadFilter = function(data) {
             if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
                 if (!tmpMap[data[i][parentField]]['children'])
                     tmpMap[data[i][parentField]]['children'] = [];
-                data[i]['text'] = $.isFunction(textField) ? iconField.call(textField,data[i]) : data[i][textField];
+                data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
                 data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
             } else {
-                data[i]['text'] = $.isFunction(textField) ? iconField.call(textField,data[i]) : data[i][textField];
+                data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
                 data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 treeData.push(data[i]);
             }
@@ -1245,7 +1245,7 @@ $.fn.treegrid.defaults.loadFilter = function(data) {
             if(item == null){
                 return ;
             }
-            item['text'] = $.isFunction(textField) ? iconField.call(textField,data[i]) : data[i][textField];
+            item['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
             item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
             item['children'] = item[childrenField];
             if(!$.ObjectUtils.isEmpty(item['children'])){

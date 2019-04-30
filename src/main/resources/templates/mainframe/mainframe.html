@@ -38,7 +38,21 @@ var _contextPath = /*[[@{/}]]*/'';
 
 <script th:inline="javascript" type="text/javascript">
 /*<![CDATA[*/
-
+$(document).ready(function() {
+	/*
+	var euiUserMenu = $('#user_menu').menu();
+	$("#user_info").mouseover(function(e){
+		e.preventDefault();
+		var _$this = $(this);
+    	var x = _$this.offset().left + _$this.width();
+    	var y = _$this.offset().top + _$this.height();
+    	$('#user_menu').menu('show', {
+            left : x,
+            top : y
+        });
+	});
+	*/
+});
 /*]]>*/
 </script>
 </head>
@@ -53,9 +67,10 @@ var _contextPath = /*[[@{/}]]*/'';
         
         <div class="topright">
             <ul class="toptool">
-	            <li><a href="#"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
-	            <li><a href="#"><i class="iconfont">&#xe621;</i></a><em class="gcolor">5</em></li>
-	            <li>
+            	<li><a id="screen_handle" href="javascript:void(0);"><i class="iconfont icon-screen-full"></i></a></li>
+	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
+	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe621;</i></a><em class="gcolor">5</em></li>
+	            <li id="user_info">
 	            	<span class="userface"><i class="iconfont">&#xe60d;</i></span>
 	            	<a href="javascript:void(0);"><font>admin&nbsp;&nbsp;<i class="iconfont userdown">&#xe618;</i></font></a>
 	            </li>
@@ -82,16 +97,22 @@ var _contextPath = /*[[@{/}]]*/'';
 </div>
 
 <div id="tabs-tool" style="display: none;">
+	<!-- transmit icon-down -->
 	<a href="javascript:void(0);" id="tabs_tool_refresh" class="easyui-linkbutton" plain="true" iconCls="transmit"></a>
 	<a href="javascript:void(0);" id="tabs_tool_menu" class="easyui-linkbutton" plain="true" iconCls="cog"></a>
 </div>
-
 <div id="index_tabs_menu" style="width: 120px; display: none;">
 	<div id="refresh" data-options="iconCls:'transmit'">刷新</div>
 	<div class="menu-sep"></div>
 	<div id="close_current" data-options="iconCls:'delete'">关闭当前标签页</div>
 	<div id="close_other" data-options="iconCls:'delete'">关闭其他标签页</div>
 	<div id="close_all" data-options="iconCls:'delete'">关闭所有标签页</div>
+</div>
+<div id="user_menu" style="width: 140px; display: none;">
+	<div id="user_menu_modify_user_info" data-options="iconCls:'delete'">基本资料</div>
+	<div id="user_menu_modify_password" data-options="iconCls:'transmit'">修改密码</div>
+	<div class="menu-sep"></div>
+	<div id="user_menu_logout" data-options="iconCls:'delete'">退出</div>
 </div>
 </body>
 </html>
