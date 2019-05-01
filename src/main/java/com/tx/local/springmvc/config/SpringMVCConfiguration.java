@@ -14,11 +14,10 @@ import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * web配置器<br/>
@@ -30,8 +29,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @since  [产品/模块版本]
  */
 @Configuration
-public class SpringMVCConfiguration extends WebMvcConfigurerAdapter
-        implements InitializingBean {
+public class SpringMVCConfiguration
+        implements WebMvcConfigurer, InitializingBean {
     
     /** 本地化验证器 */
     private LocalValidatorFactoryBean validator;
@@ -45,23 +44,11 @@ public class SpringMVCConfiguration extends WebMvcConfigurerAdapter
     }
     
     /**
-     * 参数解析器<br/>
-     * @param argumentResolvers
-     */
-    @Override
-    public void addArgumentResolvers(
-            List<HandlerMethodArgumentResolver> argumentResolvers) {
-        super.addArgumentResolvers(argumentResolvers);
-    }
-    
-    /**
      * @param converters
      */
     @Override
     public void extendMessageConverters(
             List<HttpMessageConverter<?>> converters) {
-        super.extendMessageConverters(converters);
-        
         //bufferedImageConverter
         converters.add(new BufferedImageHttpMessageConverter());
     }
@@ -72,7 +59,7 @@ public class SpringMVCConfiguration extends WebMvcConfigurerAdapter
     @Override
     public void extendHandlerExceptionResolvers(
             List<HandlerExceptionResolver> exceptionResolvers) {
-        super.extendHandlerExceptionResolvers(exceptionResolvers);
+        //super.extendHandlerExceptionResolvers(exceptionResolvers);
         //添加自定义异常解析器
         //exceptionResolvers.add(customizedHandlerExceptionResolver());
     }
@@ -83,7 +70,7 @@ public class SpringMVCConfiguration extends WebMvcConfigurerAdapter
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        super.addResourceHandlers(registry);
+        //super.addResourceHandlers(registry);
         registry.addResourceHandler("/favicon.ico")
                 .addResourceLocations("classpath:/static/favicon.ico")
                 .setCachePeriod(86400);
@@ -96,6 +83,7 @@ public class SpringMVCConfiguration extends WebMvcConfigurerAdapter
         Integer cachePeriod = 0;//86400;
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/static/webjars/")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/")
                 .setCachePeriod(cachePeriod);
         
     }
@@ -127,6 +115,6 @@ public class SpringMVCConfiguration extends WebMvcConfigurerAdapter
      */
     @Override
     public Validator getValidator() {
-        return super.getValidator();
+        return this.validator;
     }
 }

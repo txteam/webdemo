@@ -1,4 +1,4 @@
-debug: false
+debug: true
 
 #server
 server:
@@ -6,7 +6,8 @@ server:
     uri-encoding: UTF-8
   port: ${app.server.port}
   # 为了在研发期间能够及时发现contextPath引起的路径错乱这里增加context-path设置
-  context-path: ${app.server.contextPath}
+  servlet:
+    context-path: ${app.server.contextPath}
   # session:
   #  cookie:
   #    name: tx_webdemo
@@ -21,6 +22,7 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
+  servlet:
     #替代： multipartResolver的实现
     multipart:
       enabled: true
@@ -50,6 +52,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
+      log-abandoned: true
       db-type: mysql
       driver-class-name: com.p6spy.engine.spy.P6SpyDriver
       url: ${app.jdbc.url}
@@ -111,4 +114,26 @@ spring:
     #mode: HTML5
     #encoding: UTF-8
     #content-type: text/html
+    
+tx:
+  core:
+    persister:
+      type: mybatis
+      database-platform: org.hibernate.dialect.MySQL5Dialect
+      mybatis:
+        check-config-location: true
+        mapper-locations:
+        - 'classpath*:com/tx/local/**/*SqlMap.xml'
+        config-location: classpath:context/mybatis-config.xml
+        type-handlers-package: com.tx.core.mybatis.handler
+        # executor-type: reuse
+        #configuration:
+          #cache-enabled: true
+          #auto-mapping-behavior: FULL
+          #default-executor-type: REUSE
+          #map-underscore-to-camel-case: true
+          #lazy-loading-enabled: true
+          #aggressive-lazy-loading: false
+          #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+            
     

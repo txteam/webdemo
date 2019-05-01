@@ -65,6 +65,14 @@
 		</menu>
 	</catalog>
 	
+	<!-- 调试菜单 -->
+	<catalog id="debug_catalog" roles="super_admin" type="tab" text="调试菜单">
+		<!-- 控制面板 -->
+		<menu id="test_pile_menu" text="测试桩">
+			<menu id="swagger_menu" text="swagger" href="/swagger-ui.html"></menu>
+		</menu>
+	</catalog>
+	
 	<!-- 编码 -->
 	<catalog id="documentation_catalog" roles="super_admin" type="tab" text="Documentation">
 		<menu id="coding_standard_menu" text="编码规范">
