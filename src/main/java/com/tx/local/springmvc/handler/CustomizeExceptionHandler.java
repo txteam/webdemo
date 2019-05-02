@@ -14,24 +14,24 @@
 //import javax.servlet.http.HttpServletRequest;
 //import javax.servlet.http.HttpServletResponse;
 //
-//import org.apache.commons.collections.CollectionUtils;
+//import org.apache.commons.collections4.CollectionUtils;
 //import org.apache.commons.lang3.StringUtils;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.ObjectProvider;
-//import org.springframework.boot.autoconfigure.web.ErrorAttributes;
-//import org.springframework.boot.autoconfigure.web.ErrorViewResolver;
+//import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
+//import org.springframework.boot.web.servlet.error.ErrorAttributes;
 //import org.springframework.http.HttpHeaders;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.MediaType;
 //import org.springframework.http.ResponseEntity;
-//import org.springframework.stereotype.Controller;
 //import org.springframework.web.bind.annotation.ExceptionHandler;
 //import org.springframework.web.context.request.RequestAttributes;
 //import org.springframework.web.context.request.ServletRequestAttributes;
 //import org.springframework.web.servlet.ModelAndView;
 //
 //import com.tx.core.exceptions.SILException;
+//import com.tx.core.util.WebRequestUtils;
 //
 ///**
 // * 自定义处理异常解析器<br/>
@@ -64,11 +64,16 @@
 //    }
 //    
 //    /**
+//     * ErrorHandler:错误处理句柄<br/>
+//     * <功能详细描述>
 //     * @param request
 //     * @param response
-//     * @param handler
 //     * @param ex
-//     * @return
+//     * @return [参数说明]
+//     * 
+//     * @return Object [返回类型说明]
+//     * @exception throws [异常类型] [异常说明]
+//     * @see [类、类#方法、类#成员]
 //     */
 //    @ExceptionHandler
 //    public Object errorHandler(HttpServletRequest request,
@@ -78,7 +83,7 @@
 //            logger.error(ex.getMessage(), ex);
 //        }
 //        
-//        if (isAjaxRequest(request)) {
+//        if (WebRequestUtils.isAjaxRequest(request)) {
 //            Map<String, Object> body = getErrorAttributes(request,
 //                    isIncludeStackTrace(request, MediaType.ALL));
 //            HttpStatus status = getStatus(request);
@@ -116,8 +121,7 @@
 //            boolean includeStackTrace) {
 //        RequestAttributes requestAttributes = new ServletRequestAttributes(
 //                request);
-//        return this.errorAttributes.getErrorAttributes(requestAttributes,
-//                includeStackTrace);
+//        return this.errorAttributes.getErrorAttributes(webRequest, includeStackTrace);
 //    }
 //    
 //    /**
@@ -212,45 +216,5 @@
 //        } catch (Exception ex) {
 //            return HttpStatus.INTERNAL_SERVER_ERROR;
 //        }
-//    }
-//    
-//    /**
-//     * 是否是ajax请求<br/>
-//     * <功能详细描述>
-//     * @param request
-//     * @return [参数说明]
-//     * 
-//     * @return boolean [返回类型说明]
-//     * @exception throws [异常类型] [异常说明]
-//     * @see [类、类#方法、类#成员]
-//     */
-//    public static boolean isAjaxRequest(HttpServletRequest request) {
-//        //Header
-//        String requestType = request.getHeader("X-Requested-With");
-//        if (StringUtils.equalsIgnoreCase("XMLHttpRequest", requestType)) {
-//            return true;
-//        }
-//        
-//        //accept
-//        String accept = request.getHeader(HttpHeaders.ACCEPT);
-//        if (StringUtils.isEmpty(accept)) {
-//            accept = request.getHeader("accept");
-//        }
-//        if (!StringUtils.isEmpty(accept) && StringUtils
-//                .indexOfIgnoreCase(accept, "application/json") != -1) {
-//            return true;
-//        }
-//        
-//        //contentType
-//        String contentType = request.getHeader(HttpHeaders.CONTENT_TYPE);
-//        if (StringUtils.isEmpty(contentType)) {
-//            contentType = request.getHeader("content-type");
-//        }
-//        if (!StringUtils.isEmpty(contentType) && StringUtils
-//                .indexOfIgnoreCase(contentType, "application/json") != -1) {
-//            return true;
-//        }
-//        
-//        return false;
 //    }
 //}

@@ -132,25 +132,23 @@ spring:
     
 tx:
   core:
-    persister:
-      type: mybatis
-      database-platform: org.hibernate.dialect.MySQL5Dialect
-      mybatis:
+    mybatis:
         check-config-location: true
         mapper-locations:
         - 'classpath*:com/tx/local/**/*SqlMap.xml'
         config-location: classpath:context/mybatis-config.xml
         type-handlers-package: com.tx.core.mybatis.handler
+        database-platform: org.hibernate.dialect.MySQL5Dialect
+        # executor-type: 
+        # type-aliases-package: 
+        # type-aliases-super-type:
+  event:
+    enable: true
+  command:
+    enable: true
   basicdata:
     enable: true
+    persister: mybatis
     base-packages: com.tx.local
-    persist:
-      type: mybatis
-      database-platform: org.hibernate.dialect.MySQL5Dialect
-      mybatis:
-        config-location: classpath:context/mybatis-config.xml
-        type-handlers-package: com.tx.core.mybatis.handler
-        mapper-locations:
-        - 'classpath*:com/tx/local/**/*SqlMap_BASICDATA.xml'
             
     

@@ -128,7 +128,7 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         for (MenuCatalogConfig catalogTemp : menuConfig.getCatalogList()) {
             String catalogUpperCase = catalogTemp.getId().toUpperCase();
             
-            logger.info("   ...加载菜单分类: catalog: [{}]", catalogTemp.getId());
+            logger.debug("   ...加载菜单分类: catalog: [{}]", catalogTemp.getId());
             //构建菜单目录项目
             MenuCatalogItem catalog = doBuildMenuCatalogItem(catalogTemp);
             List<Menu> menuList = new ArrayList<>();
@@ -266,7 +266,7 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
             menu.getRoles().addAll(parent.getRoles());
         }
         
-        logger.info("   ......加载菜单项: catalog:[{}] | id:[{}] text:[{}]",
+        logger.debug("   ......加载菜单项: catalog:[{}] | id:[{}] text:[{}]",
                 catalog.getId(),
                 menu.getId(),
                 menu.getText());
