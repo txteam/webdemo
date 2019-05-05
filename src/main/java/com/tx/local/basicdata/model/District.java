@@ -14,11 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 import com.tx.component.basicdata.model.TreeAbleBasicData;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionGreaterOrEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLess;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLikeAfter;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
+import com.tx.core.support.json.JSONAttributesSupport;
 
 /**
  * 地理信息 <br/>
@@ -31,7 +27,8 @@ import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 @Entity
 @Table(name = "bd_district")
 @BasicDataEntity(name = "区域信息", viewType = BasicDataViewTypeEnum.COMMON_PAGEDLIST)
-public class District implements TreeAbleBasicData<District> {
+public class District
+        implements TreeAbleBasicData<District>, JSONAttributesSupport {
     
     /** 注释内容 */
     private static final long serialVersionUID = 6865409939223642746L;
@@ -41,95 +38,62 @@ public class District implements TreeAbleBasicData<District> {
     private String id;
     
     /** 区域父节点 */
-    @UpdateAble
-    @QueryConditionEqual
     @Column(name = "parentId")
     private District parent;
     
     /** 区域层级 */
-    @UpdateAble
-    @QueryConditionEqual
     private int level;
     
     /** 编码 */
-    @UpdateAble
-    @QueryConditionEqual
     private String code;
     
     /** 行政区划编码 */
-    @UpdateAble
-    @QueryConditionEqual
     private String zipCode;
     
     /** 是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid = true;
     
     /** 是否可编辑 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean modifyAble = true;
     
     /** 省id */
-    @UpdateAble
-    @QueryConditionEqual
-    @Column(name = "provinceId")
-    @JsonIgnore
     private District province;
     
     /** 市id */
-    @UpdateAble
-    @QueryConditionEqual
-    @JsonIgnore
-    @Column(name = "cityId")
     private District city;
     
     /** 县id */
-    @UpdateAble
-    @QueryConditionEqual
-    @Column(name = "countyId")
-    @JsonIgnore
     private District county;
     
     /** 区域类型 */
-    @QueryConditionEqual
     private DistrictTypeEnum type;
     
     /** 名称 */
-    @UpdateAble
-    @QueryConditionEqual
     private String name;
     
     /** 区域拼音 */
-    @UpdateAble
-    @QueryConditionLikeAfter
     private String pinyin;
     
     /** 区域简拼 */
-    @UpdateAble
-    @QueryConditionEqual
     private String py;
     
     /** 区域全名 */
-    @UpdateAble
-    @QueryConditionEqual
     private String fullName;
     
     /** 备注 */
-    @UpdateAble
     private String remark;
     
     /** 创建日期 */
-    @QueryConditionGreaterOrEqual(key = "minCreateDate")
-    @QueryConditionLess(key = "maxCreateDate")
     private Date createDate;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
+    /** 基础数据额外属性 */
+    private String attributes;
+    
     /** 子节点 */
+    @JsonIgnore
     @Transient
     @OneToMany
     private List<District> childs;
@@ -438,5 +402,19 @@ public class District implements TreeAbleBasicData<District> {
      */
     public void setPy(String py) {
         this.py = py;
+    }
+    
+    /**
+     * @return 返回 attributes
+     */
+    public String getAttributes() {
+        return attributes;
+    }
+    
+    /**
+     * @param 对attributes进行赋值
+     */
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
     }
 }

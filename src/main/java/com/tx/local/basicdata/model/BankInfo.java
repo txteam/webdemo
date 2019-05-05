@@ -16,9 +16,8 @@ import javax.persistence.Table;
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.core.support.initable.model.ConfigInitAble;
+import com.tx.core.support.json.JSONAttributesSupport;
 
 /**
  * 银行信息<br/>
@@ -32,7 +31,8 @@ import com.tx.core.support.initable.model.ConfigInitAble;
 @Entity
 @Table(name = "bd_bankInfo")
 @BasicDataEntity(name = "银行信息", viewType = BasicDataViewTypeEnum.COMMON_PAGEDLIST)
-public class BankInfo implements Serializable, ConfigInitAble, BasicData {
+public class BankInfo implements Serializable, ConfigInitAble, BasicData,
+        JSONAttributesSupport {
     
     /** 注释内容 */
     private static final long serialVersionUID = -8931475549426903123L;
@@ -42,48 +42,37 @@ public class BankInfo implements Serializable, ConfigInitAble, BasicData {
     private String id;
     
     /** 银行英文简称*/
-    @UpdateAble
-    @QueryConditionEqual
     private String code;
     
     /** 是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid;
     
     /** 是否可编辑 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean modifyAble = true;
     
     /** 银行名称*/
-    @UpdateAble
-    @QueryConditionEqual
     private String name;
     
     /** 银行别名 */
-    @UpdateAble
-    @QueryConditionEqual
     private String aliases;
     
     /**logo文件ID*/
-    @UpdateAble
     private String logoFileId = "";
     
     /** 银行logo地址*/
-    @UpdateAble
     private String logoUrl;
     
     /** 个人网银登录url */
-    @UpdateAble
     private String personalLoginUrl = "";
     
     /** 机构网银登录url */
-    @UpdateAble
     private String institutionLoginUrl = "";
     
     /** 备注 */
     private String remark;
+    
+    /** 参数 */
+    private String attributes;
     
     /** 创建时间 */
     private Date createDate;
@@ -273,39 +262,18 @@ public class BankInfo implements Serializable, ConfigInitAble, BasicData {
         this.lastUpdateDate = lastUpdateDate;
     }
     
-    //    /** 是否支持代扣中 IS:是,NO:否*/
-    //    @UpdateAble
-    //    private boolean deduct;
-    //    
-    //    /** 单笔代扣限额 ,单位:万元*/
-    //    @UpdateAble
-    //    private int singleDeductLimit;
-    //    
-    //    /** 单日代扣限额 ,单位:万元*/
-    //    @UpdateAble
-    //    private int oddDeductLimit;
-    //    
-    //    /** 是否支持同步渠道,同步-Y,异步-N*/
-    //    @UpdateAble
-    //    private String synChannel;
-    //    
-    //    /** 是否支持提现 IS:是,NO:否*/
-    //    @UpdateAble
-    //    private String withdrawal;
-    //    
-    //    /** 单笔提现金额 单位:万元*/
-    //    @UpdateAble
-    //    private int singleWithdrawalLimit;
-    //    
-    //    /** 单日提现金额 单位:万元*/
-    //    @UpdateAble
-    //    private int oddWithdrawalLimit;
-    //    
-    //    /** 是否支持对公账户 Y-是,N-否*/
-    //    @UpdateAble
-    //    private String publicAccounts;
-    //    
-    //    private int oddDeductNumber;
-    //    
-    //    private int oddWithdrawalNumber;
+    /**
+     * @return 返回 attributes
+     */
+    public String getAttributes() {
+        return attributes;
+    }
+    
+    /**
+     * @param 对attributes进行赋值
+     */
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
+    }
+    
 }

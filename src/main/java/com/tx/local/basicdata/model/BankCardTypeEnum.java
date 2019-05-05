@@ -6,6 +6,9 @@
  */
 package com.tx.local.basicdata.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
+
 /**
  * 银行卡类型<br/>
  *     银行卡
@@ -17,6 +20,7 @@ package com.tx.local.basicdata.model;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum BankCardTypeEnum {
     
     /**

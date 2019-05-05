@@ -6,11 +6,16 @@
  */
 package com.tx.local.boot;
 
+import javax.sql.DataSource;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import com.tx.core.ddlutil.executor.TableDDLExecutorFactory;
+import com.tx.core.util.dialect.DataSourceTypeEnum;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -66,7 +71,7 @@ public class WebdemoBootApplication {
     public Docket createOpenAPIDocket() {
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.tx.local"))
+                .apis(RequestHandlerSelectors.basePackage("com.tx"))
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .apis(RequestHandlerSelectors
                         .withMethodAnnotation(ApiOperation.class))
@@ -90,5 +95,23 @@ public class WebdemoBootApplication {
                 .contact(new Contact("xxxxxx", "xxxxxx@xx.xxx", ""))
                 .version("9.0")
                 .build();
+    }
+    
+    /**
+     * mybatis的标自动执行器<br/>
+     * <功能详细描述>
+     * @param dataSource
+     * @return [参数说明]
+     * 
+     * @return TableDDLExecutorFactory [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean
+    public TableDDLExecutorFactory TableDDLExecutor(DataSource dataSource) {
+        TableDDLExecutorFactory executor = new TableDDLExecutorFactory(
+                dataSource);
+        executor.setDataSourceType(DataSourceTypeEnum.MYSQL);
+        return executor;
     }
 }
