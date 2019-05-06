@@ -80,7 +80,7 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
      * @return 返回 childs
      */
     @Override
-    public List<Post> getChilds() {
+    public List<Post> getChildren() {
         return childs;
     }
 
@@ -88,7 +88,7 @@ public class Post implements TreeAble<List<Post>, Post>,Serializable{
      * @param 对childs进行赋值
      */
     @Override
-    public void setChilds(List<Post> childs) {
+    public void setChildren(List<Post> childs) {
         this.childs = childs;
     }
 

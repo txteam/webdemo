@@ -58,26 +58,26 @@ $(document).ready(function() {
             	this.init();
             };
             ChildWindowLinkedSet.prototype.init = function(){
-            	this.childs = new Array();
+            	this.children = new Array();
             };
             //子引用链
-            ChildWindowLinkedSet.prototype.childs = null;
+            ChildWindowLinkedSet.prototype.children = null;
             //用以支持抹去陈旧的window引用
             ChildWindowLinkedSet.prototype._expungeStaleEntries = function() {
                 var _self = this;
-                var newChilds = $.grep(_self.childs, function(childWindowRefTemp, i) {
+                var newChilds = $.grep(_self.children, function(childWindowRefTemp, i) {
                     if (childWindowRefTemp != null && $.isWindow(childWindowRefTemp) && !childWindowRefTemp.closed) {
                         return true;
                     } else {
                         return false;
                     }
                 });
-                this.childs = newChilds;
+                this.children = newChilds;
             };
             ChildWindowLinkedSet.prototype._exist = function(childWindowRef) {
                 var _self = this;
                 var existFlag = false;
-                $.each(_self.childs, function(i,childWindowRefTemp) {
+                $.each(_self.children, function(i,childWindowRefTemp) {
                     if (childWindowRef === childWindowRefTemp) {
                     	//console.log("window is exist.");
                     	existFlag = true;
@@ -92,19 +92,19 @@ $(document).ready(function() {
             }
             //添加,能调用到该方法的子页面，应该都是统一域中的
             ChildWindowLinkedSet.prototype.add = function(childWindowRef) {
-            	//console.log("beforeExpungeSize:" + this.childs.length);
+            	//console.log("beforeExpungeSize:" + this.children.length);
                 this._expungeStaleEntries();
-                //console.log("beforeAddSize:" + this.childs.length);
+                //console.log("beforeAddSize:" + this.children.length);
                 if (childWindowRef != null && $.isWindow(childWindowRef) && !childWindowRef.closed && !this._exist(childWindowRef)) {
-                    this.childs.push(childWindowRef);
+                    this.children.push(childWindowRef);
                 }
-                //console.log("afterAddSize:" + this.childs.length);
+                //console.log("afterAddSize:" + this.children.length);
             };
             //获取链表的遍历器
             ChildWindowLinkedSet.prototype.iterator = function() {
                 this._expungeStaleEntries();
-                //console.log("size:" + this.childs.length);
-                return this.childs;
+                //console.log("size:" + this.children.length);
+                return this.children;
             };
             //全局事件管理器
             var GlobalEventManager = function(config) {
@@ -294,13 +294,13 @@ if (browser.userAgent.indexOf('MSIE') > -1) {
             id: data.id,
             text:null,
             formatter:null,
-            state: $.ObjectUtils.isEmpty(data.childs) ? null : 'closed',//open/closed
+            state: $.ObjectUtils.isEmpty(data.children) ? null : 'closed',//open/closed
             attributes: data,
             iconCls: null,
         },data);
-        if(data.childs && !$.ObjectUtils.isEmpty(data.childs)){
+        if(data.children && !$.ObjectUtils.isEmpty(data.children)){
             resData.children = [];
-            $.each(data.childs, function(index, childTemp) {
+            $.each(data.children, function(index, childTemp) {
                 resData.children[index] = converter.call(converter,childTemp);
             });
         }else{

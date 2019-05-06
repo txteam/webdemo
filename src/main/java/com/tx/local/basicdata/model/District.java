@@ -96,7 +96,7 @@ public class District
     @JsonIgnore
     @Transient
     @OneToMany
-    private List<District> childs;
+    private List<District> children;
     
     /**
      * @return 返回 id
@@ -337,15 +337,15 @@ public class District
     /**
      * @return 返回 childs
      */
-    public List<District> getChilds() {
-        return childs;
+    public List<District> getChildren() {
+        return children;
     }
     
     /**
      * @param 对childs进行赋值
      */
-    public void setChilds(List<District> childs) {
-        this.childs = childs;
+    public void setChildren(List<District> childs) {
+        this.children = childs;
     }
     
     /**

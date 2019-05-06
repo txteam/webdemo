@@ -45,7 +45,7 @@ public class MenuCatalogConfig {
     
     /** 菜单对应权限 */
     @XStreamAsAttribute
-    private String authorities;
+    private String auths;
     
     /** 菜单对应权限 */
     @XStreamAsAttribute
@@ -120,14 +120,14 @@ public class MenuCatalogConfig {
      * @return 返回 authorities
      */
     public String getAuthorities() {
-        return authorities;
+        return auths;
     }
     
     /**
      * @param 对authorities进行赋值
      */
     public void setAuthorities(String authorities) {
-        this.authorities = authorities;
+        this.auths = authorities;
     }
     
     /**

@@ -291,6 +291,45 @@ public class BankInfoService extends AbstractBasicDataService<BankInfo> {
     }
     
     /**
+     * 根据编码更新银行信息<br/>
+     * @param bankInfo
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean updateByCode(BankInfo bankInfo) {
+        //验证参数是否合法，必填字段是否填写，
+        AssertUtils.notNull(bankInfo, "bankInfo is null.");
+        AssertUtils.notEmpty(bankInfo.getId(), "bankInfo.id is empty.");
+        
+        //生成需要更新字段的hashMap
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("code", bankInfo.getId());
+        
+        //需要更新的字段
+        //updateRowMap.put("code", bankInfo.getCode());
+        if (bankInfo.isModifyAble()) {
+            updateRowMap.put("name", bankInfo.getName());
+            updateRowMap.put("aliases",
+                    handleAliases(bankInfo.getAliases(), bankInfo.getName()));
+            //updateRowMap.put("valid", bankInfo.isValid());
+        }
+        updateRowMap.put("logoFileId", bankInfo.getLogoFileId());
+        updateRowMap.put("logoUrl", bankInfo.getLogoUrl());
+        updateRowMap.put("personalLoginUrl", bankInfo.getPersonalLoginUrl());
+        updateRowMap.put("institutionLoginUrl",
+                bankInfo.getInstitutionLoginUrl());
+        updateRowMap.put("remark", bankInfo.getRemark());
+        
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        int updateRowCount = this.bankInfoDao.update(updateRowMap);
+        
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return updateRowCount >= 1;
+    }
+    
+    /**
      * 根据id禁用BankInfo<br/>
      * <功能详细描述>
      *

@@ -268,6 +268,38 @@ public class DistrictService extends AbstractBasicDataService<District> {
     }
     
     /**
+     * @param data
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean updateByCode(District district) {
+        //验证参数是否合法，必填字段是否填写，
+        AssertUtils.notNull(district, "district is null.");
+        AssertUtils.notEmpty(district.getCode(), "district.code is empty.");
+        
+        //生成需要更新字段的hashMap
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("code", district.getCode());
+        
+        //需要更新的字段
+        updateRowMap.put("level", district.getLevel());
+        updateRowMap.put("remark", district.getRemark());
+        updateRowMap.put("py", district.getPy());
+        updateRowMap.put("zipCode", district.getZipCode());
+        updateRowMap.put("name", district.getName());
+        updateRowMap.put("modifyAble", district.isModifyAble());
+        updateRowMap.put("fullName", district.getFullName());
+        updateRowMap.put("code", district.getCode());
+        updateRowMap.put("pinyin", district.getPinyin());
+        updateRowMap.put("lastUpdateDate", district.getLastUpdateDate());
+        int updateRowCount = this.districtDao.update(updateRowMap);
+        
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return updateRowCount >= 1;
+    }
+    
+    /**
      * 根据id禁用District<br/>
      * <功能详细描述>
      *

@@ -300,14 +300,14 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     /**
      * @return 返回 childs
      */
-    public List<Organization> getChilds() {
+    public List<Organization> getChildren() {
         return childs;
     }
     
     /**
      * @param 对childs进行赋值
      */
-    public void setChilds(List<Organization> childs) {
+    public void setChildren(List<Organization> childs) {
         this.childs = childs;
     }
     

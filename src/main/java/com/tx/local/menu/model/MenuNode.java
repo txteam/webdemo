@@ -38,7 +38,7 @@ public class MenuNode
     
     /** 子菜单集合 */
     @JsonIgnore
-    private List<MenuNode> childs;
+    private List<MenuNode> children;
     
     /** <默认构造函数> */
     public MenuNode(Menu menu) {
@@ -150,16 +150,16 @@ public class MenuNode
     /**
      * @return 返回 childs
      */
-    public List<MenuNode> getChilds() {
-        return childs;
+    public List<MenuNode> getChildren() {
+        return children;
     }
     
     /**
      * @return 返回 childMenuList
      */
-    public List<MenuNode> getMenuList() {
+    public List<MenuNode> getDescendants() {
         List<MenuNode> resList = new ArrayList<MenuNode>();
-        doGetMenuList(resList, getChilds());
+        doGetChildren(resList, getChildren());
         return resList;
     }
     
@@ -171,21 +171,22 @@ public class MenuNode
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private void doGetMenuList(List<MenuNode> resList, List<MenuNode> childs) {
-        if (CollectionUtils.isEmpty(childs)) {
+    private void doGetChildren(List<MenuNode> resList,
+            List<MenuNode> children) {
+        if (CollectionUtils.isEmpty(children)) {
             return;
         }
-        for (MenuNode mn : childs) {
+        for (MenuNode mn : children) {
             resList.add(mn);
-            doGetMenuList(resList, mn.getChilds());
+            doGetChildren(resList, mn.getChildren());
         }
     }
     
     /**
      * @param 对childs进行赋值
      */
-    public void setChilds(List<MenuNode> childs) {
-        this.childs = childs;
+    public void setChildren(List<MenuNode> childs) {
+        this.children = childs;
     }
     
     /**

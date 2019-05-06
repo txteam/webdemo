@@ -287,7 +287,7 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
                 catalog,
                 menu,
                 menuConfig.getChilds());
-        mn.setChilds(childs);
+        mn.setChildren(childs);
         
         return mn;
     }

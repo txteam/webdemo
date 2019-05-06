@@ -160,7 +160,7 @@ public class MenuController {
         for (MenuNode menuItemTemp : menuContext.getMenuNodeListByCatalog(catalog)) {
             Map<String, Object> menuMap = new HashMap<String, Object>();
             menuMap.put("menu", menuItemTemp.getMenu());
-            menuMap.put("menuList", menuItemTemp.getMenuList());
+            menuMap.put("menuList", menuItemTemp.getDescendants());
             
             if (CollectionUtils.isEmpty(menuItemTemp.getAuthorities())
                     && CollectionUtils.isEmpty(menuItemTemp.getRoles())) {

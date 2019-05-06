@@ -180,14 +180,14 @@ public class VirtualCenter implements
     /**
      * @return 返回 childs
      */
-    public List<VirtualCenter> getChilds() {
+    public List<VirtualCenter> getChildren() {
         return childs;
     }
     
     /**
      * @param 对childs进行赋值
      */
-    public void setChilds(List<VirtualCenter> childs) {
+    public void setChildren(List<VirtualCenter> childs) {
         this.childs = childs;
     }
     
