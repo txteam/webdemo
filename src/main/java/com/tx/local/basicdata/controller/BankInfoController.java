@@ -37,7 +37,7 @@ import com.tx.local.basicdata.service.BankInfoService;
  * @since  [产品/模块版本]
  */
 @Controller
-@RequestMapping("/basicdata/bankInfo")
+@RequestMapping("/bankinfo")
 public class BankInfoController {
     
     //银行信息业务cen 

@@ -50,9 +50,9 @@
 			<menu id="operator_manage_menu" text="用户管理" authorities="operator_manage_auth" href="/operator/toQueryOperatorList.action" type="tab"></menu>
 		</menu>
 		<menu id="basicdata_manage_center_menu" text="基础数据管理" authorities="basicdata_manage_center_auth" type="tab" selectRefresh="false">
-			<menu id="datadict_manage_menu" text="数据字典管理" authorities="basicData_manage_auth" href="/basicData/toBasicDataMainframe.action" type="tab"></menu>
-			<menu id="district_manage_menu" text="区域管理" authorities="basicdata_manage_auth" href="/district/toQueryDistrictTreeList.action" type="tab"></menu>
-			<menu id="bankInfo_manage_menu" text="银行信息管理" authorities="bankInfo_manage_auth" href="/bankInfo/toQueryBankInfoList.action" type="tab"></menu>
+			<menu id="datadict_manage_menu" text="数据字典管理" authorities="basicdata_manage_auth" href="/basicdata/toQueryBasicDataMain" type="tab"></menu>
+			<menu id="district_manage_menu" text="区域管理" authorities="district_manage_auth" href="/district/toQueryDistrictTreeList" type="tab"></menu>
+			<menu id="bankInfo_manage_menu" text="银行信息管理" authorities="bankInfo_manage_auth" href="/bankinfo/toQueryBankInfoList" type="tab"></menu>
 		</menu>
 		<menu id="system_config_manage_menu" text="系统配置" authorities="system_config_manage_auth" type="tab">
 			<menu id="menu_manage_menu" text="菜单管理" authorities="menu_manage_auth" href="/menu/toQueryMenuTreeList"/>

@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -52,7 +53,7 @@ public class BasicDataController
         implements InitializingBean, ApplicationContextAware {
     
     /** spring容器句柄 */
-    private ApplicationContext applicationContext;
+    protected ApplicationContext applicationContext;
     
     /** 基础数据实体注册表 */
     @Resource
@@ -68,14 +69,8 @@ public class BasicDataController
     /** 视图逻辑解析对象 */
     private ViewResolverComposite viewResolverComposite;
     
-    //    /** 需要表示为通用性显示的对象集合 */
-    //    private List<BasicDataEntityInfo> entityInfoList;
-    //    
-    //    /** 实例映射 */
-    //    private Map<String, BasicDataEntityInfo> entityInfoMap;
-    
     /** 页面映射 */
-    private final Map<PageTypeEnum, Map<String, String>> pageMap = new HashMap<>();
+    private final Map<String, String> pageMap = new HashMap<>();
     
     /** <默认构造函数> */
     public BasicDataController(List<ViewResolver> viewResolvers) {
@@ -91,15 +86,6 @@ public class BasicDataController
         AssertUtils.notEmpty(this.viewResolvers, "viewResolvers is empty.");
         this.viewResolverComposite = new ViewResolverComposite();
         this.viewResolverComposite.setViewResolvers(this.viewResolvers);
-        
-        //        this.entityInfoList = basicDataEntityRegistry.getEntityInfoList(null,
-        //                Arrays.asList(BasicDataViewTypeEnum.COMMON_LIST,
-        //                        BasicDataViewTypeEnum.COMMON_PAGEDLIST,
-        //                        BasicDataViewTypeEnum.COMMON_TREE));
-        //        this.entityInfoMap = new HashMap<>();
-        //        this.entityInfoList
-        //                .forEach((BasicDataEntityInfo temp) -> this.entityInfoMap
-        //                        .put(temp.getType(), temp));
         
     }
     
@@ -141,7 +127,7 @@ public class BasicDataController
     @RequestMapping("/toQuery")
     public String toQuery(
             @RequestParam(value = "type", required = false) String type,
-            ModelMap response) {
+            @RequestParam Map<String, String> requestMap, ModelMap response) {
         //基础数据类型集合
         response.put("type", type);
         PageTypeEnum defaultPageType = PageTypeEnum.QueryList;
@@ -154,6 +140,8 @@ public class BasicDataController
             //返回默认页面
             return pageName;
         }
+        response.put("typeInfo", info);
+        
         //跳转到查询页
         switch (info.getViewType()) {
             case COMMON_PAGEDLIST:
@@ -172,45 +160,35 @@ public class BasicDataController
         }
         return pageName;
     }
-    //    
-    //    /**
-    //     * 跳转到添加DataDict页面<br/>
-    //     * <功能详细描述>
-    //     * @return [参数说明]
-    //     *
-    //     * @return String [返回类型说明]
-    //     * @exception throws [异常类型] [异常说明]
-    //     * @see [类、类#方法、类#成员]
-    //    */
-    //    @RequestMapping("/toAdd")
-    //    public String toAdd(
-    //            @RequestParam(value = "basicDataTypeCode") String basicDataTypeCode,
-    //            @RequestParam Map<String, String> requestMap, ModelMap response) {
-    //        BDPageTypeEnum bdPageType = BDPageTypeEnum.AddBasicData;
-    //        String pageName = bdPageType.defaultPage;
-    //        if (StringUtils.isEmpty(basicDataTypeCode)
-    //                || !this.commonCode2TypeMap.containsKey(basicDataTypeCode)) {
-    //            AssertUtils.isTrue(false,
-    //                    "basicDataTypeCode is error.{}",
-    //                    basicDataTypeCode);
-    //        }
-    //        
-    //        //基础数据类型
-    //        BasicDataType bdType = this.commonCode2TypeMap.get(basicDataTypeCode);
-    //        response.put("basicDataTypeCode", basicDataTypeCode);//基础数据类型编码
-    //        response.put("basicDataType", bdType);//基础数据类型编码
-    //        
-    //        Class<?> type = bdType.getType();
-    //        AssertUtils.notNull(type,
-    //                "type is null.basicDataTypeCode:{}",
-    //                basicDataTypeCode);
-    //        
-    //        BasicData bd = (BasicData) ObjectUtils.newInstance(type);
-    //        response.put("basicData", bd);
-    //        
-    //        pageName = getPageName(bdType, BDPageTypeEnum.AddBasicData);
-    //        return pageName;
-    //    }
+    
+    /**
+     * 跳转到添加DataDict页面<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     *
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @RequestMapping("/toAdd")
+    public String toAdd(@RequestParam(value = "type") String type,
+            @RequestParam Map<String, String> requestMap, ModelMap response) {
+        //基础数据类型集合
+        response.put("type", type);
+        PageTypeEnum defaultPageType = PageTypeEnum.Add;
+        response.put("pageType", defaultPageType);
+        
+        String pageName = defaultPageType.getDefaultPage();
+        BasicDataEntityInfo info = this.basicDataEntityRegistry
+                .getEntityInfo(type);
+        if (info == null) {
+            //返回默认页面
+            return pageName;
+        }
+        //跳转到查询页
+        pageName = getPageName(info, PageTypeEnum.Add);
+        return pageName;
+    }
     
     /**
     * 跳转到编辑DataDict页面
@@ -226,32 +204,27 @@ public class BasicDataController
             @RequestParam("id") String id,
             @RequestParam MultiValueMap<String, String> requestMap,
             ModelMap response) {
-        //        if (StringUtils.isEmpty(basicDataTypeCode)
-        //                || !this.commonCode2TypeMap.containsKey(basicDataTypeCode)) {
-        //            DataDict resDataDict = this.dataDictService.findById(id);
-        //            AssertUtils.notNull(resDataDict, "resDataDict is null.id:{}", id);
-        //            
-        //            basicDataTypeCode = resDataDict.getBasicDataTypeCode();
-        //        }
-        //        
-        //        BDPageTypeEnum bdPageType = BDPageTypeEnum.UpdateBasicData;
-        //        String pageName = bdPageType.defaultPage;
-        //        //基础数据类型
-        //        BasicDataType bdType = this.commonCode2TypeMap.get(basicDataTypeCode);
-        //        response.put("basicDataTypeCode", basicDataTypeCode);//基础数据类型编码
-        //        response.put("basicDataType", bdType);//基础数据类型编码
-        //        
-        //        Class<? extends BasicData> type = bdType.getType();
-        //        AssertUtils.notNull(type,
-        //                "type is null.basicDataTypeCode:{}",
-        //                basicDataTypeCode);
-        //        BasicDataService<?> service = BasicDataContext.getContext()
-        //                .getBasicDataService(type);
-        //        BasicData bd = service.findById(id);
-        //        response.put("basicData", bd);
-        //        pageName = getPageName(bdType, bdPageType);
+        //基础数据类型集合
+        response.put("type", type);
+        PageTypeEnum defaultPageType = PageTypeEnum.Add;
+        response.put("pageType", defaultPageType);
         
-        String pageName = "/basicdata/updateBasicData";
+        String pageName = defaultPageType.getDefaultPage();
+        BasicDataEntityInfo info = this.basicDataEntityRegistry
+                .getEntityInfo(type);
+        if (info == null) {
+            //返回默认页面
+            return pageName;
+        }
+        
+        Class<? extends BasicData> entityClass = info.getEntityClass();
+        AssertUtils.notNull(entityClass, "entityClass is null.type:{}", type);
+        BasicDataService<?> service = BasicDataContext.getContext()
+                .getBasicDataService(entityClass);
+        BasicData bd = service.findById(id);
+        response.put("data", bd);
+        //跳转到查询页
+        pageName = getPageName(info, PageTypeEnum.Add);
         return pageName;
     }
     
@@ -440,10 +413,12 @@ public class BasicDataController
                 .getEntityClass(type);
         AssertUtils.notNull(entityClass, "entityClass is null. type:{}.", type);
         
-        BasicDataService<T> service = BasicDataContext
-                .getContext().getBasicDataService(entityClass);
-        PagedList<T> resPagedList = service
-                .queryPagedList(valid, params, pageIndex, pageSize);
+        BasicDataService<T> service = BasicDataContext.getContext()
+                .getBasicDataService(entityClass);
+        PagedList<T> resPagedList = service.queryPagedList(valid,
+                params,
+                pageIndex,
+                pageSize);
         return resPagedList;
     }
     
@@ -666,24 +641,36 @@ public class BasicDataController
         
         String type = entityInfo.getType().toLowerCase();
         AssertUtils.notEmpty(type, "type is empty.");
+        String catalog = StringUtils.isEmpty(entityInfo.getCatalog())
+                ? "basicdata" : entityInfo.getCatalog().toLowerCase();
         
+        //页面缓存键
+        String pageCacheKey = (new StringBuilder(
+                TxConstants.INITIAL_STR_LENGTH)).append(catalog)
+                        .append("_")
+                        .append(type)
+                        .append("_")
+                        .append(pageType.getPageName())
+                        .toString();
         String page = "";
-        if (!pageMap.containsKey(pageType)) {
-            pageMap.put(pageType, new HashMap<String, String>());
-        }
-        if (pageMap.get(pageType).containsKey(type)) {
-            page = pageMap.get(pageType).get(type);
+        if (pageMap.containsKey(pageCacheKey)) {
+            page = pageMap.get(pageCacheKey);
             return page;
         }
         
         StringBuilder sb = new StringBuilder(TxConstants.INITIAL_STR_LENGTH);
-        sb.append("/").append(type).append("/").append(pageType.getPageName());
+        sb//.append("/")
+                .append(catalog)
+                .append("/")
+                .append(type)
+                .append("/")
+                .append(pageType.getPageName());
         page = sb.toString();
-        if (!existsForPage(page)) {
+        if (!existPage(page)) {
             //如果页面不存在获取其对应的默认页面
             page = pageType.getDefaultPage();
         }
-        pageMap.get(pageType).put(type, page);
+        pageMap.put(pageCacheKey, page);
         return page;
     }
     
@@ -697,7 +684,7 @@ public class BasicDataController
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private boolean existsForPage(String page) {
+    private boolean existPage(String page) {
         View view = null;
         try {
             view = this.viewResolverComposite.resolveViewName(page, null);
@@ -709,7 +696,6 @@ public class BasicDataController
         } else {
             return true;
         }
-        
     }
     
     /**

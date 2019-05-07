@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>default</title>
+<block th:replace="fragments/header::common_replace">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- echarts -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" >
+/*<![CDATA[*/
+//权限判定
+$.canAdd = false;
+$.canUpdate = false;
+$.canDelete = false;
+$.canDisable = false;
+$.canEnable = false;
+var treeview=null;
+var treegrid = null;
+var idFieldName = 'id';
+var nameFieldName = 'name'; 
+var entityName = '区域管理'; 
+$(document).ready(function() {
+	var  $editALink = $("#editALink");
+	var  $deleteALink = $("#deleteALink");
+	var  $enableALink = $("#enableALink");
+	var  $disableALink = $("#disableALink");
+	
+	treeview = $('#treeview').tree({
+		url : '${contextPath}/district/queryList.action?maxLevel=1',
+		idField : 'id',
+		parentField : 'parentId',
+		iconField : function(){
+			return 'folder_user';
+		},
+		/*loadFilter: function(data, parent) {
+			var opt = $(this).data().tree.options;
+			var idField, textField, parentField;
+			if (opt.parentField) {
+				idField = opt.idField || 'id';
+				textField = opt.textField || 'text';
+				iconField = opt.iconField || 'iconCls';
+				parentField = opt.parentField;
+				var i, l, treeData = [], tmpMap = [];
+				for (i = 0, l = data.length; i < l; i++) {
+					tmpMap[data[i][idField]] = data[i];
+					if(data[i].level == 0){
+						data[i]['state'] = 'closed';
+					}
+				}
+				for (i = 0, l = data.length; i < l; i++) {
+					if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
+						if (!tmpMap[data[i][parentField]]['children'])
+							tmpMap[data[i][parentField]]['children'] = [];
+						data[i]['text'] = data[i][textField];
+						tmpMap[data[i][parentField]]['children'].push(data[i]);
+					} else {
+						data[i]['text'] = data[i][textField];
+						treeData.push(data[i]);
+					}
+				}
+				return treeData;
+			}
+			return data;
+		},*/
+		textField : 'name',
+		border : false,
+		onClick : function(node){
+			$('#treegrid').treegrid('load',{
+				parentId: node.id
+			});
+		}
+	});
+	treegrid = $('#treegrid').treegrid({
+		url : '${contextPath}/district/queryList.action?maxLevel=2',
+		idField : 'id',
+		parentField : 'parentId',
+		treeField : 'name',
+		striped : true,
+		iconField : function(item){
+			return 'group_group';	
+		},
+        onBeforeLoad:function(row,param){
+            var selectedNode = treeview.tree('getSelected');
+            if(selectedNode){
+                $(this).treegrid("options").url = '${contextPath}/district/queryList.action?parentIdLike='+selectedNode.id;
+                return true;
+            }
+            return false;
+		},
+		fit : true,
+		fitColumns : true,
+		border : false,
+		frozenColumns : [[ 
+		{
+			title : '地区id',
+			field : 'id',
+			width : 150,
+			hidden : true
+		},
+		{
+			field : 'parentId',
+			title : '上级地区ID',
+			width : 150,
+			hidden : true
+		}
+		]],
+		columns : [[
+		{
+			field : 'name',
+			title : '地区名称',
+			width : 200
+		},
+		{
+			field : 'code',
+			title : '编码',
+			width : 200
+		},
+		{
+			field : 'type',
+			title : '类型',
+			width : 100,
+			formatter : function(value, row, index) {
+				return value.key;
+			}
+		},
+		{
+			field : 'level',
+			title : '级别',
+			width : 80
+		},
+		{
+			field : 'valid',
+			title : '是否有效',
+			width : 80,
+			formatter : function(value, row, index) {
+				if(value == '1'){
+					return "有效";
+				}else{
+					return "无效";
+				}
+			}
+		},
+		{
+			field : 'modifyAble',
+			title : '是否可编辑',
+			width : 80,
+			formatter : function(value, row, index) {
+				if(value == '1'){
+					return "有效";
+				}else{
+					return "无效";
+				}
+			}
+		},
+		{
+			field : 'fullName',
+			title : '全名',
+			width : 200
+		},
+		{
+			field : 'remark',
+			title : '地区备注',
+			width : 200
+		}
+		]],
+		toolbar : '#toolbar',
+		onContextMenu : function(e, row) {
+			e.preventDefault();
+			$(this).treegrid('unselectAll');
+			$(this).treegrid('select', row.id);
+			$('#menu').menu('show', {
+				left : e.pageX,
+				top : e.pageY
+			});
+		},
+		onLoadSuccess : function() {
+			parent.$.messager.progress('close');
+			$(this).treegrid('tooltip');
+			
+			$editALink.linkbutton('disable');
+			$deleteALink.linkbutton('disable');
+			
+			$enableALink.show();
+			$disableALink.show();
+			$enableALink.linkbutton('disable');
+			$disableALink.linkbutton('disable');
+		},
+		onDblClickRow : function(row){
+		},
+		onClickRow: function(row){
+			$editALink.linkbutton('enable');
+			$deleteALink.linkbutton('enable');
+			if(row.valid){
+				$enableALink.linkbutton('disable');
+				$enableALink.hide();
+				$disableALink.show();
+				$disableALink.linkbutton('enable');
+			}else{
+				$disableALink.linkbutton('disable');
+				$disableALink.hide();
+				$enableALink.show();
+				$enableALink.linkbutton('enable');
+			}
+		}
+	});
+});
+function refresh(){
+	var selectedNode = districtTree.tree('getSelected');
+
+	if(selectedNode){
+		treeGrid.treegrid('load',{
+			parentId:selectedNode.id
+		});
+        districtTree.tree('reload');
+	}
+}
+function deselect(){
+	var selectedNode = districtTree.tree('getSelected');
+	if(selectedNode){
+		districtTree.find(".tree-node-selected").removeClass("tree-node-selected");
+		treeGrid.treegrid('load',{});
+	}
+}
+function redo() {
+	var node = treegrid.treegrid('getSelected');
+	if (node) {
+        treegrid.treegrid('expandAll', node.id);
+	} else {
+        treegrid.treegrid('expandAll');
+	}
+}
+function undo() {
+	var node = treegrid.treegrid('getSelected');
+	if (node) {
+        treegrid.treegrid('collapseAll', node.id);
+	} else {
+        treegrid.treegrid('collapseAll');
+	}
+}
+/*
+ * 新增
+ */
+function addFun() {
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	DialogUtils.openModalDialog(
+		"addDistrict",
+		"新增" + entityName,
+		$.formatString("${contextPath}/district/toAddDistrict.action"),
+		400,230,function(){
+			districtTree.tree('reload');
+			treeGrid.treegrid('load',{});
+	});
+	return false;
+}
+/**
+ * 编辑
+ */
+function editFun(id,name) {
+	if (id == undefined) {
+		var rows = treeGrid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return ;
+	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	DialogUtils.openModalDialog(
+		"updateDistrict",
+		"编辑" + entityName + ":" + name,
+		$.formatString("${contextPath}/district/toUpdateDistrict.action?districtId={0}",id),
+		400,230,function(){
+			districtTree.tree('reload');
+			treeGrid.treegrid('load',{});
+	});
+	return false;
+}
+/*
+ * 删除
+ */
+function deleteFun(id,name) {
+	if (id == undefined) {
+		var rows = treeGrid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认删除指定的District
+	DialogUtils.confirm("确认提醒" , 
+    	$.formatString("是否确认删除{0}:[{1}]?",entityName,name) , 
+    	function(data){
+	    	if(data){
+	    		DialogUtils.progress({
+	    	        text : '数据提交中，请等待....'
+	    		});
+	    		//如果确认删除指定的District
+	    		$.post(
+			    		'${contextPath}/district/deleteById.action',
+			    		{districtId:id},
+			    		function(data){
+			    			DialogUtils.progress('close');
+			    			if(data){
+			    				DialogUtils.tip("删除" + entityName + "成功");
+			    			}else{
+			    				$.formatString("删除{0}:{1}失败.指定{0}可能已经被其他管理员所删除.如果指定{0}依然存在，请联系系统管理员.",entityName,name);
+			    			}
+			    			districtTree.tree('reload');
+			    			treeGrid.treegrid('load',{});
+			    });
+	    	}
+    });
+    return false;
+}
+/*
+ * 禁用
+ */
+function disableFun(id,name){
+	if (id == undefined) {
+		var rows = treeGrid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定District
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认禁用{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认禁用指定District
+    		$.post(
+		    		'${contextPath}/district/disableById.action',
+		    		{districtId:id},
+		    		function(){
+		    			DialogUtils.progress('close');
+		    			DialogUtils.tip("禁用" + entityName + "成功");
+		    			districtTree.tree('reload');
+		    			treeGrid.treegrid('load',{});
+		    });
+    	}
+    });
+    return false;
+}
+/*
+ * 启用
+ */
+function enableFun(id,name){
+	if (id == undefined) {
+		var rows = treeGrid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定District
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认启用{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认启用指定District
+    		$.post(
+		    		'${contextPath}/district/enableById.action',
+		    		{districtId:id},
+		    		function(){
+		    			DialogUtils.progress('close');
+		    			DialogUtils.tip("启用" + entityName + "成功");
+		    			districtTree.tree('reload');
+		    			treeGrid.treegrid('load',{});
+		    });
+    	}
+    });
+    return false;
+}
+/*]]>*/
+</script>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'west',title:'地区数据 ',split:true,
+		tools : [
+			{ iconCls : 'clear',handler : function() {deselect();} } ,
+			{ iconCls : 'database_refresh',handler : function() {refresh();} }
+		]"
+		style="width:230px;">
+		<ul id="treeview"></ul>
+	</div> 
+	
+	<div data-options="region:'center'" style="padding:5px;background:#eee;">
+		<div class="easyui-layout" data-options="fit:true,border:false">
+			<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+				<table id="treegrid" style="width:fit;height:fit"></table>
+			</div>
+		</div>
+		
+		<div id="toolbar" style="display: none;">
+			<%-- 
+			<c:if test='${authContext.hasAuth("add_district") }'>
+				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("update_district") }'>
+				<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("delete_district") }'>
+				<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("enable_district") }'>
+				<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+			</c:if>
+			<c:if test='${authContext.hasAuth("disable_district") }'>
+				<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
+			</c:if> 
+			--%>
+			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
+			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
+			<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+		</div>
+	</div> 
+</body>
+</html>

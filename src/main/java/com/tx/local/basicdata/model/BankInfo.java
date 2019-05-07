@@ -30,7 +30,7 @@ import com.tx.core.support.json.JSONAttributesSupport;
  */
 @Entity
 @Table(name = "bd_bankInfo")
-@BasicDataEntity(name = "银行信息", viewType = BasicDataViewTypeEnum.COMMON_PAGEDLIST)
+@BasicDataEntity(name = "银行信息", viewType = BasicDataViewTypeEnum.PAGEDLIST)
 public class BankInfo implements Serializable, ConfigInitAble, BasicData,
         JSONAttributesSupport {
     

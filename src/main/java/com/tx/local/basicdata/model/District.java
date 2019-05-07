@@ -26,7 +26,7 @@ import com.tx.core.support.json.JSONAttributesSupport;
  */
 @Entity
 @Table(name = "bd_district")
-@BasicDataEntity(name = "区域信息", viewType = BasicDataViewTypeEnum.COMMON_PAGEDLIST)
+@BasicDataEntity(name = "区域信息", viewType = BasicDataViewTypeEnum.PAGEDLIST)
 public class District
         implements TreeAbleBasicData<District>, JSONAttributesSupport {
     

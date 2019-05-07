@@ -35,7 +35,7 @@ import com.tx.local.basicdata.service.DistrictService;
  * @since  [产品/模块版本]
  */
 @Controller
-@RequestMapping("/basicdata/district")
+@RequestMapping("/district")
 public class DistrictController {
     
     /** districtService */
