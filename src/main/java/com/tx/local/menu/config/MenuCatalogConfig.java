@@ -51,8 +51,12 @@ public class MenuCatalogConfig {
     @XStreamAsAttribute
     private String roles;
     
+    /** 访问权控 */
+    @XStreamAsAttribute
+    private String accesses;
+    
     @XStreamImplicit(itemFieldName = "menu")
-    private List<MenuItemConfig> menuList;
+    private List<MenuItemConfig> children;
     
     /** <默认构造函数> */
     public MenuCatalogConfig() {
@@ -145,16 +149,44 @@ public class MenuCatalogConfig {
     }
     
     /**
-     * @return 返回 menuList
+     * @return 返回 auths
      */
-    public List<MenuItemConfig> getMenuList() {
-        return menuList;
+    public String getAuths() {
+        return auths;
     }
     
     /**
-     * @param 对menuList进行赋值
+     * @param 对auths进行赋值
      */
-    public void setMenuList(List<MenuItemConfig> menuList) {
-        this.menuList = menuList;
+    public void setAuths(String auths) {
+        this.auths = auths;
+    }
+    
+    /**
+     * @return 返回 accesses
+     */
+    public String getAccesses() {
+        return accesses;
+    }
+    
+    /**
+     * @param 对accesses进行赋值
+     */
+    public void setAccesses(String accesses) {
+        this.accesses = accesses;
+    }
+
+    /**
+     * @return 返回 children
+     */
+    public List<MenuItemConfig> getChildren() {
+        return children;
+    }
+
+    /**
+     * @param 对children进行赋值
+     */
+    public void setChildren(List<MenuItemConfig> children) {
+        this.children = children;
     }
 }

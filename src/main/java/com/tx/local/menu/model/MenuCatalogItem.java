@@ -42,18 +42,21 @@ public class MenuCatalogItem implements Serializable {
     private Map<String, String> attributes;
     
     /** 菜单对应权限 */
-    private Set<String> authorities;
+    private Set<String> auths;
     
     /** 菜单对应权限 */
     private Set<String> roles;
     
+    /** 访问的表达式 */
+    private Set<String> accesses;
+    
     /** 子菜单集合 */
     @JsonIgnore
-    private List<Menu> menuList;
+    private List<Menu> descendants;
     
     /** 菜单节点清单(不包含子节点的子节点，以树结构存放数据):直接子节点 */
     @JsonIgnore
-    private List<MenuNode> childs;
+    private List<MenuNode> children;
     
     /**
      * @return 返回 id
@@ -100,18 +103,18 @@ public class MenuCatalogItem implements Serializable {
     /**
      * @return 返回 authorities
      */
-    public Set<String> getAuthorities() {
-        if (this.authorities == null) {
-            this.authorities = new HashSet<>();
+    public Set<String> getAuths() {
+        if (this.auths == null) {
+            this.auths = new HashSet<>();
         }
-        return authorities;
+        return auths;
     }
     
     /**
      * @param 对authorities进行赋值
      */
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
+    public void setAuths(Set<String> auths) {
+        this.auths = auths;
     }
     
     /**
@@ -132,6 +135,23 @@ public class MenuCatalogItem implements Serializable {
     }
     
     /**
+     * @return 返回 accesses
+     */
+    public Set<String> getAccesses() {
+        if (this.accesses == null) {
+            this.accesses = new HashSet<>();
+        }
+        return accesses;
+    }
+    
+    /**
+     * @param 对accesses进行赋值
+     */
+    public void setAccesses(Set<String> accesses) {
+        this.accesses = accesses;
+    }
+    
+    /**
      * @return 返回 attributes
      */
     public Map<String, String> getAttributes() {
@@ -147,33 +167,33 @@ public class MenuCatalogItem implements Serializable {
     }
     
     /**
-     * @return 返回 menuList
+     * @return 返回 descendants
      */
     @JsonIgnore
-    public List<Menu> getMenuList() {
-        return menuList;
+    public List<Menu> getDescendants() {
+        return descendants;
     }
     
     /**
-     * @param 对menuList进行赋值
+     * @param 对descendants进行赋值
      */
-    public void setMenuList(List<Menu> menuList) {
-        this.menuList = menuList;
+    public void setDescendants(List<Menu> descendants) {
+        this.descendants = descendants;
     }
     
     /**
-     * @return 返回 childs
+     * @return 返回 children
      */
     @JsonIgnore
-    public List<MenuNode> getChilds() {
-        return childs;
+    public List<MenuNode> getChildren() {
+        return children;
     }
     
     /**
-     * @param 对childs进行赋值
+     * @param 对children进行赋值
      */
-    public void setChilds(List<MenuNode> childs) {
-        this.childs = childs;
+    public void setChildren(List<MenuNode> children) {
+        this.children = children;
     }
     
     /**

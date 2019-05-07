@@ -4,7 +4,7 @@
  * 修改时间:  2016年10月6日
  * <修改描述:>
  */
-package com.tx.local.basicdata.model;
+package com.tx.local.loanbill.model;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.AbstractDataDict;

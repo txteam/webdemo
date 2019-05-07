@@ -4,13 +4,13 @@
  * 修改时间:  2016年10月6日
  * <修改描述:>
  */
-package com.tx.local.basicdata.model;
+package com.tx.local.blacklist.model;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.AbstractDataDict;
 
 /**
- * 黑名单类型<br/>
+ * 黑名单来源<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -18,9 +18,10 @@ import com.tx.component.basicdata.model.AbstractDataDict;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@BasicDataEntity(name = "黑名单类型")
-public class BlackListType extends AbstractDataDict {
+@BasicDataEntity(name = "黑名单来源")
+public class BlackListSource extends AbstractDataDict {
     
     /** 注释内容 */
-    private static final long serialVersionUID = -3084409112283370383L;
+    private static final long serialVersionUID = -4833600781335356651L;
+    
 }

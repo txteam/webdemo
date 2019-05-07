@@ -102,7 +102,7 @@ public class MenuController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @SuppressWarnings("unused") 
+    @SuppressWarnings("unused")
     @ResponseBody
     @RequestMapping("/queryMenuListBySecurity")
     public List<Menu> queryMenuListBySecurity(
@@ -112,16 +112,18 @@ public class MenuController {
         //根据权限及菜单配置生成最终权限列表
         List<Menu> resList = new ArrayList<Menu>();
         for (Menu menuItemTemp : menuContext.getMenuListByCatalog(catalog)) {
-            if (CollectionUtils.isEmpty(menuItemTemp.getAuthorities())
-                    && CollectionUtils.isEmpty(menuItemTemp.getRoles())) {
+            if (CollectionUtils.isEmpty(menuItemTemp.getAuths())
+                    && CollectionUtils.isEmpty(menuItemTemp.getRoles())
+                    && CollectionUtils.isEmpty(menuItemTemp.getAccesses())) {
                 //如果对应菜单未配置权限，无需鉴权
                 resList.add(menuItemTemp);
             } else {
                 //根据权限判断是否需要鉴权
                 boolean check = true;
-                if (!CollectionUtils.isEmpty(menuItemTemp.getAuthorities())
+                if (!CollectionUtils.isEmpty(menuItemTemp.getAuths())
                         && check) {
-                    for (String authorityTemp : menuItemTemp.getAuthorities()) {
+                    for (String authorityTemp : menuItemTemp.getAuths()) {
+                        
                         //一旦拥有其中任一权限即可拥有对应菜单
                         //SecurityContextHolder.getContext().getAuthentication().
                         //if (authItemRefMap.containsKey(authKeyTemp)) {
@@ -132,6 +134,16 @@ public class MenuController {
                 if (!CollectionUtils.isEmpty(menuItemTemp.getRoles())
                         && check) {
                     for (String roleTemp : menuItemTemp.getRoles()) {
+                        //一旦拥有其中任一权限即可拥有对应菜单
+                        //SecurityContextHolder.getContext().getAuthentication().
+                        //if (authItemRefMap.containsKey(authKeyTemp)) {
+                        //resList.add(menuItemTemp);
+                        //}
+                    }
+                }
+                if (!CollectionUtils.isEmpty(menuItemTemp.getAccesses())
+                        && check) {
+                    for (String roleTemp : menuItemTemp.getAccesses()) {
                         //一旦拥有其中任一权限即可拥有对应菜单
                         //SecurityContextHolder.getContext().getAuthentication().
                         //if (authItemRefMap.containsKey(authKeyTemp)) {
@@ -148,7 +160,7 @@ public class MenuController {
         return resList;
     }
     
-    @SuppressWarnings("unused") 
+    @SuppressWarnings("unused")
     @ResponseBody
     @RequestMapping("/queryMenuMapListBySecurity")
     public List<Map<String, Object>> queryMenuMapListBySecurity(
@@ -157,12 +169,13 @@ public class MenuController {
         
         //根据权限及菜单配置生成最终权限列表
         List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
-        for (MenuNode menuItemTemp : menuContext.getMenuNodeListByCatalog(catalog)) {
+        for (MenuNode menuItemTemp : menuContext
+                .getMenuNodeListByCatalog(catalog)) {
             Map<String, Object> menuMap = new HashMap<String, Object>();
             menuMap.put("menu", menuItemTemp.getMenu());
             menuMap.put("menuList", menuItemTemp.getDescendants());
             
-            if (CollectionUtils.isEmpty(menuItemTemp.getAuthorities())
+            if (CollectionUtils.isEmpty(menuItemTemp.getAuths())
                     && CollectionUtils.isEmpty(menuItemTemp.getRoles())) {
                 //如果对应菜单未配置权限，无需鉴权
                 
@@ -170,9 +183,9 @@ public class MenuController {
             } else {
                 //根据权限判断是否需要鉴权
                 boolean check = true;
-                if (!CollectionUtils.isEmpty(menuItemTemp.getAuthorities())
+                if (!CollectionUtils.isEmpty(menuItemTemp.getAuths())
                         && check) {
-                    for (String authorityTemp : menuItemTemp.getAuthorities()) {
+                    for (String authorityTemp : menuItemTemp.getAuths()) {
                         //一旦拥有其中任一权限即可拥有对应菜单
                         //SecurityContextHolder.getContext().getAuthentication().
                         //if (authItemRefMap.containsKey(authKeyTemp)) {
@@ -183,6 +196,16 @@ public class MenuController {
                 if (!CollectionUtils.isEmpty(menuItemTemp.getRoles())
                         && check) {
                     for (String roleTemp : menuItemTemp.getRoles()) {
+                        //一旦拥有其中任一权限即可拥有对应菜单
+                        //SecurityContextHolder.getContext().getAuthentication().
+                        //if (authItemRefMap.containsKey(authKeyTemp)) {
+                        //resList.add(menuItemTemp);
+                        //}
+                    }
+                }
+                if (!CollectionUtils.isEmpty(menuItemTemp.getAccesses())
+                        && check) {
+                    for (String roleTemp : menuItemTemp.getAccesses()) {
                         //一旦拥有其中任一权限即可拥有对应菜单
                         //SecurityContextHolder.getContext().getAuthentication().
                         //if (authItemRefMap.containsKey(authKeyTemp)) {
@@ -208,7 +231,7 @@ public class MenuController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @SuppressWarnings("unused") 
+    @SuppressWarnings("unused")
     @ResponseBody
     @RequestMapping("/queryMenuNodeListBySecurity")
     public List<MenuNode> queryMenuNodeListBySecurity(
@@ -219,16 +242,16 @@ public class MenuController {
         List<MenuNode> resList = new ArrayList<MenuNode>();
         for (MenuNode menunodeTemp : menuContext
                 .getMenuNodeListByCatalog(catalog)) {
-            if (CollectionUtils.isEmpty(menunodeTemp.getAuthorities())
+            if (CollectionUtils.isEmpty(menunodeTemp.getAuths())
                     && CollectionUtils.isEmpty(menunodeTemp.getRoles())) {
                 //如果对应菜单未配置权限，无需鉴权
                 resList.add(menunodeTemp);
             } else {
                 //根据权限判断是否需要鉴权
                 boolean check = true;
-                if (!CollectionUtils.isEmpty(menunodeTemp.getAuthorities())
+                if (!CollectionUtils.isEmpty(menunodeTemp.getAuths())
                         && check) {
-                    for (String authorityTemp : menunodeTemp.getAuthorities()) {
+                    for (String authorityTemp : menunodeTemp.getAuths()) {
                         //一旦拥有其中任一权限即可拥有对应菜单
                         //SecurityContextHolder.getContext().getAuthentication().
                         //if (authItemRefMap.containsKey(authKeyTemp)) {
@@ -239,6 +262,16 @@ public class MenuController {
                 if (!CollectionUtils.isEmpty(menunodeTemp.getRoles())
                         && check) {
                     for (String roleTemp : menunodeTemp.getRoles()) {
+                        //一旦拥有其中任一权限即可拥有对应菜单
+                        //SecurityContextHolder.getContext().getAuthentication().
+                        //if (authItemRefMap.containsKey(authKeyTemp)) {
+                        //resList.add(menuItemTemp);
+                        //}
+                    }
+                }
+                if (!CollectionUtils.isEmpty(menunodeTemp.getAccesses())
+                        && check) {
+                    for (String roleTemp : menunodeTemp.getAccesses()) {
                         //一旦拥有其中任一权限即可拥有对应菜单
                         //SecurityContextHolder.getContext().getAuthentication().
                         //if (authItemRefMap.containsKey(authKeyTemp)) {

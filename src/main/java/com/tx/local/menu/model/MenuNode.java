@@ -143,8 +143,15 @@ public class MenuNode
     /**
      * @return 返回 authorities
      */
-    public Set<String> getAuthorities() {
-        return this.menu.getAuthorities();
+    public Set<String> getAuths() {
+        return this.menu.getAuths();
+    }
+    
+    /**
+     * @return 返回 authorities
+     */
+    public Set<String> getAccesses() {
+        return this.menu.getAccesses();
     }
     
     /**

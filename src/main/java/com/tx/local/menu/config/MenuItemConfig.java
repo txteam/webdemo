@@ -47,11 +47,15 @@ public class MenuItemConfig {
     
     /** 菜单对应权限 */
     @XStreamAsAttribute
-    private String authorities;
+    private String auths;
     
     /** 菜单对应权限 */
     @XStreamAsAttribute
     private String roles;
+    
+    /** 访问权控 */
+    @XStreamAsAttribute
+    private String accesses;
     
     /** 菜单图标 */
     @XStreamAsAttribute
@@ -66,7 +70,7 @@ public class MenuItemConfig {
     
     /** 子菜单项 */
     @XStreamImplicit(itemFieldName = "menu")
-    private List<MenuItemConfig> childs = new ArrayList<MenuItemConfig>();
+    private List<MenuItemConfig> children = new ArrayList<MenuItemConfig>();
     
     /** <默认构造函数> */
     public MenuItemConfig() {
@@ -131,17 +135,31 @@ public class MenuItemConfig {
     }
     
     /**
-     * @return 返回 authorities
+     * @return 返回 auths
      */
-    public String getAuthorities() {
-        return authorities;
+    public String getAuths() {
+        return auths;
     }
     
     /**
-     * @param 对authorities进行赋值
+     * @param 对auths进行赋值
      */
-    public void setAuthorities(String authorities) {
-        this.authorities = authorities;
+    public void setAuths(String auths) {
+        this.auths = auths;
+    }
+    
+    /**
+     * @return 返回 accesses
+     */
+    public String getAccesses() {
+        return accesses;
+    }
+    
+    /**
+     * @param 对accesses进行赋值
+     */
+    public void setAccesses(String accesses) {
+        this.accesses = accesses;
     }
     
     /**
@@ -201,16 +219,17 @@ public class MenuItemConfig {
     }
     
     /**
-     * @return 返回 childs
+     * @return 返回 children
      */
-    public List<MenuItemConfig> getChilds() {
-        return childs;
+    public List<MenuItemConfig> getChildren() {
+        return children;
     }
     
     /**
-     * @param 对childs进行赋值
+     * @param 对children进行赋值
      */
-    public void setChilds(List<MenuItemConfig> childs) {
-        this.childs = childs;
+    public void setChildren(List<MenuItemConfig> children) {
+        this.children = children;
     }
+    
 }

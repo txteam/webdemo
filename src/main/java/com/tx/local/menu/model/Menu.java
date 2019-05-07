@@ -119,7 +119,7 @@ public interface Menu {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public Set<String> getAuthorities();
+    public Set<String> getAuths();
     
     /**
      * 拥有的角色<br/>
@@ -131,4 +131,15 @@ public interface Menu {
      * @see [类、类#方法、类#成员]
      */
     public Set<String> getRoles();
+    
+    /**
+     * 拥有的角色<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String[] [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public Set<String> getAccesses();
 }

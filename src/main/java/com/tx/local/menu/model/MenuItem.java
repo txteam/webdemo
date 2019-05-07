@@ -64,10 +64,13 @@ public class MenuItem implements Menu, Serializable {
     private Map<String, String> attributes;
     
     /** 菜单对应权限 */
-    private Set<String> authorities;
+    private Set<String> auths;
     
     /** 菜单对应权限 */
     private Set<String> roles;
+    
+    /** 判断权限的表达式 */
+    private Set<String> accesses;
     
     /** 打开类型 ： tab,nav,event,dialog */
     private String type = "tab";
@@ -123,21 +126,39 @@ public class MenuItem implements Menu, Serializable {
     /**
      * @return 返回 authorities
      */
-    public Set<String> getAuthorities() {
-        if (this.authorities == null) {
-            this.authorities = new HashSet<String>();
+    public Set<String> getAuths() {
+        if (this.auths == null) {
+            this.auths = new HashSet<String>();
         }
-        if (!CollectionUtils.isEmpty(this.catalog.getAuthorities())) {
-            for (String authorityTemp : this.catalog.getAuthorities()) {
-                if (this.authorities.contains(authorityTemp)) {
+        if (!CollectionUtils.isEmpty(this.catalog.getAuths())) {
+            for (String authorityTemp : this.catalog.getAuths()) {
+                if (this.auths.contains(authorityTemp)) {
                     continue;
                 }
-                this.authorities.add(authorityTemp);
+                this.auths.add(authorityTemp);
             }
         }
-        return authorities;
+        return auths;
     }
     
+    /**
+     * @return 返回 authorities
+     */
+    public Set<String> getAccesses() {
+        if (this.accesses == null) {
+            this.accesses = new HashSet<String>();
+        }
+        if (!CollectionUtils.isEmpty(this.catalog.getAccesses())) {
+            for (String accessTemp : this.catalog.getAccesses()) {
+                if (this.accesses.contains(accessTemp)) {
+                    continue;
+                }
+                this.accesses.add(accessTemp);
+            }
+        }
+        return accesses;
+    }
+
     /**
      * @param 对type进行赋值
      */
@@ -162,8 +183,8 @@ public class MenuItem implements Menu, Serializable {
     /**
      * @param 对authorities进行赋值
      */
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
+    public void setAuths(Set<String> auths) {
+        this.auths = auths;
     }
     
     /**

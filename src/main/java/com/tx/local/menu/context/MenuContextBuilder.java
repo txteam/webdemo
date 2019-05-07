@@ -135,10 +135,10 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
             List<MenuNode> childrenMenuNodeList = doBuildMenuNodeList(menuList,
                     catalog,
                     null,
-                    catalogTemp.getMenuList());
+                    catalogTemp.getChildren());
             
-            catalog.setMenuList(menuList);
-            catalog.setChilds(childrenMenuNodeList);
+            catalog.setDescendants(menuList);
+            catalog.setChildren(childrenMenuNodeList);
             
             catalogMap.put(catalogUpperCase, catalog);
             catalog2menuListMap.put(catalogUpperCase, menuList);
@@ -241,29 +241,37 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         menu.setType(menuConfig.getType());
         menu.setAttributes(menuConfig.getAttributes());
         
-        if (!StringUtils.isEmpty(menuConfig.getAuthorities())) {
-            String[] authorities = StringUtils
-                    .splitByWholeSeparatorPreserveAllTokens(
-                            menuConfig.getAuthorities(), ",");
-            
-            if (!ArrayUtils.isEmpty(authorities)) {
-                menu.setAuthorities(
-                        new HashSet<>(Arrays.asList(authorities)));
+        if (!StringUtils.isEmpty(menuConfig.getAuths())) {
+            String[] auths = StringUtils.splitByWholeSeparatorPreserveAllTokens(
+                    menuConfig.getAuths(), ",");
+            if (!ArrayUtils.isEmpty(auths)) {
+                menu.setAuths(new HashSet<>(Arrays.asList(auths)));
             }
         }
         if (!StringUtils.isEmpty(menuConfig.getRoles())) {
             String[] rolse = StringUtils.splitByWholeSeparatorPreserveAllTokens(
                     menuConfig.getRoles(), ",");
+            
             if (!ArrayUtils.isEmpty(rolse)) {
                 menu.setRoles(new HashSet<>(Arrays.asList(rolse)));
+            }
+        }
+        if (!StringUtils.isEmpty(menuConfig.getAccesses())) {
+            String[] accesses = StringUtils
+                    .splitByWholeSeparatorPreserveAllTokens(
+                            menuConfig.getAccesses(), ",");
+            
+            if (!ArrayUtils.isEmpty(accesses)) {
+                menu.setRoles(new HashSet<>(Arrays.asList(accesses)));
             }
         }
         if (parent != null) {
             menu.setParentId(parent.getId());
             
             //当存在父级菜单时，父级菜单需要的权限以及角色，都需要附给子级菜单
-            menu.getAuthorities().addAll(parent.getAuthorities());
+            menu.getAuths().addAll(parent.getAuths());
             menu.getRoles().addAll(parent.getRoles());
+            menu.getAccesses().addAll(parent.getAccesses());
         }
         
         logger.debug("   ......加载菜单项: catalog:[{}] | id:[{}] text:[{}]",
@@ -286,7 +294,7 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         List<MenuNode> childs = doBuildMenuNodeList(menuList,
                 catalog,
                 menu,
-                menuConfig.getChilds());
+                menuConfig.getChildren());
         mn.setChildren(childs);
         
         return mn;
@@ -315,8 +323,7 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
                     .splitByWholeSeparatorPreserveAllTokens(
                             catalogConfigTemp.getAuthorities(), ",");
             if (!ArrayUtils.isEmpty(authorities)) {
-                catalog.setAuthorities(
-                        new HashSet<>(Arrays.asList(authorities)));
+                catalog.setAuths(new HashSet<>(Arrays.asList(authorities)));
             }
         }
         if (!StringUtils.isEmpty(catalogConfigTemp.getRoles())) {
