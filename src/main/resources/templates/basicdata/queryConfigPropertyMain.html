@@ -49,9 +49,9 @@ var configGroupTree = null;
 $(document).ready(function() {
 	//配置属性组树
 	configGroupTree = $('#configGroupTree').tree({
-		url : /*[[@{/config/queryList}]]*/_contextPath + '${contextPath}/config/queryList',
-		idField : 'name',
-		parentField : 'parentName',
+		url : /*[[@{/config/queryRootList}]]*/_contextPath + '/config/queryRootList',
+		idField : 'id',
+		parentField : 'parentId',
 		iconField : function(){
 			return 'folder_wrench';
 		},
@@ -66,9 +66,9 @@ $(document).ready(function() {
 	});
 
 	treeGrid = $('#treeGrid').treegrid({
-		//url : '${contextPath}/configuration/getConfigPropertyTreeNodeList.action',
+		url : /*[[@{/config/queryDescendantsByParentId}]]*/_contextPath + '/config/queryDescendantsByParentId',
 		idField : 'id',
-		childrenField : 'childs',
+		parentField : 'parentId',
 		treeField : 'name',
 		iconField : function(item){
 			if(item.type == '0'){
@@ -91,98 +91,45 @@ $(document).ready(function() {
 			width : 150,
 			hidden : true
 		},{
+			field : 'module',
+			title : '模块',
+			width : 150,
+			hidden : true
+		},{
 			field : 'name',
 			title : '配置项名称',
 			width : 200
 		}, {
-			field : 'type',
-			title : '配置项类型',
-			width : 230,
-			formatter : function(value, row, index) {
-				if(row.type == '0'){
-					return '&nbsp;';
-				}else{
-					return row.target.configPropertyType;
-				}	
-			}
-		}, {
-			field : 'key',
-			title : '配置项key',
-			width : 230,
-			formatter : function(value, row, index) {
-				if(row.type == '0'){
-					return '&nbsp;';
-				}else{
-					return row.target.key;
-				}	
-			}
+			field : 'code',
+			title : '配置项编码',
+			width : 230
 		},{
 			field : 'value',
-			title : '配置项目值',
-			formatter : function(value, row, index) {
-				if(row.type == '0'){
-					return '&nbsp;';
-				}else{
-					return row.target.value;
-				}	
-			}
+			title : '配置项目值'
+		},{
+			field : 'modifyAble',
+			title : '是否可编辑',
+			width : 80
 		}]],
 		columns : [[{
 			field : 'valid',
 			title : '是否有效',
-			width : 80,
-			formatter : function(value, row, index) {
-				if(row.type == '0'){
-					return '&nbsp;';
-				}else{
-					if(row.target.valid){
-						return "有效";
-					}else{
-						return "无效";
-					}
-				}
-			}
+			width : 80
 		},{
-			field : 'modifyAble',
-			title : '是否可编辑',
-			width : 80,
-			formatter : function(row, row, index) {
-				if(row.type == '0'){
-					return '&nbsp;';
-				}else{
-					if(row.target.modifyAble){
-						return "可编辑";
-					}else{
-						return "不可编辑";
-					}
-				}
-			}
-		},{
-			field : 'description',
+			field : 'remark',
 			title : '备注',
-			width : 200,
-			formatter : function(value, row, index) {
-				if(row.type == '0'){
-					return '&nbsp;';
-				}else{
-					return row.target.description;
-				}	
-			}
+			width : 200
 		},{
 			field : 'action',
 			title : '操作',
 			width : 100,
 			formatter : function(value, row, index) {
-				if(row.type == '0'){
-					return '&nbsp;';
-				}else{
-					var str = '';
-					if($.canModify && row.target.modifyAble){
-						str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, '${contextPath}/style/images/extjs_icons/pencil.png');
-						str += '&nbsp;';
-					}
-					return str;
+				var str = '';
+				if(row.modifyAble){
+					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, /*[[@{@{/style/images/extjs_icons/pencil.png}}]]*/'');
+					str += '&nbsp;';
 				}
+				return str;
 			}
 		} ] ],
 		toolbar : '#toolbar',
