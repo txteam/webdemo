@@ -1,47 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configContext>
-	<configGroup name="庖丁分词配置">
+<config>
+	<config name="庖丁分词配置">
 		<config>
 			<name>paoding.analyzer.mode</name>
-			<key>paoding.analyzer.mode</key>
+			<code>paoding.analyzer.mode</code>
 			<value>most-words</value>
-			<description></description>
 		</config>
 		<config>
 			<name>paoding.analyzer.dictionaries.compiler</name>
-			<key>paoding.analyzer.dictionaries.compiler</key>
+			<code>paoding.analyzer.dictionaries.compiler</code>
 			<value>net.paoding.analysis.analyzer.impl.MostWordsModeDictionariesCompiler</value>
-			<description></description>
 		</config>
 		<config>
 			<name>paoding.dic.home</name>
-			<key>paoding.dic.home</key>
+			<code>paoding.dic.home</code>
 			<value>classpath:context/paoding/dic</value>
-			<description></description>
 		</config>
 		<config>
 			<name>paoding.dic.detector.interval</name>
-			<key>paoding.dic.detector.interval</key>
+			<code>paoding.dic.detector.interval</code>
 			<value>60</value>
-			<description></description>
 		</config>
 		<config>
 			<name>paoding.knife.class.letterKnife</name>
-			<key>paoding.knife.class.letterKnife</key>
+			<code>paoding.knife.class.letterKnife</code>
 			<value>net.paoding.analysis.knife.LetterKnife</value>
-			<description></description>
 		</config>
 		<config>
 			<name>paoding.knife.class.numberKnife</name>
-			<key>paoding.knife.class.numberKnife</key>
+			<code>paoding.knife.class.numberKnife</code>
 			<value>net.paoding.analysis.knife.NumberKnife</value>
-			<description></description>
 		</config>
 		<config>
 			<name>paoding.knife.class.cjkKnife</name>
-			<key>paoding.knife.class.cjkKnife</key>
+			<code>paoding.knife.class.cjkKnife</code>
 			<value>net.paoding.analysis.knife.CJKKnife</value>
-			<description></description>
 		</config>
-	</configGroup>
-</configContext>
+	</config>
+</config>

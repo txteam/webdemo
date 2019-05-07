@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -24,6 +25,7 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * 让菜单项目支持data放入任意值的设定<br/>
@@ -53,7 +55,24 @@ public class MenuCatalogConfigConverter extends AbstractReflectionConverter {
     /** <默认构造函数> */
     public MenuCatalogConfigConverter(Mapper mapper,
             ReflectionProvider reflectionProvider) {
-        super(mapper, reflectionProvider);
+        super(new MapperWrapper(mapper) {
+            @SuppressWarnings("rawtypes")
+            @Override
+            public boolean shouldSerializeMember(Class definedIn,
+                    String fieldName) {
+                if (!super.shouldSerializeMember(definedIn, fieldName)) {
+                    return false;
+                } else {
+                    if (FieldUtils.getDeclaredField(definedIn,
+                            fieldName,
+                            true) == null) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }, reflectionProvider);
     }
     
     /**

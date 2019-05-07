@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>default</title>
-<div th:replace="fragments/header::common_replace">
+<block th:replace="fragments/header::common_replace">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -41,7 +41,7 @@
 	var _contextPath = /*[[@{/}]]*/'';
 	/*]]>*/
 	</script>
-</div>
+</block>
 <script>
 	//窗口大小变化时候，进行刷新页面操作，防止样式混乱
 	//由于用easyui的panel组件时echarts无法自动resize，所以暂时用刷新页面的方法来解决，如果不用panel组件，可自动适应。

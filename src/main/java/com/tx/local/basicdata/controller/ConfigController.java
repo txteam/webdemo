@@ -6,11 +6,13 @@
  */
 package com.tx.local.basicdata.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,8 +92,8 @@ public class ConfigController {
     }
     
     /**
-     * 查询所有的配置属性组
-     *<功能详细描述>
+     * 查询所有的根节点属性<br/>
+     * <功能详细描述>
      * @return [参数说明]
      * 
      * @return List<ConfigPropertyGroup> [返回类型说明]
@@ -99,8 +101,29 @@ public class ConfigController {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
+    @RequestMapping("queryRootList")
+    public List<ConfigProperty> queryRootList(
+            @RequestParam Map<String, Object> params) {
+        params = params == null ? new HashMap<>() : params;
+        params.put("leaf", false);
+        
+        List<ConfigProperty> resList = configContext.queryList(params);
+        return resList;
+    }
+    
+    /**
+     * 查询所有节点<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<ConfigProperty> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
     @RequestMapping("queryList")
-    public List<ConfigProperty> queryList() {
+    public List<ConfigProperty> queryList(
+            @RequestParam Map<String, Object> params) {
         List<ConfigProperty> resList = configContext.queryList(null);
         return resList;
     }
@@ -116,10 +139,15 @@ public class ConfigController {
      */
     @ResponseBody
     @RequestMapping("queryChildrenByParentId")
-    public List<ConfigProperty> queryChildrenByParentId(String parentId,
-            Map<String, Object> params) {
-        List<ConfigProperty> resList = configContext
-                .queryChildrenByParentId(parentId, params);
+    public List<ConfigProperty> queryChildrenByParentId(
+            @RequestParam(required = false, name = "parentId") String parentId,
+            @RequestParam Map<String, Object> params) {
+        List<ConfigProperty> resList = null;
+        if (StringUtils.isEmpty(parentId)) {
+            resList = configContext.queryList(params);
+        } else {
+            resList = configContext.queryChildrenByParentId(parentId, params);
+        }
         return resList;
     }
     
@@ -134,10 +162,15 @@ public class ConfigController {
      */
     @ResponseBody
     @RequestMapping("queryDescendantsByParentId")
-    public List<ConfigProperty> queryDescendantsByParentId(String parentId,
-            Map<String, Object> params) {
-        List<ConfigProperty> resList = configContext
-                .queryDescendantsByParentId(parentId, params);
+    public List<ConfigProperty> queryDescendantsByParentId(
+            @RequestParam(required = false, name = "parentId") String parentId,
+            @RequestParam Map<String, Object> params) {
+        List<ConfigProperty> resList = null;
+        if (StringUtils.isEmpty(parentId)) {
+            resList = configContext.queryList(params);
+        } else {
+            resList = configContext.queryDescendantsByParentId(parentId, params);
+        }
         return resList;
     }
     
