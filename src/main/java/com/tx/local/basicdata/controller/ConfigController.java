@@ -74,15 +74,15 @@ public class ConfigController {
     }
     
     /**
-      * 更新配置属性值<br/>
-      *<功能详细描述>
-      * @param key
-      * @param value
-      * @return [参数说明]
-      * 
-      * @return boolean [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
+     * 更新配置属性值<br/>
+     *<功能详细描述>
+     * @param key
+     * @param value
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
      */
     @ResponseBody
     @RequestMapping("update")
@@ -169,7 +169,8 @@ public class ConfigController {
         if (StringUtils.isEmpty(parentId)) {
             resList = configContext.queryList(params);
         } else {
-            resList = configContext.queryDescendantsByParentId(parentId, params);
+            resList = configContext.queryDescendantsByParentId(parentId,
+                    params);
         }
         return resList;
     }

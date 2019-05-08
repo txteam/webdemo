@@ -101,8 +101,6 @@ $(document).ready(function() {
     	$errorMessage.hide();
     }
   	
-    
-    
     //验证提示信息样式自定义
     $formBody.validator({
         stopOnError: false, //关闭此开关，以便一次性显示所有消息
@@ -120,11 +118,11 @@ $(document).ready(function() {
 	        //	text : '数据提交中，请等待....'
 	        //});
 	        $formBody.ajaxSubmit({
-			    url:/*[[@{/doLogin}]]*/'',
+			    url:/*[[@{/doLogin}]]*/'/doLogin',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data.status == 'success'){
-						window.location.href = /*[[@{/}]]*/'' + data.data;
+						window.location.href = /*[[@{/}]]*/'/' + data.data;
 					}else{
 						showErrorMessage(data.msg);
 						if($.ObjectUtils.isEmpty(data.msg)){

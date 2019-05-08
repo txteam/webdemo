@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content_config>
+	<category code="GG" name="公告">
+		<category code="GG_XTGG" name="系统公告" type="dbRichContent">
+			<level code="GG_XTGG_JJZD" name="紧急置顶" orderIndex="0"></level>
+			<level code="GG_XTGG_ZD" name="置顶" orderIndex="1"></level>
+			<level code="GG_XTGG_JJ" name="紧急" orderIndex="2"></level>
+			<level code="GG_XTGG_PT" name="普通" orderIndex="3"></level>
+		</category>
+		<category code="GG_SKGG" name="收款公告" type="dbRichContent"></category>
+	</category>
+	<category code="GYWM" name="关于我们">
+		<category code="GYWM_QYJJ" name="企业简介" type="fileRichContent"></category>
+		<category code="GYWM_PTGG" name="平台公告" type="fileRichContent"></category>
+		<category code="GYWM_YYTD" name="运营团队" type="fileRichContent"></category>
+		<category code="GYWM_HZDW" name="合作单位" type="fileRichContent"></category>
+		<category code="GYWM_LXWM" name="联系我们" type="fileRichContent"></category>
+		<category code="GYWM_JRWM" name="加入我们" type="fileRichContent"></category>
+		<category code="GYWM_HYZX" name="行业资讯" type="fileRichContent"></category>
+	</category>
+	<category code="BZZX" name="帮助中心">
+		<category code="BZZX_XSRM" name="新手入门" type="fileRichContent"></category>
+		<category code="BZZX_CZSC" name="操作手册" type="fileRichContent"></category>
+		<category code="BZZX_CJWT" name="常见问题" type="fileRichContent"></category>
+	</category>
+	<category code="ZCXY" name="注册协议">
+		<category code="ZCXY_GR" name="个人注册协议" type="fileRichContent"></category>
+		<category code="ZCXY_QY" name="企业注册协议" type="fileRichContent"></category>
+	</category>
+	<category code="YQLJ" name="友情链接" type="dbContentLink"></category>
+	<category code="HZHB" name="合作伙伴" type="dbImageContentLink"></category>
+	<category code="SYHF" name="首页横幅" type="dbImageContentLink"></category>
+</content_config>

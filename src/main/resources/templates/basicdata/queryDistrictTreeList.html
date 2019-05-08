@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8"/>
-	<title>default</title>
+	<title>queryDistrictTreeList</title>
 <block th:replace="fragments/header::common_replace">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -38,12 +38,11 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
-
-<script type="text/javascript" >
+<script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 //权限判定
 $.canAdd = false;
@@ -63,42 +62,12 @@ $(document).ready(function() {
 	var  $disableALink = $("#disableALink");
 	
 	treeview = $('#treeview').tree({
-		url : '${contextPath}/district/queryList.action?maxLevel=1',
+		url : /*[[@{/district/queryList.action?maxLevel=1}]]*/'district/queryList.action?maxLevel=1',
 		idField : 'id',
 		parentField : 'parentId',
 		iconField : function(){
 			return 'folder_user';
 		},
-		/*loadFilter: function(data, parent) {
-			var opt = $(this).data().tree.options;
-			var idField, textField, parentField;
-			if (opt.parentField) {
-				idField = opt.idField || 'id';
-				textField = opt.textField || 'text';
-				iconField = opt.iconField || 'iconCls';
-				parentField = opt.parentField;
-				var i, l, treeData = [], tmpMap = [];
-				for (i = 0, l = data.length; i < l; i++) {
-					tmpMap[data[i][idField]] = data[i];
-					if(data[i].level == 0){
-						data[i]['state'] = 'closed';
-					}
-				}
-				for (i = 0, l = data.length; i < l; i++) {
-					if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
-						if (!tmpMap[data[i][parentField]]['children'])
-							tmpMap[data[i][parentField]]['children'] = [];
-						data[i]['text'] = data[i][textField];
-						tmpMap[data[i][parentField]]['children'].push(data[i]);
-					} else {
-						data[i]['text'] = data[i][textField];
-						treeData.push(data[i]);
-					}
-				}
-				return treeData;
-			}
-			return data;
-		},*/
 		textField : 'name',
 		border : false,
 		onClick : function(node){
@@ -108,7 +77,7 @@ $(document).ready(function() {
 		}
 	});
 	treegrid = $('#treegrid').treegrid({
-		url : '${contextPath}/district/queryList.action?maxLevel=2',
+		//url : '${contextPath}/district/queryList.action?maxLevel=2',
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
@@ -119,7 +88,7 @@ $(document).ready(function() {
         onBeforeLoad:function(row,param){
             var selectedNode = treeview.tree('getSelected');
             if(selectedNode){
-                $(this).treegrid("options").url = '${contextPath}/district/queryList.action?parentIdLike='+selectedNode.id;
+                //$(this).treegrid("options").url = '${contextPath}/district/queryList.action?parentIdLike='+selectedNode.id;
                 return true;
             }
             return false;
@@ -127,21 +96,21 @@ $(document).ready(function() {
 		fit : true,
 		fitColumns : true,
 		border : false,
-		frozenColumns : [[ 
+		frozenColumns : [ [
 		{
-			title : '地区id',
+			title : 'id',
 			field : 'id',
 			width : 150,
 			hidden : true
 		},
 		{
 			field : 'parentId',
-			title : '上级地区ID',
+			title : 'parentId',
 			width : 150,
 			hidden : true
 		}
-		]],
-		columns : [[
+		] ],
+		columns : [ [
 		{
 			field : 'name',
 			title : '地区名称',
@@ -199,7 +168,7 @@ $(document).ready(function() {
 			title : '地区备注',
 			width : 200
 		}
-		]],
+		] ],
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {
 			e.preventDefault();
@@ -449,7 +418,6 @@ function enableFun(id,name){
 		</div>
 		
 		<div id="toolbar" style="display: none;">
-			<%-- 
 			<c:if test='${authContext.hasAuth("add_district") }'>
 				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
 			</c:if>
@@ -464,8 +432,7 @@ function enableFun(id,name){
 			</c:if>
 			<c:if test='${authContext.hasAuth("disable_district") }'>
 				<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
-			</c:if> 
-			--%>
+			</c:if>
 			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
 			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
 			<a onclick="treeGrid.treegrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
