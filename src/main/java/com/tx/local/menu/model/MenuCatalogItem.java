@@ -47,9 +47,6 @@ public class MenuCatalogItem implements Serializable {
     /** 菜单对应权限 */
     private Set<String> roles;
     
-    /** 访问的表达式 */
-    private Set<String> accesses;
-    
     /** 子菜单集合 */
     @JsonIgnore
     private List<Menu> descendants;
@@ -132,23 +129,6 @@ public class MenuCatalogItem implements Serializable {
      */
     public void setRoles(Set<String> roles) {
         this.roles = roles;
-    }
-    
-    /**
-     * @return 返回 accesses
-     */
-    public Set<String> getAccesses() {
-        if (this.accesses == null) {
-            this.accesses = new HashSet<>();
-        }
-        return accesses;
-    }
-    
-    /**
-     * @param 对accesses进行赋值
-     */
-    public void setAccesses(Set<String> accesses) {
-        this.accesses = accesses;
     }
     
     /**

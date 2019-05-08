@@ -69,9 +69,6 @@ public class MenuItem implements Menu, Serializable {
     /** 菜单对应权限 */
     private Set<String> roles;
     
-    /** 判断权限的表达式 */
-    private Set<String> accesses;
-    
     /** 打开类型 ： tab,nav,event,dialog */
     private String type = "tab";
     
@@ -139,24 +136,6 @@ public class MenuItem implements Menu, Serializable {
             }
         }
         return auths;
-    }
-    
-    /**
-     * @return 返回 authorities
-     */
-    public Set<String> getAccesses() {
-        if (this.accesses == null) {
-            this.accesses = new HashSet<String>();
-        }
-        if (!CollectionUtils.isEmpty(this.catalog.getAccesses())) {
-            for (String accessTemp : this.catalog.getAccesses()) {
-                if (this.accesses.contains(accessTemp)) {
-                    continue;
-                }
-                this.accesses.add(accessTemp);
-            }
-        }
-        return accesses;
     }
 
     /**

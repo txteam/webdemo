@@ -148,13 +148,6 @@ public class MenuNode
     }
     
     /**
-     * @return 返回 authorities
-     */
-    public Set<String> getAccesses() {
-        return this.menu.getAccesses();
-    }
-    
-    /**
      * @return 返回 childs
      */
     public List<MenuNode> getChildren() {

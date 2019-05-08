@@ -256,22 +256,12 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
                 menu.setRoles(new HashSet<>(Arrays.asList(rolse)));
             }
         }
-        if (!StringUtils.isEmpty(menuConfig.getAccesses())) {
-            String[] accesses = StringUtils
-                    .splitByWholeSeparatorPreserveAllTokens(
-                            menuConfig.getAccesses(), ",");
-            
-            if (!ArrayUtils.isEmpty(accesses)) {
-                menu.setRoles(new HashSet<>(Arrays.asList(accesses)));
-            }
-        }
         if (parent != null) {
             menu.setParentId(parent.getId());
             
             //当存在父级菜单时，父级菜单需要的权限以及角色，都需要附给子级菜单
             menu.getAuths().addAll(parent.getAuths());
             menu.getRoles().addAll(parent.getRoles());
-            menu.getAccesses().addAll(parent.getAccesses());
         }
         
         logger.debug("   ......加载菜单项: catalog:[{}] | id:[{}] text:[{}]",
