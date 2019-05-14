@@ -194,5 +194,4 @@ tx:
     persister: mybatis
     table-auto-initialize: true
     base-packages: com.tx.local
-            
     
