@@ -123,8 +123,11 @@ public class KaptchaConfiguration {
                 configs.getFontColor());
         props.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_SIZE,
                 String.valueOf(configs.getFontSize()));
-        props.put(Constants.KAPTCHA_BACKGROUND_IMPL,
-                configs.getBackgroundImpl());
+        if(!StringUtils.isEmpty(configs.getBackgroundImpl())){
+            props.put(Constants.KAPTCHA_BACKGROUND_IMPL,
+                    configs.getBackgroundImpl());
+        }
+        
         
         //干扰实现类
         props.put(Constants.KAPTCHA_NOISE_IMPL,
