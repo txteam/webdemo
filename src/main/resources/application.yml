@@ -185,13 +185,15 @@ tx:
         # executor-type: 
         # type-aliases-package: 
         # type-aliases-super-type:
-  event:
-    enable: true
-  command:
-    enable: true
-  basicdata:
-    enable: true
-    persister: mybatis
-    table-auto-initialize: true
-    base-packages: com.tx.local
+  component:
+    persister:
+      type: mybatis
+    event:
+      enable: true
+    command:
+      enable: true
+    basicdata:
+      enable: true
+      table-auto-initialize: true
+      base-packages: com.tx.local
     
