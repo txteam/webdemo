@@ -11,7 +11,7 @@ server:
   # session:
   #  cookie:
   #    name: tx_webdemo
-  
+
 #javamelody
 javamelody:
   enabled: true
@@ -23,6 +23,10 @@ javamelody:
     # monitoring-path: /admin/performance
   
 spring:
+#  devtools:
+#    restart: #开启热部署
+#      enabled: true
+#      additional-paths: src/main/java
   application:
     name: webdemo
   #http配置
@@ -149,6 +153,23 @@ spring:
     #mode: HTML5
     #encoding: UTF-8
     #content-type: text/html
+
+  freemarker:
+    allow-request-override: false
+    allow-session-override: false
+    cache: false
+    charset: UTF-8
+    check-template-location: true
+    content-type: text/html; charset=utf-8
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
+    settings:
+      template_update_delay: 0
+    #prefix:
+    suffix: .ftl
+#    template-loader-path: classpath:/templates/
+    enabled: true
   redis:
     database: 0
     host: 120.24.75.25
@@ -172,7 +193,7 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    
+
 tx:
   core:
     mybatis:
