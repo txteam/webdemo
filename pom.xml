@@ -270,17 +270,37 @@
 			<artifactId>p6spy</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.gitee.sunchenbin.mybatis.actable</groupId>-->
+            <!--<artifactId>mybatis-enhance-actable</artifactId>-->
+            <!--<version>1.0.3</version>-->
+        <!--</dependency>-->
+
+
 		<!-- actuator是监控系统健康情况的工具,zuul上可以不进行配置 -->
 		<!-- <dependency> -->
 		<!-- <groupId>org.springframework.boot</groupId> -->
 		<!-- <artifactId>spring-boot-starter-actuator</artifactId> -->
 		<!-- </dependency> -->
 		<!-- devtools -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.boot</groupId> -->
-		<!-- <artifactId>spring-boot-devtools</artifactId> -->
-		<!-- <optional>true</optional> -->
-		<!-- </dependency> -->
+		 <!--<dependency>-->
+		 <!--<groupId>org.springframework.boot</groupId>-->
+		 <!--<artifactId>spring-boot-devtools</artifactId>-->
+		 <!--<optional>true</optional>-->
+          <!--&lt;!&ndash;<scope>true</scope>&ndash;&gt;-->
+		 <!--</dependency>-->
+
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-loader</artifactId>-->
+		<!--</dependency>-->
+
+
 
 		<!-- test -->
 		<dependency>
@@ -288,7 +308,24 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<!--<dependency>-->
+            <!--<groupId>freemarker</groupId>-->
+            <!--<artifactId>freemarker</artifactId>-->
+            <!--<version>2.3.8</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+    </dependencies>
 
 	<profiles>
 		<profile>
@@ -368,6 +405,7 @@
 				</executions>
 				<configuration>
 					<mainClass>com.tx.local.boot.WebdemoBootApplication</mainClass>
+					<fork>true</fork>
 				</configuration>
 			</plugin>
 		</plugins>
