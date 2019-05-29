@@ -3,7 +3,7 @@
 * {
 	border:0;margin:0;padding:0;
 	font-size: 14px;
-	font-family: "Microsoft YaHei","iconfont"!important, Arial, Helvetica, sans-serif;
+	font-family: "Microsoft YaHei","iconfont"!important; Arial Helvetica sans-serif;
 	/*IE滚动条*/
 	scrollbar-face-color:#2c3950; /*面子*/  
 	scrollbar-arrow-color:#C0C0C0; /*箭头*/  

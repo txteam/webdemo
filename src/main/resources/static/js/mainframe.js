@@ -304,8 +304,23 @@ $(function(){
 			var _options = _this.options;
 			var _url = _options.url;
 			var _element = _this.element;
+
+			var hrefValue = menu.href;
+			if(hrefValue){
+				if(hrefValue.startWith("http://")){
+					menu.href = hrefValue;
+				}else if(hrefValue.startWith(_contextPath)){
+					menu.href = hrefValue;
+				}else if(hrefValue.startWith("/")){
+					menu.href = _contextPath + hrefValue.substr(1);
+				}else{
+					menu.href = _contextPath + hrefValue;
+				}
+			}
+
+
 			
-			var $a = $('<a>').attr('href',menu.href).append('<i class="iconfont">' + menu.icon + '</i>' + menu.text);
+			var $a = $('<a>').attr('href',menu.href).attr("target","_blank").append('<i class="iconfont">' + menu.icon + '</i>' + menu.text);
 			var $li = $('<li>').append($a);
 			$(_element).append($li);
 			

@@ -10,6 +10,8 @@
 		<menu id="debug_nav_menu" text="调试" icon="&#xe6bf;" link="debug_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 调试 -->
 		<menu id="documentation_nav_menu" text="文档" icon="&#xe60e;" link="documentation_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
 		<menu id="demo_nav_menu" text="演示" icon="&#xe60e;" link="demo_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
+        <menu id="demo_inspinia" text="inspinia DEMO" icon="&#xe60e;" href="/portal/inspinia" roles="ROLE_SUPER_ADMIN" type="_blank"/><!-- 编码 -->
+
 	</catalog>
 	
 	<!-- 工作台 -->
@@ -99,6 +101,7 @@
 			<menu id="demo_main2_menu" text="主页二" href="/demo/main/main2" />
 			<menu id="demo_main3_menu" text="主页三" href="/demo/main/main3" />
 			<menu id="demo_main4_menu" text="主页四" href="/demo/main/main4" />
+            <menu id="demo_inspinia" text="inspinia DEMO"  href="/portal/inspinia"  />
 		</menu>
 		<menu id="demo_component_menu" text="组件">
 			<menu id="demo_comp_static_grid_menu" text="静态表格" href="/demo/component/grid/static" />
