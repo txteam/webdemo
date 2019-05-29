@@ -153,7 +153,6 @@ spring:
     #mode: HTML5
     #encoding: UTF-8
     #content-type: text/html
-
   freemarker:
     allow-request-override: false
     allow-session-override: false
@@ -168,7 +167,7 @@ spring:
       template_update_delay: 0
     #prefix:
     suffix: .ftl
-#    template-loader-path: classpath:/templates/
+    #template-loader-path: classpath:/templates/
     enabled: true
   redis:
     database: 0
@@ -217,4 +216,7 @@ tx:
       enable: true
       table-auto-initialize: true
       base-packages: com.tx.local
+    config:
+      enable: true
+      table-auto-initialize: true
     
