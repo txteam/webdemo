@@ -9,10 +9,17 @@ package com.tx.local.mainframe.controller;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
+import com.tx.local.menu.context.MenuContext;
+import com.tx.local.menu.model.Menu;
+import com.tx.local.menu.model.MenuNode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
 
 /**
  * 主框架页面逻辑层<br/>
@@ -26,6 +33,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/mainframe")
 public class MainframeController {
+
+    @Resource(name = "menuContext")
+    private MenuContext menuContext;
     
     /**
      * 跳转到主页面中<br/> 
@@ -43,5 +53,21 @@ public class MainframeController {
         model.addAttribute("now", df.format(new Date()));
         
         return "/mainframe/mainframe";
+    }
+
+    @RequestMapping("/inspinia")
+    public String toMainframe_inspinia(Model model) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        model.addAttribute("now", df.format(new Date()));
+
+        List<Menu> menuList = menuContext.getMenuListByCatalog("operator_nav_catalog");
+        model.addAttribute("menuList",menuList);
+
+        Map<String, List<MenuNode>> menuNodeMap =  menuContext
+                .getMenuNodeMap();
+
+        model.addAttribute("menuNodeMap",menuNodeMap);
+
+        return "/mainframe/index";
     }
 }

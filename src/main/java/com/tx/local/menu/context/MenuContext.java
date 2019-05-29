@@ -8,6 +8,7 @@ package com.tx.local.menu.context;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.menu.model.Menu;
@@ -117,4 +118,9 @@ public class MenuContext extends MenuContextBuilder {
         
         return menuNodeList;
     }
+
+    public Map<String, List<MenuNode>>  getMenuNodeMap(){
+        return this.catalog2nodesMap;
+    }
+
 }

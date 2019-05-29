@@ -7,6 +7,7 @@
 package com.tx.local.demo.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
@@ -56,5 +57,16 @@ public class MainDemoController {
     public String toCalandar(){
         return "/portal/calandar";
     }
+
+    @RequestMapping("/inspinia")
+    public String inspinia(){
+        return "/inspinia-demo";
+    }
+
+     @RequestMapping("/inspinia/demo/{page}")
+     public String inspiniaDemo(@PathVariable String page){
+         return "/inspinia/demo/"+page;
+     }
+
     
 }
