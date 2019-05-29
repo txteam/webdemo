@@ -871,3 +871,29 @@ nav.page-tabs .page-tabs-content {
     padding: 20px 0px;
 }
 
+
+.roll-right.J_tabRight {
+    right: 140px;
+}
+
+.roll-right.btn-group {
+    right: 60px;
+    width: 80px;
+    padding: 0;
+}
+
+.J_menuTab.active {
+    background-color: #1ab394;
+    color: #fff;
+
+}
+
+.J_menuTab.active:hover {
+    background-color: #18a689;
+    color: #fff;
+
+}
+
+body.mini-navbar #page-wrapper{
+    margin:0px;
+}

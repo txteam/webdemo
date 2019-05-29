@@ -192,8 +192,13 @@ $(function () {
         var dataUrl = $(this).attr('href'),
             dataIndex = $(this).data('index'),
             menuName = $.trim($(this).text()),
+            menuName2 = $(this).data("menu-name");
             flag = true;
         if (dataUrl == undefined || $.trim(dataUrl).length == 0)return false;
+
+        if(menuName2){
+            menuName = menuName2;
+        }
 
         // 选项卡菜单已存在
         $('.J_menuTab').each(function () {
