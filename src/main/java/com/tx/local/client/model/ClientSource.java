@@ -9,6 +9,7 @@ package com.tx.local.client.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -16,9 +17,9 @@ import javax.persistence.Table;
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.core.support.initable.model.ConfigInitAble;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * 客户来源<br/>
@@ -29,6 +30,7 @@ import com.tx.core.support.initable.model.ConfigInitAble;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@ApiModel("客户来源")
 @Entity
 @Table(name = "cli_client_source")
 @BasicDataEntity(name = "客户来源", viewType = BasicDataViewTypeEnum.LIST)
@@ -42,35 +44,30 @@ public class ClientSource implements Serializable, ConfigInitAble, BasicData {
     private String id;
     
     /** 银行英文简称*/
-    @UpdateAble
-    @QueryConditionEqual
+    @Column(nullable = false, updatable = false, unique = true)
     private String code;
     
     /** 是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
+    @Column(nullable = false)
     private boolean valid;
     
     /** 是否可编辑 */
-    @UpdateAble
-    @QueryConditionEqual
+    @Column(nullable = false)
     private boolean modifyAble = true;
     
     /** 银行名称*/
-    @UpdateAble
-    @QueryConditionEqual
+    @Column(nullable = false)
     private String name;
     
     /** 备注 */
-    @UpdateAble
     private String remark;
     
     /** 创建时间 */
+    @Column(nullable = false)
     private Date createDate;
     
     /** 最后更新时间 */
-    @UpdateAble
-    @QueryConditionEqual
+    @Column(nullable = false)
     private Date lastUpdateDate;
     
     /**

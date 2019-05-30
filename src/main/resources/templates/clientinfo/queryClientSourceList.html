@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8"/>
-	<title>queryBasicDataList</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>queryclientSourceList</title>
 <block th:replace="fragments/header::common_replace">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -46,46 +46,47 @@
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 //权限判定
+$.canAdd = true;
+$.canDelete = true;
+$.canUpdate = true;
+$.canDisable = true;
+$.canEnable = true;
+
 var grid = null;
 var idFieldName = 'id';
-var nameFieldName = 'name';
-var entityName = '${typeInfo.name}'; 
+var nameFieldName = 'name'; 
+var entityName = '客户来源'; 
 
 $(document).ready(function(){
 	var  $editALink = $("#editALink");
+	var  $deleteALink = $("#deleteALink");
 	var  $enableALink = $("#enableALink");
 	var  $disableALink = $("#disableALink");
-	var  $deleteALink = $("#deleteALink");
-	
+
 	grid = $('#grid').datagrid({
-		//url : '${contextPath}/basicData/queryList.action?basicDataTypeCode=${basicDataTypeCode}',
+		url : _contextPath + 'clientSource/queryList',
 		fit : true,
 		fitColumns : true,
 		border : false,
-		pagination : false,
 		idField : 'id',
 		checkOnSelect : false,
 		selectOnCheck : false,
-		nowrap : true,
+		nowrap : false,
 		striped : true,
 		singleSelect : true,
-		frozenColumns: [[ {
+		frozenColumns: [ [ 
+		{
 			field : 'id',
 			title : '主键',
 			width : 150,
 			hidden : true
-		}]],
-		columns: [[
-		{
-			field : 'basicDataTypeCode',
-			title : '基础数据类型',
-			hidden : true,
-			width : 150
-		},
+		}
+		] ],
+		columns: [ [
 		{
 			field : 'code',
 			title : '编码',
-			width : 100
+			width : 200
 		},
 		{
 			field : 'name',
@@ -95,7 +96,7 @@ $(document).ready(function(){
 		{
 			field : 'valid',
 			title : '是否有效',
-			width : 100
+			width : 200
 			,formatter: function(value, row, index){
 	   			var text = '';
 	   			if(value){
@@ -109,7 +110,7 @@ $(document).ready(function(){
 		{
 			field : 'modifyAble',
 			title : '是否可编辑',
-			width : 100
+			width : 200
 			,formatter: function(value, row, index){
 	   			var text = '';
 	   			if(value){
@@ -121,14 +122,8 @@ $(document).ready(function(){
 			}
 		},
 		{
-			field : 'remark',
-			title : '备注',
-			width : 200
-		},
-		{
 			field : 'createDate',
 			title : '创建时间',
-			hidden : true,
 			width : 200
 			,formatter: function(value, row, index){
 	   			var text = '';
@@ -157,74 +152,75 @@ $(document).ready(function(){
 	   			}
 	   			return text;
 			}
+		},
+		{
+			field : 'remark',
+			title : '备注',
+			width : 200
 		}
-		<c:if test="${show_grid_action == true}">
 		,{
 			field : 'action',
 			title : '操作',
-			width : 80,
+			width : 220,
 			formatter : function(value, row, index) {
 				var str = '&nbsp;';
-				if(row.modifyAble && !row.valid){
+				if(!row.valid && $.canEnable && row.modifyAble){
 					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
 					str += '&nbsp;';
 				}
-				if(row.modifyAble){
+				if($.canUpdate && row.modifyAble){
 					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil.png');
 					str += '&nbsp;';
 				}
-				
-				if(row.modifyAble){
+				if($.canDelete && row.modifyAble){
 					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil_delete.png');
 					str += '&nbsp;';
 				}
-				if(row.modifyAble && row.valid){
+				if(row.valid && $.canDisable && row.modifyAble){
 					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
 					str += '&nbsp;';
 				}
 				return str;
 			}
 		}
-		</c:if>	
-		]],
+		] ],
 		toolbar : '#toolbar',
 		onDblClickRow : function(index, row){
-			if($.canUpdate){
+			if($.canUpdate && row.modifyAble){
 				editFun(row[idFieldName], row[nameFieldName]);
 			}
 		},
 		onClickRow : function(index, row){
 			if(row.modifyAble){
-				$deleteALink.linkbutton('enable');
 				$editALink.linkbutton('enable');
+				$deleteALink.linkbutton('enable');
+				if(row.valid){
+					$enableALink.linkbutton('disable');
+					$enableALink.hide();
+					$disableALink.show();
+					$disableALink.linkbutton('enable');
+				}else{
+					$disableALink.linkbutton('disable');
+					$disableALink.hide();
+					$enableALink.show();
+					$enableALink.linkbutton('enable');
+				}
 			}else{
-				$deleteALink.linkbutton('disable');
 				$editALink.linkbutton('disable');
-			}
-			if(row.valid && row.modifyAble){
+				$deleteALink.linkbutton('disable');
 				$enableALink.linkbutton('disable');
-				$enableALink.hide();
-				$disableALink.show();
-				$disableALink.linkbutton('enable');
-			}else if(!row.valid && row.modifyAble){
 				$disableALink.linkbutton('disable');
-				$disableALink.hide();
-				$enableALink.show();
-				$enableALink.linkbutton('enable');
-			}else{
-				$disableALink.linkbutton('disable');
-				$enableALink.linkbutton('disable');
-				$enableALink.hide();
-				$disableALink.hide();
 			}
 		},
 		onLoadSuccess : function() {
 			$(this).datagrid('unselectAll');
 			$(this).datagrid('tooltip');
 			
+			$editALink.linkbutton('disable');
+			$deleteALink.linkbutton('disable');
+
 			$enableALink.show();
 			$disableALink.show();
-			$deleteALink.linkbutton('disable');
 			$enableALink.linkbutton('disable');
 			$disableALink.linkbutton('disable');
 		}
@@ -245,11 +241,11 @@ function addFun() {
         text : '加载中，请等待....'
 	});
 	DialogUtils.openModalDialog(
-		"addBasicData_${basicDataType.code}",
-		"新增${basicDataType.name}",
-		$.formatString("${contextPath}/basicData/toAdd.action?basicDataTypeCode=${basicDataType.code}"),
+		"addClientSource",
+		"新增" + entityName,
+		$.formatString("${contextPath}/clientSource/toAddClientSource.action"),
 		450,220,function(){
-			grid.datagrid('load',$('#queryForm').serializeObject());
+			queryFun();
 	});
 	return false;
 }
@@ -270,9 +266,9 @@ function editFun(id,name) {
         text : '加载中，请等待....'
 	});
 	DialogUtils.openModalDialog(
-		"updateBasicData_${basicDataType.code}",
-		"编辑${basicDataType.name}" + ":" + name,
-		$.formatString("${contextPath}/basicData/toUpdate.action?basicDataTypeCode=${basicDataType.code}&id={0}",id),
+		"updateClientSource",
+		"编辑" + entityName + ":" + name,
+		$.formatString("${contextPath}/clientSource/toUpdateClientSource.action?clientSourceId={0}",id),
 		450,220,function(){
 			queryFun();
 	});
@@ -291,7 +287,7 @@ function deleteFun(id,name) {
 		DialogUtils.alert("没有选中的" + entityName);
 		return false;
 	}
-	//判断是否确认删除指定的DataDict
+	//判断是否确认删除指定的clientSource
 	DialogUtils.confirm("确认提醒" , 
     	$.formatString("是否确认删除{0}:[{1}]?",entityName,name) , 
     	function(data){
@@ -299,14 +295,14 @@ function deleteFun(id,name) {
 	    		DialogUtils.progress({
 	    	        text : '数据提交中，请等待....'
 	    		});
-	    		//如果确认删除指定的DataDict
+	    		//如果确认删除指定的clientSource
 	    		$.post(
-			    		'${contextPath}/basicData/deleteById.action',
-			    		{id:id,basicDataTypeCode:'${basicDataType.code}'},
+			    		'${contextPath}/clientSource/deleteById.action',
+			    		{clientSourceId:id},
 			    		function(data){
 			    			DialogUtils.progress('close');
 			    			if(data){
-			    				DialogUtils.tip("删除${basicDataType.name}成功");
+			    				DialogUtils.tip("删除" + entityName + "成功");
 			    			}else{
 			    				var errorMessage = $.formatString("删除{0}失败.可能已被处理.如有疑问,请联系管理员.",entityName);
 			    				DialogUtils.alert("错误提示",errorMessage,"error");
@@ -330,8 +326,7 @@ function disableFun(id,name){
 		DialogUtils.alert("没有选中的" + entityName);
 		return false;
 	}
-	
-	//判断是否确认禁用指定DataDict
+	//判断是否确认禁用指定BankInfo
 	DialogUtils.confirm(
     		"确认提醒" , 
     		$.formatString("是否确认禁用{0}:[{1}]?",entityName,name), 
@@ -340,19 +335,14 @@ function disableFun(id,name){
     		DialogUtils.progress({
     	        text : '数据提交中，请等待....'
     		});
-    		//如果确认禁用指定DataDict
+    		//如果确认禁用指定BankInfo
     		$.post(
-		    		'${contextPath}/basicData/disableById.action',
-		    		{id:id,basicDataTypeCode:'${basicDataType.code}'},
-		    		function(data){
-			    			DialogUtils.progress('close');
-			    			if(data){
-			    				DialogUtils.tip("禁用" + entityName + "成功");
-			    			}else{
-			    				var errorMessage = $.formatString("禁用{0}失败.",entityName);
-			    				DialogUtils.alert("错误提示",errorMessage,"error");
-			    			}
-			    			queryFun();
+		    		'${contextPath}/clientSource/disableById.action',
+		    		{clientSourceId:id},
+		    		function(){
+		    			DialogUtils.progress('close');
+		    			DialogUtils.tip("禁用" + entityName + "成功");
+		    			grid.datagrid('reload',$('#queryForm').serializeObject());
 		    });
     	}
     });
@@ -371,7 +361,7 @@ function enableFun(id,name){
 		DialogUtils.alert("没有选中的" + entityName);
 		return false;
 	}
-	//判断是否确认禁用指定DataDict
+	//判断是否确认禁用指定BankInfo
 	DialogUtils.confirm(
     		"确认提醒" , 
     		$.formatString("是否确认启用{0}:[{1}]?",entityName,name), 
@@ -380,19 +370,14 @@ function enableFun(id,name){
     		DialogUtils.progress({
     	        text : '数据提交中，请等待....'
     		});
-    		//如果确认启用指定DataDict
+    		//如果确认启用指定BankInfo
     		$.post(
-		    		'${contextPath}/basicData/enableById.action',
-		    		{id:id,basicDataTypeCode:'${basicDataType.code}'},
-		    		function(data){
-			    			DialogUtils.progress('close');
-			    			if(data){
-			    				DialogUtils.tip("启用" + entityName + "成功");
-			    			}else{
-			    				var errorMessage = $.formatString("启用{0}失败.",entityName);
-			    				DialogUtils.alert("错误提示",errorMessage,"error");
-			    			}
-			    			queryFun();
+		    		'${contextPath}/clientSource/enableById.action',
+		    		{clientSourceId:id},
+		    		function(){
+		    			DialogUtils.progress('close');
+		    			DialogUtils.tip("启用" + entityName + "成功");
+		    			grid.datagrid('reload',$('#queryForm').serializeObject());
 		    });
     	}
     });
@@ -404,68 +389,51 @@ function enableFun(id,name){
 <body>
 <div class="easyui-layout" data-options="fit : true,border : false">
 	<!--//FIXME: 修改查询条件框体高度 -->
-	<div data-options="region:'north',title:'查询条件',border:false" style="height: 145px; overflow: hidden;">
+	<div data-options="region:'north',title:'查询条件',border:false" style="height: 115px; overflow: hidden;">
 		<form id="queryForm" class="form">
 			<table class="table table-hover table-condensed">
 				<tr>
 					<th>编码:</th>
 					<td><input id="code" name="code"/></td>
-					<th>名称:</th>
-					<td><input id="name" name="name"/></td>
-					<th>基础数据类型:</th>
-					<td>
-						<input id="basicDataTypeName" name="basicDataTypeName" 
-							value="${basicDataType.name }" readonly="true">
-					</td>
-				</tr>
-				<tr>
-					<th>是否有效:</th>
-					<td>
-						<select id="valid" name="valid" class="select">
-							<option value="">-- 不限 --</option>
-							<option value="true">是</option>
-							<option value="false">否</option>
-						</select>
-					</td>
 					<th>是否可编辑:</th>
 					<td>
-						<select id="modifyAble" name="modifyAble" class="modifyAble">
+						<select id="modifyAble" name="modifyAble">
 							<option value="">-- 不限 --</option>
 							<option value="true">是</option>
 							<option value="false">否</option>
 						</select>
 					</td>
-					<th>备注:</th>
-					<td><input id="remark" name="remark"/></td>
 				</tr>
 				<tr>
-					<td colspan="6" class="button operRow">
+					<th>名称</th>
+					<td><input id="name" name="name"/></td>
+					<th>是否有效:</th>
+					<td>
+						<select id="valid" name="valid">
+							<option value="">-- 不限 --</option>
+							<option value="true">是</option>
+							<option value="false">否</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" class="button operRow">
 						<a id="queryBtn" onclick="queryFun();return false;" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>
 					</td>
 				</tr>
 			</table>
 		</form>
 	</div>
-	<div data-options="region:'center',border:false,title:'${basicDataType.name }列表'">
+	<div data-options="region:'center',border:false">
 		<table id="grid"></table>
     </div> 
     
-	<div id="toolbar" style="display: none;">
-	    <c:if test='${authContext.hasAuth("add_dataDict") }'>
-			<a id="addALink" onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
-		</c:if>
-		<c:if test='${authContext.hasAuth("update_dataDict") }'>
-			<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
-		</c:if>
-		<c:if test='${authContext.hasAuth("delete_dataDict") }'>
-			<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
-		</c:if>
-		<c:if test='${authContext.hasAuth("enable_dataDict") }'>
-			<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
-		</c:if>
-		<c:if test='${authContext.hasAuth("disable_dataDict") }'>
-			<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
-		</c:if>
+	<div id="toolbar" style="display: none;">		
+		<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+		<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
 		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
 			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 	</div>

@@ -10,8 +10,6 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.local.basicdata.model.BankCardTypeEnum;
 import com.tx.local.basicdata.model.BankInfo;
 import com.tx.local.basicdata.model.IDCardTypeEnum;
@@ -38,226 +36,145 @@ public class ClientInfo implements Client, ClientLoginAccount,
     private String id;
     
     /** 信用信息id */
-    @UpdateAble
-    @QueryConditionEqual
     private String creditInfoId;
     
     /** 登录用户id: */
-    @UpdateAble
-    @QueryConditionEqual
     private String loginClientId;
     
     /** 序列号: 席位号|客户编号|等(客户有序编号)... */
-    @UpdateAble
-    @QueryConditionEqual
     private String serialNumber;
     
     /*** 状态：激活|禁用：禁用的帐号不允许前端系统登录 */
-    @UpdateAble
-    @QueryConditionEqual
     private ClientStatusEnum status = ClientStatusEnum.WAIT_ACTIVATE;
     
     /** 客户类型 */
-    @UpdateAble
-    @QueryConditionEqual
     private ClientTypeEnum type;
     
     /** 客户来源 */
     @Column(name = "clientSourceId")
-    @UpdateAble
-    @QueryConditionEqual
     private ClientSource clientSource;
     
     /** 客户推广渠道 */
     @Column(name = "promotionChannelId")
-    @UpdateAble
-    @QueryConditionEqual
     private ClientPromotionChannel promotionChannel;
     
     /** 登录名 */
-    @UpdateAble
-    @QueryConditionEqual
     private String loginName;
     
     /** 登录名是否可编辑 */
-    @UpdateAble
     private boolean loginNameModifyAble;
     
     /** 电话 */
-    @UpdateAble
-    @QueryConditionEqual
     private String mobilePhoneNumber;
     
     /** 电子邮件 */
-    @UpdateAble
-    @QueryConditionEqual
     private String email;
     
     /** 账户名 */
-    @UpdateAble
-    @QueryConditionEqual
     private String userName;
     
     /** 证件类型 */
-    @UpdateAble
-    @QueryConditionEqual
     private IDCardTypeEnum idCardType = IDCardTypeEnum.身份证;
     
     /** 身份证号码 */
-    @UpdateAble
-    @QueryConditionEqual
     private String idCardNumber;
     
     /** 身份证到期日 */
-    @UpdateAble
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date idCardExpiryDate;
     
     /**银行名称*/
     @Column(name = "bankInfoId")
-    @UpdateAble
     private BankInfo bankInfo;
     
     /** 卡类型借记卡=DE；信用卡=CR */
-    @UpdateAble
-    @QueryConditionEqual
     private BankCardTypeEnum bankCardType;
     
     /** 银行卡号 */
-    @UpdateAble
-    @QueryConditionEqual
     private String bankCardNumber;
     
     /** 是否绑定电话号码 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean mobilePhoneBinding = false;
     
     /** 是否绑定email */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean emailBinding = false;
     
     /** 是否实名认证 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean realNameBinding = false;
     
     /** 实名认证错误次数:由于实名认证存在成本，所以增加该字段以便控制在一段时间内控制认证次数 */
-    @UpdateAble
-    @QueryConditionEqual
     private int realNameErrCount;
     
     /** 实名认证错误时间 */
-    @UpdateAble
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @QueryConditionEqual
     private Date realNameErrLastDate;
     
     /** 是否绑定银行卡 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean bankCardBinding;
     
     /** 银行卡绑定错误时间 */
-    @UpdateAble
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @QueryConditionEqual
     private Date bankCardErrLastDate;
     
     /** 银行卡实名认证错误次数 */
-    @UpdateAble
-    @QueryConditionEqual
     private int bankCardErrCount;
     
     /** 密码 */
-    @UpdateAble
-    @QueryConditionEqual
     private String password;
     
     /** 历史密码 */
-    @UpdateAble
     private String hisPwd;
     
     /** 用户输错密码的次数 */
-    @UpdateAble
     private Integer pwdErrCount = 0;
     
     /** 密码输入错误时间 */
-    @UpdateAble
     private Date pwdLastErrDate;
     
     /** 用户最近一次修改密码时间 */
-    @UpdateAble
-    @QueryConditionEqual
     private Date pwdLastUpdateDate;
     
     /** 支付密码 */
-    @UpdateAble
-    @QueryConditionEqual
     private String payPassword;
     
     /** 历史密码 */
-    @UpdateAble
     private String hisPayPwd;
     
     /** 用户输错密码的次数 */
-    @UpdateAble
     private Integer payPwdErrCount = 0;
     
     /** 密码输入错误时间 */
-    @UpdateAble
     private Date payPwdLastErrDate;
     
     /** 用户最近一次修改密码时间 */
-    @UpdateAble
-    @QueryConditionEqual
     private Date payPwdLastUpdateDate;
     
     /** 推荐码:系统自动分配给客户的推荐码 */
-    @UpdateAble
-    @QueryConditionEqual
     private String referralCode;
     
     /** 用户注册期间填写的推荐码|电话号码...等 */
-    @UpdateAble
-    @QueryConditionEqual
     private String belongReferralCode;
     
     /** 所属介绍人客户id */
-    @UpdateAble
-    @QueryConditionEqual
     private String belongReferralClientId;
     
     /** 客户图标文件id */
-    @UpdateAble
-    @QueryConditionEqual
     private String clientIconFileId;
     
     /** 客户图标url */
-    @UpdateAble
-    @QueryConditionEqual
     private String clientIconUrl;
     
     /** 是否新手的标志： */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean newhand = true;
     
     /** 锁定 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean locked = false;
-    
-
     
     /** 创建日期 */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @QueryConditionEqual
     private Date createDate;
     
     /** 最后跟新时间 */
-    @UpdateAble
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdateDate;
     
