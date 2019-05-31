@@ -11,7 +11,6 @@
 		<menu id="documentation_nav_menu" text="文档" icon="&#xe60e;" link="documentation_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
 		<menu id="demo_nav_menu" text="演示" icon="&#xe60e;" link="demo_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
         <menu id="demo_inspinia" text="inspinia DEMO" icon="&#xe60e;" href="/mainframe/inspinia" roles="ROLE_SUPER_ADMIN" type="_blank"/><!-- 编码 -->
-
 	</catalog>
 	
 	<!-- 工作台 -->
@@ -53,8 +52,12 @@
 		</menu>
 		<menu id="basicdata_manage_center_menu" text="基础数据管理" auths="basicdata_manage_center_auth" type="tab" selectRefresh="false">
 			<menu id="datadict_manage_menu" text="数据字典管理" auths="basicdata_manage_auth" href="/basicdata/toQueryBasicDataMain" type="tab"></menu>
-			<menu id="district_manage_menu" text="区域管理" auths="district_manage_auth" href="/district/toQueryDistrictTreeList" type="tab"></menu>
-			<menu id="bankInfo_manage_menu" text="银行信息管理" auths="bankInfo_manage_auth" href="/bankinfo/toQueryBankInfoList" type="tab"></menu>
+			<menu id="District_manage_menu" text="区域" auths="district_manage_auth" href="/district/toQueryDistrictTreeList" type="tab"></menu>
+			<menu id="BankInfo_manage_menu" text="银行" auths="bankInfo_manage_auth" href="/bankinfo/toQueryBankInfoList" type="tab"></menu>
+			<menu id="clientinfo_basicdata_manage_menu" text="客户信息" auths="clientinfo_basicdata_manage_auth" type="tab">
+				<menu id="ClientSource_manage_menu" text="客户来源" auths="ClientSource_manage_auth" href="/clientSource/toQueryList" type="tab"></menu>
+				<menu id="ClientPromotionChannel_manage_menu" text="推广渠道" auths="ClientPromotionChannel_manage_auth" href="/clientPromotionChannel/toQueryList" type="tab"></menu>
+			</menu>
 		</menu>
 		<menu id="system_config_manage_menu" text="系统配置" auths="system_config_manage_auth" type="tab">
 			<menu id="menu_manage_menu" text="菜单管理" auths="menu_manage_auth" href="/menu/toQueryMenuTreeList"/>
