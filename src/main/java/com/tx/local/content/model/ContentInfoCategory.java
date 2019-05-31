@@ -9,10 +9,7 @@ package com.tx.local.content.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
@@ -45,7 +42,9 @@ public class ContentInfoCategory implements
     private String id;
     
     /** 父级分类 */
-    @Column(name = "parentId")
+
+    @ManyToOne
+    @JoinColumn(name = "parentId")
     @QueryConditionEqual
     private ContentInfoCategory parent;
     
@@ -101,6 +100,7 @@ public class ContentInfoCategory implements
     private String lastUpdateOperatorId;
     
     /** 子节点 */
+    @Transient
     private List<ContentInfoCategory> children;
     
     /**

@@ -9,10 +9,7 @@ package com.tx.local.content.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
 import com.tx.core.jdbc.sqlsource.annotation.QueryConditionGreaterOrEqual;
@@ -119,6 +116,7 @@ public class ContentInfo implements EntryAble<EntityEntry> {
     private Date createDate;
     
     /** 分项属性列表 */
+    @Transient
     private List<EntityEntry> entryList;
     
     /**

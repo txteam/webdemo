@@ -8,11 +8,7 @@ package com.tx.local.noticemessage.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 
@@ -43,7 +39,7 @@ public class NoticeMessage {
     
     /** 站内消息类型 */
     @ManyToOne
-    @Column(name = "noticeMessageTypeId")
+    @JoinColumn(name = "noticeMessageTypeId")
     @UpdateAble
     private NoticeMessageType noticeMessageType;
     

@@ -40,8 +40,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //@EnableEurekaClient
 //@EnableFeignClients
 @SpringBootApplication(scanBasePackages = { "com.tx.local" })
-@EntityScan(basePackages = { "com.tx.local.demo" })
-@EnableJpaRepositories(basePackages = { "com.tx.local.demo" })
+@EntityScan(basePackages = { "com.tx.local" })
+@EnableJpaRepositories(basePackages = { "com.tx.local" })
 @EnableSwagger2
 public class WebdemoBootApplication {
     

@@ -9,6 +9,7 @@ package com.tx.local.content.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
@@ -35,6 +36,7 @@ public class ContentInfoType implements BasicData {
     private static final long serialVersionUID = -1859105456565271373L;
     
     /** 唯一键id */
+    @Id
     @QueryConditionEqual
     private String id;
     

@@ -9,6 +9,7 @@ package com.tx.local.noticemessage.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
@@ -27,6 +28,7 @@ import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 public class NoticeMessage2Client {
     
     /** 站内消息id */
+    @Id
     private String id;
     
     /** 站内消息id */

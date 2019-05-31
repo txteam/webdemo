@@ -13,9 +13,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
+import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.core.support.initable.model.ConfigInitAble;
 import com.tx.core.support.json.JSONAttributesSupport;
 
@@ -31,9 +33,10 @@ import com.tx.core.support.json.JSONAttributesSupport;
 @Entity
 @Table(name = "bd_bankInfo")
 @BasicDataEntity(name = "银行信息", viewType = BasicDataViewTypeEnum.PAGEDLIST)
-public class BankInfo implements Serializable, ConfigInitAble, BasicData,
-        JSONAttributesSupport {
-    
+public class BankInfo implements Serializable, ConfigInitAble, BasicData{
+
+
+
     /** 注释内容 */
     private static final long serialVersionUID = -8931475549426903123L;
     
@@ -45,6 +48,7 @@ public class BankInfo implements Serializable, ConfigInitAble, BasicData,
     private String code;
     
     /** 是否有效 */
+    @UpdateAble
     private boolean valid;
     
     /** 是否可编辑 */

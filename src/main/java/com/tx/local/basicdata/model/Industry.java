@@ -3,6 +3,7 @@ package com.tx.local.basicdata.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -21,6 +22,7 @@ import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@Entity
 @Table(name = "BD_INDUSTRY")
 public class Industry implements Serializable {
     /** 注释内容 */

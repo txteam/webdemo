@@ -12,6 +12,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.tx.local.basicdata.service.BankInfoServiceNew;
+import com.tx.local.common.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 //import com.tx.component.remote.model.RemoteResult;
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.basicdata.model.BankInfo;
-import com.tx.local.basicdata.service.BankInfoService;
 
 /**
  * BankInfo显示层逻辑<br/>
@@ -42,7 +43,7 @@ public class BankInfoController {
     
     //银行信息业务cen 
     @Resource
-    private BankInfoService bankInfoService;
+    private BankInfoServiceNew bankInfoServiceNew;
     
     /**
      * 跳转到查询BankInfo列表页面<br/>
@@ -56,6 +57,11 @@ public class BankInfoController {
     @RequestMapping("/toQueryBankInfoList")
     public String toQueryBankInfoList(ModelMap response) {
         return "/basicdata/queryBankInfoList";
+    }
+
+    @RequestMapping("/toQueryBankInfoPagedList")
+    public String toQueryBankInfoPagedList(ModelMap response) {
+        return "/basicdata/queryBankInfoPagedList";
     }
     
     /**
@@ -87,7 +93,7 @@ public class BankInfoController {
     @RequestMapping("/toUpdateBankInfo")
     public String toUpdateBankInfo(
             @RequestParam("bankInfoId") String bankInfoId, ModelMap response) {
-        BankInfo resBankInfo = this.bankInfoService.findById(bankInfoId);
+        BankInfo resBankInfo = this.bankInfoServiceNew.findById(bankInfoId);
         response.put("bankInfo", resBankInfo);
         
         return "/basicdata/updateBankInfo";
@@ -116,7 +122,7 @@ public class BankInfoController {
         Map<String, String> key2valueMap = new HashMap<String, String>();
         key2valueMap.put("code", code);
         
-        boolean flag = this.bankInfoService.exist(key2valueMap,
+        boolean flag = this.bankInfoServiceNew.exist(key2valueMap,
                 excludeBankInfoId);
         
         Map<String, String> resMap = new HashMap<String, String>();
@@ -151,7 +157,7 @@ public class BankInfoController {
         Map<String, String> key2valueMap = new HashMap<String, String>();
         key2valueMap.put("name", name);
         
-        boolean flag = this.bankInfoService.exist(key2valueMap,
+        boolean flag = this.bankInfoServiceNew.exist(key2valueMap,
                 excludeBankInfoId);
         
         Map<String, String> resMap = new HashMap<String, String>();
@@ -185,7 +191,7 @@ public class BankInfoController {
         params.put("aliases", request.getFirst("aliases"));
         params.put("name", request.getFirst("name"));
         
-        List<BankInfo> resList = this.bankInfoService.queryList(valid, params);
+        List<BankInfo> resList = this.bankInfoServiceNew.queryList(valid, params);
         
         return resList;
     }
@@ -206,6 +212,7 @@ public class BankInfoController {
             @RequestParam(value = "modifyAble", required = false) Boolean modifyAble,
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+            Pageable pageable,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         
@@ -214,7 +221,7 @@ public class BankInfoController {
         params.put("aliases", request.getFirst("aliases"));
         params.put("name", request.getFirst("name"));
         
-        PagedList<BankInfo> resPagedList = this.bankInfoService
+        PagedList<BankInfo> resPagedList = this.bankInfoServiceNew
                 .queryPagedList(valid, params, pageIndex, pageSize);
         return resPagedList;
     }
@@ -231,7 +238,7 @@ public class BankInfoController {
     @RequestMapping("/add")
     @ResponseBody
     public boolean add(BankInfo bankInfo) {
-        this.bankInfoService.insert(bankInfo);
+        this.bankInfoServiceNew.insert(bankInfo);
         return true;
     }
     
@@ -248,7 +255,7 @@ public class BankInfoController {
     @RequestMapping("/update")
     @ResponseBody
     public boolean update(BankInfo bankInfo) {
-        this.bankInfoService.updateById(bankInfo);
+        this.bankInfoServiceNew.updateById(bankInfo);
         
         return true;
     }
@@ -267,7 +274,7 @@ public class BankInfoController {
     @RequestMapping("/deleteById")
     public boolean deleteById(
             @RequestParam(value = "bankInfoId") String bankInfoId) {
-        boolean resFlag = this.bankInfoService.deleteById(bankInfoId);
+        boolean resFlag = this.bankInfoServiceNew.deleteById(bankInfoId);
         return resFlag;
     }
     
@@ -284,7 +291,7 @@ public class BankInfoController {
     @RequestMapping("/disableById")
     public boolean disableById(
             @RequestParam(value = "bankInfoId") String bankInfoId) {
-        boolean resFlag = this.bankInfoService.disableById(bankInfoId);
+        boolean resFlag = this.bankInfoServiceNew.disableById(bankInfoId);
         return resFlag;
     }
     
@@ -302,7 +309,7 @@ public class BankInfoController {
     @RequestMapping("/enableById")
     public boolean enableById(
             @RequestParam(value = "bankInfoId") String bankInfoId) {
-        boolean resFlag = this.bankInfoService.enableById(bankInfoId);
+        boolean resFlag = this.bankInfoServiceNew.enableById(bankInfoId);
         return resFlag;
     }
     
@@ -322,7 +329,7 @@ public class BankInfoController {
     //            @RequestParam(value = "bankInfoId") String bankInfoId,
     //            @RequestParam(value = "file", required = false) CommonsMultipartFile uploadFile) {
     //        RemoteResult res = new RemoteResult();
-    //        BankInfo bankInfo = this.bankInfoService.findById(bankInfoId);
+    //        BankInfo bankInfo = this.bankInfoServiceNew.findById(bankInfoId);
     //        if (bankInfo == null) {
     //            res.setResult(false);
     //            res.setErrorMessage(MessageUtils.format("指定的银行信息不存在.bankInfoId:{}",
@@ -336,7 +343,7 @@ public class BankInfoController {
     //            }
     //            bankInfo.setLogoFileId(null);
     //            bankInfo.setLogoUrl(null);
-    //            this.bankInfoService.updateById(bankInfo);
+    //            this.bankInfoServiceNew.updateById(bankInfo);
     //            res.setResult(true);
     //            res.setData(bankInfo);
     //        } else {
@@ -369,7 +376,7 @@ public class BankInfoController {
     //            } finally {
     //                IOUtils.closeQuietly(input);
     //            }
-    //            this.bankInfoService.updateById(bankInfo);
+    //            this.bankInfoServiceNew.updateById(bankInfo);
     //        }
     //        
     //        return res;
