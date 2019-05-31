@@ -28,23 +28,7 @@ import java.util.Properties;
 @Configuration
 public class FreeMarkerConfig implements ServletContextAware {
     
-//    @Autowired
-//    private MessageMethod messageMethod;
-//
-//    @Autowired
-//    private AbbreviateMethod abbreviateMethod;
-//
-//    @Autowired
-//    private CurrencyMethod currencyMethod;
-//
-//    @Autowired
-//    private PaginationDirective paginationDirective;
-//
-//    @Autowired
-//    private OrderCountDirective orderCountDirective;
-//
-//    @Autowired
-//    private ProductCountDirective productCountDirective;
+
 //
     /** servlet容器 */
     private ServletContext servletContext;
@@ -62,18 +46,12 @@ public class FreeMarkerConfig implements ServletContextAware {
         FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
         
         freeMarkerConfigurer.setTemplateLoaderPaths("classpath:/",
-                "classpath:/templates/_freemarker/");
+                "classpath:/templates/");
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("base", servletContext.getContextPath());
         variables.put("contextPath", servletContext.getContextPath());
         variables.put("showPowered", true);
-//        variables.put("message", messageMethod);
-//        variables.put("abbreviate", abbreviateMethod);
-//        variables.put("currency", currencyMethod);
-//        variables.put("pagination", paginationDirective);
-//        variables.put("order_count", orderCountDirective);
-//        variables.put("product_count", productCountDirective);
         freeMarkerConfigurer.setFreemarkerVariables(variables);
 
         Properties prop = new Properties();
@@ -81,7 +59,7 @@ public class FreeMarkerConfig implements ServletContextAware {
         prop.put("url_escaping_charset", "UTF-8");
         prop.put("output_format", "HTMLOutputFormat");
         prop.put("template_update_delay", "0");
-        prop.put("tag_syntax", "auto_detect"); //使用<# 还是使用[#  auto_detect 表示使用[#
+        prop.put("tag_syntax", "auto_detect"); // [# 和 <# 都可以使用,二选一；[# 优先级高于 <#
         prop.put("classic_compatible", "true");
         prop.put("number_format", "0.######");
         prop.put("boolean_format", "true,false");
