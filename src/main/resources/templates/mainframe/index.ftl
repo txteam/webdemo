@@ -20,7 +20,6 @@
     <style>
 
 
-
     </style>
 </head>
 
@@ -63,7 +62,7 @@
                         <a href="#"><i class="fa fa-th-large"></i>
                         <span class="nav-label">${topMenu.text} </span> <span
                             class="fa arrow"></span></a>
-                        <#assign link =topMenu.attributes["link"]?upper_case />
+                        <#assign link = topMenu.attributes["link"]?upper_case />
                         <ul class="nav nav-second-level collapse">
                         <#list menuNodeMap["${link}"] as menuNode>
                             <#if menuNode.descendants?size gt 0>
@@ -71,14 +70,12 @@
                                 <a href="#">${menuNode.text} <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
                                 <#list menuNode.descendants as threeMenu>
-                                    <li><a href="${base}/${threeMenu.href}"
-                                class="J_menuItem" >${threeMenu.text}</a></li>
+                                    <li><a href="${base}${threeMenu.href}" class="J_menuItem" >${threeMenu.text}</a></li>
                                 </#list>
                                 </ul>
                                 </li>
-
                             <#else >
-                                <li><a href="${base}/${menuNode.href}" class="J_menuItem" >${menuNode.text}</a></li>
+                                <li><a href="${base}${menuNode.href}" class="J_menuItem" >${menuNode.text}</a></li>
                             </#if>
 
                         </#list>
@@ -88,7 +85,6 @@
                     </#if>
 
                 </#list>
-
 
 
             </ul>
@@ -104,10 +100,10 @@
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i>
                     </a>
                     <#--<form role="search" class="navbar-form-custom" method="post" action="search_results.html">-->
-                        <#--<div class="form-group">-->
-                            <#--<input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search"-->
-                                   <#--id="top-search">-->
-                        <#--</div>-->
+                    <#--<div class="form-group">-->
+                    <#--<input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search"-->
+                    <#--id="top-search">-->
+                    <#--</div>-->
                     <#--</form>-->
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
@@ -125,7 +121,7 @@
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="profile.html"  class="J_menuItem"  data-menu-name="新回复" >
+                                <a href="profile.html" class="J_menuItem" data-menu-name="新回复">
                                     <div><i class="fa fa-qq fa-fw"></i> 3条新回复 <span class="pull-right text-muted small">12分钟钱</span>
                                     </div>
                                 </a>
@@ -150,7 +146,8 @@
                     </li>
 
                     <li class="dropdown hidden-xs">
-                        <a href="http://cn.inspinia.cn/index.html" target="_blank"> <i class="fa fa-tasks"></i> inspinia 官网 </a>
+                        <a href="http://cn.inspinia.cn/index.html" target="_blank"> <i class="fa fa-tasks"></i> inspinia
+                            官网 </a>
                     </li>
 
                 </ul>
