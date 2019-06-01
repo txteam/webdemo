@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @Api(tags = "客户来源API")
-@RequestMapping("/api/clientSource")
+@RequestMapping("/api/ClientSource")
 public class ClientSourceAPIController {
     
     //客户来源业务层
@@ -54,7 +54,7 @@ public class ClientSourceAPIController {
      * @see [类、类#方法、类#成员]
      */
     @ApiOperation(value = "新增客户来源")
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public boolean insert(@RequestBody ClientSource clientSource) {
         this.clientSourceService.insert(clientSource);
         return true;
@@ -89,7 +89,7 @@ public class ClientSourceAPIController {
      * @see [类、类#方法、类#成员]
      */
     @ApiOperation(value = "修改客户来源")
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @RequestMapping(value = "", method = RequestMethod.PUT)
     public boolean update(@RequestBody ClientSource clientSource) {
         boolean flag = this.clientSourceService.updateById(clientSource);
         return flag;

@@ -37,32 +37,22 @@ public class ClientSafeAnswer implements Serializable {
     @Id
     private String id;
     
-    @UpdateAble
-    @QueryConditionEqual
     private String clientId;
     
     /** 客户问题回答编码：如:问题一、问题二、问题三 */
     private String code;
     
-    @UpdateAble
-    @QueryConditionEqual
     private String questionId;
     
-    @UpdateAble
-    @QueryConditionEqual
     private String questionTitle;
     
-    @UpdateAble
-    @QueryConditionEqual
     private String answer;
     
     /** 创建日期 */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @QueryConditionEqual
     private Date createDate;
     
     /** 最后更新时间 */
-    @UpdateAble
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdateDate;
     

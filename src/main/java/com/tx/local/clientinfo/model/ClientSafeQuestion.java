@@ -15,9 +15,6 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
-
 /**
  * 客户问题库<br/>
  * <功能详细描述>
@@ -37,40 +34,27 @@ public class ClientSafeQuestion implements Serializable {
     @Id
     private String id;
     
-    @UpdateAble
-    @QueryConditionEqual
     private String title;
     
-    @UpdateAble
-    @QueryConditionEqual
     private String remark;
     
     /** 是否可用 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid = true;
     
     /** 是否可编辑 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean modifyAble = true;
     
     /** 是否是通用问题 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean common = false;
     
     /** 客户id:如果为通用问题该字段为空 */
-    @QueryConditionEqual
     private String clientId;
     
     /** 创建日期 */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @QueryConditionEqual
     private Date createDate;
     
     /** 最后更新时间 */
-    @UpdateAble
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdateDate = new Date();
     

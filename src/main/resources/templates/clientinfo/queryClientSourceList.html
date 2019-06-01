@@ -167,19 +167,19 @@ $(document).ready(function(){
 			formatter : function(value, row, index) {
 				var str = '&nbsp;';
 				if(!row.valid && $.canEnable && row.modifyAble){
-					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row[idFieldName], row[nameFieldName], '@{/images/extjs_icons/control/control_play_blue.png}');
 					str += '&nbsp;';
 				}
 				if($.canUpdate && row.modifyAble){
-					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil.png');
+					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row[idFieldName], row[nameFieldName], '@{/images/extjs_icons/pencil.png}');
 					str += '&nbsp;';
 				}
 				if($.canDelete && row.modifyAble){
-					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil_delete.png');
+					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row[idFieldName], row[nameFieldName], '@{/images/extjs_icons/pencil_delete.png}');
 					str += '&nbsp;';
 				}
 				if(row.valid && $.canDisable && row.modifyAble){
-					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row[idFieldName], row[nameFieldName], '@{/images/extjs_icons/control/control_stop_blue.png}');
 					str += '&nbsp;';
 				}
 				return str;
