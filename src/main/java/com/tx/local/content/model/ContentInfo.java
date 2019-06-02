@@ -9,13 +9,12 @@ package com.tx.local.content.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionGreaterOrEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLess;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLike;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.core.support.entrysupport.model.EntityEntry;
 import com.tx.core.support.entrysupport.model.EntryAble;
 
@@ -37,82 +36,57 @@ public class ContentInfo implements EntryAble<EntityEntry> {
     private String id;
     
     /** 内容类型：一般内容类型于内容所在分类的类型一致 */
-    @UpdateAble
-    @QueryConditionEqual
     @Column(name = "typeCode")
     private ContentInfoType type;
     
     /** 内容分类 */
-    @UpdateAble
-    @QueryConditionEqual
     @Column(name = "categoryCode")
     private ContentInfoCategory category;
     
     /** 信息级别： */
-    @UpdateAble
-    @QueryConditionEqual
     @Column(name = "levelCode")
     private ContentInfoLevel level;
     
     /** 名称 */
-    @UpdateAble
-    @QueryConditionLike
     private String name;
     
     /** 标题 */
-    @UpdateAble
-    @QueryConditionLike
     private String title;
     
     /** 内容字段：内容 */
-    @UpdateAble
     private String content;
     
     /** 内容文件id：存储文件id */
-    @UpdateAble
     private String fileId;
     
     /** 文件相对路径：存储相对路径 */
-    @UpdateAble
-    @QueryConditionEqual
     private String fileUrl;
     
     /** 链接的url */
-    @UpdateAble
-    @QueryConditionEqual
     private String linkUrl;
     
     /** 关键字：便于信息检索 */
-    @QueryConditionLike
     private String keywords;
     
     /** 备注 */
-    @UpdateAble
     private String remark;
     
     /** 是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid = true;
     
     /** 排序值 */
-    @UpdateAble
     private int orderIndex = 0;
     
     /** 最后更新人 */
-    @UpdateAble
     private String lastUpdateOperatorId;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
     /** 创建人 */
     private String createOperatorId;
     
     /** 创建时间 */
-    @QueryConditionGreaterOrEqual(key = "minCreateDate")
-    @QueryConditionLess(key = "maxCreateDate")
     private Date createDate;
     
     /** 分项属性列表 */

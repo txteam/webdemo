@@ -18,8 +18,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.core.support.initable.model.ConfigInitAble;
 
 /**
@@ -45,23 +43,17 @@ public class NoticeMessageType implements ConfigInitAble, Serializable {
     private String id;
     
     /** 通知消息类型编码 */
-    @QueryConditionEqual
     @XmlAttribute
     private String code;
     
     /** 消息类型名称 */
-    @UpdateAble
-    @QueryConditionEqual
     @XmlElement
     private String name;
     
     /** 是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid;
     
     /** 是否可编辑 */
-    @QueryConditionEqual
     private boolean modifyAble;
     
     /** 备注 */
@@ -71,7 +63,6 @@ public class NoticeMessageType implements ConfigInitAble, Serializable {
     private Date createDate;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
     /**

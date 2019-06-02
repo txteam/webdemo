@@ -11,11 +11,6 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionGreaterOrEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLess;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
-
 /**
  * 客户通知消息明细<br/>
  * <功能详细描述>
@@ -33,7 +28,6 @@ public class NoticeMessage2ClientDetail {
     private String id;
     
     /** 站内消息优先级 */
-    @UpdateAble
     private NoticeMessagePriorityEnum priority;
     
     /** 站内消息类型 */
@@ -46,80 +40,57 @@ public class NoticeMessage2ClientDetail {
     private String noticeMessageTypeName;
     
     /** 站内消息标题 */
-    @UpdateAble
-    @QueryConditionEqual
     private String title;
     
     /** 站内消息内容 */
-    @UpdateAble
     private String content;
     
     /** 发布时间 */
-    @QueryConditionGreaterOrEqual(key = "minPublishDate")
-    @QueryConditionLess(key = "maxPublishDate")
     private Date publishDate = new Date();;
     
     /** 是否撤销 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean revokeFlag = false;
     
     /** 撤销时间 */
-    @UpdateAble
     private Date revokeDate;
     
     /** 创建时间 */
-    @QueryConditionGreaterOrEqual(key = "minCreateDate")
-    @QueryConditionLess(key = "maxCreateDate")
     private Date createDate = new Date();
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate = new Date();
     
     /** 站内消息id */
     private String noticeMessageId;
     
     /** 客户类型 */
-    @UpdateAble
-    @QueryConditionEqual
     private NoticeMessageClientTypeEnum clientType;
     
     /** 客户id */
-    @QueryConditionEqual
     private String clientId;
     
     /** 客户电话号码 */
-    @QueryConditionEqual
     private String clientPhoneNumber;
     
     /** 客户登录名 */
-    @QueryConditionEqual
     private String clientLoginName;
     
     /** 客户用户名 */
-    @QueryConditionEqual
     private String clientUserName;
     
     /** 接收消息时间 */
     private Date receiveDate;
     
     /** 是否阅读 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean readFlag;
     
     /** 阅读时间 */
-    @UpdateAble
     private Date readDate;
     
     /** 是否删除 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean deleteFlag;
     
     /** 删除时间 */
-    @UpdateAble
     private Date deleteDate;
     
     /**

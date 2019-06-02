@@ -8,9 +8,11 @@ package com.tx.local.noticemessage.model;
 
 import java.util.Date;
 
-import javax.persistence.*;
-
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * 站内消息<br/>
@@ -30,43 +32,35 @@ public class NoticeMessage {
     private String id;
     
     /** 客户类型 */
-    @UpdateAble
     private NoticeMessageClientTypeEnum clientType;
     
     /** 站内消息优先级 */
-    @UpdateAble
     private NoticeMessagePriorityEnum priority;
     
     /** 站内消息类型 */
     @ManyToOne
     @JoinColumn(name = "noticeMessageTypeId")
-    @UpdateAble
     private NoticeMessageType noticeMessageType;
     
     /** 站内消息标题 */
-    @UpdateAble
     private String title;
     
     /** 站内消息内容 */
-    @UpdateAble
     private String content;
     
     /** 发布时间 */
     private Date publishDate = new Date();
     
     /** 是否撤销 */
-    @UpdateAble
     private boolean revokeFlag = false;
     
     /** 撤销时间 */
-    @UpdateAble
     private Date revokeDate;
     
     /** 创建时间 */
     private Date createDate = new Date();
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate = new Date();
     
     /** <默认构造函数> */

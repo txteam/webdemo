@@ -12,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
-
 /**
  * 站内消息<br/>
  * <功能详细描述>
@@ -44,19 +42,15 @@ public class NoticeMessage2Client {
     private Date receiveDate;
     
     /** 是否阅读 */
-    @UpdateAble
     private boolean readFlag;
     
     /** 阅读时间 */
-    @UpdateAble
     private Date readDate;
     
     /** 是否删除 */
-    @UpdateAble
     private boolean deleteFlag;
     
     /** 删除时间 */
-    @UpdateAble
     private Date deleteDate;
     
     /**

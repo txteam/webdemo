@@ -1,46 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>addClientSource</title>
 <block th:replace="fragments/header::common_replace">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
-	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
-	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
-	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
-	<!-- customize -->
-	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
-	<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
-	
-	<!-- jquery -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
-	<!-- jqueryui -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
-	<!-- easyui -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
-	<!-- other -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
-	<!-- echarts -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
-	<!-- customize -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
-	<script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'';
-	/*]]>*/
-	</script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- css -->
+<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+<!-- customize -->
+<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+
+<!-- jquery -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+<!-- jqueryui -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+<!-- easyui -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+<!-- other -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+<!-- customize -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+var _contextPath = /*[[@{/}]]*/'';
+/*]]>*/
+</script>
 </block>
 
 <script type="text/javascript" th:inline="javascript">
@@ -56,7 +53,7 @@ $(document).ready(function(){
 	        	text : '数据提交中，请等待....'
 	        });
 			$('#entityForm').ajaxSubmit({
-			    url:"${contextPath }/clientSource/add.action",
+			    url: _contextPath + 'clientSource/add',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
@@ -83,38 +80,35 @@ function cancelFun(){
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form:form id="entityForm" method="post" cssClass="form"
-			modelAttribute="clientSource">
-			<form:hidden path="id"/>
+		<form id="entityForm" name="entityForm" method="post" class="form">
+			<input type="hidden" path="id"/>
 			<table class="common_table">
 				<tr>
 					<th class="narrow" width="20%">编码:<span class="tRed">*</span></th>
 					<td width="80%">
-						<input class="easyui-textbox" path="code" cssClass="text" 
-							data-rule="code:required;remote[${contextPath}/clientSource/validateCodeIsExist.action, code, id]" 
-						/>
+						<input class="text" name="code" id="code" data-rule="code:required;"/>
 					</td>
 				</tr>
 				<tr>
 					<th class="narrow" width="20%">名称:</th>
 					<td width="80%">
-						<input class="easyui-textbox" path="name" cssClass="text" />
+						<input id="name" name="name" class="text"/>
 					</td>
 				</tr>
 				<tr>
 					<th class="narrow" width="20%">备注:</th>
 					<td width="80%">
-						<input path="remark" cssClass="text" />
+						<input id="remark" name="remark" class="text" />
 					</td>
 				</tr>
 				<tr>
 					<td class="rightOperRow" colspan="4" style="padding-right: 50px">
-						<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  
-						<a id="cancelBtn" onclick="cancelFun();return false;" href="#" class="easyui-linkbutton">取消</a>	
+						<a id="submitBtn" onclick="submitFun();return false;" href="javascript:void(0);" class="easyui-linkbutton" style="width:80px;">提交</a>  
+						<a id="cancelBtn" onclick="cancelFun();return false;" href="javascript:void(0);" class="easyui-linkbutton" style="width:80px;">取消</a>	
 					</td>
 				</tr>
 			</table>
-		</form:form>
+		</form>
 	</div>
 </div>
 </body>
