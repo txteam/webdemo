@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8"/>
 <title>queryclientSourceList</title>
-<block th:replace="fragments/header::common_replace">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<block th:replace="fragments/header::common_replace">
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
@@ -38,6 +39,8 @@ var _contextPath = /*[[@{/}]]*/'';
 /*]]>*/
 </script>
 </block>
+<link rel="stylesheet" type="text/css" href="../../webjars/layui/css/layui.css" th:href="@{/webjars/layui/css/layui.css}"/>
+<script type="text/javascript" charset="utf-8" src="../../webjars/layui/layui.js" th:src="@{/webjars/layui/layui.js}"></script>
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 //权限判定
@@ -59,7 +62,7 @@ $(document).ready(function(){
 	var  $disableALink = $("#disableALink");
 
 	grid = $('#grid').datagrid({
-		url : /*[[@{/clientSource/queryList}]]*/'clientSource/queryList',
+		url : _contextPath + 'clientSource/queryList',
 		fit : true,
 		fitColumns : true,
 		border : false,
@@ -238,7 +241,7 @@ function addFun() {
         text : '加载中，请等待....'
 	});
 	DialogUtils.openModalDialog(
-		"addClientSource",
+		"add",
 		"新增" + entityName,
 		$.formatString(_contextPath + "clientSource/toAdd"),
 		450,220,function(){
@@ -263,9 +266,9 @@ function editFun(id,name) {
         text : '加载中，请等待....'
 	});
 	DialogUtils.openModalDialog(
-		"updateClientSource",
+		"update",
 		"编辑" + entityName + ":" + name,
-		$.formatString("${contextPath}/clientSource/toUpdateClientSource.action?clientSourceId={0}",id),
+		$.formatString("${contextPath}/clientSource/toUpdate?clientSourceId={0}",id),
 		450,220,function(){
 			queryFun();
 	});

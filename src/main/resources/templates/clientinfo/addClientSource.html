@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>addClientSource</title>
-<block th:replace="fragments/header::common_replace">
+<title>新增客户来源[addClientSource]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<block th:replace="fragments/header::common_replace">
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
@@ -58,7 +58,7 @@ $(document).ready(function(){
 			    	DialogUtils.progress('close');
 					if(data){
 						parent.DialogUtils.tip("新增客户来源成功.");
-						parent.DialogUtils.closeDialogById("addClientSource");
+						parent.DialogUtils.closeDialogById("add");
 					}else{
 						DialogUtils.alert("错误提示","新增客户来源失败.","error");
 					}
@@ -72,7 +72,7 @@ function submitFun(){
 	$('#entityForm').submit();
 }
 function cancelFun(){
-	parent.DialogUtils.closeDialogById("addClientSource");
+	parent.DialogUtils.closeDialogById("add");
 }
 /*]]>*/
 </script>
@@ -81,7 +81,7 @@ function cancelFun(){
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form id="entityForm" name="entityForm" method="post" class="form">
-			<input type="hidden" path="id"/>
+			<input id="id" name="id" type="hidden"/>
 			<table class="common_table">
 				<tr>
 					<th class="narrow" width="20%">编码:<span class="tRed">*</span></th>

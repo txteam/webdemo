@@ -13,6 +13,7 @@ a{text-decoration:none;outline:none;blr:expression(this.onFocus=this.blur());}
 a:focus{text-decoration:none;outline:none;}
 a:hover{text-decoration:none;}
 table{border-collapse:collapse;border-spacing: 0;}
+
 /* form table */
 .form { margin-bottom: 5px; }
 .form * {vertical-align: middle;}

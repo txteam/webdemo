@@ -48,7 +48,6 @@ public class BankInfo implements Serializable, ConfigInitAble, BasicData{
     private String code;
     
     /** 是否有效 */
-    @UpdateAble
     private boolean valid;
     
     /** 是否可编辑 */

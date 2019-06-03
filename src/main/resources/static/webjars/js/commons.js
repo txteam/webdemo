@@ -653,7 +653,7 @@ var GlobalDialogUtils = null;
     		msg:'',
     		width:370,
     		height:150,
-    		timeout:10000,
+    		timeout:6000,
     		showType:'slide',
     		style:{
                 right:'',
@@ -673,17 +673,18 @@ var GlobalDialogUtils = null;
     	var option = $.extend({},{
     		title:'提示',
     		msg: msg,
-    		width:200,
-    		height:100,
+    		width:220,
+    		height:120,
     		timeout:5000,
     		showType:'slide',
+    		right:0
     	},{
     		msg: msg,
     		width: width,
     		height: height,
     		timeout: (timeout && timeout > 0) ? timeout : 3000
     	});
-    	GlobalDialogUtils._show(option);
+    	DialogUtils._show(option);
     };
     //window.show = DialogUtils.show;
     /*
@@ -697,7 +698,7 @@ var GlobalDialogUtils = null;
     	$.messager.alert(title, msg, icon, fn);
     };
     DialogUtils.alert = function(title, msg, icon, fn){
-    	GlobalDialogUtils._alert(title, msg, icon, fn);
+    	DialogUtils._alert(title, msg, icon, fn);
     };
     //window.alert = function(msg){
     //	DialogUtils.alert("alert",msg,warning);
@@ -712,7 +713,7 @@ var GlobalDialogUtils = null;
     	$.messager.confirm(title, msg, fn);
     };
     DialogUtils.confirm = function(title, msg, fn){
-    	GlobalDialogUtils._confirm(title, msg, fn);
+    	DialogUtils._confirm(title, msg, fn);
     };
     //window.confirm = function(msg,fn){
     //	$.messager.confirm("confirm", msg, fn);
@@ -727,7 +728,7 @@ var GlobalDialogUtils = null;
     	$.messager.prompt(title, msg, fn);
     };
     DialogUtils.prompt = function(title, msg, fn){
-    	GlobalDialogUtils._prompt(title, msg, fn);
+    	DialogUtils._prompt(title, msg, fn);
     };
     //window.prompt = function(msg,fn){
     //	$.messager.confirm("prompt", msg, fn);

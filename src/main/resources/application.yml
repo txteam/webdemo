@@ -18,7 +18,7 @@ javamelody:
   init-parameters:
     url-exclude-pattern: '(/webjars/.*|/css/.*|/images/.*|/fonts/.*|/js/.*)'
     # authorized-users: admin:pwd
-    storage-directory: 'd:/logs/javamelody'
+    storage-directory: 'd:/logs/webdemo/javamelody'
     # to change the default "/monitoring" path:
     # monitoring-path: /admin/performance
   

@@ -10,7 +10,6 @@
 		<menu id="debug_nav_menu" text="调试" icon="&#xe6bf;" link="debug_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 调试 -->
 		<menu id="documentation_nav_menu" text="文档" icon="&#xe60e;" link="documentation_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
 		<menu id="demo_nav_menu" text="演示" icon="&#xe60e;" link="demo_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
-        <menu id="demo_inspinia" text="inspinia DEMO" icon="&#xe60e;" href="/mainframe/inspinia" roles="ROLE_SUPER_ADMIN" type="_blank"/><!-- 编码 -->
 	</catalog>
 	
 	<!-- 工作台 -->
