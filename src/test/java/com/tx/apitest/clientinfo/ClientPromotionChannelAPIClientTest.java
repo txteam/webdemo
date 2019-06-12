@@ -4,7 +4,7 @@
  * 修改时间:  2019年6月12日
  * <修改描述:>
  */
-package com.tx.local.clientinfo.client;
+package com.tx.apitest.clientinfo;
 
 import static org.junit.Assert.assertTrue;
 
@@ -32,7 +32,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Filter;
 import com.tx.core.querier.model.QuerierBuilder;
-import com.tx.local.clientinfo.model.ClientSource;
+import com.tx.local.clientinfo.client.ClientPromotionChannelAPIClient;
+import com.tx.local.clientinfo.model.ClientPromotionChannel;
 
 /**
  * 客户来源APIClient测试<br/>
@@ -43,102 +44,100 @@ import com.tx.local.clientinfo.model.ClientSource;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@SpringBootTest(classes = ClientPromotionChannelAPIClient.class)
 @RunWith(SpringRunner.class)
 @Import({ HttpClientConfiguration.class, FeignAutoConfiguration.class,
         HttpMessageConvertersAutoConfiguration.class })
-@SpringBootTest(classes = ClientSourceAPIClient.class)
-@EnableFeignClients(clients = ClientSourceAPIClient.class)
-public class ClientSourceAPIClientTest {
+@EnableFeignClients(clients = ClientPromotionChannelAPIClient.class)
+public class ClientPromotionChannelAPIClientTest {
     
     @Autowired
-    private ClientSourceAPIClient client;
+    private ClientPromotionChannelAPIClient client;
     
-    /** 主键 "yyyyMMddHHmmssSSS" */
-    protected String id = DateFormatUtils.format(new Date(), "yyyy");
+    /** 测试运行时间 */
+    private String id = DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS");
     
-    /** 实体列表 */
-    protected List<ClientSource> entityList = new ArrayList<>();
+    private List<ClientPromotionChannel> testList = new ArrayList<>();
     
-    /** 构建实体 */
-    protected ClientSource buildEntity(String suffix) {
-        ClientSource entity = new ClientSource();
+    /**
+     * 为实体设值<br/>
+     * <功能详细描述>
+     * @param entity
+     * @param i [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private ClientPromotionChannel buildEntity(String suffix) {
+        ClientPromotionChannel entity = new ClientPromotionChannel();
         entity.setCode("test_code_" + id + "_" + suffix);
         entity.setName("test_name_" + id + "_" + suffix);
-        
         return entity;
     }
     
-    /** 前置方法 */
+    /**
+     * 如果不存在则插入
+     * <功能详细描述> [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
     @Before
     public void before() {
-        List<ClientSource> resList = client.queryList(null,
+        List<ClientPromotionChannel> resList = client.queryList(null,
                 QuerierBuilder.newInstance()
                         .addFilter(Filter.like("name", "test_name_%"))
                         .querier());
-        Map<String, ClientSource> entityMap = new HashMap<>();
+        Map<String, ClientPromotionChannel> entityMap = new HashMap<>();
         resList.stream().forEach(entity -> {
             entityMap.put(entity.getName(), entity);
         });
         
         for (int i = 0; i < 5; i++) {
-            ClientSource entity = buildEntity(String.valueOf(i));
+            ClientPromotionChannel entity = buildEntity(String.valueOf(i));
             if (!entityMap.containsKey(entity.getName())) {
-                entityList.add(client.insert(entity));
+                testList.add(client.insert(entity));
             } else {
-                entityList.add(entityMap.get(entity.getName()));
+                testList.add(entityMap.get(entity.getName()));
             }
         }
     }
     
-    /** 后置方法 */
     @After
     public void after() {
-        List<ClientSource> resList = client.queryList(null,
+        List<ClientPromotionChannel> resList = client.queryList(null,
                 QuerierBuilder.newInstance()
                         .addFilter(Filter.like("name", "test_name_%"))
                         .querier());
-        
-        for (ClientSource temp : resList) {
+        for (ClientPromotionChannel temp : resList) {
             client.deleteById(temp.getId());
         }
     }
     
-    //测试插入
     @Test
     public void testInsert() {
-        ClientSource cs = buildEntity("4insert");
+        ClientPromotionChannel cs = buildEntity("4Insert");
         cs = client.insert(cs);
-        
         assertTrue(cs != null && !StringUtils.isEmpty(cs.getId()));
-        entityList.add(cs);
+        
+        testList.add(cs);
     }
     
-    //测试删除
     @Test
     public void testDeleteById() {
-        ClientSource cs = entityList.get(0);
+        ClientPromotionChannel cs = testList.get(0);
         
         boolean flag = client.deleteById(cs.getId());
         assertTrue(flag);
         
-        entityList.remove(0);
+        testList.remove(0);
     }
     
-    //测试删除
-    @Test
-    public void testDeleteByCode() {
-        ClientSource cs = entityList.get(0);
-        
-        boolean flag = client.deleteByCode(cs.getCode());
-        assertTrue(flag);
-        
-        entityList.remove(0);
-    }
-    
-    //测试更新
     @Test
     public void testUpdateById() {
-        ClientSource cs = entityList.get(0);
+        ClientPromotionChannel cs = testList.get(0);
         if (cs.isValid()) {
             client.disableById(cs.getId());
         }
@@ -147,14 +146,13 @@ public class ClientSourceAPIClientTest {
         cs.setRemark("testremark");
         boolean flag = client.updateById(cs.getId(), cs);
         
-        ClientSource res = client.findById(cs.getId());
+        ClientPromotionChannel res = client.findById(cs.getId());
         assertTrue(flag && "testremark".equals(res.getRemark()));
     }
     
-    //测试禁用
     @Test
     public void testDisableById() {
-        ClientSource cs = entityList.get(0);
+        ClientPromotionChannel cs = testList.get(0);
         if (!cs.isValid()) {
             client.enableById(cs.getId());
         }
@@ -164,10 +162,9 @@ public class ClientSourceAPIClientTest {
         assertTrue(flag && !cs.isValid());
     }
     
-    //测试启用
     @Test
     public void testEnableById() {
-        ClientSource cs = entityList.get(0);
+        ClientPromotionChannel cs = testList.get(0);
         if (cs.isValid()) {
             client.disableById(cs.getId());
         }
@@ -178,28 +175,20 @@ public class ClientSourceAPIClientTest {
         assertTrue(flag && cs.isValid());
     }
     
-    //测试查询单例
     @Test
     public void testFindById() {
-        ClientSource cs = entityList.get(0);
+        ClientPromotionChannel cs = testList.get(0);
+        if (cs.isValid()) {
+            client.disableById(cs.getId());
+        }
         
-        ClientSource res = client.findById(cs.getId());
+        ClientPromotionChannel res = client.findById(cs.getId());
         assertTrue(res != null && res.getId().equals(cs.getId()));
     }
     
-    //测试查询单例
-    @Test
-    public void testFindByCode() {
-        ClientSource cs = entityList.get(0);
-        
-        ClientSource res = client.findByCode(cs.getCode());
-        assertTrue(res != null && res.getCode().equals(cs.getCode()));
-    }
-    
-    //测试查询列表
     @Test
     public void testQueryList() {
-        List<ClientSource> resList = client.queryList(null,
+        List<ClientPromotionChannel> resList = client.queryList(null,
                 QuerierBuilder.newInstance()
                         .addFilter(Filter.isNotNull("name"))
                         .addFilter(Filter.ne("id", "xxxxasdfbb"))
@@ -209,10 +198,10 @@ public class ClientSourceAPIClientTest {
         assertTrue(resList.size() > 0);
     }
     
-    //测试查询分页列表
     @Test
     public void testQueryPagedList() {
-        PagedList<ClientSource> resPagedList = client.queryPagedList(null,
+        PagedList<ClientPromotionChannel> resPagedList = client.queryPagedList(
+                null,
                 QuerierBuilder.newInstance()
                         .addFilter(Filter.isNotNull("name"))
                         .addFilter(Filter.ne("id", "xxxxasdfbb"))
@@ -224,27 +213,16 @@ public class ClientSourceAPIClientTest {
         assertTrue(resPagedList.getCount() > 0);
     }
     
-    //查询数量
-    @Test
-    public void testCount() {
-        int count = client.count(null,
-                QuerierBuilder.newInstance()
-                        .addFilter(Filter.isNotNull("name"))
-                        .addFilter(Filter.ne("id", "xxxxasdfbb"))
-                        .addOrder("createDate")
-                        .addOrder("code")
-                        .querier());
-        assertTrue(count > 0);
-    }
-    
-    //查询数量
-    @Test
-    public void testExists() {
-        boolean flag = client.exists(
-                QuerierBuilder.newInstance()
-                        .addFilter(Filter.like("name", "test_name%"))
-                        .querier(),
-                null);
-        assertTrue(flag);
-    }
+    //    @Test
+    //    public void testCount() {
+    //        int count = client.count(null,
+    //                QuerierBuilder.newInstance()
+    //                        .addFilter(Filter.isNotNull("name"))
+    //                        .addFilter(Filter.ne("id", "xxxxasdfbb"))
+    //                        .addOrder("createDate")
+    //                        .addOrder("code")
+    //                        .querier());
+    //        assertTrue(count > 0);
+    //    }
+    //    
 }

@@ -70,7 +70,7 @@ public interface ClientPromotionChannelFacade {
      * @see [类、类#方法、类#成员]
      */
     @ApiOperation(value = "根据编码删除客户推广渠道")
-    @RequestMapping(value = "/{code}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/code/{code}", method = RequestMethod.DELETE)
     public boolean deleteByCode(
             @PathVariable(value = "code", required = true) String code);
     
