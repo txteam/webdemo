@@ -198,24 +198,27 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //所有请求都允许访问
         //允许直接访问的链接
         
-//        filterChainDefinitionMap.put("/sys/login", "anon"); //登录接口排除
-//        filterChainDefinitionMap.put("/auth/2step-code", "anon");//登录验证码
-//        filterChainDefinitionMap.put("/sys/common/view/**", "anon");//图片预览不限制token
-//        filterChainDefinitionMap.put("/sys/common/download/**", "anon");//文件下载不限制token
-//        filterChainDefinitionMap.put("/sys/common/pdf/**", "anon");//pdf预览
-//        filterChainDefinitionMap.put("/generic/**", "anon");//pdf预览需要文件
-//        filterChainDefinitionMap.put("/", "anon");
-//        filterChainDefinitionMap.put("/doc.html", "anon");
-//        filterChainDefinitionMap.put("/**/*.html", "anon");
-//        filterChainDefinitionMap.put("/druid/**", "anon");
-//        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
-//        filterChainDefinitionMap.put("/swagger**/**", "anon");
-//        filterChainDefinitionMap.put("/webjars/**", "anon");
-//        filterChainDefinitionMap.put("/v2/**", "anon");
-//        //性能监控
-//        filterChainDefinitionMap.put("/actuator/metrics/**", "anon");
-//        filterChainDefinitionMap.put("/actuator/httptrace/**", "anon");
-//        filterChainDefinitionMap.put("/actuator/redis/**", "anon");
+        //        filterChainDefinitionMap.put("/sys/login", "anon"); //登录接口排除
+        //        filterChainDefinitionMap.put("/auth/2step-code", "anon");//登录验证码
+        //        filterChainDefinitionMap.put("/sys/common/view/**", "anon");//图片预览不限制token
+        //        filterChainDefinitionMap.put("/sys/common/download/**", "anon");//文件下载不限制token
+        //        filterChainDefinitionMap.put("/sys/common/pdf/**", "anon");//pdf预览
+        //        filterChainDefinitionMap.put("/generic/**", "anon");//pdf预览需要文件
+        //        filterChainDefinitionMap.put("/", "anon");
+        //        filterChainDefinitionMap.put("/doc.html", "anon");
+        //        filterChainDefinitionMap.put("/**/*.html", "anon");
+        //        filterChainDefinitionMap.put("/druid/**", "anon");
+        //        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        //        filterChainDefinitionMap.put("/swagger**/**", "anon");
+        //        filterChainDefinitionMap.put("/webjars/**", "anon");
+        //        filterChainDefinitionMap.put("/v2/**", "anon");
+        //        //性能监控
+        //        filterChainDefinitionMap.put("/actuator/metrics/**", "anon");
+        //        filterChainDefinitionMap.put("/actuator/httptrace/**", "anon");
+        //        filterChainDefinitionMap.put("/actuator/redis/**", "anon");
+        
+        //接口不验证权限
+        http.authorizeRequests().antMatchers("/api/**").permitAll();
         
         http.authorizeRequests()
                 .antMatchers("/", "/index", "/loginer", "/login", "/toLogin")

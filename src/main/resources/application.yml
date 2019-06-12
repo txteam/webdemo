@@ -1,4 +1,4 @@
-debug: true
+debug: false
 
 #server
 server:
@@ -193,6 +193,26 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+feign:
+  local:
+    url: http://localhost:8090/webdemo
+    module: WEBDEMO
+  compression:
+    request:
+      enabled: true
+      mime-types:
+      - text/xml
+      - application/xml
+      - application/json
+      min-request-size: 2048
+    response:
+      enabled: true
+  # client:
+  #  config: 
+  httpclient:
+    enabled: true
+    connection-timeout: 10000
+    
 tx:
   core:
     mybatis:

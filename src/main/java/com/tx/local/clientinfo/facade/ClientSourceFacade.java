@@ -4,42 +4,31 @@
  * 修改时间:
  * <修改描述:>
  */
-package com.tx.local.clientinfo.controller;
+package com.tx.local.clientinfo.facade;
 
 import java.util.List;
-
-import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
-import com.tx.local.clientinfo.facade.ClientSourceFacade;
 import com.tx.local.clientinfo.model.ClientSource;
-import com.tx.local.clientinfo.service.ClientSourceService;
 
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
- * 客户来源API控制层[ClientSourceAPIController]<br/>
+ * 客户来源接口门面层[ClientSourceFacade]<br/>
  * 
  * @author []
  * @version [版本号]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@RestController
-@Api(tags = "客户来源API")
-@RequestMapping("/api/clientSource")
-public class ClientSourceAPIController implements ClientSourceFacade {
-    
-    //客户来源业务层
-    @Resource(name = "clientSourceService")
-    private ClientSourceService clientSourceService;
+public interface ClientSourceFacade {
     
     /**
      * 新增客户来源<br/>
@@ -50,11 +39,9 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
-    public ClientSource insert(@RequestBody ClientSource clientSource) {
-        this.clientSourceService.insert(clientSource);
-        return clientSource;
-    }
+    @ApiOperation(value = "新增客户来源")
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public ClientSource insert(@RequestBody ClientSource clientSource);
     
     /**
      * 根据id删除客户来源<br/> 
@@ -66,12 +53,10 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "根据主键删除客户来源")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public boolean deleteById(
-            @PathVariable(value = "id", required = true) String id) {
-        boolean flag = this.clientSourceService.deleteById(id);
-        return flag;
-    }
+            @PathVariable(value = "id", required = true) String id);
     
     /**
      * 根据code删除客户来源<br/> 
@@ -83,12 +68,10 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "根据编码删除客户来源")
+    @RequestMapping(value = "/{code}", method = RequestMethod.DELETE)
     public boolean deleteByCode(
-            @PathVariable(value = "code", required = true) String code) {
-        boolean flag = this.clientSourceService.deleteByCode(code);
-        return flag;
-    }
+            @PathVariable(value = "code", required = true) String code);
     
     /**
      * 更新客户来源<br/>
@@ -100,13 +83,11 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "修改客户来源")
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public boolean updateById(
             @PathVariable(value = "id", required = true) String id,
-            @RequestBody ClientSource clientSource) {
-        boolean flag = this.clientSourceService.updateById(id, clientSource);
-        return flag;
-    }
+            @RequestBody ClientSource clientSource);
     
     /**
      * 禁用客户来源<br/>
@@ -117,12 +98,10 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "禁用客户来源")
+    @RequestMapping(value = "/disable/{id}", method = RequestMethod.PATCH)
     public boolean disableById(
-            @PathVariable(value = "id", required = true) String id) {
-        boolean flag = this.clientSourceService.disableById(id);
-        return flag;
-    }
+            @PathVariable(value = "id", required = true) String id);
     
     /**
      * 启用客户来源<br/>
@@ -134,12 +113,10 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "启用客户来源")
+    @RequestMapping(value = "/enable/{id}", method = RequestMethod.PATCH)
     public boolean enableById(
-            @PathVariable(value = "id", required = true) String id) {
-        boolean flag = this.clientSourceService.enableById(id);
-        return flag;
-    }
+            @PathVariable(value = "id", required = true) String id);
     
     /**
      * 根据主键查询客户来源<br/>
@@ -150,13 +127,10 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "根据主键查询客户来源")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ClientSource findById(
-            @PathVariable(value = "id", required = true) String id) {
-        ClientSource res = this.clientSourceService.findById(id);
-        
-        return res;
-    }
+            @PathVariable(value = "id", required = true) String id);
     
     /**
      * 根据编码查询客户来源<br/>
@@ -167,13 +141,10 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "根据编码查询客户来源")
+    @RequestMapping(value = "/code/{code}", method = RequestMethod.GET)
     public ClientSource findByCode(
-            @PathVariable(value = "code", required = true) String code) {
-        ClientSource res = this.clientSourceService.findByCode(code);
-        
-        return res;
-    }
+            @PathVariable(value = "code", required = true) String code);
     
     /**
      * 查询客户来源实例列表<br/>
@@ -186,15 +157,11 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "查询客户来源列表")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<ClientSource> queryList(
             @RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier) {
-        List<ClientSource> resList = this.clientSourceService.queryList(valid,
-                querier);
-        
-        return resList;
-    }
+            @RequestBody Querier querier);
     
     /**
      * 查询客户来源分页列表<br/>
@@ -209,16 +176,13 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "查询客户来源分页列表")
+    @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
     public PagedList<ClientSource> queryPagedList(
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier,
             @PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize) {
-        PagedList<ClientSource> resPagedList = this.clientSourceService
-                .queryPagedList(valid, querier, pageIndex, pageSize);
-        return resPagedList;
-    }
+            @PathVariable(value = "pageSize", required = true) int pageSize);
     
     /**
      * 查询客户来源数量<br/>
@@ -231,14 +195,11 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "查询客户来源数量")
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int count(
             @RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier) {
-        int count = this.clientSourceService.count(valid, querier);
-        
-        return count;
-    }
+            @RequestBody Querier querier);
     
     /**
      * 查询客户来源是否存在<br/>
@@ -250,11 +211,8 @@ public class ClientSourceAPIController implements ClientSourceFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "查询客户来源是否存在")
+    @RequestMapping(value = "/exists", method = RequestMethod.GET)
     public boolean exists(@RequestBody Querier querier,
-            @RequestParam(value = "excludeId", required = false) String excludeId) {
-        boolean flag = this.clientSourceService.exists(querier, excludeId);
-        
-        return flag;
-    }
+            @RequestParam(value = "excludeId", required = false) String excludeId);
 }

@@ -2,7 +2,7 @@
 /* 定义通用页面样式  */
 * {
 	border:0;margin:0;padding:0;
-	font-size: 14px;
+	font-size: 12px;
 	font-family: "Microsoft YaHei","iconfont"!important; Arial Helvetica sans-serif;
 	/*IE滚动条*/
 	scrollbar-face-color:#2c3950; /*面子*/  

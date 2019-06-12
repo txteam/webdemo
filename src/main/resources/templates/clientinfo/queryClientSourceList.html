@@ -41,6 +41,7 @@ var _contextPath = /*[[@{/}]]*/'';
 </block>
 <link rel="stylesheet" type="text/css" href="../../webjars/layui/css/layui.css" th:href="@{/webjars/layui/css/layui.css}"/>
 <script type="text/javascript" charset="utf-8" src="../../webjars/layui/layui.js" th:src="@{/webjars/layui/layui.js}"></script>
+
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 //权限判定
@@ -362,7 +363,7 @@ function enableFun(id,name){
 		return false;
 	}
 	//判断是否确认禁用指定BankInfo
-	DialogUtils.confirm(
+	GlobalDialogUtils.confirm(
     		"确认提醒" , 
     		$.formatString("是否确认启用{0}:[{1}]?",entityName,name), 
     function(data){

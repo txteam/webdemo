@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -85,9 +84,9 @@ public class ClientPromotionChannelController {
      */
     @RequestMapping("/toUpdate")
     public String toUpdate(
-    		@RequestParam("clientPromotionChannelId") String clientPromotionChannelId,
+    		@RequestParam("id") String id,
             ModelMap response) {
-        ClientPromotionChannel clientPromotionChannel = this.clientPromotionChannelService.findById(clientPromotionChannelId); 
+        ClientPromotionChannel clientPromotionChannel = this.clientPromotionChannelService.findById(id); 
         response.put("clientPromotionChannel", clientPromotionChannel);
 
         
@@ -183,9 +182,43 @@ public class ClientPromotionChannelController {
     }
     
     /**
+     * 根据主键查询客户推广渠道实例<br/> 
+     * <功能详细描述>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/findById")
+    public ClientPromotionChannel findById(@RequestParam(value = "id") String id) {
+        ClientPromotionChannel clientPromotionChannel = this.clientPromotionChannelService.findById(id);
+        return clientPromotionChannel;
+    }
+
+	/**
+     * 根据编码查询客户推广渠道实例<br/> 
+     * <功能详细描述>
+     * @param code
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/findByCode")
+    public ClientPromotionChannel findByCode(@RequestParam(value = "code") String code) {
+        ClientPromotionChannel clientPromotionChannel = this.clientPromotionChannelService.findByCode(code);
+        return clientPromotionChannel;
+    }
+    
+    /**
      * 删除客户推广渠道实例<br/> 
      * <功能详细描述>
-     * @param clientPromotionChannelId
+     * @param id
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -194,14 +227,14 @@ public class ClientPromotionChannelController {
      */
     @ResponseBody
     @RequestMapping("/deleteById")
-    public boolean deleteById(@RequestParam(value = "clientPromotionChannelId") String clientPromotionChannelId) {
-        boolean flag = this.clientPromotionChannelService.deleteById(clientPromotionChannelId);
+    public boolean deleteById(@RequestParam(value = "id") String id) {
+        boolean flag = this.clientPromotionChannelService.deleteById(id);
         return flag;
     }
     
     /**
      * 禁用客户推广渠道实例
-     * @param clientPromotionChannelId
+     * @param id
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -210,15 +243,15 @@ public class ClientPromotionChannelController {
      */
     @ResponseBody
     @RequestMapping("/disableById")
-    public boolean disableById(@RequestParam(value = "clientPromotionChannelId") String clientPromotionChannelId) {
-        boolean flag = this.clientPromotionChannelService.disableById(clientPromotionChannelId);
+    public boolean disableById(@RequestParam(value = "id") String id) {
+        boolean flag = this.clientPromotionChannelService.disableById(id);
         return flag;
     }
     
     /**
      * 启用客户推广渠道实例<br/>
      * <功能详细描述>
-     * @param clientPromotionChannelId
+     * @param id
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -227,8 +260,8 @@ public class ClientPromotionChannelController {
      */
     @ResponseBody
     @RequestMapping("/enableById")
-    public boolean enableById(@RequestParam(value = "clientPromotionChannelId") String clientPromotionChannelId) {
-        boolean flag = this.clientPromotionChannelService.enableById(clientPromotionChannelId);
+    public boolean enableById(@RequestParam(value = "id") String id) {
+        boolean flag = this.clientPromotionChannelService.enableById(id);
         return flag;
     }
 
@@ -243,9 +276,9 @@ public class ClientPromotionChannelController {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping("/check/{excludeId}")
+    @RequestMapping("/validate")
     public Map<String, String> check(
-            @PathVariable(value = "excludeId", required = false) String excludeId,
+            @RequestParam(value = "excludeId", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
         boolean flag = this.clientPromotionChannelService.exists(params, excludeId);
         

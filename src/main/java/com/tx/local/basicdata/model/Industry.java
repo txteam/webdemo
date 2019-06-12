@@ -7,11 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionGreaterOrEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLess;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
-
 /**
  * 
  * 行业
@@ -33,41 +28,27 @@ public class Industry implements Serializable {
     private String id;
     
     /** 编码 */
-    @UpdateAble
-    @QueryConditionEqual
     private String code;
     
     /** 名称 */
-    @UpdateAble
-    @QueryConditionEqual
     private String name;
     
     /** 是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid = true;
     
     /** 创建日期 */
-    @QueryConditionGreaterOrEqual(key = "minCreateDate")
-    @QueryConditionLess(key = "maxCreateDate")
     private Date createDate;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
     /** 备注 */
-    @UpdateAble
     private String remark;
     
     /**上级id**/
-    @UpdateAble
-    @QueryConditionEqual
     private String parentId;
     
     /** 一级行业id */
-    @UpdateAble
-    @QueryConditionEqual
     private String baseParentId;
     
     /**

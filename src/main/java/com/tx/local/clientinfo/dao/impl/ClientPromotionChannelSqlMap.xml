@@ -49,35 +49,57 @@
 				CPC.remark
 		  FROM CLI_PROMOTION_CHANNEL CPC
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND CPC.id = #{id} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            <![CDATA[ AND CPC.code = #{code} ]]>
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
-	            <![CDATA[ AND CPC.lastUpdateDate = #{lastUpdateDate} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND CPC.name = #{name} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND CPC.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CPC.createDate >= #{minCreateDate} ]]>
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
-	            <![CDATA[ AND CPC.createDate = #{createDate} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CPC.createDate < #{maxCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
 	            <![CDATA[ AND CPC.modifyAble = #{modifyAble} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
 	            <![CDATA[ AND CPC.remark = #{remark} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND CPC.id <> #{excludeId} ]]>
 			</if>
 		</trim>
-		ORDER BY id
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
 	</select>
 
 	<!-- auto generate default count -->
@@ -87,30 +109,45 @@
 		SELECT COUNT(1)
 		  FROM CLI_PROMOTION_CHANNEL CPC
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND CPC.id = #{id} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            <![CDATA[ AND CPC.code = #{code} ]]>
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateDate)">  
-	            <![CDATA[ AND CPC.lastUpdateDate = #{lastUpdateDate} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND CPC.name = #{name} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND CPC.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CPC.createDate >= #{minCreateDate} ]]>
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createDate)">  
-	            <![CDATA[ AND CPC.createDate = #{createDate} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CPC.createDate < #{maxCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
 	            <![CDATA[ AND CPC.modifyAble = #{modifyAble} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
 	            <![CDATA[ AND CPC.remark = #{remark} ]]>
-	        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND CPC.id <> #{excludeId} ]]>
 			</if>
@@ -152,6 +189,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
+	        </if>
 		</trim>
 	</delete>
 	
@@ -169,9 +209,6 @@
 			<if test="_parameter.containsKey('valid')">
 	    		valid = #{valid,javaType=boolean},
 	    	</if>
-			<if test="_parameter.containsKey('createDate')">
-	    		createDate = #{createDate,javaType=java.util.Date},
-	    	</if>
 			<if test="_parameter.containsKey('modifyAble')">
 	    		modifyAble = #{modifyAble,javaType=boolean},
 	    	</if>
@@ -183,6 +220,9 @@
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
 	        </if>
 		</trim>
 	</update> 

@@ -9,17 +9,17 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-public abstract class  BaseDaoImpl<T>  implements BaseDao<T> {
-     @Resource(name = "myBatisDaoSupport")
+public abstract class BaseDaoImpl<T> implements BaseDao<T> {
+    
+    @Resource(name = "myBatisDaoSupport")
     private MyBatisDaoSupport myBatisDaoSupport;
-
-
-
-     private String getStatement(String key){
-         String firstUpperCaseEntityName = entityName().substring(0, 1).toUpperCase() + entityName().substring(1);
-         return entityName()+"."+key +firstUpperCaseEntityName;
-     }
-
+    
+    private String getStatement(String key) {
+        String firstUpperCaseEntityName = entityName().substring(0, 1)
+                .toUpperCase() + entityName().substring(1);
+        return entityName() + "." + key + firstUpperCaseEntityName;
+    }
+    
     /**
      * @param condition
      */
@@ -30,7 +30,7 @@ public abstract class  BaseDaoImpl<T>  implements BaseDao<T> {
                 "id",
                 true);
     }
-
+    
     /**
      * @param updateRowMapList
      */
@@ -40,7 +40,7 @@ public abstract class  BaseDaoImpl<T>  implements BaseDao<T> {
                 updateRowMapList,
                 true);
     }
-
+    
     /**
      * @param condition
      */
@@ -50,37 +50,35 @@ public abstract class  BaseDaoImpl<T>  implements BaseDao<T> {
                 condition,
                 "id");
     }
-
+    
     /**
      * @param condition
      * @return
      */
     @Override
     public int delete(T condition) {
-        return this.myBatisDaoSupport.delete(getStatement("delete"),
-                condition);
+        return this.myBatisDaoSupport.delete(getStatement("delete"), condition);
     }
-
+    
     /**
      * @param condition
      * @return
      */
     @Override
     public T find(T condition) {
-        return this.myBatisDaoSupport.<T> find(getStatement("find"),
-                condition);
+        return this.myBatisDaoSupport.<T> find(getStatement("find"), condition);
     }
-
+    
     /**
      * @param params
      * @return
      */
     @Override
     public List<T> queryList(Map<String, Object> params) {
-        return this.myBatisDaoSupport
-                .<T> queryList(getStatement("query"), params);
+        return this.myBatisDaoSupport.<T> queryList(getStatement("query"),
+                params);
     }
-
+    
     /**
      * @param params
      * @return
@@ -88,9 +86,9 @@ public abstract class  BaseDaoImpl<T>  implements BaseDao<T> {
     @Override
     public int count(Map<String, Object> params) {
         return this.myBatisDaoSupport
-                .<Integer> find(getStatement("query")+"Count", params);
+                .<Integer> find(getStatement("query") + "Count", params);
     }
-
+    
     /**
      * @param params
      * @param pageIndex
@@ -99,17 +97,22 @@ public abstract class  BaseDaoImpl<T>  implements BaseDao<T> {
      */
     @Override
     public PagedList<T> queryPagedList(Map<String, Object> params,
-                                              int pageIndex, int pageSize) {
-        return this.myBatisDaoSupport.<T> queryPagedList(
-                getStatement("query"), params, pageIndex, pageSize);
+            int pageIndex, int pageSize) {
+        return this.myBatisDaoSupport.<T> queryPagedList(getStatement("query"),
+                params,
+                pageIndex,
+                pageSize);
     }
-
+    
     @Override
-    public PagedList<T> queryPagedList(Map<String, Object> params, Pageable pageable) {
-        return this.myBatisDaoSupport.<T> queryPagedList(
-                getStatement("query"), params, pageable.getPageNumber(), pageable.getPageSize());
+    public PagedList<T> queryPagedList(Map<String, Object> params,
+            Pageable pageable) {
+        return this.myBatisDaoSupport.<T> queryPagedList(getStatement("query"),
+                params,
+                pageable.getPageNumber(),
+                pageable.getPageSize());
     }
-
+    
     /**
      * @param updateRowMap
      * @return
@@ -119,6 +122,5 @@ public abstract class  BaseDaoImpl<T>  implements BaseDao<T> {
         return this.myBatisDaoSupport.update(getStatement("update"),
                 updateRowMap);
     }
-
-
+    
 }
