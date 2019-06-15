@@ -10,7 +10,7 @@
 	</resultMap>
 	
 	<!-- auto generate default find -->
-	<select id="findBankInfo" 
+	<select id="find" 
 		parameterType="com.tx.local.basicdata.model.BankInfo"
 		resultMap="bankInfoMap">
 		SELECT 
@@ -40,7 +40,7 @@
 	</select>
 	
 	<!-- auto generate default query -->
-	<select id="queryBankInfo" 
+	<select id="query" 
 		parameterType="java.util.Map"
 		resultMap="bankInfoMap">
 		SELECT 
@@ -59,6 +59,21 @@
 				TBI.remark
 		  FROM BD_BANKINFO TBI
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
 	            <![CDATA[ AND TBI.MODIFYABLE = #{modifyAble} ]]>
 	        </if>
@@ -79,22 +94,37 @@
 			</if>
 		</trim>
 		<choose>  
-	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
-	            ORDER BY ${orderSql}
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
 	        </when>
 	        <otherwise>  
-	            ORDER BY ID
+	            ORDER BY createDate DESC
 	        </otherwise>  
 	    </choose>
 	</select>
 	
 		<!-- auto generate default count -->
-	<select id="queryBankInfoCount" 
+	<select id="queryCount" 
 		parameterType="java.util.Map"
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
 		  FROM BD_BANKINFO TBI
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
 	            <![CDATA[ AND TBI.MODIFYABLE = #{modifyAble} ]]>
 	        </if>
@@ -117,7 +147,7 @@
 	</select>
     
     <!-- auto generate default insert -->
-    <insert id="insertBankInfo" 
+    <insert id="insert" 
 		parameterType="com.tx.local.basicdata.model.BankInfo">
 		INSERT INTO BD_BANKINFO
 		(
@@ -154,7 +184,7 @@
 	</insert>
 	
 	<!-- auto generate default delete -->
-	<delete id="deleteBankInfo" 
+	<delete id="delete" 
 		parameterType="com.tx.local.basicdata.model.BankInfo">
 		DELETE FROM BD_BANKINFO  WHERE
 		<trim prefixOverrides="AND | OR">
@@ -165,7 +195,7 @@
 	</delete>
 
 	<!-- auto generate default update -->
-	<update id="updateBankInfo"
+	<update id="update"
 	    parameterType="java.util.Map">  
 	    UPDATE BD_BANKINFO 
 	    <trim prefix="SET" suffixOverrides=",">

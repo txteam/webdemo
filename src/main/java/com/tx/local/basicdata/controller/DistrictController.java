@@ -109,7 +109,7 @@ public class DistrictController {
             @RequestParam(value = "id", required = false) String excludeDistrictId) {
         Map<String, String> key2valueMap = new HashMap<String, String>();
         key2valueMap.put("code", code);
-        boolean flag = this.districtService.exist(key2valueMap,
+        boolean flag = this.districtService.exists(key2valueMap,
                 excludeDistrictId);
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {

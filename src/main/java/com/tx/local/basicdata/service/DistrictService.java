@@ -22,6 +22,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.tx.component.basicdata.service.AbstractBasicDataService;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
+import com.tx.core.querier.model.Querier;
 import com.tx.local.basicdata.dao.DistrictDao;
 import com.tx.local.basicdata.model.District;
 
@@ -217,7 +218,7 @@ public class DistrictService extends AbstractBasicDataService<District> {
      * @throws throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public boolean exist(Map<String, String> key2valueMap, String excludeId) {
+    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
         AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
         
         //生成查询条件
@@ -349,5 +350,43 @@ public class DistrictService extends AbstractBasicDataService<District> {
         return district;
         
     }
+
+    /**
+     * @param querier
+     * @param excludeId
+     * @return
+     */
+    @Override
+    public boolean exists(Querier querier, String excludeId) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    /**
+     * @param valid
+     * @param querier
+     * @return
+     */
+    @Override
+    public List<District> queryList(Boolean valid, Querier querier) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param valid
+     * @param querier
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedList<District> queryPagedList(Boolean valid, Querier querier,
+            int pageIndex, int pageSize) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    
     
 }

@@ -14,7 +14,7 @@
 	</resultMap>
 	
 	<!-- auto generate default find -->
-	<select id="findDistrict" 
+	<select id="find" 
 		parameterType="com.tx.local.basicdata.model.District"
 		resultMap="districtMap">
 		SELECT 
@@ -49,7 +49,7 @@
 	</select>
 	
 	<!-- auto generate default query -->
-	<select id="queryDistrict" 
+	<select id="query" 
 		parameterType="java.util.Map"
 		resultMap="districtMap">
 		SELECT 
@@ -73,6 +73,21 @@
 				TD.remark
 		  FROM BD_DISTRICT TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
 			<choose>
 	        	<when test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">
 	        		<![CDATA[ AND TD.PARENTID = #{parentId,jdbcType=VARCHAR} ]]>
@@ -132,22 +147,37 @@
 			</if>
 		</trim>
 		<choose>  
-	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderSql)">  
-	            ORDER BY ${orderSql}
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
 	        </when>
 	        <otherwise>  
-	            ORDER BY ID
+	            ORDER BY createDate DESC
 	        </otherwise>  
 	    </choose>
 	</select>
 	
 		<!-- auto generate default count -->
-	<select id="queryDistrictCount" 
+	<select id="queryCount" 
 		parameterType="java.util.Map"
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
 		  FROM BD_DISTRICT TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
 			<choose>
 	        	<when test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">
 	        		<![CDATA[ AND TD.PARENTID = #{parentId,jdbcType=VARCHAR} ]]>
@@ -206,7 +236,7 @@
 	</select>
     
     <!-- auto generate default insert -->
-    <insert id="insertDistrict" 
+    <insert id="insert" 
 		parameterType="com.tx.local.basicdata.model.District">
 		INSERT INTO BD_DISTRICT
 		(
@@ -253,7 +283,7 @@
 	</insert>
 	
 	<!-- auto generate default delete -->
-	<delete id="deleteDistrict" 
+	<delete id="delete" 
 		parameterType="com.tx.local.basicdata.model.District">
 		DELETE FROM BD_DISTRICT WHERE
 		<trim prefixOverrides="AND | OR">
@@ -270,7 +300,7 @@
 	</delete>
 
 	<!-- auto generate default update -->
-	<update id="updateDistrict"
+	<update id="update"
 	    parameterType="java.util.Map">  
 	    UPDATE BD_DISTRICT 
 	    <trim prefix="SET" suffixOverrides=",">

@@ -57,12 +57,15 @@ public class District
     private boolean modifyAble = true;
     
     /** 省id */
+    @Column(name = "provinceId")
     private District province;
     
     /** 市id */
+    @Column(name = "cityId")
     private District city;
     
     /** 县id */
+    @Column(name = "countyId")
     private District county;
     
     /** 区域类型 */

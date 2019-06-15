@@ -19,7 +19,7 @@ import com.tx.local.clientinfo.facade.ClientSourceFacade;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@FeignClient(name = "${feign.local.module}/clientSource", url = "${feign.local.url}", path = "/api/clientSource")
+@FeignClient(name = "${feign.local.module}/clientSourceAPIClient", url = "${feign.local.url}", path = "/api/clientSourceAPIClient")
 public interface ClientSourceAPIClient extends ClientSourceFacade {
     
 }

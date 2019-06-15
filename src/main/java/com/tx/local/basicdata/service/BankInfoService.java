@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tx.component.basicdata.service.AbstractBasicDataService;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
+import com.tx.core.querier.model.Querier;
 import com.tx.local.basicdata.dao.BankInfoDao;
 import com.tx.local.basicdata.model.BankInfo;
 
@@ -192,28 +193,6 @@ public class BankInfoService extends AbstractBasicDataService<BankInfo> {
     }
     
     /**
-     * 判断是否已经存在<br/>
-     * <功能详细描述>
-     *
-     * @return int [返回类型说明]
-     * @throws throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public boolean exist(Map<String, String> key2valueMap, String excludeId) {
-        AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
-        
-        //生成查询条件
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.putAll(key2valueMap);
-        params.put("excludeId", excludeId);
-        
-        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.bankInfoDao.count(params);
-        
-        return res > 0;
-    }
-    
-    /**
       * 删除银行logo文件<br/>
       * <功能详细描述>
       * @param bankInfoId
@@ -376,11 +355,76 @@ public class BankInfoService extends AbstractBasicDataService<BankInfo> {
     }
     
     /**
+     * @param querier
+     * @param excludeId
+     * @return
+     */
+    @Override
+    public boolean exists(Querier querier, String excludeId) {
+        boolean flag = this.bankInfoDao.exists(querier, excludeId);
+        return flag;
+    }
+    
+    /**
+     * @param valid
+     * @param querier
+     * @return
+     */
+    @Override
+    public List<BankInfo> queryList(Boolean valid, Querier querier) {
+        querier = querier == null ? new Querier() : querier;
+        querier.getParams().put("valid", valid);
+        
+        List<BankInfo> resList = bankInfoDao.queryList(querier);
+        return resList;
+    }
+    
+    /**
+     * @param valid
+     * @param querier
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedList<BankInfo> queryPagedList(Boolean valid, Querier querier,
+            int pageIndex, int pageSize) {
+        querier = querier == null ? new Querier() : querier;
+        querier.getParams().put("valid", valid);
+        
+        PagedList<BankInfo> resPagedList = bankInfoDao.queryPagedList(querier,
+                pageIndex,
+                pageSize);
+        return resPagedList;
+    }
+    
+    /**
+     * 判断是否已经存在<br/>
+     * <功能详细描述>
+     *
+     * @return int [返回类型说明]
+     * @throws throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
+        AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
+        
+        //生成查询条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.putAll(key2valueMap);
+        params.put("excludeId", excludeId);
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        int res = this.bankInfoDao.count(params);
+        
+        return res > 0;
+    }
+    
+    /**
      * @param valid
      * @param params
      * @return
      */
-    @Override
     public List<BankInfo> queryList(Boolean valid, Map<String, Object> params) {
         params = params == null ? new HashMap<String, Object>() : params;
         params.put("valid", valid);
@@ -396,7 +440,6 @@ public class BankInfoService extends AbstractBasicDataService<BankInfo> {
      * @param pageSize
      * @return
      */
-    @Override
     public PagedList<BankInfo> queryPagedList(Boolean valid,
             Map<String, Object> params, int pageIndex, int pageSize) {
         params = params == null ? new HashMap<String, Object>() : params;
