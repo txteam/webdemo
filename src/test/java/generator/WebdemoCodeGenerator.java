@@ -3,11 +3,10 @@ DataDictTransferRecord * 描 述: <描述> 修 改 人: Administrator 修改时�
  */
 package generator;
 
-import com.tx.core.generator2.CodeGenerator;
-import com.tx.local.clientinfo.model.ClientPromotionChannel;
-import com.tx.local.clientinfo.model.ClientSource;
-
 import java.io.IOException;
+
+import com.tx.core.generator2.CodeGenerator;
+import com.tx.local.clientinfo.model.ClientSource;
 
 /**
  * 基础数据生成类<br/>

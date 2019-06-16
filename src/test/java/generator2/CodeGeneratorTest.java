@@ -9,7 +9,6 @@ package generator2;
 import com.tx.core.generator2.CodeGenerator;
 import com.tx.local.demo.model.TestMode;
 import com.tx.local.demo.model.TestModeNested1;
-import com.tx.local.demo.model.TestModeNested2;
 
 /**
  * 编码生成测试 <功能详细描述>

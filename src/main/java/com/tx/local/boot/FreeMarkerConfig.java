@@ -28,8 +28,6 @@ import java.util.Properties;
 @Configuration
 public class FreeMarkerConfig implements ServletContextAware {
     
-
-//
     /** servlet容器 */
     private ServletContext servletContext;
     
@@ -47,13 +45,13 @@ public class FreeMarkerConfig implements ServletContextAware {
         
         freeMarkerConfigurer.setTemplateLoaderPaths("classpath:/",
                 "classpath:/templates/");
-
+        
         Map<String, Object> variables = new HashMap<>();
         variables.put("base", servletContext.getContextPath());
         variables.put("contextPath", servletContext.getContextPath());
         variables.put("showPowered", true);
         freeMarkerConfigurer.setFreemarkerVariables(variables);
-
+        
         Properties prop = new Properties();
         prop.put("default_encoding", "UTF-8");
         prop.put("url_escaping_charset", "UTF-8");
@@ -76,18 +74,18 @@ public class FreeMarkerConfig implements ServletContextAware {
         
         return freeMarkerConfigurer;
     }
-
-//    @Bean
-//    public PropertiesFactoryBean configProperties() throws Exception{
-//        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-//        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-//        propertiesFactoryBean.setLocations(resolver.getResources("classpath*:application.properties"));
-//        return propertiesFactoryBean;
-//    }
     
-//    @Bean
-//    @ConditionalOnMissingBean(ClassPathTldsLoader.class)
-//    public ClassPathTldsLoader classPathTldsLoader() {
-//        return new ClassPathTldsLoader();
-//    }
+    //    @Bean
+    //    public PropertiesFactoryBean configProperties() throws Exception{
+    //        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
+    //        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    //        propertiesFactoryBean.setLocations(resolver.getResources("classpath*:application.properties"));
+    //        return propertiesFactoryBean;
+    //    }
+    
+    //    @Bean
+    //    @ConditionalOnMissingBean(ClassPathTldsLoader.class)
+    //    public ClassPathTldsLoader classPathTldsLoader() {
+    //        return new ClassPathTldsLoader();
+    //    }
 }
