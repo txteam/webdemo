@@ -49,7 +49,7 @@ var configGroupTree = null;
 $(document).ready(function() {
 	//配置属性组树
 	configGroupTree = $('#configGroupTree').tree({
-		url : /*[[@{/config/queryRootList}]]*/_contextPath + '/config/queryRootList',
+		url : /*[[@{/config/queryRootList}]]*/_contextPath + 'config/queryRootList',
 		idField : 'id',
 		parentField : 'parentId',
 		iconField : function(){
@@ -60,13 +60,13 @@ $(document).ready(function() {
 		onClick : function(node){
 			//点击配置属性组节点，刷新页面仅加载对应配置属性组下存在的配置属性
 			$('#treeGrid').treegrid('load',{
-				configPropertyGroupName: node.name
+				parentId: node.id
 			});
 		}
 	});
 
 	treeGrid = $('#treeGrid').treegrid({
-		url : /*[[@{/config/queryDescendantsByParentId}]]*/_contextPath + '/config/queryDescendantsByParentId',
+		url : /*[[@{/config/queryDescendantsByParentId}]]*/_contextPath + 'config/queryDescendantsByParentId',
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
@@ -126,7 +126,7 @@ $(document).ready(function() {
 			formatter : function(value, row, index) {
 				var str = '';
 				if(row.modifyAble){
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, /*[[@{@{/style/images/extjs_icons/pencil.png}}]]*/'');
+					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, /*[[@{/webjars/css/images/extjs_icons/pencil.png}]]*/'');
 					str += '&nbsp;';
 				}
 				return str;

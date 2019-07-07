@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 操作权限 -->
+<auth_config>
+	<type id="AUTHTYPE_OPERATE" name="操作权限">
+	</type>
+</auth_config>

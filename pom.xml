@@ -162,10 +162,10 @@
 			<groupId>com.tx</groupId>
 			<artifactId>tx-component-starter-basicdata</artifactId>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>com.tx</groupId> -->
-		<!-- <artifactId>tx-component-auth</artifactId> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>com.tx</groupId>
+			<artifactId>tx-component-starter-security</artifactId>
+		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>com.tx</groupId> -->
 		<!-- <artifactId>tx-component-servicelog</artifactId> -->

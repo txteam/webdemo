@@ -4,16 +4,19 @@
  * 修改时间:  2013-8-26
  * <修改描述:>
  */
-package com.tx.local.operator.model;
+package com.tx.local.vitualcenter.model;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.tx.core.support.initable.model.ConfigInitAble;
 import com.tx.core.tree.model.TreeAble;
 import com.tx.core.util.ObjectUtils;
 
@@ -29,9 +32,11 @@ import com.tx.core.util.ObjectUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Table(name = "oper_vc")
-public class VirtualCenter implements
-        TreeAble<List<VirtualCenter>, VirtualCenter>, Serializable {
+@Entity
+@Table(name = "vc_virtual_center")
+public class VirtualCenter
+        implements TreeAble<List<VirtualCenter>, VirtualCenter>, ConfigInitAble,
+        Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = 299142584465484552L;
@@ -41,29 +46,36 @@ public class VirtualCenter implements
     private String id;
     
     /** 对应的虚中心枚举 */
-    private VirtualCenterEnum virtualCenterKey;
+    @Column(nullable = false)
+    private String code;
     
     /** 上级虚中心id */
+    @Column(nullable = true)
     private String parentId;
     
     /** 虚中心名 */
+    @Column(nullable = false)
     private String name;
     
     /** 虚中心说明 */
+    @Column(nullable = true)
     private String remark;
     
     /** 是否有效 */
+    @Column(nullable = false)
     private boolean valid = true;
     
     /** 是否可编辑 */
-    private boolean editAble = true;
+    @Column(nullable = false)
+    private boolean modifyAble = true;
     
     /** 创建时间 */
+    @Column(nullable = false)
     private Date createDate;
     
     /** 子级虚中心 */
     @Transient
-    private List<VirtualCenter> childs;
+    private List<VirtualCenter> children;
     
     /**
      * @return 返回 id
@@ -80,17 +92,17 @@ public class VirtualCenter implements
     }
     
     /**
-     * @return 返回 virtualCenterKey
+     * @return 返回 code
      */
-    public VirtualCenterEnum getVirtualCenterKey() {
-        return virtualCenterKey;
+    public String getCode() {
+        return code;
     }
     
     /**
-     * @param 对virtualCenterKey进行赋值
+     * @param 对code进行赋值
      */
-    public void setVirtualCenterKey(VirtualCenterEnum virtualCenterKey) {
-        this.virtualCenterKey = virtualCenterKey;
+    public void setCode(String code) {
+        this.code = code;
     }
     
     /**
@@ -150,17 +162,17 @@ public class VirtualCenter implements
     }
     
     /**
-     * @return 返回 editAble
+     * @return 返回 modifyAble
      */
-    public boolean isEditAble() {
-        return editAble;
+    public boolean isModifyAble() {
+        return modifyAble;
     }
     
     /**
-     * @param 对editAble进行赋值
+     * @param 对modifyAble进行赋值
      */
-    public void setEditAble(boolean editAble) {
-        this.editAble = editAble;
+    public void setModifyAble(boolean modifyAble) {
+        this.modifyAble = modifyAble;
     }
     
     /**
@@ -178,17 +190,17 @@ public class VirtualCenter implements
     }
     
     /**
-     * @return 返回 childs
+     * @return 返回 children
      */
     public List<VirtualCenter> getChildren() {
-        return childs;
+        return children;
     }
     
     /**
-     * @param 对childs进行赋值
+     * @param 对children进行赋值
      */
-    public void setChildren(List<VirtualCenter> childs) {
-        this.childs = childs;
+    public void setChildren(List<VirtualCenter> children) {
+        this.children = children;
     }
     
     /**

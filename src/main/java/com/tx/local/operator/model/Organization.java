@@ -44,7 +44,8 @@ import com.tx.core.util.ObjectUtils;
 @Entity
 @Table(name = "OPER_ORGANIZATION")
 @XStreamAlias("organization")
-public class Organization implements TreeAble<List<Organization>, Organization>, Serializable {
+public class Organization
+        implements TreeAble<List<Organization>, Organization>, Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = -6369964838562412893L;
@@ -69,6 +70,9 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     @XStreamAsAttribute
     private String code;
     
+    /** 组织类型 */
+    private OrganizationTypeEnum type;
+    
     /** 名称 */
     @XStreamAsAttribute
     private String name;
@@ -79,27 +83,22 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     /** 别名 */
     private String alias;
     
-    /** 全地址名 */
-    private String fullAddress;
+    /**所在区域ID*/
+    private String districtId;
     
     /** 地址 */
     private String address;
     
-    /** 组织类型 */
-    private OrganizationTypeEnum type;
-    
-    /**所在区域ID*/
-    private String districtId;
-    
-    /** 描述 */
-    private String remark;
+    /** 全地址名 */
+    private String fullAddress;
     
     /** 是否有效 */
     private boolean valid;
     
-    /** 
-     * 主管类型 人员 职位
-     */
+    /** 描述 */
+    private String remark;
+    
+    /** 主管类型 人员 职位 */
     private ChiefTypeEnum chiefType = ChiefTypeEnum.OPERATOR;
     
     /**
@@ -113,7 +112,7 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     /** 子级组织集合 */
     @Transient
     @XStreamImplicit(itemFieldName = "organization")
-    private List<Organization> childs;
+    private List<Organization> children;
     
     /**
      * @return 返回 id
@@ -298,17 +297,17 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     }
     
     /**
-     * @return 返回 childs
+     * @return 返回 children
      */
     public List<Organization> getChildren() {
-        return childs;
+        return children;
     }
     
     /**
-     * @param 对childs进行赋值
+     * @param 对children进行赋值
      */
-    public void setChildren(List<Organization> childs) {
-        this.childs = childs;
+    public void setChildren(List<Organization> children) {
+        this.children = children;
     }
     
     /**
@@ -339,6 +338,14 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
         this.valid = valid;
     }
     
+    public Organization getCompany() {
+        return company;
+    }
+    
+    public void setCompany(Organization company) {
+        this.company = company;
+    }
+    
     /**
      * @param obj
      * @return
@@ -354,13 +361,5 @@ public class Organization implements TreeAble<List<Organization>, Organization>,
     @Override
     public int hashCode() {
         return ObjectUtils.generateHashCode(super.hashCode(), this, "id");
-    }
-    
-    public Organization getCompany() {
-        return company;
-    }
-    
-    public void setCompany(Organization company) {
-        this.company = company;
     }
 }

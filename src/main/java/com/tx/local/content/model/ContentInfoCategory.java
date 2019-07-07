@@ -9,14 +9,17 @@ package com.tx.local.content.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 import com.tx.component.basicdata.model.TreeAbleBasicData;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLike;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 
 /**
  * 内容信息类型<br/>
@@ -29,7 +32,7 @@ import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "ci_content_info_category")
+@Table(name = "ci_content_category")
 @BasicDataEntity(name = "内容信息分类", viewType=BasicDataViewTypeEnum.LIST)
 public class ContentInfoCategory implements
         TreeAbleBasicData<ContentInfoCategory> {
@@ -45,44 +48,31 @@ public class ContentInfoCategory implements
 
     @ManyToOne
     @JoinColumn(name = "parentId")
-    @QueryConditionEqual
     private ContentInfoCategory parent;
     
     /** 内容类型:界面根据该值加载不同的新增，编辑的界面 */
     @Column(name = "typeCode")
-    @QueryConditionEqual
     private ContentInfoType type;
     
     /** 内容的树层级，设定方面，父级id一旦设置后则不能修改，所以下级的内容仅需要渠道其父级内容level+1即可 */
-    @QueryConditionEqual
     private int level = 0;
     
     /** 对应枚举关键字：该字段可以为空 */
-    @UpdateAble
-    @QueryConditionEqual
     private String code;
     
     /** 内容信息类型名 */
-    @UpdateAble
-    @QueryConditionLike
     private String name;
     
     /** 类型类型排序号 */
-    @UpdateAble
     private int orderIndex = 0;
     
     /** 内容信息类型备注 */
-    @UpdateAble
     private String remark;
     
     /** 内容信息是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid = true;
     
     /** 是否可编辑 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean modifyAble = true;
     
     /** 创建时间 */
@@ -92,11 +82,9 @@ public class ContentInfoCategory implements
     private String createOperatorId;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
     /** 最后更新人 */
-    @UpdateAble
     private String lastUpdateOperatorId;
     
     /** 子节点 */

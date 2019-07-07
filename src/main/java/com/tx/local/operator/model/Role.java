@@ -12,9 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
-
 /**
  * 角色
  *     角色在系统中主要为一个权限集合的整合
@@ -31,7 +28,7 @@ import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "OPER_ROLE")
+@Table(name = "oper_role")
 public class Role implements Serializable {
     
     /** 注释内容 */
@@ -41,40 +38,25 @@ public class Role implements Serializable {
     @Id
     private String id;
     
-    @UpdateAble
-    @QueryConditionEqual
-    private RoleEnum roleKey;
-    
-    @UpdateAble
-    @QueryConditionEqual
+    /** 角色编码 */
     private String code;
     
     /** 虚中心id */
-    @QueryConditionEqual
     private String vcid;
     
     /** 角色类型 */
-    @UpdateAble
-    @QueryConditionEqual
     private RoleTypeEnum roleType;
     
     /** 名称 */
-    @UpdateAble
-    @QueryConditionEqual
     private String name;
     
     /** 是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid = true;
     
     /** 是否可编辑 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean editAble = true;
     
     /** 备注 */
-    @UpdateAble
     private String remark;
 
     /**
@@ -89,20 +71,6 @@ public class Role implements Serializable {
      */
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * @return 返回 roleKey
-     */
-    public RoleEnum getRoleKey() {
-        return roleKey;
-    }
-
-    /**
-     * @param 对roleKey进行赋值
-     */
-    public void setRoleKey(RoleEnum roleKey) {
-        this.roleKey = roleKey;
     }
 
     /**

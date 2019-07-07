@@ -9,6 +9,8 @@ package com.tx.local.operator.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tx.local.vitualcenter.model.VirtualCenterEnum;
+
 /**
  * 角色枚举<br/>
  * <功能详细描述>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 操作人员角色 -->
+<role_config>
+	<type id="ROLE_TYPE_OPERATOR" name="操作人员角色">
+		<role id="ROLE_SUPER_ADMIN" name="超级管理员" />
+	</type>
+</role_config>

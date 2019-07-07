@@ -15,9 +15,6 @@ import javax.persistence.Table;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLike;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 
 /**
  * 内容信息级别<br/>
@@ -29,7 +26,7 @@ import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "ci_content_info_level")
+@Table(name = "ci_content_level")
 @BasicDataEntity(name = "内容信息级别")
 public class ContentInfoLevel implements BasicData {
     
@@ -41,33 +38,22 @@ public class ContentInfoLevel implements BasicData {
     private String id;
     
     /** 对应枚举关键字：该字段可以为空 */
-    @UpdateAble
-    @QueryConditionEqual
     private String code;
     
     /** 类型 */
-    @UpdateAble
-    @QueryConditionEqual
     @Column(name = "categoryCode")
     private ContentInfoCategory category;
     
     /** 内容信息类型名 */
-    @UpdateAble
-    @QueryConditionLike
     private String name;
     
     /** 内容信息类型备注 */
-    @UpdateAble
     private String remark;
     
     /** 内容信息是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid = true;
     
     /** 是否可编辑 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean modifyAble = true;
     
     /** 创建时间 */
@@ -77,11 +63,9 @@ public class ContentInfoLevel implements BasicData {
     private String createOperatorId;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
     /** 最后更新人 */
-    @UpdateAble
     private String lastUpdateOperatorId;
     
     /**

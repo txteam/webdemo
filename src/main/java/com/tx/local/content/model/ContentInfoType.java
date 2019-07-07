@@ -14,9 +14,6 @@ import javax.persistence.Table;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLike;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 
 /**
  * 类容类型<br/>
@@ -28,7 +25,7 @@ import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "ci_content_info_type")
+@Table(name = "ci_content_type")
 @BasicDataEntity(name = "内容信息类型")
 public class ContentInfoType implements BasicData {
     
@@ -37,31 +34,21 @@ public class ContentInfoType implements BasicData {
     
     /** 唯一键id */
     @Id
-    @QueryConditionEqual
     private String id;
     
     /** 对应枚举关键字：该字段可以为空 */
-    @UpdateAble
-    @QueryConditionEqual
     private String code;
     
     /** 内容信息类型名 */
-    @UpdateAble
-    @QueryConditionLike
     private String name;
     
     /** 内容信息类型备注 */
-    @UpdateAble
     private String remark;
     
     /** 内容信息是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid = true;
     
     /** 是否可编辑 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean modifyAble = true;
     
     /** 创建时间 */
@@ -71,11 +58,9 @@ public class ContentInfoType implements BasicData {
     private String createOperatorId;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
     /** 最后更新人 */
-    @UpdateAble
     private String lastUpdateOperatorId;
     
     /**

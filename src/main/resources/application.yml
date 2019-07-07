@@ -1,4 +1,4 @@
-debug: false
+debug: true
 
 #server
 server:
@@ -232,6 +232,9 @@ tx:
       enable: true
     command:
       enable: true
+    security:
+      enable: true
+      table-auto-initialize: true
     basicdata:
       enable: true
       table-auto-initialize: true
@@ -239,4 +242,5 @@ tx:
     config:
       enable: true
       table-auto-initialize: true
+      duration: 1d
     

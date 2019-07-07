@@ -1,5 +1,7 @@
 package com.tx.local.operator.model;
 
+import com.tx.component.role.model.RoleType;
+
 /**
  * 
  * 角色类型枚举<br/>
@@ -10,7 +12,7 @@ package com.tx.local.operator.model;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public enum RoleTypeEnum {
+public enum RoleTypeEnum implements RoleType{
     
     /** 系统管理员 */
     JT_ADMIN_ROLE("JT_ADMIN_ROLE", "系统管理员角色"),
@@ -19,42 +21,39 @@ public enum RoleTypeEnum {
     JT_OPERATOR_ROLE("JT_OPERATOR_ROLE","系统用户角色");
     
     /** KEY值 */
-    private String key;
+    private final String id;
     
     /** NAME值 */
-    private String name;
+    private final String name;
+    
+    /** 备注 */
+    private final String remark;
     
     /** <默认构造函数> */
-    private RoleTypeEnum(String key, String name) {
-        this.key = key;
+    private RoleTypeEnum(String id, String name) {
+        this.id = id;
         this.name = name;
+        this.remark = "";
     }
-    
+
     /**
-     * @return 返回 key
+     * @return 返回 id
      */
-    public String getKey() {
-        return key;
+    public String getId() {
+        return id;
     }
-    
-    /**
-     * @param 对key进行赋值
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-    
+
     /**
      * @return 返回 name
      */
     public String getName() {
         return name;
     }
-    
+
     /**
-     * @param 对name进行赋值
+     * @return 返回 remark
      */
-    public void setName(String name) {
-        this.name = name;
+    public String getRemark() {
+        return remark;
     }
 }

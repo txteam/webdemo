@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 数据权限配置 -->
-<auths>
-	<authType key="AUTHTYPE_DATA">
-		<!-- 系统维护数据权限 -->		
-	</authType>
-</auths>

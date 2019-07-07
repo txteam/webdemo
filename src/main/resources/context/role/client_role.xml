@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 客户角色 -->
+<role_config>
+	<type id="ROLE_TYPE_CLIENT" name="客户角色">
+		<role id="ROLE_CLIENT_PERSONAL" name="个人"/>
+		<role id="ROLE_CLIENT_ENTERPRISE" name="企业"/>
+		<role id="ROLE_CLIENT_EMPLOYEE" name="雇员"/>
+		<role id="ROLE_CLIENT_SELF_EMPLOYED" name="个体工商户"/>
+	</type>
+</role_config>

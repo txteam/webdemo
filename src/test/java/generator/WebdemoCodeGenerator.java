@@ -6,7 +6,7 @@ package generator;
 import java.io.IOException;
 
 import com.tx.core.generator2.CodeGenerator;
-import com.tx.local.clientinfo.model.ClientSource;
+import com.tx.local.vitualcenter.model.VirtualCenter;
 
 /**
  * 基础数据生成类<br/>
@@ -19,7 +19,7 @@ import com.tx.local.clientinfo.model.ClientSource;
 public class WebdemoCodeGenerator {
 
     public static void main(String[] args) throws IOException {
-        Class<?> entityType = ClientSource.class;
+        Class<?> entityType = VirtualCenter.class;
 
         //基础数据逻辑代码生成存放目录com.tx.component.basicdata.generator.
         String project_path = org.springframework.util.StringUtils
