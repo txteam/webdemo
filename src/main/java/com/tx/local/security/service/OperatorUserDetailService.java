@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.tx.local.operator.model.Operator;
-import com.tx.local.security.model.OperatorUserDetail;
+import com.tx.local.security.model.OperatorUserDetails;
 
 
 /**
@@ -60,7 +60,7 @@ public class OperatorUserDetailService implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority("ROLE_OPERATOR_ADMIN"));//用户所拥有的角色信息
         //AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
         
-        OperatorUserDetail userDetail = new OperatorUserDetail(user, authorities);
+        OperatorUserDetails userDetail = new OperatorUserDetails(user, authorities);
         return userDetail;
     }
 }

@@ -20,6 +20,8 @@ import com.tx.core.support.initable.model.ConfigInitAble;
 import com.tx.core.tree.model.TreeAble;
 import com.tx.core.util.ObjectUtils;
 
+import io.swagger.annotations.ApiModel;
+
 /**
  * 虚中心id
  * 用以支持组织架构划分
@@ -34,6 +36,7 @@ import com.tx.core.util.ObjectUtils;
  */
 @Entity
 @Table(name = "vc_virtual_center")
+@ApiModel("虚中心")
 public class VirtualCenter
         implements TreeAble<List<VirtualCenter>, VirtualCenter>, ConfigInitAble,
         Serializable {

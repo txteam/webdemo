@@ -30,11 +30,11 @@ public class OperatorRef {
     @Id
     private String operatorId;
     
-    /** 引用id */
-    private String refId;
-    
     /** 引用类型 */
     private String refType;
+    
+    /** 引用id */
+    private String refId;
     
     /** 创建时间 */
     private Date createDate;

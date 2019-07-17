@@ -21,6 +21,8 @@ import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 import com.tx.component.basicdata.model.TreeAbleBasicData;
 
+import io.swagger.annotations.ApiModel;
+
 /**
  * 内容信息类型<br/>
  *    后续如果有需要可以增加类型分组的概念基本改动量也不是很大，所以暂不进行支持<br/>
@@ -34,6 +36,7 @@ import com.tx.component.basicdata.model.TreeAbleBasicData;
 @Entity
 @Table(name = "ci_content_category")
 @BasicDataEntity(name = "内容信息分类", viewType=BasicDataViewTypeEnum.LIST)
+@ApiModel("内容信息分类")
 public class ContentInfoCategory implements
         TreeAbleBasicData<ContentInfoCategory> {
     
@@ -44,8 +47,13 @@ public class ContentInfoCategory implements
     @Id
     private String id;
     
+    /** 对应枚举关键字：该字段可以为空 */
+    private String code;
+    
+    /** 内容信息类型名 */
+    private String name;
+    
     /** 父级分类 */
-
     @ManyToOne
     @JoinColumn(name = "parentId")
     private ContentInfoCategory parent;
@@ -56,12 +64,6 @@ public class ContentInfoCategory implements
     
     /** 内容的树层级，设定方面，父级id一旦设置后则不能修改，所以下级的内容仅需要渠道其父级内容level+1即可 */
     private int level = 0;
-    
-    /** 对应枚举关键字：该字段可以为空 */
-    private String code;
-    
-    /** 内容信息类型名 */
-    private String name;
     
     /** 类型类型排序号 */
     private int orderIndex = 0;

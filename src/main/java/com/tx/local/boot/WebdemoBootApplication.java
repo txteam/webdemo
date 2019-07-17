@@ -10,10 +10,8 @@ import javax.sql.DataSource;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.tx.core.ddlutil.executor.TableDDLExecutorFactory;
 import com.tx.core.util.dialect.DataSourceTypeEnum;
@@ -41,8 +39,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //@EnableEurekaClient
 @EnableFeignClients(basePackages = {"com.tx.local"})
 @SpringBootApplication(scanBasePackages = { "com.tx.local" })
-@EntityScan(basePackages = { "com.tx.local" })
-@EnableJpaRepositories(basePackages = { "com.tx.local" })
+//@EntityScan(basePackages = { "com.tx.local" })
+//@EnableJpaRepositories(basePackages = { "com.tx.local" })
 @EnableSwagger2
 public class WebdemoBootApplication {
     

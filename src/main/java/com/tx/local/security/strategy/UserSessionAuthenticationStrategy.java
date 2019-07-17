@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.tx.local.operator.model.Operator;
 import com.tx.local.security.SecurityConstants;
-import com.tx.local.security.model.OperatorUserDetail;
+import com.tx.local.security.model.OperatorUserDetails;
 
 /**
  * 用户完成认证后，向session中写入当前登录的用户<br/>
@@ -41,7 +41,7 @@ public class UserSessionAuthenticationStrategy
     public void onAuthentication(Authentication authentication,
             HttpServletRequest request, HttpServletResponse response)
             throws SessionAuthenticationException {
-        OperatorUserDetail userDetail = (OperatorUserDetail) authentication
+        OperatorUserDetails userDetail = (OperatorUserDetails) authentication
                 .getPrincipal();
         Operator user = userDetail.getUser();
         

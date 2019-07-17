@@ -39,7 +39,7 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "新增VirtualCenter")
+    @ApiOperation(value = "新增虚中心")
     @RequestMapping(value = "", method = RequestMethod.POST)
     public VirtualCenter insert(@RequestBody VirtualCenter virtualCenter);
     
@@ -53,12 +53,12 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据主键删除VirtualCenter")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
+    @ApiOperation(value = "根据主键删除虚中心")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id);
-	
-	/**
+            @PathVariable(value = "id", required = true) String id);
+    
+    /**
      * 根据code删除VirtualCenter<br/> 
      * <功能详细描述>
      * @param code
@@ -68,11 +68,11 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据编码删除VirtualCenter")
-    @RequestMapping(value = "/code/{code}", method = RequestMethod.DELETE) 
+    @ApiOperation(value = "根据编码删除虚中心")
+    @RequestMapping(value = "/code/{code}", method = RequestMethod.DELETE)
     public boolean deleteByCode(
-    		@PathVariable(value = "code",required=true) String code);
-
+            @PathVariable(value = "code", required = true) String code);
+    
     /**
      * 更新VirtualCenter<br/>
      * <功能详细描述>
@@ -83,11 +83,12 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "修改VirtualCenter")
+    @ApiOperation(value = "修改虚中心")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody VirtualCenter virtualCenter);
-
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody VirtualCenter virtualCenter);
+    
     /**
      * 禁用VirtualCenter<br/>
      * @param id
@@ -97,10 +98,10 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-	@ApiOperation(value = "禁用VirtualCenter")
+    @ApiOperation(value = "禁用虚中心")
     @RequestMapping(value = "/disable/{id}", method = RequestMethod.PATCH)
     public boolean disableById(
-    		@PathVariable(value = "id", required = true) String id);
+            @PathVariable(value = "id", required = true) String id);
     
     /**
      * 启用VirtualCenter<br/>
@@ -112,11 +113,11 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "启用VirtualCenter")
+    @ApiOperation(value = "启用虚中心")
     @RequestMapping(value = "/enable/{id}", method = RequestMethod.PATCH)
     public boolean enableById(
-    		@PathVariable(value = "id", required = true) String id);
-
+            @PathVariable(value = "id", required = true) String id);
+    
     /**
      * 根据主键查询VirtualCenter<br/>
      * <功能详细描述>
@@ -126,7 +127,7 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据主键查询VirtualCenter")
+    @ApiOperation(value = "根据主键查询虚中心")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public VirtualCenter findById(
             @PathVariable(value = "id", required = true) String id);
@@ -140,11 +141,11 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据编码查询VirtualCenter")
+    @ApiOperation(value = "根据编码查询虚中心")
     @RequestMapping(value = "/code/{code}", method = RequestMethod.GET)
     public VirtualCenter findByCode(
             @PathVariable(value = "code", required = true) String code);
-
+    
     /**
      * 查询VirtualCenter实例列表<br/>
      * <功能详细描述>
@@ -156,12 +157,11 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询VirtualCenter列表")
+    @ApiOperation(value = "查询虚中心列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<VirtualCenter> queryList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-    		@RequestBody Querier querier
-    	);
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier);
     
     /**
      * 查询VirtualCenter分页列表<br/>
@@ -176,16 +176,15 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询VirtualCenter分页列表")
+    @ApiOperation(value = "查询虚中心分页列表")
     @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
     public PagedList<VirtualCenter> queryPagedList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	);
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize);
     
-	/**
+    /**
      * 查询VirtualCenter数量<br/>
      * <功能详细描述>
      * @param valid
@@ -196,15 +195,15 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询VirtualCenter数量")
+    @ApiOperation(value = "查询虚中心数量")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int count(
-			@RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier);
-
-	/**
+    
+    /**
      * 查询VirtualCenter是否存在<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 
@@ -212,14 +211,12 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询VirtualCenter是否存在")
+    @ApiOperation(value = "查询虚中心是否存在")
     @RequestMapping(value = "/exists", method = RequestMethod.GET)
-    public boolean exists(
-    		@RequestBody Querier querier,
-            @RequestParam(value = "excludeId", required = false) String excludeId
-            );
-
-	/**
+    public boolean exists(@RequestBody Querier querier,
+            @RequestParam(value = "excludeId", required = false) String excludeId);
+    
+    /**
      * 根据条件查询查询VirtualCenter子代列表<br/>
      * <功能详细描述>
      * @param parentId
@@ -231,13 +228,14 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据条件查询查询VirtualCenter子代列表")
+    @ApiOperation(value = "根据条件查询查询虚中心子代列表")
     @RequestMapping(value = "/children/{parentId}", method = RequestMethod.GET)
-    public List<VirtualCenter> queryChildrenByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-			@RequestParam(value = "valid", required = false) Boolean valid,
+    public List<VirtualCenter> queryChildrenByParentId(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier);
-
-	/**
+    
+    /**
      * 根据条件查询查询VirtualCenter后代列表<br/>
      * <功能详细描述>
      * @param parentId
@@ -249,9 +247,10 @@ public interface VirtualCenterFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据条件查询查询VirtualCenter后代列表")
+    @ApiOperation(value = "根据条件查询查询虚中心后代列表")
     @RequestMapping(value = "/descendants/{parentId}", method = RequestMethod.GET)
-    public List<VirtualCenter> queryDescendantsByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-			@RequestParam(value = "valid", required = false) Boolean valid,
+    public List<VirtualCenter> queryDescendantsByParentId(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier);
 }

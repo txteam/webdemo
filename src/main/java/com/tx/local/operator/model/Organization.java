@@ -15,11 +15,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import com.tx.core.tree.model.TreeAble;
 import com.tx.core.util.ObjectUtils;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 组织<br/>
@@ -42,8 +42,8 @@ import com.tx.core.util.ObjectUtils;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "OPER_ORGANIZATION")
-@XStreamAlias("organization")
+@Table(name = "oper_organization")
+@ApiModel("组织")
 public class Organization
         implements TreeAble<List<Organization>, Organization>, Serializable {
     
@@ -52,53 +52,71 @@ public class Organization
     
     /** 组织唯一键 */
     @Id
-    @XStreamAsAttribute
+    @Column(nullable = false, length = 64)
     private String id;
     
     /** 父组织id */
+    @Column(nullable = false, length = 64)
     private String parentId;
     
     /** */
-    @XStreamAsAttribute
+    @ApiModelProperty("虚中心id")
+    @Column(nullable = false, length = 64)
     private String vcid;
     
     /**公司id*/
-    @Column(name = "companyId")
+    @ApiModelProperty("公司")
+    @Column(nullable = true, length = 64, name = "companyId")
     private Organization company;
     
+    /** 部门id */
+    @ApiModelProperty("部门")
+    @Column(nullable = true, length = 64, name = "departmentId")
+    private Organization department;
+    
     /** 编码 */
-    @XStreamAsAttribute
+    @Column(nullable = false, length = 64)
     private String code;
     
     /** 组织类型 */
+    @ApiModelProperty("组织类型")
+    @Column(nullable = false, length = 64)
     private OrganizationTypeEnum type;
     
     /** 名称 */
-    @XStreamAsAttribute
+    @Column(nullable = false, length = 64)
     private String name;
     
     /** 全称 */
+    @Column(nullable = true, length = 256)
     private String fullName;
     
     /** 别名 */
+    @Column(nullable = true, length = 64)
     private String alias;
     
     /**所在区域ID*/
+    @Column(nullable = true, length = 64)
     private String districtId;
     
     /** 地址 */
+    @Column(nullable = true, length = 64)
     private String address;
     
     /** 全地址名 */
+    @Column(nullable = true, length = 256)
     private String fullAddress;
     
     /** 是否有效 */
+    @Column(nullable = false)
     private boolean valid;
     
     /** 描述 */
+    @Column(nullable = true, length = 256)
     private String remark;
     
     /** 主管类型 人员 职位 */
+    @Column(nullable = true, length = 64)
     private ChiefTypeEnum chiefType = ChiefTypeEnum.OPERATOR;
     
     /**
@@ -107,11 +125,11 @@ public class Organization
      *     可能为职位id
      *     ....
      */
+    @Column(nullable = true, length = 64)
     private String chiefId;
     
     /** 子级组织集合 */
     @Transient
-    @XStreamImplicit(itemFieldName = "organization")
     private List<Organization> children;
     
     /**

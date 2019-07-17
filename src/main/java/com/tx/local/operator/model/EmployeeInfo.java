@@ -9,9 +9,10 @@ package com.tx.local.operator.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.*;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * <功能简述>
@@ -32,15 +33,13 @@ public class EmployeeInfo implements Serializable {
     /** id */
     @Id
     @Column(name = "operatorId")
-    //    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "SYS_UUID")
-    //    @GenericGenerator(name = "SYS_UUID", strategy = "UUID")
     private String operatorId;
     
-    /** 编号 */
+    /** 编号(工号) */
     private String code;
     
     /** 姓名 */
-    private String name = "";
+    private String name;
     
     /** 身份证号码 */
     private String idCardNumber;

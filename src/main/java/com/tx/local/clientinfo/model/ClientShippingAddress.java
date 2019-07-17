@@ -14,8 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.local.basicdata.model.District;
 
 /**
@@ -37,50 +35,37 @@ public class ClientShippingAddress implements Serializable {
     private String id;
     
     /** 会员 */
-    @QueryConditionEqual
     private String clientId;
     
     /** 收货人 姓名 */
-    @UpdateAble
     private String name;
     
     /** 邮编 */
-    @UpdateAble
-    @QueryConditionEqual
     private String postcode;
     
     /** 归属区域 */
-    @UpdateAble
     @Column(name = "districtId")
-    @QueryConditionEqual
     private District district;
     
     /** 联系电话：可以为座机也可以为手机 */
-    @UpdateAble
-    @QueryConditionEqual
     private String phoneNumber;
     
     /** 地址 */
-    @UpdateAble
     private String address;
     
     /** 全地址 */
-    @UpdateAble
     private String fullAddress;
     
     /** 默认地址 */
-    @UpdateAble
     private boolean defaultAddress;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
     /** 创建时间 */
     private Date createDate;
     
     /** 备注 */
-    @UpdateAble
     private String remark;
     
     /**

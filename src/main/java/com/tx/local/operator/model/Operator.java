@@ -67,7 +67,7 @@ public class Operator implements Serializable{
     /** 用户输错密码的次数 */
     private Integer pwdErrCount = 0;
     
-    /**是否可用*/
+    /** 是否可用 */
     private boolean valid = true;
     
     /** 账户是否被锁定 */
@@ -86,14 +86,14 @@ public class Operator implements Serializable{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date invalidDate;
     
-    /** 员工信息,如果为公司员工，则该信息不为空  */
-    @Transient
-    private EmployeeInfo employeeInfo;
-    
     /** 主要职位 */
     @ManyToOne
     @JoinColumn(name="mainPostId")
     private Post mainPost;
+    
+    /** 员工信息,如果为公司员工，则该信息不为空  */
+    @Transient
+    private EmployeeInfo employeeInfo;
     
     /** 职位 */
     @ManyToMany
@@ -101,7 +101,7 @@ public class Operator implements Serializable{
     
     /** 职位 */
     @ManyToMany
-    private List<Role> roleList;
+    private List<OperatorRole> roleList;
 
     /**
      * @return 返回 id
@@ -358,14 +358,14 @@ public class Operator implements Serializable{
     /**
      * @return 返回 roleList
      */
-    public List<Role> getRoleList() {
+    public List<OperatorRole> getRoleList() {
         return roleList;
     }
 
     /**
      * @param 对roleList进行赋值
      */
-    public void setRoleList(List<Role> roleList) {
+    public void setRoleList(List<OperatorRole> roleList) {
         this.roleList = roleList;
     }
 }

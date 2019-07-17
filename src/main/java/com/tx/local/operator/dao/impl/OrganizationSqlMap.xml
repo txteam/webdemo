@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="organization">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="organizationMap" 
+		type="com.tx.local.operator.model.Organization">
+		<result column="companyId" property="company.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.operator.model.Organization"
+		resultMap="organizationMap">
+		SELECT 
+				O.id,
+				O.code,
+				O.fullName,
+				O.fullAddress,
+				O.name,
+				O.type,
+				O.vcid,
+				O.alias,
+				O.chiefId,
+				O.chiefType,
+				O.valid,
+				O.parentId,
+				O.remark,
+				O.address,
+				O.companyId,
+				O.districtId
+		  FROM OPER_ORGANIZATION O
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND O.id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND O.code = #{code}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="organizationMap">
+		SELECT 
+				O.id,
+				O.code,
+				O.fullName,
+				O.fullAddress,
+				O.name,
+				O.type,
+				O.vcid,
+				O.alias,
+				O.chiefId,
+				O.chiefType,
+				O.valid,
+				O.parentId,
+				O.remark,
+				O.address,
+				O.companyId,
+				O.districtId
+		  FROM OPER_ORGANIZATION O
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
+	            AND O.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND O.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND O.code = #{code} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
+	            <![CDATA[ AND O.fullName = #{fullName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
+	            <![CDATA[ AND O.fullAddress = #{fullAddress} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND O.name = #{name} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND O.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND O.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(alias)">  
+	            <![CDATA[ AND O.alias = #{alias} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
+	            <![CDATA[ AND O.chiefId = #{chiefId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
+	            <![CDATA[ AND O.chiefType = #{chiefType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND O.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            <![CDATA[ AND O.parentId = #{parentId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND O.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(address)">  
+	            <![CDATA[ AND O.address = #{address} ]]>
+	        </if>			
+			<if test="company != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(company.id)">  
+		            <![CDATA[ AND O.companyId = #{company.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
+	            <![CDATA[ AND O.districtId = #{districtId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND O.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY id DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_ORGANIZATION O
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
+	            AND O.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND O.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND O.code = #{code} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
+	            <![CDATA[ AND O.fullName = #{fullName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
+	            <![CDATA[ AND O.fullAddress = #{fullAddress} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND O.name = #{name} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND O.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND O.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(alias)">  
+	            <![CDATA[ AND O.alias = #{alias} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefId)">  
+	            <![CDATA[ AND O.chiefId = #{chiefId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chiefType)">  
+	            <![CDATA[ AND O.chiefType = #{chiefType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND O.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            <![CDATA[ AND O.parentId = #{parentId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND O.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(address)">  
+	            <![CDATA[ AND O.address = #{address} ]]>
+	        </if>			
+			<if test="company != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(company.id)">  
+		            <![CDATA[ AND O.companyId = #{company.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
+	            <![CDATA[ AND O.districtId = #{districtId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND O.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.operator.model.Organization">
+		INSERT INTO OPER_ORGANIZATION
+		(
+			id,
+			code,
+			fullName,
+			fullAddress,
+			name,
+			type,
+			vcid,
+			alias,
+			chiefId,
+			chiefType,
+			valid,
+			parentId,
+			remark,
+			address,
+			companyId,
+			districtId
+		)
+		VALUES
+		(
+			#{id},
+			#{code},
+			#{fullName},
+			#{fullAddress},
+			#{name},
+			#{type},
+			#{vcid},
+			#{alias},
+			#{chiefId},
+			#{chiefType},
+			#{valid},
+			#{parentId},
+			#{remark},
+			#{address},
+			#{company.id},
+			#{districtId}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.operator.model.Organization">
+		DELETE FROM OPER_ORGANIZATION  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_ORGANIZATION
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('fullName')">
+	    		fullName = #{fullName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('fullAddress')">
+	    		fullAddress = #{fullAddress,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('name')">
+	    		name = #{name,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.operator.model.OrganizationTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('vcid')">
+	    		vcid = #{vcid,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('alias')">
+	    		alias = #{alias,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('chiefId')">
+	    		chiefId = #{chiefId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('chiefType')">
+	    		chiefType = #{chiefType,javaType=com.tx.local.operator.model.ChiefTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('valid')">
+	    		valid = #{valid,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('parentId')">
+	    		parentId = #{parentId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('remark')">
+	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('address')">
+	    		address = #{address,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('company')">
+	    		companyId = #{company.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('districtId')">
+	    		districtId = #{districtId,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

@@ -15,8 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.tx.component.basicdata.model.BasicData;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.local.basicdata.model.PaymentChannelEnum;
 
 /**
@@ -39,62 +37,39 @@ public class LABankAccount implements Serializable, BasicData {
     private String id;
     
     /** 编码 */
-    @QueryConditionEqual
-    @UpdateAble
     private String code;
     
     /** 账户名称 */
-    @QueryConditionEqual
-    @UpdateAble
     private String name;
     
     /** 状态 */
-    @QueryConditionEqual
-    @UpdateAble
     private boolean valid;
     
     /** 是否可编辑 */
-    @QueryConditionEqual
-    @UpdateAble
     private boolean modifyAble;
     
     /** 贷款账户类型 */
-    @QueryConditionEqual
-    @UpdateAble
     private LoanAccountTypeEnum loanAccountType;
     
     /** 银行账户类型 */
-    @QueryConditionEqual
-    @UpdateAble
     private LABankAccountTypeEnum bankAccountType;
     
     /** 银行渠道 */
-    @QueryConditionEqual
-    @UpdateAble
     private LABankAccountChannelEnum bankAccountChannel;
     
     /** 支付渠道 */
-    @QueryConditionEqual
-    @UpdateAble
     private PaymentChannelEnum paymentChannel;
     
     /** 账户号 */
-    @QueryConditionEqual
-    @UpdateAble
     private String accountNumber;
     
     /** 财务科目编码 */
-    @QueryConditionEqual
-    @UpdateAble
     private String accountTitleCode;
     
     /** 参数配置 */
-    @QueryConditionEqual
-    @UpdateAble
     private String attributes;
     
     /** 优先级 */
-    @UpdateAble
     private int priority;
     
     /** 备注信息 */
@@ -104,7 +79,6 @@ public class LABankAccount implements Serializable, BasicData {
     private Date createDate;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
     /** 费用项集合 */

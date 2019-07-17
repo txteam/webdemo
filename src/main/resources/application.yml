@@ -184,6 +184,10 @@ spring:
         max-idle: 8
         # 连接池中的最小空闲连接 默认 0
         min-idle: 0
+  session:
+    store-type: redis
+    timeout: PT30M
+      
   #jpa
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
@@ -228,19 +232,17 @@ tx:
   component:
     persister:
       type: mybatis
+      table-auto-initialize: true
     event:
       enable: true
     command:
       enable: true
     security:
       enable: true
-      table-auto-initialize: true
     basicdata:
       enable: true
-      table-auto-initialize: true
       base-packages: com.tx.local
     config:
       enable: true
-      table-auto-initialize: true
       duration: 1d
     

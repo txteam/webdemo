@@ -34,31 +34,21 @@ public class ClientRef implements Serializable {
     private String id;
     
     /** 客户id */
-    @QueryConditionEqual
     private String clientId;
     
     /** 引用类型 */
-    @QueryConditionEqual
     private String refType;
     
     /** 引用id */
-    @QueryConditionEqual
     private String refId;
     
     /** 生效时间 */
-    @UpdateAble
-    @QueryConditionGreaterOrEqual(key = "minEffectiveDate")
-    @QueryConditionLess(key = "maxEffectiveDate")
     private Date effectiveDate;
     
     /** 系统自动判定的无效时间:系统在查询具体是否存在引用过程中将根据该时间动态计算 */
-    @UpdateAble
-    @QueryConditionGreaterOrEqual(key = "minExpiryDate")
-    @QueryConditionLess(key = "maxExpiryDate")
     private Date expiryDate;
     
     /** 结束时间 */
-    @UpdateAble
     private Date endDate;
     
     /** 创建时间 */

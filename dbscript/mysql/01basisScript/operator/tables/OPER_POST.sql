@@ -1,14 +1,16 @@
-CREATE TABLE OPER_POST(
+/*****************************************************************************
+-- OPER_POST : 
+*****************************************************************************/
+drop table if exists OPER_POST;
+create table OPER_POST(
 	id varchar(64) not null,
-	valid smallint default 1 not null,
-	parentId varchar(64),
-	remark varchar(2000),
-	name varchar(64),
-	organizationId varchar(64),
-	code varchar(64),
-	fullName varchar(255),
-	primary key(ID)
+	code varchar(64) not null,
+	fullName varchar(256) ,
+	name varchar(64) not null,
+	vcid varchar(64) not null,
+	valid bit not null,
+	parentId varchar(64) not null,
+	remark varchar(256) ,
+	organizationId varchar(64) ,
+	primary key(id)
 );
-create index idx_oper_post_00 on OPER_POST(parentId);
-create index idx_oper_post_01 on OPER_POST(code);
-create index idx_oper_post_02 on OPER_POST(organizationId);

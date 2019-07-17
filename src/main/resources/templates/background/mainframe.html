@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<title>WS运营管理系统</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- css -->
+<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+
+<link rel="stylesheet" type="text/css" href="../../webjars/themes/uimaker/easyui.css" th:href="@{/webjars/themes/uimaker/easyui.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+<link rel="stylesheet" type="text/css" href="../../css/mainframe.css" th:href="@{/css/mainframe.css}"/>
+
+<!-- jquery -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+<!-- jqueryui -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+<!-- easyui -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+<!-- other -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+<!-- customize -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+var _contextPath = /*[[@{/}]]*/'';
+/*]]>*/
+</script>
+<script type="text/javascript" charset="utf-8" src="../../js/mainframe.js" th:src="@{/js/mainframe.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+	
+});
+/*]]>*/
+</script>
+</head>
+
+<body>
+<div id="index_layout">
+	<div id="pf-hd" data-options="region:'north',border:false" class="header">
+		<div class="logo"><img src="../../images/logo.png" th:src="@{/images/logo.png}"></div>
+		
+        <ul class="nav">
+        </ul>
+        
+        <div class="topright">
+            <ul class="toptool">
+            	<li><a id="screen_handle" href="javascript:void(0);"><i class="iconfont icon-screen-full"></i></a></li>
+	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
+	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe621;</i></a><em class="gcolor">5</em></li>
+	            <li id="user_info">
+	            	<span class="userface"><i class="iconfont">&#xe60d;</i></span>
+	            	<a href="javascript:void(0);"><font>admin&nbsp;&nbsp;<i class="iconfont userdown">&#xe618;</i></font></a>
+	            </li>
+	            <li><a href="#"><i class="iconfont">&#xe61a;</i></a></li>
+            </ul>
+        </div>
+	</div>
+	
+	<div data-options="region:'west',split:true,border:false,title:'系统菜单',iconCls:'icon-yingyong-copy'" class="left">
+    </div>
+	
+	<div data-options="region:'center',border:false" class="center">
+    	<div id="index_tabs" class="index_tabs">
+			<div title="首页">
+				<iframe id="default" name="right" src="default.html" th:src="@{/workbench/}"  width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>
+			</div>
+       	</div>    
+	</div>
+	
+	<div data-options="region:'south',border:false"  class="footer">
+    	<span class="fleft"><i class="iconfont">&#xe622;</i>webdemo模板 </span>
+        <span class="fright">cqtianxin版权所有<i class="iconfont">&#xe620;</i></span>
+    </div>
+</div>
+
+<div id="tabs-tool" style="display: none;">
+	<!-- transmit icon-down -->
+	<a href="javascript:void(0);" id="tabs_tool_refresh" class="easyui-linkbutton" plain="true" iconCls="transmit"></a>
+	<a href="javascript:void(0);" id="tabs_tool_menu" class="easyui-linkbutton" plain="true" iconCls="cog"></a>
+</div>
+<div id="index_tabs_menu" style="width: 120px; display: none;">
+	<div id="refresh" data-options="iconCls:'transmit'">刷新</div>
+	<div class="menu-sep"></div>
+	<div id="close_current" data-options="iconCls:'delete'">关闭当前标签页</div>
+	<div id="close_other" data-options="iconCls:'delete'">关闭其他标签页</div>
+	<div id="close_all" data-options="iconCls:'delete'">关闭所有标签页</div>
+</div>
+<div id="user_menu" style="width: 140px; display: none;">
+	<div id="user_menu_modify_user_info" data-options="iconCls:'delete'">基本资料</div>
+	<div id="user_menu_modify_password" data-options="iconCls:'transmit'">修改密码</div>
+	<div class="menu-sep"></div>
+	<div id="user_menu_logout" data-options="iconCls:'delete'">退出</div>
+</div>
+</body>
+</html>
+
