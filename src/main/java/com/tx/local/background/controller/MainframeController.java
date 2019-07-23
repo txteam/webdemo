@@ -16,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tx.local.mainframe.util.WebContextUtils;
 import com.tx.local.menu.context.MenuContext;
+import com.tx.local.security.SecurityConstants;
 
 /**
  * 主框架页面逻辑层<br/>
@@ -46,6 +48,10 @@ public class MainframeController {
      */
     @RequestMapping(value = { "", "/", "/index", "/index.html" })
     public String toMainframe(Model model) {
+        WebContextUtils.getSession().setAttribute(
+                SecurityConstants.ACCESS_DOMAIN_KEY,
+                SecurityConstants.ACCESS_DOMAIN_OPERATOR);
+        
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         model.addAttribute("now", df.format(new Date()));
         

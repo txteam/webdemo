@@ -11,10 +11,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
+
+import com.tx.local.mainframe.util.WebContextUtils;
+import com.tx.local.security.SecurityConstants;
 
 /**
  * 自定义认证进入节点：定义后台管理员以及客户进入不同的登陆页面<br/>
@@ -52,6 +56,11 @@ public class CustomizedAuthenticationEntryPoint
             if (this.pathMatcher.match(url, requestURI)) {
                 return this.authEntryPointMap.get(url);
             }
+        }
+        if (StringUtils.equals(SecurityConstants.ACCESS_DOMAIN_OPERATOR,
+                (String) WebContextUtils.getSession()
+                        .getAttribute(SecurityConstants.ACCESS_DOMAIN_KEY))) {
+            return "/background/mainframe";
         }
         return super.determineUrlToUseForThisRequest(request,
                 response,

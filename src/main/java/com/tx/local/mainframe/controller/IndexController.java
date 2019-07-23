@@ -6,8 +6,13 @@
  */
 package com.tx.local.mainframe.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.tx.local.mainframe.util.WebContextUtils;
+import com.tx.local.security.SecurityConstants;
 
 /**
  * 主框架页面逻辑层<br/>
@@ -31,7 +36,10 @@ public class IndexController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping(value = { "", "/", "/index", "/index.html" })
-    public String index() {
+    public String index(HttpSession session) {
+        WebContextUtils.getSession().setAttribute(
+                SecurityConstants.ACCESS_DOMAIN_KEY,
+                SecurityConstants.ACCESS_DOMAIN_DEFAULT);
         return "redirect:/mainframe/mainframe";
     }
     

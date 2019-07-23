@@ -182,6 +182,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         
         //logout配置
         http.logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+        
         //http.logout().disable();
         //.and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
         //        http.logout().logoutUrl("/logout").permitAll().logoutSuccessHandler(

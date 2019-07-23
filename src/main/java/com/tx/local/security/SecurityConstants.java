@@ -22,4 +22,12 @@ public interface SecurityConstants {
     
     /** 当前登录用户 */
     String SESSION_USER = "currentUser";
+    
+    String ACCESS_DOMAIN_KEY = "ACCESS_DOMAIN";
+    
+    String ACCESS_DOMAIN_DEFAULT = "CLIENT";
+    
+    String ACCESS_DOMAIN_OPERATOR = "OPERATOR";
+    
+    String ACCESS_DOMAIN_CLIENT = "CLIENT";
 }

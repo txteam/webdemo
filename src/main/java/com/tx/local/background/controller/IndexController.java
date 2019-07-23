@@ -6,10 +6,11 @@
  */
 package com.tx.local.background.controller;
 
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.tx.local.mainframe.util.WebContextUtils;
+import com.tx.local.security.SecurityConstants;
 
 /**
  * 主框架页面逻辑层<br/>
@@ -35,7 +36,9 @@ public class IndexController {
      */
     @RequestMapping(value = { "", "/", "/index", "/index.html" })
     public String index() {
-        
+        WebContextUtils.getSession().setAttribute(
+                SecurityConstants.ACCESS_DOMAIN_KEY,
+                SecurityConstants.ACCESS_DOMAIN_OPERATOR);
         return "redirect:/background/mainframe";
     }
     
