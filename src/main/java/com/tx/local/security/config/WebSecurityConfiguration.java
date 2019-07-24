@@ -94,7 +94,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
         AuthenticationProvider upProvider = usernamePasswordAuthenticationProvider();
-        //注入Provider
+        //注入usernamePasswordAuthenticationProvider
         auth.authenticationProvider(upProvider);
     }
     
@@ -265,6 +265,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //用户名密码验证前先验证  验证码
         //        http.addFilterBefore(captchaValidateAuthenticationFilter(),
         //                UsernamePasswordAuthenticationFilter.class);
+        //http.addFilterAt(filter, atFilter)
         
     }
     

@@ -16,8 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import com.tx.local.loginaccount.model.OperatorUserDetails;
 import com.tx.local.operator.model.Operator;
-import com.tx.local.security.model.OperatorUserDetails;
 
 
 /**

@@ -4,7 +4,7 @@
  * 修改时间:  2019年7月6日
  * <修改描述:>
  */
-package com.tx.local.security.model;
+package com.tx.local.loginaccount.model;
 
 import java.util.Collection;
 import java.util.List;
