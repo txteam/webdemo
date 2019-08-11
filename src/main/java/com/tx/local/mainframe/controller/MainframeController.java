@@ -46,7 +46,7 @@ public class MainframeController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/mainframe")
+    @RequestMapping(value = { "", "/", "/index", "/index.html" })
     public String toMainframe(Model model) {
         WebContextUtils.getSession().setAttribute(
                 SecurityConstants.ACCESS_DOMAIN_KEY,
@@ -57,20 +57,4 @@ public class MainframeController {
         
         return "/mainframe/mainframe";
     }
-    
-    //    @RequestMapping("/inspinia")
-    //    public String toMainframe_inspinia(Model model) {
-    //        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    //        model.addAttribute("now", df.format(new Date()));
-    //
-    //        List<Menu> menuList = menuContext.getMenuListByCatalog("operator_nav_catalog");
-    //        model.addAttribute("menuList",menuList);
-    //
-    //        Map<String, List<MenuNode>> menuNodeMap =  menuContext
-    //                .getMenuNodeMap();
-    //
-    //        model.addAttribute("menuNodeMap",menuNodeMap);
-    //
-    //        return "/mainframe/index";
-    //    }
 }

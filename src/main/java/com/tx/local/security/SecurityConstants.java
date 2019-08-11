@@ -30,4 +30,16 @@ public interface SecurityConstants {
     String ACCESS_DOMAIN_OPERATOR = "OPERATOR";
     
     String ACCESS_DOMAIN_CLIENT = "CLIENT";
+    
+    /** 操作员登陆界面验证码 */
+    String CAPTCHA_FOR_OPERATOR = "captcha_for_operator";
+    
+    /** 操作员登陆session中存储的验证码 */
+    String SESSION_CAPTCHA_FOR_OPERATOR = "session_captcha_for_operator";
+    
+    /** 客户登陆界面验证码 */
+    String CAPTCHA_FOR_CLIENT = "captcha_for_client";
+    
+    /** 客户登陆会话中存储的验证码 */
+    String SESSION_CAPTCHA_FOR_CLIENT = "session_captcha_for_client";
 }

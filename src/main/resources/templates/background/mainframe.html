@@ -9,32 +9,32 @@
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
-
-<link rel="stylesheet" type="text/css" href="../../webjars/themes/uimaker/easyui.css" th:href="@{/webjars/themes/uimaker/easyui.css}"/>
 <link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
-<link rel="stylesheet" type="text/css" href="../../css/mainframe.css" th:href="@{/css/mainframe.css}"/>
+
+<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+<link rel="stylesheet" type="text/css" href="../../css/background/mainframe.css" th:href="@{/css/background/mainframe.css}"/>
 
 <!-- jquery -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
 <!-- jqueryui -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
 <!-- easyui -->
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
 <!-- other -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
 <!-- customize -->
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 var _contextPath = /*[[@{/}]]*/'';
 /*]]>*/
 </script>
-<script type="text/javascript" charset="utf-8" src="../../js/mainframe.js" th:src="@{/js/mainframe.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/background/mainframe.js" th:src="@{/js/background/mainframe.js}"></script>
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function() {
@@ -72,7 +72,7 @@ $(document).ready(function() {
 	<div data-options="region:'center',border:false" class="center">
     	<div id="index_tabs" class="index_tabs">
 			<div title="首页">
-				<iframe id="default" name="right" src="default.html" th:src="@{/workbench/}"  width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>
+				<iframe id="default" name="right" src="default.html" th:src="@{/background/workbench}"  width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>
 			</div>
        	</div>    
 	</div>

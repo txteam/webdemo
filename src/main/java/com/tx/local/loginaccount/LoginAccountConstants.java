@@ -6,7 +6,6 @@
  */
 package com.tx.local.loginaccount;
 
-
 /**
  * 登陆账户常量类<br/>
  * <功能详细描述>
@@ -18,4 +17,7 @@ package com.tx.local.loginaccount;
  */
 public interface LoginAccountConstants {
     
+    String REF_TYPE_OPERATOR = "operator";
+    
+    String REF_TYPE_CLIENT = "client";
 }

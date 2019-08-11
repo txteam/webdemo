@@ -26,8 +26,10 @@ import javax.persistence.Table;
 @Table(name = "oper_operator_ref")
 public class OperatorRef {
     
-    /** 操作员id */
     @Id
+    private String id;
+    
+    /** 操作员id */
     private String operatorId;
     
     /** 引用类型 */
@@ -36,17 +38,23 @@ public class OperatorRef {
     /** 引用id */
     private String refId;
     
-    /** 创建时间 */
-    private Date createDate;
-    
     /** 生效时间 */
     private Date effectiveDate;
     
     /** 系统自动判定的无效时间:系统在查询具体是否存在引用过程中将根据该时间动态计算 */
-    private Date invalidDate;
+    private Date expiryDate;
     
-    /** 结束时间时间：具体对应到移动到_His表中的时间 */
-    private Date endDate;
+    /** 权限授予人*/
+    private String createOperatorId;
+    
+    /** 权限引用项的创建(授予)时间 */
+    private Date createDate;
+    
+    /** 最后更新人 */
+    private String lastUpdateOperatorId;
+    
+    /** 最后更新时间 */
+    private Date lastUpdateDate;
     
     /** <默认构造函数> */
     public OperatorRef() {
@@ -54,28 +62,19 @@ public class OperatorRef {
     }
     
     /**
-     * <默认构造函数>
+     * @return 返回 id
      */
-    public OperatorRef(String operatorId, String refId, String refType) {
-        super();
-        this.operatorId = operatorId;
-        this.refId = refId;
-        this.refType = refType;
+    public String getId() {
+        return id;
     }
-
-    /** <默认构造函数> */
-    public OperatorRef(String operatorId, String refId, String refType,
-            Date effectiveDate, Date invalidDate) {
-        super();
-        Date now = new Date();
-        this.operatorId = operatorId;
-        this.refId = refId;
-        this.refType = refType;
-        this.effectiveDate = effectiveDate;
-        this.invalidDate = invalidDate;
-        this.createDate = now;
+    
+    /**
+     * @param 对id进行赋值
+     */
+    public void setId(String id) {
+        this.id = id;
     }
-
+    
     /**
      * @return 返回 operatorId
      */
@@ -91,6 +90,20 @@ public class OperatorRef {
     }
     
     /**
+     * @return 返回 refType
+     */
+    public String getRefType() {
+        return refType;
+    }
+    
+    /**
+     * @param 对refType进行赋值
+     */
+    public void setRefType(String refType) {
+        this.refType = refType;
+    }
+    
+    /**
      * @return 返回 refId
      */
     public String getRefId() {
@@ -103,76 +116,88 @@ public class OperatorRef {
     public void setRefId(String refId) {
         this.refId = refId;
     }
-
-    /**
-     * @return 返回 refType
-     */
-    public String getRefType() {
-        return refType;
-    }
-
-    /**
-     * @param 对refType进行赋值
-     */
-    public void setRefType(String refType) {
-        this.refType = refType;
-    }
-
-    /**
-     * @return 返回 createDate
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * @param 对createDate进行赋值
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
+    
     /**
      * @return 返回 effectiveDate
      */
     public Date getEffectiveDate() {
         return effectiveDate;
     }
-
+    
     /**
      * @param 对effectiveDate进行赋值
      */
     public void setEffectiveDate(Date effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
-
+    
     /**
-     * @return 返回 endDate
+     * @return 返回 expiryDate
      */
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    /**
-     * @param 对endDate进行赋值
-     */
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    /**
-     * @return 返回 invalidDate
-     */
-    public Date getInvalidDate() {
-        return invalidDate;
-    }
-
-    /**
-     * @param 对invalidDate进行赋值
-     */
-    public void setInvalidDate(Date invalidDate) {
-        this.invalidDate = invalidDate;
+    public Date getExpiryDate() {
+        return expiryDate;
     }
     
+    /**
+     * @param 对expiryDate进行赋值
+     */
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
     
+    /**
+     * @return 返回 createOperatorId
+     */
+    public String getCreateOperatorId() {
+        return createOperatorId;
+    }
+    
+    /**
+     * @param 对createOperatorId进行赋值
+     */
+    public void setCreateOperatorId(String createOperatorId) {
+        this.createOperatorId = createOperatorId;
+    }
+    
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+    
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+    
+    /**
+     * @return 返回 lastUpdateOperatorId
+     */
+    public String getLastUpdateOperatorId() {
+        return lastUpdateOperatorId;
+    }
+    
+    /**
+     * @param 对lastUpdateOperatorId进行赋值
+     */
+    public void setLastUpdateOperatorId(String lastUpdateOperatorId) {
+        this.lastUpdateOperatorId = lastUpdateOperatorId;
+    }
+    
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+    
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
 }

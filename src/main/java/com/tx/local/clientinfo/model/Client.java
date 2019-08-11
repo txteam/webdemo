@@ -72,7 +72,7 @@ public interface Client {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public String getUserName();
+    public String getUsername();
     
     /**
      * 获取证件类型<br/>
@@ -105,5 +105,5 @@ public interface Client {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    String getLoginName();
+    String getLoginname();
 }

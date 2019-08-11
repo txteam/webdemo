@@ -25,8 +25,7 @@ import com.tx.local.basicdata.model.IDCardTypeEnum;
  */
 @Entity
 @Table(name = "cl_client_info")
-public class ClientInfo implements Client, ClientLoginAccount,
-         Serializable {
+public class ClientInfo implements Client, Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = 4965265546304077871L;
@@ -37,9 +36,6 @@ public class ClientInfo implements Client, ClientLoginAccount,
     
     /** 信用信息id */
     private String creditInfoId;
-    
-    /** 登录用户id: */
-    private String loginClientId;
     
     /** 序列号: 席位号|客户编号|等(客户有序编号)... */
     private String serialNumber;
@@ -58,9 +54,6 @@ public class ClientInfo implements Client, ClientLoginAccount,
     @Column(name = "promotionChannelId")
     private ClientPromotionChannel promotionChannel;
     
-    /** 登录名 */
-    private String loginName;
-    
     /** 登录名是否可编辑 */
     private boolean loginNameModifyAble;
     
@@ -70,8 +63,11 @@ public class ClientInfo implements Client, ClientLoginAccount,
     /** 电子邮件 */
     private String email;
     
+    /** 登陆名 */
+    private String loginname;
+    
     /** 账户名 */
-    private String userName;
+    private String username;
     
     /** 证件类型 */
     private IDCardTypeEnum idCardType = IDCardTypeEnum.身份证;
@@ -170,6 +166,9 @@ public class ClientInfo implements Client, ClientLoginAccount,
     /** 锁定 */
     private boolean locked = false;
     
+    /** 是否有效 */
+    private boolean valid = true;
+    
     /** 创建日期 */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
@@ -178,6 +177,22 @@ public class ClientInfo implements Client, ClientLoginAccount,
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdateDate;
     
+    
+    
+    /**
+     * @return 返回 valid
+     */
+    public boolean isValid() {
+        return valid;
+    }
+
+    /**
+     * @param 对valid进行赋值
+     */
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
     /**
      * @return 返回 id
      */
@@ -204,20 +219,6 @@ public class ClientInfo implements Client, ClientLoginAccount,
      */
     public void setCreditInfoId(String creditInfoId) {
         this.creditInfoId = creditInfoId;
-    }
-    
-    /**
-     * @return 返回 loginClientId
-     */
-    public String getLoginClientId() {
-        return loginClientId;
-    }
-    
-    /**
-     * @param 对loginClientId进行赋值
-     */
-    public void setLoginClientId(String loginClientId) {
-        this.loginClientId = loginClientId;
     }
     
     /**
@@ -291,20 +292,6 @@ public class ClientInfo implements Client, ClientLoginAccount,
     }
     
     /**
-     * @return 返回 loginName
-     */
-    public String getLoginName() {
-        return loginName;
-    }
-    
-    /**
-     * @param 对loginName进行赋值
-     */
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-    
-    /**
      * @return 返回 loginNameModifyAble
      */
     public boolean isLoginNameModifyAble() {
@@ -349,15 +336,15 @@ public class ClientInfo implements Client, ClientLoginAccount,
     /**
      * @return 返回 userName
      */
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
     
     /**
      * @param 对userName进行赋值
      */
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String username) {
+        this.username = username;
     }
     
     /**
@@ -829,5 +816,26 @@ public class ClientInfo implements Client, ClientLoginAccount,
     public String getName() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    /**
+     * @return 返回 loginname
+     */
+    public String getLoginname() {
+        return loginname;
+    }
+
+    /**
+     * @param 对loginname进行赋值
+     */
+    public void setLoginname(String loginname) {
+        this.loginname = loginname;
+    }
+
+    /**
+     * @param 对username进行赋值
+     */
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -14,9 +14,9 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.stereotype.Component;
 
-import com.tx.local.loginaccount.model.OperatorUserDetails;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.security.SecurityConstants;
+import com.tx.local.security.model.OperatorUserDetails;
 
 /**
  * 用户完成认证后，向session中写入当前登录的用户<br/>

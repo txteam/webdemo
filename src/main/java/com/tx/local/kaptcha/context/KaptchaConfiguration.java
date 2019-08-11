@@ -34,8 +34,6 @@ import com.google.code.kaptcha.util.Config;
 @PropertySource(value = { "classpath:context/kaptcha.properties" })
 public class KaptchaConfiguration {
     
-    
-    
     /**
      * 注册期间使用的验证码<br/>
      * <功能详细描述>
@@ -88,7 +86,6 @@ public class KaptchaConfiguration {
         
         return captchaProducer;
     }
-
     
     /** 
      * 构建验证码生成器<br/>
@@ -123,11 +120,10 @@ public class KaptchaConfiguration {
                 configs.getFontColor());
         props.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_SIZE,
                 String.valueOf(configs.getFontSize()));
-        if(!StringUtils.isEmpty(configs.getBackgroundImpl())){
+        if (!StringUtils.isEmpty(configs.getBackgroundImpl())) {
             props.put(Constants.KAPTCHA_BACKGROUND_IMPL,
                     configs.getBackgroundImpl());
         }
-        
         
         //干扰实现类
         props.put(Constants.KAPTCHA_NOISE_IMPL,
@@ -149,10 +145,10 @@ public class KaptchaConfiguration {
                                 .isEmpty(configs.getBackgroundImagePath())) {
                     KaptchaBackground cb = KaptchaBackground
                             .getInstance(configs.getBackgroundImagePath());
-                    if(cb.getBackgroundImagesCacheSize() > 0){
+                    if (cb.getBackgroundImagesCacheSize() > 0) {
                         //如果背景图片数量>0
                         return cb;
-                    }else{
+                    } else {
                         //覆盖配置
                         getProperties().put(paramName, "");
                     }

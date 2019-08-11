@@ -18,32 +18,6 @@ package com.tx.local.loginaccount.model;
 public interface ILoginAccount {
     
     /**
-     * 登录账户唯一键<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public String getId();
-    
-    /**
-     * 获取登陆编码<br/>
-     *    loginCode = loginName
-     *    loginCode = mobilePhoneNumber
-     *    loginCode = email
-     *    loginCode = 
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public String getLoginCode();
-    
-    /**
      * 登陆账户关联类型<br/>
      *  可以为操作人员，也可以为客户<br/>
      *  client,operator...

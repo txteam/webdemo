@@ -40,7 +40,7 @@ public class IndexController {
         WebContextUtils.getSession().setAttribute(
                 SecurityConstants.ACCESS_DOMAIN_KEY,
                 SecurityConstants.ACCESS_DOMAIN_DEFAULT);
-        return "redirect:/mainframe/mainframe";
+        return "redirect:/mainframe";
     }
     
     /**
@@ -54,6 +54,6 @@ public class IndexController {
     */
     @RequestMapping("/login")
     public String toLogin() {
-        return "index/login";
+        return "mainframe/login";
     }
 }
