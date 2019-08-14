@@ -52,7 +52,7 @@ public class MenuController {
     */
     @RequestMapping("/toQueryMenuTreeList")
     public String toQueryMenuTreeList() {
-        return "mainframe/queryMenuTreeList";
+        return "background/queryMenuTreeList";
     }
     
     /**
