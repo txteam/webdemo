@@ -112,5 +112,51 @@
 			</menu>
 		</menu>
 	</catalog>
+	
+	<!-- client menu catalog -->
+	<catalog id="client_demo_catalog" type="tab" text="CLIENT_MENUS">
+		<menu id="home_menu" text="主页" icon="layui-icon-home">
+			<menu id="console_menu" text="控制台" href="home/console.html" />
+			<menu id="homepage1_menu" text="主页一" href="home/homepage1.html" />
+			<menu id="homepage2_menu" text="主页二" href="home/homepage2.html" />
+		</menu>
+		<menu id="component_menu" text="组件" icon="layui-icon-component">
+			<menu id="grid_menu" text="栅格">
+				<menu id="grid_list_menu" text="等比例列表排列" href="component/grid/list.html" />
+				<menu id="grid_mobile_menu" text="按移动端排列" href="component/grid/mobile.html" />
+				<menu id="grid_mobile_pc_menu" text="移动桌面端组合" href="component/grid/mobile-pc.html" />
+				<menu id="grid_all_menu" text="全端复杂组合" href="component/grid/all.html" />
+				<menu id="grid_stack_menu" text="低于桌面堆叠排列" href="component/grid/stack.html" />
+				<menu id="grid_speed_dial_menu" text="九宫格" href="component/grid/speed-dial.html" />
+			</menu>
+			<menu id="button_menu" text="按钮" href="component/button/index.html" />
+			<menu id="form_menu" text="表单">
+				<menu id="element_menu" text="表单元素" href="component/form/element.html" />
+				<menu id="group_menu" text="表单组合" href="component/form/group.html" />
+			</menu>
+			<menu id="nav_menu" text="导航" href="component/nav/index.html" />
+			<menu id="tabs_menu" text="选项卡" href="component/tabs/index.html" />
+			<menu id="progress_menu" text="进度条" href="component/progress/index.html" />
+			<menu id="panel_menu" text="面板" href="component/panel/index.html" />
+			<menu id="badge_menu" text="徽章" href="component/badge/index.html" />
+			<menu id="timeline_menu" text="时间线" href="component/timeline/index.html" />
+			<menu id="anim_menu" text="动画" href="component/anim/index.html" />
+			<menu id="auxiliar_menu" text="辅助" href="component/auxiliar/index.html" />
+			<menu id="layers_menu" text="通用弹层">
+				<menu id="layer_menu" text="功能演示" href="component/layer/list.html" />
+				<menu id="special_layer_menu" text="特殊示例" href="component/layer/special-demo.html" />
+			</menu>
+		</menu>
+		<menu id="setting_menu" text="设置" icon="layui-icon-set">
+			<menu id="system_setting_menu" text="系统设置">
+				<menu id="web_setting_menu" text="网站设置" href="set/system/website.html" />
+				<menu id="mail_setting_menu" text="邮件服务" href="set/system/email.html" />
+			</menu>
+			<menu id="my_setting_menu" text="我的设置">
+				<menu id="user_setting_menu" text="基本资料" href="set/user/info.html" />
+				<menu id="password_setting_menu" text="修改密码" href="set/user/password.html" />
+			</menu>
+		</menu>
+	</catalog>
 
 </menu_config>

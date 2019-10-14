@@ -42,8 +42,8 @@ public class SecurityAuthenticationSuccessHandler
         
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
-        out.write(
-                "{\"status\":\"success\",\"msg\":\"登录成功\",\"data\":\"mainframe/mainframe\"}");
+        out.write("{" + "\"status\":\"success\"," + "\"msg\":\"登录成功\","
+                + "\"data\":\"mainframe\"" + "}");
         out.flush();
         out.close();
     }

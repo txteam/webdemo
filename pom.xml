@@ -26,12 +26,18 @@
 	</properties>
 
 	<dependencies>
-		<!-- javamelody 1.72后续版本，需要spring-boot2 -->
+		<!--启动时启动内置tomcat -->
 		<dependency>
-			<groupId>net.bull.javamelody</groupId>
-			<artifactId>javamelody-spring-boot-starter</artifactId>
-			<version>1.77.0</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
 		</dependency>
+	
+		<!-- javamelody 1.72后续版本，需要spring-boot2 -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>net.bull.javamelody</groupId> -->
+<!-- 			<artifactId>javamelody-spring-boot-starter</artifactId> -->
+<!-- 			<version>1.77.0</version> -->
+<!-- 		</dependency> -->
 
 		<!-- druid -->
 		<dependency>
@@ -382,6 +388,7 @@
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 				<includes>
+					<include>**/*.properties</include>
 					<include>**/*.xml</include>
 					<include>**/*.yml</include>
 				</includes>
@@ -390,6 +397,7 @@
 				<directory>src/main/resources</directory>
 				<filtering>false</filtering>
 				<excludes>
+					<exclude>**/*.properties</exclude>
 					<exclude>**/*.xml</exclude>
 					<exclude>**/*.yml</exclude>
 				</excludes>

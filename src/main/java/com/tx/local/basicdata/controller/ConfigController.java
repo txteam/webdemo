@@ -31,8 +31,8 @@ import com.tx.core.querier.model.Querier;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Controller
-@RequestMapping("/config")
+//@Controller
+//@RequestMapping("/config")
 public class ConfigController {
     
     public static final int TREENODE_TYPE_CONFIGGROUP = 0;

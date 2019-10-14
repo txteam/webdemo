@@ -6,6 +6,7 @@ package generator;
 import java.io.IOException;
 
 import com.tx.core.generator2.CodeGenerator;
+import com.tx.local.demo.model.TestM1;
 import com.tx.local.operator.model.Post;
 
 /**
@@ -19,7 +20,7 @@ import com.tx.local.operator.model.Post;
 public class WebdemoCodeGenerator {
 
     public static void main(String[] args) throws IOException {
-        Class<?> entityType = Post.class;
+        Class<?> entityType = TestM1.class;
 
         //基础数据逻辑代码生成存放目录com.tx.component.basicdata.generator.
         String project_path = org.springframework.util.StringUtils

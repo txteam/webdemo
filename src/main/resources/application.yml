@@ -235,16 +235,15 @@ tx:
     persister:
       type: mybatis
       table-auto-initialize: true
-    event:
-      enable: true
-    command:
-      enable: true
-    security:
-      enable: true
     basicdata:
       enable: true
       base-packages: com.tx.local
     config:
       enable: true
       duration: 1d
+    # event:
+      # enable: false
+    # command:
+      # enable: false
+    
     
