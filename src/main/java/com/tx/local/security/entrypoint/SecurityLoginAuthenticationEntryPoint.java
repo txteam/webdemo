@@ -99,7 +99,8 @@ public class SecurityLoginAuthenticationEntryPoint
         String loginUrl = "/login";
         if (StringUtils.equals(SecurityConstants.ACCESS_DOMAIN_OPERATOR,
                 (String) WebContextUtils.getSession()
-                        .getAttribute(SecurityConstants.ACCESS_DOMAIN_KEY))) {
+                        .getAttribute(SecurityConstants.ACCESS_DOMAIN_KEY))
+                || requestURI.startsWith("/background")) {
             loginUrl = "/background/login";
         } else {
             loginUrl = "/login";
