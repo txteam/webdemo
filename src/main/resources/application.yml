@@ -245,5 +245,7 @@ tx:
       # enable: false
     # command:
       # enable: false
+    # strategy:
+      # enable: false
     
     

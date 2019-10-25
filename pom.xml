@@ -31,13 +31,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 		</dependency>
-	
+
 		<!-- javamelody 1.72后续版本，需要spring-boot2 -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>net.bull.javamelody</groupId> -->
-<!-- 			<artifactId>javamelody-spring-boot-starter</artifactId> -->
-<!-- 			<version>1.77.0</version> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>net.bull.javamelody</groupId>
+			<artifactId>javamelody-spring-boot-starter</artifactId>
+			<version>1.77.0</version>
+		</dependency>
 
 		<!-- druid -->
 		<dependency>
@@ -46,10 +46,6 @@
 		</dependency>
 
 		<!-- spring cloud feign -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.cloud</groupId> -->
-		<!-- <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId> -->
-		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -78,9 +74,9 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-data-redis</artifactId>
-        </dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
 
 		<!-- aop -->
 		<dependency>
@@ -288,7 +284,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.16</version>
+			<!-- <version>8.0.16</version> -->
 		</dependency>
 		<dependency>
 			<groupId>p6spy</groupId>
