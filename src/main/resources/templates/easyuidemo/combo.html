@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>无标题文档</title>
+    <link rel="stylesheet" type="text/css" href="../themes/uimaker/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/uimaker.css">   
+    <link rel="stylesheet" type="text/css" href="font/iconfont.css"> 
+	<script type="text/javascript" src="../jquery.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+</head>
+
+<body style="background:#fff;">
+
+	
+    <div class="pagebox">
+    
+    <div class="titlename">combo</div>
+    
+        
+        
+        <div class="cbox">
+            	
+                <div class="easyui-panel" style="padding:15px;width:100%;">
+                
+                	<ul style="width:600px;">
+                    <li style="margin-bottom:8px;"><input id="cc" style="width:100%;"></li>  
+                    
+                    <div id="sp">
+                        <div style="line-height:25px;background:#0076c8;color:#fff;padding:5px; text-indent:8px;">请选择编程语言</div>
+                        <div style="padding:10px">
+                        
+                        	<ul>
+                            	<li style="line-height:35px;"><input type="radio" name="lang" value="01"><span>Java</span></li>
+                                <li style="line-height:35px;"><input type="radio" name="lang" value="02"><span>C#</span></li>
+                                <li style="line-height:35px;"><input type="radio" name="lang" value="03"><span>Ruby</span></li>
+                                <li style="line-height:35px;"><input type="radio" name="lang" value="04"><span>Basic</span></li>
+                                <li style="line-height:35px;"><input type="radio" name="lang" value="05"><span>Fortran</span></li>
+                            </ul>
+                            
+                        </div>
+					</div>
+					<script type="text/javascript">
+                        $(function(){
+                            $('#cc').combo({
+                                required:true,
+                                editable:false,
+                                label:'Language:',
+                                labelPosition:'top'
+                            });
+                            $('#sp').appendTo($('#cc').combo('panel'));
+                            $('#sp input').click(function(){
+                                var v = $(this).val();
+                                var s = $(this).next('span').text();
+                                $('#cc').combo('setValue', v).combo('setText', s).combo('hidePanel');
+                            });
+                        });
+                    </script>                 
+             
+                    </ul>
+                
+                </div>            
+            
+        </div>
+        
+        
+    </div>
+    
+
+</body>
+</html>

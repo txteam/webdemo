@@ -10,10 +10,7 @@ import javax.persistence.Table;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionGreaterOrEqual;
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionLess;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
+import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 
 /**
  * Ip地址数据库<br/>
@@ -26,7 +23,7 @@ import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
  */
 @Entity
 @Table(name = "bd_ipaddress_reposity")
-@BasicDataEntity(name = "Ip地址数据库")
+@BasicDataEntity(name = "Ip地址数据库", viewType = BasicDataViewTypeEnum.PAGEDLIST)
 public class IpAddressReposity implements BasicData {
     
     /** 注释内容 */
@@ -37,8 +34,6 @@ public class IpAddressReposity implements BasicData {
     private String id;
     
     /** 行政区划id */
-    @UpdateAble
-    @QueryConditionEqual
     @Column(name = "districtId")
     private District district;
     
@@ -49,62 +44,39 @@ public class IpAddressReposity implements BasicData {
     //    private TelecomOperator telecomOperator;
     
     /** 编码 */
-    @UpdateAble
-    @QueryConditionEqual
     private String code;
     
     /** ip地址名：存放>ip段 */
-    @UpdateAble
-    @QueryConditionEqual
     private String name;
     
     /** 洲id */
-    @UpdateAble
-    @QueryConditionEqual
     private String continentName;
     
     /** 国家id */
-    @UpdateAble
-    @QueryConditionEqual
     private String nationName;
     
     /** 省id */
-    @UpdateAble
-    @QueryConditionEqual
     private String provinceName;
     
     /** 市id */
-    @UpdateAble
-    @QueryConditionEqual
     private String cityName;
     
     /** 县id */
-    @UpdateAble
-    @QueryConditionEqual
     private String countyName;
     
     /** 国家英文名称*/
-    @UpdateAble
-    @QueryConditionEqual
     private String enName;
     
     /** 简拼*/
-    @UpdateAble
-    @QueryConditionEqual
     private String en;
     
     /** 是否编辑 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean modifyAble = true;
     
     /** 是否有效 */
-    @UpdateAble
-    @QueryConditionEqual
     private boolean valid = true;
     
     /** 备注 */
-    @UpdateAble
     private String remark;
     
     /** 纬度 */
@@ -114,12 +86,9 @@ public class IpAddressReposity implements BasicData {
     private BigDecimal longitude;
     
     /** 创建日期 */
-    @QueryConditionGreaterOrEqual(key = "minCreateDate")
-    @QueryConditionLess(key = "maxCreateDate")
     private Date createDate;
     
     /** 最后更新时间 */
-    @UpdateAble
     private Date lastUpdateDate;
     
     /**

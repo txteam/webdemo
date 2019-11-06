@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>form</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- echarts -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
+</head>
+<body>
+    <div class="pagebox">
+    
+    <div class="titlename">form</div>
+    
+        <div class="cbox">
+        
+        	<div class="easyui-panel" style="padding:15px;width:100%;">
+        	
+            
+            
+            <form id="ff" class="easyui-form" method="post" data-options="novalidate:true">
+            
+            <ul style="width:600px;">
+            
+            <li style="margin-bottom:15px;"><input class="easyui-textbox" name="name" style="width:100%;height:32px" data-options="label:'姓名:',required:true"></li>
+            <li style="margin-bottom:15px;"><input class="easyui-textbox" name="email" style="width:100%;height:32px" data-options="label:'邮件:',required:true,validType:'email'"></li>
+            <li style="margin-bottom:15px;"><span class="fspan">组件</span><input class="easyui-checkbox" name="fruit" value="Apple"><i class="fi">表单</i><input class="easyui-checkbox" name="fruit" value="Apple"><i class="fi">文本框</i><input class="easyui-checkbox" name="fruit" value="Apple"><i class="fi">数据表格</i></li>  
+            <li style="margin-bottom:15px;"><input class="easyui-textbox" name="subject" style="width:100%;height:32px" data-options="label:'项目:',required:true"></li>
+            <li style="margin-bottom:15px;"><span class="fspan">性别</span><input class="easyui-radiobutton" name="fruit" value="Apple" ><i class="fi">男</i><input class="easyui-radiobutton" name="fruit" value="Apple" ><i class="fi">女</i></li>
+            <li style="margin-bottom:15px;">
+            	<select class="easyui-combobox" name="language" label="城市" style="width:100%;height:32px">
+                <option value="ar">南京</option>
+                <option value="bg">上海</option>
+                <option value="ca" selected="selected">北京</option>
+                <option value="zh-cht">济南</option>
+                <option value="cs">滨州</option>
+                <option value="da">无锡</option>
+                <option value="nl">合肥</option>
+                <option value="en">重庆</option>
+                <option value="et">长沙</option>
+                </select>            
+            </li>
+            <li style="margin-bottom:15px;"><input class="easyui-textbox" name="message" style="width:100%;height:60px" data-options="label:'信息:',multiline:true"></li>
+            
+            <li style="margin-bottom:15px;"><span class="fspan">&nbsp;</span>
+            	<a href="javascript:void(0)" class="easyui-linkbutton c1" onclick="submitForm()" style="width:80px">确定</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()"  style="width:80px">重置</a>
+            </li>
+            
+            </ul>
+            
+            </form>
+            
+            </div> 
+        
+        </div>
+        
+    </div>
+    
+    <script>
+		function submitForm(){
+			$('#ff').form('submit',{
+				onSubmit:function(){
+					return $(this).form('enableValidation').form('validate');
+				}
+			});
+		}
+		function clearForm(){
+			$('#ff').form('clear');
+		}
+	</script>
+
+</body>
+</html>

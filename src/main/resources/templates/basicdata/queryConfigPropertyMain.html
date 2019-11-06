@@ -7,9 +7,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <block th:replace="fragments/easyui_header::common_replace">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<!-- css -->
 	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
@@ -41,7 +38,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'';
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
 	/*]]>*/
 	</script>
 </block>
@@ -115,9 +112,10 @@ $(document).ready(function() {
 			width : 80
 		}]],
 		columns : [[{
-			field : 'valid',
-			title : '是否有效',
-			width : 80
+			field : 'ValidateExpression',
+			title : '验证表达式',
+			width : 80,
+			hidden : true
 		},{
 			field : 'remark',
 			title : '备注',
@@ -129,13 +127,18 @@ $(document).ready(function() {
 			formatter : function(value, row, index) {
 				var str = '';
 				if(row.modifyAble){
-					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.id, /*[[@{/webjars/css/images/extjs_icons/pencil.png}]]*/'');
+					str += $.formatString('<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>', row.code, /*[[@{/webjars/css/images/extjs_icons/pencil.png}]]*/'');
 					str += '&nbsp;';
 				}
 				return str;
 			}
 		} ] ],
 		toolbar : '#toolbar',
+		onDblClickRow : function(row){
+			if(row.modifyAble){
+				editFun(row.code)
+			}
+		},
 		onLoadSuccess : function() {
 			parent.$.messager.progress('close');
 			$(this).treegrid('tooltip');
@@ -175,18 +178,19 @@ function undo() {
 /**
  * 打开编辑职位页面
  */
-function editFun(key) {
+function editFun(code) {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
-	if (key == undefined) {
+	if (code == undefined) {
 		var rows = treeGrid.datagrid('getSelections');
-		key = rows[0].key;
+		code = rows[0].code;
 	}
+	var url = /*[[@{/config/toUpdateConfigProperty?code={0}}]]*/_contextPath + '/config/toUpdateConfigProperty?code={0}';
 	DialogUtils.openModalDialog(
 		"updateConfigProperty",
 		"修改配置属性",
-		$.formatString("${contextPath}/configuration/toUpdateConfigProperty.action?key={0}",key),
+		$.formatString(url,code),
 		600,210,function(){
 			$('#treeGrid').treegrid('reload');
 	});

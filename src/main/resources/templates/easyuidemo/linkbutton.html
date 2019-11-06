@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>form</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- echarts -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
+</head>
+<body>
+    <div class="pagebox">
+    
+    <div class="titlename">linkbutton</div>
+    
+        <div class="cbox">
+        
+        	<div class="easyui-panel" data-options="fit:true" style="padding:15px;">
+        
+        	<p style="color:#536383;font-weight:bold;">基础按钮</p>
+            <div style="padding:15px 0;">
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-tianjia',selected:true">新增</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-buchongiconsvg13'">删除</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-baocun'">保存</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-jianqie',disabled:true">剪切</a>
+                <a href="#" class="easyui-linkbutton">刷新</a>
+            </div>
+            
+            <p style="color:#536383;font-weight:bold;">固定宽度按钮</p>
+            <div style="padding:15px 0;">
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-sousuo',selected:true" style="width:80px">搜索</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-bianji'" style="width:80px">编辑</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-shuaxin'" style="width:80px">加载</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-shuoming'" style="width:80px">帮助</a>
+            </div>
+            
+            </div>
+        
+        </div>
+        
+        <div class="cbox" >
+        	
+            <div class="easyui-panel" data-options="fit:true" style="padding:15px;">
+            
+				<p style="color:#536383;font-weight:bold; padding-bottom:8px;">按钮组</p>
+                <div style="padding:5px 0;">
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',iconCls:'icon-tianjia'">信息发布</a>
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true">选中按钮</a>
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'">普通样式</a>
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'">用户管理</a>
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'">自定义</a>
+                </div>
+
+                <div style="padding:5px 0;">
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g2',plain:true">信息发布</a>
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g2',plain:true,selected:true">选中按钮</a>
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g2',plain:true">普通样式</a>
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g2',plain:true">用户管理</a>
+                    <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g2',plain:true">自定义</a>
+                </div>
+            
+            </div>
+        
+        </div>
+        
+        
+        <div class="cbox">
+        
+        	<div class="easyui-panel" data-options="fit:true" style="padding:15px;">
+            
+            	<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-xiangmu1'">档案管理</a>
+                <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-shuaxin'">刷新</a>
+                <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-sousuo'">搜索</a>
+                <a href="#" class="easyui-linkbutton" data-options="plain:true">设置</a>
+                <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-shujuku'">数据库</a>
+                <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-tianjia1'"> </a>
+                <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-baocun1'"></a>
+                <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-icon-user'"></a>
+            
+            </div>        
+        
+        </div>
+        
+        <div class="cbox">
+        
+        	<div class="easyui-panel" data-options="fit:true" style="padding:15px;">
+            	
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-jiagou',size:'large',iconAlign:'top',selected:true">关系图</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-xiangmu',size:'large',iconAlign:'top'">项目管理</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-daibanmoren',size:'large',iconAlign:'top'">日程安排</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-dashuju',size:'large',iconAlign:'top'">大数据</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-tongji',size:'large',iconAlign:'top'">统计</a>        
+            
+            </div>
+        
+        </div>
+        
+        <div class="cbox">
+        	
+            <div class="easyui-panel" data-options="fit:true" style="padding:15px;">
+            	
+                <a href="#" class="easyui-linkbutton c1" style="width:100px">蓝色</a>
+                <a href="#" class="easyui-linkbutton c2" style="width:100px">红色</a>
+                <a href="#" class="easyui-linkbutton c3" style="width:100px">紫色</a>
+                <a href="#" class="easyui-linkbutton c4" style="width:100px">绿色</a>
+                <a href="#" class="easyui-linkbutton c5" style="width:100px">粉绿</a>
+                <a href="#" class="easyui-linkbutton c6" style="width:100px">灰色</a>
+                <a href="#" class="easyui-linkbutton c7" style="width:100px">深蓝</a>
+                <a href="#" class="easyui-linkbutton c8" style="width:100px">橙色</a>            
+            
+            </div>
+        
+        </div>
+        
+        
+        <div class="cbox">
+        
+        	<div class="easyui-panel" data-options="fit:true" style="padding:15px;">
+            
+            	<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-yingyong-copy',toggle:true">应用</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-riqi',toggle:true">日期</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-tixing',toggle:true,selected:true">提醒</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-Components',toggle:true">组件</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true">自定义</a>            
+            
+            </div>
+        
+        </div>
+        
+        
+    </div>
+    
+
+</body>
+</html>

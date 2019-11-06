@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>accordion</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- echarts -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
+</head>
+<body>
+    <div class="pagebox">
+    
+    <div class="titlename">accordion</div>
+    
+        <div class="cbox">
+            
+            <dl class="cboxdd">
+            
+            	<dd>
+                
+                	<div class="ddiv">
+                                        
+                        <div class="easyui-accordion" style="width:100%;height:400px;">
+                        
+                            <div title="用户管理" data-options="iconCls:'icon-yonghu'" style="overflow:auto;padding:10px;">
+                            
+                            		<ul class="textlist">
+                                    <li><span></span><a href="#">uimaker网站最新office2016风格模板上线</a><em class="emcolor1 smallfont">hot</em><i>11-10</i></li>
+                                    <li><span></span><a href="#">2017年度公司现金个人表彰大会即将召开</a><em class="emcolor2 smallfont">new</em><i>11-09</i></li>
+                                    <li><span></span><a href="#">订单管理系统功能升级效率大幅提升</a><em class="emcolor3 smallfont">rec</em><i>11-08</i></li>
+                                    <li><span></span><a href="#">精美后台管理系统模板html免费下载-uimaker</a><i>11-07</i></li>
+                                    <li><span></span><a href="#">大学生职场新人产品经理晋级课堂</a><i>11-06</i></li>
+                                    <li><span></span><a href="#">卡通头像设计ui教程-您身边最好的在线课堂</a><i>11-05</i></li>
+                                    <li><span></span><a href="#">uimaker分享-最全面最基础的ui设计知识</a><i>11-04</i></li>
+                                    <li><span></span><a href="#">漂亮大数据可视化大屏展示ui设计</a><i>11-03</i></li>
+                                    </ul>
+                                
+                            </div>
+                            
+                            <div title="项目" data-options="iconCls:'icon-xiangmu'" style="padding:15px;">
+                                <p style="color:#536383;line-height:25px;">uimaker基于easyui框架基础上对主题进行美化修改，只修改了css样式，可以直接替换样式实现主题替换，也可以与easyui默认的主题进行切换。对于已经搭建好的系统，也可以很方便的进行主题修改，用最小的工作量换最漂亮的界面。</p> 		
+                            </div>
+                            
+                            <div title="自定义" data-options="iconCls:'icon-xiangmu1'" style="padding:15px;">
+                            
+                           		<h3 style="color:#0099FF;">树形菜单</h3>
+                                    <ul class="easyui-tree">
+                                    <li>
+                                        <span>管理员</span>
+                                        <ul>
+                                            <li>
+                                                <span>权限设置</span>
+                                                <ul>
+                                                    <li>修改密码</li>
+                                                    <li>信息管理</li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <span>访客</span>
+                                                <ul>
+                                                    <li>用户来源</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                
+                            </div>
+                        </div>
+    
+    				</div>
+                
+                </dd>
+                
+                
+                <dd>
+                
+                	<div class="ddiv">
+                    
+                        <div class="easyui-accordion" style="width:100%;height:400px;">
+                        
+                            <div title="信息检索" data-options="iconCls:'icon-sousuo',collapsed:false,collapsible:false" style="padding:10px;">
+                                <input class="easyui-searchbox" prompt="请输入内容" style="width:300px;">
+                            </div>
+                            
+                            <div title="说明" data-options="selected:true" style="padding:10px;">
+                                <h3 style="color:#0099FF;">做最好的easyui主题</h3>
+                                <p style="color:#536383;line-height:25px;">uimaker基于easyui框架基础上对主题进行美化修改，只修改了css样式，可以直接替换样式实现主题替换，也可以与easyui默认的主题进行切换。对于已经搭建好的系统，也可以很方便的进行主题修改，用最小的工作量换最漂亮的界面。</p>
+                            </div>
+                            
+                            <div title="标题1" style="padding:10px">
+                                <p style="color:#536383;line-height:25px;">内容1</p>
+                            </div>
+                            
+                            <div title="标题2" style="padding:10px">
+                                <p style="color:#536383;line-height:25px;">内容2</p>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                    
+                </dd>
+                
+                
+                <dd>
+                
+                	<div class="ddiv">
+                    	
+                            <div class="easyui-accordion" halign="left" style="width:100%;height:400px;">
+                            <div title="菜单" titleDirection="up" style="overflow:auto;padding:10px;">
+                                <ul class="easyui-tree">
+                                    <li>
+                                        <span>管理员</span>
+                                        <ul>
+                                            <li>
+                                                <span>权限设置</span>
+                                                <ul>
+                                                    <li>修改密码</li>
+                                                    <li>信息管理</li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <span>访客</span>
+                                                <ul>
+                                                    <li>用户来源</li>
+                                                    <li>地区</li>
+                                                    <li>浏览器</li>
+                                                    <li>访问时长</li>
+                                                    <li>自定义</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div title="帮助" titleDirection="up" style="padding:10px;">
+                                <p style="color:#536383;line-height:25px;">uimaker基于easyui框架基础上对主题进行美化修改，只修改了css样式，可以直接替换样式实现主题替换，也可以与easyui默认的主题进行切换。对于已经搭建好的系统，也可以很方便的进行主题修改，用最小的工作量换最漂亮的界面。</p> 		
+                            </div>
+                            <div title="关于" titleDirection="up" style="padding:10px;">
+                               <p style="color:#536383;line-height:25px;">uimaker基于easyui框架基础上对主题进行美化修改，只修改了css样式，可以直接替换样式实现主题替换，也可以与easyui默认的主题进行切换。对于已经搭建好的系统，也可以很方便的进行主题修改，用最小的工作量换最漂亮的界面。</p>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    
+                </dd>
+                
+                
+            </dl>
+            
+            
+        </div>
+        
+        
+        
+    
+    </div>
+    
+
+</body>
+</html>

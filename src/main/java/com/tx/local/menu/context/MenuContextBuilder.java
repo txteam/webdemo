@@ -111,7 +111,7 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private void doParseMenuConfig() {
+    protected void doParseMenuConfig() {
         //解析配置文件
         MenuConfig menuConfig = parseMenuConfig();
         if (menuConfig == null

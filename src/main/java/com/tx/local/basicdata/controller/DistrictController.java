@@ -51,8 +51,8 @@ public class DistrictController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/toQueryDistrictTreeList")
-    public String toQueryDistrictTreeList(ModelMap response) {
+    @RequestMapping("/toQueryTreeList")
+    public String toQueryTreeList(ModelMap response) {
         return "/basicdata/queryDistrictTreeList";
     }
     
@@ -65,8 +65,8 @@ public class DistrictController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/toAddDistrict")
-    public String toAddDistrict(ModelMap response) {
+    @RequestMapping("/toAdd")
+    public String toAdd(ModelMap response) {
         response.put("district", new District());
         
         return "/basicdata/addDistrict";
@@ -81,8 +81,8 @@ public class DistrictController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("/toUpdateDistrict")
-    public String toUpdateDistrict(
+    @RequestMapping("/toUpdate")
+    public String toUpdate(
             @RequestParam("districtId") String districtId, ModelMap response) {
         District resDistrict = this.districtService.findById(districtId);
         response.put("district", resDistrict);

@@ -257,4 +257,20 @@ public class MenuController {
         return resList;
     }
     
+    /**
+     * 重新加载菜单<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/reload")
+    public boolean reload() {
+        menuContext.reload();
+        return true;
+    }
+    
 }

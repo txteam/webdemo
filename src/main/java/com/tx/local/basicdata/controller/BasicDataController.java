@@ -21,15 +21,14 @@ import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.view.ViewResolverComposite;
 
 import com.tx.component.basicdata.context.BasicDataContext;
 import com.tx.component.basicdata.model.BasicData;
@@ -54,8 +53,8 @@ import com.tx.core.util.ObjectUtils;
  */
 @Controller
 @RequestMapping("/basicdata")
-public class BasicDataController
-        implements InitializingBean, ApplicationContextAware {
+public class BasicDataController implements InitializingBean,
+        ApplicationContextAware, ResourceLoaderAware {
     
     /** spring容器句柄 */
     protected ApplicationContext applicationContext;
@@ -68,19 +67,25 @@ public class BasicDataController
     @Resource
     private BasicDataContext basicDataContext;
     
-    /** 视图逻辑解析层 */
-    private List<ViewResolver> viewResolvers;
-    
-    /** 视图逻辑解析对象 */
-    private ViewResolverComposite viewResolverComposite;
-    
     /** 页面映射 */
     private final Map<String, String> pageMap = new HashMap<>();
     
+    /** 资源读取器 */
+    private ResourceLoader resourceLoader;
+    
+    /**
+     * @param resourceLoader
+     */
+    @Override
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
+    
     /** <默认构造函数> */
-    public BasicDataController(List<ViewResolver> viewResolvers) {
+    //List<ViewResolver> viewResolvers
+    public BasicDataController() {
         super();
-        this.viewResolvers = viewResolvers;
+        //this.viewResolvers = viewResolvers;
     }
     
     /**
@@ -88,10 +93,9 @@ public class BasicDataController
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        AssertUtils.notEmpty(this.viewResolvers, "viewResolvers is empty.");
-        this.viewResolverComposite = new ViewResolverComposite();
-        this.viewResolverComposite.setViewResolvers(this.viewResolvers);
-        
+        //AssertUtils.notEmpty(this.viewResolvers, "viewResolvers is empty.");
+        //this.viewResolverComposite = new ViewResolverComposite();
+        //this.viewResolverComposite.setViewResolvers(this.viewResolvers);
     }
     
     /**
@@ -139,6 +143,10 @@ public class BasicDataController
         response.put("pageType", defaultPageType);
         
         String pageName = defaultPageType.getDefaultPage();
+        if (StringUtils.isEmpty(type)) {
+            //返回默认页面
+            return pageName;
+        }
         BasicDataEntityInfo info = this.basicDataEntityRegistry
                 .getEntityInfo(type);
         if (info == null) {
@@ -597,16 +605,25 @@ public class BasicDataController
      * @see [类、类#方法、类#成员]
      */
     private boolean existPage(String page) {
-        View view = null;
-        try {
-            view = this.viewResolverComposite.resolveViewName(page, null);
-        } catch (Exception e) {
-            view = null;
-        }
-        if (view == null) {
-            return false;
-        } else {
+        //        View view = null;
+        //        try {
+        //            view = this.viewResolverComposite.resolveViewName(page, null);
+        //        } catch (Exception e) {
+        //            view = null;
+        //        }
+        //        if (view == null) {
+        //            return false;
+        //        } else {
+        //            return true;
+        //        }
+        StringBuilder jspPageSB = new StringBuilder("/templates");
+        jspPageSB.append(page).append(".html");
+        org.springframework.core.io.Resource jspPageResource = resourceLoader
+                .getResource(jspPageSB.toString());
+        if (jspPageResource.exists()) {
             return true;
+        } else {
+            return false;
         }
     }
     
@@ -624,19 +641,18 @@ public class BasicDataController
         ADD("add", "/basicdata/addBasicData"),
         
         //更新基础数据
-        UPDATE("update", "/basicdata/updateBasicData"),
+        UPDATE("update", "basicdata/updateBasicData"),
         
         //查询树列表
-        QUERY_TREE_LIST("queryTree", "/basicdata/queryBasicDataTreeList"),
+        QUERY_TREE_LIST("queryTree", "basicdata/queryBasicDataTreeList"),
         
         //查询列表
         //如果类型为空的时候，跳转到基础数据列表《分页》
-        QUERY_LIST("queryList", "/basicdata/queryBasicDataList"),
+        QUERY_LIST("queryList", "basicdata/queryBasicDataList"),
         
         //查询分页列表
         //如果类型为空的时候，跳转到基础数据列表《分页》
-        QUERY_PAGED_LIST("queryPagedList",
-                "/basicdata/queryBasicDataPagedList");
+        QUERY_PAGED_LIST("queryPagedList", "basicdata/queryBasicDataPagedList");
         
         /** 默认页面 */
         private final String pageName;

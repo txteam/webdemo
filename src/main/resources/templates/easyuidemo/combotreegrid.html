@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>无标题文档</title>
+    <link rel="stylesheet" type="text/css" href="../themes/uimaker/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/uimaker.css">   
+    <link rel="stylesheet" type="text/css" href="font/iconfont.css"> 
+	<script type="text/javascript" src="../jquery.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+</head>
+
+<body style="background:#fff;">
+
+	
+    <div class="pagebox">
+    
+    <div class="titlename">combotreegrid</div>
+    
+        
+        
+        <div class="cbox">
+            	
+                <div class="easyui-panel" style="padding:15px; width:100%;">
+                
+                	<ul style="width:600px;">
+                    
+                    <li style="margin-bottom:8px;">
+                    	<input class="easyui-combotreegrid" data-options="
+                        width:'100%',
+                        panelWidth:600,
+                        label:'请选择内容(chrome浏览器不显示下拉内容，请搭建服务器环境，通过地址访问即可):',
+                        labelPosition:'top',
+                        url:'data/treegrid_data1.json',
+                        idField:'id',
+                        treeField:'name',
+                        columns:[[
+                            {field:'name',title:'标题',width:200},
+                            {field:'size',title:'大小',width:100},
+                            {field:'date',title:'日期',width:100}
+                        ]]">
+                    </li>
+                    
+                    <li style="margin-bottom:8px;">
+                    
+                    	<input class="easyui-combotreegrid" data-options="
+                        width:'100%',
+                        panelWidth:600,
+                        label:'选择栏目:',
+                        labelPosition:'top',
+                        url:'data/treegrid_data1.json',
+                        idField:'id',
+                        treeField:'name',
+                        multiple:true,
+                        value:['211','31'],
+                        columns:[[
+                            {field:'name',title:'标题',width:200},
+                            {field:'size',title:'大小',width:100},
+                            {field:'date',title:'日期',width:100}
+                        ]]">
+                                            
+                    </li>
+                    
+                    </ul>
+                
+                </div>            
+            
+        </div>
+        
+        
+    </div>
+    
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>tabs</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- echarts -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
+</head>
+<body>
+    <div class="pagebox">
+    
+    <div class="titlename">layout</div>
+    
+        <div class="cbox" style="clear:both; overflow:hidden;">
+        
+        	<dl class="cboxdt">
+        
+        	<dd>
+            
+                <div class="ddiv">
+                    <div class="easyui-layout" style="width:100%;height:400px;">
+                    
+                        <div data-options="region:'north'" style="height:50px"></div>
+                        <div data-options="region:'south',split:true" style="height:50px;"></div>
+                        <div data-options="region:'east',split:true" title="右侧" style="width:100px;"></div>
+                        <div data-options="region:'west',split:true" title="左侧" style="width:100px;"></div>
+                        <div data-options="region:'center',title:'主体',iconCls:'icon-xiangmu'">                 
+                        </div>
+                        
+                    </div>
+                </div>
+            
+            </dd>
+            
+            <dd>
+            
+            	<div class="ddiv">
+                
+                	<div class="easyui-layout" style="width:100%;height:400px;">
+                    <div data-options="region:'north'" style="height:50px"></div>
+                    <div data-options="region:'south',split:true" style="height:50px;"></div>
+                    <div data-options="region:'east',split:true" title="右侧" style="width:180px;"></div>
+                    <div data-options="region:'west',split:true" title="左侧" style="width:100px;"></div>
+                    <div data-options="region:'center',iconCls:'icon-xiangmu'" title="主体" style="padding:5px">
+                        <div class="easyui-layout" data-options="fit:true">
+                            <div data-options="region:'north',split:true" style="height:50px"></div>
+                            <div data-options="region:'west',split:true" style="width:100px"></div>
+                            <div data-options="region:'center'"></div>
+                        </div>
+                    </div>
+                	</div>
+                    
+                </div>
+            
+            </dd>
+            
+            </dl>
+            
+        </div>
+        
+        <div class="cbox" style="overflow:hidden; padding: 0 3px;clear:both;">
+        	
+            <div class="easyui-layout" style="width:100%;height:250px;">
+            
+                <div id="p" data-options="region:'west'" title="左侧" style="width:20%;padding:15px">
+                    <p style="color:#536383;line-height:25px;">宽度: 20%</p>
+                </div>
+                
+                <div data-options="region:'center'" title="右侧">
+                </div>
+                
+        	</div>
+                
+        </div>
+        
+    </div>
+    
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>无标题文档</title>
+    <link rel="stylesheet" type="text/css" href="../themes/uimaker/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/uimaker.css">   
+    <link rel="stylesheet" type="text/css" href="font/iconfont.css"> 
+	<script type="text/javascript" src="../jquery.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+</head>
+
+<body style="background:#fff;">
+
+	
+    <div class="pagebox">
+    
+    <div class="titlename">timespinner</div>
+    
+        
+        <div class="cbox">
+            	
+                <div class="easyui-panel" style="padding:15px; width:100%;">
+                
+                	
+                    <a href="#" class="easyui-linkbutton c1" onclick="getValue()">获取值</a>
+                    <a href="#" class="easyui-linkbutton" onclick="setValue()">预设值</a>
+                    <a href="#" class="easyui-linkbutton" onclick="disable()">禁用</a>
+                    <a href="#" class="easyui-linkbutton" onclick="enable()">启用</a>
+                   
+                
+                	<ul style="width:600px; margin-top:15px;">
+                    
+                    <li style="margin-bottom:8px;">
+                    <input id="dt" class="easyui-timespinner" label="选择时间:" labelPosition="top" value="01:20" style="width:100%;">
+                    <script>
+					function getValue(){
+						var val = $('#dt').timespinner('getValue');
+						alert(val);
+					}
+					function setValue(){
+						$('#dt').timespinner('setValue', '09:45');
+					}
+					function disable(){
+						$('#dt').timespinner('disable');
+					}
+					function enable(){
+						$('#dt').timespinner('enable');
+					}
+					</script>
+                    </li>
+                    
+                    <li style="margin-bottom:8px;"><input class="easyui-timespinner" label="开始时间:" labelPosition="top" value="01:20" style="width:100%;"></li>
+                    <li style="margin-bottom:8px;"><input class="easyui-timespinner" label="结束时间:" labelPosition="top" value="14:45" style="width:100%;"></li>
+                                    
+                    </ul>
+                
+                </div>            
+            
+        </div>
+        
+        
+    </div>
+    
+
+</body>
+</html>

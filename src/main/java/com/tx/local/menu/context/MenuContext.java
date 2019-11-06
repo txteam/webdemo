@@ -61,6 +61,18 @@ public class MenuContext extends MenuContextBuilder {
     }
     
     /**
+     * 重新加载菜单配置<br/>
+     * <功能详细描述> [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public void reload(){
+        doParseMenuConfig();
+    }
+    
+    /**
      * 根据当前的登录人员的权限项加载菜单树
      * <功能详细描述>
      * @return [参数说明]

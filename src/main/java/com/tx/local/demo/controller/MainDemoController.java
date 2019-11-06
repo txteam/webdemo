@@ -63,10 +63,5 @@ public class MainDemoController {
         return "/inspinia-demo";
     }
 
-     @RequestMapping("/inspinia/demo/{page}")
-     public String inspiniaDemo(@PathVariable String page){
-         return "/inspinia/demo/"+page;
-     }
-
     
 }

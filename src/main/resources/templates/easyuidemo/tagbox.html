@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>无标题文档</title>
+    <link rel="stylesheet" type="text/css" href="../themes/uimaker/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/uimaker.css">   
+    <link rel="stylesheet" type="text/css" href="font/iconfont.css"> 
+	<script type="text/javascript" src="../jquery.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+</head>
+
+<body style="background:#fff;">
+
+	
+    <div class="pagebox">
+    
+    <div class="titlename">tagbox</div>
+    
+        
+        
+        <div class="cbox">
+            	
+                <div class="easyui-panel" style="padding:15px;width:100%;">
+                
+                	<ul style="width:600px;">
+                    
+                    <li style="margin-bottom:15px;"><input class="easyui-tagbox" value="南京,上海,北京" label="城市" style="width:100%; height:32px;"></li>
+                    
+                    <li style="margin-bottom:15px;">
+                    <input class="easyui-tagbox" value="建邺区,雨花台区" label="区域" style="width:100%; height:32px;" data-options="
+                    buttonText: '按钮',
+                    onClickButton: function(){
+                        alert('click button');
+                    }
+                    ">
+                    </li>
+                    
+                    <li style="margin-bottom:15px;">
+                    <input class="easyui-tagbox" value="设计,唱歌,睡觉,打游戏,吃饭,音乐,羽毛球,散步,跆拳道,uimaker" label="兴趣爱好" style="width:100%; height:32px;" data-options="
+                    tagFormatter: function(value, row){
+                        return '[' + value + ']';
+                    }
+                    ">
+                    </li>
+                    
+                    <li style="margin-bottom:15px;">
+                    <input class="easyui-tagbox" value="3" label="技能" style="width:100%; height:32px;" data-options="
+                    url: 'data/tagbox_data1.json',
+                    method: 'get',
+                    value: '3,4',
+                    valueField: 'id',
+                    textField: 'text',
+                    limitToList: true,
+                    prompt: '选择您的技能',
+                    tagStyler: function(value){
+                        if (value == 3){
+                            return 'background:#0076c8;color:#fff';
+                        } else if (value == 4){
+                            return 'background:#d63737;color:#fff';
+                        }
+                    }
+                    ">
+                    </li>
+                    
+                    <li style="margin-bottom:15px;">
+                    <input class="easyui-tagbox" value="交互,产品" label="具体内容" style="width:100%; height:32px;" data-options=" validType: ['length[3,10]','uniquetag'] ">
+                    <script type="text/javascript">
+					$.extend($.fn.validatebox.defaults.rules, {
+						uniquetag: {
+							validator: function(value, param){
+								var tb = $(this).closest('.tagbox').prev();
+								var values = tb.tagbox('getValues');
+								return $.inArray(value, values)==-1;
+							},
+							message: 'The tag value already exists.'
+						}
+					})
+					</script>
+                    </li>
+                        
+                    <li style="margin-bottom:15px;">                    
+                    <input class="easyui-tagbox" label="能力" style="width:100%; height:32px;" data-options="
+                        url: 'data/tagbox_data1.json',
+                        method: 'get',
+                        value: '3',
+                        valueField: 'id',
+                        textField: 'text',
+                        limitToList: true,
+                        hasDownArrow: true,
+                        prompt: '选择内容'
+                        ">                    	
+                    </li>                    
+                    
+                                        
+                    </ul>
+                	
+                
+                </div>            
+            
+        </div>
+        
+        
+    </div>
+    
+
+</body>
+</html>

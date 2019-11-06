@@ -70,7 +70,7 @@ public class ConfigController {
     public String toUpdateConfigProperty(@RequestParam("code") String code,
             ModelMap responseMap) {
         responseMap.put("configProperty", configContext.find(code));
-        return "/mainframe/updateConfigProperty";
+        return "basicdata/updateConfigProperty";
     }
     
     /**

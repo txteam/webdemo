@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+	<title>queryBasicDatas</title>
 	<meta charset="utf-8"/>
-	<title>queryBasicDataList</title>
-<block th:replace="fragments/header::common_replace">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
 	<!-- css -->
 	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
@@ -49,16 +49,14 @@
 var grid = null;
 var idFieldName = 'id';
 var nameFieldName = 'name';
-var entityName = '${typeInfo.name}'; 
-
+var entityName = /*[[${typeInfo?.name?:''}]]*/''; 
 $(document).ready(function(){
 	var  $editALink = $("#editALink");
 	var  $enableALink = $("#enableALink");
 	var  $disableALink = $("#disableALink");
 	var  $deleteALink = $("#deleteALink");
-	
 	grid = $('#grid').datagrid({
-		//url : '${contextPath}/basicData/queryList.action?basicDataTypeCode=${basicDataTypeCode}',
+		url : /*[[@{/basicdata/queryList(type=${typeInfo.type})}]]*/_contextPath + '/basicdata/queryList?type=xx',
 		fit : true,
 		fitColumns : true,
 		border : false,
@@ -69,13 +67,13 @@ $(document).ready(function(){
 		nowrap : true,
 		striped : true,
 		singleSelect : true,
-		frozenColumns: [[ {
+		frozenColumns: [ [ {
 			field : 'id',
 			title : '主键',
 			width : 150,
 			hidden : true
-		}]],
-		columns: [[
+		}] ],
+		columns: [ [
 		{
 			field : 'basicDataTypeCode',
 			title : '基础数据类型',
@@ -158,7 +156,7 @@ $(document).ready(function(){
 	   			return text;
 			}
 		}
-		<c:if test="${show_grid_action == true}">
+		/*[+
 		,{
 			field : 'action',
 			title : '操作',
@@ -185,8 +183,8 @@ $(document).ready(function(){
 				return str;
 			}
 		}
-		</c:if>	
-		]],
+		+]*/
+		] ],
 		toolbar : '#toolbar',
 		onDblClickRow : function(index, row){
 			if($.canUpdate){
@@ -414,8 +412,8 @@ function enableFun(id,name){
 					<td><input id="name" name="name"/></td>
 					<th>基础数据类型:</th>
 					<td>
-						<input id="basicDataTypeName" name="basicDataTypeName" 
-							value="${basicDataType.name }" readonly="true">
+						<input id="basicDataTypeName" name="basicDataTypeName"
+							value="" th:value="${typeInfo?.name?:''}" readonly="true">
 					</td>
 				</tr>
 				<tr>
@@ -446,7 +444,7 @@ function enableFun(id,name){
 			</table>
 		</form>
 	</div>
-	<div data-options="region:'center',border:false,title:'${basicDataType.name }列表'">
+	<div data-options="region:'center',border:false" th:title="${typeInfo?.name ?:'' + '列表'}">
 		<table id="grid"></table>
     </div> 
     

@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>uimaker蓝色风格easyui模板</title>
+	<link rel="stylesheet" type="text/css" href="../themes/uimaker/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/uimaker.css">
+    <link rel="stylesheet" type="text/css" href="font/iconfont.css">
+	<script type="text/javascript" src="../jquery.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+    
+    <script>
+		function addTab(title, url){
+			if ($('#tt').tabs('exists', title)){
+				$('#tt').tabs('select', title);
+			} else {
+				var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%;"></iframe>';
+				$('#tt').tabs('add',{
+					title:title,
+					content:content,
+					closable:true
+				});
+			}
+		}
+	</script>
+    
+</head>
+<body class="easyui-layout" style="background:#fff;">
+
+	<div data-options="region:'north',border:false" class="header">
+    	<div class="logo"><img src="images/logo.png"></div>
+        
+        <ul class="nav">
+        <li><a href="#"><i class="iconfont">&#xe617;</i>项目</a></li>
+        <li><a href="mobile/index.html" class="selected"><i class="iconfont">&#xe681;</i>手机</a></li>
+        <li><a href="#"><i class="iconfont">&#xe78e;</i>统计</a></li>
+        <li><a href="#"><i class="iconfont">&#xe605;</i>设置</a></li>
+        <li><a href="#"><i class="iconfont">&#xe61b;</i>更新</a></li>
+        </ul>
+        
+        <div class="topright">
+            <ul class="toptool">
+            <li><a href="#"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
+            <li><a href="#"><i class="iconfont">&#xe60c;</i></a><em class="gcolor">5</em></li>
+            <li><a href="#"><i class="iconfont">&#xe61a;</i></a></li>
+            <li><span class="userface"><i class="iconfont">&#xe60d;</i></span><a href="#"><font>Admin&nbsp;&nbsp;<i class="iconfont userdown">&#xe618;</i></font></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+	<div data-options="region:'west',split:true,border:false,title:'管理菜单',iconCls:'icon-yingyong-copy'" class="left">
+    	
+    	<div class="easyui-accordion"  data-options="border:false" style="width:100%; height:750px;">
+        
+		<div title="组件" data-options="iconCls:'icon-Components'" style="overflow:auto;">
+        	<ul class="easyui-tree">
+				<li>
+					<span>Easyui</span>
+					<ul>  
+						<li>
+							<span>基础</span>
+							<ul>
+								<li><a href="#" onclick="addTab('可放置','droppable.html')">可放置</a></li>
+                                <li><a href="#" onclick="addTab('可拖动','draggable.html')">可拖动</a></li>
+                                <li><a href="#" onclick="addTab('可调整大小','resizable.html')">可调整大小</a></li>
+                                <li><a href="#" onclick="addTab('分页','pagination.html')">分页</a></li>
+                                <li><a href="#" onclick="addTab('搜索框','searchbox.html')">搜索框</a></li>
+                                <li><a href="#" onclick="addTab('进度条','progressbar.html')">进度条</a></li>
+                                <li><a href="#" onclick="addTab('提示框','tooltip.html')">提示框</a></li>
+							</ul>
+						</li>
+						<li style=" display:none">
+							<span>布局</span>
+							<ul>
+								<li><a href="#" onclick="addTab('面板','panel.html')">面板</a></li>
+                                <li><a href="#" onclick="addTab('选项卡','tabs.html')">选项卡</a></li>
+                                <li><a href="#" onclick="addTab('折叠面板','accordion.html')">折叠面板</a></li>
+                                <li><a href="#" onclick="addTab('布局','layout.html')">布局</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+        
+		</div>
+        
+		<div title="表单" data-options="iconCls:'icon-biaodan'" style=" overflow:auto;">
+        	<ul class="easyui-tree">
+				<li><a href="#" onclick="addTab('表单','form.html')">表单</a></li>
+                <li><a href="#" onclick="addTab('验证框','validatebox.html')">验证框</a></li>
+                <li><a href="#" onclick="addTab('文本框','textbox.html')">文本框</a></li>
+                <li><a href="#" onclick="addTab('密码框','passwordbox.html')">密码框</a></li>
+                <li><a href="#" onclick="addTab('格式框','maskedbox.html')">格式框</a></li>
+                <li><a href="#" onclick="addTab('组合','combo.html')">组合</a></li>
+                <li><a href="#" onclick="addTab('组合框','combobox.html')">组合框</a></li>
+                <li><a href="#" onclick="addTab('组合树','combotree.html')">组合树</a></li>
+                <li><a href="#" onclick="addTab('组合网格','combogrid.html')">组合网格</a></li>
+                <li><a href="#" onclick="addTab('组合树网格','combotreegrid.html')">组合树网格</a></li>
+                <li><a href="#" onclick="addTab('标签框','tagbox.html')">标签框</a></li>
+                <li><a href="#" onclick="addTab('数字框','numberbox.html')">数字框</a></li>
+                <li><a href="#" onclick="addTab('日期框','datebox.html')">日期框</a></li>
+                <li><a href="#" onclick="addTab('日期时间框','datetimebox.html')">日期时间框</a></li>
+                <li><a href="#" onclick="addTab('日期时间微调','datetimespinner.html')">日期时间微调</a></li>
+                <li><a href="#" onclick="addTab('日历','calendar.html')">日历</a></li>
+                <li><a href="#" onclick="addTab('数值微调','numberspinner.html')">数值微调</a></li>
+                <li><a href="#" onclick="addTab('时间微调','timespinner.html')">时间微调</a></li>
+                <li><a href="#" onclick="addTab('滑块','slider.html')">滑块</a></li>
+                <li><a href="#" onclick="addTab('文件框','filebox.html')">文件框</a></li>
+                <li><a href="#" onclick="addTab('复选框','checkbox.html')">复选框</a></li>
+                <li><a href="#" onclick="addTab('单选框','radiobutton.html')">单选框</a></li>
+			</ul>
+		</div>
+        
+		<div title="常用控件" data-options="iconCls:'icon-zujian-'" style="overflow:auto;">
+        	<ul class="easyui-tree">
+            	<li>
+                    <span>菜单按钮</span>
+                    <ul>
+                    <li><a href="#" onclick="addTab('菜单','menu.html')">菜单</a></li>
+                    <li><a href="#" onclick="addTab('侧边菜单','sidemenu.html')">侧边菜单</a></li>
+                    <li><a href="#" onclick="addTab('按钮','linkbutton.html')">按钮</a></li>
+                    <li><a href="#" onclick="addTab('菜单按钮','menubutton.html')">菜单按钮</a></li>
+                    <li><a href="#" onclick="addTab('分割按钮','splitbutton.html')">分割按钮</a></li>
+                    <li><a href="#" onclick="addTab('开关按钮','switchbutton.html')">开关按钮</a></li>
+                    </ul>
+                </li>
+                
+                <li>
+                    <span>窗口</span>
+                    <ul>
+                    <li><a href="#" onclick="addTab('窗口','window.html')">窗口</a></li>
+                    <li><a href="#" onclick="addTab('对话框','dialog.html')">对话框</a></li>
+                    <li><a href="#" onclick="addTab('消息提示','messager.html')">消息提示</a></li>
+                    </ul>	
+                </li>                
+			</ul>		
+		</div>
+                
+        <div title="网格和树" data-options="iconCls:'icon-zujian-shu'" style="overflow:auto;">
+        	<ul class="easyui-tree">
+				<li><a href="#" onclick="addTab('数据网格','datagrid.html')">数据网格</a></li>
+                <li><a href="#" onclick="addTab('数据列表','datalist.html')">数据列表</a></li>
+                <li><a href="#" onclick="addTab('属性网格','propertygrid.html')">属性网格</a></li>
+                <li><a href="#" onclick="addTab('树','tree.html')">树</a></li>
+                <li><a href="#" onclick="addTab('树形网格','treegrid.html')">树形网格</a></li>
+			</ul>		
+		</div>
+        
+        <div title="应用" data-options="iconCls:'icon-bianji'" style="overflow:auto;">
+        	<ul class="easyui-tree">
+                <li><a href="#" onclick="addTab('图标','icon.html')">图标</a></li>
+                <li><a href="#" onclick="addTab('404页','404.html')">404页</a></li>
+			</ul>		
+		</div>
+        
+        
+		</div>
+    
+    </div>
+    
+    
+	<div data-options="region:'south',border:false"  class="footer">
+    	<span class="fleft"><i class="iconfont">&#xe622;</i>easyui蓝色风格模板</span>
+        <span class="fright">重庆添馨网络科技有限公司版权所有<i class="iconfont">&#xe620;</i></span>
+    </div>
+    
+    
+	<div data-options="region:'center',border:false" class="center">
+    
+    	<div id="tt" class="easyui-tabs"  data-options="fit:true,border:false" >
+		<div title="首页"><iframe src="default.html" id="iframe" name="right" width="100%" height="100%" frameborder="0" scrolling="auto"></iframe></div>
+                
+	</div>
+    
+    </div>    
+   
+    
+</body>
+
+</html>

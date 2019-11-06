@@ -57,6 +57,30 @@ function deselect(){
 		treegrid.treegrid('load',{catalog: 'operator_workbench_catalog'});
 	}
 }
+function reload(){
+	DialogUtils.confirm("确认提醒" , 
+    	$.formatString("是否确认重新加载菜单配置?") , 
+    	function(data){
+	    	if(data){
+	    		DialogUtils.progress({
+	    	        text : '数据提交中，请等待....'
+	    		});
+	    		//如果确认删除指定的DataDict
+	    		$.post(
+	    				_contextPath + 'menu/reload',
+			    		function(data){
+			    			DialogUtils.progress('close');
+			    			if(data){
+			    				DialogUtils.tip("重新加载菜单成功");
+			    			}else{
+			    				var errorMessage = $.formatString("重新加载菜单失败.");
+			    				DialogUtils.alert("错误提示",errorMessage,"error");
+			    			}
+			    			queryFun();
+			    });
+	    	}
+    });
+}
 $(document).ready(function() {
 	//配置属性组树
 	catalogTree = $('#catalog_tree').tree({
@@ -198,14 +222,12 @@ $(document).ready(function() {
 		}
 	});
 });
-
 function editFun(){
 	DialogUtils.alert("提醒","暂不支持菜单编辑.","warning");
 }
 function deleteFun(){
 	DialogUtils.alert("提醒","暂不支持菜单删除.");
 }
-
 function redo() {
 	var node = treegrid.treegrid('getSelected');
 	if (node) {
@@ -246,6 +268,8 @@ var _contextPath = /*[[@{/}]]*/'';
 			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
 			<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" 
 				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+			<a onclick="reload();" href="javascript:void(0);" 
+				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">重新加载配置</a>
 		</div>
 	</div>
 </body>

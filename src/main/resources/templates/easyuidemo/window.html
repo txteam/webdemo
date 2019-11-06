@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>form</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- echarts -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
+</head>
+<body>
+    <div class="pagebox">
+    
+    <div class="titlename">window</div>
+    
+        
+        
+        <div class="cbox">
+        		
+                <a href="javascript:void(0)" class="easyui-linkbutton c1" onclick="$('#w').window('open')">打开</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#w').window('close')">关闭</a>
+            	
+                <div class="easyui-panel" style="padding:15px;width:100%;margin-top:20px;position:relative;height:300px;overflow:auto;">
+                
+                	<div id="w" class="easyui-window" data-options="title:'window窗口',inline:true" style="width:400px;height:230px;padding:10px;color:#536383;">
+					这里显示您的内容
+					</div>
+                
+                </div>            
+            
+        </div>
+        
+        
+        <div class="cbox">
+        	
+            <div class="easyui-panel" style="padding:15px;width:100%;margin-top:20px;position:relative;height:350px;overflow:auto;">
+            
+            	
+                <div class="easyui-window" title="默认" data-options="width:300,height:150,left:10,top:10,inline:true">
+                <p class="w-content">这里显示内容</p>
+                </div>
+                <div class="easyui-window" title="蓝色" data-options="width:300,height:150,left:320,top:10,inline:true,cls:'c1'">
+                    <p class="w-content">这里显示内容</p>
+                </div>
+                <div class="easyui-window" title="红色" data-options="width:300,height:150,left:630,top:10,inline:true,cls:'c2'">
+                    <p class="w-content">这里显示内容</p>
+                </div>
+                <div class="easyui-window" title="紫色" data-options="width:300,height:150,left:10,top:180,inline:true,border:'thin',cls:'c3'">
+                    <p class="w-content">这里显示内容</p>
+                </div>
+                <div class="easyui-window" title="绿色" data-options="width:300,height:150,left:320,top:180,inline:true,border:'thin',cls:'c4'">
+                    <p class="w-content">这里显示内容</p>
+                </div>
+                <div class="easyui-window" title="翠绿" data-options="width:300,height:150,left:630,top:180,inline:true,border:'thin',cls:'c5'">
+                    <p class="w-content">这里显示内容</p>
+                </div>
+            	
+            
+            </div>        	
+        
+        </div>
+        
+        
+    </div>
+    
+    <script type="text/javascript">
+		$('.easyui-window').window({
+			collapsible: true,
+			minimizable: true,
+			maximizable: true,
+			closable: true
+		});
+	</script>
+	<style type="text/css" scoped>
+		.w-content{
+			padding:5px 10px;
+			color:#536383;
+		}
+	</style>
+    
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>无标题文档</title>
+    <link rel="stylesheet" type="text/css" href="../themes/uimaker/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/uimaker.css">   
+    <link rel="stylesheet" type="text/css" href="font/iconfont.css"> 
+	<script type="text/javascript" src="../jquery.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+</head>
+
+<body style="background:#fff;">
+
+	
+    <div class="pagebox">
+    
+    <div class="titlename">treegrid</div>
+    
+                
+        <div class="cbox">
+        
+        	<table title="文件管理器" class="easyui-treegrid" style="width:100%;height:350px"
+			data-options="
+				url: 'data/treegrid_data1.json',
+				method: 'get',
+				rownumbers: true,
+				idField: 'id',
+				treeField: 'name'
+                ">
+            <thead>
+                <tr>
+                    <th data-options="field:'name'" width="500">文件名</th>
+                    <th data-options="field:'size'" width="100" align="right">大小</th>
+                    <th data-options="field:'date'" width="150">修改日期</th>
+                </tr>
+            </thead>
+       		</table>
+                                       
+            
+        </div>
+        
+        
+        <div class="cbox">
+        
+        		<table id="tg" class="easyui-treegrid" title="树形网格" style="width:100%;height:250px"
+                data-options="
+                    iconCls: 'icon-xiangmu',
+                    rownumbers: true,
+                    animate: true,
+                    collapsible: true,
+                    fitColumns: true,
+                    url: 'data/treegrid_data2.json',
+                    method: 'get',
+                    idField: 'id',
+                    treeField: 'name'
+                    ">
+                <thead>
+                <tr>
+                    <th data-options="field:'name',width:180">名称</th>
+                    <th data-options="field:'persons',width:60,align:'right'">数量</th>
+                    <th data-options="field:'begin',width:80">开始日期</th>
+                    <th data-options="field:'end',width:80">结束日期</th>
+                    <th data-options="field:'progress',width:120,formatter:formatProgress">进度</th>
+                </tr>
+                </thead>
+            	</table>   
+                <script type="text/javascript">
+		function formatProgress(value){
+	    	if (value){
+		    	var s = '<div style="width:100%;background:#e3e6e8">' +
+		    			'<div style="width:' + value + '%;background:#0076c8;color:#fff">' + value + '%' + '</div>'
+		    			'</div>';
+		    	return s;
+	    	} else {
+		    	return '';
+	    	}
+		}
+		
+	</script>      
+        
+        </div>
+        
+        
+        
+    </div>
+    
+
+</body>
+</html>
