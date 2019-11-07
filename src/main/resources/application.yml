@@ -1,4 +1,4 @@
-debug: true
+debug: false
 
 #server
 server:
@@ -147,7 +147,9 @@ spring:
       # connection-properties: 'druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000'
   jackson:
     time-zone: GMT+8
-    date-format: yyyy-MM-dd HH:mm:ss.SSS
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZ
+    serialization:
+      write-dates-as-timestamps: true
   thymeleaf:
     #开发时关闭缓存,不然没法看到实时页面
     cache: ${thymeleaf.cache}

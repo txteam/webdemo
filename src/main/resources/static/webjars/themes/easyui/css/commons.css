@@ -35,8 +35,8 @@ select[disabled]{border: 1px solid #A0C2E5;background-color: #efefef;}
 .form input.n-invalid {border: 1px solid #f00;}
 .form .n-invalid {border: 1px solid #f00;}
 .form .n-right{vertical-align: top;}
-.form input {border: 1px solid #A0C2E5;color: #44474C;background: #fff;font-size: 12px;height: 20px;line-height: 20px;width:80%;padding: 0 2px;vertical-align: middle;}
-.form select{border: 1px solid #A0C2E5;color: #44474C;background: #fff;font-size: 12px;height: 22px;line-height: 22px;width:80%;padding: 0 0px;vertical-align: middle;}
+.form input {border: 1px solid #A0C2E5;color: #44474C;background: #fff;font-size: 12px;height: 20px;line-height: 20px;width: 133px;padding: 0 2px;vertical-align: middle;}
+.form select{border: 1px solid #A0C2E5;color: #44474C;background: #fff;font-size: 12px;height: 22px;line-height: 22px;width: 139px;width: 133px\9; padding: 0 0px;vertical-align: middle;}
 .form textarea {border: 1px solid #A0C2E5;background: #FFF;vertical-align: middle;padding: 2px;overflow: auto;}
 .form input[type="radio"],.form input[type="checkbox"] {vertical-align: middle;width: 16px;}
 .form input.date [readonly]{border: 1px solid #A0C2E5;background-color: #fff;}
@@ -44,10 +44,6 @@ select[disabled]{border: 1px solid #A0C2E5;background-color: #efefef;}
 .form input[disabled]{border: 1px solid #A0C2E5;background-color: #efefef;}
 .form select[disabled]{border: 1px solid #A0C2E5;background-color: #efefef;}
 .form select[readonly]{border: 1px solid #A0C2E5;background-color: #efefef;}
-
-.form .common_table input {border: 1px solid #A0C2E5;color: #44474C;background: #fff;font-size: 12px;height: 20px;line-height: 20px;width: 139px;width: 133px\9;padding: 0 2px;vertical-align: middle;}
-.form .common_table input.n-invalid {border: 1px solid #f00;}
-.form .common_table select {vertical-align: middle;width:139px;width:133px\9;height: 22px;	line-height: 22px;border: 1px solid #A0C2E5;background: #fff;}
 
 /* list-table */
 .list-table {}
@@ -57,6 +53,21 @@ select[disabled]{border: 1px solid #A0C2E5;background-color: #efefef;}
 .list-table table th {height: 24px;}
 .list-table a {text-decoration: underline;}
 .list-table .operRow {width: 100%;text-align: right;line-height: 26px;border-top: none;}
+
+.selectInput {
+	background: url('../../../style/css/images/extjs_icons/attach.png') no-repeat
+		center right;
+	border: 1px solid #A0C2E5;
+	color: #44474C;
+	font-size: 12px;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 2px;
+	vertical-align: middle;
+}
+.clearInput {
+	background: url('../../../style/css/images/clear.png') no-repeat center center;
+}
 
 /*color.css*/
 .c1,.c1:hover,.c1>.panel-header{
@@ -292,8 +303,11 @@ a.c8:hover{
     color: #0076c8;
     padding-bottom: 20px;
 }
-.pagebox {
-    padding: 10px;
+.pagebox body{
+	padding: 5px;
+}
+.pagebox{
+    padding: 1px;
 }
 .cbox {
     padding-bottom: 15px;
@@ -315,4 +329,42 @@ a.c8:hover{
     font-size: 38px;
     padding-left: 280px;
     padding-top: 80px;
+}
+.ddiv {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.cboxdd dd {
+    float: left;
+    width: 33.33%;
+}
+.textlist {
+    padding: 8px;
+}
+.textlist li {
+    line-height: 30px;
+    height: 30px;
+    *line-height: 29px;
+    *height: 29px;
+    width: 100%;
+}
+.textlist li a {
+    display: block;
+    float: left;
+    font-size: 12px;
+    color: #000;
+}
+.fspan {
+    float: left;
+    display: block;
+    width: 80px;
+    margin-right: 5px;
+    color: #536383;
+    font-size: 14px;
+}
+.fi {
+    padding-right: 8px;
+    padding-left: 5px;
+    color: #536383;
+    font-style: normal;
 }

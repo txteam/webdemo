@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.tx.component.basicdata.service.AbstractBasicDataService;
 import com.tx.core.exceptions.util.AssertUtils;
@@ -43,9 +42,6 @@ public class DistrictService extends AbstractBasicDataService<District> {
     
     @Resource(name = "districtDao")
     private DistrictDao districtDao;
-    
-    @Resource(name = "transactionTemplate")
-    private TransactionTemplate transactionTemplate;
     
     /**
      * 将district实例插入数据库中保存
@@ -182,6 +178,22 @@ public class DistrictService extends AbstractBasicDataService<District> {
     }
     
     /**
+     * @param valid
+     * @param querier
+     * @return
+     */
+    @Override
+    public List<District> queryList(Boolean valid, Querier querier) {
+        querier = querier == null ? new Querier() : querier;
+        querier.getParams().put("valid", valid);
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        List<District> resList = this.districtDao.queryList(querier);
+        
+        return resList;
+    }
+    
+    /**
      * 分页查询District实体列表
      * <功能详细描述>
      *
@@ -211,6 +223,26 @@ public class DistrictService extends AbstractBasicDataService<District> {
     }
     
     /**
+     * @param valid
+     * @param querier
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedList<District> queryPagedList(Boolean valid, Querier querier,
+            int pageIndex, int pageSize) {
+        querier = querier == null ? new Querier() : querier;
+        querier.getParams().put("valid", valid);
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        PagedList<District> resPagedList = this.districtDao
+                .queryPagedList(querier, pageIndex, pageSize);
+        
+        return resPagedList;
+    }
+    
+    /**
      * 判断是否已经存在<br/>
      * <功能详细描述>
      *
@@ -228,6 +260,24 @@ public class DistrictService extends AbstractBasicDataService<District> {
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.districtDao.count(params);
+        
+        return res > 0;
+    }
+    
+    /**
+     * @param querier
+     * @param excludeId
+     * @return
+     */
+    @Override
+    public boolean exists(Querier querier, String excludeId) {
+        AssertUtils.notNull(querier, "querier is empty");
+        
+        //设置查询条件
+        querier.getParams().put("excludeId", excludeId);
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        int res = this.districtDao.count(querier);
         
         return res > 0;
     }
@@ -342,51 +392,5 @@ public class DistrictService extends AbstractBasicDataService<District> {
         this.districtDao.update(params);
         return true;
     }
-    
-    public District findNotNullDistrictByIds(String cityId, String countyId) {
-        District district = findById(countyId);
-        district = district == null ? findById(cityId) : district;
-        
-        return district;
-        
-    }
-
-    /**
-     * @param querier
-     * @param excludeId
-     * @return
-     */
-    @Override
-    public boolean exists(Querier querier, String excludeId) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    /**
-     * @param valid
-     * @param querier
-     * @return
-     */
-    @Override
-    public List<District> queryList(Boolean valid, Querier querier) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * @param valid
-     * @param querier
-     * @param pageIndex
-     * @param pageSize
-     * @return
-     */
-    @Override
-    public PagedList<District> queryPagedList(Boolean valid, Querier querier,
-            int pageIndex, int pageSize) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
     
 }

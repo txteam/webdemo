@@ -12,8 +12,8 @@
 	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
-	<!-- themes -->
-	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
 	
 	<!-- jquery -->
@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/';
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
 	/*]]>*/
 	</script>
 </block>
@@ -109,7 +109,7 @@ $(document).ready(function() {
 	treegrid = $('#treegrid').treegrid({
 		url : _contextPath + 'menu/queryList',
 		queryParams: {
-			catalog: 'operator_workbench_catalog'
+			//catalog: 'operator_workbench_catalog'
 		},
 		idField : 'id',
 		treeField : 'text',
@@ -158,49 +158,16 @@ $(document).ready(function() {
 				}else{
 					return '否';
 				}
-			},
-			hidden : true
+			}
 		}, {
-			field : 'visibal',
-			title : '是否可见',
-			width : 100,
-			formatter : function(value, row, index){
-				if(value){
-					return '是';
-				}else{
-					return '否';
-				}
-			}
-		},{
-			field : 'refresh',
-			title : '选中刷新',
-			width : 100,
-			formatter : function(value, row, index){
-				if(value){
-					return '是';
-				}else{
-					return '否';
-				}
-			}
-		},{
-			field : 'openNewEveryTime',
-			title : '存在是否新打开',
-			width : 120,
-			formatter : function(value, row, index){
-				if(value){
-					return '是';
-				}else{
-					return '否';
-				}
-			},
-			hidden : true
-		},{
-			field : 'eventType',
-			title : '事件类型',
-			width : 80,
-			hidden : true
-		},
-		{
+			field : 'auths',
+			title : '权限',
+			width : 100
+		}, {
+			field : 'roles',
+			title : '角色',
+			width : 100
+		}, {
 			field : 'remark',
 			title : '备注',
 			width : 200,
@@ -249,27 +216,29 @@ var _contextPath = /*[[@{/}]]*/'';
 /*]]>*/
 </script>
 </head>
-<body class="easyui-layout">
-	<!-- 配置属性组 -->
-	<div data-options="region:'west',title:'菜单分类',split:true,
-		tools:[
-			{iconCls: 'clear',handler: function() {deselect();} } ,
-			{iconCls: 'database_refresh',handler: function() {refreshTree();} }
-		]"
-		style="width:230px;overflow:auto;">
-		<ul id="catalog_tree"></ul>
-	</div>
-	<!-- 配置属性 -->
-	<div data-options="region:'center',border:false" style="overflow:auto;">
-		<table id="treegrid"></table>
-		
-		<div id="toolbar" style="display: none;">
-			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
-			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
-			<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" 
-				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
-			<a onclick="reload();" href="javascript:void(0);" 
-				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">重新加载配置</a>
+<body>
+	<div class="easyui-layout" data-options="fit:true">
+		<!-- 配置属性组 -->
+		<div data-options="region:'west',title:'菜单分类',split:true,
+			tools:[
+				{iconCls: 'clear',handler: function() {deselect();} } ,
+				{iconCls: 'database_refresh',handler: function() {refreshTree();} }
+			]"
+			style="width:230px;overflow:auto;">
+			<ul id="catalog_tree"></ul>
+		</div>
+		<!-- 配置属性 -->
+		<div data-options="region:'center',border:false" style="overflow:auto;">
+			<table id="treegrid"></table>
+			
+			<div id="toolbar" style="display: none;">
+				<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
+				<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
+				<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" 
+					class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+				<a onclick="reload();" href="javascript:void(0);" 
+					class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">重新加载配置</a>
+			</div>
 		</div>
 	</div>
 </body>

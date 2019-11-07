@@ -8,6 +8,7 @@ package com.tx.local.blacklist.model;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.AbstractDataDict;
+import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 
 /**
  * 黑名单来源<br/>
@@ -18,7 +19,7 @@ import com.tx.component.basicdata.model.AbstractDataDict;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@BasicDataEntity(name = "黑名单来源")
+@BasicDataEntity(name = "黑名单来源", viewType = BasicDataViewTypeEnum.LIST)
 public class BlackListSource extends AbstractDataDict {
     
     /** 注释内容 */

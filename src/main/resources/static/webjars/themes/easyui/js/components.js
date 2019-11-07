@@ -108,16 +108,16 @@ $.widget("txcomponent.selectDistrict",{
     }
 });
 //控件：选择虚中心
-$.widget("txcomponent.chooseVirtualCenter",{
+$.widget("txcomponent.selectVirtualCenter",{
 	options: {
-		eventName : "chooseVirtualCenter",
+		eventName : "selectVirtualCenter",
 		contextPath : "",
 		title : "请选择虚中心",
 		width : 600,
 		height : 500,
 		openDialogHandler : window.parent.DialogUtils,
 		clearHandler: null,
-		chooseHandler: null,
+		selectHandler: null,
 		authKey: null,
         handler : null
 	},
@@ -125,7 +125,7 @@ $.widget("txcomponent.chooseVirtualCenter",{
 		var _this = this;
 		var _element = _this.element;
 		var _option = _this.options;
-		var action = _option.contextPath + '/virtualCenter/toChooseVirtualCenter.action?eventName='+_option.eventName+'&authKey='+_option.authKey;
+		var action = _option.contextPath + 'virtualCenter/toSelect?eventName='+_option.eventName;
 		if(_option.clearHandler && $.isFunction(_option.clearHandler)){
 			var $clear = $('<span class="icon_span clear"></span>')
 			$(_element).after($clear);
@@ -134,7 +134,7 @@ $.widget("txcomponent.chooseVirtualCenter",{
 			});
 		}
 		$(_element).click(function(){
-			var dialog_ = _option.openDialogHandler.openModalDialog("component_dialog_chooseVirtualCenter",
+			var dialog_ = _option.openDialogHandler.openModalDialog("selectVirtualCenter",
 					_option.title,
 					action,
 					_option.width,
@@ -148,16 +148,16 @@ $.widget("txcomponent.chooseVirtualCenter",{
 						    if(_option.handler){
                                 _option.handler.call(_option.handler,_option._choosedData);
                             }
-							_option.openDialogHandler.closeDialogById("component_dialog_chooseVirtualCenter");
+							_option.openDialogHandler.closeDialogById("selectVirtualCenter");
 						}
 					}]);
 			return false;
 		});
 		//绑定响应选中事件
-		$.bindge("choose_virtualCenter_" + _option.eventName,function(event,virtualCenter){
+		$.bindge("select_virtualCenter_" + _option.eventName,function(event,virtualCenter){
 		    _option._choosedData = virtualCenter;
-            if (_option.chooseHandler) {
-                _option.chooseHandler.call(_option.chooseHandler, virtualCenter);
+            if (_option.selectHandler) {
+                _option.selectHandler.call(_option.selectHandler, virtualCenter);
             }
 		});
 	},
@@ -172,28 +172,8 @@ $.widget("txcomponent.chooseVirtualCenter",{
     	$.Widget.prototype.destroy.call(this);
     }
 });
-$.widget("txcomponent.selectVirtualCenter",{
-	options: {
-		eventName : "chooseVirtualCenter",
-		contextPath : "",
-		authKey: null
-	},
-	_create: function(){
-		var _this = this;
-		var _element = _this.element;
-		var _option = _this.options;
-	},
-    destroy : function(){
-    	var _this = this;
-		var _element = _this.element;
-		var _option = _this.options;
-		
-    	$(_element).unbind("click");
-    	$.unbindge("choose_virtualCenter_" + _option.eventName);
-    	
-    	$.Widget.prototype.destroy.call(this);
-    }
-});
+
+
 
 //控件：选择财务科目
 $.widget("txcomponent.chooseAccountTitle",{

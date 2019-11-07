@@ -9,36 +9,33 @@
 <block th:replace="fragments/easyui_header::common_replace">
 	<!-- css -->
 	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
-	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
-	<!-- customize -->
 	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
-	<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
 	
 	<!-- jquery -->
 	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
 	<!-- jqueryui -->
 	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
 	<!-- easyui -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
 	<!-- other -->
 	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
 	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
 	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
 	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
 	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
-	<!-- echarts -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
 	<!-- customize -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
-	<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'';
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
 	/*]]>*/
 	</script>
 </block>
@@ -49,14 +46,15 @@
 var grid = null;
 var idFieldName = 'id';
 var nameFieldName = 'name';
-var entityName = /*[[${typeInfo?.name?:''}]]*/''; 
+var entityName = /*[[${typeInfo?.name?:''}]]*/'';
+var entityType = /*[[${typeInfo?.type?:''}]]*/'';
 $(document).ready(function(){
 	var  $editALink = $("#editALink");
 	var  $enableALink = $("#enableALink");
 	var  $disableALink = $("#disableALink");
 	var  $deleteALink = $("#deleteALink");
 	grid = $('#grid').datagrid({
-		url : /*[[@{/basicdata/queryList(type=${typeInfo.type})}]]*/_contextPath + '/basicdata/queryList?type=xx',
+		url : /*[[@{/basicdata/queryList(type=${typeInfo?.type?:''})}]]*/_contextPath + 'basicdata/queryList?type=xx',
 		fit : true,
 		fitColumns : true,
 		border : false,
@@ -156,7 +154,6 @@ $(document).ready(function(){
 	   			return text;
 			}
 		}
-		/*[+
 		,{
 			field : 'action',
 			title : '操作',
@@ -164,32 +161,29 @@ $(document).ready(function(){
 			formatter : function(value, row, index) {
 				var str = '&nbsp;';
 				if(row.modifyAble && !row.valid){
-					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row[idFieldName], row[nameFieldName], _contextPath + 'webjars/css/images/extjs_icons/control/control_play_blue.png');
 					str += '&nbsp;';
 				}
 				if(row.modifyAble){
-					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil.png');
+					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row[idFieldName], row[nameFieldName], _contextPath + 'webjars/css/images/extjs_icons/pencil.png');
 					str += '&nbsp;';
 				}
 				
 				if(row.modifyAble){
-					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil_delete.png');
+					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row[idFieldName], row[nameFieldName], _contextPath + 'webjars/css/images/extjs_icons/pencil_delete.png');
 					str += '&nbsp;';
 				}
 				if(row.modifyAble && row.valid){
-					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row[idFieldName], row[nameFieldName], _contextPath + 'webjars/css/images/extjs_icons/control/control_stop_blue.png');
 					str += '&nbsp;';
 				}
 				return str;
 			}
 		}
-		+]*/
 		] ],
 		toolbar : '#toolbar',
 		onDblClickRow : function(index, row){
-			if($.canUpdate){
-				editFun(row[idFieldName], row[nameFieldName]);
-			}
+			editFun(row[idFieldName], row[nameFieldName]);
 		},
 		onClickRow : function(index, row){
 			if(row.modifyAble){
@@ -222,6 +216,7 @@ $(document).ready(function(){
 			
 			$enableALink.show();
 			$disableALink.show();
+			$editALink.linkbutton('disable');
 			$deleteALink.linkbutton('disable');
 			$enableALink.linkbutton('disable');
 			$disableALink.linkbutton('disable');
@@ -239,13 +234,17 @@ function queryFun() {
  * 新增
  */
 function addFun() {
+	if(!entityType){
+		return false;
+	}
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var url = /*[[@{/basicdata/toAdd(type=${typeInfo?.type?:''})}]]*/_contextPath + 'basicdata/toAdd';
 	DialogUtils.openModalDialog(
-		"addBasicData_${basicDataType.code}",
-		"新增${basicDataType.name}",
-		$.formatString("${contextPath}/basicData/toAdd.action?basicDataTypeCode=${basicDataType.code}"),
+		"addBasicData",
+		"新增" + entityName,
+		url,
 		450,220,function(){
 			grid.datagrid('load',$('#queryForm').serializeObject());
 	});
@@ -255,6 +254,9 @@ function addFun() {
  * 编辑
  */
 function editFun(id,name) {
+	if(!entityType){
+		return false;
+	}
 	if (id == undefined) {
 		var rows = grid.datagrid('getSelections');
 		id = rows[0][idFieldName];
@@ -267,10 +269,12 @@ function editFun(id,name) {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var url = /*[[@{/basicdata/toUpdate(type=${typeInfo?.type?:''})}]]*/_contextPath + 'basicdata/toUpdate';
+	url = url + "&id=" + id;
 	DialogUtils.openModalDialog(
-		"updateBasicData_${basicDataType.code}",
-		"编辑${basicDataType.name}" + ":" + name,
-		$.formatString("${contextPath}/basicData/toUpdate.action?basicDataTypeCode=${basicDataType.code}&id={0}",id),
+		"updateBasicData",
+		"编辑" + entityName + ":" + name,
+		url,
 		450,220,function(){
 			queryFun();
 	});
@@ -299,8 +303,8 @@ function deleteFun(id,name) {
 	    		});
 	    		//如果确认删除指定的DataDict
 	    		$.post(
-			    		'${contextPath}/basicData/deleteById.action',
-			    		{id:id,basicDataTypeCode:'${basicDataType.code}'},
+	    				/*[[@{/basicdata/deleteById}]]*/_contextPath + 'basicdata/deleteById',
+			    		{id:id,type:entityType},
 			    		function(data){
 			    			DialogUtils.progress('close');
 			    			if(data){
@@ -340,8 +344,8 @@ function disableFun(id,name){
     		});
     		//如果确认禁用指定DataDict
     		$.post(
-		    		'${contextPath}/basicData/disableById.action',
-		    		{id:id,basicDataTypeCode:'${basicDataType.code}'},
+    				/*[[@{/basicdata/disableById}]]*/_contextPath + 'basicdata/disableById',
+		    		{id:id,type:entityType},
 		    		function(data){
 			    			DialogUtils.progress('close');
 			    			if(data){
@@ -380,8 +384,8 @@ function enableFun(id,name){
     		});
     		//如果确认启用指定DataDict
     		$.post(
-		    		'${contextPath}/basicData/enableById.action',
-		    		{id:id,basicDataTypeCode:'${basicDataType.code}'},
+    				/*[[@{/basicdata/enableById}]]*/_contextPath + 'basicdata/enableById',
+		    		{id:id,type:entityType},
 		    		function(data){
 			    			DialogUtils.progress('close');
 			    			if(data){
@@ -406,12 +410,12 @@ function enableFun(id,name){
 		<form id="queryForm" class="form">
 			<table class="table table-hover table-condensed">
 				<tr>
-					<th>编码:</th>
-					<td><input id="code" name="code"/></td>
-					<th>名称:</th>
-					<td><input id="name" name="name"/></td>
-					<th>基础数据类型:</th>
-					<td>
+					<th width="13%">编码:</th>
+					<td width="20%"><input id="code" name="code"/></td>
+					<th width="13%">名称:</th>
+					<td width="20%"><input id="name" name="name"/></td>
+					<th width="13%">基础数据类型:</th>
+					<td width="21%">
 						<input id="basicDataTypeName" name="basicDataTypeName"
 							value="" th:value="${typeInfo?.name?:''}" readonly="true">
 					</td>
@@ -419,7 +423,7 @@ function enableFun(id,name){
 				<tr>
 					<th>是否有效:</th>
 					<td>
-						<select id="valid" name="valid" class="select">
+						<select id="valid" name="valid">
 							<option value="">-- 不限 --</option>
 							<option value="true">是</option>
 							<option value="false">否</option>
@@ -427,7 +431,7 @@ function enableFun(id,name){
 					</td>
 					<th>是否可编辑:</th>
 					<td>
-						<select id="modifyAble" name="modifyAble" class="modifyAble">
+						<select id="modifyAble" name="modifyAble">
 							<option value="">-- 不限 --</option>
 							<option value="true">是</option>
 							<option value="false">否</option>
@@ -449,23 +453,12 @@ function enableFun(id,name){
     </div> 
     
 	<div id="toolbar" style="display: none;">
-	    <c:if test='${authContext.hasAuth("add_dataDict") }'>
-			<a id="addALink" onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
-		</c:if>
-		<c:if test='${authContext.hasAuth("update_dataDict") }'>
-			<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
-		</c:if>
-		<c:if test='${authContext.hasAuth("delete_dataDict") }'>
-			<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
-		</c:if>
-		<c:if test='${authContext.hasAuth("enable_dataDict") }'>
-			<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
-		</c:if>
-		<c:if test='${authContext.hasAuth("disable_dataDict") }'>
-			<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
-		</c:if>
-		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
-			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+	    <a id="addALink" onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+		<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
+		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 	</div>
 </div>
 </body>

@@ -79,15 +79,15 @@ public class BankInfoService extends AbstractBasicDataService<BankInfo> {
     //    }
     
     /**
-      * 预处理别名<br/>
-      * <功能详细描述>
-      * @param aliases
-      * @param name
-      * @return [参数说明]
-      * 
-      * @return String [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
+     * 预处理别名<br/>
+     * <功能详细描述>
+     * @param aliases
+     * @param name
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
      */
     private String handleAliases(String aliases, String name) {
         if (aliases.indexOf(name) >= 0) {

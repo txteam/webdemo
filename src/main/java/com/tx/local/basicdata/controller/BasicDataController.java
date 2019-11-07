@@ -7,6 +7,7 @@
 package com.tx.local.basicdata.controller;
 
 import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -121,7 +122,7 @@ public class BasicDataController implements InitializingBean,
     @RequestMapping("/toQueryBasicDataMain")
     public String toQueryBasicDataMain(ModelMap response) {
         //加载数据类型
-        return "/basicdata/queryBasicDataMain";
+        return "basicdata/queryBasicDataMain";
     }
     
     /**
@@ -200,6 +201,9 @@ public class BasicDataController implements InitializingBean,
         }
         //跳转到查询页
         pageName = getPageName(info, defaultPageType);
+        
+        response.put("typeInfo", info);
+        
         return pageName;
     }
     
@@ -235,9 +239,12 @@ public class BasicDataController implements InitializingBean,
         BasicDataService<?> service = BasicDataContext.getContext()
                 .getBasicDataService(entityClass);
         BasicData bd = service.findById(id);
-        response.put("data", bd);
+        response.put("entity", bd);
         //跳转到查询页
         pageName = getPageName(info, defaultPageType);
+        
+        response.put("typeInfo", info);
+        
         return pageName;
     }
     
@@ -335,6 +342,9 @@ public class BasicDataController implements InitializingBean,
             @RequestParam(value = "type", required = false) String type,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam Map<String, String> params) {
+        if (StringUtils.isEmpty(type)) {
+            return new ArrayList<>();
+        }
         
         Class<T> entityClass = (Class<T>) BasicDataContext.getContext()
                 .getEntityClass(type);
@@ -368,6 +378,9 @@ public class BasicDataController implements InitializingBean,
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam Map<String, String> params) {
+        if (StringUtils.isEmpty(type)) {
+            return new PagedList<>();
+        }
         Class<T> entityClass = (Class<T>) BasicDataContext.getContext()
                 .getEntityClass(type);
         AssertUtils.notNull(entityClass, "entityClass is null. type:{}.", type);

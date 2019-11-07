@@ -61,7 +61,13 @@
 	<Loggers>
 		<!-- spring框架打印日志级别 -->
 		<Logger name="org.springframework" level="ERROR" />
-
+		
+		<!-- com.p6spy.engine.spy.appender.Slf4JLogger -->
+		<Logger name="com.p6spy.engine.spy.appender.Slf4JLogger" level="ERROR" />
+		
+		<!-- springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator -->
+		<Logger name="springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator" level="ERROR" />
+		
 		<!-- springMVC答应日志级别 -->
 		<Logger name="org.springframework.web" level="ERROR" />
 		<Logger name="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" level="ERROR" />

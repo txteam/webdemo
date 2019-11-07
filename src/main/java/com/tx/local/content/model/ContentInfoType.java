@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
+import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 
 /**
  * 类容类型<br/>
@@ -26,7 +27,7 @@ import com.tx.component.basicdata.model.BasicData;
  */
 @Entity
 @Table(name = "ci_content_type")
-@BasicDataEntity(name = "内容信息类型")
+@BasicDataEntity(name = "内容信息类型",viewType = BasicDataViewTypeEnum.LIST)
 public class ContentInfoType implements BasicData {
     
     /** 注释内容 */

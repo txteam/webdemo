@@ -30,20 +30,20 @@
 	
 	<!-- 系统日志 -->
 	<catalog id="log_catalog" type="tab" text="日志菜单">
-		<menu id="system_operate_logs_menu" text="系统操作日志">
+		<menu id="system_operate_log_menus" text="系统操作日志">
 			<menu id="login_log_menu" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList"></menu>
-			<menu id="system_operate_log_menu" text="系统操作日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList"></menu>
+			<menu id="operator_manage_log_menu" text="系统管理日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList"></menu>
 		</menu>
-		<menu id="interface message_logs_menu" text="接口报文日志">
+		<menu id="interface message_log_menus" text="接口报文日志">
 			<menu id="test_log_menu" text="测试接口日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action"></menu>
 		</menu>
 	</catalog>
 	
 	<!-- 系统配置菜单分类 -->
-	<catalog id="config_catalog" auths="config_nav_menu_auth" text="配置菜单">
+	<catalog id="config_catalog" text="配置菜单">
 		<menu id="operator_manage_center_menu" text="用户管理" auths="operator_manage_center_auth" type="tab">
-			<menu id="virtualCenter_manage_menu" text="虚中心管理" auths="virtualCenter_manage_auth" href="/virtualCenter/toQueryList" type="tab"></menu>
-			<menu id="organization_manage_menu" text="组织结构管理" auths="organization_manage_auth" href="/organization/toQueryOrganizationList.action" type="tab"></menu>
+			<menu id="virtualcenter_manage_menu" text="虚中心管理" auths="virtualcenter_manage_auth" href="/virtualCenter/toQueryTreeList" type="tab"></menu>
+			<menu id="organization_manage_menu" text="组织结构管理" auths="organization_manage_auth" href="/organization/toQueryList" type="tab"></menu>
 			<menu id="auth_manage_menu" text="权限管理" auths="auth_manage_auth" href="/auth/toQueryAuthView.action" type="tab"></menu>
 			<menu id="role_manage_menu" text="角色管理" auths="role_manage_auth" href="/role/toQueryRoleList.action" type="tab"></menu>
 			<menu id="post_manage_menu" text="职位管理" auths="post_manage_auth" href="/post/toQueryPostList.action" type="tab"></menu>
@@ -51,12 +51,13 @@
 		</menu>
 		<menu id="basicdata_manage_center_menu" text="基础数据管理" auths="basicdata_manage_center_auth" type="tab" selectRefresh="false">
 			<menu id="datadict_manage_menu" text="数据字典管理" auths="basicdata_manage_auth" href="/basicdata/toQueryBasicDataMain" type="tab"></menu>
-			<menu id="District_manage_menu" text="区域" auths="district_manage_auth" href="/district/toQueryDistrictTreeList" type="tab"></menu>
-			<menu id="BankInfo_manage_menu" text="银行" auths="bankInfo_manage_auth" href="/bankinfo/toQueryBankInfoList" type="tab"></menu>
-			<menu id="clientinfo_basicdata_manage_menu" text="客户信息" auths="clientinfo_basicdata_manage_auth" type="tab">
-				<menu id="ClientSource_manage_menu" text="客户来源" auths="ClientSource_manage_auth" href="/clientSource/toQueryList" type="tab"></menu>
-				<menu id="ClientPromotionChannel_manage_menu" text="推广渠道" auths="ClientPromotionChannel_manage_auth" href="/clientPromotionChannel/toQueryList" type="tab"></menu>
+			<menu id="district_manage_menu" text="区域" auths="district_manage_auth" href="/district/toQueryTreeList" type="tab"></menu>
+			<menu id="bankinfo_manage_menu" text="银行" auths="bankinfo_manage_auth" href="/bankInfo/toQueryList" type="tab"></menu>
+			<menu id="clientinfo_basicdata_manage_menu" text="客户信息基础数据" auths="clientinfo_basicdata_manage_auth" type="tab">
+				<menu id="clientsource_manage_menu" text="客户来源" auths="clientsource_manage_auth" href="/clientSource/toQueryList" type="tab"></menu>
+				<menu id="clientpromotionchannel_manage_menu" text="推广渠道" auths="clientpromotionchannel_manage_auth" href="/clientPromotionChannel/toQueryList" type="tab"></menu>
 			</menu>
+			<menu id="blacklistsource_manage_menu" text="黑名单来源" auths="blacklistsource_manage_auth" href="/basicdata/toQuery?type=BlackListSource" type="tab"></menu>
 		</menu>
 		<menu id="system_config_manage_menu" text="系统配置" auths="system_config_manage_auth" type="tab">
 			<menu id="menu_manage_menu" text="菜单管理" auths="menu_manage_auth" href="/menu/toQueryMenuTreeList"/>
@@ -119,6 +120,25 @@
 			<menu id="form_demo_menu" text="表单" href="/easyui/demo/form" />
 			<menu id="validatebox_demo_menu" text="验证框" href="/easyui/demo/validatebox" />
 			<menu id="textbox_demo_menu" text="文本框" href="/easyui/demo/textbox" />
+			<menu id="passwordbox_demo_menu" text="密码框" href="/easyui/demo/passwordbox" />
+			<menu id="maskedbox_demo_menu" text="格式框" href="/easyui/demo/maskedbox" />
+			<menu id="combo_demo_menu" text="组合" href="/easyui/demo/combo" />
+			<menu id="combobox_demo_menu" text="组合框" href="/easyui/demo/combobox" />
+			<menu id="combotree_demo_menu" text="组合树" href="/easyui/demo/combotree" />
+			<menu id="combogrid_demo_menu" text="组合网格" href="/easyui/demo/combogrid" />
+			<menu id="combotreegrid_demo_menu" text="组合树网格" href="/easyui/demo/combotreegrid" />
+			<menu id="tagbox_demo_menu" text="标签框" href="/easyui/demo/tagbox" />
+			<menu id="numberbox_demo_menu" text="数字框" href="/easyui/demo/numberbox" />
+			<menu id="datebox_demo_menu" text="日期框" href="/easyui/demo/datebox" />
+			<menu id="datetimebox_demo_menu" text="日期时间框" href="/easyui/demo/datetimebox" />
+			<menu id="datetimespinner_demo_menu" text="日期时间微调" href="/easyui/demo/datetimespinner" />
+			<menu id="calendar_demo_menu" text="日历" href="/easyui/demo/calendar" />
+			<menu id="numberspinner_demo_menu" text="数值微调" href="/easyui/demo/numberspinner" />
+			<menu id="timespinner_demo_menu" text="时间微调" href="/easyui/demo/timespinner" />
+			<menu id="slider_demo_menu" text="滑块" href="/easyui/demo/slider" />
+			<menu id="filebox_demo_menu" text="文件框" href="/easyui/demo/filebox" />
+			<menu id="checkbox_demo_menu" text="复选框" href="/easyui/demo/checkbox" />
+			<menu id="radiobutton_demo_menu" text="单选框" href="/easyui/demo/radiobutton" />
 		</menu>
 		<menu id="component_demo_menus" text="控件">
 			<menu id="menubutton_demo_menus" text="菜单">

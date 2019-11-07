@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,11 +86,18 @@ public class MenuController {
     @ResponseBody
     @RequestMapping("/queryList")
     public List<Menu> queryMenuList(
-            @RequestParam(name = "catalog") String catalog) {
-        AssertUtils.notEmpty(catalog, "catalog is empty.");
-        
+            @RequestParam(name = "catalog", required = false) String catalog) {
         //根据权限及菜单配置生成最终权限列表
-        List<Menu> resList = menuContext.getMenuListByCatalog(catalog);
+        List<Menu> resList = new ArrayList<>();
+        if (!StringUtils.isEmpty(catalog)) {
+            resList = menuContext.getMenuListByCatalog(catalog);
+        } else {
+            List<MenuCatalogItem> mciList = menuContext
+                    .getMenuCatalogItemList();
+            for (MenuCatalogItem mci : mciList) {
+                resList.addAll(menuContext.getMenuListByCatalog(mci.getId()));
+            }
+        }
         return resList;
     }
     

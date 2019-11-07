@@ -52,7 +52,7 @@ public class ClientSourceController {
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
 
-        return "/clientinfo/queryClientSourceList";
+        return "clientinfo/queryClientSourceList";
     }
     
     

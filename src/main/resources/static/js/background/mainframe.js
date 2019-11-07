@@ -156,9 +156,9 @@ $(function(){
 		        return false;
 		    } else if (options.href) {
 		        //以iframe的形式显示tab
-		        var newIframe = '<iframe src="' + options.href + '" width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>';
+		        var newIframe = '<iframe src="' + options.href + '" width="100%" height="100%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:100%;" class="mainframe_tab"></iframe>';
 		        if(options.refreshWhenSelect){
-		        	newIframe = '<iframe src=' + options.href + ' newsrc="' + options.href + '" refresh="true" width="100%" height="98%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:98%;" class="mainframe_tab"></iframe>';
+		        	newIframe = '<iframe src=' + options.href + ' newsrc="' + options.href + '" refresh="true" width="100%" height="100%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:100%;" class="mainframe_tab"></iframe>';
 		        }
 		        $index_tabs.tabs('add', {
 		            title : options.title,

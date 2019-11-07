@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
+import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 import com.tx.core.support.initable.model.ConfigInitAble;
 
 import io.swagger.annotations.ApiModel;
@@ -32,9 +33,9 @@ import io.swagger.annotations.ApiModel;
 @ApiModel("客户推广渠道")
 @Entity
 @Table(name = "cli_promotion_channel")
-@BasicDataEntity(name = "客户推广渠道")
-public class ClientPromotionChannel implements Serializable, ConfigInitAble,
-        BasicData {
+@BasicDataEntity(name = "客户推广渠道", viewType = BasicDataViewTypeEnum.LIST)
+public class ClientPromotionChannel
+        implements Serializable, ConfigInitAble, BasicData {
     
     /** 注释内容 */
     private static final long serialVersionUID = 3085563149265732611L;

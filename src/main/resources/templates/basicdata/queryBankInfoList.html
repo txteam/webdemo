@@ -1,422 +1,419 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>queryBankInfoList</title>
+	<title>queryBankInfoList</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	/*]]>*/
+	</script>
+</block>
 
-    <!-- css -->
-    <link rel="stylesheet" type="text/css" href="../../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
-    <link rel="stylesheet" type="text/css" href="../../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
-    <link rel="stylesheet" type="text/css" href="../../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
-    <link rel="stylesheet" type="text/css" href="../../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
-    <!-- customize -->
-    <link rel="stylesheet" type="text/css" href="../../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
-    <link rel="stylesheet" type="text/css" href="../../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+var grid = null;
+var idFieldName = 'id';
+var nameFieldName = 'name';
+var entityName = '银行信息管理';
 
-    <!-- jquery -->
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
-    <!-- jqueryui -->
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
-    <!-- easyui -->
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
-    <!-- other -->
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
-    <!-- echarts -->
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
-    <!-- customize -->
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
-    <script type="text/javascript" charset="utf-8" src="../../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
+$(document).ready(function () {
+    var $editALink = $("#editALink");
+    var $deleteALink = $("#deleteALink");
+    var $enableALink = $("#enableALink");
+    var $disableALink = $("#disableALink");
 
-    <script type="text/javascript">
-        //权限判定
-        $.canAdd = false;
-        $.canUpdate = false;
-        $.canDelete = false;
-        $.canDisable = false;
-        $.canEnable = false;
-
-
-        var grid = null;
-        var idFieldName = 'id';
-        var nameFieldName = 'name';
-        var entityName = '银行信息管理';
-
-        $(document).ready(function () {
-            var $editALink = $("#editALink");
-            var $deleteALink = $("#deleteALink");
-            var $enableALink = $("#enableALink");
-            var $disableALink = $("#disableALink");
-
-            grid = $('#grid').datagrid({
-                url: '[[@{/bankinfo/queryList}]]',
-                fit: true,
-                fitColumns: true,
-                border: false,
-                idField: 'id',
-                checkOnSelect: false,
-                selectOnCheck: false,
-                nowrap: true,
-                striped: true,
-                singleSelect: true,
-                frozenColumns: [
-                    [
-                        {
-                            field: 'row.id',
-                            title: 'pk',
-                            width: 150,
-                            hidden: true
-                        }
-                    ]
-                ],
-                columns: [
-                    [
-                        {
-                            field: 'logoFileId',
-                            title: '图片地址',
-                            width: 150,
-                            align: 'center',
-                            formatter: function (value, row, index) {
-                                if ($.ObjectUtils.isEmpty(value)) {
-                                    return "";
-                                }
-                                var img = $.formatString('<img class="imgViewer" data-original="${contextPath}/filecontext/resource/{0}" src="${contextPath}/filecontext/resource/thumbnail/{1}?height=25"/>', value, value);
-                                return img;
-                            }
-                        },
-                        {
-                            field: 'name',
-                            title: '银行名称',
-                            width: 150
-                        },
-                        {
-                            field: 'code',
-                            title: '银行英文简称',
-                            width: 150
-                        },
-                        {
-                            field: 'aliases',
-                            title: '别名集合',
-                            width: 200
-                        },
-                        {
-                            field: 'valid',
-                            title: '是否有效',
-                            width: 100
-                            , formatter: function (value, row, index) {
-                                var text = '';
-                                if (value) {
-                                    text = '是';
-                                } else {
-                                    text = '<font color="red">否</font>';
-                                }
-                                return text;
-                            }
-                        },
-                        {
-                            field: 'modifyAble',
-                            title: '是否可编辑',
-                            width: 100
-                            , formatter: function (value, row, index) {
-                                var text = '';
-                                if (value) {
-                                    text = '<font color="green">是</font>';
-                                } else {
-                                    text = '否';
-                                }
-                                return text;
-                            }
-                        },
-                        {
-                            field: 'personalLoginUrl',
-                            title: '个人网银登录url',
-                            //hidden : true,
-                            width: 200
-                        },
-                        {
-                            field: 'institutionLoginUrl',
-                            title: '机构网银登录url',
-                            //hidden : true,
-                            width: 200
-                        },
-                        {
-                            field: 'remark',
-                            title: '备注',
-                            width: 200
-                        },
-                        {
-                            field: 'createDate',
-                            title: '创建时间',
-                            width: 200
-                            , formatter: function (cellvalue, options, rowObject) {
-                                var date = new Date();
-                                date.setTime(cellvalue);
-                                return date.format('yyyy-MM-dd hh:mm:ss');
-                                ;
-                            }
-                        },
-                        {
-                            field: 'lastUpdateDate',
-                            title: '最后更新时间',
-                            width: 200
-                            , formatter: function (cellvalue, options, rowObject) {
-                                var date = new Date();
-                                date.setTime(cellvalue);
-                                return date.format('yyyy-MM-dd hh:mm:ss');
-                                ;
-                            }
-                        }
-                        /*
-                        <c:if test="${show_grid_action == true}">
-                        ,{
-                            field : 'action',
-                            title : '操作',
-                            width : 220,
-                            formatter : function(value, row, index) {
-                                var str = '&nbsp;';
-                                if(!row.valid && $.canEnable){
-                                    str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
-                                    str += '&nbsp;';
-                                }
-                                if($.canUpdate){
-                                    str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil.png');
-                                    str += '&nbsp;';
-                                }
-
-                                if($.canDelete){
-                                    str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil_delete.png');
-                                    str += '&nbsp;';
-                                }
-                                if(row.valid && $.canDisable){
-                                    str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
-                                    str += '&nbsp;';
-                                }
-                                return str;
-                            }
-                        }
-                        </c:if>
-                        */
-                    ]],
-                toolbar: '#toolbar',
-                onDblClickRow: function (index, row) {
-                    //&& row.modifyAble
-                    if ($.canUpdate) {
-                        editFun(row[idFieldName], row[nameFieldName]);
-                    }
-                },
-                onClickRow: function (index, row) {
-                    $editALink.linkbutton('enable');
-                    $deleteALink.linkbutton('enable');
-
-                    if (row.modifyAble) {
-                        $editALink.linkbutton('enable');
-                        $deleteALink.linkbutton('enable');
-
-                        if (row.valid) {
-                            $enableALink.linkbutton('disable');
-                            $enableALink.hide();
-                            $disableALink.show();
-                            $disableALink.linkbutton('enable');
-                        } else {
-                            $disableALink.linkbutton('disable');
-                            $disableALink.hide();
-                            $enableALink.show();
-                            $enableALink.linkbutton('enable');
-                        }
-                    } else {
-                        $enableALink.show();
-                        $enableALink.linkbutton('disable');
-                        $disableALink.show();
-                        $disableALink.linkbutton('disable');
-
-                        //$editALink.linkbutton('disable');
-                        $deleteALink.linkbutton('disable');
-                    }
-                },
-                onLoadSuccess: function () {
-                    $(this).datagrid('unselectAll');
-                    $(this).datagrid('tooltip');
-
-                    $editALink.linkbutton('disable');
-                    $deleteALink.linkbutton('disable');
-                    $enableALink.show();
-                    $disableALink.show();
-                    $enableALink.linkbutton('disable');
-                    $disableALink.linkbutton('disable');
-
-                    $(".imgViewer").viewer({url: 'data-original'});
+    grid = $('#grid').datagrid({
+        url: /*[[@{/bankInfo/queryList}]]*/_contextPath + 'bankInfo/queryList',
+        fit: true,
+        fitColumns: true,
+        border: false,
+        idField: 'id',
+        checkOnSelect: false,
+        selectOnCheck: false,
+        nowrap: true,
+        striped: true,
+        singleSelect: true,
+        frozenColumns: [ [
+        {
+            field: 'ID',
+            title: '主键',
+            width: 150,
+            hidden: true
+        }
+        ] ],
+        columns: [ [
+        {
+            field: 'logoFileId',
+            title: 'LOGO',
+            width: 150,
+            align: 'center',
+            formatter: function (value, row, index) {
+                if ($.ObjectUtils.isEmpty(value)) {
+                    return "";
                 }
-            });
-        });
-
+                var img = $.formatString('<img class="imgViewer" data-original="${contextPath}/filecontext/resource/{0}" src="${contextPath}/filecontext/resource/thumbnail/{1}?height=25"/>', value, value);
+                return img;
+            }
+        },
+        {
+            field: 'name',
+            title: '银行名称',
+            width: 150
+        },
+        {
+            field: 'code',
+            title: '银行英文简称',
+            width: 150
+        },
+        {
+            field: 'aliases',
+            title: '别名集合',
+            width: 200
+        },
+        {
+            field: 'valid',
+            title: '是否有效',
+            width: 100
+            , formatter: function (value, row, index) {
+                var text = '';
+                if (value) {
+                    text = '是';
+                } else {
+                    text = '<font color="red">否</font>';
+                }
+                return text;
+            }
+        },
+        {
+            field: 'modifyAble',
+            title: '是否可编辑',
+            width: 100
+            , formatter: function (value, row, index) {
+                var text = '';
+                if (value) {
+                    text = '<font color="green">是</font>';
+                } else {
+                    text = '否';
+                }
+                return text;
+            }
+        },
+        {
+            field: 'personalLoginUrl',
+            title: '个人网银登录url',
+            hidden : true,
+            width: 200
+        },
+        {
+            field: 'institutionLoginUrl',
+            title: '机构网银登录url',
+            hidden : true,
+            width: 200
+        },
+        {
+            field: 'remark',
+            title: '备注',
+            width: 200
+        },
+        {
+            field: 'createDate',
+            title: '创建时间',
+            width: 200
+            , formatter: function (cellvalue, options, rowObject) {
+                var date = new Date();
+                date.setTime(cellvalue);
+                return date.format('yyyy-MM-dd hh:mm:ss');
+                ;
+            }
+        },
+        {
+            field: 'lastUpdateDate',
+            title: '最后更新时间',
+            width: 200
+            , formatter: function (cellvalue, options, rowObject) {
+                var date = new Date();
+                date.setTime(cellvalue);
+                return date.format('yyyy-MM-dd hh:mm:ss');
+                ;
+            }
+        }
         /*
-         * 查询
-         */
-        function queryFun() {
+        <c:if test="${show_grid_action == true}">
+        ,{
+            field : 'action',
+            title : '操作',
+            width : 220,
+            formatter : function(value, row, index) {
+                var str = '&nbsp;';
+                if(!row.valid && $.canEnable){
+                    str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+                    str += '&nbsp;';
+                }
+                if($.canUpdate){
+                    str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil.png');
+                    str += '&nbsp;';
+                }
+
+                if($.canDelete){
+                    str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil_delete.png');
+                    str += '&nbsp;';
+                }
+                if(row.valid && $.canDisable){
+                    str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+                    str += '&nbsp;';
+                }
+                return str;
+            }
+        }
+        </c:if>
+        */
+        ]],
+        toolbar: '#toolbar',
+        onDblClickRow: function (index, row) {
+            //&& row.modifyAble
+            if ($.canUpdate) {
+                editFun(row[idFieldName], row[nameFieldName]);
+            }
+        },
+        onClickRow: function (index, row) {
+            $editALink.linkbutton('enable');
+            $deleteALink.linkbutton('enable');
+
+            if (row.modifyAble) {
+                $editALink.linkbutton('enable');
+                $deleteALink.linkbutton('enable');
+
+                if (row.valid) {
+                    $enableALink.linkbutton('disable');
+                    $enableALink.hide();
+                    $disableALink.show();
+                    $disableALink.linkbutton('enable');
+                } else {
+                    $disableALink.linkbutton('disable');
+                    $disableALink.hide();
+                    $enableALink.show();
+                    $enableALink.linkbutton('enable');
+                }
+            } else {
+                $enableALink.show();
+                $enableALink.linkbutton('disable');
+                $disableALink.show();
+                $disableALink.linkbutton('disable');
+
+                //$editALink.linkbutton('disable');
+                $deleteALink.linkbutton('disable');
+            }
+        },
+        onLoadSuccess: function () {
+            $(this).datagrid('unselectAll');
+            $(this).datagrid('tooltip');
+
+            $editALink.linkbutton('disable');
+            $deleteALink.linkbutton('disable');
+            $enableALink.show();
+            $disableALink.show();
+            $enableALink.linkbutton('disable');
+            $disableALink.linkbutton('disable');
+
+            $(".imgViewer").viewer({url: 'data-original'});
+        }
+    });
+});
+
+/*
+ * 查询
+ */
+function queryFun() {
+    grid.datagrid('load', $('#queryForm').serializeObject());
+    return false;
+}
+
+/*
+ * 新增
+ */
+function addFun() {
+    DialogUtils.progress({
+        text: '加载中，请等待....'
+    });
+    DialogUtils.openModalDialog(
+        "addBankInfo",
+        "新增银行",
+        /*[[@{/bankInfo/toAdd}]]*/_contextPath + 'bankInfo/toAdd',
+        550, 278, function () {
             grid.datagrid('load', $('#queryForm').serializeObject());
-            return false;
-        }
+        });
+    return false;
+}
 
-        /*
-         * 新增
-         */
-        function addFun() {
-            DialogUtils.progress({
-                text: '加载中，请等待....'
-            });
-            DialogUtils.openModalDialog(
-                "addBankInfo",
-                "新增银行",
-                $.formatString("${contextPath}/bankInfo/toAddBankInfo.action"),
-                550, 278, function () {
-                    grid.datagrid('load', $('#queryForm').serializeObject());
-                });
-            return false;
-        }
+/**
+ * 编辑
+ */
+function editFun(id, name) {
+    if (id == undefined) {
+        var rows = grid.datagrid('getSelections');
+        id = rows[0][idFieldName];
+        name = rows[0][nameFieldName];
+    }
+    if ($.ObjectUtils.isEmpty(id)) {
+        DialogUtils.alert("没有选中的" + entityName);
+        return;
+    }
+    DialogUtils.progress({
+        text: '加载中，请等待....'
+    });
+    DialogUtils.openModalDialog(
+        "updateBankInfo",
+        "编辑银行",
+        $.formatString("${contextPath}/bankInfo/toUpdateBankInfo.action?bankInfoId={0}", id),
+        650, 450, function () {
+            grid.datagrid('load', $('#queryForm').serializeObject());
+        });
+    return false;
+}
 
-        /**
-         * 编辑
-         */
-        function editFun(id, name) {
-            if (id == undefined) {
-                var rows = grid.datagrid('getSelections');
-                id = rows[0][idFieldName];
-                name = rows[0][nameFieldName];
-            }
-            if ($.ObjectUtils.isEmpty(id)) {
-                DialogUtils.alert("没有选中的" + entityName);
-                return;
-            }
-            DialogUtils.progress({
-                text: '加载中，请等待....'
-            });
-            DialogUtils.openModalDialog(
-                "updateBankInfo",
-                "编辑银行",
-                $.formatString("${contextPath}/bankInfo/toUpdateBankInfo.action?bankInfoId={0}", id),
-                650, 450, function () {
-                    grid.datagrid('load', $('#queryForm').serializeObject());
+/*
+ * 删除
+ */
+function deleteFun(id, name) {
+    if (id == undefined) {
+        var rows = grid.datagrid('getSelections');
+        id = rows[0][idFieldName];
+        name = rows[0][nameFieldName];
+    }
+    if ($.ObjectUtils.isEmpty(id)) {
+        DialogUtils.alert("没有选中的" + entityName);
+        return false;
+    }
+    //判断是否确认删除指定的BankInfo
+    DialogUtils.confirm("确认提醒",
+        $.formatString("是否确认删除{0}:[{1}]?", entityName, name),
+        function (data) {
+            if (data) {
+                DialogUtils.progress({
+                    text: '数据提交中，请等待....'
                 });
-            return false;
-        }
+                //如果确认删除指定的BankInfo
+                $.post(
+                    '${contextPath}/bankInfo/deleteById.action',
+                    {bankInfoId: id},
+                    function (data) {
+                        DialogUtils.progress('close');
+                        if (data) {
+                            DialogUtils.tip("删除" + entityName + "成功");
+                        } else {
+                            $.formatString("删除{0}:{1}失败.指定{0}可能已经被其他管理员所删除.如果指定{0}依然存在，请联系系统管理员.", entityName, name);
+                        }
+                        grid.datagrid('load', $('#queryForm').serializeObject());
+                    });
+            }
+        });
+    return false;
+}
 
-        /*
-         * 删除
-         */
-        function deleteFun(id, name) {
-            if (id == undefined) {
-                var rows = grid.datagrid('getSelections');
-                id = rows[0][idFieldName];
-                name = rows[0][nameFieldName];
-            }
-            if ($.ObjectUtils.isEmpty(id)) {
-                DialogUtils.alert("没有选中的" + entityName);
-                return false;
-            }
-            //判断是否确认删除指定的BankInfo
-            DialogUtils.confirm("确认提醒",
-                $.formatString("是否确认删除{0}:[{1}]?", entityName, name),
-                function (data) {
-                    if (data) {
-                        DialogUtils.progress({
-                            text: '数据提交中，请等待....'
-                        });
-                        //如果确认删除指定的BankInfo
-                        $.post(
-                            '${contextPath}/bankInfo/deleteById.action',
-                            {bankInfoId: id},
-                            function (data) {
-                                DialogUtils.progress('close');
-                                if (data) {
-                                    DialogUtils.tip("删除" + entityName + "成功");
-                                } else {
-                                    $.formatString("删除{0}:{1}失败.指定{0}可能已经被其他管理员所删除.如果指定{0}依然存在，请联系系统管理员.", entityName, name);
-                                }
-                                grid.datagrid('load', $('#queryForm').serializeObject());
-                            });
-                    }
+/*
+ * 禁用
+ */
+function disableFun(id, name) {
+    if (id == undefined) {
+        var rows = grid.datagrid('getSelections');
+        id = rows[0][idFieldName];
+        name = rows[0][nameFieldName];
+    }
+    if ($.ObjectUtils.isEmpty(id)) {
+        DialogUtils.alert("没有选中的" + entityName);
+        return false;
+    }
+    //判断是否确认禁用指定BankInfo
+    DialogUtils.confirm(
+        "确认提醒",
+        $.formatString("是否确认禁用{0}:[{1}]?", entityName, name),
+        function (data) {
+            if (data) {
+                DialogUtils.progress({
+                    text: '数据提交中，请等待....'
                 });
-            return false;
-        }
+                //如果确认禁用指定BankInfo
+                $.post(
+                    '${contextPath}/bankInfo/disableById.action',
+                    {bankInfoId: id},
+                    function () {
+                        DialogUtils.progress('close');
+                        DialogUtils.tip("禁用" + entityName + "成功");
+                        grid.datagrid('reload', $('#queryForm').serializeObject());
+                    });
+            }
+        });
+    return false;
+}
 
-        /*
-         * 禁用
-         */
-        function disableFun(id, name) {
-            if (id == undefined) {
-                var rows = grid.datagrid('getSelections');
-                id = rows[0][idFieldName];
-                name = rows[0][nameFieldName];
-            }
-            if ($.ObjectUtils.isEmpty(id)) {
-                DialogUtils.alert("没有选中的" + entityName);
-                return false;
-            }
-            //判断是否确认禁用指定BankInfo
-            DialogUtils.confirm(
-                "确认提醒",
-                $.formatString("是否确认禁用{0}:[{1}]?", entityName, name),
-                function (data) {
-                    if (data) {
-                        DialogUtils.progress({
-                            text: '数据提交中，请等待....'
-                        });
-                        //如果确认禁用指定BankInfo
-                        $.post(
-                            '${contextPath}/bankInfo/disableById.action',
-                            {bankInfoId: id},
-                            function () {
-                                DialogUtils.progress('close');
-                                DialogUtils.tip("禁用" + entityName + "成功");
-                                grid.datagrid('reload', $('#queryForm').serializeObject());
-                            });
-                    }
+/*
+ * 启用
+ */
+function enableFun(id, name) {
+    if (id == undefined) {
+        var rows = grid.datagrid('getSelections');
+        id = rows[0][idFieldName];
+        name = rows[0][nameFieldName];
+    }
+    if ($.ObjectUtils.isEmpty(id)) {
+        DialogUtils.alert("没有选中的" + entityName);
+        return false;
+    }
+    //判断是否确认禁用指定BankInfo
+    DialogUtils.confirm(
+        "确认提醒",
+        $.formatString("是否确认启用{0}:[{1}]?", entityName, name),
+        function (data) {
+            if (data) {
+                DialogUtils.progress({
+                    text: '数据提交中，请等待....'
                 });
-            return false;
-        }
-
-        /*
-         * 启用
-         */
-        function enableFun(id, name) {
-            if (id == undefined) {
-                var rows = grid.datagrid('getSelections');
-                id = rows[0][idFieldName];
-                name = rows[0][nameFieldName];
+                //如果确认启用指定BankInfo
+                $.post(
+                    '${contextPath}/bankInfo/enableById.action',
+                    {bankInfoId: id},
+                    function () {
+                        DialogUtils.progress('close');
+                        DialogUtils.tip("启用" + entityName + "成功");
+                        grid.datagrid('reload', $('#queryForm').serializeObject());
+                    });
             }
-            if ($.ObjectUtils.isEmpty(id)) {
-                DialogUtils.alert("没有选中的" + entityName);
-                return false;
-            }
-            //判断是否确认禁用指定BankInfo
-            DialogUtils.confirm(
-                "确认提醒",
-                $.formatString("是否确认启用{0}:[{1}]?", entityName, name),
-                function (data) {
-                    if (data) {
-                        DialogUtils.progress({
-                            text: '数据提交中，请等待....'
-                        });
-                        //如果确认启用指定BankInfo
-                        $.post(
-                            '${contextPath}/bankInfo/enableById.action',
-                            {bankInfoId: id},
-                            function () {
-                                DialogUtils.progress('close');
-                                DialogUtils.tip("启用" + entityName + "成功");
-                                grid.datagrid('reload', $('#queryForm').serializeObject());
-                            });
-                    }
-                });
-            return false;
-        }
-    </script>
+        });
+    return false;
+}
+/*]]>*/
+</script>
 </head>
 <body>
 <div class="easyui-layout" data-options="fit : true,border : false">

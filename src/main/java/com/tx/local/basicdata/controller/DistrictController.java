@@ -53,7 +53,7 @@ public class DistrictController {
      */
     @RequestMapping("/toQueryTreeList")
     public String toQueryTreeList(ModelMap response) {
-        return "/basicdata/queryDistrictTreeList";
+        return "basicdata/queryDistrictTreeList";
     }
     
     /**
@@ -69,7 +69,7 @@ public class DistrictController {
     public String toAdd(ModelMap response) {
         response.put("district", new District());
         
-        return "/basicdata/addDistrict";
+        return "basicdata/addDistrict";
     }
     
     /**
@@ -82,12 +82,12 @@ public class DistrictController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdate")
-    public String toUpdate(
-            @RequestParam("districtId") String districtId, ModelMap response) {
+    public String toUpdate(@RequestParam("districtId") String districtId,
+            ModelMap response) {
         District resDistrict = this.districtService.findById(districtId);
         response.put("district", resDistrict);
         
-        return "/basicdata/updateDistrict";
+        return "basicdata/updateDistrict";
     }
     
     /**
@@ -102,20 +102,19 @@ public class DistrictController {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping("/validateCodeIsExist")
-    public Map<String, String> validateCodeIsExist(
+    @RequestMapping("/validate")
+    public Map<String, String> validate(
             @RequestParam MultiValueMap<String, String> request,
             @RequestParam("code") String code,
-            @RequestParam(value = "id", required = false) String excludeDistrictId) {
+            @RequestParam(value = "id", required = false) String excludeId) {
         Map<String, String> key2valueMap = new HashMap<String, String>();
         key2valueMap.put("code", code);
-        boolean flag = this.districtService.exists(key2valueMap,
-                excludeDistrictId);
+        boolean flag = this.districtService.exists(key2valueMap, excludeId);
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {
-            resMap.put("ok", "可用的district code");
+            resMap.put("ok", "可用的区域编码");
         } else {
-            resMap.put("error", "已经存在的district code");
+            resMap.put("error", "已经存在的区域编码");
         }
         return resMap;
     }

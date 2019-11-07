@@ -1,15 +1,48 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE html >
-<html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>updateBasicData</title>
-<%@include file="../includes/commonHead.jsp" %>
+	<title>updateBasicData</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	/*]]>*/
+	</script>
+</block>
 
-<script type="text/javascript" >
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+var entityName = /*[[${typeInfo?.name?:''}]]*/'';
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
@@ -20,15 +53,16 @@ $(document).ready(function(){
 	        DialogUtils.progress({
 	        	text : '数据提交中，请等待....'
 	        });
+	        var url = /*[[@{/basicdata/update}]]*/_contextPath + 'basicdata/update';
 			$('#entityForm').ajaxSubmit({
-			    url:"${contextPath }/basicData/update.action",
+			    url: url,
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
-						parent.DialogUtils.tip("更新${basicDataType.name}成功.");
-						parent.DialogUtils.closeDialogById("updateBasicData_${basicDataType.code}");
+						parent.DialogUtils.tip("更新" + entityName + "成功.");
+						parent.DialogUtils.closeDialogById("updateBasicData");
 					}else{
-						DialogUtils.alert("错误提示","更新${basicDataType.name}失败.","error");
+						DialogUtils.alert("错误提示","更新" + entityName + "失败.","error");
 					}
 			    } 
 			});
@@ -40,35 +74,34 @@ function submitFun(){
 	$('#entityForm').submit();
 }
 function cancelFun(){
-	parent.DialogUtils.closeDialogById("updateBasicData_${basicDataType.code}");
+	parent.DialogUtils.closeDialogById("updateBasicData");
 }
+/*]]>*/
 </script>
 </head>
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form:form id="entityForm" method="post" cssClass="form"
-			modelAttribute="basicData">
-			<input id="basicDataTypeCode" name="basicDataTypeCode" value="${basicDataTypeCode }" type="hidden"/>
-			<form:hidden path="id"/>
+		<form id="entityForm" method="post" class="form" th:object="${entity}">
+			<input id="type" name="type" type="hidden" th:value="${typeInfo?.type}" value="" />
+			<input id="id" name="id" type="hidden"  th:value="*{id}" value=""/>
 			<table class="common_table">
 				<tr>
 					<th class="narrow" width="20%">编码:<span class="tRed">*</span></th>
 					<td width="80%">
-						<form:input path="code" cssClass="text" readonly="true"/>
+						<input id="code" name="code" readonly="true" value="" th:value="*{code}"/>
 					</td>
 				</tr>
 				<tr>
 					<th class="narrow" width="20%">名称:<span class="tRed">*</span></th>
 					<td width="80%">
-						<form:input path="name" cssClass="text" 
-							data-rule="name:required;"/>
+						<input id="name" name="name" class="text" data-rule="name:required;" value="" th:value="*{name}"/>
 					</td>
 				</tr>
 				<tr>
 					<th class="narrow" width="20%">备注:</th>
 					<td width="80%">
-						<form:textarea path="remark" cssClass="text" rows="10" cols="50"/>
+						<textarea id="remark" name="remark" rows="4" cols="50" th:text="*{remark}" ></textarea>
 					</td>
 				</tr>
 				<tr>
