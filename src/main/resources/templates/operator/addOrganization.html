@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>addOrganization</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	parent.DialogUtils.progress('close');
+	
+	//选择上级组织
+	$("#parentName").selectOrganization({
+		eventName : "forAddOrganization",
+		contextPath : _contextPath,
+		title : "请选择上级组织",
+		width : 260,
+		height : 400,
+		handler : function(organization){
+			if(organization != null){
+				$("#parentName").val(organization.name);
+				$("#parentId").val(organization.id);
+				$("#vcid").val(organization.vcid);
+				$("#vcid").attr("readonly","true");
+			}
+		},
+	    clearHandler: function(){
+	    	$("#parentName").val("");
+			$("#parentId").val("");
+			
+			$("#virtualCenterName").val("");
+			$("#vcid").val("");
+	    }
+	});
+	
+	$("#chiefName").chooseOperator({
+		eventName : "forAddOrganization",
+		contextPath : _contextPath,
+		title : "请选择人员",  
+		width : 800,
+		height : 450,
+		handler : function(operator){
+			if(operator != null){
+				$("#chiefName").val(operator.loginName);
+				$("#chiefId").val(operator.id);
+			}
+		},
+	    clearHandler: function(){
+	    	$("#chiefName").val("");
+			$("#chiefId").val("");
+	    }
+	});
+	
+	$(":radio[name=chiefType]").change(function(){
+		var value = $(this).val();
+		$("#chiefName").val("");
+		$("#chiefId").val("");
+		if(value == 'POST'){
+			$("#chiefName").chooseOperator('destroy');
+			$("#chiefName").choosePost({
+				eventName : "choosePostForAddOrganization",
+				contextPath : _contextPath,
+				title : "请选择职位",  
+				width : 800,
+				height : 450,
+				handler : function(post){
+					if(post != null){
+						$("#chiefName").val(post.name);
+						$("#chiefId").val(post.id);
+					}
+				},
+			    clearHandler: function(){
+			    	$("#chiefName").val("");
+					$("#chiefId").val("");
+			    }
+			});
+		}else{
+			$("#chiefName").choosePost('destroy');
+			$("#chiefName").chooseOperator({
+				eventName : "chooseOperatorForAddOrganization",
+				contextPath : _contextPath,
+				title : "请选择人员",  
+				width : 800,
+				height : 450,
+				handler : function(operator){
+					if(operator != null){
+						$("#chiefName").val(operator.loginName);
+						$("#chiefId").val(operator.id);
+					}
+				},
+			    clearHandler: function(){
+			    	$("#chiefName").val("");
+					$("#chiefId").val("");
+			    }
+			});
+		}
+	});
+	
+	//虚中心与组织存在联动关系，如果选中需中心，则组织仅能在选中的虚中心中选取
+	//所以在组织与虚中心任一发生变动时应当影响到对方
+	$("#vcid").change(function(){
+		$("#parentName").val("");
+		$("#parentId").val("");
+	});
+	
+	//验证器
+	$('#entityForm').validator({
+	    valid: function(){
+	    	var flag = false;
+	    	if($.ObjectUtils.isEmpty($('#parentId').val())){
+            	if($('#type').val() == 'GROUP_COMPANY' || $('#type').val() == 'COMPANY' || $('#type').val() == 'BRANCH_COMPANY'){
+            		flag = true;
+            	}else{
+            		flag = false;
+            	}
+            }else{
+            	flag = true;
+            }
+	    	if(!flag){
+	    		DialogUtils.alert('警告',"非分公司类型组织上级组织不允许为空.",'warning');
+	    		return false;
+	    	}
+	    
+	    	DialogUtils.progress({
+		        text : '数据提交中，请等待....'
+			});
+	        //表单验证通过，提交表单到服务器
+			$('#entityForm').ajaxSubmit({
+			    url:/*[[@{/organization/add}]]*/_contextPath + 'organization/add',
+			    success: function(data) {
+			    	DialogUtils.progress('close');
+					if(data){
+						DialogUtils.tip("新增组织成功.");
+						parent.DialogUtils.closeDialogById("addOrganization");
+					}else{
+						parent.DialogUtils.tip("新增组织失败.");
+					}
+			    }
+			});
+			return false;
+	    }
+	});
+});
+function submitFun(){
+	$('#entityForm').submit();
+}
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+		<form id="entityForm" method="post" class="form">
+			<table class="table">
+				<tr>
+					<th class="narrow" width="18%">名称:<span class="tRed">*</span></th>
+					<td>
+						<input id="name" name="name" data-rule="名称:required;length[2~30]" data-tip="必填"/>
+					</td>
+					<th class="narrow" width="18%">&nbsp;</th>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<th class="narrow">组织类型:<span class="tRed">*</span></th>
+					<td>
+						<select id="type" name="type" data-rule="组织类型:required;" >
+							<option value="">--- 请选择 ---</option>
+							<option th:each="type:${types}" th:value="${type.code}" th:text="${type.name}"></option>
+						</select>
+					</td>
+					<th>上级组织</th>
+					<td>
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly" value="" th:value="${parent?.id?:''}"/>
+						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" value="" th:value="${parent?.name?:''}"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow">编号<span class="tRed">*</span></th>
+					<td>
+						<input id="code" name="code" data-tip="不能重复的编号"
+							th:data-rule="'编号:required;length[1~16];remote[' + @{/organization/validate} + ', code]'"/>
+					</td>
+					<th class="narrow">别名:</th>
+					<td>
+						<input id="alias" name="alias" data-rule="别名:length[~16]"/>
+					</td>
+				</tr>
+				<tr>
+					<th>主管类型</th>
+					<td>
+						<input id="chiefType" name="chiefType" type="radio" th:each="chiefTypeTemp:${chiefTypes}" th:value="${chiefTypeTemp.key}" th:text="${chiefTypeTemp.name}"/>
+					</td>
+					<th>主管</th>
+					<td>
+						<input id="chiefId" name="chiefId" type="hidden" readonly="readonly"/>
+						<input id="chiefName" name="chiefName" class="selectInput" readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<th>所属业务中心:</th>
+					<td>
+						<select id="vcid" name="vcid">
+							<option value="">--请选择--</option>
+							<option th:each="vc:${virtualCenterList}" th:value="${vc.id}" th:text="${vc.name}"></option>
+						</select>
+					</td>
+					<th>&nbsp;</th>
+					<td>
+						&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<th>备注</th>
+					<td colspan="3">
+						<textarea name="remark" rows="" cols="" class="longText" style="width:90%"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="rightOperRow" colspan="4" style="padding-right: 50px">
+						<a id="addBtn"  onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  	
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+</body>

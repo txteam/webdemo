@@ -555,7 +555,7 @@ public class TestM1Service {
     }
     
     /**
-     * 根据条件查询基础数据分页列表<br/>
+     * 根据parentId查询TestM1子、孙级实例列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid
@@ -620,7 +620,7 @@ public class TestM1Service {
     }
     
     /**
-     * 根据条件查询基础数据分页列表<br/>
+     * 根据parentId查询TestM1子、孙级实例列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid

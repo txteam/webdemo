@@ -110,15 +110,14 @@ $.widget("txcomponent.selectDistrict",{
 //控件：选择虚中心
 $.widget("txcomponent.selectVirtualCenter",{
 	options: {
-		eventName : "selectVirtualCenter",
 		contextPath : "",
-		title : "请选择虚中心",
 		width : 600,
 		height : 500,
+		title : "请选择虚中心",
+		eventName : "selectVirtualCenter",
 		openDialogHandler : window.parent.DialogUtils,
 		clearHandler: null,
 		selectHandler: null,
-		authKey: null,
         handler : null
 	},
 	_create: function(){
@@ -135,27 +134,27 @@ $.widget("txcomponent.selectVirtualCenter",{
 		}
 		$(_element).click(function(){
 			var dialog_ = _option.openDialogHandler.openModalDialog("selectVirtualCenter",
-					_option.title,
-					action,
-					_option.width,
-					_option.height,
-					function(){
-						//onClose doNothing
-					},
-					[{
-						text : '确认',
-						handler : function() {
-						    if(_option.handler){
-                                _option.handler.call(_option.handler,_option._choosedData);
-                            }
-							_option.openDialogHandler.closeDialogById("selectVirtualCenter");
-						}
-					}]);
+				_option.title,
+				action,
+				_option.width,
+				_option.height,
+				function(){
+					//onClose doNothing
+				},
+				[{
+					text : '确认',
+					handler : function() {
+					    if(_option.handler){
+                            _option.handler.call(_option.handler,_option._data);
+                        }
+						_option.openDialogHandler.closeDialogById("selectVirtualCenter");
+					}
+				}]);
 			return false;
 		});
 		//绑定响应选中事件
-		$.bindge("select_virtualCenter_" + _option.eventName,function(event,virtualCenter){
-		    _option._choosedData = virtualCenter;
+		$.bindge("select_virtualcenter_" + _option.eventName,function(event,virtualCenter){
+		    _option._data = virtualCenter;
             if (_option.selectHandler) {
                 _option.selectHandler.call(_option.selectHandler, virtualCenter);
             }
@@ -167,14 +166,75 @@ $.widget("txcomponent.selectVirtualCenter",{
 		var _option = _this.options;
 		
     	$(_element).unbind("click");
-    	$.unbindge("choose_virtualCenter_" + _option.eventName);
+    	$.unbindge("select_virtualcenter_" + _option.eventName);
     	
     	$.Widget.prototype.destroy.call(this);
     }
 });
-
-
-
+//控件选择组织
+$.widget("txcomponent.selectOrganization",{
+	options: {
+		eventName : "selectOrganization",
+		contextPath : "",
+		title : "请选择组织",
+		width : 260,
+		height : 400,
+		openDialogHandler : window.parent.DialogUtils,
+		clearHandler: null,
+		selectHandler: null,
+        handler : null
+	},
+	_create: function(){
+		var _this = this;
+		var _element = _this.element;
+		var _option = _this.options;
+		var action = _option.contextPath + 'organization/toSelect?eventName=' + _option.eventName;
+		if(_option.clearHandler && $.isFunction(_option.clearHandler)){
+			var $clear = $('<span class="icon_span clear"></span>')
+			$(_element).after($clear);
+			$clear.click(function(){
+				_option.clearHandler();
+			});
+		}
+		$(_element).click(function(){
+			var dialog_ = _option.openDialogHandler.openModalDialog("selectOrganization",
+				_option.title,
+				action,
+				_option.width,
+				_option.height,
+				function(){
+					//onClose doNothing
+				},
+				[{
+					text : '确认',
+					handler : function() {
+					    if(_option.handler){
+	                        _option.handler.call(_option.handler,_option._choosedData);
+	                    }
+						_option.openDialogHandler.closeDialogById("selectOrganization");
+					}
+				}]);
+			return false;
+		});
+		//绑定响应选中事件
+		$.bindge("select_organization_" + _option.eventName,function(event,organization){
+		    _option._choosedData = organization;
+            if (_option.selectHandler) {
+                _option.selectHandler.call(_option.selectHandler, organization);
+            }
+		});
+	},
+    destroy : function(){
+    	var _this = this;
+		var _element = _this.element;
+		var _option = _this.options;
+		
+    	$(_element).unbind("click");
+    	$.unbindge("select_organization_" + _option.eventName);
+    	
+    	$.Widget.prototype.destroy.call(this);
+    }
+});
 //控件：选择财务科目
 $.widget("txcomponent.chooseAccountTitle",{
 	options: {
@@ -338,70 +398,7 @@ $.widget("txcomponent.chooseBranchUser",{
 
 
 
-//控件选择组织
-$.widget("txcomponent.chooseOrganization",{
-	options: {
-		eventName : "chooseOrganization",
-		contextPath : "",
-		title : "请选择组织",
-		width : 260,
-		height : 400,
-		openDialogHandler : window.parent.DialogUtils,
-		clearHandler: null,
-		chooseHandler: null,
-        handler : null
-	},
-	_create: function(){
-		var _this = this;
-		var _element = _this.element;
-		var _option = _this.options;
-		var action = _option.contextPath + '/organization/toChooseOrgnization.action?eventName=' + _option.eventName;
-		if(_option.clearHandler && $.isFunction(_option.clearHandler)){
-			var $clear = $('<span class="icon_span clear"></span>')
-			$(_element).after($clear);
-			$clear.click(function(){
-				_option.clearHandler();
-			});
-		}
-		$(_element).click(function(){
-			var dialog_ = _option.openDialogHandler.openModalDialog("component_dialog_chooseOrganization",
-					_option.title,
-					action,
-					_option.width,
-					_option.height,
-					function(){
-						//onClose doNothing
-					},
-					[{
-						text : '确认',
-						handler : function() {
-						    if(_option.handler){
-                                _option.handler.call(_option.handler,_option._choosedData);
-                            }
-							_option.openDialogHandler.closeDialogById("component_dialog_chooseOrganization");
-						}
-					}]);
-			return false;
-		});
-		//绑定响应选中事件
-		$.bindge("choose_organization_" + _option.eventName,function(event,organization){
-		    _option._choosedData = organization;
-            if (_option.chooseHandler) {
-                _option.chooseHandler.call(_option.chooseHandler, organization);
-            }
-		});
-	},
-    destroy : function(){
-    	var _this = this;
-		var _element = _this.element;
-		var _option = _this.options;
-		
-    	$(_element).unbind("click");
-    	$.unbindge("choose_organization_" + _option.eventName);
-    	
-    	$.Widget.prototype.destroy.call(this);
-    }
-});
+
 
 //控件选择行业
 $.widget("txcomponent.chooseIndustry",{

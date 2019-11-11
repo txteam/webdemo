@@ -15,6 +15,9 @@ import javax.persistence.Table;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
+import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * 内容信息级别<br/>
@@ -27,7 +30,8 @@ import com.tx.component.basicdata.model.BasicData;
  */
 @Entity
 @Table(name = "ci_content_level")
-@BasicDataEntity(name = "内容信息级别")
+@BasicDataEntity(name = "内容信息级别", viewType = BasicDataViewTypeEnum.LIST)
+@ApiModel("内容信息级别")
 public class ContentInfoLevel implements BasicData {
     
     /** 注释内容 */

@@ -1,8 +1,8 @@
 /*****************************************************************************
 -- OPER_POST : 
 *****************************************************************************/
-drop table if exists OPER_POST;
-create table OPER_POST(
+drop table if exists oper_post;
+create table oper_post(
 	id varchar(64) not null,
 	code varchar(64) not null,
 	fullName varchar(256) ,

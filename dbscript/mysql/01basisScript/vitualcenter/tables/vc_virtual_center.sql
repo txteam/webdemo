@@ -8,6 +8,7 @@ create table VC_VIRTUAL_CENTER(
 	name varchar(64) not null,
 	valid bit not null,
 	createDate datetime(6) not null,
+	lastUpdateDate datetime(6) not null,
 	modifyAble bit not null,
 	parentId varchar(64) ,
 	remark varchar(512) ,

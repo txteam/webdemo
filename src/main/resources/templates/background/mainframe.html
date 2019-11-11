@@ -38,7 +38,50 @@ var _contextPath = /*[[@{/}]]*/'';
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function() {
-	
+	$('#notice_handle').click(function(){
+		$.triggerge("addTab",{
+    		id: 'notice_page',
+            title : '通知',
+            href : '/easyui/demo/icon',
+            iconCls : 'icon-duihua'
+        });
+	});
+	$('#message_handle').click(function(){
+		$.triggerge("addTab",{
+    		id: 'message_page',
+            title : '私信',
+            href : '/easyui/demo/icon',
+            iconCls : 'icon-tixing'
+        });
+	});
+	$('#helper_handle').click(function(){
+		$.triggerge("addTab",{
+    		id: 'helper_page',
+            title : '帮助',
+            href : '/easyui/demo/icon',
+            iconCls : 'icon-shuoming'
+        });
+	});
+	var $user_menu = $('#user_menu');
+    var user_euimenu = $user_menu.menu({
+    	onClose: function(){
+    		alert('1111');
+    	}
+    });
+	$('#user_info').mouseover(function(e){
+	});
+	$('#user_info').click(function(e){
+		e.preventDefault();
+		var _$this = $(this);
+    	var x = _$this.offset().left + _$this.width() - 50;
+    	var y = _$this.offset().top + _$this.height();
+    	
+    	$user_menu.menu('show', {
+            left : x,
+            top : y
+        });
+    	$('#user_info_icon').html('&#xe623;');
+	});
 });
 /*]]>*/
 </script>
@@ -59,13 +102,13 @@ $(document).ready(function() {
         <div class="topright">
             <ul class="toptool">
             	<li><a id="screen_handle" href="javascript:void(0);"><i class="iconfont icon-screen-full"></i></a></li>
-	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
+	            <li><a id="notice_handle" href="javascript:void(0);"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
 	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe621;</i></a><em class="gcolor">5</em></li>
 	            <li id="user_info">
 	            	<span class="userface"><i class="iconfont">&#xe60d;</i></span>
-	            	<a href="javascript:void(0);"><font>admin&nbsp;&nbsp;<i class="iconfont userdown">&#xe618;</i></font></a>
+	            	<a href="javascript:void(0);"><font>admin&nbsp;&nbsp;<i class="iconfont userdown" id="user_info_icon">&#xe618;</i></font></a>
 	            </li>
-	            <li><a href="#"><i class="iconfont">&#xe61a;</i></a></li>
+	            <li><a id="helper_handle" href="javascript:void(0);"><i class="iconfont">&#xe61a;</i></a></li>
             </ul>
         </div>
 	</div>

@@ -6,13 +6,17 @@
  */
 package com.tx.local.basicdata.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,7 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tx.component.basicdata.service.AbstractBasicDataService;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
+import com.tx.core.querier.model.Filter;
 import com.tx.core.querier.model.Querier;
+import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.local.basicdata.dao.DistrictDao;
 import com.tx.local.basicdata.model.District;
 
@@ -243,11 +249,65 @@ public class DistrictService extends AbstractBasicDataService<District> {
     }
     
     /**
-     * 判断是否已经存在<br/>
+     * 查询District实例数量<br/>
      * <功能详细描述>
-     *
+     * @param valid
+     * @param params      
+     * @return [参数说明]
+     * 
+     * @return List<District> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public int count(Boolean valid, Map<String, Object> params) {
+        //判断条件合法性
+        
+        //生成查询条件
+        params = params == null ? new HashMap<String, Object>() : params;
+        params.put("valid", valid);
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        int res = this.districtDao.count(params);
+        
+        return res;
+    }
+    
+    /**
+     * 查询District实例数量<br/>
+     * <功能详细描述>
+     * @param valid
+     * @param querier      
+     * @return [参数说明]
+     * 
+     * @return List<District> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public int count(Boolean valid, Querier querier) {
+        //判断条件合法性
+        
+        //生成查询条件
+        querier = querier == null ? QuerierBuilder.newInstance().querier()
+                : querier;
+        if (valid != null) {
+            querier.getFilters().add(Filter.eq("valid", valid));
+        }
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        int res = this.districtDao.count(querier);
+        
+        return res;
+    }
+    
+    /**
+     * 判断District实例是否已经存在<br/>
+     * <功能详细描述>
+     * @param key2valueMap
+     * @param excludeId
+     * @return
+     * 
      * @return int [返回类型说明]
-     * @throws throws [异常类型] [异常说明]
+     * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     public boolean exists(Map<String, String> key2valueMap, String excludeId) {
@@ -265,57 +325,90 @@ public class DistrictService extends AbstractBasicDataService<District> {
     }
     
     /**
-     * @param querier
+     * 判断District实例是否已经存在<br/>
+     * <功能详细描述>
+     * @param key2valueMap
      * @param excludeId
      * @return
+     * 
+     * @return int [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
      */
-    @Override
     public boolean exists(Querier querier, String excludeId) {
-        AssertUtils.notNull(querier, "querier is empty");
-        
-        //设置查询条件
-        querier.getParams().put("excludeId", excludeId);
+        AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.districtDao.count(querier);
+        int res = this.districtDao.count(querier, excludeId);
         
         return res > 0;
     }
     
     /**
-     * 根据id更新对象
+     * 根据id更新District实例<br/>
      * <功能详细描述>
-     *
      * @param district
+     * @return [参数说明]
+     * 
      * @return boolean [返回类型说明]
-     * @throws throws [异常类型] [异常说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean updateById(String id, District district) {
+        //验证参数是否合法，必填字段是否填写
+        AssertUtils.notNull(district, "district is null.");
+        AssertUtils.notEmpty(id, "id is empty.");
+        
+        //生成需要更新字段的hashMap
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        //需要更新的字段
+        //updateRowMap.put("code", district.getCode());
+        updateRowMap.put("level", district.getLevel());
+        updateRowMap.put("zipCode", district.getZipCode());
+        
+        updateRowMap.put("name", district.getName());
+        updateRowMap.put("modifyAble", district.isModifyAble());
+        
+        updateRowMap.put("parent", district.getParent());
+        updateRowMap.put("province", district.getProvince());
+        updateRowMap.put("city", district.getCity());
+        updateRowMap.put("county", district.getCounty());
+        
+        updateRowMap.put("pinyin", district.getPinyin());
+        updateRowMap.put("py", district.getPy());
+        updateRowMap.put("fullName", district.getFullName());
+        updateRowMap.put("type", district.getType());
+        updateRowMap.put("valid", district.isValid());
+        
+        updateRowMap.put("remark", district.getRemark());
+        updateRowMap.put("attributes", district.getAttributes());
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        boolean flag = this.districtDao.update(id, updateRowMap);
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return flag;
+    }
+    
+    /**
+     * 根据id更新District实例<br/>
+     * <功能详细描述>
+     * @param district
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     @Transactional
     public boolean updateById(District district) {
-        //验证参数是否合法，必填字段是否填写，
+        //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(district, "district is null.");
         AssertUtils.notEmpty(district.getId(), "district.id is empty.");
         
-        //生成需要更新字段的hashMap
-        Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        updateRowMap.put("id", district.getId());
-        
-        //需要更新的字段
-        updateRowMap.put("level", district.getLevel());
-        updateRowMap.put("remark", district.getRemark());
-        updateRowMap.put("py", district.getPy());
-        updateRowMap.put("zipCode", district.getZipCode());
-        updateRowMap.put("name", district.getName());
-        updateRowMap.put("modifyAble", district.isModifyAble());
-        updateRowMap.put("fullName", district.getFullName());
-        updateRowMap.put("code", district.getCode());
-        updateRowMap.put("pinyin", district.getPinyin());
-        updateRowMap.put("lastUpdateDate", district.getLastUpdateDate());
-        int updateRowCount = this.districtDao.update(updateRowMap);
-        
+        boolean flag = updateById(district.getId(), district);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
-        return updateRowCount >= 1;
+        return flag;
     }
     
     /**
@@ -369,7 +462,6 @@ public class DistrictService extends AbstractBasicDataService<District> {
         params.put("valid", false);
         
         this.districtDao.update(params);
-        
         return true;
     }
     
@@ -385,12 +477,206 @@ public class DistrictService extends AbstractBasicDataService<District> {
     @Transactional
     public boolean enableById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
+        
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("id", id);
         params.put("valid", true);
         this.districtDao.update(params);
+        
         return true;
+    }
+    
+    /**
+     * 根据parentId查询District子级实例列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param params
+     * @return [参数说明]
+     * 
+     * @return List<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public List<District> queryChildrenByParentId(String parentId,
+            Boolean valid, Map<String, Object> params) {
+        //判断条件合法性
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
+        
+        //生成查询条件
+        params = params == null ? new HashMap<String, Object>() : params;
+        params.put("parentId", parentId);
+        params.put("valid", valid);
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        List<District> resList = this.districtDao.queryList(params);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据parentId查询District子级实例列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param querier
+     * @return [参数说明]
+     * 
+     * @return List<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public List<District> queryChildrenByParentId(String parentId,
+            Boolean valid, Querier querier) {
+        //判断条件合法性
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
+        
+        //生成查询条件
+        querier = querier == null ? QuerierBuilder.newInstance().querier()
+                : querier;
+        if (valid != null) {
+            querier.getFilters().add(Filter.eq("valid", valid));
+        }
+        querier.getFilters().add(Filter.eq("parentId", parentId));
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        List<District> resList = this.districtDao.queryList(querier);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据条件查询基础数据分页列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param params
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public List<District> queryDescendantsByParentId(String parentId,
+            Boolean valid, Map<String, Object> params) {
+        //判断条件合法性
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
+        
+        //生成查询条件
+        params = params == null ? new HashMap<String, Object>() : params;
+        Set<String> ids = new HashSet<>();
+        Set<String> parentIds = new HashSet<>();
+        parentIds.add(parentId);
+        
+        List<District> resList = doNestedQueryChildren(valid,
+                ids,
+                parentIds,
+                params);
+        return resList;
+    }
+    
+    /**
+     * 查询嵌套列表<br/>
+     * <功能详细描述>
+     * @param ids
+     * @param parentIds
+     * @param params
+     * @return [参数说明]
+     * 
+     * @return List<VirtualCenter> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private List<District> doNestedQueryChildren(Boolean valid, Set<String> ids,
+            Set<String> parentIds, Map<String, Object> params) {
+        if (CollectionUtils.isEmpty(parentIds)) {
+            return new ArrayList<District>();
+        }
+        
+        //ids避免数据出错时导致无限循环
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.putAll(params);
+        queryParams.put("parentIds", parentIds);
+        List<District> resList = queryList(valid, queryParams);
+        
+        Set<String> newParentIds = new HashSet<>();
+        for (District bdTemp : resList) {
+            if (!ids.contains(bdTemp.getId())) {
+                newParentIds.add(bdTemp.getId());
+            }
+            ids.add(bdTemp.getId());
+        }
+        //嵌套查询下一层级
+        resList.addAll(doNestedQueryChildren(valid, ids, newParentIds, params));
+        return resList;
+    }
+    
+    /**
+     * 根据条件查询基础数据分页列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param querier
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public List<District> queryDescendantsByParentId(String parentId,
+            Boolean valid, Querier querier) {
+        //判断条件合法性
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
+        
+        //生成查询条件
+        querier = querier == null ? QuerierBuilder.newInstance().querier()
+                : querier;
+        Set<String> ids = new HashSet<>();
+        Set<String> parentIds = new HashSet<>();
+        parentIds.add(parentId);
+        
+        List<District> resList = doNestedQueryChildren(valid,
+                ids,
+                parentIds,
+                querier);
+        return resList;
+    }
+    
+    /**
+     * 嵌套查询列表<br/>
+     * <功能详细描述>
+     * @param ids
+     * @param parentIds
+     * @param querier
+     * @return [参数说明]
+     * 
+     * @return List<VirtualCenter> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private List<District> doNestedQueryChildren(Boolean valid, Set<String> ids,
+            Set<String> parentIds, Querier querier) {
+        if (CollectionUtils.isEmpty(parentIds)) {
+            return new ArrayList<District>();
+        }
+        
+        //ids避免数据出错时导致无限循环
+        Querier querierClone = (Querier) querier.clone();
+        querierClone.getFilters().add(Filter.in("parentId", parentIds));
+        List<District> resList = queryList(valid, querierClone);
+        
+        Set<String> newParentIds = new HashSet<>();
+        for (District bdTemp : resList) {
+            if (!ids.contains(bdTemp.getId())) {
+                newParentIds.add(bdTemp.getId());
+            }
+            ids.add(bdTemp.getId());
+        }
+        //嵌套查询下一层级
+        resList.addAll(
+                doNestedQueryChildren(valid, ids, newParentIds, querier));
+        return resList;
     }
     
 }

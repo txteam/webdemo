@@ -76,6 +76,10 @@ public class VirtualCenter
     @Column(nullable = false)
     private Date createDate;
     
+    /** 创建时间 */
+    @Column(nullable = false)
+    private Date lastUpdateDate;
+    
     /** 子级虚中心 */
     @Transient
     private List<VirtualCenter> children;
@@ -190,6 +194,20 @@ public class VirtualCenter
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+    
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+    
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
     
     /**

@@ -18,32 +18,33 @@
 		parameterType="com.tx.local.basicdata.model.District"
 		resultMap="districtMap">
 		SELECT 
-				TD.id,
-				TD.code,
-				TD.type,
-				TD.level,
-				TD.parentId AS parent_id,
-				TD.provinceId AS province_id,
-				TD.cityId AS city_id,
-				TD.countyId AS county_id,
-				TD.zipCode,
-				TD.name,
-				TD.pinyin,
-				TD.py,
-				TD.fullName,
-				TD.createDate,
-				TD.lastUpdateDate,
-				TD.valid,
-				TD.modifyAble,
-				TD.remark
-		  FROM BD_DISTRICT TD
+				D.id,
+				D.code,
+				D.py,
+				D.zipCode,
+				D.cityId,
+				D.fullName,
+				D.lastUpdateDate,
+				D.name,
+				D.type,
+				D.level,
+				D.valid,
+				D.countyId,
+				D.createDate,
+				D.modifyAble,
+				D.parentId,
+				D.pinyin,
+				D.remark,
+				D.provinceId,
+				D.attributes
+		  FROM BD_DISTRICT D
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            AND TD.ID = #{id}
+	            AND D.id = #{id}
 	        </if>
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            AND TD.CODE = #{code}
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND D.code = #{code}
 	        </if>
 		</trim>
 	</select>
@@ -53,25 +54,27 @@
 		parameterType="java.util.Map"
 		resultMap="districtMap">
 		SELECT 
-				TD.id,
-				TD.code,
-				TD.type,
-				TD.level,
-				TD.parentId AS parent_id,
-				TD.provinceId AS province_id,
-				TD.cityId AS city_id,
-				TD.countyId AS county_id,
-				TD.zipCode,
-				TD.name,
-				TD.pinyin,
-				TD.py,
-				TD.fullName,
-				TD.createDate,
-				TD.lastUpdateDate,
-				TD.valid,
-				TD.modifyAble,
-				TD.remark
-		  FROM BD_DISTRICT TD
+				D.id,
+				D.code,
+				D.py,
+				D.zipCode,
+				D.cityId,
+				D.fullName,
+				D.lastUpdateDate,
+				D.name,
+				D.type,
+				D.level,
+				D.valid,
+				D.countyId,
+				D.createDate,
+				D.modifyAble,
+				D.parentId,
+				D.pinyin,
+				D.remark,
+				D.provinceId,
+				D.attributes
+		  FROM BD_DISTRICT D
+		 WHERE
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -90,60 +93,63 @@
 	        </if>
 			<choose>
 	        	<when test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">
-	        		<![CDATA[ AND TD.PARENTID = #{parentId,jdbcType=VARCHAR} ]]>
+	        		<![CDATA[ AND D.PARENTID = #{parentId,jdbcType=VARCHAR} ]]>
 	        	</when>
 	        	<otherwise>
 	        		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parent)">
 	        			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parent.id)">  
-				        	<![CDATA[ AND TD.PARENTID = #{parent.id,jdbcType=VARCHAR} ]]>
+				        	<![CDATA[ AND D.PARENTID = #{parent.id,jdbcType=VARCHAR} ]]>
 				        </if>
 		        	</if>
 	        	</otherwise>
 	        </choose>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
+	            AND D.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            <![CDATA[ AND TD.VALID = #{valid} ]]>
+	            <![CDATA[ AND D.VALID = #{valid} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIdLike)">
-	            <![CDATA[ AND TD.PARENTID like concat(#{parentIdLike},'%' )]]>
+	            <![CDATA[ AND D.PARENTID like concat(#{parentIdLike},'%' )]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
-	            <![CDATA[ AND TD.MODIFYABLE = #{modifyAble} ]]>
+	            <![CDATA[ AND D.MODIFYABLE = #{modifyAble} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            <![CDATA[ AND TD.CODE = #{code} ]]>
+	            <![CDATA[ AND D.CODE = #{code} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(zipCode)">  
-	            <![CDATA[ AND TD.ZIPCODE = #{zipCode} ]]>
+	            <![CDATA[ AND D.ZIPCODE = #{zipCode} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            <![CDATA[ AND TD.TYPE = #{type} ]]>
+	            <![CDATA[ AND D.TYPE = #{type} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxLevel)">  
-	            <![CDATA[ AND TD.LEVEL <= #{maxLevel} ]]>
+	            <![CDATA[ AND D.LEVEL <= #{maxLevel} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(level)">  
-	            <![CDATA[ AND TD.LEVEL = #{level} ]]>
+	            <![CDATA[ AND D.LEVEL = #{level} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
-	            <![CDATA[ AND TD.NAME = #{name} ]]>
+	            <![CDATA[ AND D.NAME = #{name} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pinyin)">  
-	            <![CDATA[ AND TD.PINYIN LIKE concat(#{pinyin}, '%') ]]>
+	            <![CDATA[ AND D.PINYIN LIKE concat(#{pinyin}, '%') ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(py)">  
-	            <![CDATA[ AND TD.PY = #{py} ]]>
+	            <![CDATA[ AND D.PY = #{py} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
-	            <![CDATA[ AND TD.FULLNAME = #{fullName} ]]>
+	            <![CDATA[ AND D.FULLNAME = #{fullName} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
-	            <![CDATA[ AND TD.CREATEDATE >= #{minCreateDate} ]]>
+	            <![CDATA[ AND D.CREATEDATE >= #{minCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
-	            <![CDATA[ AND TD.CREATEDATE < #{maxCreateDate} ]]>
+	            <![CDATA[ AND D.CREATEDATE < #{maxCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
-				<![CDATA[ AND TD.ID <> #{excludeId} ]]>
+				<![CDATA[ AND D.ID <> #{excludeId} ]]>
 			</if>
 		</trim>
 		<choose>  
@@ -161,7 +167,7 @@
 		parameterType="java.util.Map"
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
-		  FROM BD_DISTRICT TD
+		  FROM BD_DISTRICT D
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -180,57 +186,63 @@
 	        </if>
 			<choose>
 	        	<when test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">
-	        		<![CDATA[ AND TD.PARENTID = #{parentId,jdbcType=VARCHAR} ]]>
+	        		<![CDATA[ AND D.PARENTID = #{parentId,jdbcType=VARCHAR} ]]>
 	        	</when>
 	        	<otherwise>
 	        		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parent)">
 	        			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parent.id)">  
-				        	<![CDATA[ AND TD.PARENTID = #{parent.id,jdbcType=VARCHAR} ]]>
+				        	<![CDATA[ AND D.PARENTID = #{parent.id,jdbcType=VARCHAR} ]]>
 				        </if>
 		        	</if>
 	        	</otherwise>
 	        </choose>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
+	            AND D.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            <![CDATA[ AND TD.VALID = #{valid} ]]>
+	            <![CDATA[ AND D.VALID = #{valid} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIdLike)">
+	            <![CDATA[ AND D.PARENTID like concat(#{parentIdLike},'%' )]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
-	            <![CDATA[ AND TD.MODIFYABLE = #{modifyAble} ]]>
+	            <![CDATA[ AND D.MODIFYABLE = #{modifyAble} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            <![CDATA[ AND TD.CODE = #{code} ]]>
+	            <![CDATA[ AND D.CODE = #{code} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(zipCode)">  
-	            <![CDATA[ AND TD.ZIPCODE = #{zipCode} ]]>
+	            <![CDATA[ AND D.ZIPCODE = #{zipCode} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            <![CDATA[ AND TD.TYPE = #{type} ]]>
+	            <![CDATA[ AND D.TYPE = #{type} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxLevel)">  
-	            <![CDATA[ AND TD.LEVEL <= #{maxLevel} ]]>
+	            <![CDATA[ AND D.LEVEL <= #{maxLevel} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(level)">  
-	            <![CDATA[ AND TD.LEVEL = #{level} ]]>
+	            <![CDATA[ AND D.LEVEL = #{level} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
-	            <![CDATA[ AND TD.NAME = #{name} ]]>
+	            <![CDATA[ AND D.NAME = #{name} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pinyin)">  
-	            <![CDATA[ AND TD.PINYIN LIKE concat(#{pinyin}, '%') ]]>
+	            <![CDATA[ AND D.PINYIN LIKE concat(#{pinyin}, '%') ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(py)">  
-	            <![CDATA[ AND TD.PY = #{py} ]]>
+	            <![CDATA[ AND D.PY = #{py} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullName)">  
-	            <![CDATA[ AND TD.FULLNAME = #{fullName} ]]>
+	            <![CDATA[ AND D.FULLNAME = #{fullName} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
-	            <![CDATA[ AND TD.CREATEDATE >= #{minCreateDate} ]]>
+	            <![CDATA[ AND D.CREATEDATE >= #{minCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
-	            <![CDATA[ AND TD.CREATEDATE < #{maxCreateDate} ]]>
+	            <![CDATA[ AND D.CREATEDATE < #{maxCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
-				<![CDATA[ AND TD.ID <> #{excludeId} ]]>
+				<![CDATA[ AND D.ID <> #{excludeId} ]]>
 			</if>
 		</trim>
 	</select>
@@ -242,43 +254,45 @@
 		(
 			id,
 			code,
-			parentId,
-			provinceId,
-			cityId,
-			countyId,
-			valid,
-			modifyAble,
-			fullName,
-			level,
-			name,
-			pinyin,
 			py,
-			remark,
-			type,
 			zipCode,
+			cityId,
+			fullName,
+			lastUpdateDate,
+			name,
+			type,
+			level,
+			valid,
+			countyId,
 			createDate,
-			lastUpdateDate
+			modifyAble,
+			parentId,
+			pinyin,
+			remark,
+			provinceId,
+			attributes
 		)
 		VALUES
 		(
 			#{id},
 			#{code},
-			#{parent.id},
-			#{province.id},
-			#{city.id},
-			#{county.id},
-			#{valid},
-			#{modifyAble},
-			#{fullName},
-			#{level},
-			#{name},
-			#{pinyin},
 			#{py},
-			#{remark},
-			#{type},
 			#{zipCode},
+			#{city.id},
+			#{fullName},
+			#{lastUpdateDate},
+			#{name},
+			#{type},
+			#{level},
+			#{valid},
+			#{county.id},
 			#{createDate},
-			#{lastUpdateDate}
+			#{modifyAble},
+			#{parent.id},
+			#{pinyin},
+			#{remark},
+			#{province.id},
+			#{attributes}
 		)
 	</insert>
 	
@@ -302,49 +316,66 @@
 	<!-- auto generate default update -->
 	<update id="update"
 	    parameterType="java.util.Map">  
-	    UPDATE BD_DISTRICT 
+	    UPDATE BD_DISTRICT
 	    <trim prefix="SET" suffixOverrides=",">
-	    	<if test="_parameter.containsKey('parent')">
-	    		parentId = #{parent.id,javaType=java.lang.String},
-	    	</if>	
-	    	<if test="_parameter.containsKey('province')">
-				provinceId = #{province.id,javaType=java.lang.String},
+			<if test="_parameter.containsKey('py')">
+	    		py = #{py,javaType=java.lang.String},
 	    	</if>
-	    	<if test="_parameter.containsKey('city')">
-				cityId = #{city.id,javaType=java.lang.String},
+			<if test="_parameter.containsKey('zipCode')">
+	    		zipCode = #{zipCode,javaType=java.lang.String},
 	    	</if>
-	    	<if test="_parameter.containsKey('county')">
-				countyId = #{county.id,javaType=java.lang.String},
+			<if test="_parameter.containsKey('city')">
+	    		cityId = #{city.id,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('parentId')">
-	    		parentId = #{parent.id,javaType=java.lang.String},
-	    	</if>	
-	    	<if test="_parameter.containsKey('code')">
-	    		code = #{code,javaType=java.lang.String},
+			<if test="_parameter.containsKey('fullName')">
+	    		fullName = #{fullName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('name')">
+	    		name = #{name,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.basicdata.model.DistrictTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('level')">
+	    		level = #{level,javaType=int},
 	    	</if>
 			<if test="_parameter.containsKey('valid')">
 	    		valid = #{valid,javaType=boolean},
 	    	</if>
-	    	<if test="_parameter.containsKey('modifyAble')">
+			<if test="_parameter.containsKey('county')">
+	    		countyId = #{county.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('modifyAble')">
 	    		modifyAble = #{modifyAble,javaType=boolean},
 	    	</if>
-	    	<if test="_parameter.containsKey('name')">
-	    		name = #{name,javaType=java.lang.String},
-	    	</if>	
-			<if test="_parameter.containsKey('fullName')">
-	    		fullName = #{fullName,javaType=java.lang.String},
-	    	</if>	
-			<if test="_parameter.containsKey('lastUpdateDate')">
-	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+			<if test="_parameter.containsKey('parent')">
+	    		parentId = #{parent.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('pinyin')">
+	    		pinyin = #{pinyin,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('remark')">
 	    		remark = #{remark,javaType=java.lang.String},
-	    	</if>	
-			<if test="_parameter.containsKey('type')">
-	    		type = #{type,javaType=com.tx.local.basicdata.model.DistrictTypeEnum},
-	    	</if>	
+	    	</if>
+			<if test="_parameter.containsKey('province')">
+	    		provinceId = #{province.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('attributes')">
+	    		attributes = #{attributes,javaType=java.lang.String},
+	    	</if>
 	    </trim>
-	    WHERE id = #{id}
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
+	        </if>
+		</trim>
 	</update>  
 
 </mapper>

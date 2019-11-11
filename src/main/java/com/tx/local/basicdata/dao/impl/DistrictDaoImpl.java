@@ -25,18 +25,19 @@ import com.tx.local.basicdata.model.District;
  * @since  [产品/模块版本]
  */
 @Component("districtDao")
-public class DistrictDaoImpl extends MybatisBaseDaoImpl<District, String> implements DistrictDao {
+public class DistrictDaoImpl extends MybatisBaseDaoImpl<District, String>
+        implements DistrictDao {
     
     @Resource(name = "myBatisDaoSupport")
     private MyBatisDaoSupport myBatisDaoSupport;
-
+    
     /**
      * @return 返回 myBatisDaoSupport
      */
     public MyBatisDaoSupport getMyBatisDaoSupport() {
         return myBatisDaoSupport;
     }
-
+    
     /**
      * @param 对myBatisDaoSupport进行赋值
      */

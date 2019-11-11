@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -113,6 +114,7 @@ public class VirtualCenterService implements InitializingBean {
                     ur.put("name", virtualCenterKeyTemp.getName());
                     ur.put("valid", true);
                     ur.put("modifyAble", false);
+                    ur.put("lastUpdateDate", new Date());
                     
                     //code无法更新
                     this.virtualCenterDao.update(ur);
@@ -159,6 +161,7 @@ public class VirtualCenterService implements InitializingBean {
             Map<String, Object> ur = new HashMap<>();
             ur.put("id", vc.getId());
             ur.put("parentId", virtualCenterKeyTemp.getParent().getId());
+            ur.put("lastUpdateDate", new Date());
             
             this.virtualCenterDao.update(ur);
             vc.setParentId(virtualCenterKeyTemp.getParent().getId());
@@ -192,9 +195,11 @@ public class VirtualCenterService implements InitializingBean {
         AssertUtils.notEmpty(virtualCenter.isModifyAble(),
                 "virtualCenter.modifyAble is empty.");
         
-        //FIXME:为添加的数据需要填入默认值的字段填入默认值
+        //为添加的数据需要填入默认值的字段填入默认值
+        Date now = new Date();
         virtualCenter.setValid(true);
-        virtualCenter.setCreateDate(new Date());
+        virtualCenter.setCreateDate(now);
+        virtualCenter.setLastUpdateDate(now);
         
         //调用数据持久层对实例进行持久化操作
         this.virtualCenterDao.insert(virtualCenter);
@@ -257,7 +262,6 @@ public class VirtualCenterService implements InitializingBean {
         
         VirtualCenter condition = new VirtualCenter();
         condition.setId(id);
-        
         VirtualCenter res = this.virtualCenterDao.find(condition);
         return res;
     }
@@ -464,10 +468,9 @@ public class VirtualCenterService implements InitializingBean {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         params.putAll(key2valueMap);
-        params.put("excludeId", excludeId);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.virtualCenterDao.count(params);
+        int res = this.virtualCenterDao.count(params, excludeId);
         
         return res > 0;
     }
@@ -523,6 +526,7 @@ public class VirtualCenterService implements InitializingBean {
         updateRowMap.put("modifyAble", virtualCenter.isModifyAble());
         updateRowMap.put("parentId", virtualCenter.getParentId());
         updateRowMap.put("remark", virtualCenter.getRemark());
+        updateRowMap.put("lastUpdateDate", new Date());
         
         boolean flag = this.virtualCenterDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
@@ -790,5 +794,46 @@ public class VirtualCenterService implements InitializingBean {
         resList.addAll(
                 doNestedQueryChildren(valid, ids, newParentIds, querier));
         return resList;
+    }
+    
+    /**
+     * 判断VirtualCenter实例是否可编辑<br/>
+     * <功能详细描述>
+     * @param key2valueMap
+     * @param excludeId
+     * @return
+     * 
+     * @return int [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public boolean modifyAble(String id) {
+        AssertUtils.notEmpty(id, "id is empty");
+        
+        VirtualCenter condition = new VirtualCenter();
+        condition.setId(id);
+        VirtualCenter vc = this.virtualCenterDao.find(condition);
+        
+        DateTime createDateTime = new DateTime(vc.getCreateDate());
+        Date now = new Date();
+        
+        //如果不能被编辑
+        if (!vc.isModifyAble()) {
+            return false;
+        }
+        
+        //如果创建时间已经超过了一天
+        if (createDateTime.plusDays(1).toDate().compareTo(now) <= 0) {
+            return false;
+        }
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("parentId", id);
+        int c = count(null, params);
+        if (c > 0) {
+            return false;
+        }
+        
+        return true;
     }
 }

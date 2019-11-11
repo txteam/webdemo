@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>queryBasicDatas</title>
+	<title>addVirtualCenter</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -46,7 +46,7 @@ $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
 	$("#parentName").selectVirtualCenter({
-		eventName : "selectVCForAddVirtualCenter",
+		eventName : "forAddVirtualCenter",
 		contextPath : _contextPath,
 		title : "请选择父级虚中心",  
 		width : 260,
@@ -71,12 +71,14 @@ $(document).ready(function(){
 			});
 	        //表单验证通过，提交表单到服务器
 			$('#entityForm').ajaxSubmit({
-			    url:"${contextPath}/virtualCenter/add",
+			    url: /*[[@{/virtualCenter/add}]]*/_contextPath + 'virtualCenter/add',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
-						DialogUtils.tip("新增类型分组成功");
+						DialogUtils.tip("新增虚中心成功.");
 						parent.DialogUtils.closeDialogById("addVirtualCenter");
+					}else{
+						parent.DialogUtils.tip("新增虚中心失败.");
 					}
 			    }
 			});
@@ -100,28 +102,28 @@ $(document).ready(function(){
 				<tr>
 					<th class="narrow" width="20%">名称:<span class="tRed">*</span></th>
 					<td>
-						<input id="name" name="name" data-tip="必填" style="width: 80%"
+						<input id="name" name="name" data-tip="必填" style="width: 60%"
 							th:data-rule="'名称:required;length[2~16];remote[' + @{/virtualCenter/validateName} + ', name]'"/>
 					</td>
 				</tr>
 				<tr>
 					<th class="narrow">编码:<span class="tRed">*</span></th>
 					<td>
-						<input id="code" name="code" data-tip="必填" style="width: 80%"
+						<input id="code" name="code" data-tip="必填" style="width: 60%"
 							th:data-rule="'名称:required;length[2~16];remote[' + @{/virtualCenter/validateName} + ', name]'"/>
 					</td>
 				</tr>
 				<tr>
 					<th>上级类型分组：</th>
 					<td>
-						<input id="parentId" name="parentId" type="hidden" readonly="readonly" th:value="${parent?.id }" style="width: 80%"/>
-						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" th:value="${parent?.name }" style="width: 80%"/>
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly" th:value="${parent?.id }" style="width: 60%"/>
+						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" th:value="${parent?.name }" style="width: 60%"/>
 					</td>
 				</tr>
 				<tr>
 					<th>备注：</th>
 					<td>
-						<textarea name="remark" rows="" cols="" class="longText"></textarea>
+						<textarea name="remark" rows="" cols="" class="longText" style="width: 60%"></textarea>
 					</td>
 				</tr>
 				<tr>

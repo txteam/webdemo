@@ -8,6 +8,7 @@ package com.tx.local.appoint.model;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.AbstractDataDict;
+import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 
 /**
  * 预约方式
@@ -18,7 +19,7 @@ import com.tx.component.basicdata.model.AbstractDataDict;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@BasicDataEntity(name = "预约方式")
+@BasicDataEntity(name = "预约方式", viewType = BasicDataViewTypeEnum.LIST)
 public class AppointWay extends AbstractDataDict {
     
     /** 注释内容 */

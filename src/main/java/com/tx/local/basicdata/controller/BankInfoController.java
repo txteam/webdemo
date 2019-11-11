@@ -12,8 +12,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -37,9 +35,6 @@ import com.tx.local.basicdata.service.BankInfoService;
 @Controller("bankInfoController")
 @RequestMapping("/bankInfo")
 public class BankInfoController {
-    
-    //日志记录器
-    private Logger logger = LoggerFactory.getLogger(BankInfoController.class);
     
     @Resource(name = "bankInfoService")
     private BankInfoService bankInfoService;

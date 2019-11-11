@@ -19,11 +19,16 @@
 			<menu id="personal_center_menu" text="个人中心">
 				<menu id="calandar_menu" text="行事历"></menu>
 				<menu id="notepad_menu" text="记事本"></menu>
-				<menu id="modify_myself_info_menu" text="修改个人信息"></menu>
-				<menu id="modify_password_menu" text="修改密码"></menu>
+				<menu id="notice_menu" text="通知"></menu>
+				<menu id="message_menu" text="私信"></menu>
 			</menu>
-			<menu id="lock_window_menu" text="锁定窗口" type="event" event="logout"></menu>
-			<menu id="relogin_menu" text="重新登录" type="event" event="logout"></menu>
+			<menu id="account_setting_menus" text="账号设置">
+				<menu id="safeinfo_menu" text="安全设置"></menu>
+				<menu id="password_menu" text="密码管理"></menu>
+				<menu id="account_relate_menu" text="账号关联"></menu>
+				<menu id="authentication_menu" text="身份认证"></menu>
+			</menu>
+			<menu id="lock_menu" text="锁定窗口" type="event" event="lock"></menu>
 			<menu id="logout_menu" text="退出系统" type="event" event="logout"></menu>
 		</menu>
 	</catalog>
@@ -43,10 +48,10 @@
 	<catalog id="config_catalog" text="配置菜单">
 		<menu id="operator_manage_center_menu" text="用户管理" auths="operator_manage_center_auth" type="tab">
 			<menu id="virtualcenter_manage_menu" text="虚中心管理" auths="virtualcenter_manage_auth" href="/virtualCenter/toQueryTreeList" type="tab"></menu>
-			<menu id="organization_manage_menu" text="组织结构管理" auths="organization_manage_auth" href="/organization/toQueryList" type="tab"></menu>
+			<menu id="organization_manage_menu" text="组织管理" auths="organization_manage_auth" href="/organization/toQueryList" type="tab"></menu>
 			<menu id="auth_manage_menu" text="权限管理" auths="auth_manage_auth" href="/auth/toQueryAuthView.action" type="tab"></menu>
-			<menu id="role_manage_menu" text="角色管理" auths="role_manage_auth" href="/role/toQueryRoleList.action" type="tab"></menu>
-			<menu id="post_manage_menu" text="职位管理" auths="post_manage_auth" href="/post/toQueryPostList.action" type="tab"></menu>
+			<menu id="role_manage_menu" text="角色管理" auths="role_manage_auth" href="/role/toQueryList" type="tab"></menu>
+			<menu id="post_manage_menu" text="职位管理" auths="post_manage_auth" href="/post/toQueryList" type="tab"></menu>
 			<menu id="operator_manage_menu" text="用户管理" auths="operator_manage_auth" href="/operator/toQueryOperatorList.action" type="tab"></menu>
 		</menu>
 		<menu id="basicdata_manage_center_menu" text="基础数据管理" auths="basicdata_manage_center_auth" type="tab" selectRefresh="false">

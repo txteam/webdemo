@@ -12,19 +12,22 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.local.operator.model.Organization;
-import com.tx.local.operator.service.OrganizationService;
 import com.tx.core.paged.model.PagedList;
-
-import com.tx.local.operator.model.OrganizationTypeEnum;
 import com.tx.local.operator.model.ChiefTypeEnum;
+import com.tx.local.operator.model.Organization;
+import com.tx.local.operator.model.OrganizationTypeEnum;
+import com.tx.local.operator.service.OrganizationService;
+import com.tx.local.vitualcenter.model.VirtualCenter;
+import com.tx.local.vitualcenter.service.VirtualCenterService;
 
 /**
  * 组织控制层<br/>
@@ -42,6 +45,10 @@ public class OrganizationController {
     @Resource(name = "organizationService")
     private OrganizationService organizationService;
     
+    //虚中心业务层
+    @Resource(name = "virtualCenterService")
+    private VirtualCenterService virtualCenterService;
+    
     /**
      * 跳转到查询组织列表页面<br/>
      * <功能详细描述>
@@ -53,26 +60,10 @@ public class OrganizationController {
      */
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
-		response.put("types", OrganizationTypeEnum.values());
-		response.put("chiefTypes", ChiefTypeEnum.values());
-
+        response.put("types", OrganizationTypeEnum.values());
+        response.put("chiefTypes", ChiefTypeEnum.values());
+        
         return "/operator/queryOrganizationList";
-    }
-    /**
-     * 跳转到查询组织列表页面<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/toQueryTreeList")
-    public String toQueryTreeList(ModelMap response) {
-		response.put("types", OrganizationTypeEnum.values());
-		response.put("chiefTypes", ChiefTypeEnum.values());
-
-        return "/operator/queryOrganizationTreeList";
     }
     
     /**
@@ -85,12 +76,23 @@ public class OrganizationController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAdd")
-    public String toAdd(ModelMap response) {
-    	response.put("organization", new Organization());
-    	
-		response.put("types", OrganizationTypeEnum.values());
-		response.put("chiefTypes", ChiefTypeEnum.values());
-
+    public String toAdd(
+            @RequestParam(value = "parentId", required = false) String parentId,
+            @RequestParam(value = "vcid", required = false) String vcid,
+            ModelMap response) {
+        response.put("organization", new Organization());
+        
+        response.put("types", OrganizationTypeEnum.values());
+        response.put("chiefTypes", ChiefTypeEnum.values());
+        response.put("virtualCenterList",
+                this.virtualCenterService.queryList(true,
+                        (Map<String, Object>) null));
+        
+        if (!StringUtils.isEmpty(parentId)) {
+            Organization parent = this.organizationService.findById(parentId);
+            response.put("parent", parent);
+        }
+        
         return "/operator/addOrganization";
     }
     
@@ -104,18 +106,44 @@ public class OrganizationController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdate")
-    public String toUpdate(
-    		@RequestParam("id") String id,
-            ModelMap response) {
-        Organization organization = this.organizationService.findById(id); 
+    public String toUpdate(@RequestParam("id") String id, ModelMap response) {
+        Organization organization = this.organizationService.findById(id);
         response.put("organization", organization);
-
-		response.put("types", OrganizationTypeEnum.values());
-		response.put("chiefTypes", ChiefTypeEnum.values());
+        
+        response.put("types", OrganizationTypeEnum.values());
+        response.put("chiefTypes", ChiefTypeEnum.values());
+        
+        if (!StringUtils.isEmpty(organization.getParentId())) {
+            Organization parent = this.organizationService
+                    .findById(organization.getParentId());
+            response.put("parent", parent);
+        }
+        if (!StringUtils.isEmpty(organization.getVcid())) {
+            VirtualCenter vc = this.virtualCenterService
+                    .findById(organization.getVcid());
+            response.put("vc", vc);
+        }
         
         return "/operator/updateOrganization";
     }
-
+    
+    /**
+     * 跳转到选择组织页面
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toSelect")
+    public String toSelect(
+            @RequestParam(value = "eventName", required = false) String eventName,
+            ModelMap responseMap) {
+        responseMap.put("eventName", eventName);
+        return "/operator/selectOrganization";
+    }
+    
     /**
      * 查询组织实例列表<br/>
      * <功能详细描述>
@@ -128,17 +156,14 @@ public class OrganizationController {
     @ResponseBody
     @RequestMapping("/queryList")
     public List<Organization> queryList(
-			@RequestParam(value="valid",required=false) Boolean valid,
-    		@RequestParam MultiValueMap<String, String> request
-    	) {
-        Map<String,Object> params = new HashMap<>();
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
         //params.put("",request.getFirst(""));
-    	
-        List<Organization> resList = this.organizationService.queryList(
-			valid,
-			params         
-        );
-  
+        
+        List<Organization> resList = this.organizationService.queryList(valid,
+                params);
+        
         return resList;
     }
     
@@ -154,20 +179,15 @@ public class OrganizationController {
     @ResponseBody
     @RequestMapping("/queryPagedList")
     public PagedList<Organization> queryPagedList(
-			@RequestParam(value="valid",required=false) Boolean valid,
-			@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam MultiValueMap<String, String> request
-    	) {
-		Map<String,Object> params = new HashMap<>();
-		//params.put("",request.getFirst(""));
-
-        PagedList<Organization> resPagedList = this.organizationService.queryPagedList(
-			valid,
-			params,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        //params.put("",request.getFirst(""));
+        
+        PagedList<Organization> resPagedList = this.organizationService
+                .queryPagedList(valid, params, pageIndex, pageSize);
         return resPagedList;
     }
     
@@ -220,8 +240,8 @@ public class OrganizationController {
         Organization organization = this.organizationService.findById(id);
         return organization;
     }
-
-	/**
+    
+    /**
      * 根据编码查询组织实例<br/> 
      * <功能详细描述>
      * @param code
@@ -287,10 +307,10 @@ public class OrganizationController {
         boolean flag = this.organizationService.enableById(id);
         return flag;
     }
-
-	/**
+    
+    /**
      * 校验参数对应实例是否重复
-	 * @param excludeId
+     * @param excludeId
      * @param params
      * @return [参数说明]
      * 
@@ -300,7 +320,7 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping("/validate")
-    public Map<String, String> check(
+    public Map<String, String> validate(
             @RequestParam(value = "excludeId", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
         boolean flag = this.organizationService.exists(params, excludeId);
@@ -312,5 +332,74 @@ public class OrganizationController {
             resMap.put("error", "重复值");
         }
         return resMap;
+    }
+    
+    /**
+     * 是否可编辑<br/>
+     * <功能详细描述>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/modifyAble")
+    public boolean modifyAble(@RequestParam(value = "id") String id) {
+        boolean flag = this.organizationService.modifyAble(id);
+        return flag;
+    }
+    
+    /**
+     * 根据条件查询组织结构子级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryChildren")
+    public List<Organization> queryChildren(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        
+        List<Organization> resList = this.organizationService
+                .queryChildrenByParentId(parentId, valid, params);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据条件查询组织结构子、孙级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryDescendants")
+    public List<Organization> queryDescendants(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        
+        List<Organization> resList = this.organizationService
+                .queryDescendantsByParentId(parentId, valid, params);
+        
+        return resList;
     }
 }

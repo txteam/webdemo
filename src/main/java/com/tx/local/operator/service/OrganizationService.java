@@ -17,18 +17,19 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.local.operator.dao.OrganizationDao;
-import com.tx.local.operator.model.Organization;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Filter;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.local.operator.dao.OrganizationDao;
+import com.tx.local.operator.model.Organization;
 
 /**
  * 组织的业务层[OrganizationService]
@@ -60,17 +61,60 @@ public class OrganizationService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
+    public void insertToHis(Organization organization) {
+        //验证参数是否合法
+        AssertUtils.notNull(organization, "organization is null.");
+        AssertUtils.notEmpty(organization.getCode(),
+                "organization.code is empty.");
+        AssertUtils.notEmpty(organization.getName(),
+                "organization.name is empty.");
+        AssertUtils.notEmpty(organization.getType(),
+                "organization.type is empty.");
+        AssertUtils.notEmpty(organization.getVcid(),
+                "organization.vcid is empty.");
+        
+        AssertUtils.notEmpty(organization.getId(),
+                "organization.parentId is empty.");
+        
+        //为添加的数据需要填入默认值的字段填入默认值
+        organization.setValid(true);
+        Date now = new Date();
+        organization.setCreateDate(now);
+        organization.setLastUpdateDate(now);
+        
+        //调用数据持久层对实例进行持久化操作
+        this.organizationDao.insert(organization);
+    }
+    
+    /**
+     * 新增组织实例<br/>
+     * 将organization插入数据库中保存
+     * 1、如果organization 为空时抛出参数为空异常
+     * 2、如果organization 中部分必要参数为非法值时抛出参数不合法异常
+     * 
+     * @param organization [参数说明]
+     * @return void [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
     public void insert(Organization organization) {
         //验证参数是否合法
         AssertUtils.notNull(organization, "organization is null.");
-		AssertUtils.notEmpty(organization.getCode(), "organization.code is empty.");
-		AssertUtils.notEmpty(organization.getName(), "organization.name is empty.");
-		AssertUtils.notEmpty(organization.getType(), "organization.type is empty.");
-		AssertUtils.notEmpty(organization.getVcid(), "organization.vcid is empty.");
-		AssertUtils.notEmpty(organization.getParentId(), "organization.parentId is empty.");
-           
-        //FIXME:为添加的数据需要填入默认值的字段填入默认值
-		organization.setValid(true);
+        AssertUtils.notEmpty(organization.getCode(),
+                "organization.code is empty.");
+        AssertUtils.notEmpty(organization.getName(),
+                "organization.name is empty.");
+        AssertUtils.notEmpty(organization.getType(),
+                "organization.type is empty.");
+        AssertUtils.notEmpty(organization.getVcid(),
+                "organization.vcid is empty.");
+        
+        //为添加的数据需要填入默认值的字段填入默认值
+        organization.setValid(true);
+        Date now = new Date();
+        organization.setCreateDate(now);
+        organization.setLastUpdateDate(now);
         
         //调用数据持久层对实例进行持久化操作
         this.organizationDao.insert(organization);
@@ -97,7 +141,7 @@ public class OrganizationService {
         boolean flag = resInt > 0;
         return flag;
     }
-
+    
     /**
      * 根据code删除组织实例
      * 1、当code为empty时抛出异常
@@ -137,7 +181,7 @@ public class OrganizationService {
         Organization res = this.organizationDao.find(condition);
         return res;
     }
-
+    
     /**
      * 根据code查询组织实例
      * 1、当code为empty时抛出异常
@@ -168,16 +212,14 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<Organization> queryList(
-		Boolean valid,
-		Map<String,Object> params   
-    	) {
+    public List<Organization> queryList(Boolean valid,
+            Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<Organization> resList = this.organizationDao.queryList(params);
         
@@ -195,19 +237,16 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<Organization> queryList(
-		Boolean valid,
-		Querier querier   
-    	) {
+    public List<Organization> queryList(Boolean valid, Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<Organization> resList = this.organizationDao.queryList(querier);
         
@@ -229,24 +268,22 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<Organization> queryPagedList(
-		Boolean valid,
-		Map<String,Object> params,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<Organization> queryPagedList(Boolean valid,
+            Map<String, Object> params, int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
- 
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<Organization> resPagedList = this.organizationDao.queryPagedList(params, pageIndex, pageSize);
+        PagedList<Organization> resPagedList = this.organizationDao
+                .queryPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
     
-	/**
+    /**
      * 分页查询组织实例列表
      * <功能详细描述>
      * @param valid
@@ -261,22 +298,20 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<Organization> queryPagedList(
-		Boolean valid,
-		Querier querier,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<Organization> queryPagedList(Boolean valid,
+            Querier querier, int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<Organization> resPagedList = this.organizationDao.queryPagedList(querier, pageIndex, pageSize);
+        PagedList<Organization> resPagedList = this.organizationDao
+                .queryPagedList(querier, pageIndex, pageSize);
         
         return resPagedList;
     }
@@ -292,16 +327,13 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Boolean valid,
-		Map<String,Object> params   
-    	) {
+    public int count(Boolean valid, Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.organizationDao.count(params);
         
@@ -319,19 +351,16 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Boolean valid,
-		Querier querier   
-    	) {
+    public int count(Boolean valid, Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.organizationDao.count(querier);
         
@@ -349,7 +378,7 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public boolean exists(Map<String,String> key2valueMap, String excludeId) {
+    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
         AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
         
         //生成查询条件
@@ -378,7 +407,7 @@ public class OrganizationService {
         AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.organizationDao.count(querier,excludeId);
+        int res = this.organizationDao.count(querier, excludeId);
         
         return res > 0;
     }
@@ -394,36 +423,48 @@ public class OrganizationService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(String id,Organization organization) {
+    public boolean updateById(String id, Organization organization) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(organization, "organization is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-		AssertUtils.notEmpty(organization.getCode(), "organization.code is empty.");
-		AssertUtils.notEmpty(organization.getName(), "organization.name is empty.");
-		AssertUtils.notEmpty(organization.getType(), "organization.type is empty.");
-		AssertUtils.notEmpty(organization.getVcid(), "organization.vcid is empty.");
-		AssertUtils.notEmpty(organization.getParentId(), "organization.parentId is empty.");
-
+        AssertUtils.notEmpty(organization.getCode(),
+                "organization.code is empty.");
+        AssertUtils.notEmpty(organization.getName(),
+                "organization.name is empty.");
+        AssertUtils.notEmpty(organization.getType(),
+                "organization.type is empty.");
+        AssertUtils.notEmpty(organization.getVcid(),
+                "organization.vcid is empty.");
+        AssertUtils.notEmpty(organization.getParentId(),
+                "organization.parentId is empty.");
+        
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //FIXME:需要更新的字段
-		updateRowMap.put("code", organization.getCode());
-		updateRowMap.put("fullName", organization.getFullName());
-		updateRowMap.put("fullAddress", organization.getFullAddress());
-		updateRowMap.put("name", organization.getName());
-		updateRowMap.put("type", organization.getType());
-		updateRowMap.put("vcid", organization.getVcid());
-		updateRowMap.put("alias", organization.getAlias());
-		updateRowMap.put("chiefId", organization.getChiefId());
-		updateRowMap.put("chiefType", organization.getChiefType());
-		updateRowMap.put("valid", organization.isValid());
-		updateRowMap.put("parentId", organization.getParentId());
-		updateRowMap.put("remark", organization.getRemark());
-		updateRowMap.put("address", organization.getAddress());
-		updateRowMap.put("company", organization.getCompany());
-		updateRowMap.put("districtId", organization.getDistrictId());
-
-        boolean flag = this.organizationDao.update(id,updateRowMap); 
+        //需要更新的字段
+        updateRowMap.put("parentId", organization.getParentId());
+        updateRowMap.put("vcid", organization.getVcid());
+        updateRowMap.put("code", organization.getCode());
+        updateRowMap.put("name", organization.getName());
+        updateRowMap.put("type", organization.getType());
+        
+        updateRowMap.put("fullName", organization.getFullName());
+        updateRowMap.put("fullAddress", organization.getFullAddress());
+        
+        updateRowMap.put("alias", organization.getAlias());
+        updateRowMap.put("chiefId", organization.getChiefId());
+        updateRowMap.put("chiefType", organization.getChiefType());
+        updateRowMap.put("valid", organization.isValid());
+        
+        updateRowMap.put("remark", organization.getRemark());
+        updateRowMap.put("address", organization.getAddress());
+        updateRowMap.put("districtId", organization.getDistrictId());
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        updateRowMap.put("districtId", organization.getDistrictId());
+        updateRowMap.put("company", organization.getCompany());
+        updateRowMap.put("department", organization.getDepartment());
+        
+        boolean flag = this.organizationDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
@@ -443,12 +484,12 @@ public class OrganizationService {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(organization, "organization is null.");
         AssertUtils.notEmpty(organization.getId(), "organization.id is empty.");
-
-        boolean flag = updateById(organization.getId(),organization); 
+        
+        boolean flag = updateById(organization.getId(), organization);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
-
+    
     /**
      * 根据id禁用组织<br/>
      * <功能详细描述>
@@ -496,7 +537,7 @@ public class OrganizationService {
         
         return flag;
     }
-
+    
     /**
      * 根据parentId查询组织子级实例列表<br/>
      * <功能详细描述>
@@ -510,16 +551,15 @@ public class OrganizationService {
      * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryChildrenByParentId(String parentId,
-			Boolean valid,
-			Map<String,Object> params) {
+            Boolean valid, Map<String, Object> params) {
         //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
         params.put("parentId", parentId);
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<Organization> resList = this.organizationDao.queryList(params);
         
@@ -539,19 +579,18 @@ public class OrganizationService {
      * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryChildrenByParentId(String parentId,
-			Boolean valid,
-			Querier querier) {
+            Boolean valid, Querier querier) {
         //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-		querier.getFilters().add(Filter.eq("parentId", parentId));
-
+        querier.getFilters().add(Filter.eq("parentId", parentId));
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<Organization> resList = this.organizationDao.queryList(querier);
         
@@ -571,10 +610,9 @@ public class OrganizationService {
      * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryDescendantsByParentId(String parentId,
-			Boolean valid,
-            Map<String, Object> params) {
+            Boolean valid, Map<String, Object> params) {
         //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
@@ -582,7 +620,10 @@ public class OrganizationService {
         Set<String> parentIds = new HashSet<>();
         parentIds.add(parentId);
         
-        List<Organization> resList = doNestedQueryChildren(valid, ids, parentIds, params);
+        List<Organization> resList = doNestedQueryChildren(valid,
+                ids,
+                parentIds,
+                params);
         return resList;
     }
     
@@ -598,9 +639,9 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private List<Organization> doNestedQueryChildren(
-			Boolean valid,
-    		Set<String> ids,Set<String> parentIds,Map<String, Object> params) {
+    private List<Organization> doNestedQueryChildren(Boolean valid,
+            Set<String> ids, Set<String> parentIds,
+            Map<String, Object> params) {
         if (CollectionUtils.isEmpty(parentIds)) {
             return new ArrayList<Organization>();
         }
@@ -636,10 +677,9 @@ public class OrganizationService {
      * @see [类、类#方法、类#成员]
      */
     public List<Organization> queryDescendantsByParentId(String parentId,
-			Boolean valid,
-            Querier querier) {
+            Boolean valid, Querier querier) {
         //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
@@ -648,7 +688,10 @@ public class OrganizationService {
         Set<String> parentIds = new HashSet<>();
         parentIds.add(parentId);
         
-        List<Organization> resList = doNestedQueryChildren(valid, ids, parentIds, querier);
+        List<Organization> resList = doNestedQueryChildren(valid,
+                ids,
+                parentIds,
+                querier);
         return resList;
     }
     
@@ -664,17 +707,14 @@ public class OrganizationService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private List<Organization> doNestedQueryChildren(
-			Boolean valid,
-    		Set<String> ids,
-    		Set<String> parentIds,
-    		Querier querier) {
+    private List<Organization> doNestedQueryChildren(Boolean valid,
+            Set<String> ids, Set<String> parentIds, Querier querier) {
         if (CollectionUtils.isEmpty(parentIds)) {
             return new ArrayList<Organization>();
         }
         
         //ids避免数据出错时导致无限循环
-        Querier querierClone = (Querier)querier.clone();
+        Querier querierClone = (Querier) querier.clone();
         querierClone.getFilters().add(Filter.in("parentId", parentIds));
         List<Organization> resList = queryList(valid, querierClone);
         
@@ -686,7 +726,43 @@ public class OrganizationService {
             ids.add(bdTemp.getId());
         }
         //嵌套查询下一层级
-        resList.addAll(doNestedQueryChildren(valid, ids, newParentIds, querier));
+        resList.addAll(
+                doNestedQueryChildren(valid, ids, newParentIds, querier));
         return resList;
+    }
+    
+    /**
+     * 判断VirtualCenter实例是否可编辑<br/>
+     * <功能详细描述>
+     * @param key2valueMap
+     * @param excludeId
+     * @return
+     * 
+     * @return int [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public boolean modifyAble(String id) {
+        AssertUtils.notEmpty(id, "id is empty");
+        
+        Organization condition = new Organization();
+        condition.setId(id);
+        Organization org = this.organizationDao.find(condition);
+        
+        DateTime createDateTime = new DateTime(org.getCreateDate());
+        Date now = new Date();
+        //如果创建时间已经超过了一天
+        if (createDateTime.plusDays(1).toDate().compareTo(now) <= 0) {
+            return false;
+        }
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("parentId", id);
+        int c = count(null, params);
+        if (c > 0) {
+            return false;
+        }
+        
+        return true;
     }
 }

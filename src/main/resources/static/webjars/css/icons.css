@@ -28,6 +28,12 @@
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;	
 }
+.icon_span {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	opacity: 0.8;
+}
 
 .icon-shezhi:before {
   content: "\e605";

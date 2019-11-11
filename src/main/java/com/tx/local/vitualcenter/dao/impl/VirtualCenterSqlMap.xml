@@ -19,6 +19,7 @@
 				VC.name,
 				VC.valid,
 				VC.createDate,
+				VC.lastUpdateDate,
 				VC.modifyAble,
 				VC.parentId,
 				VC.remark
@@ -44,6 +45,7 @@
 				VC.name,
 				VC.valid,
 				VC.createDate,
+				VC.lastUpdateDate,
 				VC.modifyAble,
 				VC.parentId,
 				VC.remark
@@ -176,6 +178,7 @@
 			name,
 			valid,
 			createDate,
+			lastUpdateDate,
 			modifyAble,
 			parentId,
 			remark
@@ -187,6 +190,7 @@
 			#{name},
 			#{valid},
 			#{createDate},
+			#{lastUpdateDate},
 			#{modifyAble},
 			#{parentId},
 			#{remark}
@@ -196,7 +200,7 @@
 	<!-- auto generate default delete -->
 	<delete id="delete" 
 		parameterType="com.tx.local.vitualcenter.model.VirtualCenter">
-		DELETE FROM VC_VIRTUAL_CENTER  WHERE
+		DELETE FROM VC_VIRTUAL_CENTER WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
@@ -226,6 +230,9 @@
 	    	</if>
 			<if test="_parameter.containsKey('remark')">
 	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
 	    </trim>
 	    WHERE

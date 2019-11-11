@@ -7,8 +7,9 @@
 package generator2;
 
 import com.tx.core.generator2.CodeGenerator;
-import com.tx.local.demo.model.TestMode;
-import com.tx.local.demo.model.TestModeNested1;
+import com.tx.local.basicdata.model.District;
+import com.tx.local.operator.model.Organization;
+import com.tx.local.vitualcenter.model.VirtualCenter;
 
 /**
  * 编码生成测试 <功能详细描述>
@@ -21,21 +22,12 @@ import com.tx.local.demo.model.TestModeNested1;
 public class CodeGeneratorTest {
 
 	public static void main(String[] args) {
-		Class<?> entityType = TestMode.class;
+		Class<?> entityType = Organization.class;
 
 		CodeGenerator.generateDBScript(entityType);
 		CodeGenerator.generateSqlMap(entityType);
 		CodeGenerator.generateDao(entityType);
 		CodeGenerator.generateService(entityType);
 		CodeGenerator.generateController(entityType);
-
-		Class<?> nested1 = TestModeNested1.class;
-
-		CodeGenerator.generateDBScript(nested1);
-		CodeGenerator.generateSqlMap(nested1);
-		CodeGenerator.generateDao(nested1);
-		CodeGenerator.generateService(nested1);
-		CodeGenerator.generateController(nested1);
-
 	}
 }

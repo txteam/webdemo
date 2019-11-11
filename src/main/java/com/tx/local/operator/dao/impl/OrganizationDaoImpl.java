@@ -25,9 +25,8 @@ import com.tx.local.operator.model.Organization;
  * @since [产品/模块版本]
  */
 @Component("organizationDao")
-public class OrganizationDaoImpl 
-		extends MybatisBaseDaoImpl<Organization, String>
-		implements OrganizationDao {
+public class OrganizationDaoImpl extends
+        MybatisBaseDaoImpl<Organization, String> implements OrganizationDao {
     
     @Resource(name = "myBatisDaoSupport")
     private MyBatisDaoSupport myBatisDaoSupport;
@@ -38,11 +37,19 @@ public class OrganizationDaoImpl
     public MyBatisDaoSupport getMyBatisDaoSupport() {
         return myBatisDaoSupport;
     }
-
+    
     /**
      * @param 对myBatisDaoSupport进行赋值
      */
     public void setMyBatisDaoSupport(MyBatisDaoSupport myBatisDaoSupport) {
         this.myBatisDaoSupport = myBatisDaoSupport;
+    }
+    
+    /**
+     * @param entity
+     */
+    @Override
+    public void insertToHis(Organization organization) {
+        this.myBatisDaoSupport.insert("organization.insertToHis", organization);
     }
 }

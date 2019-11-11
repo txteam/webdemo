@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -288,5 +289,103 @@ public class DistrictController {
             @RequestParam(value = "districtId") String districtId) {
         boolean resFlag = this.districtService.enableById(districtId);
         return resFlag;
+    }
+    
+    /**
+     * 根据条件查询区域子级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryChildren")
+    public List<District> queryChildren(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "type", required = false) DistrictTypeEnum type,
+            @RequestParam(value = "level", required = false) Integer level,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        
+        if (StringUtils.isEmpty(request.getFirst("parentIdLike"))) {
+            params.put("parentId", request.getFirst("parentId"));
+        } else {
+            String parentIdLike = request.getFirst("parentIdLike");
+            parentIdLike = parentIdLike.substring(0,
+                    parentIdLike.indexOf("0000"));
+            params.put("parentIdLike", parentIdLike);
+        }
+        
+        params.put("countryId", request.getFirst("countryId"));
+        params.put("provinceId", request.getFirst("provinceId"));
+        params.put("cityId", request.getFirst("cityId"));
+        
+        params.put("name", request.getFirst("name"));
+        params.put("fullName", request.getFirst("fullName"));
+        params.put("code", request.getFirst("code"));
+        
+        params.put("type", type);
+        params.put("level", level);
+        params.put("maxLevel", request.getFirst("maxLevel"));
+        
+        List<District> resList = this.districtService
+                .queryChildrenByParentId(parentId, valid, params);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据条件查询区域子、孙级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryDescendants")
+    public List<District> queryDescendants(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "type", required = false) DistrictTypeEnum type,
+            @RequestParam(value = "level", required = false) Integer level,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        
+        if (StringUtils.isEmpty(request.getFirst("parentIdLike"))) {
+            params.put("parentId", request.getFirst("parentId"));
+        } else {
+            String parentIdLike = request.getFirst("parentIdLike");
+            parentIdLike = parentIdLike.substring(0,
+                    parentIdLike.indexOf("0000"));
+            params.put("parentIdLike", parentIdLike);
+        }
+        
+        params.put("countryId", request.getFirst("countryId"));
+        params.put("provinceId", request.getFirst("provinceId"));
+        params.put("cityId", request.getFirst("cityId"));
+        
+        params.put("name", request.getFirst("name"));
+        params.put("fullName", request.getFirst("fullName"));
+        params.put("code", request.getFirst("code"));
+        
+        params.put("type", type);
+        params.put("level", level);
+        params.put("maxLevel", request.getFirst("maxLevel"));
+        
+        List<District> resList = this.districtService
+                .queryDescendantsByParentId(parentId, valid, params);
+        
+        return resList;
     }
 }

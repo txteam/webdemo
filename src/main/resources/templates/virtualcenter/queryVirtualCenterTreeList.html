@@ -61,29 +61,78 @@ $(document).ready(function() {
 		fit : true,
 		fitColumns : true,
 		border : false,
-		frozenColumns : [ [ {
-			title : '虚中心id',
+		frozenColumns : [ [ 
+		{
+			title : '主键',
 			field : 'id',
 			width : 150,
 			hidden : true
-		},{
+		},
+		{
 			field : 'parentId',
-			title : '上级虚中心ID',
+			title : '父级主键',
 			width : 150,
 			hidden : true
 		}] ],
-		columns : [ [ {
+		columns : [ [ 
+		{
 			field : 'name',
 			title : '名称',
+			width : 100,
+		},
+		{
+			field : 'code',
+			title : '编码',
 			width : 50,
-		},{
+		},
+		{
+			field : 'valid',
+			title : '是否有效',
+			width : 40
+			,formatter: function(value, row, index){
+	   			var text = '';
+	   			if(value){
+	   				text = '是';
+	   			}else{
+	   				text = '否';
+	   			}
+	   			return text;
+			}
+		},
+		{
+			field : 'modifyAble',
+			title : '是否可编辑',
+			width : 40
+			,formatter: function(value, row, index){
+	   			var text = '';
+	   			if(value){
+	   				text = '是';
+	   			}else{
+	   				text = '否';
+	   			}
+	   			return text;
+			}
+		},
+		{
+			field : 'createDate',
+			title : '创建时间',
+			width : 80
+			,formatter: function(value, row, index){
+	   			var text = '';
+	   			if($.ObjectUtils.isEmpty(value)){
+	   				text = '';
+	   			}else{
+	   				var date = new Date();
+	   				date.setTime(value);
+	   				text = date.format('yyyy-MM-dd hh:mm:ss');
+	   			}
+	   			return text;
+			}
+		},
+		{
 			field : 'remark',
 			title : '备注',
 			width : 150
-		},{
-			field : 'virtualCenterKey',
-			title : '虚拟中心KEY',
-			width : 50,
 		}
 		,{
 			field : 'action',
@@ -91,21 +140,21 @@ $(document).ready(function() {
 			width : 50,
 			formatter : function(value, row, index) {
 				var str = '&nbsp;';
-				if(!row.valid && $.canEnable && row.editAble){
-					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\',\'{2}\');" src="{3}" title="启用"/>', row.id, row.name,row.editAble, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+				if(!row.valid && row.modifyAble){
+					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\',\'{2}\');" src="{3}" title="启用"/>', row.id, row.name,row.modifyAble, _contextPath + 'webjars/css/images/extjs_icons/control/control_play_blue.png');
 					str += '&nbsp;';
 				}
-				if($.canModify && row.editAble){
-					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\',\'{2}\');" src="{3}" title="编辑"/>', row.id, row.name,row.editAble, '${contextPath}/style/images/extjs_icons/pencil.png');
+				if(row.modifyAble){
+					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\',\'{2}\');" src="{3}" title="编辑"/>', row.id, row.name,row.modifyAble, _contextPath + 'webjars/css/images/extjs_icons/pencil.png');
 					str += '&nbsp;';
 				}
 				
-				if($.canDelete && row.editAble){
-					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\',\'{2}\');" src="{3}" title="删除"/>', row.id, row.name,row.editAble, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
+				if(row.modifyAble){
+					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\',\'{2}\');" src="{3}" title="删除"/>', row.id, row.name,row.modifyAble, _contextPath + 'webjars/css/images/extjs_icons/pencil_delete.png');
 					str += '&nbsp;';
 				}
-				if(row.valid && $.canDisable && row.editAble){
-					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\',\'{2}\');" src="{3}" title="禁用"/>', row.id, row.name,row.editAble, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+				if(row.valid && row.modifyAble){
+					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\',\'{2}\');" src="{3}" title="禁用"/>', row.id, row.name,row.modifyAble, _contextPath + 'webjars/css/images/extjs_icons/control/control_stop_blue.png');
 					str += '&nbsp;';
 				}
 				return str;
@@ -114,12 +163,12 @@ $(document).ready(function() {
 		] ],
 		toolbar : '#toolbar',
 		onDblClickRow : function(row){
-			if(row.editAble){
-				editFun(row.id, row.name,row.editAble);
+			if(row.modifyAble){
+				editFun(row.id, row.name,row.modifyAble);
 			}
 		},
 		onClickRow: function(row){
-			if(row.editAble){
+			if(row.modifyAble){
 				$editALink.linkbutton('enable');
 				$deleteALink.linkbutton('enable');
 				
@@ -189,10 +238,14 @@ function addFun(id) {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var addUrl = /*[[@{/virtualCenter/toAdd}]]*/_contextPath + 'virtualCenter/toAdd';
+	if(id){
+		addUrl = addUrl + '?parentId=' + id;
+	}
 	DialogUtils.openModalDialog(
 		"addVirtualCenter",
 		"添加虚中心",
-		/*[[@{/virtualCenter/toAdd}]]*/_contextPath + 'virtualCenter/toAdd',
+		addUrl,
 		600,193,function(){
 		$('#treegrid').treegrid('reload');
 	});
@@ -200,49 +253,65 @@ function addFun(id) {
 /*
  * 编辑虚中心
  */
-function editFun(id,name,editAble) {
+function editFun(id,name,modifyAble) {
 	if (id == undefined) {
 		var rows = treegrid.treegrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
-		editAble = rows[0].editAble;
+		modifyAble = rows[0].modifyAble;
 	}
-	if(!editAble){
+	if(!modifyAble){
 		return ;
 	}
 	if($.ObjectUtils.isEmpty(id)){
 		DialogUtils.alert("没有选中的虚中心");
 		return ;
 	}
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
-	DialogUtils.openModalDialog(
-		"updateVirtualCenter",
-		"编辑虚中心:"+name,
-		$.formatString("${contextPath}/virtualCenter/toUpdateVirtualCenter.action?virtualCenterId={0}",id),
-		600,200,function(){
-			$('#treegrid').treegrid('reload');
-	});
-}
-function deleteFun(id,name,editAble) {
-	if (id == undefined) {
-		var rows = treegrid.treegrid('getSelections');
-		id = rows[0].id;
-		name = rows[0].name;
-		editAble = rows[0].editAble;
+	var updateUrl = /*[[@{/virtualCenter/toUpdate}]]*/_contextPath + 'virtualCenter/toUpdate';
+	if(id){
+		updateUrl = updateUrl + '?id=' + id;
 	}
-	if(!editAble){
-		return ;
-	}
-	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的虚中心");
-		return ;
-	}
-	//判断对应组织是否能被停用
+	//判断对应组织是否能被修改
 	$.post(
-		'${contextPath}/virtualCenter/isDeleteAble.action',
-		{virtualCenterId: id},
+		/*[[@{/virtualCenter/modifyAble}]]*/_contextPath + 'virtualCenter/modifyAble',
+		{id: id},
+		function(data){
+			if(data){
+	    		DialogUtils.progress({
+	    	        text : '加载中，请等待....'
+	    		});
+	    		
+	    		DialogUtils.openModalDialog(
+    				"updateVirtualCenter",
+    				"编辑虚中心:" + name,
+    				updateUrl,
+    				600,175,function(){
+    					$('#treegrid').treegrid('reload');
+    			});
+			}else{
+				DialogUtils.alert("提醒","该虚中心不允许被编辑。","warning");
+			}
+	});
+
+}
+function deleteFun(id,name,modifyAble) {
+	if (id == undefined) {
+		var rows = treegrid.treegrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].name;
+		modifyAble = rows[0].modifyAble;
+	}
+	if(!modifyAble){
+		return ;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的虚中心");
+		return ;
+	}
+	//判断对应组织是否能被修改
+	$.post(
+		/*[[@{/virtualCenter/modifyAble}]]*/_contextPath + 'virtualCenter/modifyAble',
+		{id: id},
 		function(data){
 			if(data){
 			    DialogUtils.confirm(
@@ -253,10 +322,11 @@ function deleteFun(id,name,editAble) {
 			    		DialogUtils.progress({
 			    	        text : '数据提交中，请等待....'
 			    		});
+			    		
 			    		//如果确认删除对应组织
 			    		$.post(
-					    		'${contextPath}/virtualCenter/deleteVirtualCenterById.action',
-					    		{virtualCenterId:id},
+			    				/*[[@{/virtualCenter/deleteById}]]*/_contextPath + 'virtualCenter/deleteById',
+			    				{id: id},
 					    		function(){
 					    			DialogUtils.tip("删除虚中心成功");
 					    			$('#treegrid').treegrid('reload');
@@ -265,80 +335,72 @@ function deleteFun(id,name,editAble) {
 			    	}
 			    });
 			}else{
-				DialogUtils.alert("提醒","该虚中心已经被使用不允许被删除。","warning");
+				DialogUtils.alert("提醒","该虚中心不允许被删除。","warning");
 			}
 	});
 }
-function enableFun(id,name,editAble){
+function enableFun(id,name,modifyAble){
 	if (id == undefined) {
 		var rows = treegrid.treegrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
-		editAble = rows[0].editAble;
+		modifyAble = rows[0].modifyAble;
 	}
-	if(!editAble){
+	if(!modifyAble){
 		return ;
 	}
 	//判断对应组织是否能被停用
     DialogUtils.confirm(
-    		"确认提醒" , 
-    		$.formatString("是否确认启用虚中心:[{0}]?",name), 
-    function(data){
-    	if(data){
-    		DialogUtils.progress({
-    	        text : '数据提交中，请等待....'
-    		});
-    		//如果确认删除对应组织
-    		$.post(
-		    		'${contextPath}/virtualCenter/enableVirtualCenterById.action',
-		    		{virtualCenterId:id},
-		    		function(){
-		    			DialogUtils.progress('close');
-		    			DialogUtils.tip("启用组织成功");
-		    			$('#treegrid').treegrid('reload');
-		    });
+   		"确认提醒" , 
+   		$.formatString("是否确认启用虚中心:[{0}]?",name), 
+    	function(data){
+	    	if(data){
+	    		DialogUtils.progress({
+	    	        text : '数据提交中，请等待....'
+	    		});
+	    		//如果确认删除对应组织
+	    		$.post(
+	    				/*[[@{/virtualCenter/enableById}]]*/_contextPath + 'virtualCenter/enableById',
+			    		{id:id},
+			    		function(){
+			    			DialogUtils.progress('close');
+			    			DialogUtils.tip("启用虚中心成功");
+			    			$('#treegrid').treegrid('reload');
+			    });
+	    	}
     	}
-    });
+    );
 }
-function disableFun(id,name,editAble){
+function disableFun(id,name,modifyAble){
 	if (id == undefined) {
 		var rows = treegrid.treegrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
-		editAble = rows[0].editAble;
+		modifyAble = rows[0].modifyAble;
 	}
-	if(!editAble){
+	if(!modifyAble){
 		return ;
 	}
 	//判断对应组织是否能被停用
-	$.post(
-		'${contextPath}/virtualCenter/isDisableAble.action',
-		{virtualCenterId: id},
-		function(data){
-			if(data){
-			    DialogUtils.confirm(
-			    		"确认提醒" , 
-			    		$.formatString("是否确认禁用虚中心:[{0}]?",name), 
-			    function(data){
-			    	if(data){
-			    		DialogUtils.progress({
-			    	        text : '数据提交中，请等待....'
-			    		});
-			    		//如果确认删除对应组织
-			    		$.post(
-					    		'${contextPath}/virtualCenter/disableVirtualCenterById.action',
-					    		{virtualCenterId:id},
-					    		function(){
-					    			DialogUtils.progress('close');
-					    			DialogUtils.tip("禁用虚中心成功");
-					    			$('#treegrid').treegrid('reload');
-					    });
-			    	}
+    DialogUtils.confirm(
+  		"确认提醒" , 
+  		$.formatString("是否确认禁用虚中心:[{0}]?",name), 
+	    function(data){
+	    	if(data){
+	    		DialogUtils.progress({
+	    	        text : '数据提交中，请等待....'
+	    		});
+	    		//如果确认删除对应组织
+	    		$.post(
+	    				/*[[@{/virtualCenter/disableById}]]*/_contextPath + 'virtualCenter/disableById',
+			    		{id:id},
+			    		function(){
+			    			DialogUtils.progress('close');
+			    			DialogUtils.tip("禁用虚中心成功");
+			    			$('#treegrid').treegrid('reload');
 			    });
-			}else{
-				DialogUtils.alert("提醒","该虚中心已经被使用不能被禁用。","warning");
-			}
-		 });
+	    	}
+	    });
 }
 /*]]>*/
 </script>
@@ -359,17 +421,5 @@ function disableFun(id,name,editAble){
 		<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
 		<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
 		<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
-	</div>
-
-	<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
-		<c:if test='${authContext.hasAuth("add_VirtualCenter")}'>
-			<div onclick="addFun();" data-options="iconCls:'pencil_add'">新增</div>
-		</c:if>
-		<c:if test='${authContext.hasAuth("update_VirtualCenter")}'>
-			<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
-		</c:if>
-		<c:if test='${authContext.hasAuth("delete_VirtualCenter")}'>
-			<div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
-		</c:if>
 	</div>
 </body>

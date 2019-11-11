@@ -16,6 +16,8 @@ import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 
+import io.swagger.annotations.ApiModel;
+
 /**
  * 类容类型<br/>
  * <功能详细描述>
@@ -28,6 +30,7 @@ import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 @Entity
 @Table(name = "ci_content_type")
 @BasicDataEntity(name = "内容信息类型",viewType = BasicDataViewTypeEnum.LIST)
+@ApiModel("内容信息类型")
 public class ContentInfoType implements BasicData {
     
     /** 注释内容 */

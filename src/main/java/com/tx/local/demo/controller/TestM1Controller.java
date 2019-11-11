@@ -56,6 +56,7 @@ public class TestM1Controller {
 
         return "/demo/queryTestM1List";
     }
+    
     /**
      * 跳转到查询TestM1列表页面<br/>
      * <功能详细描述>
@@ -282,9 +283,9 @@ public class TestM1Controller {
         boolean flag = this.testM1Service.enableById(id);
         return flag;
     }
-
+    
 	/**
-     * 校验参数对应实例是否重复
+     * 校验是否重复<br/>
 	 * @param excludeId
      * @param params
      * @return [参数说明]
@@ -295,7 +296,7 @@ public class TestM1Controller {
      */
     @ResponseBody
     @RequestMapping("/validate")
-    public Map<String, String> check(
+    public Map<String, String> validate(
             @RequestParam(value = "excludeId", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
         boolean flag = this.testM1Service.exists(params, excludeId);
@@ -308,4 +309,57 @@ public class TestM1Controller {
         }
         return resMap;
     }
+    
+    /**
+     * 根据条件查询TestM1子级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryChildren")
+    public List<TestM1> queryChildren(
+            @RequestParam(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        
+        List<TestM1> resList = this.testM1Service
+                .queryChildrenByParentId(parentId, valid, params);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据条件查询TestM1子、孙级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryDescendants")
+    public List<TestM1> queryDescendants(
+            @RequestParam(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        
+        List<TestM1> resList = this.testM1Service
+                .queryDescendantsByParentId(parentId, valid, params);
+        
+        return resList;
+    }
+    
 }

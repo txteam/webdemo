@@ -7,6 +7,7 @@
 package com.tx.local.operator.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -114,6 +115,14 @@ public class Organization
     /** 描述 */
     @Column(nullable = true, length = 256)
     private String remark;
+    
+    /** 创建时间 */
+    @Column(nullable = false)
+    private Date createDate;
+    
+    /** 创建时间 */
+    @Column(nullable = false)
+    private Date lastUpdateDate;
     
     /** 主管类型 人员 职位 */
     @Column(nullable = true, length = 64)
@@ -356,14 +365,62 @@ public class Organization
         this.valid = valid;
     }
     
+    /**
+     * @return 返回 company
+     */
     public Organization getCompany() {
         return company;
     }
-    
+
+    /**
+     * @param 对company进行赋值
+     */
     public void setCompany(Organization company) {
         this.company = company;
     }
-    
+
+    /**
+     * @return 返回 department
+     */
+    public Organization getDepartment() {
+        return department;
+    }
+
+    /**
+     * @param 对department进行赋值
+     */
+    public void setDepartment(Organization department) {
+        this.department = department;
+    }
+
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
     /**
      * @param obj
      * @return

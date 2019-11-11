@@ -8,6 +8,7 @@
 	<resultMap id="organizationMap" 
 		type="com.tx.local.operator.model.Organization">
 		<result column="companyId" property="company.id"/>
+		<result column="departmentId" property="department.id"/>
 	</resultMap>
 	
 	<!-- auto generate default find -->
@@ -19,6 +20,7 @@
 				O.code,
 				O.fullName,
 				O.fullAddress,
+				O.lastUpdateDate,
 				O.name,
 				O.type,
 				O.vcid,
@@ -26,11 +28,13 @@
 				O.chiefId,
 				O.chiefType,
 				O.valid,
+				O.createDate,
 				O.parentId,
 				O.remark,
 				O.address,
 				O.companyId,
-				O.districtId
+				O.districtId,
+				O.departmentId
 		  FROM OPER_ORGANIZATION O
 		 WHERE
 		<trim prefixOverrides="AND | OR">
@@ -52,6 +56,7 @@
 				O.code,
 				O.fullName,
 				O.fullAddress,
+				O.lastUpdateDate,
 				O.name,
 				O.type,
 				O.vcid,
@@ -59,11 +64,13 @@
 				O.chiefId,
 				O.chiefType,
 				O.valid,
+				O.createDate,
 				O.parentId,
 				O.remark,
 				O.address,
 				O.companyId,
-				O.districtId
+				O.districtId,
+				O.departmentId
 		  FROM OPER_ORGANIZATION O
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
@@ -117,6 +124,12 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND O.valid = #{valid} ]]>
 	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND O.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND O.createDate < #{maxCreateDate} ]]>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            <![CDATA[ AND O.parentId = #{parentId} ]]>
 	        </if>			
@@ -134,6 +147,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
 	            <![CDATA[ AND O.districtId = #{districtId} ]]>
 	        </if>			
+			<if test="department != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(department.id)">  
+		            <![CDATA[ AND O.departmentId = #{department.id} ]]>
+		        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND O.id <> #{excludeId} ]]>
 			</if>
@@ -143,7 +161,7 @@
 	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
 	        </when>
 	        <otherwise>  
-	            ORDER BY id DESC
+	            ORDER BY createDate DESC
 	        </otherwise>  
 	    </choose>
 	</select>
@@ -206,6 +224,12 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND O.valid = #{valid} ]]>
 	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND O.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND O.createDate < #{maxCreateDate} ]]>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            <![CDATA[ AND O.parentId = #{parentId} ]]>
 	        </if>			
@@ -223,6 +247,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
 	            <![CDATA[ AND O.districtId = #{districtId} ]]>
 	        </if>			
+			<if test="department != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(department.id)">  
+		            <![CDATA[ AND O.departmentId = #{department.id} ]]>
+		        </if>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND O.id <> #{excludeId} ]]>
 			</if>
@@ -230,7 +259,7 @@
 	</select>
 	
 	<!-- auto generate default insert -->
-    <insert id="insert" 
+    <insert id="insertToHis" 
 		parameterType="com.tx.local.operator.model.Organization">
 		INSERT INTO OPER_ORGANIZATION
 		(
@@ -247,9 +276,12 @@
 			valid,
 			parentId,
 			remark,
+			createDate,
+			lastUpdateDate,
 			address,
 			companyId,
-			districtId
+			districtId,
+			departmentId
 		)
 		VALUES
 		(
@@ -266,9 +298,60 @@
 			#{valid},
 			#{parentId},
 			#{remark},
+			#{createDate},
+			#{lastUpdateDate},
 			#{address},
 			#{company.id},
-			#{districtId}
+			#{districtId},
+			#{department.id}
+		)
+	</insert>
+	
+	<insert id="insert" 
+		parameterType="com.tx.local.operator.model.Organization">
+		INSERT INTO OPER_ORGANIZATION
+		(
+			id,
+			code,
+			fullName,
+			fullAddress,
+			lastUpdateDate,
+			name,
+			type,
+			vcid,
+			alias,
+			chiefId,
+			chiefType,
+			valid,
+			createDate,
+			parentId,
+			remark,
+			address,
+			companyId,
+			districtId,
+			departmentId
+		)
+		VALUES
+		(
+			#{id},
+			#{code},
+			#{fullName},
+			#{fullAddress},
+			#{lastUpdateDate},
+			#{name},
+			#{type},
+			#{vcid},
+			#{alias},
+			#{chiefId},
+			#{chiefType},
+			#{valid},
+			#{createDate},
+			#{parentId},
+			#{remark},
+			#{address},
+			#{company.id},
+			#{districtId},
+			#{department.id}
 		)
 	</insert>
 	
@@ -296,6 +379,9 @@
 	    	</if>
 			<if test="_parameter.containsKey('fullAddress')">
 	    		fullAddress = #{fullAddress,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
 			<if test="_parameter.containsKey('name')">
 	    		name = #{name,javaType=java.lang.String},
@@ -327,11 +413,14 @@
 			<if test="_parameter.containsKey('address')">
 	    		address = #{address,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('company')">
-	    		companyId = #{company.id,javaType=java.lang.String},
-	    	</if>
 			<if test="_parameter.containsKey('districtId')">
 	    		districtId = #{districtId,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('company')">
+	    		companyId = #{company.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('department')">
+	    		departmentId = #{department.id,javaType=java.lang.String},
 	    	</if>
 	    </trim>
 	    WHERE
