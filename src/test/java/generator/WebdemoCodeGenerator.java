@@ -6,8 +6,8 @@ package generator;
 import java.io.IOException;
 
 import com.tx.core.generator2.CodeGenerator;
-import com.tx.local.demo.model.TestM1;
-import com.tx.local.operator.model.Post;
+import com.tx.core.generator2.model.ViewTypeEnum;
+import com.tx.local.content.model.ContentInfo;
 
 /**
  * 基础数据生成类<br/>
@@ -20,20 +20,25 @@ import com.tx.local.operator.model.Post;
 public class WebdemoCodeGenerator {
 
     public static void main(String[] args) throws IOException {
-        Class<?> entityType = TestM1.class;
-
+        boolean toProjectPath = true;//是否生成覆盖到项目代码中，如果设置为false则会写入D盘的目录中
+        Class<?> entityType = ContentInfo.class;
+        ViewTypeEnum viewType = ViewTypeEnum.PAGEDLIST;
+        
         //基础数据逻辑代码生成存放目录com.tx.component.basicdata.generator.
-        String project_path = org.springframework.util.StringUtils
-                .cleanPath(entityType.getResource("/").getPath() + "../..");
-        String codeBaseFolder = project_path;
-        CodeGenerator.BASE_CODE_FOLDER = codeBaseFolder;
-
+        if(toProjectPath){
+            String project_path = org.springframework.util.StringUtils
+                    .cleanPath(entityType.getResource("/").getPath() + "../..");
+            String codeBaseFolder = project_path;
+            CodeGenerator.BASE_CODE_FOLDER = codeBaseFolder;
+        }
+        
         //基础数据生成逻辑代码对应的数据库类型(mysql与oracle)在sqlMap中组装like条件是不一致的
         CodeGenerator.generateDBScript(entityType);
         CodeGenerator.generateSqlMap(entityType);
         CodeGenerator.generateDao(entityType);
         CodeGenerator.generateService(entityType);
-        CodeGenerator.generateController(entityType);
+        CodeGenerator.generateController(entityType,viewType);
+        
         System.out.println("success");
     }
 }

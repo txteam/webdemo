@@ -44,7 +44,6 @@
 /*<![CDATA[*/
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
-	
 	//选择上级组织
 	$("#parentName").selectOrganization({
 		eventName : "forAddOrganization",
@@ -53,9 +52,10 @@ $(document).ready(function(){
 		width : 260,
 		height : 400,
 		handler : function(organization){
-			if(organization != null){
+			if(organization){
 				$("#parentName").val(organization.name);
 				$("#parentId").val(organization.id);
+				
 				$("#vcid").val(organization.vcid);
 				$("#vcid").attr("readonly","true");
 			}
@@ -69,74 +69,13 @@ $(document).ready(function(){
 	    }
 	});
 	
-	$("#chiefName").chooseOperator({
-		eventName : "forAddOrganization",
-		contextPath : _contextPath,
-		title : "请选择人员",  
-		width : 800,
-		height : 450,
-		handler : function(operator){
-			if(operator != null){
-				$("#chiefName").val(operator.loginName);
-				$("#chiefId").val(operator.id);
-			}
-		},
-	    clearHandler: function(){
-	    	$("#chiefName").val("");
-			$("#chiefId").val("");
-	    }
-	});
-	
-	$(":radio[name=chiefType]").change(function(){
-		var value = $(this).val();
-		$("#chiefName").val("");
-		$("#chiefId").val("");
-		if(value == 'POST'){
-			$("#chiefName").chooseOperator('destroy');
-			$("#chiefName").choosePost({
-				eventName : "choosePostForAddOrganization",
-				contextPath : _contextPath,
-				title : "请选择职位",  
-				width : 800,
-				height : 450,
-				handler : function(post){
-					if(post != null){
-						$("#chiefName").val(post.name);
-						$("#chiefId").val(post.id);
-					}
-				},
-			    clearHandler: function(){
-			    	$("#chiefName").val("");
-					$("#chiefId").val("");
-			    }
-			});
-		}else{
-			$("#chiefName").choosePost('destroy');
-			$("#chiefName").chooseOperator({
-				eventName : "chooseOperatorForAddOrganization",
-				contextPath : _contextPath,
-				title : "请选择人员",  
-				width : 800,
-				height : 450,
-				handler : function(operator){
-					if(operator != null){
-						$("#chiefName").val(operator.loginName);
-						$("#chiefId").val(operator.id);
-					}
-				},
-			    clearHandler: function(){
-			    	$("#chiefName").val("");
-					$("#chiefId").val("");
-			    }
-			});
-		}
-	});
-	
 	//虚中心与组织存在联动关系，如果选中需中心，则组织仅能在选中的虚中心中选取
 	//所以在组织与虚中心任一发生变动时应当影响到对方
 	$("#vcid").change(function(){
-		$("#parentName").val("");
-		$("#parentId").val("");
+		if($('#type').val() != 'GROUP_COMPANY' || $('#type').val() != 'COMPANY' || $('#type').val() != 'BRANCH_COMPANY'){
+			$("#parentName").val("");
+			$("#parentId").val("");
+		}
 	});
 	
 	//验证器
@@ -186,12 +125,13 @@ function submitFun(){
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form id="entityForm" method="post" class="form">
+		<form id="entityForm" method="post" class="form" th:object="${organization}">
 			<table class="table">
 				<tr>
-					<th class="narrow" width="18%">名称:<span class="tRed">*</span></th>
+					<th class="narrow" width="18%">编号:<span class="tRed">*</span></th>
 					<td>
-						<input id="name" name="name" data-rule="名称:required;length[2~30]" data-tip="必填"/>
+						<input id="code" name="code" data-tip="不能重复的编号"
+							th:data-rule="'编号:required;length[1~16];remote[' + @{/organization/validate} + ', code]'"/>
 					</td>
 					<th class="narrow" width="18%">&nbsp;</th>
 					<td>&nbsp;</td>
@@ -204,17 +144,16 @@ function submitFun(){
 							<option th:each="type:${types}" th:value="${type.code}" th:text="${type.name}"></option>
 						</select>
 					</td>
-					<th>上级组织</th>
+					<th>上级组织:</th>
 					<td>
 						<input id="parentId" name="parentId" type="hidden" readonly="readonly" value="" th:value="${parent?.id?:''}"/>
 						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" value="" th:value="${parent?.name?:''}"/>
 					</td>
 				</tr>
 				<tr>
-					<th class="narrow">编号<span class="tRed">*</span></th>
+					<th class="narrow">名称:<span class="tRed">*</span></th>
 					<td>
-						<input id="code" name="code" data-tip="不能重复的编号"
-							th:data-rule="'编号:required;length[1~16];remote[' + @{/organization/validate} + ', code]'"/>
+						<input id="name" name="name" data-rule="名称:required;length[2~30]" data-tip="必填"/>
 					</td>
 					<th class="narrow">别名:</th>
 					<td>
@@ -222,22 +161,11 @@ function submitFun(){
 					</td>
 				</tr>
 				<tr>
-					<th>主管类型</th>
-					<td>
-						<input id="chiefType" name="chiefType" type="radio" th:each="chiefTypeTemp:${chiefTypes}" th:value="${chiefTypeTemp.key}" th:text="${chiefTypeTemp.name}"/>
-					</td>
-					<th>主管</th>
-					<td>
-						<input id="chiefId" name="chiefId" type="hidden" readonly="readonly"/>
-						<input id="chiefName" name="chiefName" class="selectInput" readonly="readonly"/>
-					</td>
-				</tr>
-				<tr>
 					<th>所属业务中心:</th>
 					<td>
 						<select id="vcid" name="vcid">
 							<option value="">--请选择--</option>
-							<option th:each="vc:${virtualCenterList}" th:value="${vc.id}" th:text="${vc.name}"></option>
+							<option th:each="vc:${virtualCenterList}" th:value="${vc.id}" th:text="${vc.name}" th:selected="${organization.vcid eq vc.id}"></option>
 						</select>
 					</td>
 					<th>&nbsp;</th>
@@ -246,7 +174,7 @@ function submitFun(){
 					</td>
 				</tr>
 				<tr>
-					<th>备注</th>
+					<th>备注:</th>
 					<td colspan="3">
 						<textarea name="remark" rows="" cols="" class="longText" style="width:90%"></textarea>
 					</td>

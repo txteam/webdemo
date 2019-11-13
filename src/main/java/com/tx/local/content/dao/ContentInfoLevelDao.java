@@ -14,10 +14,9 @@ import com.tx.local.content.model.ContentInfoLevel;
  * <功能详细描述>
  * 
  * @author  
- * @version  [版本号, ]
- * @see  [相关类/方法]
- * @since  [产品/模块版本]
+ * @version [版本号]
+ * @see [相关类/方法]
+ * @since [产品/模块版本]
  */
-public interface ContentInfoLevelDao
-        extends MybatisBaseDao<ContentInfoLevel, String> {
+public interface ContentInfoLevelDao extends MybatisBaseDao<ContentInfoLevel, String>{
 }

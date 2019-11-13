@@ -43,6 +43,10 @@ public class SecurityLoginAuthenticationEntryPoint
     /** <默认构造函数> */
     public SecurityLoginAuthenticationEntryPoint(String loginFormUrl) {
         super(loginFormUrl);
+        
+        authEntryPointMap.put("/mainframe/**", "/background/login");
+        authEntryPointMap.put("/operator/**", "/background/login");
+        authEntryPointMap.put("/virtualcenter/**", "/background/login");
     }
     
     /**

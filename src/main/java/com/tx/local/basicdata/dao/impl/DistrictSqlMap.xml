@@ -74,7 +74,6 @@
 				D.provinceId,
 				D.attributes
 		  FROM BD_DISTRICT D
-		 WHERE
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">

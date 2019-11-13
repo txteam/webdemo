@@ -17,8 +17,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.operator.model.Operator;
-import com.tx.local.operator.model.Organization;
-import com.tx.local.operator.model.Post;
+import com.tx.local.operator.model.OperatorOrganization;
+import com.tx.local.operator.model.OperatorPost;
 
 /**
  * 请求获取请求属性集
@@ -105,12 +105,12 @@ public class WebContextUtils {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public static Organization getCurrentOrganization() {
+    public static OperatorOrganization getCurrentOrganization() {
         HttpSession session = getSession(true);
         if(null == session ){
             return null;
         }
-        Organization currentOrganization = (Organization) session.getAttribute(SESSION_CURRENT_ORGANIZATION);
+        OperatorOrganization currentOrganization = (OperatorOrganization) session.getAttribute(SESSION_CURRENT_ORGANIZATION);
         return currentOrganization;
     }
     
@@ -124,7 +124,7 @@ public class WebContextUtils {
       * @see [类、类#方法、类#成员]
      */
     public static String getCurrentOrganizationId() {
-        Organization organization = getCurrentOrganization();
+        OperatorOrganization organization = getCurrentOrganization();
         String organizationId = organization == null ? null
                 : organization.getId();
         return organizationId;
@@ -174,7 +174,7 @@ public class WebContextUtils {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public static void putMainPostInSession(Post post) {
+    public static void putMainPostInSession(OperatorPost post) {
         HttpSession session = getSession(true);
         
         session.setAttribute(SESSION_CURRENT_POST, post);
@@ -190,7 +190,7 @@ public class WebContextUtils {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public static void putPostListInSession(List<Post> postList) {
+    public static void putPostListInSession(List<OperatorPost> postList) {
         HttpSession session = getSession(true);
         
         session.setAttribute(SESSION_CURRENT_POSTLIST, postList);
@@ -205,7 +205,7 @@ public class WebContextUtils {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public static void putOganizationInSession(Organization organization) {
+    public static void putOganizationInSession(OperatorOrganization organization) {
         AssertUtils.notNull(organization, "organization is null");
         
         HttpSession session = getSession(true);

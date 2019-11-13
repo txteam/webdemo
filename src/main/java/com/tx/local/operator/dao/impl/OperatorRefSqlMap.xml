@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="operatorRef">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="operatorRefMap" 
+		type="com.tx.local.operator.model.OperatorRef">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.operator.model.OperatorRef"
+		resultMap="operatorRefMap">
+		SELECT 
+				OR.id,
+				OR.refId,
+				OR.refType,
+				OR.lastUpdateDate,
+				OR.lastUpdateOperatorId,
+				OR.createDate,
+				OR.createOperatorId,
+				OR.expiryDate,
+				OR.operatorId,
+				OR.effectiveDate
+		  FROM OPER_OPERATOR_REF OR
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND OR.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="operatorRefMap">
+		SELECT 
+				OR.id,
+				OR.refId,
+				OR.refType,
+				OR.lastUpdateDate,
+				OR.lastUpdateOperatorId,
+				OR.createDate,
+				OR.createOperatorId,
+				OR.expiryDate,
+				OR.operatorId,
+				OR.effectiveDate
+		  FROM OPER_OPERATOR_REF OR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND OR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
+	            <![CDATA[ AND OR.refId = #{refId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType)">  
+	            <![CDATA[ AND OR.refType = #{refType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
+	            <![CDATA[ AND OR.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND OR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND OR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
+	            <![CDATA[ AND OR.createOperatorId = #{createOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            <![CDATA[ AND OR.operatorId = #{operatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND OR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_OPERATOR_REF OR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND OR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
+	            <![CDATA[ AND OR.refId = #{refId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType)">  
+	            <![CDATA[ AND OR.refType = #{refType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
+	            <![CDATA[ AND OR.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND OR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND OR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
+	            <![CDATA[ AND OR.createOperatorId = #{createOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            <![CDATA[ AND OR.operatorId = #{operatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND OR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.operator.model.OperatorRef">
+		INSERT INTO OPER_OPERATOR_REF
+		(
+			id,
+			refId,
+			refType,
+			lastUpdateDate,
+			lastUpdateOperatorId,
+			createDate,
+			createOperatorId,
+			expiryDate,
+			operatorId,
+			effectiveDate
+		)
+		VALUES
+		(
+			#{id},
+			#{refId},
+			#{refType},
+			#{lastUpdateDate},
+			#{lastUpdateOperatorId},
+			#{createDate},
+			#{createOperatorId},
+			#{expiryDate},
+			#{operatorId},
+			#{effectiveDate}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.operator.model.OperatorRef">
+		DELETE FROM OPER_OPERATOR_REF  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_OPERATOR_REF
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('refId')">
+	    		refId = #{refId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('refType')">
+	    		refType = #{refType,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateOperatorId')">
+	    		lastUpdateOperatorId = #{lastUpdateOperatorId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('expiryDate')">
+	    		expiryDate = #{expiryDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('operatorId')">
+	    		operatorId = #{operatorId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('effectiveDate')">
+	    		effectiveDate = #{effectiveDate,javaType=java.util.Date},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

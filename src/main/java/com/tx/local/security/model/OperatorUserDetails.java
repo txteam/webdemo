@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.tx.component.auth.model.Auth;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRole;
-import com.tx.local.operator.model.Post;
+import com.tx.local.operator.model.OperatorPost;
 
 /**
  * 操作人员用户详情<br/>
@@ -35,10 +35,10 @@ public class OperatorUserDetails implements UserDetails {
     private Operator operator;
     
     /** 主要职位 */
-    private Post mainPost;
+    private OperatorPost mainPost;
     
     /** 职位 */
-    private List<Post> posts;
+    private List<OperatorPost> posts;
     
     /** 角色 */
     private List<OperatorRole> roles;
@@ -167,28 +167,28 @@ public class OperatorUserDetails implements UserDetails {
     /**
      * @return 返回 mainPost
      */
-    public Post getMainPost() {
+    public OperatorPost getMainPost() {
         return mainPost;
     }
 
     /**
      * @param 对mainPost进行赋值
      */
-    public void setMainPost(Post mainPost) {
+    public void setMainPost(OperatorPost mainPost) {
         this.mainPost = mainPost;
     }
 
     /**
      * @return 返回 posts
      */
-    public List<Post> getPosts() {
+    public List<OperatorPost> getPosts() {
         return posts;
     }
 
     /**
      * @param 对posts进行赋值
      */
-    public void setPosts(List<Post> posts) {
+    public void setPosts(List<OperatorPost> posts) {
         this.posts = posts;
     }
 

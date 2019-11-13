@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.tx.local.basicdata.model.IDCardTypeEnum;
+
 /**
  * <功能简述>
  * <功能详细描述>
@@ -30,10 +32,12 @@ public class EmployeeInfo implements Serializable {
     /** 注释内容 */
     private static final long serialVersionUID = 8805323377968943458L;
     
-    /** id */
     @Id
+    private String id;
+    
+    /** id */
     @Column(name = "operatorId")
-    private String operatorId;
+    private Operator operator;
     
     /** 编号(工号) */
     private String code;
@@ -41,8 +45,14 @@ public class EmployeeInfo implements Serializable {
     /** 姓名 */
     private String name;
     
+    /** 证件类型 */
+    private IDCardTypeEnum idCardType;
+    
     /** 身份证号码 */
     private String idCardNumber;
+    
+    /** 生日 */
+    private Date birthday;
     
     /** 年龄 */
     private int age;
@@ -50,14 +60,11 @@ public class EmployeeInfo implements Serializable {
     /** 性别0男  1女 */
     private int sex;
     
-    /** 入职时间 */
-    private Date entryDate;
-    
-    /** 试用期 到期时间 */
-    private Date trialPeriodEndDate;
-    
     /**是否转正*/
     private boolean official = true;
+    
+    /** 入职时间 */
+    private Date entryDate;
     
     /** 转正时间  */
     private Date officialDate;
@@ -74,20 +81,42 @@ public class EmployeeInfo implements Serializable {
     /** 电话 */
     private String phoneNumber;
     
+    /** 创建时间 */
+    private Date createDate;
+    
+    /** 最后更新时间 */
+    private Date lastUpdateDate;
+    
     /**
-     * @return 返回 operatorId
+     * @return 返回 id
      */
-    public String getOperatorId() {
-        return operatorId;
+    public String getId() {
+        return id;
     }
     
     /**
-     * @param 对operatorId进行赋值
+     * @param 对id进行赋值
      */
-    public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId;
+    public void setId(String id) {
+        this.id = id;
     }
     
+    
+    
+    /**
+     * @return 返回 operator
+     */
+    public Operator getOperator() {
+        return operator;
+    }
+
+    /**
+     * @param 对operator进行赋值
+     */
+    public void setOperator(Operator operator) {
+        this.operator = operator;
+    }
+
     /**
      * @return 返回 code
      */
@@ -173,20 +202,6 @@ public class EmployeeInfo implements Serializable {
     }
     
     /**
-     * @return 返回 trialPeriodEndDate
-     */
-    public Date getTrialPeriodEndDate() {
-        return trialPeriodEndDate;
-    }
-    
-    /**
-     * @param 对trialPeriodEndDate进行赋值
-     */
-    public void setTrialPeriodEndDate(Date trialPeriodEndDate) {
-        this.trialPeriodEndDate = trialPeriodEndDate;
-    }
-    
-    /**
      * @return 返回 official
      */
     public boolean isOfficial() {
@@ -268,5 +283,61 @@ public class EmployeeInfo implements Serializable {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+    
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+    
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+    
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    /**
+     * @return 返回 idCardType
+     */
+    public IDCardTypeEnum getIdCardType() {
+        return idCardType;
+    }
+
+    /**
+     * @param 对idCardType进行赋值
+     */
+    public void setIdCardType(IDCardTypeEnum idCardType) {
+        this.idCardType = idCardType;
+    }
+
+    /**
+     * @return 返回 birthday
+     */
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    /**
+     * @param 对birthday进行赋值
+     */
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 }

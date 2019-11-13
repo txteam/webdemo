@@ -201,9 +201,12 @@ $(document).ready(function() {
 		},
 		onLoadSuccess : function() {
 			parent.$.messager.progress('close');
+			
 			$(this).treegrid('tooltip');
 			$editALink.linkbutton('disable');
 			$deleteALink.linkbutton('disable');
+			$enableALink.linkbutton('disable');
+			$disableALink.linkbutton('disable');
 		}
 	});
 });

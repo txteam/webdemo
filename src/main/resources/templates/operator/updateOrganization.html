@@ -1,27 +1,58 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE html >
-<html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>updateOrganization</title>
-<%@include file="../includes/commonHead.jsp" %>
-
-<script type="text/javascript" >
-$(document).ready(function(){
-	// 初始化省市区下拉框
-	initDistrictSelect();
-	parent.DialogUtils.progress('close');
+	<title>updateOrganization</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
 	
-	$('#organizationForm').bind('valid.form', function(){
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+var updateurl = /*[[@{/organization/update}]]*/_contextPath + 'organization/update';
+$(document).ready(function(){
+	parent.DialogUtils.progress('close');
+	//初始化省市区下拉框
+	$('#entityForm').bind('valid.form', function(){
 			DialogUtils.progress({
 		        text : '数据提交中，请等待....'
 			});
 		    //ajax提交
 			$(this).ajaxSubmit({
-			    url:"${contextPath}/organization/updateOrganization.action",
+			    url: updateurl,
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
@@ -31,99 +62,54 @@ $(document).ready(function(){
 			    } 
 			});
 	});
-    
-	if("${organization.type}" == "分行"){
-		$('#organizationForm').validator("setField", "partyBCompanyName", "乙方公司名称:required;");
-		$('#organizationForm').validator("setField", "partyBTradingLicense", "乙方营业执照号:required;");
-		$('#organizationForm').validator("setField", "partyBTelephoneNumber", "乙方电话号码:required;");
-		$('#organizationForm').validator("setField", "partyBDomicile", "乙方住所:required;");
-		$('#organizationForm').validator("setField", "partyCCompanyName", "丙方公司名称:required;");
-		$('#organizationForm').validator("setField", "partyCTradingLicense", "丙方营业执照号:required;");
-		$('#organizationForm').validator("setField", "partyCTelephoneNumber", "丙方电话号码:required;");
-		$('#organizationForm').validator("setField", "partyCDomicile", "丙方住所:required;");
-	}
 });
-
-
 function submitFun(){
-	$('#organizationForm').submit();
+	$('#entityForm').submit();
 }
+/*]]>*/
 </script>
 </head>
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form:form id="organizationForm" method="post" cssClass="form"
-			modelAttribute="organization">
-			<form:hidden path="id"/>
-			<table class="common_table">
+		<form id="entityForm" method="post" class="form" th:object="${organization}">
+			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
+			<table class="table">
 				<tr>
-					<th class="narrow">名称:<span class="tRed">*</span></th>
+					<th class="narrow" width="18%">编号:</th>
 					<td>
-						<form:input path="name" cssClass="text"
-							data-rule="名称:required;length[2~30]" 
-							data-tip="必填"/>
+						<input id="code" name="code" data-tip="不能重复的编号" readonly="readonly" value="" th:value="*{code}"/>
 					</td>
-					<th>&nbsp;</th>
-					<td >
-						&nbsp;
-					</td>
+					<th class="narrow" width="18%">&nbsp;</th>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<th class="narrow">组织类型:<span class="tRed">*</span></th>
 					<td>
-						<c:out value="${organization.type}"></c:out>
+						<input id="type" name="type" type="hidden" value="" th:value="*{type.code}" />
+						<input id="typeName" name="typeName" readonly="readonly" value="" th:value="*{type.name}" />
 					</td>
-					<th>上级组织</th>
+					<th>上级组织:</th>
 					<td>
-						<c:choose>
-							<c:when test="${organization.type=='公司' || organization.type=='分公司'}">
-								<form:select path="parentId" >
-									<form:option value="" >-- 请选择 --</form:option>
-									<form:options items="${parentOrganizations }" itemValue="id" itemLabel="name" />
-								</form:select>
-							</c:when>
-							<c:otherwise>
-								<input id="parentId" name="parentId" type="hidden" readonly="readonly"
-									value="${organization.parentId}"/>
-								<input id="parentName" name="parentName" class="selectInput" readonly="readonly" 
-									value="${parentOrganizationName}"/>
-							</c:otherwise>
-						</c:choose>
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly" value="" th:value="${parent?.id?:''}"/>
+						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" value="" th:value="${parent?.name?:''}"/>
 					</td>
 				</tr>
 				<tr>
-					<th class="narrow">编号<span class="tRed">*</span></th>
+					<th class="narrow">名称:<span class="tRed">*</span></th>
 					<td>
-						<form:input path="code" cssClass="text"
-							data-rule="编号:required;length[1~16];remote[${contextPath }/organization/organizationCodeIsExist.action, code, id]" 
-							data-tip="不能重复的编号"/>
+						<input id="name" name="name" data-rule="名称:required;length[2~30]" data-tip="必填" value="" th:value="*{name}"/>
 					</td>
 					<th class="narrow">别名:</th>
 					<td>
-						<form:input path="alias" cssClass="text"
-							data-rule="别名:length[~16]"/>
-					</td>
-				</tr>
-
-				<tr>
-					<th>主管类型</th>
-					<td>
-						<form:radiobuttons path="chiefType" items="${chiefTypes }"/>
-					</td>
-					<th>主管</th>
-					<td>
-						<input id="chiefId" name="chiefId" type="hidden" readonly="readonly"/>
-						<input id="chiefName" name="chiefName" class="selectInput" readonly="readonly"/>
+						<input id="alias" name="alias" data-rule="别名:length[~16]" value="" th:value="*{alias}"/>
 					</td>
 				</tr>
 				<tr>
-					<th>所属业务中心<span class="tRed">*</span></th>
+					<th>所属业务中心:</th>
 					<td>
-						<input id="vcid" name="vcid" type="hidden" readonly="readonly"
-							value="${organization.vcid}"/>
-						<input id="virtualCenterName"  class="selectInput" readonly="readonly" 
-							value="${virtualCenter.name}"/>
+						<input id="vcid" name="vcid" type="hidden" readonly="readonly" value="" th:value="*{vcid}"/>
+						<input id="virtualCenterName" name="virtualCenterName" class="selectInput" readonly="readonly" value="" th:value="${vc?.name?:''}"/>
 					</td>
 					<th>&nbsp;</th>
 					<td>
@@ -131,14 +117,14 @@ function submitFun(){
 					</td>
 				</tr>
 				<tr>
-					<th>备注</th>
+					<th>备注:</th>
 					<td colspan="3">
-						<form:textarea path="remark" class="longText" style="width:92%"/>
+						<textarea name="remark" rows="" cols="" class="longText" style="width:90%" th:text="*{remark}"></textarea>
 					</td>
 				</tr>
 				<tr>
 					<td class="rightOperRow" colspan="4" style="padding-right: 50px">
-						<a id="addBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  	
+						<a id="addBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton" style="width: 80px;">提交</a>  	
 					</td>
 				</tr>
 			</table>

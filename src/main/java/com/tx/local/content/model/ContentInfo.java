@@ -18,6 +18,8 @@ import javax.persistence.Transient;
 import com.tx.core.support.entrysupport.model.EntityEntry;
 import com.tx.core.support.entrysupport.model.EntryAble;
 
+import io.swagger.annotations.ApiModel;
+
 /**
  * 内容信息管理<br/>
  * <功能详细描述>
@@ -29,6 +31,7 @@ import com.tx.core.support.entrysupport.model.EntryAble;
  */
 @Entity
 @Table(name = "ci_content_info")
+@ApiModel("内容信息")
 public class ContentInfo implements EntryAble<EntityEntry> {
     
     /** 主键id */

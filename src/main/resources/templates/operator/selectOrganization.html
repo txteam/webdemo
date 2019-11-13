@@ -43,7 +43,7 @@
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 var tree = null;
-var event_name = /*[['select_virtualcenter_' + ${eventName}]]*/'select_virtualcenter_';
+var event_name = /*[['select_organization_' + ${eventName}]]*/'select_organization_';
 $(document).ready(function() {
 	tree = $('#organizationTree').tree({
 		url : /*[[@{/organization/queryList}]]*/'',

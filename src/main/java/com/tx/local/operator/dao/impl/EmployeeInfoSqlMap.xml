@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="employeeInfo">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="employeeInfoMap" 
+		type="com.tx.local.operator.model.EmployeeInfo">
+		<result column="operatorId" property="operator.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.operator.model.EmployeeInfo"
+		resultMap="employeeInfoMap">
+		SELECT 
+				EI.id,
+				EI.code,
+				EI.idCardType,
+				EI.idCardNumber,
+				EI.age,
+				EI.sex,
+				EI.lastUpdateDate,
+				EI.name,
+				EI.email,
+				EI.entryDate,
+				EI.phoneNumber,
+				EI.createDate,
+				EI.leaving,
+				EI.leavingDate,
+				EI.birthday,
+				EI.official,
+				EI.officialDate,
+				EI.operatorId
+		  FROM OPER_EMPLOYEE_INFO EI
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND EI.id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND EI.code = #{code}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="employeeInfoMap">
+		SELECT 
+				EI.id,
+				EI.code,
+				EI.idCardType,
+				EI.idCardNumber,
+				EI.age,
+				EI.sex,
+				EI.lastUpdateDate,
+				EI.name,
+				EI.email,
+				EI.entryDate,
+				EI.phoneNumber,
+				EI.createDate,
+				EI.leaving,
+				EI.leavingDate,
+				EI.birthday,
+				EI.official,
+				EI.officialDate,
+				EI.operatorId
+		  FROM OPER_EMPLOYEE_INFO EI
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND EI.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND EI.code = #{code} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND EI.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND EI.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
+	            <![CDATA[ AND EI.age = #{age} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
+	            <![CDATA[ AND EI.sex = #{sex} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND EI.name = #{name} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
+	            <![CDATA[ AND EI.email = #{email} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phoneNumber)">  
+	            <![CDATA[ AND EI.phoneNumber = #{phoneNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND EI.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND EI.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(leaving)">  
+	            <![CDATA[ AND EI.leaving = #{leaving} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(official)">  
+	            <![CDATA[ AND EI.official = #{official} ]]>
+	        </if>			
+			<if test="operator != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operator.id)">  
+		            <![CDATA[ AND EI.operatorId = #{operator.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND EI.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_EMPLOYEE_INFO EI
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND EI.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND EI.code = #{code} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND EI.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND EI.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
+	            <![CDATA[ AND EI.age = #{age} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
+	            <![CDATA[ AND EI.sex = #{sex} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND EI.name = #{name} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
+	            <![CDATA[ AND EI.email = #{email} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phoneNumber)">  
+	            <![CDATA[ AND EI.phoneNumber = #{phoneNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND EI.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND EI.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(leaving)">  
+	            <![CDATA[ AND EI.leaving = #{leaving} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(official)">  
+	            <![CDATA[ AND EI.official = #{official} ]]>
+	        </if>			
+			<if test="operator != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operator.id)">  
+		            <![CDATA[ AND EI.operatorId = #{operator.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND EI.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.operator.model.EmployeeInfo">
+		INSERT INTO OPER_EMPLOYEE_INFO
+		(
+			id,
+			code,
+			idCardType,
+			idCardNumber,
+			age,
+			sex,
+			lastUpdateDate,
+			name,
+			email,
+			entryDate,
+			phoneNumber,
+			createDate,
+			leaving,
+			leavingDate,
+			birthday,
+			official,
+			officialDate,
+			operatorId
+		)
+		VALUES
+		(
+			#{id},
+			#{code},
+			#{idCardType},
+			#{idCardNumber},
+			#{age},
+			#{sex},
+			#{lastUpdateDate},
+			#{name},
+			#{email},
+			#{entryDate},
+			#{phoneNumber},
+			#{createDate},
+			#{leaving},
+			#{leavingDate},
+			#{birthday},
+			#{official},
+			#{officialDate},
+			#{operator.id}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.operator.model.EmployeeInfo">
+		DELETE FROM OPER_EMPLOYEE_INFO  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_EMPLOYEE_INFO
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('idCardType')">
+	    		idCardType = #{idCardType,javaType=com.tx.local.basicdata.model.IDCardTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('idCardNumber')">
+	    		idCardNumber = #{idCardNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('age')">
+	    		age = #{age,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('sex')">
+	    		sex = #{sex,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('name')">
+	    		name = #{name,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('email')">
+	    		email = #{email,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('entryDate')">
+	    		entryDate = #{entryDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('phoneNumber')">
+	    		phoneNumber = #{phoneNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('leaving')">
+	    		leaving = #{leaving,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('leavingDate')">
+	    		leavingDate = #{leavingDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('birthday')">
+	    		birthday = #{birthday,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('official')">
+	    		official = #{official,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('officialDate')">
+	    		officialDate = #{officialDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('operator')">
+	    		operatorId = #{operator.id,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

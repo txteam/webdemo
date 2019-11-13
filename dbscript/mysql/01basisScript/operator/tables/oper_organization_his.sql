@@ -1,5 +1,5 @@
-drop table if exists oper_organization_his;
-CREATE TABLE oper_organization_his(
+drop table if exists OPER_ORGANIZATION_HIS;
+CREATE TABLE OPER_ORGANIZATION_HIS(
 	id varchar(64) not null,			-- 主键
 	vcid varchar(64) not null,			-- 组织虚中心id
 	code varchar(64) not null,			-- 组织编码

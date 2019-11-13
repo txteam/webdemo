@@ -37,7 +37,7 @@
 	<catalog id="log_catalog" type="tab" text="日志菜单">
 		<menu id="system_operate_log_menus" text="系统操作日志">
 			<menu id="login_log_menu" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList"></menu>
-			<menu id="operator_manage_log_menu" text="系统管理日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList"></menu>
+			<menu id="operator_manage_log_menu" text="系统日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList"></menu>
 		</menu>
 		<menu id="interface message_log_menus" text="接口报文日志">
 			<menu id="test_log_menu" text="测试接口日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList.action"></menu>
@@ -49,10 +49,10 @@
 		<menu id="operator_manage_center_menu" text="用户管理" auths="operator_manage_center_auth" type="tab">
 			<menu id="virtualcenter_manage_menu" text="虚中心管理" auths="virtualcenter_manage_auth" href="/virtualCenter/toQueryTreeList" type="tab"></menu>
 			<menu id="organization_manage_menu" text="组织管理" auths="organization_manage_auth" href="/organization/toQueryList" type="tab"></menu>
-			<menu id="auth_manage_menu" text="权限管理" auths="auth_manage_auth" href="/auth/toQueryAuthView.action" type="tab"></menu>
-			<menu id="role_manage_menu" text="角色管理" auths="role_manage_auth" href="/role/toQueryList" type="tab"></menu>
-			<menu id="post_manage_menu" text="职位管理" auths="post_manage_auth" href="/post/toQueryList" type="tab"></menu>
-			<menu id="operator_manage_menu" text="用户管理" auths="operator_manage_auth" href="/operator/toQueryOperatorList.action" type="tab"></menu>
+			<menu id="role_manage_menu" text="角色管理" auths="role_manage_auth" href="/operatorRole/toQueryList" type="tab"></menu>
+			<menu id="post_manage_menu" text="职位管理" auths="post_manage_auth" href="/operatorPost/toQueryList" type="tab"></menu>
+			<menu id="operator_manage_menu" text="用户管理" auths="operator_manage_auth" href="/operator/toQueryPagedList" type="tab"></menu>
+			<menu id="auth_manage_menu" text="权限管理" auths="auth_manage_auth" href="/auth/toQueryAuthView" type="tab"></menu>
 		</menu>
 		<menu id="basicdata_manage_center_menu" text="基础数据管理" auths="basicdata_manage_center_auth" type="tab" selectRefresh="false">
 			<menu id="datadict_manage_menu" text="数据字典管理" auths="basicdata_manage_auth" href="/basicdata/toQueryBasicDataMain" type="tab"></menu>

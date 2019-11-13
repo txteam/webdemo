@@ -91,7 +91,7 @@ public class VirtualCenterService implements InitializingBean {
         @SuppressWarnings("unchecked")
         List<VirtualCenter> virtualCenterList = queryList(null, (Map) null);
         for (VirtualCenter virtualCenter : virtualCenterList) {
-            if (virtualCenter.getCode() == null) {
+            if (StringUtils.isEmpty(virtualCenter.getCode())) {
                 continue;
             }
             virtualCenterMap.put(virtualCenter.getCode().toUpperCase(),

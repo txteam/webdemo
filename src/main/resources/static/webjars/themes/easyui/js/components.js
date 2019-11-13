@@ -124,7 +124,7 @@ $.widget("txcomponent.selectVirtualCenter",{
 		var _this = this;
 		var _element = _this.element;
 		var _option = _this.options;
-		var action = _option.contextPath + 'virtualCenter/toSelect?eventName='+_option.eventName;
+		var action = _option.contextPath + 'virtualCenter/toSelect?eventName=' + _option.eventName;
 		if(_option.clearHandler && $.isFunction(_option.clearHandler)){
 			var $clear = $('<span class="icon_span clear"></span>')
 			$(_element).after($clear);
@@ -182,7 +182,8 @@ $.widget("txcomponent.selectOrganization",{
 		openDialogHandler : window.parent.DialogUtils,
 		clearHandler: null,
 		selectHandler: null,
-        handler : null
+        handler : null,
+        data: null
 	},
 	_create: function(){
 		var _this = this;
@@ -194,6 +195,7 @@ $.widget("txcomponent.selectOrganization",{
 			$(_element).after($clear);
 			$clear.click(function(){
 				_option.clearHandler();
+				_option._choosedData = null;
 			});
 		}
 		$(_element).click(function(){
@@ -209,7 +211,7 @@ $.widget("txcomponent.selectOrganization",{
 					text : '确认',
 					handler : function() {
 					    if(_option.handler){
-	                        _option.handler.call(_option.handler,_option._choosedData);
+	                        _option.handler.call(_option.handler,_option._data);
 	                    }
 						_option.openDialogHandler.closeDialogById("selectOrganization");
 					}
@@ -218,7 +220,7 @@ $.widget("txcomponent.selectOrganization",{
 		});
 		//绑定响应选中事件
 		$.bindge("select_organization_" + _option.eventName,function(event,organization){
-		    _option._choosedData = organization;
+		    _option._data = organization;
             if (_option.selectHandler) {
                 _option.selectHandler.call(_option.selectHandler, organization);
             }

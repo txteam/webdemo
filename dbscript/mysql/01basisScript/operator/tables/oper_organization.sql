@@ -1,8 +1,8 @@
 /*****************************************************************************
 -- OPER_ORGANIZATION : 
 *****************************************************************************/
-drop table if exists oper_organization;
-create table oper_organization(
+drop table if exists OPER_ORGANIZATION;
+create table OPER_ORGANIZATION(
 	id varchar(64) not null,			-- 主键
 	vcid varchar(64) not null,			-- 组织虚中心id
 	code varchar(64) not null,			-- 组织编码

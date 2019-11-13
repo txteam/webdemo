@@ -6,6 +6,10 @@
  */
 package com.tx.local.operator.model;
 
+import java.io.Serializable;
+
+import com.tx.local.vitualcenter.model.VirtualCenterEnum;
+
 /**
  * 角色枚举<br/>
  * <功能详细描述>
@@ -15,25 +19,50 @@ package com.tx.local.operator.model;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public enum OperatorRoleEnum {
+public enum OperatorRoleEnum implements Serializable {
     
-    ADMIN("ADMIN", "系统管理员");
+    /** 系统管理员 */
+    ADMIN("ADMIN", "系统管理员", VirtualCenterEnum.JT.getCode());
     
-    private final String id;
+    /** 数据库中主键，系统启动后会进行写入 */
+    private String id;
     
+    /** 编码 */
+    private final String code;
+    
+    /** 名称 */
     private final String name;
     
+    /** 归属虚中心编码 */
+    private final String virtualCenterCode;
+    
     /** <默认构造函数> */
-    private OperatorRoleEnum(String id, String name) {
-        this.id = id;
+    private OperatorRoleEnum(String code, String name,
+            String virtualCenterCode) {
+        this.code = code;
         this.name = name;
+        this.virtualCenterCode = virtualCenterCode;
     }
     
     /**
-     * @return 返回 id
+     * @return
      */
     public String getId() {
-        return id;
+        return this.id;
+    }
+    
+    /**
+     * @param 对id进行赋值
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    /**
+     * @return 返回 code
+     */
+    public String getCode() {
+        return code;
     }
     
     /**
@@ -41,5 +70,12 @@ public enum OperatorRoleEnum {
      */
     public String getName() {
         return name;
+    }
+    
+    /**
+     * @return 返回 virtualCenterCode
+     */
+    public String getVirtualCenterCode() {
+        return virtualCenterCode;
     }
 }

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contentInfoCategory">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="contentInfoCategoryMap" 
+		type="com.tx.local.content.model.ContentInfoCategory">
+		<result column="typeCode" property="type.code"/>
+		<result column="parentId" property="parent.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.content.model.ContentInfoCategory"
+		resultMap="contentInfoCategoryMap">
+		SELECT 
+				CIC.id,
+				CIC.code,
+				CIC.lastUpdateDate,
+				CIC.lastUpdateOperatorId,
+				CIC.name,
+				CIC.typeCode,
+				CIC.level,
+				CIC.orderIndex,
+				CIC.valid,
+				CIC.createDate,
+				CIC.createOperatorId,
+				CIC.modifyAble,
+				CIC.parentId,
+				CIC.remark
+		  FROM CI_CONTENT_CATEGORY CIC
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND CIC.id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND CIC.code = #{code}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="contentInfoCategoryMap">
+		SELECT 
+				CIC.id,
+				CIC.code,
+				CIC.lastUpdateDate,
+				CIC.lastUpdateOperatorId,
+				CIC.name,
+				CIC.typeCode,
+				CIC.level,
+				CIC.orderIndex,
+				CIC.valid,
+				CIC.createDate,
+				CIC.createOperatorId,
+				CIC.modifyAble,
+				CIC.parentId,
+				CIC.remark
+		  FROM CI_CONTENT_CATEGORY CIC
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND CIC.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND CIC.code = #{code} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
+	            <![CDATA[ AND CIC.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND CIC.name = #{name} ]]>
+	        </if>			
+			<if test="type != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type.code)">  
+		            <![CDATA[ AND CIC.typeCode = #{type.code} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(level)">  
+	            <![CDATA[ AND CIC.level = #{level} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderIndex)">  
+	            <![CDATA[ AND CIC.orderIndex = #{orderIndex} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND CIC.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CIC.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CIC.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
+	            <![CDATA[ AND CIC.createOperatorId = #{createOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND CIC.modifyAble = #{modifyAble} ]]>
+	        </if>			
+			<if test="parent != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parent.id)">  
+		            <![CDATA[ AND CIC.parentId = #{parent.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND CIC.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND CIC.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM CI_CONTENT_CATEGORY CIC
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND CIC.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND CIC.code = #{code} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
+	            <![CDATA[ AND CIC.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND CIC.name = #{name} ]]>
+	        </if>			
+			<if test="type != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type.code)">  
+		            <![CDATA[ AND CIC.typeCode = #{type.code} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(level)">  
+	            <![CDATA[ AND CIC.level = #{level} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(orderIndex)">  
+	            <![CDATA[ AND CIC.orderIndex = #{orderIndex} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND CIC.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CIC.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CIC.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
+	            <![CDATA[ AND CIC.createOperatorId = #{createOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND CIC.modifyAble = #{modifyAble} ]]>
+	        </if>			
+			<if test="parent != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parent.id)">  
+		            <![CDATA[ AND CIC.parentId = #{parent.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND CIC.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND CIC.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.content.model.ContentInfoCategory">
+		INSERT INTO CI_CONTENT_CATEGORY
+		(
+			id,
+			code,
+			lastUpdateDate,
+			lastUpdateOperatorId,
+			name,
+			typeCode,
+			level,
+			orderIndex,
+			valid,
+			createDate,
+			createOperatorId,
+			modifyAble,
+			parentId,
+			remark
+		)
+		VALUES
+		(
+			#{id},
+			#{code},
+			#{lastUpdateDate},
+			#{lastUpdateOperatorId},
+			#{name},
+			#{type.code},
+			#{level},
+			#{orderIndex},
+			#{valid},
+			#{createDate},
+			#{createOperatorId},
+			#{modifyAble},
+			#{parent.id},
+			#{remark}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.content.model.ContentInfoCategory">
+		DELETE FROM CI_CONTENT_CATEGORY  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE CI_CONTENT_CATEGORY
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateOperatorId')">
+	    		lastUpdateOperatorId = #{lastUpdateOperatorId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('name')">
+	    		name = #{name,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		typeCode = #{type.code,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('level')">
+	    		level = #{level,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('orderIndex')">
+	    		orderIndex = #{orderIndex,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('valid')">
+	    		valid = #{valid,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('modifyAble')">
+	    		modifyAble = #{modifyAble,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('parent')">
+	    		parentId = #{parent.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('remark')">
+	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

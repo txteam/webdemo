@@ -20,6 +20,8 @@ import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import io.swagger.annotations.ApiModel;
+
 
  /**
   * 操作员<br/>
@@ -32,6 +34,7 @@ import org.springframework.format.annotation.DateTimeFormat;
   */
 @Entity
 @Table(name = "oper_operator")
+@ApiModel("操作人员")
 public class Operator implements Serializable{
     
     /** 注释内容 */
@@ -47,7 +50,7 @@ public class Operator implements Serializable{
     /** 所属组织: 在代码中控制组织id不能为空，考虑到超级管理员的组织为空的情况,由界面中创建的人员组织id不能为空 */
     @ManyToOne
     @JoinColumn(name="organizationId")
-    private Organization organization;
+    private OperatorOrganization organization;
     
     /** 登录名 */
     private String loginName;
@@ -89,7 +92,7 @@ public class Operator implements Serializable{
     /** 主要职位 */
     @ManyToOne
     @JoinColumn(name="mainPostId")
-    private Post mainPost;
+    private OperatorPost mainPost;
     
     /** 员工信息,如果为公司员工，则该信息不为空  */
     @Transient
@@ -97,7 +100,7 @@ public class Operator implements Serializable{
     
     /** 职位 */
     @ManyToMany
-    private List<Post> postList;
+    private List<OperatorPost> postList;
     
     /** 职位 */
     @ManyToMany
@@ -316,42 +319,42 @@ public class Operator implements Serializable{
     /**
      * @return 返回 organization
      */
-    public Organization getOrganization() {
+    public OperatorOrganization getOrganization() {
         return organization;
     }
 
     /**
      * @param 对organization进行赋值
      */
-    public void setOrganization(Organization organization) {
+    public void setOrganization(OperatorOrganization organization) {
         this.organization = organization;
     }
 
     /**
      * @return 返回 mainPost
      */
-    public Post getMainPost() {
+    public OperatorPost getMainPost() {
         return mainPost;
     }
 
     /**
      * @param 对mainPost进行赋值
      */
-    public void setMainPost(Post mainPost) {
+    public void setMainPost(OperatorPost mainPost) {
         this.mainPost = mainPost;
     }
 
     /**
      * @return 返回 postList
      */
-    public List<Post> getPostList() {
+    public List<OperatorPost> getPostList() {
         return postList;
     }
 
     /**
      * @param 对postList进行赋值
      */
-    public void setPostList(List<Post> postList) {
+    public void setPostList(List<OperatorPost> postList) {
         this.postList = postList;
     }
 

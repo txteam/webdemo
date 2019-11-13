@@ -12,8 +12,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tx.component.role.model.Role;
 import com.tx.local.security.model.RoleTypeEnum;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * 角色
@@ -32,6 +35,7 @@ import com.tx.local.security.model.RoleTypeEnum;
  */
 @Entity
 @Table(name = "oper_role")
+@ApiModel("角色")
 public class OperatorRole implements Serializable, Role {
     
     /** 注释内容 */
@@ -161,7 +165,17 @@ public class OperatorRole implements Serializable, Role {
      * @return
      */
     @Override
+    @JsonIgnore
     public String getRoleTypeId() {
         return RoleTypeEnum.ROLE_TYPE_OPERATOR.getId();
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    @JsonIgnore
+    public String getParentId() {
+        return Role.super.getParentId();
     }
 }

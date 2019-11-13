@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="operator">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="operatorMap" 
+		type="com.tx.local.operator.model.Operator">
+		<result column="mainPostId" property="mainPost.id"/>
+		<result column="organizationId" property="organization.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.operator.model.Operator"
+		resultMap="operatorMap">
+		SELECT 
+				O.id,
+				O.pwdErrCount,
+				O.pwdUpdateDate,
+				O.lastUpdateDate,
+				O.mainPostId,
+				O.userName,
+				O.vcid,
+				O.loginName,
+				O.valid,
+				O.createDate,
+				O.locked,
+				O.examinePwd,
+				O.historyPwd,
+				O.invalidDate,
+				O.password,
+				O.organizationId
+		  FROM OPER_OPERATOR O
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND O.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="operatorMap">
+		SELECT 
+				O.id,
+				O.pwdErrCount,
+				O.pwdUpdateDate,
+				O.lastUpdateDate,
+				O.mainPostId,
+				O.userName,
+				O.vcid,
+				O.loginName,
+				O.valid,
+				O.createDate,
+				O.locked,
+				O.examinePwd,
+				O.historyPwd,
+				O.invalidDate,
+				O.password,
+				O.organizationId
+		  FROM OPER_OPERATOR O
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND O.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
+	            <![CDATA[ AND O.pwdErrCount = #{pwdErrCount} ]]>
+	        </if>			
+			<if test="mainPost != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
+		            <![CDATA[ AND O.mainPostId = #{mainPost.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
+	            <![CDATA[ AND O.userName = #{userName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND O.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
+	            <![CDATA[ AND O.loginName = #{loginName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND O.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND O.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND O.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            <![CDATA[ AND O.locked = #{locked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
+	            <![CDATA[ AND O.examinePwd = #{examinePwd} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(historyPwd)">  
+	            <![CDATA[ AND O.historyPwd = #{historyPwd} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
+	            <![CDATA[ AND O.password = #{password} ]]>
+	        </if>			
+			<if test="organization != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
+		            <![CDATA[ AND O.organizationId = #{organization.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND O.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_OPERATOR O
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND O.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
+	            <![CDATA[ AND O.pwdErrCount = #{pwdErrCount} ]]>
+	        </if>			
+			<if test="mainPost != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
+		            <![CDATA[ AND O.mainPostId = #{mainPost.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
+	            <![CDATA[ AND O.userName = #{userName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND O.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
+	            <![CDATA[ AND O.loginName = #{loginName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND O.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND O.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND O.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            <![CDATA[ AND O.locked = #{locked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
+	            <![CDATA[ AND O.examinePwd = #{examinePwd} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(historyPwd)">  
+	            <![CDATA[ AND O.historyPwd = #{historyPwd} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
+	            <![CDATA[ AND O.password = #{password} ]]>
+	        </if>			
+			<if test="organization != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
+		            <![CDATA[ AND O.organizationId = #{organization.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND O.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.operator.model.Operator">
+		INSERT INTO OPER_OPERATOR
+		(
+			id,
+			pwdErrCount,
+			pwdUpdateDate,
+			lastUpdateDate,
+			mainPostId,
+			userName,
+			vcid,
+			loginName,
+			valid,
+			createDate,
+			locked,
+			examinePwd,
+			historyPwd,
+			invalidDate,
+			password,
+			organizationId
+		)
+		VALUES
+		(
+			#{id},
+			#{pwdErrCount},
+			#{pwdUpdateDate},
+			#{lastUpdateDate},
+			#{mainPost.id},
+			#{userName},
+			#{vcid},
+			#{loginName},
+			#{valid},
+			#{createDate},
+			#{locked},
+			#{examinePwd},
+			#{historyPwd},
+			#{invalidDate},
+			#{password},
+			#{organization.id}
+		)
+	</insert>
+	
+	<insert id="insertToHis" 
+		parameterType="com.tx.local.operator.model.Operator">
+		INSERT INTO OPER_OPERATOR_HIS
+		(
+			id,
+			pwdErrCount,
+			pwdUpdateDate,
+			lastUpdateDate,
+			mainPostId,
+			userName,
+			vcid,
+			loginName,
+			valid,
+			createDate,
+			locked,
+			examinePwd,
+			historyPwd,
+			invalidDate,
+			password,
+			organizationId
+		)
+		VALUES
+		(
+			#{id},
+			#{pwdErrCount},
+			#{pwdUpdateDate},
+			#{lastUpdateDate},
+			#{mainPost.id},
+			#{userName},
+			#{vcid},
+			#{loginName},
+			#{valid},
+			#{createDate},
+			#{locked},
+			#{examinePwd},
+			#{historyPwd},
+			#{invalidDate},
+			#{password},
+			#{organization.id}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.operator.model.Operator">
+		DELETE FROM OPER_OPERATOR  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_OPERATOR
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('pwdErrCount')">
+	    		pwdErrCount = #{pwdErrCount,javaType=java.lang.Integer},
+	    	</if>
+			<if test="_parameter.containsKey('pwdUpdateDate')">
+	    		pwdUpdateDate = #{pwdUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('mainPost')">
+	    		mainPostId = #{mainPost.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('userName')">
+	    		userName = #{userName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('vcid')">
+	    		vcid = #{vcid,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('loginName')">
+	    		loginName = #{loginName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('valid')">
+	    		valid = #{valid,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('locked')">
+	    		locked = #{locked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('examinePwd')">
+	    		examinePwd = #{examinePwd,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('historyPwd')">
+	    		historyPwd = #{historyPwd,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('invalidDate')">
+	    		invalidDate = #{invalidDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('password')">
+	    		password = #{password,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('organization')">
+	    		organizationId = #{organization.id,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

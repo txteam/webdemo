@@ -247,6 +247,8 @@ tx:
     config:
       enable: true
       duration: 1d
+    security:
+      enable: true
     # event:
       # enable: false
     # command:

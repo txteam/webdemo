@@ -45,8 +45,12 @@
 // * @since  [产品/模块版本]
 // */
 //@Component("contentConfigRegistry")
-//public class ContentConfigRegistry implements InitializingBean,
-//        ResourceLoaderAware {
+//public class ContentConfigRegistry
+//        implements InitializingBean, ResourceLoaderAware {
+//    
+//    /** 内容类型注册表 */
+//    @Resource(name = "contentTypeRegistry")
+//    private ContentTypeRegistry contentTypeRegistry;
 //    
 //    /** 内容信息分类业务层 */
 //    @Resource(name = "contentInfoCategoryService")
@@ -56,16 +60,13 @@
 //    @Resource(name = "contentInfoLevelService")
 //    private ContentInfoLevelService contentInfoLevelService;
 //    
-//    /** 内容类型注册表 */
-//    @Resource(name = "contentTypeRegistry")
-//    private ContentTypeRegistry contentTypeRegistry;
-//    
 //    /** 事务处理句柄 */
 //    @Resource(name = "transactionTemplate")
 //    private TransactionTemplate transactionTemplate;
 //    
 //    /** 内容配置解析器 */
-//    private static XStream contentConfigXstream = XstreamUtils.getXstream(ContentConfig.class);
+//    private static XStream contentConfigXstream = XstreamUtils
+//            .getXstream(ContentConfig.class);
 //    
 //    /** 资源加载器 */
 //    private ResourceLoader resourceLoader;
@@ -96,12 +97,14 @@
 //    @Override
 //    public void afterPropertiesSet() throws Exception {
 //        AssertUtils.notEmpty(this.configLocation, "configLocation is empty.");
-//        org.springframework.core.io.Resource config = this.resourceLoader.getResource(this.configLocation);
+//        org.springframework.core.io.Resource config = this.resourceLoader
+//                .getResource(this.configLocation);
 //        
 //        ContentConfig contentConfig = null;
-//        try (InputStream in = config.getInputStream()){
+//        try (InputStream in = config.getInputStream()) {
 //            String configXml = "";//IOUtils.toString(in, "UTF-8");
-//            contentConfig = (ContentConfig) contentConfigXstream.fromXML(configXml);
+//            contentConfig = (ContentConfig) contentConfigXstream
+//                    .fromXML(configXml);
 //        } catch (Exception e) {
 //            AssertUtils.wrap(e, "read configLocation.");
 //        }
@@ -110,13 +113,16 @@
 //        this.categoryMap = new HashMap<>();
 //        this.levelList = new ArrayList<>();
 //        //初始化分配配置
-//        final List<CategoryConfig> finalCategoryConfigList = contentConfig.getCategoryConfigList();
-//        this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-//            @Override
-//            protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-//                parseCategoryConfig(null, finalCategoryConfigList);
-//            }
-//        });
+//        final List<CategoryConfig> finalCategoryConfigList = contentConfig
+//                .getCategoryConfigList();
+//        this.transactionTemplate
+//                .execute(new TransactionCallbackWithoutResult() {
+//                    @Override
+//                    protected void doInTransactionWithoutResult(
+//                            TransactionStatus arg0) {
+//                        parseCategoryConfig(null, finalCategoryConfigList);
+//                    }
+//                });
 //        //初始化等级配置
 //        initCategoryConfigInitAbleHelper(this.levelList);
 //        this.levelConfigInitAbleHelper.init(transactionTemplate);
@@ -135,24 +141,27 @@
 //    private void parseCategoryConfig(ContentInfoCategory parent,
 //            List<CategoryConfig> categoryConfigList) {
 //        for (CategoryConfig categoryConfig : categoryConfigList) {
-//            ContentInfoCategory category = buildCategory(parent, categoryConfig);
+//            ContentInfoCategory category = buildCategory(parent,
+//                    categoryConfig);
 //            category = this.contentInfoCategoryService.saveForInit(category);
 //            this.categoryMap.put(category.getCode(), category);
 //            
 //            if (!CollectionUtils.isEmpty(categoryConfig.getLevelConfigList())) {
-//                for (LevelConfig levelConfig : categoryConfig.getLevelConfigList()) {
+//                for (LevelConfig levelConfig : categoryConfig
+//                        .getLevelConfigList()) {
 //                    ContentInfoLevel level = buildLevel(category, levelConfig);
 //                    this.levelList.add(level);
 //                }
 //            }
-//            if (!CollectionUtils.isEmpty(categoryConfig.getCategoryConfigList())) {
+//            if (!CollectionUtils
+//                    .isEmpty(categoryConfig.getCategoryConfigList())) {
 //                parseCategoryConfig(category,
 //                        categoryConfig.getCategoryConfigList());
 //            }
 //        }
 //        //遍历所有的分类，将非配置的分类设置为可编辑
-//        List<ContentInfoCategory> categoryList = this.contentInfoCategoryService.queryList(null,
-//                null);
+//        List<ContentInfoCategory> categoryList = this.contentInfoCategoryService
+//                .queryList(null, (Map<String, Object>) null);
 //        for (ContentInfoCategory categoryTemp : categoryList) {
 //            if (categoryTemp.isModifyAble()
 //                    || this.categoryMap.containsKey(categoryTemp.getCode())) {
@@ -186,7 +195,8 @@
 //        category.setRemark(categoryConfig.getRemark());
 //        category.setModifyAble(false);
 //        category.setValid(true);
-//        category.setType(this.contentTypeRegistry.getTypeByCode(categoryConfig.getType()));
+//        category.setType(this.contentTypeRegistry
+//                .getTypeByCode(categoryConfig.getType()));
 //        return category;
 //    }
 //    
@@ -245,7 +255,7 @@
 //            
 //            protected List<ContentInfoLevel> queryListFromDB() {
 //                List<ContentInfoLevel> resDbList = levelService.queryList(null,
-//                        null);
+//                        (Map<String, Object>)null);
 //                return resDbList;
 //            }
 //            
