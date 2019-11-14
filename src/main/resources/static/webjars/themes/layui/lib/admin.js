@@ -424,7 +424,7 @@ layui.define('view', function(exports){
         ,resize: false
         ,success: function(layero, index){
           var textarea = layero.find('textarea')
-          ,value = note === undefined ? '便签中的内容会存储在本地，这样即便你关掉了浏览器，在下次打开时，依然会读取到上一次的记录。是个非常小巧实用的本地备忘录' : note;
+          ,value = note === undefined ? '' : note;
           
           textarea.val(value).focus().on('keyup', function(){
             layui.data(setter.tableName, {
@@ -779,7 +779,6 @@ layui.define('view', function(exports){
     
     admin.tabsPage.elem = othis;
     //admin.prevRouter[router.path[0]] = router.href; //记录上一次各菜单的路由信息
-
     //执行跳转
     var topLayui = parent === self ? layui : top.layui;
     topLayui.index.openTabsPage(href, text || othis.text());

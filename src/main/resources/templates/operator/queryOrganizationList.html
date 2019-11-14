@@ -121,7 +121,10 @@ $(document).ready(function() {
 			title : '组织类型',
 			width : 80,
 			formatter : function(value, row, index) {
-				return value;
+				if(value){
+					return value.name;
+				}
+				return "";
 			}
 		}, {
 			field : 'valid',

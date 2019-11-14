@@ -64,8 +64,11 @@ public class OperatorRoleController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAdd")
-    public String toAdd(ModelMap response) {
+    public String toAdd(
+            @RequestParam(value = "vcid", required = false) String vcid,
+            ModelMap response) {
         response.put("operatorRole", new OperatorRole());
+        response.put("vcid", vcid);
         
         return "/operator/addOperatorRole";
     }
@@ -102,7 +105,6 @@ public class OperatorRoleController {
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        //params.put("",request.getFirst(""));
         
         List<OperatorRole> resList = this.operatorRoleService.queryList(valid,
                 params);

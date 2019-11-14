@@ -46,7 +46,7 @@ var vcTree = null;
 var grid = null;
 var idFieldName = 'id';
 var nameFieldName = 'name'; 
-var entityName = '角色'; 
+var entityName = '角色';
 $(document).ready(function(){
 	vcTree = $('#virtualCenterTree').tree({
 		url : /*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
@@ -60,6 +60,7 @@ $(document).ready(function(){
 		onClick : function(node){
 			$('#virtualCenterName').val(node.name);
 			$('#vcid').val(node.id);
+			
 			$('#grid').datagrid('load',{
 				vcid: $("#vcid").val(),
 				name: $("#name").val(),
@@ -91,7 +92,6 @@ $(document).ready(function(){
 		singleSelect : true,
 		onBeforeLoad:function(){
 			if(!virtualCenterMapLoaded){
-				
 				$.post(
 					/*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
 					function(rows){
@@ -267,6 +267,10 @@ function addFun() {
         text : '加载中，请等待....'
 	});
 	var addUrl = /*[[@{/operatorRole/toAdd}]]*/_contextPath + 'operatorRole/toAdd';
+	var vcidTemp = $("vcid").val();
+	if(!StringUtils.isEmpty(vcidTemp)){
+		addUrl = addUrl + "?vcid=" + vcidTemp;
+	}
 	DialogUtils.openModalDialog(
 		"addRole",
 		"新增" + entityName,
