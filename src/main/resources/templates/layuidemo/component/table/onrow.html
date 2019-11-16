@@ -1,15 +1,24 @@
-
-
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <title>监听行事件 - 数据表格</title>
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-  <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	<title>table/onrow</title>
+	<meta charset="utf-8"/>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<block th:replace="fragments/layui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+	<!-- layui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
 </head>
 <body>
 
@@ -36,21 +45,22 @@
       </div>
     </div>
   </div>
-  
-  <script src="../../../layuiadmin/layui/layui.js"></script>  
-  <script>
-  layui.config({
-    base: '../../../layuiadmin/' //静态资源所在路径
-  }).extend({
-    index: 'lib/index' //主入口模块
-  }).use(['index', 'table'], function(){
-    var admin = layui.admin
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+layui.config({
+	//静态资源所在路径 //静态资源所在路径
+	base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/' 
+}).extend({
+	//主入口模块
+	index: 'lib/index' 
+}).use(['index', 'table'],function(){
+	var admin = layui.admin
     ,table = layui.table;
   
     table.render({
       elem: '#test-table-onrow'
       ,url:'/test/table/demo1.json'
-      ,cols: [[
+      ,cols: [ [
         {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
         ,{field:'username', title:'用户名', width:120}
         ,{field:'email', title:'邮箱', width:150, templet: function(res){
@@ -63,7 +73,7 @@
         ,{field:'ip', title:'IP', width:120}
         ,{field:'logins', title:'登入次数', width:100, sort: true}
         ,{field:'joinTime', title:'加入时间', width:120}
-      ]]
+      ] ]
       ,page: true
     });
     
@@ -78,8 +88,8 @@
       //标注选中样式
       obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
     });
-  
-  });
-  </script>
+});
+/*]]>*/  
+</script>
 </body>
 </html>

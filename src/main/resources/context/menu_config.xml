@@ -335,7 +335,7 @@
 			<menu id="error_layuidemo_menu" text="错误提示" href="/layui/demo/template/tips/error" />
 			<menu id="baidu_layuidemo_menu" text="百度一下" href="http://www.baidu.com/" />
 			<menu id="layui_layuidemo_menu" text="layui官网" href="http://www.layui.com/" />
-			<menu id="layui_admin_layuidemo_menu" text="layuiAdmin官网" href="http//www.layui.com/admin/" />
+			<menu id="layui_admin_layuidemo_menu" text="layuiAdmin官网" href="https://www.layui.com/admin" />
 		</menu>
 		<menu id="app_layuidemo_menus" text="应用" icon="layui-icon-app">
 			<menu id="content_layuidemo_menus" text="内容系统">

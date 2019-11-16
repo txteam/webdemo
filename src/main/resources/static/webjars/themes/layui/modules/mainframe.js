@@ -285,7 +285,7 @@ layui.define(function(exports){
 	$.bindge("addTab", function(event, options) {
 	    var router = layui.router();
 		var hrefValue = options.href;
-	    if(hrefValue.startWith("http://")){
+	    if(hrefValue.startWith("http://") || hrefValue.startWith("https://")){
 	    	options.href = hrefValue;
 	    }else if(hrefValue.startWith(_contextPath)){
 	    	options.href = hrefValue;
