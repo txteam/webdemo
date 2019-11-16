@@ -45,9 +45,6 @@ public class OperatorRole implements Serializable, Role {
     @Id
     private String id;
     
-    /** 角色编码 */
-    private String code;
-    
     /** 虚中心id */
     private String vcid;
     
@@ -75,20 +72,6 @@ public class OperatorRole implements Serializable, Role {
      */
     public void setId(String id) {
         this.id = id;
-    }
-    
-    /**
-     * @return 返回 code
-     */
-    public String getCode() {
-        return code;
-    }
-    
-    /**
-     * @param 对code进行赋值
-     */
-    public void setCode(String code) {
-        this.code = code;
     }
     
     /**

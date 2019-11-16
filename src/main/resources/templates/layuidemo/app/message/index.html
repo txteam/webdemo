@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+	<title>message/index</title>
 	<meta charset="utf-8"/>
-	<title>消息中心</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<block th:replace="fragments/layui_header::common_replace">
 	<!-- css -->
 	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
 	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
-	
 	<!-- layui -->
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
 </head>
 <body>
   <div class="layui-fluid" id="LAY-app-message">
@@ -58,14 +64,18 @@
       </div>
     </div>
   </div>
-
-  <script src="../../../layuiadmin/layui/layui.js"></script>  
-  <script>
-  layui.config({
-    base: '../../../layuiadmin/' //静态资源所在路径
-  }).extend({
-    index: 'lib/index' //主入口模块
-  }).use(['index', 'message']);
-  </script>
+<script>
+/*<![CDATA[*/
+layui.config({
+	//静态资源所在路径 //静态资源所在路径
+	base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/' 
+}).extend({
+	//主入口模块
+	index: 'lib/index' 
+}).use(['index', 'message'],function(){
+	
+});
+/*]]>*/
+</script>
 </body>
 </html>

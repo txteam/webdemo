@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.local.operator.model.OperatorPost;
+import com.tx.local.operator.service.OperatorOrganizationService;
 import com.tx.local.operator.service.OperatorPostService;
+import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
 import com.tx.core.paged.model.PagedList;
 
 
@@ -39,6 +41,14 @@ public class OperatorPostController {
     //职位业务层
     @Resource(name = "operatorPostService")
     private OperatorPostService operatorPostService;
+    
+    //操作员所属组织业务层
+    @Resource
+    private OperatorOrganizationService operatorOrganizationService;
+    
+    //虚中心业务层
+    @Resource
+    private VirtualCenterFacade virtualCenterFacade;
     
     /**
      * 跳转到查询职位列表页面<br/>

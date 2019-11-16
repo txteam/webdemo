@@ -45,7 +45,7 @@ layui.define(['table', 'form', 'element'], function(exports){
       layer.open({
         type: 2
         ,title: '编辑工单'
-        ,content: '../../../views/app/workorder/listform.html'
+        ,content: '/webdemo/layui/demo/app/workorder/listform'//'../../../views/app/workorder/listform.html'
         ,area: ['450px', '450px']
         ,btn: ['确定', '取消']
         ,yes: function(index, layero){

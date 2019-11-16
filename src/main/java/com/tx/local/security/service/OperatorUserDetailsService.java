@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.tx.local.operator.model.Operator;
+import com.tx.local.operator.model.OperatorRoleEnum;
 import com.tx.local.security.model.OperatorUserDetails;
 
 
@@ -55,7 +56,8 @@ public class OperatorUserDetailsService implements UserDetailsService {
         user.setLocked(false);
         
         Collection<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_OPERATOR_ADMIN"));//用户所拥有的角色信息
+        authorities.add(new SimpleGrantedAuthority(OperatorRoleEnum.SUPER_ADMIN.getId()));//用户所拥有的角色信息
+        authorities.add(new SimpleGrantedAuthority(OperatorRoleEnum.ADMIN.getId()));//用户所拥有的角色信息
         //AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
         
         OperatorUserDetails userDetail = new OperatorUserDetails(user, authorities);

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>addOrganization</title>
+	<title>addOperatorRole</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -81,41 +81,22 @@ function cancelFun(){
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form id="entityForm" method="post" class="form" th:object="${operatorRole}">
-			<table class="common_table">
+			<table class="table">
 				<tr>
 					<th class="narrow" width="30%">所属虚中心:<span class="tRed">*</span></th>
 					<td>
-						<form:select path="vcid" cssClass="select" data-rule="所属业务中心:required;" >
-							<form:option value="">-- 请选择 --</form:option>
-							<form:options items="${virtualCenterList}" itemLabel="name" itemValue="id" />
-						</form:select>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" width="30%">角色类型:<span class="tRed">*</span></th>
-					<td>
-						<form:select path="roleType" cssClass="select" data-rule="角色类型:required;" >
-							<form:option value="">-- 请选择 --</form:option>
-							<form:options items="${roleTypeList}" itemLabel="name" itemValue="key" />
-						</form:select>
-					</td>
-				</tr>
-				<tr>
-					<!--//TODO:修改字段是否必填,修改其中文名-->
-					<th class="narrow" width="30%">编码:<span class="tRed">*</span></th>
-					<td width="70%">
-						<form:input path="code" cssClass="text" 
-							data-rule="编码:required;;remote[${contextPath}/role/validateVcidAndCodeIsExist.action, vcid, code, id]" 
-						/>
+						<select id="vcid" name="vcid" data-rule="所属业务中心:required;" >
+							<option value="">-- 请选择 --</option>
+							<option th:each="vc:${vcList}" th:value="${vc.id}" th:text="${vc.name}" th:selected="${role.vcid eq vc.id}"></option>
+						</select>
 					</td>
 				</tr>
 				<tr>
 					<!--//TODO:修改字段是否必填,修改其中文名-->
 					<th class="narrow" width="30%">名称:<span class="tRed">*</span></th>
 					<td width="70%">
-						<form:input path="name" cssClass="text" 
-							data-rule="名称:required;;remote[${contextPath}/role/validateVcidAndNameIsExist.action, vcid, name, id]" 
-						/>
+						<input id="name" name="name"
+							data-rule="名称:required;;remote[${contextPath}/role/validate, vcid, name, id]"/>
 					</td>
 				</tr>
 				<tr>

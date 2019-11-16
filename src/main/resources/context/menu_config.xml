@@ -48,8 +48,8 @@
 	<catalog id="config_catalog" text="配置菜单">
 		<menu id="operator_manage_center_menu" text="用户管理" auths="operator_manage_center_auth" type="tab">
 			<menu id="virtualcenter_manage_menu" text="虚中心管理" auths="virtualcenter_manage_auth" href="/virtualCenter/toQueryTreeList" type="tab"></menu>
-			<menu id="organization_manage_menu" text="组织管理" auths="organization_manage_auth" href="/organization/toQueryList" type="tab"></menu>
 			<menu id="role_manage_menu" text="角色管理" auths="role_manage_auth" href="/operatorRole/toQueryList" type="tab"></menu>
+			<menu id="organization_manage_menu" text="组织管理" auths="organization_manage_auth" href="/organization/toQueryList" type="tab"></menu>
 			<menu id="post_manage_menu" text="职位管理" auths="post_manage_auth" href="/operatorPost/toQueryList" type="tab"></menu>
 			<menu id="operator_manage_menu" text="用户管理" auths="operator_manage_auth" href="/operator/toQueryPagedList" type="tab"></menu>
 			<menu id="auth_manage_menu" text="权限管理" auths="auth_manage_auth" href="/auth/toQueryAuthView" type="tab"></menu>
@@ -83,7 +83,7 @@
 	</catalog>
 	
 	<!-- 编码 -->
-	<catalog id="documentation_catalog" roles="super_admin" type="tab" text="Documentation">
+	<catalog id="documentation_catalog" roles="ROLE_SUPER_ADMIN" type="tab" text="Documentation">
 		<menu id="coding_standard_menu" text="编码规范">
 			<menu id="naming_standard_menu" text="命名规范" href="/standard/naming" />
 			<menu id="java_coding_standard_menu" text="Java编码规范" href="/standard/java" />
@@ -211,6 +211,166 @@
 			<menu id="my_setting_menu" text="我的设置">
 				<menu id="user_setting_menu" text="基本资料" href="set/user/info.html" />
 				<menu id="password_setting_menu" text="修改密码" href="set/user/password.html" />
+			</menu>
+		</menu>
+	</catalog>
+	
+	
+	<!-- 工具菜单配置：暂只支持两级菜单，更多级将不会被显示 -->
+	<catalog id="client_nav_catalog" type="nav" text="客户导航菜单">
+		<menu id="client_workbench_nav_menu" text="工作台" icon="layui-icon-website" link="client_workbench_catalog"/>
+		<menu id="layui_demo_menu" text="范例" icon="layui-icon-website" link="layui_demo_catalog"/>
+	</catalog>
+	
+	<catalog id="client_workbench_catalog" type="tab" text="工作台">
+		<menu id="user_menus" text="用户" icon="layui-icon-user">
+    		<menu id="user_list_menu" text="网站用户" href="/layui/demo/user/user/list" />
+			<menu id="administrators_list_menu" text="后台管理员" href="/layui/demo/user/administrators/list" />
+			<menu id="administrators_role_menu" text="角色管理" href="/layui/demo/user/administrators/role" />
+		</menu>
+    	<menu id="set_layuidemo_menus" text="设置" icon="layui-icon-set">
+    		<menu id="set_system_menus" text="系统设置" icon="layui-icon-home">
+    			<menu id="console_menu" text="控制台" href="/layui/demo/home/console" />
+				<menu id="homepage1_menu" text="控制台" href="/layui/demo/home/homepage1" />
+			</menu>
+			<menu id="set_user_layuidemo_menus" text="我的设置" icon="layui-icon-home">
+				<menu id="user_info_menu" text="基本资料" href="/layui/demo/set/user/info" />
+				<menu id="user_password_menu" text="修改密码" href="/layui/demo/user/password" />
+			</menu>
+		</menu>
+	</catalog>
+	
+	<catalog id="layui_demo_catalog" type="tab" text="工作台">
+		<menu id="home_layuidemo_menus" text="主页" icon="layui-icon-home">
+			<menu id="console_layuidemo_menu" text="控制台" href="/layui/demo/home/console" />
+			<menu id="homepage1_layuidemo_menu" text="主页一" href="/layui/demo/home/homepage1" />
+			<menu id="homepage2_layuidemo_menu" text="主页二" href="/layui/demo/home/homepage2" />
+		</menu>
+		<menu id="component_layuidemo_menus" text="组件" icon="layui-icon-component">
+			<menu id="grid_layuidemo_menus" text="栅格">
+				<menu id="grid_list_layuidemo_menu" text="等比例列表排列" href="/layui/demo/component/grid/list" />
+				<menu id="grid_mobile_layuidemo_menu" text="按移动端排列" href="/layui/demo/component/grid/mobile" />
+				<menu id="grid_mobile_pc_layuidemo_menu" text="移动桌面端组合" href="/layui/demo/component/grid/mobile-pc" />
+				<menu id="grid_all_layuidemo_menu" text="全端复杂组合" href="/layui/demo/component/grid/all" />
+				<menu id="grid_stack_layuidemo_menu" text="低于桌面堆叠排列" href="/layui/demo/component/grid/stack" />
+				<menu id="grid_spped_dial_layuidemo_menu" text="九宫格" href="/layui/demo/component/grid/speed-dial" />
+			</menu>
+			<menu id="button_index_layuidemo_menu" text="按钮" href="/layui/demo/component/button/index" />
+			<menu id="form_layuidemo_menus" text="表单">
+				<menu id="form_element_layuidemo_menu" text="表单元素" href="/layui/demo/component/form/element" />
+				<menu id="form_group_layuidemo_menu" text="表单组合" href="/layui/demo/component/form/group" />
+			</menu>
+			<menu id="nav_layuidemo_menu" text="导航" href="/layui/demo/component/nav/index" />
+			<menu id="tabs_layuidemo_menu" text="选项卡" href="/layui/demo/component/tabs/index" />
+			<menu id="progress_layuidemo_menu" text="进度条" href="/layui/demo/component/progress/index" />
+			<menu id="panel_layuidemo_menu" text="面板" href="/layui/demo/component/panel/index" />
+			<menu id="badge_layuidemo_menu" text="徽章" href="/layui/demo/component/badge/index" />
+			<menu id="timeline_layuidemo_menu" text="时间线" href="/layui/demo/component/timeline/index" />
+			<menu id="anim_layuidemo_menu" text="动画" href="/layui/demo/component/anim/index" />
+			<menu id="auxiliar_layuidemo_menu" text="辅助" href="/layui/demo/component/auxiliar/index" />
+			<menu id="layer_layuidemo_menus" text="通用弹层">
+				<menu id="layer_layuidemo_menu" text="功能演示" href="/layui/demo/component/layer/list" />
+				<menu id="layer_special_group_layuidemo_menu" text="特殊示例" href="/layui/demo/component/layer/special-demo" />
+				<menu id="layer_theme_layuidemo_menu" text="风格定制" href="/layui/demo/component/layer/theme" />
+			</menu>
+			<menu id="laydate_layuidemo_menus" text="日期时间">
+				<menu id="laydate_demo1_layuidemo_menu" text="功能演示一" href="/layui/demo/component/laydate/demo1" />
+				<menu id="laydate_demo2_layuidemo_menu" text="功能演示二" href="/layui/demo/component/laydate/demo2" />
+				<menu id="laydate_theme_layuidemo_menu" text="设定主题" href="/layui/demo/component/laydate/theme" />
+				<menu id="laydate_special_layuidemo_menu" text="特殊示例" href="/layui/demo/component/laydate/special-demo" />
+			</menu>
+			<menu id="table_static_layuidemo_menu" text="静态表格" href="/layui/demo/component/table/static" />
+			<menu id="table_layuidemo_menus" text="数据表格">
+				<menu id="table_simple_layuidemo_menu" text="简单数据表格" href="/layui/demo/component/table/simple" />
+				<menu id="table_auto_layuidemo_menu" text="列宽自动分配" href="/layui/demo/component/table/auto" />
+				<menu id="table_data_layuidemo_menu" text="赋值已知数据" href="/layui/demo/component/table/data" />
+				<menu id="table_tostatic_layuidemo_menu" text="转化静态表格" href="/layui/demo/component/table/tostatic" />
+				<menu id="table_page_layuidemo_menu" text="开启分页" href="/layui/demo/component/table/page" />
+				<menu id="table_resetPage_layuidemo_menu" text="自定义分页" href="/layui/demo/component/table/resetPage" />
+				<menu id="table_toolbar_layuidemo_menu" text="开启头部工具栏" href="/layui/demo/component/table/toolbar" />
+				<menu id="table_totalRow_layuidemo_menu" text="开启合计行" href="/layui/demo/component/table/totalRow" />
+				<menu id="table_height_layuidemo_menu" text="高度最大适应" href="/layui/demo/component/table/height" />
+				<menu id="table_checkbox_layuidemo_menu" text="开启复选框" href="/layui/demo/component/table/checkbox" />
+				<menu id="table_radio_layuidemo_menu" text="开启单选框" href="/layui/demo/component/table/radio" />
+				<menu id="table_cellEdit_layuidemo_menu" text="开启单元格编辑" href="/layui/demo/component/table/cellEdit" />
+				<menu id="table_form_layuidemo_menu" text="加入表单元素" href="/layui/demo/component/table/form" />
+				<menu id="table_style_layuidemo_menu" text="设置单元格样式" href="/layui/demo/component/table/style" />
+				<menu id="table_fixed_layuidemo_menu" text="固定列" href="/layui/demo/component/table/fixed" />
+				<menu id="table_operate_layuidemo_menu" text="数据操作" href="/layui/demo/component/table/operate" />
+				<menu id="table_parseData_layuidemo_menu" text="解析任意数据格式" href="/layui/demo/component/table/parseData" />
+				<menu id="table_onrow_layuidemo_menu" text="监听行事件" href="/layui/demo/component/table/onrow" />
+				<menu id="table_reload_layuidemo_menu" text="数据表格的重载" href="/layui/demo/component/table/reload" />
+				<menu id="table_initSort_layuidemo_menu" text="设置初始排序" href="/layui/demo/component/table/initSort" />
+				<menu id="table_cellEvent_layuidemo_menu" text="监听单元格事件" href="/layui/demo/component/table/cellEvent" />
+				<menu id="table_thead_layuidemo_menu" text="复杂表头" href="/layui/demo/component/table/thead" />
+			</menu>
+			<menu id="laypage_layuidemo_menus" text="分页">
+				<menu id="layerpage_demo1_layuidemo_menu" text="功能演示一" href="/layui/demo/component/laypage/demo1" />
+				<menu id="layerpage_demo2_layuidemo_menu" text="功能演示二" href="/layui/demo/component/laypage/demo2" />
+			</menu>
+			<menu id="upload_layuidemo_menus" text="上传">
+				<menu id="upload_demo1_layuidemo_menu" text="功能演示一" href="/layui/demo/component/upload/demo1" />
+				<menu id="upload_demo2_layuidemo_menu" text="功能演示二" href="/layui/demo/component/upload/demo2" />
+			</menu>
+			<menu id="colorpicker_layuidemo_menu" text="颜色选择器" href="/layui/demo/component/colorpicker/index" />
+			<menu id="slider_layuidemo_menu" text="滑块组件" href="/layui/demo/component/slider/index" />
+			<menu id="rate_layuidemo_menu" text="评分" href="/layui/demo/component/rate/index" />
+			<menu id="carousel_layuidemo_menu" text="轮播" href="/layui/demo/component/carousel/index" />
+			
+			<menu id="flow_layuidemo_menu" text="流加载" href="/layui/demo/component/flow/index" />
+			<menu id="util_layuidemo_menu" text="工具" href="/layui/demo/component/util/index" />
+			<menu id="code_layuidemo_menu" text="代码修饰" href="/layui/demo/component/code/index" />
+		</menu>
+		<menu id="template_layuidemo_menus" text="页面" icon="layui-icon-template">
+			<menu id="personalpage_layuidemo_menu" text="个人主页" href="/layui/demo/template/personalpage" />
+			<menu id="addresslist_layuidemo_menu" text="通讯录" href="/layui/demo/template/addresslist" />
+			<menu id="caller_layuidemo_menu" text="客户列表" href="/layui/demo/template/caller" />
+			<menu id="goodslist_layuidemo_menu" text="商品列表" href="/layui/demo/template/goodslist" />
+			<menu id="msgboard_layuidemo_menu" text="留言板" href="/layui/demo/template/msgboard" />
+			<menu id="search_layuidemo_menu" text="搜索结果" href="/layui/demo/template/search" />
+			<menu id="reg_layuidemo_menu" text="注册" href="/layui/demo/user/reg" />
+			<menu id="login_layuidemo_menu" text="登入" href="/layui/demo/user/login" />
+			<menu id="forget_layuidemo_menu" text="忘记密码" href="/layui/demo/user/forget" />
+			<menu id="404_layuidemo_menu" text="404页面不存在" href="/layui/demo/template/tips/404" />
+			<menu id="error_layuidemo_menu" text="错误提示" href="/layui/demo/template/tips/error" />
+			<menu id="baidu_layuidemo_menu" text="百度一下" href="http://www.baidu.com/" />
+			<menu id="layui_layuidemo_menu" text="layui官网" href="http://www.layui.com/" />
+			<menu id="layui_admin_layuidemo_menu" text="layuiAdmin官网" href="http//www.layui.com/admin/" />
+		</menu>
+		<menu id="app_layuidemo_menus" text="应用" icon="layui-icon-app">
+			<menu id="content_layuidemo_menus" text="内容系统">
+    			<menu id="content_list_line_layuidemo_menu" text="文章列表" href="/layui/demo/app/content/list" />
+				<menu id="content_tags_layuidemo_menu" text="分类管理" href="/layui/demo/app/content/tags" />
+				<menu id="content_comment_layuidemo_menu" text="评论管理" href="/layui/demo/app/content/comment" />
+			</menu>
+			<menu id="forum_layuidemo_menus" text="社区系统">
+    			<menu id="forum_list_layuidemo_menu" text="帖子列表" href="/layui/demo/app/forum/list" />
+				<menu id="forum_replys_layuidemo_menu" text="回帖列表" href="/layui/demo/app/forum/replys" />
+			</menu>
+			<menu id="message_index_layuidemo_menu" text="消息中心" href="/layui/demo/app/message/index" />
+			<menu id="workorder_list_layuidemo_menu" text="工单系统" href="/layui/demo/app/workorder/list" />
+		</menu>
+		<menu id="senior_layuidemo_menus" text="高级" icon="layui-icon-senior">
+    		<menu id="im_layuidemo_menu" text="LayIM通讯系统" type="event" layadmin-event="im"/>
+			<menu id="echarts_layuidemo_menus" text="Echarts集成">
+    			<menu id="echarts_line_layuidemo_menu" text="折线图" href="/layui/demo/senior/echarts/line" />
+				<menu id="echarts_bar_layuidemo_menu" text="柱状图" href="/layui/demo/senior/echarts/bar" />
+				<menu id="echarts_map_layuidemo_menu" text="地图" href="/layui/demo/senior/echarts/map" />
+			</menu>
+		</menu>
+        <menu id="user_layuidemo_menus" text="用户" icon="layui-icon-user">
+    		<menu id="user_list_layuidemo_menu" text="网站用户" href="/layui/demo/user/user/list" />
+			<menu id="administrators_list_layuidemo_menu" text="后台管理员" href="/layui/demo/user/administrators/list" />
+			<menu id="administrators_role_layuidemo_menu" text="角色管理" href="/layui/demo/user/administrators/role" />
+		</menu>
+    	<menu id="set_layuidemo_menus" text="设置" icon="layui-icon-set">
+    		<menu id="set_system_layuidemo_menus" text="系统设置" icon="layui-icon-home">
+    			<menu id="website_layuidemo_menu" text="网站设置" href="/layui/demo/set/system/website" />
+				<menu id="email_layuidemo_menu" text="邮件服务" href="/layui/demo/set/system/email" />
+			</menu>
+			<menu id="set_user_layuidemo_menus" text="我的设置" icon="layui-icon-home">
+				<menu id="user_info_layuidemo_menu" text="基本资料" href="/layui/demo/set/user/info" />
+				<menu id="user_password_layuidemo_menu" text="修改密码" href="/layui/demo/set/user/password" />
 			</menu>
 		</menu>
 	</catalog>

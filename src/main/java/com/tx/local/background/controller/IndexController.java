@@ -9,8 +9,8 @@ package com.tx.local.background.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.tx.local.mainframe.util.WebContextUtils;
 import com.tx.local.security.SecurityConstants;
+import com.tx.local.security.util.WebContextUtils;
 
 /**
  * 主框架页面逻辑层<br/>

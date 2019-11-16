@@ -1,24 +1,31 @@
-
-
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <title>九宫格</title>
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-  <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
-</head>
-<body>
-
-  <style>
+	<title>grid/speed-dial</title>
+	<meta charset="utf-8"/>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<block th:replace="fragments/layui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+	<!-- layui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
+<style>
   /* 这段样式只是用于演示 */
   #LAY-component-grid-speed-dial .layui-card-body{display: flex; justify-content: center; flex-direction: column; text-align: center; font-size: 20px;}
   #LAY-component-grid-speed-dial .layui-card-body:hover{background-color: #FAFAFA;}
-  </style>
-
+</style>
+</head>
+<body>
   <div class="layui-fluid" id="LAY-component-grid-speed-dial">
     <div class="layui-row layui-col-space1">
       <div class="layui-col-xs4">
@@ -69,15 +76,15 @@
       </div>
     </div>
   </div>
-
-  
-  <script src="../../../layuiadmin/layui/layui.js"></script>  
-  <script>
-  layui.config({
-    base: '../../../layuiadmin/' //静态资源所在路径
-  }).extend({
-    index: 'lib/index' //主入口模块
-  }).use(['index'], function(){
+<script>
+/*<![CDATA[*/
+layui.config({
+	//静态资源所在路径 //静态资源所在路径
+	base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/' 
+}).extend({
+	//主入口模块
+	index: 'lib/index' 
+}).use(['index'],function(){
     var $ = layui.$
     ,admin = layui.admin
     ,element = layui.element;
@@ -89,7 +96,7 @@
       var cardBody = $('#LAY-component-grid-speed-dial .layui-card-body');
       cardBody.height(cardBody.width())
     });
-  });
-  </script>
+});
+/*]]>*/
 </body>
 </html>

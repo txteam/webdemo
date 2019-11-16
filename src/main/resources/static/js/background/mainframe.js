@@ -317,8 +317,6 @@ $(function(){
 					menu.href = _contextPath + hrefValue;
 				}
 			}
-
-
 			
 			var $a = $('<a>').attr('href',menu.href).attr("target","_blank").append('<i class="iconfont">' + menu.icon + '</i>' + menu.text);
 			var $li = $('<li>').append($a);

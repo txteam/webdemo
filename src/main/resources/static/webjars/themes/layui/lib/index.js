@@ -87,6 +87,99 @@ layui.extend({
   
   //加载公共模块
   layui.use('common');
+  
+	var TopLeftMenu = function(options){
+        var _this = this;
+        _this.options = $.extend({
+        	contextPath : '',
+        	url : '',
+    		element : null,
+    		onClick : null
+        },options);
+        _this._create();
+  	};
+  	TopLeftMenu.prototype.options = {
+  		contextPath : '',
+		url : '',
+		element : null,
+		onClick : null
+	};
+  	TopLeftMenu.prototype._lastElement = null;
+  	TopLeftMenu.prototype._create = function(){
+  		var _this = this;
+		var _options = _this.options;
+		var _url = _options.url;
+		var _element = _options.element;
+  		
+  		_this._lastElement = _element.find(".layui-nav-item:last");
+  		_this._init();
+  	};
+  	TopLeftMenu.prototype._init = function(){
+  		var _this = this;
+		var _options = _this.options;
+		var _url = _options.url;
+		var _element = _options.element;
+		var _contextPath = _options.contextPath;
+		
+		//移除
+		_element.find(".layui-nav-item:not(.left-menu-fixed)").remove();
+		//执行
+		$.ajax({
+		   type: "GET",
+		   async: false,
+		   url: _url,
+		   success: function(menus){
+			   //重点地方，将Layui在页面加载时渲染出来的span.layui-nav-bar提前删除掉
+			   $("#layui-layout-left").find('span.layui-nav-bar').remove();
+			   
+			   $.each(menus,function(index,menuTemp){
+					var menu = $.extend({
+						href: 'javascript:void(0);',
+						icon: 'layui-icon-website',
+						text: '' 
+					},menuTemp);
+					
+					var hrefValue = menu.href;
+					if(hrefValue){
+						if(hrefValue.startWith("http://")){
+							menu.href = hrefValue;
+						}else if(hrefValue.startWith(_contextPath)){
+							menu.href = hrefValue;
+						}else if(hrefValue.startWith("/")){
+							menu.href = _contextPath + hrefValue.substr(1);
+						}else{
+							menu.href = _contextPath + hrefValue;
+						}
+					}
+					
+					_this._addMenu(menu);
+				});
+			   
+			   	//再次执行渲染
+				var layFilter = $("#layui-layout-left").attr('lay-filter');
+	       		element.render('layui-layout-left', layFilter);
+		   }
+		});
+	};
+	TopLeftMenu.prototype._addMenu = function(menu){
+  		/*<li class="layui-nav-item layui-hide-xs top_menu_item" lay-unselect><a href="javascript:void(0);"><i class="layui-icon layui-icon-website">工作台</i></a></li>*/
+		var _this = this;
+		var _options = _this.options;
+		var _url = _options.url;
+		var _element = _options.element;
+		
+		var $i = $("<i>").addClass("layui-icon").addClass(menu.icon).text(menu.text);
+		var $a = $("<a href='javascript:void(0);'>").append($i);
+		$("<li lay-unselect></li>").addClass("layui-nav-item layui-hide-xs").append($a).insertBefore(_this._lastElement);
+		
+		$a.click(function(){
+			if(_this.options.onClick){
+				_this.options.onClick(menu);
+			}
+		});
+		
+		return $a;
+	};
 
   //对外输出
   exports('index', {

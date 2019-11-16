@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.local.operator.model.OperatorRole;
 import com.tx.local.operator.service.OperatorRoleService;
+import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
+import com.tx.component.role.context.RoleTypeRegistry;
 import com.tx.core.paged.model.PagedList;
 
 /**
@@ -38,6 +40,10 @@ public class OperatorRoleController {
     //角色业务层
     @Resource(name = "operatorRoleService")
     private OperatorRoleService operatorRoleService;
+    
+    //虚中心业务层
+    @Resource
+    private VirtualCenterFacade virtualCenterFacade;
     
     /**
      * 跳转到查询角色列表页面<br/>
@@ -67,8 +73,12 @@ public class OperatorRoleController {
     public String toAdd(
             @RequestParam(value = "vcid", required = false) String vcid,
             ModelMap response) {
-        response.put("operatorRole", new OperatorRole());
+        OperatorRole role = new OperatorRole();
+        role.setVcid(vcid);
+        response.put("role", role);
         response.put("vcid", vcid);
+        response.put("vcList",
+                this.virtualCenterFacade.queryList(true, null));
         
         return "/operator/addOperatorRole";
     }
@@ -183,23 +193,6 @@ public class OperatorRoleController {
     @RequestMapping("/findById")
     public OperatorRole findById(@RequestParam(value = "id") String id) {
         OperatorRole operatorRole = this.operatorRoleService.findById(id);
-        return operatorRole;
-    }
-    
-    /**
-     * 根据编码查询角色实例<br/> 
-     * <功能详细描述>
-     * @param code
-     * @return [参数说明]
-     * 
-     * @return boolean [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ResponseBody
-    @RequestMapping("/findByCode")
-    public OperatorRole findByCode(@RequestParam(value = "code") String code) {
-        OperatorRole operatorRole = this.operatorRoleService.findByCode(code);
         return operatorRole;
     }
     

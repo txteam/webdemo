@@ -86,19 +86,19 @@ public class OperatorRoleService implements InitializingBean {
         List<OperatorRole> roleList = queryList(null,
                 (Map<String, Object>) null);
         for (OperatorRole roleTemp : roleList) {
-            if (StringUtils.isEmpty(roleTemp.getCode().toUpperCase())) {
+            if (StringUtils.isEmpty(roleTemp.getId().toUpperCase())) {
                 continue;
             }
-            roleMap.put(roleTemp.getCode().toUpperCase(), roleTemp);
+            roleMap.put(roleTemp.getId().toUpperCase(), roleTemp);
         }
         
         //处理自动新增以及自动更新逻辑（不包括树形结构写入）
         Map<String, OperatorRoleEnum> roleEnumMap = EnumUtils
                 .<OperatorRoleEnum> getEnumMap(OperatorRoleEnum.class);
         for (OperatorRoleEnum roleEnumTemp : roleEnumMap.values()) {
-            if (roleMap.containsKey(roleEnumTemp.getCode().toUpperCase())) {
+            if (roleMap.containsKey(roleEnumTemp.getId().toUpperCase())) {
                 OperatorRole role = roleMap
-                        .get(roleEnumTemp.getCode().toUpperCase());
+                        .get(roleEnumTemp.getId().toUpperCase());
                 if (!role.isValid() || role.isModifyAble()
                         || !role.getName().equals(roleEnumTemp.getName())) {
                     Map<String, Object> ur = new HashMap<>();
@@ -114,16 +114,14 @@ public class OperatorRoleService implements InitializingBean {
                     
                     //更新以后重新查询出来进行写入
                     role = findById(role.getId());
-                    roleMap.put(role.getCode().toUpperCase(), role);
+                    roleMap.put(role.getId().toUpperCase(), role);
                 }
-                //给枚举写入id
-                roleEnumTemp.setId(role.getId());
                 continue;
             } else {
                 //将新的虚中心插入表中
                 OperatorRole role = new OperatorRole();
                 role.setName(roleEnumTemp.getName());
-                role.setCode(roleEnumTemp.getCode());
+                role.setId(roleEnumTemp.getId());
                 role.setModifyAble(false);
                 role.setValid(true);
                 
@@ -136,9 +134,7 @@ public class OperatorRoleService implements InitializingBean {
                 this.insert(role);
                 
                 //给枚举写入id
-                roleMap.put(role.getCode().toUpperCase(), role);
-                //给枚举写入id
-                roleEnumTemp.setId(role.getId());
+                roleMap.put(role.getId().toUpperCase(), role);
             }
         }
     }
@@ -189,27 +185,6 @@ public class OperatorRoleService implements InitializingBean {
     }
     
     /**
-     * 根据code删除OperatorRole实例
-     * 1、当code为empty时抛出异常
-     * 2、执行删除后，将返回数据库中被影响的条数 > 0，则返回true
-     *
-     * @param code
-     * @return OperatorRole [返回类型说明]
-     * @exception throws
-     * @see [类、类#方法、类#成员]
-     */
-    public boolean deleteByCode(String code) {
-        AssertUtils.notEmpty(code, "code is empty.");
-        
-        OperatorRole condition = new OperatorRole();
-        condition.setCode(code);
-        
-        int resInt = this.operatorRoleDao.delete(condition);
-        boolean flag = resInt > 0;
-        return flag;
-    }
-    
-    /**
      * 根据id查询OperatorRole实例
      * 1、当id为empty时抛出异常
      *
@@ -223,25 +198,6 @@ public class OperatorRoleService implements InitializingBean {
         
         OperatorRole condition = new OperatorRole();
         condition.setId(id);
-        
-        OperatorRole res = this.operatorRoleDao.find(condition);
-        return res;
-    }
-    
-    /**
-     * 根据code查询OperatorRole实例
-     * 1、当code为empty时抛出异常
-     *
-     * @param code
-     * @return OperatorRole [返回类型说明]
-     * @exception throws
-     * @see [类、类#方法、类#成员]
-     */
-    public OperatorRole findByCode(String code) {
-        AssertUtils.notEmpty(code, "code is empty.");
-        
-        OperatorRole condition = new OperatorRole();
-        condition.setCode(code);
         
         OperatorRole res = this.operatorRoleDao.find(condition);
         return res;
@@ -476,8 +432,7 @@ public class OperatorRoleService implements InitializingBean {
         
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //FIXME:需要更新的字段
-        updateRowMap.put("code", operatorRole.getCode());
+        //需要更新的字段
         updateRowMap.put("name", operatorRole.getName());
         updateRowMap.put("vcid", operatorRole.getVcid());
         updateRowMap.put("valid", operatorRole.isValid());

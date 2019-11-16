@@ -4,12 +4,10 @@
 drop table if exists OPER_ROLE;
 create table OPER_ROLE(
 	id varchar(64) not null,
-	code varchar(64) ,
-	name varchar(64) ,
-	vcid varchar(64) ,
-	valid bit ,
-	modifyAble bit ,
+	name varchar(64) not null,
+	vcid varchar(64),
+	valid bit not null default 1,
+	modifyAble bit not null default 1,
 	remark varchar(512) ,
-	primary key(id)
+	primary key(id,vcid)
 );
-create unique index idx_oper_role_01 on oper_role(code,vcid);

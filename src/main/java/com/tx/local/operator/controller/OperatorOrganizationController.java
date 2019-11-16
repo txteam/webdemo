@@ -21,11 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.security.context.SecurityContext;
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.operator.model.ChiefTypeEnum;
 import com.tx.local.operator.model.OperatorOrganization;
 import com.tx.local.operator.model.OperatorOrganizationTypeEnum;
+import com.tx.local.operator.model.OperatorRoleEnum;
 import com.tx.local.operator.service.OperatorOrganizationService;
+import com.tx.local.security.util.WebContextUtils;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
 import com.tx.local.vitualcenter.model.VirtualCenter;
 
@@ -60,6 +63,10 @@ public class OperatorOrganizationController {
      */
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
+        response.put("super_admin",
+                SecurityContext.getContext()
+                        .hasRole(OperatorRoleEnum.SUPER_ADMIN.getId()));
+        
         response.put("types", OperatorOrganizationTypeEnum.values());
         response.put("chiefTypes", ChiefTypeEnum.values());
         
@@ -161,8 +168,14 @@ public class OperatorOrganizationController {
     public List<OperatorOrganization> queryList(
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
+        String vcid = request.getFirst("vcid");
+        if(!SecurityContext.getContext()
+                .hasRole(OperatorRoleEnum.SUPER_ADMIN.getId())){
+            vcid = WebContextUtils.getCurrentVcid();
+        }
+        
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid",request.getFirst("vcid"));
+        params.put("vcid", request.getFirst("vcid"));
         
         List<OperatorOrganization> resList = this.organizationService
                 .queryList(valid, params);

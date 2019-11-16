@@ -256,12 +256,22 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
                 menu.setRoles(new HashSet<>(Arrays.asList(rolse)));
             }
         }
+        if (!StringUtils.isEmpty(menuConfig.getAccess())) {
+            String[] access = StringUtils
+                    .splitByWholeSeparatorPreserveAllTokens(
+                            menuConfig.getAccess(), ",");
+            
+            if (!ArrayUtils.isEmpty(access)) {
+                menu.setRoles(new HashSet<>(Arrays.asList(access)));
+            }
+        }
         if (parent != null) {
             menu.setParentId(parent.getId());
             
             //当存在父级菜单时，父级菜单需要的权限以及角色，都需要附给子级菜单
             menu.getAuths().addAll(parent.getAuths());
             menu.getRoles().addAll(parent.getRoles());
+            menu.getAccess().addAll(parent.getAccess());
         }
         
         logger.debug("   ......加载菜单项: catalog:[{}] | id:[{}] text:[{}]",
@@ -308,10 +318,10 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         catalog.setType(catalogConfigTemp.getType());
         catalog.setAttributes(catalogConfigTemp.getAttributes());
         
-        if (!StringUtils.isEmpty(catalogConfigTemp.getAuthorities())) {
+        if (!StringUtils.isEmpty(catalogConfigTemp.getAuths())) {
             String[] authorities = StringUtils
                     .splitByWholeSeparatorPreserveAllTokens(
-                            catalogConfigTemp.getAuthorities(), ",");
+                            catalogConfigTemp.getAuths(), ",");
             if (!ArrayUtils.isEmpty(authorities)) {
                 catalog.setAuths(new HashSet<>(Arrays.asList(authorities)));
             }
@@ -321,6 +331,14 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
                     catalogConfigTemp.getRoles(), ",");
             if (!ArrayUtils.isEmpty(roles)) {
                 catalog.setRoles(new HashSet<>(Arrays.asList(roles)));
+            }
+        }
+        if (!StringUtils.isEmpty(catalogConfigTemp.getAccess())) {
+            String[] access = StringUtils
+                    .splitByWholeSeparatorPreserveAllTokens(
+                            catalogConfigTemp.getAccess(), ",");
+            if (!ArrayUtils.isEmpty(access)) {
+                catalog.setAccess(new HashSet<>(Arrays.asList(access)));
             }
         }
         return catalog;

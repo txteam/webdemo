@@ -22,13 +22,13 @@ import com.tx.local.vitualcenter.model.VirtualCenterEnum;
 public enum OperatorRoleEnum implements Serializable {
     
     /** 系统管理员 */
+    SUPER_ADMIN("SUPER_ADMIN", "超级管理员", VirtualCenterEnum.JT.getCode()),
+    
+    /** 系统管理员 */
     ADMIN("ADMIN", "系统管理员", VirtualCenterEnum.JT.getCode());
     
     /** 数据库中主键，系统启动后会进行写入 */
-    private String id;
-    
-    /** 编码 */
-    private final String code;
+    private final String id;
     
     /** 名称 */
     private final String name;
@@ -37,32 +37,17 @@ public enum OperatorRoleEnum implements Serializable {
     private final String virtualCenterCode;
     
     /** <默认构造函数> */
-    private OperatorRoleEnum(String code, String name,
-            String virtualCenterCode) {
-        this.code = code;
+    private OperatorRoleEnum(String id, String name, String virtualCenterCode) {
+        this.id = id;
         this.name = name;
         this.virtualCenterCode = virtualCenterCode;
     }
     
     /**
-     * @return
+     * @return 返回 id
      */
     public String getId() {
-        return this.id;
-    }
-    
-    /**
-     * @param 对id进行赋值
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    /**
-     * @return 返回 code
-     */
-    public String getCode() {
-        return code;
+        return id;
     }
     
     /**

@@ -53,6 +53,10 @@ public class MenuItemConfig {
     @XStreamAsAttribute
     private String roles;
     
+    /** 菜单是否可访问 */
+    @XStreamAsAttribute
+    private String access;
+    
     /** 菜单图标 */
     @XStreamAsAttribute
     private String icon;
@@ -128,6 +132,20 @@ public class MenuItemConfig {
      */
     public void setHref(String href) {
         this.href = href;
+    }
+    
+    /**
+     * @return 返回 access
+     */
+    public String getAccess() {
+        return access;
+    }
+    
+    /**
+     * @param 对access进行赋值
+     */
+    public void setAccess(String access) {
+        this.access = access;
     }
     
     /**

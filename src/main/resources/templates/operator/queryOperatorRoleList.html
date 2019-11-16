@@ -48,7 +48,7 @@ var idFieldName = 'id';
 var nameFieldName = 'name'; 
 var entityName = '角色';
 $(document).ready(function(){
-	vcTree = $('#virtualCenterTree').tree({
+	vcTree = $('#vcTree').tree({
 		url : /*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
 		idField : 'id',
 		parentField : 'parentId',
@@ -118,9 +118,9 @@ $(document).ready(function(){
 			width : 200
 		},
 		{
-			field : 'code',
-			title : '名称',
-			width : 200
+			field : 'id',
+			title : '编码',
+			width : 300
 		},
 		{
 			field : 'vcid',
@@ -133,11 +133,6 @@ $(document).ready(function(){
 					return row.vcid;
 				}
 			}
-		},
-		{
-			field : 'code',
-			title : '编码',
-			width : 200
 		},
 		 {
 			field : 'modifyAble',
@@ -268,7 +263,7 @@ function addFun() {
 	});
 	var addUrl = /*[[@{/operatorRole/toAdd}]]*/_contextPath + 'operatorRole/toAdd';
 	var vcidTemp = $("vcid").val();
-	if(!StringUtils.isEmpty(vcidTemp)){
+	if(!$.ObjectUtils.isEmpty(vcidTemp)){
 		addUrl = addUrl + "?vcid=" + vcidTemp;
 	}
 	DialogUtils.openModalDialog(
@@ -493,13 +488,13 @@ function deselect(){
 </script>
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'west',title:'组织结构',split:true,
+	<div data-options="region:'west',title:'虚中心',split:true,
 		tools : [
 			{ iconCls : 'clear',handler : function() {deselect();} } ,
 			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
 		]"
 		style="width:230px;">
-		<ul id="virtualCenterTree"></ul>
+		<ul id="vcTree"></ul>
 	</div>
 	
 	<div data-options="region:'center'" style="padding:5px;background:#eee;">

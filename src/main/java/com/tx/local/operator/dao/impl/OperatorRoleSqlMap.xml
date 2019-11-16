@@ -15,7 +15,6 @@
 		resultMap="operatorRoleMap">
 		SELECT 
 				R.id,
-				R.code,
 				R.name,
 				R.vcid,
 				R.valid,
@@ -27,9 +26,6 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND R.id = #{id}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            AND R.code = #{code}
-	        </if>
 		</trim>
 	</select>
 	
@@ -39,7 +35,6 @@
 		resultMap="operatorRoleMap">
 		SELECT 
 				R.id,
-				R.code,
 				R.name,
 				R.vcid,
 				R.valid,
@@ -64,10 +59,7 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND R.id = #{id} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            <![CDATA[ AND R.code = #{code} ]]>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND R.name = #{name} ]]>
 	        </if>			
@@ -121,10 +113,7 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND R.id = #{id} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            <![CDATA[ AND R.code = #{code} ]]>
-	        </if>			
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND R.name = #{name} ]]>
 	        </if>			
@@ -152,7 +141,6 @@
 		INSERT INTO OPER_ROLE
 		(
 			id,
-			code,
 			name,
 			vcid,
 			valid,
@@ -162,7 +150,6 @@
 		VALUES
 		(
 			#{id},
-			#{code},
 			#{name},
 			#{vcid},
 			#{valid},
@@ -176,7 +163,6 @@
 		INSERT INTO OPER_ROLE_HIS
 		(
 			id,
-			code,
 			name,
 			vcid,
 			valid,
@@ -186,7 +172,6 @@
 		VALUES
 		(
 			#{id},
-			#{code},
 			#{name},
 			#{vcid},
 			#{valid},
@@ -202,9 +187,6 @@
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            AND code = #{code}
 	        </if>
 		</trim>
 	</delete>
@@ -234,9 +216,6 @@
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            AND code = #{code}
 	        </if>
 		</trim>
 	</update> 

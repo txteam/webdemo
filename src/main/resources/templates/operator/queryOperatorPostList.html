@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>queryOrganizationList</title>
+	<title>queryOperatorPostList</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -52,7 +52,28 @@ $(document).ready(function() {
 	var  $configPostAuthALink = $("#configPostAuthALink");
 	var  $configPostOperatorALink = $("#configPostOperatorALink");
 	
-	orgTree = $('#organizationPostTree').tree({
+	vcTree = $('#vcTree').tree({
+		url : /*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
+		idField : 'id',
+		parentField : 'parentId',
+		iconField : function(){
+			return 'folder_database';
+		},
+		textField : 'name',
+		border : false,
+		onClick : function(node){
+			$('#virtualCenterName').val(node.name);
+			$('#vcid').val(node.id);
+			
+			$('#grid').datagrid('load',{
+				vcid: $("#vcid").val(),
+				name: $("#name").val(),
+				code: $("#code").val(),
+			});
+		}
+	});
+	
+	orgTree = $('#orgTree').tree({
 		url : /*[[@{/organization/queryList(valid=true)}]]*/_contextPath + 'organization/queryList?valid=true',
 		idField : 'id',
 		parentField : 'parentId',
@@ -135,7 +156,6 @@ $(document).ready(function() {
 			title : '备注',
 			width : 200,
 		}
-		<c:if test="${show_grid_action == true}">
 		,{
 			field : 'action',
 			title : '操作',
@@ -168,7 +188,6 @@ $(document).ready(function() {
 				return str;
 			}
 		}
-		</c:if>
 		]],
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {
@@ -196,9 +215,7 @@ $(document).ready(function() {
 			$configPostOperatorALink.linkbutton('disable');
 		},
 		onDblClickRow : function(row){
-			<c:if test='${authContext.hasAuth("update_post")}'>
 			editFun(row.id, row.name);
-			</c:if>
 		},
 		onClickRow: function(row){
 			$editALink.linkbutton('enable');
@@ -473,18 +490,27 @@ function configPostOperator(id,name){
 </script>
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'west',title:'组织结构',split:true,
+	<div data-options="region:'west',title:'虚中心',split:true,
 		tools : [
 			{ iconCls : 'clear',handler : function() {deselect();} } ,
 			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
 		]"
 		style="width:230px;">
-		<ul id="organizationPostTree"></ul>
+		<ul id="vcTree"></ul>
 	</div> 
 	
-	<div data-options="region:'center'" style="padding:5px;background:#eee;">
+	<div data-options="region:'center',border:false">
 		<div class="easyui-layout" data-options="fit:true,border:false">
-			<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+			<div data-options="region:'west',title:'组织结构',split:true,
+				tools : [
+					{ iconCls : 'clear',handler : function() {deselect();} } ,
+					{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
+				]"
+				style="width:230px;">
+				<ul id="orgTree"></ul>
+			</div> 
+			
+			<div data-options="region:'center',border:false" style="padding:5px;background:#eee;overflow:hidden;"  title="">
 				<table id="treegrid" style="width:fit;height:fit"></table>
 			</div>
 		</div>

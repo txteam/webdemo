@@ -57,21 +57,6 @@ public interface OperatorRoleFacade {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
     public boolean deleteById(
     		@PathVariable(value = "id",required=true) String id);
-	
-	/**
-     * 根据code删除角色<br/> 
-     * <功能详细描述>
-     * @param code
-     * @return [参数说明]
-     * 
-     * @return boolean [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ApiOperation(value = "根据编码删除角色")
-    @RequestMapping(value = "/code/{code}", method = RequestMethod.DELETE) 
-    public boolean deleteByCode(
-    		@PathVariable(value = "code",required=true) String code);
 
     /**
      * 更新角色<br/>
@@ -130,20 +115,6 @@ public interface OperatorRoleFacade {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public OperatorRole findById(
             @PathVariable(value = "id", required = true) String id);
-    
-    /**
-     * 根据编码查询角色<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return OperatorRole [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ApiOperation(value = "根据编码查询角色")
-    @RequestMapping(value = "/code/{code}", method = RequestMethod.GET)
-    public OperatorRole findByCode(
-            @PathVariable(value = "code", required = true) String code);
 
     /**
      * 查询角色实例列表<br/>
