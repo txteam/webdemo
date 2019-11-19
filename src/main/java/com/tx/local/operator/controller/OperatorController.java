@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.service.OperatorService;
+import com.tx.local.springmvc.argumentresolver.VcidRequestParam;
 import com.tx.core.paged.model.PagedList;
 
 /**
@@ -49,7 +50,7 @@ public class OperatorController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toQueryPagedList")
-    public String toQueryList(ModelMap response) {
+    public String toQueryPagedList(ModelMap response) {
         
         return "/operator/queryOperatorPagedList";
     }
@@ -64,7 +65,9 @@ public class OperatorController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAdd")
-    public String toAdd(ModelMap response) {
+    public String toAdd(@VcidRequestParam String vcid,
+            @RequestParam(value = "organizationId", required = false) String organizationId,
+            ModelMap response) {
         response.put("operator", new Operator());
         
         return "/operator/addOperator";
@@ -98,11 +101,11 @@ public class OperatorController {
      */
     @ResponseBody
     @RequestMapping("/queryList")
-    public List<Operator> queryList(
+    public List<Operator> queryList(@VcidRequestParam String vcid,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        //params.put("",request.getFirst(""));
+        params.put("vcid", vcid);
         
         List<Operator> resList = this.operatorService.queryList(valid, params);
         
@@ -120,13 +123,13 @@ public class OperatorController {
      */
     @ResponseBody
     @RequestMapping("/queryPagedList")
-    public PagedList<Operator> queryPagedList(
+    public PagedList<Operator> queryPagedList(@VcidRequestParam String vcid,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        //params.put("",request.getFirst(""));
+        params.put("vcid", vcid);
         
         PagedList<Operator> resPagedList = this.operatorService
                 .queryPagedList(valid, params, pageIndex, pageSize);

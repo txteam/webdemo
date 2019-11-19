@@ -16,6 +16,7 @@ create table bd_district(
 	modifyAble bit not null default 1,
 	fullName varchar(64),
 	remark varchar(512),
+	attributes varchar(512),
 	lastUpdateDate datetime not null default now(),
 	createDate datetime not null default now(),
 	primary key(id)

@@ -16,8 +16,10 @@ import javax.persistence.Table;
 
 import com.tx.local.basicdata.model.IDCardTypeEnum;
 
+import io.swagger.annotations.ApiModel;
+
 /**
- * <功能简述>
+ * 员工信息<br/>
  * <功能详细描述>
  * 
  * @author  PengQingyang
@@ -27,6 +29,7 @@ import com.tx.local.basicdata.model.IDCardTypeEnum;
  */
 @Entity
 @Table(name = "oper_employee_info")
+@ApiModel("员工信息")
 public class EmployeeInfo implements Serializable {
     
     /** 注释内容 */
@@ -101,22 +104,20 @@ public class EmployeeInfo implements Serializable {
         this.id = id;
     }
     
-    
-    
     /**
      * @return 返回 operator
      */
     public Operator getOperator() {
         return operator;
     }
-
+    
     /**
      * @param 对operator进行赋值
      */
     public void setOperator(Operator operator) {
         this.operator = operator;
     }
-
+    
     /**
      * @return 返回 code
      */
@@ -312,28 +313,28 @@ public class EmployeeInfo implements Serializable {
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
-
+    
     /**
      * @return 返回 idCardType
      */
     public IDCardTypeEnum getIdCardType() {
         return idCardType;
     }
-
+    
     /**
      * @param 对idCardType进行赋值
      */
     public void setIdCardType(IDCardTypeEnum idCardType) {
         this.idCardType = idCardType;
     }
-
+    
     /**
      * @return 返回 birthday
      */
     public Date getBirthday() {
         return birthday;
     }
-
+    
     /**
      * @param 对birthday进行赋值
      */

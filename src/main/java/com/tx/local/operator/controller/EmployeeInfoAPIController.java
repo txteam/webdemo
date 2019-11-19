@@ -25,7 +25,7 @@ import com.tx.local.operator.service.EmployeeInfoService;
 import io.swagger.annotations.Api;
 
 /**
- * EmployeeInfoAPI控制层[EmployeeInfoAPIController]<br/>
+ * 员工信息API控制层[EmployeeInfoAPIController]<br/>
  * 
  * @author []
  * @version [版本号]
@@ -33,16 +33,16 @@ import io.swagger.annotations.Api;
  * @since [产品/模块版本]
  */
 @RestController
-@Api(tags = "EmployeeInfoAPI")
+@Api(tags = "员工信息API")
 @RequestMapping("/api/employeeInfo")
 public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     
-    //EmployeeInfo业务层
+    //员工信息业务层
     @Resource(name = "employeeInfoService")
     private EmployeeInfoService employeeInfoService;
     
     /**
-     * 新增EmployeeInfo<br/>
+     * 新增员工信息<br/>
      * <功能详细描述>
      * @param employeeInfo [参数说明]
      * 
@@ -57,7 +57,7 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     }
     
     /**
-     * 根据id删除EmployeeInfo<br/> 
+     * 根据id删除员工信息<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -74,7 +74,7 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     }
 	
 	/**
-     * 根据code删除EmployeeInfo<br/> 
+     * 根据code删除员工信息<br/> 
      * <功能详细描述>
      * @param code
      * @return [参数说明]
@@ -91,7 +91,7 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     }
     
     /**
-     * 更新EmployeeInfo<br/>
+     * 更新员工信息<br/>
      * <功能详细描述>
      * @param employeeInfo
      * @return [参数说明]
@@ -109,7 +109,7 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     
 
     /**
-     * 根据主键查询EmployeeInfo<br/>
+     * 根据主键查询员工信息<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -126,7 +126,7 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     }
 
     /**
-     * 根据编码查询EmployeeInfo<br/>
+     * 根据编码查询员工信息<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -143,7 +143,7 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     }
 
     /**
-     * 查询EmployeeInfo实例列表<br/>
+     * 查询员工信息实例列表<br/>
      * <功能详细描述>
      * @param querier
      * @return [参数说明]
@@ -164,7 +164,7 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     }
     
     /**
-     * 查询EmployeeInfo分页列表<br/>
+     * 查询员工信息分页列表<br/>
      * <功能详细描述>
      * @param pageIndex
      * @param pageSize
@@ -190,7 +190,7 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     }
     
 	/**
-     * 查询EmployeeInfo数量<br/>
+     * 查询员工信息数量<br/>
      * <功能详细描述>
      * @param querier
      * @return [参数说明]
@@ -209,7 +209,7 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     }
 
 	/**
-     * 查询EmployeeInfo是否存在<br/>
+     * 查询员工信息是否存在<br/>
 	 * @param excludeId
      * @param querier
      * @return [参数说明]

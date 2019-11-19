@@ -39,7 +39,6 @@
 	/*]]>*/
 	</script>
 </block>
-
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function(){
@@ -52,7 +51,7 @@ $(document).ready(function(){
 	        DialogUtils.progress({
 	        	text : '数据提交中，请等待....'
 	        });
-			$('#roleForm').ajaxSubmit({
+			$('#entityForm').ajaxSubmit({
 			    url:/*[[@{/operatorRole/add}]]*/_contextPath + 'operatorRole/add',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
@@ -83,7 +82,7 @@ function cancelFun(){
 		<form id="entityForm" method="post" class="form" th:object="${operatorRole}">
 			<table class="table">
 				<tr>
-					<th class="narrow" width="30%">所属虚中心:<span class="tRed">*</span></th>
+					<th class="narrow" width="25%">所属虚中心:<span class="tRed">*</span></th>
 					<td>
 						<select id="vcid" name="vcid" data-rule="所属业务中心:required;" >
 							<option value="">-- 请选择 --</option>
@@ -92,22 +91,21 @@ function cancelFun(){
 					</td>
 				</tr>
 				<tr>
-					<!--//TODO:修改字段是否必填,修改其中文名-->
-					<th class="narrow" width="30%">名称:<span class="tRed">*</span></th>
-					<td width="70%">
+					<th class="narrow">名称:<span class="tRed">*</span></th>
+					<td>
 						<input id="name" name="name"
-							data-rule="名称:required;;remote[${contextPath}/role/validate, vcid, name, id]"/>
+							data-rule="名称:required;remote[${contextPath}/operatorRole/validate, vcid, name, id]"
+							th:data-rule="'名称:required;length[1~16];remote[' + @{/operatorRole/validate} + ', name]'"/>
 					</td>
 				</tr>
 				<tr>
-					<!--//TODO:修改字段是否必填,修改其中文名-->
-					<th class="narrow" width="30%">备注:</th>
-					<td width="70%">
-						<form:input path="remark" cssClass="text" />
+					<th class="narrow">备注:</th>
+					<td>
+						<textarea name="remark" rows="" cols="" class="longText" style="width:90%"></textarea>
 					</td>
 				</tr>
 				<tr>
-					<td class="rightOperRow" colspan="4" style="padding-right: 50px">
+					<td class="rightOperRow" colspan="2" style="padding-right: 50px">
 						<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  
 						<a id="cancelBtn" onclick="cancelFun();return false;" href="#" class="easyui-linkbutton">取消</a>	
 					</td>

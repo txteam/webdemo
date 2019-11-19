@@ -20,8 +20,8 @@ create table OPER_ORGANIZATION(
 	chiefType varchar(64) ,
 	valid bit not null,
 	remark varchar(256) ,
-	createDate datetime(6) not null,
-	lastUpdateDate datetime(6) not null,
+	createDate datetime(6) not null default now(6),
+	lastUpdateDate datetime(6) not null default now(6),
 	primary key(id)
 );
 create unique index idx_oper_org_01 on oper_organization(code,vcid);

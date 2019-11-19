@@ -9,5 +9,5 @@ create table OPER_ROLE(
 	valid bit not null default 1,
 	modifyAble bit not null default 1,
 	remark varchar(512) ,
-	primary key(id,vcid)
+	primary key(id)
 );

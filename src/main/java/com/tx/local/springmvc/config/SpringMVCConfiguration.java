@@ -14,10 +14,13 @@ import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.tx.local.springmvc.argumentresolver.VcidArgumentResolver;
 
 /**
  * web配置器<br/>
@@ -51,6 +54,17 @@ public class SpringMVCConfiguration
             List<HttpMessageConverter<?>> converters) {
         //bufferedImageConverter
         converters.add(new BufferedImageHttpMessageConverter());
+    }
+    
+    /**
+     * @param resolvers
+     */
+    @Override
+    public void addArgumentResolvers(
+            List<HandlerMethodArgumentResolver> resolvers) {
+        WebMvcConfigurer.super.addArgumentResolvers(resolvers);
+        
+        resolvers.add(new VcidArgumentResolver());
     }
     
     /**

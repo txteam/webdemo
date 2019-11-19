@@ -26,7 +26,7 @@ import com.tx.core.paged.model.PagedList;
 import com.tx.local.basicdata.model.IDCardTypeEnum;
 
 /**
- * EmployeeInfo控制层<br/>
+ * 员工信息控制层<br/>
  * 
  * @author []
  * @version [版本号]
@@ -37,12 +37,12 @@ import com.tx.local.basicdata.model.IDCardTypeEnum;
 @RequestMapping("/employeeInfo")
 public class EmployeeInfoController {
     
-    //EmployeeInfo业务层
+    //员工信息业务层
     @Resource(name = "employeeInfoService")
     private EmployeeInfoService employeeInfoService;
     
     /**
-     * 跳转到查询EmployeeInfo列表页面<br/>
+     * 跳转到查询员工信息列表页面<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -58,7 +58,7 @@ public class EmployeeInfoController {
     }
     
     /**
-     * 跳转到新增EmployeeInfo页面<br/>
+     * 跳转到新增员工信息页面<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -76,7 +76,7 @@ public class EmployeeInfoController {
     }
     
     /**
-     * 跳转到编辑EmployeeInfo页面
+     * 跳转到编辑员工信息页面
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -97,7 +97,7 @@ public class EmployeeInfoController {
     }
 
     /**
-     * 查询EmployeeInfo实例列表<br/>
+     * 查询员工信息实例列表<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -121,7 +121,7 @@ public class EmployeeInfoController {
     }
     
     /**
-     * 查询EmployeeInfo实例分页列表<br/>
+     * 查询员工信息实例分页列表<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -148,7 +148,7 @@ public class EmployeeInfoController {
     }
     
     /**
-     * 新增EmployeeInfo实例
+     * 新增员工信息实例
      * <功能详细描述>
      * @param employeeInfo [参数说明]
      * 
@@ -164,7 +164,7 @@ public class EmployeeInfoController {
     }
     
     /**
-     * 更新EmployeeInfo实例<br/>
+     * 更新员工信息实例<br/>
      * <功能详细描述>
      * @param employeeInfo
      * @return [参数说明]
@@ -181,7 +181,7 @@ public class EmployeeInfoController {
     }
     
     /**
-     * 根据主键查询EmployeeInfo实例<br/> 
+     * 根据主键查询员工信息实例<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -198,7 +198,7 @@ public class EmployeeInfoController {
     }
 
 	/**
-     * 根据编码查询EmployeeInfo实例<br/> 
+     * 根据编码查询员工信息实例<br/> 
      * <功能详细描述>
      * @param code
      * @return [参数说明]
@@ -215,7 +215,7 @@ public class EmployeeInfoController {
     }
     
     /**
-     * 删除EmployeeInfo实例<br/> 
+     * 删除员工信息实例<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]

@@ -357,7 +357,7 @@ public class OperatorService {
         //FIXME:需要更新的字段
 		updateRowMap.put("pwdErrCount", operator.getPwdErrCount());
 		updateRowMap.put("pwdUpdateDate", operator.getPwdUpdateDate());
-		updateRowMap.put("mainPost", operator.getMainPost());
+		updateRowMap.put("mainPostId", operator.getMainPostId());
 		updateRowMap.put("userName", operator.getUserName());
 		updateRowMap.put("vcid", operator.getVcid());
 		updateRowMap.put("loginName", operator.getLoginName());
@@ -367,7 +367,7 @@ public class OperatorService {
 		updateRowMap.put("historyPwd", operator.getHistoryPwd());
 		updateRowMap.put("invalidDate", operator.getInvalidDate());
 		updateRowMap.put("password", operator.getPassword());
-		updateRowMap.put("organization", operator.getOrganization());
+		updateRowMap.put("organizationId", operator.getOrganizationId());
 		updateRowMap.put("lastUpdateDate", new Date());
 
         boolean flag = this.operatorDao.update(id,updateRowMap); 

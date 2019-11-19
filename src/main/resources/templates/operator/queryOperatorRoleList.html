@@ -120,7 +120,8 @@ $(document).ready(function(){
 		{
 			field : 'id',
 			title : '编码',
-			width : 300
+			width : 300,
+			hidden : true
 		},
 		{
 			field : 'vcid',
@@ -169,41 +170,36 @@ $(document).ready(function(){
 			width : 220,
 			formatter : function(value, row, index) {
 				var str = '&nbsp;';
-				if(row.editAble && !row.valid && $.canEnable){
-					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
+				if(row.modifyAble && !row.valid){
+					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row[idFieldName], row[nameFieldName], _contextPath + 'webjars/css/images/extjs_icons/control/control_play_blue.png');
 					str += '&nbsp;';
 				}
-				if(row.editAble && $.canUpdate){
-					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil.png');
+				if(row.modifyAble){
+					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row[idFieldName], row[nameFieldName], _contextPath + 'webjars/css/images/extjs_icons/pencil.png');
 					str += '&nbsp;';
 				}
 				
-				if(row.editAble && $.canDelete){
-					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/pencil_delete.png');
+				if(row.modifyAble){
+					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row[idFieldName], row[nameFieldName], _contextPath + 'webjars/css/images/extjs_icons/pencil_delete.png');
 					str += '&nbsp;';
 				}
-				if(row.editAble && row.valid && $.canDisable){
-					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row[idFieldName], row[nameFieldName], '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
+				if(row.modifyAble && row.valid){
+					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row[idFieldName], row[nameFieldName], _contextPath + 'webjars/css/images/extjs_icons/control/control_stop_blue.png');
 					str += '&nbsp;';
 				}
-				if ($.configRoleAuth) {
-					str += $.formatString('<img onclick="configRoleAuth(\'{0}\',\'{1}\');" src="{2}" title="配置职位权限"/>', row.id, row.name,'${contextPath}/style/images/extjs_icons/database_key.png');
-				}
-				if ($.configRoleOperator) {
-					str += $.formatString('<img onclick="configRoleOperator(\'{0}\',\'{1}\');" src="{2}" title="配置职位人员"/>', row.id, row.name,'${contextPath}/style/images/extjs_icons/folder/folder_user.png');
-				}
+				str += $.formatString('<img onclick="configRoleAuth(\'{0}\',\'{1}\');" src="{2}" title="配置职位权限"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/database_key.png');
+				str += $.formatString('<img onclick="configRoleOperator(\'{0}\',\'{1}\');" src="{2}" title="配置职位人员"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/folder/folder_user.png');
+				
 				return str;
 			}
 		}
 		] ],
 		toolbar : '#toolbar',
-		onDblClickRow : function(row){
-			if($.canUpdate){
-				editFun(row[idFieldName], row[nameFieldName]);
-			}
+		onDblClickRow : function(index, row){
+			editFun(row[idFieldName], row[nameFieldName]);
 		},
-		onClickRow : function(row){
-			if(!row.editAble){
+		onClickRow: function(index,row){
+			if(!row.modifyAble){
 				$editALink.linkbutton('disable');
 				$deleteALink.linkbutton('disable');
 				$enableALink.linkbutton('disable');
@@ -270,7 +266,7 @@ function addFun() {
 		"addRole",
 		"新增" + entityName,
 		addUrl,
-		450,220,function(){
+		500,220,function(){
 			grid.datagrid('load',$('#queryForm').serializeObject());
 	});
 	return false;
@@ -298,7 +294,7 @@ function editFun(id,name) {
 		"updateRole",
 		"编辑" + entityName + ":" + name,
 		url,
-		450,220,function(){
+		500,220,function(){
 			grid.datagrid('load',$('#queryForm').serializeObject());
 	});
 	return false;
@@ -327,7 +323,7 @@ function deleteFun(id,name) {
 	    		//如果确认删除指定的Role
 	    		$.post(
 	    				/*[[@{/operatorRole/deleteById}]]*/_contextPath + 'operatorRole/deleteById',
-			    		{roleId:id},
+			    		{id:id},
 			    		function(data){
 			    			DialogUtils.progress('close');
 			    			if(data){
@@ -365,8 +361,8 @@ function disableFun(id,name){
     		});
     		//如果确认禁用指定Role
     		$.post(
-		    		'${contextPath}/role/disableRoleById.action',
-		    		{roleId:id},
+    				/*[[@{/operatorRole/disableById}]]*/_contextPath + 'operatorRole/disableById',
+		    		{id:id},
 		    		function(){
 		    			DialogUtils.progress('close');
 		    			DialogUtils.tip("禁用" + entityName + "成功");
@@ -400,8 +396,8 @@ function enableFun(id,name){
     		});
     		//如果确认启用指定Role
     		$.post(
-		    		'${contextPath}/role/enableRoleById.action',
-		    		{roleId:id},
+    				/*[[@{/operatorRole/enableById}]]*/_contextPath + 'operatorRole/enableById',
+		    		{id:id},
 		    		function(){
 		    			DialogUtils.progress('close');
 		    			DialogUtils.tip("启用" + entityName + "成功");
@@ -493,14 +489,14 @@ function deselect(){
 			{ iconCls : 'clear',handler : function() {deselect();} } ,
 			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
 		]"
-		style="width:230px;">
+		style="width:240px;">
 		<ul id="vcTree"></ul>
 	</div>
 	
 	<div data-options="region:'center'" style="padding:5px;background:#eee;">
 		<div class="easyui-layout" data-options="fit : true,border : false">
 			<!--//FIXME: 修改查询条件框体高度 -->
-			<div data-options="region:'north',title:'查询条件',border:false" style="height: 90px; overflow: hidden;">
+			<div data-options="region:'north',title:'查询条件',border:false" style="height: 105px; overflow: hidden;">
 				<form id="queryForm" class="form">
 					<table class="table table-hover table-condensed">
 						<tr>

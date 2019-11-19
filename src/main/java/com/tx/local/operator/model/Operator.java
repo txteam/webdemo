@@ -8,13 +8,9 @@ package com.tx.local.operator.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -48,9 +44,7 @@ public class Operator implements Serializable{
     private String vcid;
     
     /** 所属组织: 在代码中控制组织id不能为空，考虑到超级管理员的组织为空的情况,由界面中创建的人员组织id不能为空 */
-    @ManyToOne
-    @JoinColumn(name="organizationId")
-    private OperatorOrganization organization;
+    private String organizationId;
     
     /** 登录名 */
     private String loginName;
@@ -90,21 +84,11 @@ public class Operator implements Serializable{
     private Date invalidDate;
     
     /** 主要职位 */
-    @ManyToOne
-    @JoinColumn(name="mainPostId")
-    private OperatorPost mainPost;
+    private String mainPostId;
     
     /** 员工信息,如果为公司员工，则该信息不为空  */
     @Transient
     private EmployeeInfo employeeInfo;
-    
-    /** 职位 */
-    @ManyToMany
-    private List<OperatorPost> postList;
-    
-    /** 职位 */
-    @ManyToMany
-    private List<OperatorRole> roleList;
 
     /**
      * @return 返回 id
@@ -317,58 +301,30 @@ public class Operator implements Serializable{
     }
 
     /**
-     * @return 返回 organization
+     * @return 返回 organizationId
      */
-    public OperatorOrganization getOrganization() {
-        return organization;
+    public String getOrganizationId() {
+        return organizationId;
     }
 
     /**
-     * @param 对organization进行赋值
+     * @param 对organizationId进行赋值
      */
-    public void setOrganization(OperatorOrganization organization) {
-        this.organization = organization;
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
     }
 
     /**
-     * @return 返回 mainPost
+     * @return 返回 mainPostId
      */
-    public OperatorPost getMainPost() {
-        return mainPost;
+    public String getMainPostId() {
+        return mainPostId;
     }
 
     /**
-     * @param 对mainPost进行赋值
+     * @param 对mainPostId进行赋值
      */
-    public void setMainPost(OperatorPost mainPost) {
-        this.mainPost = mainPost;
-    }
-
-    /**
-     * @return 返回 postList
-     */
-    public List<OperatorPost> getPostList() {
-        return postList;
-    }
-
-    /**
-     * @param 对postList进行赋值
-     */
-    public void setPostList(List<OperatorPost> postList) {
-        this.postList = postList;
-    }
-
-    /**
-     * @return 返回 roleList
-     */
-    public List<OperatorRole> getRoleList() {
-        return roleList;
-    }
-
-    /**
-     * @param 对roleList进行赋值
-     */
-    public void setRoleList(List<OperatorRole> roleList) {
-        this.roleList = roleList;
+    public void setMainPostId(String mainPostId) {
+        this.mainPostId = mainPostId;
     }
 }

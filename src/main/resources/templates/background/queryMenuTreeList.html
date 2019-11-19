@@ -116,7 +116,7 @@ $(document).ready(function() {
 		iconField : function(item){
 			if(item['icon']){
 				return item['icon'];
-			}else if($.ObjectUtils.isEmpty(item['childs'])){
+			}else if($.ObjectUtils.isEmpty(item['children'])){
 				return 'database';
 			}else{
 				return 'database_gear';

@@ -8,6 +8,10 @@ import java.io.IOException;
 import com.tx.core.generator2.CodeGenerator;
 import com.tx.core.generator2.model.ViewTypeEnum;
 import com.tx.local.content.model.ContentInfo;
+import com.tx.local.operator.model.EmployeeInfo;
+import com.tx.local.operator.model.Operator;
+import com.tx.local.organization.model.Organization;
+import com.tx.local.organization.model.Post;
 
 /**
  * 基础数据生成类<br/>
@@ -21,8 +25,8 @@ public class WebdemoCodeGenerator {
 
     public static void main(String[] args) throws IOException {
         boolean toProjectPath = true;//是否生成覆盖到项目代码中，如果设置为false则会写入D盘的目录中
-        Class<?> entityType = ContentInfo.class;
-        ViewTypeEnum viewType = ViewTypeEnum.PAGEDLIST;
+        Class<?> entityType = EmployeeInfo.class;
+        ViewTypeEnum viewType = ViewTypeEnum.LIST;
         
         //基础数据逻辑代码生成存放目录com.tx.component.basicdata.generator.
         if(toProjectPath){

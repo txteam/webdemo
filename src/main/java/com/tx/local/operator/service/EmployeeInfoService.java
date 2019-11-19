@@ -26,7 +26,7 @@ import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 
 /**
- * EmployeeInfo的业务层[EmployeeInfoService]
+ * 员工信息的业务层[EmployeeInfoService]
  * <功能详细描述>
  * 
  * @author  
@@ -44,7 +44,7 @@ public class EmployeeInfoService {
     private EmployeeInfoDao employeeInfoDao;
     
     /**
-     * 新增EmployeeInfo实例<br/>
+     * 新增员工信息实例<br/>
      * 将employeeInfo插入数据库中保存
      * 1、如果employeeInfo 为空时抛出参数为空异常
      * 2、如果employeeInfo 中部分必要参数为非法值时抛出参数不合法异常
@@ -68,7 +68,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 根据id删除EmployeeInfo实例
+     * 根据id删除员工信息实例
      * 1、如果入参数为空，则抛出异常
      * 2、执行删除后，将返回数据库中被影响的条数 > 0，则返回true
      *
@@ -90,7 +90,7 @@ public class EmployeeInfoService {
     }
 
     /**
-     * 根据code删除EmployeeInfo实例
+     * 根据code删除员工信息实例
      * 1、当code为empty时抛出异常
      * 2、执行删除后，将返回数据库中被影响的条数 > 0，则返回true
      *
@@ -111,7 +111,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 根据id查询EmployeeInfo实例
+     * 根据id查询员工信息实例
      * 1、当id为empty时抛出异常
      *
      * @param id
@@ -130,7 +130,7 @@ public class EmployeeInfoService {
     }
 
     /**
-     * 根据code查询EmployeeInfo实例
+     * 根据code查询员工信息实例
      * 1、当code为empty时抛出异常
      *
      * @param code
@@ -149,7 +149,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 查询EmployeeInfo实例列表
+     * 查询员工信息实例列表
      * <功能详细描述>
      * @param params      
      * @return [参数说明]
@@ -173,7 +173,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 查询EmployeeInfo实例列表
+     * 查询员工信息实例列表
      * <功能详细描述>
      * @param querier      
      * @return [参数说明]
@@ -198,7 +198,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 分页查询EmployeeInfo实例列表
+     * 分页查询员工信息实例列表
      * <功能详细描述>
      * @param params    
      * @param pageIndex 当前页index从1开始计算
@@ -227,7 +227,7 @@ public class EmployeeInfoService {
     }
     
 	/**
-     * 分页查询EmployeeInfo实例列表
+     * 分页查询员工信息实例列表
      * <功能详细描述>
      * @param querier    
      * @param pageIndex 当前页index从1开始计算
@@ -257,7 +257,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 查询EmployeeInfo实例数量<br/>
+     * 查询员工信息实例数量<br/>
      * <功能详细描述>
      * @param params      
      * @return [参数说明]
@@ -281,7 +281,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 查询EmployeeInfo实例数量<br/>
+     * 查询员工信息实例数量<br/>
      * <功能详细描述>
      * @param querier      
      * @return [参数说明]
@@ -306,7 +306,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 判断EmployeeInfo实例是否已经存在<br/>
+     * 判断员工信息实例是否已经存在<br/>
      * <功能详细描述>
      * @param key2valueMap
      * @param excludeId
@@ -331,7 +331,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 判断EmployeeInfo实例是否已经存在<br/>
+     * 判断员工信息实例是否已经存在<br/>
      * <功能详细描述>
      * @param key2valueMap
      * @param excludeId
@@ -351,7 +351,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 根据id更新EmployeeInfo实例<br/>
+     * 根据id更新员工信息实例<br/>
      * <功能详细描述>
      * @param employeeInfo
      * @return [参数说明]
@@ -392,7 +392,7 @@ public class EmployeeInfoService {
     }
     
     /**
-     * 根据id更新EmployeeInfo实例<br/>
+     * 根据id更新员工信息实例<br/>
      * <功能详细描述>
      * @param employeeInfo
      * @return [参数说明]

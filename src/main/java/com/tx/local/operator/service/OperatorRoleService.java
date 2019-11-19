@@ -109,6 +109,7 @@ public class OperatorRoleService implements InitializingBean {
                     ur.put("modifyAble", false);
                     ur.put("lastUpdateDate", new Date());
                     
+                    //虚中心不能更新：更新虚中心对业务影响较大，若有该场景，应在数据库中直接进行修改
                     //code无法更新
                     this.operatorRoleDao.update(ur);
                     
@@ -125,12 +126,11 @@ public class OperatorRoleService implements InitializingBean {
                 role.setModifyAble(false);
                 role.setValid(true);
                 
-                VirtualCenter vc = virtualCenterFacade
-                        .findByCode(roleEnumTemp.getVirtualCenterCode());
-                AssertUtils.notNull(vc,
-                        "virtualcenter is null.code:{}",
-                        roleEnumTemp.getVirtualCenterCode());
-                role.setVcid(vc.getId());
+                if(!StringUtils.isEmpty(roleEnumTemp.getVirtualCenterCode())){
+                    VirtualCenter vc = virtualCenterFacade
+                            .findByCode(roleEnumTemp.getVirtualCenterCode());
+                    role.setVcid(vc != null ? vc.getId() : null);
+                }
                 this.insert(role);
                 
                 //给枚举写入id
@@ -434,9 +434,9 @@ public class OperatorRoleService implements InitializingBean {
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         //需要更新的字段
         updateRowMap.put("name", operatorRole.getName());
-        updateRowMap.put("vcid", operatorRole.getVcid());
-        updateRowMap.put("valid", operatorRole.isValid());
-        updateRowMap.put("modifyAble", operatorRole.isModifyAble());
+        //updateRowMap.put("vcid", operatorRole.getVcid());
+        //updateRowMap.put("valid", operatorRole.isValid());
+        //updateRowMap.put("modifyAble", operatorRole.isModifyAble());
         updateRowMap.put("remark", operatorRole.getRemark());
         
         boolean flag = this.operatorRoleDao.update(id, updateRowMap);

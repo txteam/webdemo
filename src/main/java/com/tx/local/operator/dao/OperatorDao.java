@@ -18,16 +18,5 @@ import com.tx.local.operator.model.Operator;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface OperatorDao extends MybatisBaseDao<Operator, String> {
-    
-    /**
-     * 插入对象实例到历史表<br/>
-     * <功能详细描述>
-     * @param entity [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public void insertToHis(Operator entity);
+public interface OperatorDao extends MybatisBaseDao<Operator, String>{
 }

@@ -57,7 +57,7 @@ public class OperatorUserDetailsService implements UserDetailsService {
         
         Collection<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(OperatorRoleEnum.SUPER_ADMIN.getId()));//用户所拥有的角色信息
-        authorities.add(new SimpleGrantedAuthority(OperatorRoleEnum.ADMIN.getId()));//用户所拥有的角色信息
+        authorities.add(new SimpleGrantedAuthority(OperatorRoleEnum.JT_SUPER_ADMIN.getId()));//用户所拥有的角色信息
         //AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
         
         OperatorUserDetails userDetail = new OperatorUserDetails(user, authorities);

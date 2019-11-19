@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>addOperator</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	/*]]>*/
+	</script>
+</block>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	parent.DialogUtils.progress('close');
+	
+	$("#organizationName").chooseOrganization({
+		eventName : "chooseOrganizationForAddPost",
+		contextPath : _contextPath,
+		title : "请选择所属组织",
+		width : 260,
+		height : 400,
+		handler : function(organization){
+			$("#organizationName").val(organization.name);
+			$("#organizationId").val(organization.id);
+		},
+		clearHandler: function(){
+			$("#organizationName").val('');
+			$("#organizationId").val('');
+		}
+	});
+	
+	$("#postName").choosePost({
+		eventName : "choosePostForAddOperator",
+		contextPath : _contextPath,
+		title : "请选择职位",  
+		width : 800,
+		height : 450,
+		handler : function(post){
+			if(post != null){
+				$("#postName").val(post.name);
+				$("#postId").val(post.id);
+			}
+		},
+	    clearHandler: function(){
+	    	$("#postName").val("");
+			$("#postId").val("");
+	    }
+	});
+	
+	//验证器
+	$('#operatorForm').validator({
+	    valid: function(){
+	        //表单验证通过，提交表单到服务器
+	        DialogUtils.progress({
+	        	text : '数据提交中，请等待....'
+	        });
+			$('#operatorForm').ajaxSubmit({
+			    url:"${contextPath}/operator/addOperator.action",
+			    success: function(data) {
+			    	DialogUtils.progress('close');
+			    	if(data){
+						parent.DialogUtils.tip("新人员成功.新增人员默认登陆密码为:123456");
+						parent.DialogUtils.closeDialogById("addOperator");
+					}
+			    } 
+			});
+			return false;
+	    }
+	});
+
+});
+function submitFun(){
+	$('#operatorForm').submit();
+}
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+		<form id="operatorForm" method="post" class="form" th:object="${operator}">
+			<form:hidden path="id"/>
+			<table class="common_table">
+				<tr>
+					<th class="narrow" width="30%">登录名：<span class="tRed">*</span></th>
+					<td width="70%">
+						<form:input path="loginName" 
+							data-rule="登录名:required;remote[get:${contextPath }/operator/loginNameIsExist.action, loginName]"
+							data-tip="必填"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >姓名：<span class="tRed">*</span></th>
+					<td>
+						<form:input path="userName" cssClass="text"
+							data-rule="姓名:required;"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >性别：<span class="tRed">*</span></th>
+					<td>
+						<input type="radio" name="sex" value="0" checked="checked"/>男
+						<input type="radio" name="sex" value="1"/>女
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >入职时间：</th>
+					<td>
+						<input name="entryDate" type="text" 
+						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >试用期到期时间：</th>
+					<td>
+						<input name="trialPeriodEndDate" type="text" 
+						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >转正时间：</th>
+					<td>
+						<input name="officialDate" type="text" 
+						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >离职时间：</th>
+					<td>
+						<input name="leavingDate" type="text" 
+						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >账户有效时间：</th>
+					<td>
+						<input name="invalidDate" type="text" 
+						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >邮箱：</th>
+					<td>
+						<input name="email" type="text"  data-rule="email;"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >电话：</th>
+					<td>
+						<input name="phone" type="text"  data-rule="mobile;"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" >RTX：</th>
+					<td>
+						<input name="rtx" type="text"  data-rule="qq;"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow">所属组织<span class="tRed">*</span></th>
+					<td>
+						<input id="organizationId" name="organization.id" type="hidden"
+							value="${organization.id }"
+							readonly="readonly"/>
+						<input id="organizationName" name="organization.name"
+							value="${organization.name }" 
+							data-rule="所属组织:required;"
+							class="selectInput" readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow">职位<span class="tRed">*</span></th>
+					<td>
+						<input id="postName" name="postName" class="text" type="text" readonly="readonly">
+						<input id="postId" name="mainPost.id" class="text" type="hidden" data-rule="职位:required;"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="rightOperRow" colspan="2" style="padding-right: 50px">
+						<a id="addBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  	
+					</td>
+				</tr>
+			</table>
+			<p style="margin-left: 5px;display: none" id="operatorPassword">操作员密码：<span class="tRed" id="password"></span></p>
+		</form>
+	</div>
+</div>
+</body>

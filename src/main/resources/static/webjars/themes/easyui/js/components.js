@@ -190,6 +190,7 @@ $.widget("txcomponent.selectOrganization",{
 		var _element = _this.element;
 		var _option = _this.options;
 		var action = _option.contextPath + 'organization/toSelect?eventName=' + _option.eventName;
+		
 		if(_option.clearHandler && $.isFunction(_option.clearHandler)){
 			var $clear = $('<span class="icon_span clear"></span>')
 			$(_element).after($clear);

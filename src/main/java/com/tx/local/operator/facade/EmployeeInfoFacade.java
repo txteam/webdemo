@@ -21,7 +21,7 @@ import com.tx.local.operator.model.EmployeeInfo;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * EmployeeInfo接口门面层[EmployeeInfoFacade]<br/>
+ * 员工信息接口门面层[EmployeeInfoFacade]<br/>
  * 
  * @author []
  * @version [版本号]
@@ -31,7 +31,7 @@ import io.swagger.annotations.ApiOperation;
 public interface EmployeeInfoFacade {
     
     /**
-     * 新增EmployeeInfo<br/>
+     * 新增员工信息<br/>
      * <功能详细描述>
      * @param employeeInfo [参数说明]
      * 
@@ -39,12 +39,12 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "新增EmployeeInfo")
+    @ApiOperation(value = "新增员工信息")
     @RequestMapping(value = "", method = RequestMethod.POST)
     public EmployeeInfo insert(@RequestBody EmployeeInfo employeeInfo);
     
     /**
-     * 根据id删除EmployeeInfo<br/> 
+     * 根据id删除员工信息<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -53,13 +53,13 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据主键删除EmployeeInfo")
+    @ApiOperation(value = "根据主键删除员工信息")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
     public boolean deleteById(
     		@PathVariable(value = "id",required=true) String id);
 	
 	/**
-     * 根据code删除EmployeeInfo<br/> 
+     * 根据code删除员工信息<br/> 
      * <功能详细描述>
      * @param code
      * @return [参数说明]
@@ -68,13 +68,13 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据编码删除EmployeeInfo")
+    @ApiOperation(value = "根据编码删除员工信息")
     @RequestMapping(value = "/code/{code}", method = RequestMethod.DELETE) 
     public boolean deleteByCode(
     		@PathVariable(value = "code",required=true) String code);
 
     /**
-     * 更新EmployeeInfo<br/>
+     * 更新员工信息<br/>
      * <功能详细描述>
      * @param employeeInfo
      * @return [参数说明]
@@ -83,13 +83,13 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "修改EmployeeInfo")
+    @ApiOperation(value = "修改员工信息")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public boolean updateById(@PathVariable(value = "id",required=true) String id,
     		@RequestBody EmployeeInfo employeeInfo);
 
     /**
-     * 根据主键查询EmployeeInfo<br/>
+     * 根据主键查询员工信息<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -97,13 +97,13 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据主键查询EmployeeInfo")
+    @ApiOperation(value = "根据主键查询员工信息")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public EmployeeInfo findById(
             @PathVariable(value = "id", required = true) String id);
     
     /**
-     * 根据编码查询EmployeeInfo<br/>
+     * 根据编码查询员工信息<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -111,13 +111,13 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据编码查询EmployeeInfo")
+    @ApiOperation(value = "根据编码查询员工信息")
     @RequestMapping(value = "/code/{code}", method = RequestMethod.GET)
     public EmployeeInfo findByCode(
             @PathVariable(value = "code", required = true) String code);
 
     /**
-     * 查询EmployeeInfo实例列表<br/>
+     * 查询员工信息实例列表<br/>
      * <功能详细描述>
      * @param querier
      * @return [参数说明]
@@ -126,14 +126,14 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询EmployeeInfo列表")
+    @ApiOperation(value = "查询员工信息列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<EmployeeInfo> queryList(
     		@RequestBody Querier querier
     	);
     
     /**
-     * 查询EmployeeInfo分页列表<br/>
+     * 查询员工信息分页列表<br/>
      * <功能详细描述>
      * @param pageIndex
      * @param pageSize
@@ -144,7 +144,7 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询EmployeeInfo分页列表")
+    @ApiOperation(value = "查询员工信息分页列表")
     @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
     public PagedList<EmployeeInfo> queryPagedList(
 			@RequestBody Querier querier,
@@ -153,7 +153,7 @@ public interface EmployeeInfoFacade {
     	);
     
 	/**
-     * 查询EmployeeInfo数量<br/>
+     * 查询员工信息数量<br/>
      * <功能详细描述>
      * @param querier
      * @return [参数说明]
@@ -162,13 +162,13 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询EmployeeInfo数量")
+    @ApiOperation(value = "查询员工信息数量")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int count(
             @RequestBody Querier querier);
 
 	/**
-     * 查询EmployeeInfo是否存在<br/>
+     * 查询员工信息是否存在<br/>
 	 * @param excludeId
      * @param querier
      * @return [参数说明]
@@ -177,7 +177,7 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询EmployeeInfo是否存在")
+    @ApiOperation(value = "查询员工信息是否存在")
     @RequestMapping(value = "/exists", method = RequestMethod.GET)
     public boolean exists(
     		@RequestBody Querier querier,

@@ -33,14 +33,6 @@ public class OperatorDaoImpl
     private MyBatisDaoSupport myBatisDaoSupport;
     
     /**
-     * @param entity
-     */
-    @Override
-    public void insertToHis(Operator operator) {
-        this.myBatisDaoSupport.insert("operator.insertToHis", operator);
-    }
-    
-    /**
      * @return 返回 myBatisDaoSupport
      */
     public MyBatisDaoSupport getMyBatisDaoSupport() {

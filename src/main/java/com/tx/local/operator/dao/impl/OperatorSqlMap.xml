@@ -7,8 +7,6 @@
 	<!-- auto generate default resultMap -->
 	<resultMap id="operatorMap" 
 		type="com.tx.local.operator.model.Operator">
-		<result column="mainPostId" property="mainPost.id"/>
-		<result column="organizationId" property="organization.id"/>
 	</resultMap>
 	
 	<!-- auto generate default find -->
@@ -85,10 +83,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
 	            <![CDATA[ AND O.pwdErrCount = #{pwdErrCount} ]]>
 	        </if>			
-			<if test="mainPost != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
-		            <![CDATA[ AND O.mainPostId = #{mainPost.id} ]]>
-		        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPostId)">  
+	            <![CDATA[ AND O.mainPostId = #{mainPostId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
 	            <![CDATA[ AND O.userName = #{userName} ]]>
@@ -120,10 +116,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
 	            <![CDATA[ AND O.password = #{password} ]]>
 	        </if>			
-			<if test="organization != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            <![CDATA[ AND O.organizationId = #{organization.id} ]]>
-		        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
+	            <![CDATA[ AND O.organizationId = #{organizationId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND O.id <> #{excludeId} ]]>
@@ -167,10 +161,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
 	            <![CDATA[ AND O.pwdErrCount = #{pwdErrCount} ]]>
 	        </if>			
-			<if test="mainPost != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPost.id)">  
-		            <![CDATA[ AND O.mainPostId = #{mainPost.id} ]]>
-		        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPostId)">  
+	            <![CDATA[ AND O.mainPostId = #{mainPostId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
 	            <![CDATA[ AND O.userName = #{userName} ]]>
@@ -202,10 +194,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
 	            <![CDATA[ AND O.password = #{password} ]]>
 	        </if>			
-			<if test="organization != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organization.id)">  
-		            <![CDATA[ AND O.organizationId = #{organization.id} ]]>
-		        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
+	            <![CDATA[ AND O.organizationId = #{organizationId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND O.id <> #{excludeId} ]]>
@@ -241,7 +231,7 @@
 			#{pwdErrCount},
 			#{pwdUpdateDate},
 			#{lastUpdateDate},
-			#{mainPost.id},
+			#{mainPostId},
 			#{userName},
 			#{vcid},
 			#{loginName},
@@ -252,49 +242,7 @@
 			#{historyPwd},
 			#{invalidDate},
 			#{password},
-			#{organization.id}
-		)
-	</insert>
-	
-	<insert id="insertToHis" 
-		parameterType="com.tx.local.operator.model.Operator">
-		INSERT INTO OPER_OPERATOR_HIS
-		(
-			id,
-			pwdErrCount,
-			pwdUpdateDate,
-			lastUpdateDate,
-			mainPostId,
-			userName,
-			vcid,
-			loginName,
-			valid,
-			createDate,
-			locked,
-			examinePwd,
-			historyPwd,
-			invalidDate,
-			password,
-			organizationId
-		)
-		VALUES
-		(
-			#{id},
-			#{pwdErrCount},
-			#{pwdUpdateDate},
-			#{lastUpdateDate},
-			#{mainPost.id},
-			#{userName},
-			#{vcid},
-			#{loginName},
-			#{valid},
-			#{createDate},
-			#{locked},
-			#{examinePwd},
-			#{historyPwd},
-			#{invalidDate},
-			#{password},
-			#{organization.id}
+			#{organizationId}
 		)
 	</insert>
 	
@@ -323,8 +271,8 @@
 			<if test="_parameter.containsKey('lastUpdateDate')">
 	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
-			<if test="_parameter.containsKey('mainPost')">
-	    		mainPostId = #{mainPost.id,javaType=java.lang.String},
+			<if test="_parameter.containsKey('mainPostId')">
+	    		mainPostId = #{mainPostId,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('userName')">
 	    		userName = #{userName,javaType=java.lang.String},
@@ -353,8 +301,8 @@
 			<if test="_parameter.containsKey('password')">
 	    		password = #{password,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('organization')">
-	    		organizationId = #{organization.id,javaType=java.lang.String},
+			<if test="_parameter.containsKey('organizationId')">
+	    		organizationId = #{organizationId,javaType=java.lang.String},
 	    	</if>
 	    </trim>
 	    WHERE

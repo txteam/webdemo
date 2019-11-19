@@ -19,11 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.core.paged.model.PagedList;
 import com.tx.local.operator.model.OperatorRole;
 import com.tx.local.operator.service.OperatorRoleService;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
-import com.tx.component.role.context.RoleTypeRegistry;
-import com.tx.core.paged.model.PagedList;
 
 /**
  * 角色控制层<br/>

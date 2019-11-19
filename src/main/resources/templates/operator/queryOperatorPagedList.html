@@ -43,7 +43,7 @@
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 var orgTree = null;
-var dataGrid = null;
+var datagrid = null;
 $(document).ready(function() {
 	var $editALink = $("#editALink");
 	var $deleteALink = $("#deleteALink");
@@ -74,7 +74,27 @@ $(document).ready(function() {
 		}
 	});
 	
-	orgTree = $('#organizationTree').tree({
+	vcTree = $('#vcTree').tree({
+		url : /*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
+		idField : 'id',
+		parentField : 'parentId',
+		iconField : function(){
+			return 'folder_database';
+		},
+		textField : 'name',
+		border : false,
+		onClick : function(node){
+			$('#virtualCenterName').val(node.name);
+			$('#vcid').val(node.id);
+			
+			$('#grid').datagrid('load',{
+				vcid: $("#vcid").val(),
+				name: $("#name").val(),
+				code: $("#code").val(),
+			});
+		}
+	});
+	orgTree = $('#orgTree').tree({
 		url : /*[[@{/organization/queryList(valid=true)}]]*/_contextPath + 'organization/queryList?valid=true',
 		idField : 'id',
 		parentField : 'parentId',
@@ -85,11 +105,11 @@ $(document).ready(function() {
 		border : false,
 		onClick : function(node){
 			$("#organizationId").val(node.id);
-			$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
+			$('#datagrid').datagrid('load',$('#queryForm').serializeObject());
 		}
 	});
 
-	dataGrid = $('#dataGrid').datagrid({
+	datagrid = $('#datagrid').datagrid({
 		url : /*[[@{/operator/queryPagedList}]]*/_contextPath + 'operator/queryPagedList',
 		fit : true,
 		fitColumns : true,
@@ -178,11 +198,11 @@ $(document).ready(function() {
 			width : 100,
 			formatter : function(value, row, index) {
 				var str = '';
-				if(row.locked && $.canUnlock){
+				if(row.locked){
 					str += $.formatString('<img onclick="unlockFun(\'{0}\',\'{1}\');" src="{2}" title="解锁"/>', row.id, row.loginName, '${contextPath}/style/images/extjs_icons/lock/lock_open.png');
 					str += '&nbsp;';
 				}
-				if(!row.valid && $.canEnable){
+				if(!row.valid){
 					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.loginName, '${contextPath}/style/images/extjs_icons/control/control_play_blue.png');
 					str += '&nbsp;';
 				}
@@ -195,7 +215,7 @@ $(document).ready(function() {
 					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.loginName, '${contextPath}/style/images/extjs_icons/pencil_delete.png');
 					str += '&nbsp;';
 				}
-				if(row.valid && $.canDisable){
+				if(row.valid 	){
 					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.loginName, '${contextPath}/style/images/extjs_icons/control/control_stop_blue.png');
 					str += '&nbsp;';
 				}
@@ -218,8 +238,6 @@ $(document).ready(function() {
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {
 			e.preventDefault();
-			//$(this).datagrid('unselectAll');
-			//$(this).datagrid('select', row.id);
 		},
 		onDblClickRow : function(index, row){
 			editFun(row.id, row.loginName);
@@ -276,7 +294,7 @@ $(document).ready(function() {
 	});
 	
 	$("#queryBtn").click(function(){
-		$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
+		$('#datagrid').datagrid('load',$('#queryForm').serializeObject());
 	});
 });
 
@@ -286,7 +304,7 @@ function deselect(){
 		orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
 	}
 	$("#organizationId").val('');
-	$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
+	$('#datagrid').datagrid('load',$('#queryForm').serializeObject());
 }
 function refreshTree(){
 	var selectedNode = orgTree.tree('getSelected');
@@ -294,7 +312,7 @@ function refreshTree(){
 		orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
 	}
 	$("#organizationId").val('');
-	$('#dataGrid').datagrid('load',$('#queryForm').serializeObject());
+	$('#datagrid').datagrid('load',$('#queryForm').serializeObject());
 }
 /*
  * 打开添加操作员界面
@@ -308,20 +326,21 @@ function addFun() {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var url = /*[[@{/operator/toAdd}]]*/_contextPath + 'operator/toAdd';
 	DialogUtils.openModalDialog(
 		"addOperator",
 		"添加操作员",
-		$.formatString("${contextPath}/operator/toAddOperator.action?organizationId={0}",organizationId),
+		url,
 		450,450,function(){
-			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+			$('#datagrid').datagrid('reload',$('#queryForm').serializeObject());
 	});
 }
-/**
+/*
  * 打开编辑操作员页面
  */
 function editFun(id,name) {
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = datagrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].loginName;
 	}
@@ -337,7 +356,7 @@ function editFun(id,name) {
 		$.formatString("编辑操作员_[{0}]",name),
 		$.formatString("${contextPath}/operator/toUpdateOperator.action?operatorId={0}",id),
 		450,450,function(){
-		dataGrid.datagrid('reload');
+		datagrid.datagrid('reload');
 	});
 }
 /*
@@ -345,7 +364,7 @@ function editFun(id,name) {
  */
 function deleteFun(id,name) {
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = datagrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].loginName;
 	}
@@ -363,19 +382,19 @@ function deleteFun(id,name) {
 	    		});
 	    		//如果确认删除对应职位
 	    		$.post(
-			    		'${contextPath}/operator/deleteOperatorById.action',
+			    		'${contextPath}/operator/deleteById',
 			    		{operatorId:id},
 			    		function(){
 			    			DialogUtils.progress('close');
 			    			DialogUtils.tip("删除操作员成功");
-			    			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+			    			$('#datagrid').datagrid('reload',$('#queryForm').serializeObject());
 			    });
 	    	}
     });
 }
 function disableFun(id,name){
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = datagrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].loginName;
 	}
@@ -394,19 +413,19 @@ function disableFun(id,name){
     		});
     		//如果确认删除对应组织
     		$.post(
-		    		'${contextPath}/operator/disableOperatorById.action',
+    				/*[[@{/operator/disableById}]]*/_contextPath + 'operator/disableById',
 		    		{operatorId:id},
 		    		function(){
 		    			DialogUtils.progress('close');
 		    			DialogUtils.tip("禁用禁用操作员成功");
-		    			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+		    			$('#datagrid').datagrid('reload',$('#queryForm').serializeObject());
 		    });
     	}
     });
 }
 function enableFun(id,name){
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = datagrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].loginName;
 	}
@@ -425,19 +444,19 @@ function enableFun(id,name){
     		});
     		//如果确认删除对应组织
     		$.post(
-		    		'${contextPath}/operator/enableOperatorById.action',
+    				/*[[@{/operator/enableById}]]*/_contextPath + 'operator/enableById',
 		    		{operatorId:id},
 		    		function(){
 		    			DialogUtils.progress('close');
 		    			DialogUtils.tip("启用启用操作员成功");
-		    			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+		    			$('#datagrid').datagrid('reload',$('#queryForm').serializeObject());
 		    });
     	}
     });
 }
 function unlockFun(id,name){
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = datagrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].loginName;
 	}
@@ -456,12 +475,12 @@ function unlockFun(id,name){
     		});
     		//如果确认删除对应组织
     		$.post(
-		    		'${contextPath}/operator/unlockOperatorById.action',
+    				/*[[@{/operator/unlockById}]]*/_contextPath + 'operator/unlockById',
 		    		{operatorId:id},
 		    		function(){
 		    			DialogUtils.progress('close');
 		    			DialogUtils.tip("解锁操作员成功");
-		    			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+		    			$('#datagrid').datagrid('reload',$('#queryForm').serializeObject());
 		    });
     	}
     });
@@ -471,7 +490,7 @@ function unlockFun(id,name){
  */
 function configOperatorAuth(id,name){
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = datagrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].loginName;
 	}
@@ -492,7 +511,7 @@ function configOperatorAuth(id,name){
 }
 function configOperatorPost(id,name){
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = datagrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].loginName;
 	}
@@ -513,7 +532,7 @@ function configOperatorPost(id,name){
 }
 function configOperatorRole(id,name){
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = datagrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].loginName;
 	}
@@ -535,7 +554,7 @@ function configOperatorRole(id,name){
 //重置密码
 function resetPassword(id,name){
 	if (id == undefined) {
-		var rows = dataGrid.datagrid('getSelections');
+		var rows = datagrid.datagrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].userName;
 	}
@@ -560,7 +579,7 @@ function resetPassword(id,name){
 			    			DialogUtils.progress('close');
 			    			//DialogUtils.tip("重置密码成功");
 			    			DialogUtils.tip("重置密码成功");
-			    			$('#dataGrid').datagrid('reload',$('#queryForm').serializeObject());
+			    			$('#datagrid').datagrid('reload',$('#queryForm').serializeObject());
 		    			}else{
 							DialogUtils.progress('close');
 							DialogUtils.tip("重置密码失败");
@@ -572,61 +591,74 @@ function resetPassword(id,name){
 </script>
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'west',title:'组织结构',split:true,
+	<div data-options="region:'west',title:'虚中心',split:true,
 		tools : [
 			{ iconCls : 'clear',handler : function() {deselect();} } ,
 			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
 		]"
 		style="width:230px;">
-		<ul id="organizationTree"></ul>
+		<ul id="vcTree"></ul>
 	</div> 
 		
-	<div data-options="region:'center'" style="padding:5px;background:#eee;">
-		<div class="easyui-layout" data-options="fit : true,border : false">
-			<div data-options="region:'north',title:'查询条件',border:false" 
-				style="height: 110px; overflow: hidden;">
-				<form method="post" id="queryForm" name="queryForm" class="form">
-				<!-- query condition -->
-				<input type="hidden" id="organizationId" name="organizationId" value=""/>
-				<div>
-					<table>
-						<tbody>
-						<tr>
-							<th class="narrow">登录名:</th>
-							<td><input name="loginName" class="text" type="text" value=''/></td>
-							<th class="narrow">姓名:</th>
-							<td><input name="userName" class="text" type="text" value=''/></td>
-						</tr>
-						<tr>
-							<th class="narrow">状态:</th>
-							<td>
-								<select name="state" class="select">
-									<optgroup label=""> 
-										<option value="">--- 不限 ---</option>
-										<option value="正常">--- 正常 ---</option>
-										<option value="锁定">--- 锁定 ---</option>
-										<option value="停用">--- 禁用 ---</option>
-									</optgroup>
-								</select>
-							</td>
-							<th class="narrow">职位</th>
-							<td>
-								<input id="postName" name="postName" class="text" type="text" value='' readonly="readonly">
-								<input id="postId" name="postId" class="text" type="hidden" value=''/>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="4" class="button operRow">
-								<a id="queryBtn" href="#" class="easyui-linkbutton">查询</a>
-							</td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
-				</form>
-			</div>
+	<div data-options="region:'center'">
+		<div class="easyui-layout" data-options="fit:true,border:false">
+			<div data-options="region:'west',title:'组织结构',split:true,
+				tools : [
+					{ iconCls : 'clear',handler : function() {deselect();} } ,
+					{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
+				]"
+				style="width:230px;">
+				<ul id="orgTree"></ul>
+			</div> 
+			
 			<div data-options="region:'center',border:false">
-				<table id="dataGrid"></table>
+				<div class="easyui-layout" data-options="fit:true,border:false" style="padding:5px;background:#eee;">
+					<div data-options="region:'north',title:'查询条件',border:false" 
+						style="height: 130px; overflow: hidden;">
+						<form method="post" id="queryForm" name="queryForm" class="form">
+						<!-- query condition -->
+						<input type="hidden" id="organizationId" name="organizationId" value=""/>
+						<div>
+							<table>
+								<tbody>
+								<tr>
+									<th class="narrow">登录名:</th>
+									<td><input name="loginName" class="text" type="text" value=''/></td>
+									<th class="narrow">姓名:</th>
+									<td><input name="userName" class="text" type="text" value=''/></td>
+								</tr>
+								<tr>
+									<th class="narrow">状态:</th>
+									<td>
+										<select name="state" class="select">
+											<optgroup label=""> 
+												<option value="">--- 不限 ---</option>
+												<option value="正常">--- 正常 ---</option>
+												<option value="锁定">--- 锁定 ---</option>
+												<option value="停用">--- 禁用 ---</option>
+											</optgroup>
+										</select>
+									</td>
+									<th class="narrow">职位</th>
+									<td>
+										<input id="postName" name="postName" class="text" type="text" value='' readonly="readonly">
+										<input id="postId" name="postId" class="text" type="hidden" value=''/>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4" class="button operRow">
+										<a id="queryBtn" href="#" class="easyui-linkbutton">查询</a>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						</form>
+					</div>
+					<div data-options="region:'center',border:false">
+						<table id="datagrid"></table>
+					</div>
+				</div>
 			</div>
 		</div>
 		
@@ -641,7 +673,7 @@ function resetPassword(id,name){
 			<a id="configOperatorPostALink" onclick="configOperatorPost();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'group_group'">配置人员职位</a>
 			<a id="configOperatorRoleALink" onclick="configOperatorRole();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置人员角色</a>
 			<a id="resetPasswordALink" onclick="resetPassword();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">重置密码</a>
-			<a onclick="dataGrid.datagrid('reload');" href="javascript:void(0);" 
+			<a onclick="datagrid.datagrid('reload');" href="javascript:void(0);" 
 				class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 		</div>
 	

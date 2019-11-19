@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.tx.component.auth.model.Auth;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRole;
-import com.tx.local.operator.model.OperatorPost;
+import com.tx.local.organization.model.Post;
 
 /**
  * 操作人员用户详情<br/>
@@ -35,10 +35,10 @@ public class OperatorUserDetails implements UserDetails {
     private Operator operator;
     
     /** 主要职位 */
-    private OperatorPost mainPost;
+    private Post mainPost;
     
     /** 职位 */
-    private List<OperatorPost> posts;
+    private List<Post> posts;
     
     /** 角色 */
     private List<OperatorRole> roles;
@@ -149,81 +149,82 @@ public class OperatorUserDetails implements UserDetails {
         String id = this.operator.getId();
         return id;
     }
-
+    
     /**
      * @return 返回 operator
      */
     public Operator getOperator() {
         return operator;
     }
-
+    
     /**
      * @param 对operator进行赋值
      */
     public void setOperator(Operator operator) {
         this.operator = operator;
     }
-
+    
     /**
      * @return 返回 mainPost
      */
-    public OperatorPost getMainPost() {
+    public Post getMainPost() {
         return mainPost;
     }
-
+    
     /**
      * @param 对mainPost进行赋值
      */
-    public void setMainPost(OperatorPost mainPost) {
+    public void setMainPost(Post mainPost) {
         this.mainPost = mainPost;
     }
-
+    
     /**
      * @return 返回 posts
      */
-    public List<OperatorPost> getPosts() {
+    public List<Post> getPosts() {
         return posts;
     }
-
+    
     /**
      * @param 对posts进行赋值
      */
-    public void setPosts(List<OperatorPost> posts) {
+    public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
-
+    
     /**
      * @return 返回 roles
      */
     public List<OperatorRole> getRoles() {
         return roles;
     }
-
+    
     /**
      * @param 对roles进行赋值
      */
     public void setRoles(List<OperatorRole> roles) {
         this.roles = roles;
     }
-
+    
     /**
      * @return 返回 auths
      */
     public List<Auth> getAuths() {
         return auths;
     }
-
+    
     /**
      * @param 对auths进行赋值
      */
     public void setAuths(List<Auth> auths) {
         this.auths = auths;
     }
-
+    
     /**
      * @param 对authorities进行赋值
      */
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+    public void setAuthorities(
+            Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;
     }
 }

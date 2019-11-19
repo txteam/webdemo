@@ -171,19 +171,6 @@ $(document).ready(function() {
     $.bindGE = $.bindge = $.bindGlobalEvent;
     $.unbindGE = $.unbindge = $.unbindGlobalEvent;
     $.oneGE = $.onege = $.oneGlobalEvent;
-    //页面加载完后的逻辑处理
-	//function test(a,b,c){
-	//	alert(a + " : " + b + " : " + c);
-	//}
-	//var fun = function a(){	
-	//}
-	//test.call(fun,1,2,3);
-	//test.apply(fun,[1,2,3]);
-	//function test2(a,b,c){
-	//	test.apply(fun,arguments);
-	//}
-	//test2(1,2,3);
-	//test2(1,2);
 })(jQuery); 
 
 
@@ -295,7 +282,7 @@ if (browser.userAgent.indexOf('MSIE') > -1) {
             text:null,
             formatter:null,
             state: $.ObjectUtils.isEmpty(data.children) ? null : 'closed',//open/closed
-            attributes: data,
+            object: data,
             iconCls: null,
         },data);
         if(data.children && !$.ObjectUtils.isEmpty(data.children)){
@@ -1159,7 +1146,7 @@ $.fn.tree.defaults.loadFilter = function(data) {
                 if (!tmpMap[data[i][parentField]]['children'])
                     tmpMap[data[i][parentField]]['children'] = [];
                 if(!notIncludeTarget){
-                	data[i]['attributes'] = data[i];
+                	data[i]['object'] = data[i];
                 } 
                 data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
                 data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
@@ -1167,7 +1154,7 @@ $.fn.tree.defaults.loadFilter = function(data) {
                 tmpMap[data[i][parentField]]['checked'] = false;
             } else {
             	if(!notIncludeTarget){
-            		data[i]['attributes'] = data[i];
+            		data[i]['object'] = data[i];
                 }
                 data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
                 data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
@@ -1185,7 +1172,7 @@ $.fn.tree.defaults.loadFilter = function(data) {
                 return ;
             }
             if(!notIncludeTarget){
-            	item['attributes'] = item;
+            	item['object'] = item;
             }
             item['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
             item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
