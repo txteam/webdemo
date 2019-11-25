@@ -24,7 +24,7 @@ import com.tx.local.organization.model.Organization;
 import com.tx.local.organization.model.Post;
 import com.tx.local.organization.service.OrganizationService;
 import com.tx.local.organization.service.PostService;
-import com.tx.local.springmvc.argumentresolver.VcidRequestParam;
+import com.tx.local.security.util.WebContextUtils;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
 import com.tx.core.paged.model.PagedList;
 
@@ -63,6 +63,7 @@ public class PostController {
      */
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
+        response.put("vcid", WebContextUtils.getVcidBySecurity());
         
         return "organization/queryPostList";
     }
@@ -77,19 +78,25 @@ public class PostController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAdd")
-    public String toAdd(@VcidRequestParam String vcid,
+    public String toAdd(
             @RequestParam(value = "parentId", required = false) String parentId,
             @RequestParam(value = "organizationId", required = false) String organizationId,
             ModelMap response) {
         Post op = new Post();
-        op.setVcid(vcid);
-        op.setOrganizationId(organizationId);
-        op.setParentId(parentId);
-        response.put("post", op);
         
-        if (!StringUtils.isEmpty(parentId)) {
-            response.put("parent", this.postService.findById(parentId));
+        op.setParentId(parentId);
+        if (!StringUtils.isEmpty(organizationId)) {
+            Organization org = this.organizationService
+                    .findById(organizationId);
+            op.setOrganizationId(organizationId);
+            op.setVcid(org.getVcid());
+            response.put("organization", org);
         }
+        if (!StringUtils.isEmpty(parentId)) {
+            Post parent = this.postService.findById(parentId);
+            response.put("parent", parent);
+        }
+        response.put("post", op);
         
         return "organization/addPost";
     }
@@ -122,11 +129,11 @@ public class PostController {
      */
     @ResponseBody
     @RequestMapping("/queryList")
-    public List<Post> queryList(@VcidRequestParam String vcid,
+    public List<Post> queryList(
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", vcid);
+        params.put("vcid", WebContextUtils.getVcidBySecurity());
         
         List<Post> resList = this.postService.queryList(valid, params);
         
@@ -144,13 +151,13 @@ public class PostController {
      */
     @ResponseBody
     @RequestMapping("/queryPagedList")
-    public PagedList<Post> queryPagedList(@VcidRequestParam String vcid,
+    public PagedList<Post> queryPagedList(
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", vcid);
+        params.put("vcid", WebContextUtils.getVcidBySecurity());
         
         PagedList<Post> resPagedList = this.postService.queryPagedList(valid,
                 params,
@@ -337,12 +344,12 @@ public class PostController {
      */
     @ResponseBody
     @RequestMapping("/queryChildren")
-    public List<Post> queryChildren(@VcidRequestParam String vcid,
+    public List<Post> queryChildren(
             @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", vcid);
+        params.put("vcid", WebContextUtils.getVcidBySecurity());
         
         List<Post> resList = this.postService.queryChildrenByParentId(parentId,
                 valid,
@@ -365,12 +372,12 @@ public class PostController {
      */
     @ResponseBody
     @RequestMapping("/queryDescendants")
-    public List<Post> queryDescendants(@VcidRequestParam String vcid,
+    public List<Post> queryDescendants(
             @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", vcid);
+        params.put("vcid", WebContextUtils.getVcidBySecurity());
         
         List<Post> resList = this.postService
                 .queryDescendantsByParentId(parentId, valid, params);

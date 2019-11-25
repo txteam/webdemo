@@ -20,8 +20,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.tx.local.springmvc.argumentresolver.VcidArgumentResolver;
-
 /**
  * web配置器<br/>
  * <功能详细描述>
@@ -64,7 +62,7 @@ public class SpringMVCConfiguration
             List<HandlerMethodArgumentResolver> resolvers) {
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
         
-        resolvers.add(new VcidArgumentResolver());
+        //resolvers.add(new VcidArgumentResolver());
     }
     
     /**
@@ -108,7 +106,7 @@ public class SpringMVCConfiguration
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        
+        //registry.addInterceptor(new VirtualCenterInjectInterceptor());
     }
     
     /**

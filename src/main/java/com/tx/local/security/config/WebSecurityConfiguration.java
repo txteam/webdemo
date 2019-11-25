@@ -141,14 +141,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //http.formLogin().loginPage(loginPage)
         //注册登录入口
         registerAuthenticationEntryPoint(http);
+        
         //添加登录过滤器
         http.addFilterBefore(this.operatorAuthenticationProcessingFilter,
                 UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(this.clientAuthenticationProcessingFilter,
                 UsernamePasswordAuthenticationFilter.class);
+        
         //.usernameParameter("username").passwordParameter("password").loginPage("/login")
         //.loginProcessingUrl(this.loginProcessingUrl).permitAll().successHandler(successHandler).failureHandler(failureHandler);
-        
         //http.authorizeRequests().antMatchers("")
         //.hasIpAddress(ipaddressExpression)
         //.hasRole(role)

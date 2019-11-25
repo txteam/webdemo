@@ -60,6 +60,11 @@ public class OperatorRole implements Serializable, Role {
     /** 备注 */
     private String remark;
     
+    /** <默认构造函数> */
+    public OperatorRole() {
+        super();
+    }
+    
     /**
      * @return 返回 id
      */
@@ -152,7 +157,7 @@ public class OperatorRole implements Serializable, Role {
     public String getRoleTypeId() {
         return RoleTypeEnum.ROLE_TYPE_OPERATOR.getId();
     }
-
+    
     /**
      * @return
      */

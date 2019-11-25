@@ -499,7 +499,6 @@ public class OrganizationService {
         //updateRowMap.put("vcid", organization.getVcid());
         //updateRowMap.put("code", organization.getCode());
         //updateRowMap.put("type", organization.getType());
-        
         updateRowMap.put("name", organization.getName());
         updateRowMap.put("fullName",
                 generateFullName(organization.getParentId(),
@@ -511,9 +510,8 @@ public class OrganizationService {
         updateRowMap.put("address", organization.getAddress());
         updateRowMap.put("fullAddress", organization.getFullAddress());
         
-        //updateRowMap.put("valid", organization.isValid());
         updateRowMap.put("lastUpdateDate", new Date());
-        
+        //updateRowMap.put("valid", organization.isValid());
         //updateRowMap.put("company", organization.getCompany());
         //updateRowMap.put("department", organization.getDepartment());
         

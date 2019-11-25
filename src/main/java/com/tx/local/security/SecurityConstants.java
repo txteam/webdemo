@@ -17,6 +17,8 @@ package com.tx.local.security;
  */
 public interface SecurityConstants {
     
+    
+    
     /** 当前登录用户名 */
     String COOKIE_CURRENT_USERNAME = "currentUsername";
     

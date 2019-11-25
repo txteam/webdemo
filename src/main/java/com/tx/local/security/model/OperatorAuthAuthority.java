@@ -8,8 +8,8 @@ package com.tx.local.security.model;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.tx.component.auth.model.Auth;
 import com.tx.core.exceptions.util.AssertUtils;
-import com.tx.local.operator.model.OperatorRole;
 
 /**
  * 操作人员角色权限<br/>
@@ -26,7 +26,7 @@ public class OperatorAuthAuthority implements GrantedAuthority {
     private static final long serialVersionUID = -7769850368661901465L;
     
     /** 操作人员角色 */
-    private OperatorRole role;
+    private Auth auth;
     
     /** <默认构造函数> */
     public OperatorAuthAuthority() {
@@ -34,9 +34,9 @@ public class OperatorAuthAuthority implements GrantedAuthority {
     }
     
     /** <默认构造函数> */
-    public OperatorAuthAuthority(OperatorRole role) {
+    public OperatorAuthAuthority(Auth auth) {
         super();
-        this.role = role;
+        this.auth = auth;
     }
     
     /**
@@ -44,24 +44,24 @@ public class OperatorAuthAuthority implements GrantedAuthority {
      */
     @Override
     public String getAuthority() {
-        AssertUtils.notNull(this.role, "role is null.");
-        AssertUtils.notEmpty(this.role.getId(), "role.id is empty.");
+        AssertUtils.notNull(this.auth, "auth is null.");
+        AssertUtils.notEmpty(this.auth.getId(), "auth.id is empty.");
         
-        String authority = this.role.getId();
+        String authority = this.auth.getId();
         return authority;
     }
-    
+
     /**
-     * @return 返回 role
+     * @return 返回 auth
      */
-    public OperatorRole getRole() {
-        return role;
+    public Auth getAuth() {
+        return auth;
     }
-    
+
     /**
-     * @param 对role进行赋值
+     * @param 对auth进行赋值
      */
-    public void setRole(OperatorRole role) {
-        this.role = role;
+    public void setAuth(Auth auth) {
+        this.auth = auth;
     }
 }

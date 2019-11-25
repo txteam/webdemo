@@ -16,19 +16,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.component.security.context.SecurityContext;
 import com.tx.core.paged.model.PagedList;
-import com.tx.local.operator.model.OperatorRoleEnum;
 import com.tx.local.organization.model.Organization;
 import com.tx.local.organization.model.OrganizationTypeEnum;
 import com.tx.local.organization.service.OrganizationService;
 import com.tx.local.security.util.WebContextUtils;
-import com.tx.local.springmvc.argumentresolver.VcidRequestParam;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
 import com.tx.local.vitualcenter.model.VirtualCenter;
 
@@ -63,11 +59,8 @@ public class OrganizationController {
      */
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
-        response.put("super_admin",
-                SecurityContext.getContext()
-                        .hasRole(OperatorRoleEnum.SUPER_ADMIN.getId()));
-        
         response.put("types", OrganizationTypeEnum.values());
+        response.put("vcid", WebContextUtils.getVcidBySecurity());
         
         return "/organization/queryOrganizationList";
     }
@@ -82,19 +75,20 @@ public class OrganizationController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAdd")
-    public String toAdd(@VcidRequestParam String vcid,
+    public String toAdd(
             @RequestParam(value = "parentId", required = false) String parentId,
             ModelMap response) {
         Organization org = new Organization();
         
         response.put("types", OrganizationTypeEnum.values());
-        
         response.put("virtualCenterList",
                 this.virtualCenterFacade.queryList(true, null));
         if (!StringUtils.isEmpty(parentId)) {
             Organization parent = this.organizationService.findById(parentId);
             response.put("parent", parent);
             org.setVcid(parent.getVcid());
+        } else {
+            org.setVcid(WebContextUtils.getVcidBySecurity());
         }
         response.put("organization", org);
         
@@ -114,8 +108,8 @@ public class OrganizationController {
     public String toUpdate(@RequestParam("id") String id, ModelMap response) {
         Organization organization = this.organizationService.findById(id);
         response.put("organization", organization);
-        
         response.put("types", OrganizationTypeEnum.values());
+        response.put("vcid", WebContextUtils.getVcidBySecurity());
         
         if (!StringUtils.isEmpty(organization.getParentId())) {
             Organization parent = this.organizationService
@@ -142,9 +136,11 @@ public class OrganizationController {
      */
     @RequestMapping("/toSelect")
     public String toSelect(
-            @RequestParam(value = "eventName", required = false) String eventName,
+            @RequestParam(value = "eventName", required = true) String eventName,
             ModelMap responseMap) {
+        responseMap.put("vcid", WebContextUtils.getVcidBySecurity());
         responseMap.put("eventName", eventName);
+        
         return "/organization/selectOrganization";
     }
     
@@ -159,15 +155,14 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping("/queryList")
-    public List<Organization> queryList(@VcidRequestParam String vcid,
+    public List<Organization> queryList(
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", request.getFirst("vcid"));
+        params.put("vcid", WebContextUtils.getVcidBySecurity());
         
         List<Organization> resList = this.organizationService.queryList(valid,
                 params);
-        
         return resList;
     }
     
@@ -182,12 +177,13 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping("/queryPagedList")
-    public PagedList<Organization> queryPagedList(@VcidRequestParam String vcid,
+    public PagedList<Organization> queryPagedList(
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
+        params.put("vcid", WebContextUtils.getVcidBySecurity());
         
         PagedList<Organization> resPagedList = this.organizationService
                 .queryPagedList(valid, params, pageIndex, pageSize);
@@ -206,6 +202,9 @@ public class OrganizationController {
     @ResponseBody
     @RequestMapping("/add")
     public boolean add(Organization organization) {
+        if (StringUtils.isEmpty(organization.getVcid())) {
+            organization.setVcid(WebContextUtils.getVcidBySecurity());
+        }
         this.organizationService.insert(organization);
         return true;
     }
@@ -223,10 +222,6 @@ public class OrganizationController {
     @ResponseBody
     @RequestMapping("/update")
     public boolean update(Organization organization) {
-        if (!SecurityContext.getContext()
-                .hasRole(OperatorRoleEnum.SUPER_ADMIN.getId())) {
-            organization.setVcid(WebContextUtils.getCurrentVcid());
-        }
         boolean flag = this.organizationService.updateById(organization);
         return flag;
     }
@@ -372,12 +367,12 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping("/queryChildren")
-    public List<Organization> queryChildren(@VcidRequestParam String vcid,
-            @PathVariable(value = "parentId", required = true) String parentId,
+    public List<Organization> queryChildren(
+            @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", vcid);
+        params.put("vcid", WebContextUtils.getVcidBySecurity());
         
         List<Organization> resList = this.organizationService
                 .queryChildrenByParentId(parentId, valid, params);
@@ -399,12 +394,12 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping("/queryDescendants")
-    public List<Organization> queryDescendants(@VcidRequestParam String vcid,
-            @PathVariable(value = "parentId", required = true) String parentId,
+    public List<Organization> queryDescendants(
+            @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", vcid);
+        params.put("vcid", WebContextUtils.getVcidBySecurity());
         
         List<Organization> resList = this.organizationService
                 .queryDescendantsByParentId(parentId, valid, params);

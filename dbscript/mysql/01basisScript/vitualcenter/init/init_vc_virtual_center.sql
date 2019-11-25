@@ -1,6 +1,0 @@
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('1000000000', 'JT', '集团公司', '', '2019-11-10 11:43:42.580000', '2019-11-10 11:43:42.580000', '\0', NULL, NULL);
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('1100000000', 'JTZGS1', '集团子公司1', '', '2019-11-10 11:43:42.754000', '2019-11-10 11:43:43.111000', '\0', '1000000000', NULL);
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('1200000000', 'JTZGS2', '集团子公司2', '', '2019-11-10 11:43:42.841000', '2019-11-10 11:43:43.246000', '\0', '1000000000', NULL);
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('5000000001', 'CSGS1', '测试公司1', '', '2019-11-10 11:43:42.931000', '2019-11-10 11:43:42.931000', '\0', NULL, NULL);
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('5000000002', 'CSGS2', '测试公司2', '', '2019-11-10 11:43:43.021000', '2019-11-10 11:43:43.021000', '\0', NULL, NULL);
-commit;

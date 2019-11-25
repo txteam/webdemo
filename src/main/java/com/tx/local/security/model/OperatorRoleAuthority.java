@@ -6,10 +6,11 @@
  */
 package com.tx.local.security.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 
+import com.tx.component.role.model.Role;
 import com.tx.core.exceptions.util.AssertUtils;
-import com.tx.local.operator.model.OperatorRole;
 
 /**
  * 操作人员角色权限<br/>
@@ -26,7 +27,7 @@ public class OperatorRoleAuthority implements GrantedAuthority {
     private static final long serialVersionUID = -7769850368661901465L;
     
     /** 操作人员角色 */
-    private OperatorRole role;
+    private Role role;
     
     /** <默认构造函数> */
     public OperatorRoleAuthority() {
@@ -34,7 +35,7 @@ public class OperatorRoleAuthority implements GrantedAuthority {
     }
     
     /** <默认构造函数> */
-    public OperatorRoleAuthority(OperatorRole role) {
+    public OperatorRoleAuthority(Role role) {
         super();
         this.role = role;
     }
@@ -48,20 +49,25 @@ public class OperatorRoleAuthority implements GrantedAuthority {
         AssertUtils.notEmpty(this.role.getId(), "role.id is empty.");
         
         String authority = this.role.getId();
+        if (StringUtils.startsWithIgnoreCase(authority, "ROLE_")) {
+            authority = "ROLE_" + authority.substring(5);
+        } else {
+            authority = "ROLE_" + authority;
+        }
         return authority;
     }
     
     /**
      * @return 返回 role
      */
-    public OperatorRole getRole() {
+    public Role getRole() {
         return role;
     }
     
     /**
      * @param 对role进行赋值
      */
-    public void setRole(OperatorRole role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

@@ -6,19 +6,18 @@
  */
 package com.tx.local.security.service;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.tx.local.operator.model.Operator;
+import com.tx.local.operator.model.OperatorRole;
 import com.tx.local.operator.model.OperatorRoleEnum;
+import com.tx.local.organization.model.Organization;
 import com.tx.local.security.model.OperatorUserDetails;
-
 
 /**
  * 操作人员用户登陆业务层<br/>
@@ -47,20 +46,35 @@ public class OperatorUserDetailsService implements UserDetailsService {
     }
     
     private UserDetails mockUser() {
+        String jtVcid = "1000000000";
+        
         Operator user = new Operator();
+        user.setVcid(jtVcid);
         user.setLoginName("admin");
+        user.setUserName("adminUserName");
+        user.setValid(true);
+        user.setLocked(false);
+        
         //System.out.println((new Md5PasswordEncoder()).encodePassword("123456", ""));
         user.setPassword("E10ADC3949BA59ABBE56E057F20F883E");
         user.setId("1");
         user.setValid(true);
         user.setLocked(false);
         
-        Collection<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(OperatorRoleEnum.SUPER_ADMIN.getId()));//用户所拥有的角色信息
-        authorities.add(new SimpleGrantedAuthority(OperatorRoleEnum.JT_SUPER_ADMIN.getId()));//用户所拥有的角色信息
-        //AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
+        List<OperatorRole> roles = new ArrayList<OperatorRole>();
+        OperatorRole role1 = new OperatorRole();
+        role1.setId(OperatorRoleEnum.SUPER_ADMIN.getId());
+        role1.setName(OperatorRoleEnum.SUPER_ADMIN.getName());
+        roles.add(role1);
+        OperatorRole role2 = new OperatorRole();
+        role2.setId(OperatorRoleEnum.SYSTEM_ADMIN.getId());
+        role2.setName(OperatorRoleEnum.SYSTEM_ADMIN.getName());
+        roles.add(role2);
         
-        OperatorUserDetails userDetail = new OperatorUserDetails(user, authorities);
+        OperatorUserDetails userDetail = new OperatorUserDetails(user, roles,
+                null);
+        Organization org = new Organization();
+        userDetail.setOrganization(org);
         return userDetail;
     }
 }

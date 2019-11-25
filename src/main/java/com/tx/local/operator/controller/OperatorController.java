@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.core.paged.model.PagedList;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.service.OperatorService;
-import com.tx.local.springmvc.argumentresolver.VcidRequestParam;
-import com.tx.core.paged.model.PagedList;
 
 /**
  * 操作人员控制层<br/>
@@ -65,7 +64,7 @@ public class OperatorController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAdd")
-    public String toAdd(@VcidRequestParam String vcid,
+    public String toAdd(@RequestParam(value = "vcid", required = false) String vcid,
             @RequestParam(value = "organizationId", required = false) String organizationId,
             ModelMap response) {
         response.put("operator", new Operator());
@@ -101,7 +100,7 @@ public class OperatorController {
      */
     @ResponseBody
     @RequestMapping("/queryList")
-    public List<Operator> queryList(@VcidRequestParam String vcid,
+    public List<Operator> queryList(@RequestParam(value = "vcid", required = false) String vcid,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
@@ -123,7 +122,7 @@ public class OperatorController {
      */
     @ResponseBody
     @RequestMapping("/queryPagedList")
-    public PagedList<Operator> queryPagedList(@VcidRequestParam String vcid,
+    public PagedList<Operator> queryPagedList(@RequestParam(value = "vcid", required = false) String vcid,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,

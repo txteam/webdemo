@@ -6,22 +6,25 @@
  */
 package com.tx.local.security.util;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.tx.component.security.context.SecurityContext;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.operator.model.Operator;
+import com.tx.local.operator.model.OperatorRoleEnum;
 import com.tx.local.organization.model.Organization;
-import com.tx.local.organization.model.Post;
+import com.tx.local.security.model.OperatorUserDetails;
 
 /**
- * <功能简述>
+ * WebContext容器工具类<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -31,20 +34,90 @@ import com.tx.local.organization.model.Post;
  */
 public class WebContextUtils {
     
-    /** 当前登录人员在session中的key */
-    public static final String SESSION_CURRENT_OPERATOR = "operator";
+    /**
+     * 获取请求中的虚中心id<br/>
+     * <功能详细描述>
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static String getVcidBySecurity() {
+        Authentication authentication = getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+        OperatorUserDetails detail = getUserDetails();
+        if (detail == null) {
+            return null;
+        }
+        String vcid = detail.getVcid();
+        if (isSuperAdmin()) {
+            HttpServletRequest request = getRequest();
+            if (request == null) {
+                return vcid;
+            }
+            String requestVcid = request.getParameter("vcid");
+            if (StringUtils.isNotEmpty(requestVcid)) {
+                vcid = requestVcid;
+            }
+        }
+        return vcid;
+    }
     
-    /** 当前登录人员所在组织在 session中的key */
-    public static final String SESSION_CURRENT_ORGANIZATION = "organization";
+    /**
+     * 是否为超级管理员<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static boolean isSuperAdmin() {
+        boolean hasSuperAdminRole = SecurityContext.getContext()
+                .hasRole(OperatorRoleEnum.SUPER_ADMIN.getId());
+        return hasSuperAdminRole;
+    }
     
-    /** 当前登录人员在session中的职位列表 */
-    public static final String SESSION_CURRENT_POSTLIST = "postList";
+    /**
+     * 获取安全框架认证信息<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return Authentication [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static Authentication getAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        return authentication;
+    }
     
-    /** 获取当前登录人员的职位 */
-    public static final String SESSION_CURRENT_POST = "post";
-    
-    /** 获取当前虚中心 */
-    public static final String SESSION_CURRENT_VCID = "vcid";
+    /**
+     * 获取OperatorUserDetails实例<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return OperatorUserDetails [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static OperatorUserDetails getUserDetails() {
+        Authentication authentication = getAuthentication();
+        if (authentication != null && authentication.getPrincipal() != null
+                && authentication
+                        .getPrincipal() instanceof OperatorUserDetails) {
+            OperatorUserDetails details = (OperatorUserDetails) authentication
+                    .getPrincipal();
+            return details;
+        } else {
+            return null;
+        }
+    }
     
     /**
      * 获取当前登录人员的虚中心id如果不存在则返回null
@@ -55,13 +128,13 @@ public class WebContextUtils {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public static String getCurrentVcid() {
-        HttpSession session = getSession(true);
-        if (null == session) {
+    public static String getVcid() {
+        OperatorUserDetails details = getUserDetails();
+        if (null == details) {
             return null;
         }
         
-        String vcid = (String) session.getAttribute(SESSION_CURRENT_VCID);
+        String vcid = details.getVcid();
         return vcid;
     }
     
@@ -74,14 +147,14 @@ public class WebContextUtils {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public static Organization getCurrentOrganization() {
-        HttpSession session = getSession(true);
-        if (null == session) {
+    public static Organization getOrganization() {
+        OperatorUserDetails details = getUserDetails();
+        if (null == details) {
             return null;
         }
-        Organization currentOrganization = (Organization) session
-                .getAttribute(SESSION_CURRENT_ORGANIZATION);
-        return currentOrganization;
+        
+        Organization organization = details.getOrganization();
+        return organization;
     }
     
     /**
@@ -93,8 +166,8 @@ public class WebContextUtils {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public static String getCurrentOrganizationId() {
-        Organization organization = getCurrentOrganization();
+    public static String getOrganizationId() {
+        Organization organization = getOrganization();
         String organizationId = organization == null ? null
                 : organization.getId();
         return organizationId;
@@ -109,14 +182,14 @@ public class WebContextUtils {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public static Operator getCurrentOperator() {
-        HttpSession session = getSession(true);
-        if (null == session) {
+    public static Operator getOperator() {
+        OperatorUserDetails details = getUserDetails();
+        if (null == details) {
             return null;
         }
-        Operator currentOperator = (Operator) session
-                .getAttribute(SESSION_CURRENT_OPERATOR);
-        return currentOperator;
+        
+        Operator operator = details.getOperator();
+        return operator;
     }
     
     /**
@@ -128,110 +201,27 @@ public class WebContextUtils {
       * @exception throws [异常类型] [异常说明]
       * @see [类、类#方法、类#成员]
      */
-    public static String getCurrentOperatorId() {
-        Operator currentOperator = getCurrentOperator();
-        String currentOperatorId = currentOperator == null ? null
-                : currentOperator.getId();
-        return currentOperatorId;
+    public static String getOperatorId() {
+        Operator operator = getOperator();
+        String operatorId = operator == null ? null : operator.getId();
+        return operatorId;
     }
     
     /**
-     * 将当前人员的主要职位放入会话中<br/>
-     *     可能为空<br/>
+     * 将当前登录人员放入当前会话中
      *<功能详细描述>
-     * @param organization [参数说明]
+     * @param operator [参数说明]
      * 
      * @return void [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
-    */
-    public static void putMainPostInSession(Post post) {
-        HttpSession session = getSession(true);
-        
-        session.setAttribute(SESSION_CURRENT_POST, post);
-    }
-    
-    /**
-     * 放入会话中的职位列表允许为空<br/>
-     *  
-     *<功能详细描述>
-     * @param organization [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-    */
-    public static void putPostListInSession(List<Post> postList) {
-        HttpSession session = getSession(true);
-        
-        session.setAttribute(SESSION_CURRENT_POSTLIST, postList);
-    }
-    
-    /**
-      * 放入会话中的组织现不允许为空<br/>
-      *<功能详细描述>
-      * @param organization [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
      */
-    public static void putOganizationInSession(Organization organization) {
-        AssertUtils.notNull(organization, "organization is null");
+    public static void putInSession(String attributeName, Object object) {
+        AssertUtils.notEmpty(attributeName, "attributeName is null");
+        AssertUtils.notNull(object, "object is null");
         
         HttpSession session = getSession(true);
-        session.setAttribute(SESSION_CURRENT_ORGANIZATION, organization);
-        session.setAttribute(SESSION_CURRENT_VCID, organization.getVcid());
-    }
-    
-    /**
-      * 将当前登录人员放入当前会话中
-      *<功能详细描述>
-      * @param operator [参数说明]
-      * 
-      * @return void [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
-     */
-    public static void putOperatorInSession(Operator operator) {
-        AssertUtils.notNull(operator, "operator is null");
-        
-        HttpSession session = getSession(true);
-        session.setAttribute(SESSION_CURRENT_OPERATOR, operator);
-    }
-    
-    /**
-     * 获取当前请求RequestAttributes
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return HttpServletRequest [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public static RequestAttributes getRequestAttributes() {
-        RequestAttributes requestAttributes = RequestContextHolder
-                .getRequestAttributes();
-        
-        return requestAttributes;
-    }
-    
-    /**
-     * 获取当前请求request<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return HttpServletRequest [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public static HttpServletRequest getRequest() {
-        if (getRequestAttributes() != null) {
-            return ((ServletRequestAttributes) RequestContextHolder
-                    .getRequestAttributes()).getRequest();
-        } else {
-            return null;
-        }
+        session.setAttribute(attributeName, object);
     }
     
     /**
@@ -262,5 +252,39 @@ public class WebContextUtils {
             return null;
         }
         return getRequest().getSession(flag);
+    }
+    
+    /**
+     * 获取当前请求request<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return HttpServletRequest [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static HttpServletRequest getRequest() {
+        RequestAttributes requestAttributes = getRequestAttributes();
+        if (requestAttributes != null) {
+            return ((ServletRequestAttributes) requestAttributes).getRequest();
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * 获取当前请求RequestAttributes
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return HttpServletRequest [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static RequestAttributes getRequestAttributes() {
+        RequestAttributes requestAttributes = RequestContextHolder
+                .getRequestAttributes();
+        
+        return requestAttributes;
     }
 }

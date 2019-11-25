@@ -6,6 +6,7 @@
  */
 package com.tx.local.security.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.tx.component.auth.model.Auth;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRole;
+import com.tx.local.organization.model.Organization;
 import com.tx.local.organization.model.Post;
 
 /**
@@ -34,17 +36,20 @@ public class OperatorUserDetails implements UserDetails {
     /** 操作人员 */
     private Operator operator;
     
+    /** 所属组织 */
+    private Organization organization;
+    
     /** 主要职位 */
     private Post mainPost;
     
     /** 职位 */
     private List<Post> posts;
     
-    /** 角色 */
-    private List<OperatorRole> roles;
-    
     /** 权限项 */
     private List<Auth> auths;
+    
+    /** 角色 */
+    private List<OperatorRole> roles;
     
     /** 权限 */
     private Collection<? extends GrantedAuthority> authorities;
@@ -55,17 +60,49 @@ public class OperatorUserDetails implements UserDetails {
     }
     
     /** <默认构造函数> */
-    public OperatorUserDetails(Operator operator) {
+    public OperatorUserDetails(Operator operator, List<OperatorRole> roleList,
+            List<Auth> authList) {
         super();
         this.operator = operator;
+        
+        this.roles = roleList == null ? new ArrayList<OperatorRole>()
+                : roleList;
+        this.auths = authList == null ? new ArrayList<Auth>() : authList;
+        initAuthority();
     }
     
-    /** <默认构造函数> */
-    public OperatorUserDetails(Operator operator,
-            Collection<? extends GrantedAuthority> authorities) {
-        super();
-        this.operator = operator;
-        this.authorities = authorities;
+    /**
+     * 初始化clientDetail权限<br/>
+     * <功能详细描述> [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private void initAuthority() {
+        List<GrantedAuthority> newAuthorites = new ArrayList<>();
+        for (OperatorRole roleTemp : this.roles) {
+            newAuthorites.add(new OperatorRoleAuthority(roleTemp));
+        }
+        for (Auth authTemp : this.auths) {
+            newAuthorites.add(new OperatorAuthAuthority(authTemp));
+        }
+    }
+    
+    /**
+     * @param 对roles进行赋值
+     */
+    public void setRoles(List<OperatorRole> roles) {
+        this.roles = roles;
+        initAuthority();
+    }
+    
+    /**
+     * @param 对auths进行赋值
+     */
+    public void setAuths(List<Auth> auths) {
+        this.auths = auths;
+        initAuthority();
     }
     
     /**
@@ -106,15 +143,16 @@ public class OperatorUserDetails implements UserDetails {
      * @return
      */
     @Override
-    public String getUsername() {
-        return this.operator.getLoginName();
+    public boolean isEnabled() {
+        return this.operator != null && this.operator.isValid();
     }
     
     /**
+     * 授权是否过期<br/>
      * @return
      */
     @Override
-    public boolean isEnabled() {
+    public boolean isCredentialsNonExpired() {
         return this.operator != null && this.operator.isValid();
     }
     
@@ -122,8 +160,8 @@ public class OperatorUserDetails implements UserDetails {
      * @return
      */
     @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
+    public String getUsername() {
+        return this.operator.getLoginName();
     }
     
     /**
@@ -158,10 +196,17 @@ public class OperatorUserDetails implements UserDetails {
     }
     
     /**
-     * @param 对operator进行赋值
+     * @return 返回 vcid
      */
-    public void setOperator(Operator operator) {
-        this.operator = operator;
+    public String getVcid() {
+        return this.operator.getVcid();
+    }
+    
+    /**
+     * @return 返回 organization
+     */
+    public Organization getOrganization() {
+        return organization;
     }
     
     /**
@@ -172,24 +217,10 @@ public class OperatorUserDetails implements UserDetails {
     }
     
     /**
-     * @param 对mainPost进行赋值
-     */
-    public void setMainPost(Post mainPost) {
-        this.mainPost = mainPost;
-    }
-    
-    /**
      * @return 返回 posts
      */
     public List<Post> getPosts() {
         return posts;
-    }
-    
-    /**
-     * @param 对posts进行赋值
-     */
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
     }
     
     /**
@@ -200,13 +231,6 @@ public class OperatorUserDetails implements UserDetails {
     }
     
     /**
-     * @param 对roles进行赋值
-     */
-    public void setRoles(List<OperatorRole> roles) {
-        this.roles = roles;
-    }
-    
-    /**
      * @return 返回 auths
      */
     public List<Auth> getAuths() {
@@ -214,17 +238,31 @@ public class OperatorUserDetails implements UserDetails {
     }
     
     /**
-     * @param 对auths进行赋值
+     * @param 对operator进行赋值
      */
-    public void setAuths(List<Auth> auths) {
-        this.auths = auths;
+    public void setOperator(Operator operator) {
+        this.operator = operator;
     }
     
     /**
-     * @param 对authorities进行赋值
+     * @param 对organization进行赋值
      */
-    public void setAuthorities(
-            Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
+    
+    /**
+     * @param 对mainPost进行赋值
+     */
+    public void setMainPost(Post mainPost) {
+        this.mainPost = mainPost;
+    }
+    
+    /**
+     * @param 对posts进行赋值
+     */
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+    
 }
