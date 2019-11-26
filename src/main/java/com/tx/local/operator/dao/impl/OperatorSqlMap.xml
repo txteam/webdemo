@@ -36,6 +36,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND O.id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
+	            AND O.loginName = #{loginName}
+	        </if>
 		</trim>
 	</select>
 	

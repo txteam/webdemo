@@ -9,15 +9,25 @@ package com.tx.local.security.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
+import com.tx.component.auth.AuthConstants;
+import com.tx.component.auth.context.AuthRegistry;
 import com.tx.component.auth.model.Auth;
+import com.tx.component.auth.model.AuthRef;
+import com.tx.component.auth.service.AuthRefService;
 import com.tx.component.security.context.SecurityContext;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRole;
 import com.tx.local.operator.model.OperatorRoleEnum;
+import com.tx.local.operator.service.OperatorService;
 import com.tx.local.organization.model.Organization;
 import com.tx.local.security.model.OperatorUserDetails;
 
@@ -30,8 +40,27 @@ import com.tx.local.security.model.OperatorUserDetails;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class OperatorUserDetailsService implements UserDetailsService {
+public class OperatorUserDetailsService implements UserDetailsService,InitializingBean {
     
+    @Resource
+    private SecurityContext securityContext;
+    
+    @Resource
+    private OperatorService operatorService;
+    
+    private AuthRefService authRefService;
+    
+    private AuthRegistry authRegistry;
+    
+    /**
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.authRefService = securityContext.getAuthRefService();
+        this.authRegistry = securityContext.getAuthRegistry();
+    }
+
     /**
      * @param username
      * @return
@@ -44,7 +73,23 @@ public class OperatorUserDetailsService implements UserDetailsService {
             UserDetails user = mockUser();
             return user;
         }
-        return null;
+        Operator operator = this.operatorService.findByLoginName(username);
+        
+        MultiValueMap<String, String> refMap = new LinkedMultiValueMap<>();
+        refMap.add(AuthConstants.AUTHREFTYPE_OPERATOR, operator.getId());
+        
+        List<AuthRef> authRefList = this.authRefService.queryListByRefMap(true, refMap);
+        List<Auth> auths = new ArrayList<>();
+        for(AuthRef arTemp : authRefList){
+            Auth auth = authRegistry.findById(arTemp.getAuthId());
+            if(auth == null){
+                continue;
+            }
+            auths.add(auth);
+        }
+        OperatorUserDetails userDetail = new OperatorUserDetails(operator, new ArrayList<>(),
+                auths);
+        return userDetail;
     }
     
     private UserDetails mockUser() {
