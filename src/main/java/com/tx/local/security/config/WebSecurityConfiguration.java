@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.switchuser.SwitchUserFilter;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
@@ -26,6 +27,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.accept.ContentNegotiationStrategy;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 
+import com.tx.component.security.filter.SecurityThreadLocalResourceSupportFilter;
 import com.tx.local.security.entrypoint.SecurityLoginAuthenticationEntryPoint;
 import com.tx.local.security.filter.ClientAuthenticationProcessingFilter;
 import com.tx.local.security.filter.OperatorAuthenticationProcessingFilter;
@@ -147,6 +149,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(this.clientAuthenticationProcessingFilter,
                 UsernamePasswordAuthenticationFilter.class);
+        //必须条件该过滤器，不然权限容器中线程变量逻辑会存在问题
+        http.addFilterAfter(new SecurityThreadLocalResourceSupportFilter(), SwitchUserFilter.class);
         
         //.usernameParameter("username").passwordParameter("password").loginPage("/login")
         //.loginProcessingUrl(this.loginProcessingUrl).permitAll().successHandler(successHandler).failureHandler(failureHandler);

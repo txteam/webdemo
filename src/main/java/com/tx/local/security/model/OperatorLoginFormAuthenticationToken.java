@@ -38,5 +38,15 @@ public class OperatorLoginFormAuthenticationToken
             Object credentials) {
         super(principal, credentials);
     }
+
+    /**
+     * @param details
+     */
+    @Override
+    public void setDetails(Object details) {
+        super.setDetails(details);
+    }
+    
+    
     
 }

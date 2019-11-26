@@ -494,11 +494,7 @@ public class OrganizationService {
         
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //需要更新的字段
-        //updateRowMap.put("parentId", organization.getParentId());
-        //updateRowMap.put("vcid", organization.getVcid());
-        //updateRowMap.put("code", organization.getCode());
-        //updateRowMap.put("type", organization.getType());
+        
         updateRowMap.put("name", organization.getName());
         updateRowMap.put("fullName",
                 generateFullName(organization.getParentId(),
@@ -511,6 +507,11 @@ public class OrganizationService {
         updateRowMap.put("fullAddress", organization.getFullAddress());
         
         updateRowMap.put("lastUpdateDate", new Date());
+        //需要更新的字段
+        //updateRowMap.put("parentId", organization.getParentId());
+        //updateRowMap.put("vcid", organization.getVcid());
+        //updateRowMap.put("code", organization.getCode());
+        //updateRowMap.put("type", organization.getType());
         //updateRowMap.put("valid", organization.isValid());
         //updateRowMap.put("company", organization.getCompany());
         //updateRowMap.put("department", organization.getDepartment());

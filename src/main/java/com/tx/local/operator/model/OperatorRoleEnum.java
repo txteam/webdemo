@@ -8,7 +8,8 @@ package com.tx.local.operator.model;
 
 import java.io.Serializable;
 
-import com.tx.local.vitualcenter.model.VirtualCenterEnum;
+import com.tx.component.role.model.Role;
+import com.tx.local.security.model.RoleTypeEnum;
 
 /**
  * 角色枚举<br/>
@@ -19,13 +20,13 @@ import com.tx.local.vitualcenter.model.VirtualCenterEnum;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public enum OperatorRoleEnum implements Serializable {
+public enum OperatorRoleEnum implements Serializable, Role {
     
     /** 系统管理员 */
-    SUPER_ADMIN("SUPER_ADMIN", "超级管理员", VirtualCenterEnum.JT.getCode()),
+    SUPER_ADMIN("ROLE_SUPER_ADMIN", "超级管理员", RoleTypeEnum.ROLE_TYPE_ADMIN.getId()),
     
     /** 系统管理员 */
-    SYSTEM_ADMIN("SYSTEM_ADMIN", "系统管理员", VirtualCenterEnum.JT.getCode());
+    SYSTEM_ADMIN("ROLE_SYSTEM_ADMIN", "系统管理员", RoleTypeEnum.ROLE_TYPE_OPERATOR.getId());
     
     /** 数据库中主键，系统启动后会进行写入 */
     private final String id;
@@ -33,14 +34,14 @@ public enum OperatorRoleEnum implements Serializable {
     /** 名称 */
     private final String name;
     
-    /** 归属虚中心编码 */
-    private final String virtualCenterCode;
+    /** 角色类型id */
+    private final String roleTypeId;
     
     /** <默认构造函数> */
-    private OperatorRoleEnum(String id, String name, String virtualCenterCode) {
+    private OperatorRoleEnum(String id, String name, String roleTypeId) {
         this.id = id;
         this.name = name;
-        this.virtualCenterCode = virtualCenterCode;
+        this.roleTypeId = roleTypeId;
     }
     
     /**
@@ -58,9 +59,10 @@ public enum OperatorRoleEnum implements Serializable {
     }
     
     /**
-     * @return 返回 virtualCenterCode
+     * @return
      */
-    public String getVirtualCenterCode() {
-        return virtualCenterCode;
+    @Override
+    public String getRoleTypeId() {
+        return this.roleTypeId;
     }
 }

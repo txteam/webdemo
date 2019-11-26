@@ -6,15 +6,12 @@
  */
 package com.tx.local.operator.service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang3.EnumUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -31,9 +28,7 @@ import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.local.operator.dao.OperatorRoleDao;
 import com.tx.local.operator.model.OperatorRole;
-import com.tx.local.operator.model.OperatorRoleEnum;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
-import com.tx.local.vitualcenter.model.VirtualCenter;
 
 /**
  * OperatorRole的业务层[OperatorRoleService]
@@ -68,75 +63,9 @@ public class OperatorRoleService implements InitializingBean {
             @Override
             protected void doInTransactionWithoutResult(
                     TransactionStatus status) {
-                init();
+                //init();
             }
         });
-    }
-    
-    /**
-     * 启动期间检查初始化数据<br/>
-     * <功能详细描述> [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    private void init() {
-        Map<String, OperatorRole> roleMap = new HashMap<String, OperatorRole>();
-        List<OperatorRole> roleList = queryList(null,
-                (Map<String, Object>) null);
-        for (OperatorRole roleTemp : roleList) {
-            if (StringUtils.isEmpty(roleTemp.getId().toUpperCase())) {
-                continue;
-            }
-            roleMap.put(roleTemp.getId().toUpperCase(), roleTemp);
-        }
-        
-        //处理自动新增以及自动更新逻辑（不包括树形结构写入）
-        Map<String, OperatorRoleEnum> roleEnumMap = EnumUtils
-                .<OperatorRoleEnum> getEnumMap(OperatorRoleEnum.class);
-        for (OperatorRoleEnum roleEnumTemp : roleEnumMap.values()) {
-            if (roleMap.containsKey(roleEnumTemp.getId().toUpperCase())) {
-                OperatorRole role = roleMap
-                        .get(roleEnumTemp.getId().toUpperCase());
-                if (!role.isValid() || role.isModifyAble()
-                        || !role.getName().equals(roleEnumTemp.getName())) {
-                    Map<String, Object> ur = new HashMap<>();
-                    ur.put("id", role.getId());
-                    
-                    ur.put("name", roleEnumTemp.getName());
-                    ur.put("valid", true);
-                    ur.put("modifyAble", false);
-                    ur.put("lastUpdateDate", new Date());
-                    
-                    //虚中心不能更新：更新虚中心对业务影响较大，若有该场景，应在数据库中直接进行修改
-                    //code无法更新
-                    this.operatorRoleDao.update(ur);
-                    
-                    //更新以后重新查询出来进行写入
-                    role = findById(role.getId());
-                    roleMap.put(role.getId().toUpperCase(), role);
-                }
-                continue;
-            } else {
-                //将新的虚中心插入表中
-                OperatorRole role = new OperatorRole();
-                role.setName(roleEnumTemp.getName());
-                role.setId(roleEnumTemp.getId());
-                role.setModifyAble(false);
-                role.setValid(true);
-                
-                if(!StringUtils.isEmpty(roleEnumTemp.getVirtualCenterCode())){
-                    VirtualCenter vc = virtualCenterFacade
-                            .findByCode(roleEnumTemp.getVirtualCenterCode());
-                    role.setVcid(vc != null ? vc.getId() : null);
-                }
-                this.insert(role);
-                
-                //给枚举写入id
-                roleMap.put(role.getId().toUpperCase(), role);
-            }
-        }
     }
     
     /**

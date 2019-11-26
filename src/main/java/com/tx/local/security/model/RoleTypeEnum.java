@@ -15,6 +15,9 @@ import com.tx.component.role.model.RoleType;
 public enum RoleTypeEnum implements RoleType {
     
     /** 系统管理员 */
+    ROLE_TYPE_ADMIN("ROLE_TYPE_ADMIN", "系统操作员"),
+    
+    /** 系统管理员 */
     ROLE_TYPE_OPERATOR("ROLE_TYPE_OPERATOR", "系统操作员"),
     
     /** 系统管理员 */

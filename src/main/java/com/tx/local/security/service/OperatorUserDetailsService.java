@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.tx.component.auth.model.Auth;
+import com.tx.component.security.context.SecurityContext;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRole;
 import com.tx.local.operator.model.OperatorRoleEnum;
@@ -71,8 +73,19 @@ public class OperatorUserDetailsService implements UserDetailsService {
         role2.setName(OperatorRoleEnum.SYSTEM_ADMIN.getName());
         roles.add(role2);
         
+        List<Auth> auths = new ArrayList<>();
+        String[] authTypeIds = SecurityContext.getContext()
+                .getAuthTypeRegistry()
+                .queryList()
+                .stream()
+                .map(at -> at.getId())
+                .toArray(String[]::new);
+        auths.addAll(SecurityContext.getContext()
+                .getAuthRegistry()
+                .queryList(authTypeIds));
+        
         OperatorUserDetails userDetail = new OperatorUserDetails(user, roles,
-                null);
+                auths);
         Organization org = new Organization();
         userDetail.setOrganization(org);
         return userDetail;

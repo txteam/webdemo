@@ -112,6 +112,7 @@ $(document).ready(function() {
 			//catalog: 'operator_workbench_catalog'
 		},
 		idField : 'id',
+		parentField : 'parentId',
 		treeField : 'text',
 		iconField : function(item){
 			if(item['icon']){
@@ -122,7 +123,6 @@ $(document).ready(function() {
 				return 'database_gear';
 			}
 		},
-		parentField : 'parentId',
 		fit : true,
 		fitColumns : true,
 		border : false,

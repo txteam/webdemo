@@ -48,6 +48,27 @@ var idFieldName = 'id';
 var nameFieldName = 'name'; 
 var entityName = '角色';
 $(document).ready(function(){
+	vcTree = $('#vcTree').tree({
+		url : /*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
+		idField : 'id',
+		parentField : 'parentId',
+		iconField : function(){
+			return 'folder_database';
+		},
+		textField : 'name',
+		border : false,
+		onClick : function(node){
+			$('#virtualCenterName').val(node.name);
+			$('#vcid').val(node.id);
+			
+			$('#grid').datagrid('load',{
+				vcid: $("#vcid").val(),
+				name: $("#name").val(),
+				code: $("#code").val(),
+			});
+		}
+	});
+	
 	var  $editALink = $("#editALink");
 	var  $deleteALink = $("#deleteALink");
 	var  $enableALink = $("#enableALink");
@@ -463,42 +484,55 @@ function deselect(){
 </script>
 </head>
 <body class="easyui-layout">
-	<!--//FIXME: 修改查询条件框体高度 -->
-	<div data-options="region:'north',title:'查询条件',border:false" style="height: 105px; overflow: hidden;">
-		<form id="queryForm" class="form">
-			<table class="table table-hover table-condensed">
-				<tr>
-					<th>名称:</th>
-					<td><input id="name" name="name"/></td>
-					<th>编码:</th>
-					<td><input id="code" name="code"/></td>
-					<th>虚中心:</th>
-					<td>
-						<input id="vcid" name="vcid" type="hidden"/>
-						<input id="virtualCenterName" name="virtualCenterName" readonly="readonly"/>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="6" class="button operRow">
-						<a id="queryBtn" onclick="queryFun();return false;" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>
-					</td>
-				</tr>
-			</table>
-		</form>
+	<div data-options="region:'west',title:'虚中心',split:true,
+		tools : [
+			{ iconCls : 'clear',handler : function() {deselect();} } ,
+			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
+		]"
+		style="width:240px;">
+		<ul id="vcTree"></ul>
 	</div>
-	<div data-options="region:'center',border:false">
-		<table id="grid"></table>
-    </div>
-    
-    <div id="toolbar" style="display: none;">		
-		<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
-		<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
-		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
-		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
-		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
-		<a id="configRoleAuthALink" onclick="configRoleAuth();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">配置角色权限</a>
-		<a id="configRoleOperatorALink" onclick="configRoleOperator();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置角色人员</a>
-		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
-			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
-	</div>
+	
+	<div data-options="region:'center'" style="padding:5px;background:#eee;">
+		<div class="easyui-layout" data-options="fit : true,border : false">
+			<!--//FIXME: 修改查询条件框体高度 -->
+			<div data-options="region:'north',title:'查询条件',border:false" style="height: 105px; overflow: hidden;">
+				<form id="queryForm" class="form">
+					<table class="table table-hover table-condensed">
+						<tr>
+							<th>名称:</th>
+							<td><input id="name" name="name"/></td>
+							<th>编码:</th>
+							<td><input id="code" name="code"/></td>
+							<th>虚中心:</th>
+							<td>
+								<input id="vcid" name="vcid" type="hidden"/>
+								<input id="virtualCenterName" name="virtualCenterName" readonly="readonly"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6" class="button operRow">
+								<a id="queryBtn" onclick="queryFun();return false;" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<div data-options="region:'center',border:false">
+				<table id="grid"></table>
+		    </div> 
+		    
+			<div id="toolbar" style="display: none;">		
+				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+				<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+				<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+				<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+				<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
+				<a id="configRoleAuthALink" onclick="configRoleAuth();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">配置角色权限</a>
+				<a id="configRoleOperatorALink" onclick="configRoleOperator();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置角色人员</a>
+				<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
+					class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+			</div>
+		</div>
+	</div> 
 </body>

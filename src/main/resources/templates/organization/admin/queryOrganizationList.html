@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>queryPostList</title>
+	<title>queryOrganizationList</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -42,78 +42,91 @@
 
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
+var virtualCenterTree = null;
 var treegrid = null;
-var orgTree = null;
 $(document).ready(function() {
 	var  $editALink = $("#editALink");
 	var  $deleteALink = $("#deleteALink");
 	var  $enableALink = $("#enableALink");
 	var  $disableALink = $("#disableALink");
-	var  $configPostAuthALink = $("#configPostAuthALink");
-	var  $configPostOperatorALink = $("#configPostOperatorALink");
 	
-	orgTree = $('#orgTree').tree({
-		url : /*[[@{/organization/queryList(valid=true)}]]*/_contextPath + 'organization/queryList?valid=true',
+	virtualCenterTree = $('#virtualCenterTree').tree({
+		url : /*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
 		idField : 'id',
 		parentField : 'parentId',
 		iconField : function(){
-			return 'folder_user';
+			return 'folder_database';
 		},
 		textField : 'name',
 		border : false,
 		onClick : function(node){
 			$('#treegrid').treegrid('load',{
-				organizationId: node.id
+				vcid: node.id
 			});
 		}
 	});
 	
 	treegrid = $('#treegrid').treegrid({
-		url : /*[[@{/post/queryList}]]*/_contextPath + 'post/queryList',
+		url : /*[[@{/organization/queryList}]]*/'',
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
 		striped : true,
 		iconField : function(item){
-			return 'group_group';	
+			return 'folder_user';	
 		},
 		fit : true,
 		fitColumns : true,
 		border : false,
 		frozenColumns : [ [ {
-			title : '职位id',
+			title : '组织id',
 			field : 'id',
 			width : 150,
 			hidden : true
 		},{
 			field : 'parentId',
-			title : '上级职位ID',
+			title : '上级组织ID',
 			width : 150,
 			hidden : true
-		},{
+		}] ],
+		columns : [ [ {
 			field : 'name',
-			title : '职位名称',
-			width : 200
+			title : '名称',
+			width : 80
 		}, {
 			field : 'code',
-			title : '职位编号',
-			width : 230
+			title : '编号',
+			width : 50
 		},{
-			field : 'organization',
-			title : '所属组织',
+			field : 'alias',
+			title : '别名',
+			width : 100,
+			hidden : true
+		}, {
+			field : 'fullName',
+			title : '全称',
+			width : 160
+		}, {
+			field : 'address',
+			title : '地址',
+			width : 80,
+			hidden : true
+		}, {
+			field : 'fullAddress',
+			title : '详细地址',
+			width : 160,
+			hidden : true
+		}, {
+			field : 'type',
+			title : '组织类型',
+			width : 80,
 			formatter : function(value, row, index) {
 				if(value){
-					if(value.name){
-						return value.name;
-					}else{
-						return "";
-					}
-				}else{
-					return "";
+					return value.name;
 				}
+				return "";
 			}
-		}] ],
-		columns : [ [{
+		}, {
 			field : 'valid',
 			title : '是否有效',
 			width : 80,
@@ -125,22 +138,27 @@ $(document).ready(function() {
 					return "无效";
 				}
 			}
-		},{
-			field : 'fullName',
-			title : '职位全称',
-			width : 150,
+		}, {
+			field : 'provinceId',
+			title : '所在省',
+			width : 80,
 			hidden : true
 		},{
-			field : 'remark',
-			title : '备注',
-			width : 200,
+			field : 'cityId',
+			title : '所在市',
+			width : 80,
+			hidden : true
+		},{
+			field : 'areaId',
+			title : '所在地',
+			width : 80
 		}
 		,{
 			field : 'action',
 			title : '操作',
-			width : 100,
+			width : 50,
 			formatter : function(value, row, index) {
-				var str = '';
+				var str = '&nbsp;';
 				if(!row.valid && $.canEnable){
 					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/control/control_play_blue.png');
 					str += '&nbsp;';
@@ -149,7 +167,6 @@ $(document).ready(function() {
 					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil.png');
 					str += '&nbsp;';
 				}
-				
 				if($.canDelete){
 					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil_delete.png');
 					str += '&nbsp;';
@@ -158,16 +175,15 @@ $(document).ready(function() {
 					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/control/control_stop_blue.png');
 					str += '&nbsp;';
 				}
-				if ($.configPostAuth) {
-					str += $.formatString('<img onclick="configPostAuth(\'{0}\',\'{1}\');" src="{2}" title="配置职位权限"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/database_key.png');
-				}
-				if ($.configPostOperator) {
-					str += $.formatString('<img onclick="configPostOperator(\'{0}\',\'{1}\');" src="{2}" title="配置职位人员"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/folder/folder_user.png');
-				}
 				return str;
 			}
-		}
-		] ],
+		},
+		{
+			field : 'remark',
+			title : '备注',
+			width : 200,
+			hidden : true
+		} ] ],
 		toolbar : '#toolbar',
 		onContextMenu : function(e, row) {
 			e.preventDefault();
@@ -178,29 +194,12 @@ $(document).ready(function() {
 				top : e.pageY
 			});
 		},
-		onLoadSuccess : function() {
-			parent.$.messager.progress('close');
-			$(this).treegrid('tooltip');
-			
-			$editALink.linkbutton('disable');
-			$deleteALink.linkbutton('disable');
-			
-			$enableALink.show();
-			$disableALink.show();
-			$enableALink.linkbutton('disable');
-			$disableALink.linkbutton('disable');
-			
-			$configPostAuthALink.linkbutton('disable');
-			$configPostOperatorALink.linkbutton('disable');
-		},
 		onDblClickRow : function(row){
 			editFun(row.id, row.name);
 		},
 		onClickRow: function(row){
 			$editALink.linkbutton('enable');
 			$deleteALink.linkbutton('enable');
-			$configPostAuthALink.linkbutton('enable');;
-			$configPostOperatorALink.linkbutton('enable');
 			
 			if(row.valid){
 				$enableALink.linkbutton('disable');
@@ -213,27 +212,21 @@ $(document).ready(function() {
 				$enableALink.show();
 				$enableALink.linkbutton('enable');
 			}
+		},
+		onLoadSuccess : function() {
+			parent.$.messager.progress('close');
+			$(this).treegrid('tooltip');
+			
+			$editALink.linkbutton('disable');
+			$deleteALink.linkbutton('disable');
+			
+			$enableALink.show();
+			$disableALink.show();
+			$enableALink.linkbutton('disable');
+			$disableALink.linkbutton('disable');
 		}
 	});
 });
-function refreshTree(){
-	var selectedNode = orgTree.tree('getSelected');
-	orgTree.tree('reload');
-	if(selectedNode){
-		treegrid.treegrid('load',{
-			organizationId: '',
-			parentPostId: ''
-		});
-
-	}
-}
-function deselect(){
-	var selectedNode = orgTree.tree('getSelected');
-	if(selectedNode){
-		orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
-		treegrid.treegrid('load',{});
-	}
-}
 function redo() {
 	var node = treegrid.treegrid('getSelected');
 	if (node) {
@@ -251,100 +244,84 @@ function undo() {
 	}
 }
 /*
- * 打开添加职位界面
+ * 打开添加组织界面
  */
 function addFun(id) {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
-	var organizationId = '';
 	if (id == undefined) {
 		var rows = treegrid.treegrid('getSelections');
 		if(!$.ObjectUtils.isEmpty(rows)){
 			id = rows[0].id;
 		}else{
 			id = ''
-			var selectOrgRows = orgTree.tree('getSelected');
-			if(selectOrgRows && selectOrgRows.id){
-				organizationId = selectOrgRows.id;
-			}
 		}
 	}
-	var addUrl = /*[[@{/post/toAdd}]]*/_contextPath + 'post/toAdd';
+	var addUrl = /*[[@{/organization/toAdd}]]*/_contextPath + 'organization/toAdd';
 	if(id){
 		addUrl = addUrl + '?parentId=' + id;
 	}
 	DialogUtils.openModalDialog(
-		"addPost",
-		"添加职位",
+		"addOrganization",
+		"添加组织",
 		addUrl,
-		500,220,function(){
-		treegrid.treegrid('reload');
+		600,220,function(){
+		$('#treegrid').treegrid('reload');
 	});
 }
-/**
- * 打开编辑职位页面
- */
-function editFun(id,name) {
+function editFun(id) {
 	if (id == undefined) {
 		var rows = treegrid.treegrid('getSelections');
 		id = rows[0].id;
-		name = rows[0].name;
-	}
-	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的职位");
-		return ;
 	}
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	
+	var url = /*[[@{/organization/toUpdate}]]*/_contextPath + 'organization/toUpdate';
+	url = url + "?id=" + id;
 	DialogUtils.openModalDialog(
-		"updatePost",
-		"编辑职位:" + name,
-		$.formatString("${contextPath}/post/toUpdatePost.action?postId={0}",id),
-		500,220,function(){
+		"updateOrganization",
+		"编辑组织",
+		url,
+		600,220,function(){
 			$('#treegrid').treegrid('reload');
 	});
 }
-/*
- * 删除职位
- */
 function deleteFun(id,name) {
 	if (id == undefined) {
 		var rows = treegrid.treegrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
 	}
-	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的职位");
-		return ;
-	}
-	//判断对应职位是否能被停用
+	//判断对应组织是否能被停用
 	$.post(
-		'${contextPath}/post/isDeleteAble.action',
-		{postId: id},
+		/*[[@{/organization/modifyAble}]]*/_contextPath + 'organization/modifyAble',
+		{id: id},
 		function(data){
 			if(data){
-			    DialogUtils.confirm("确认提醒" , 
-			    		$.formatString("是否确认删除职位_[{0}]?",name) , 
+			    DialogUtils.confirm(
+			    		"确认提醒" , 
+			    		$.formatString("是否确认删除组织:[{0}]?",name), 
 			    function(data){
 			    	if(data){
 			    		DialogUtils.progress({
 			    	        text : '数据提交中，请等待....'
 			    		});
-			    		//如果确认删除对应职位
+			    		//如果确认删除对应组织
 			    		$.post(
-					    		'${contextPath}/post/deletePostById.action',
-					    		{postId:id},
+			    				/*[[@{/organization/deleteById}]]*/_contextPath + 'organization/deleteById',
+					    		{id:id},
 					    		function(){
 					    			DialogUtils.progress('close');
-					    			DialogUtils.tip("删除职位成功");
+					    			DialogUtils.tip("删除组织成功");
 					    			$('#treegrid').treegrid('reload');
 					    });
 			    	}
 			    });
 			}else{
-				DialogUtils.alert("提醒",$.formatString("职位 [{0}]存在下级职位，不能被删除。",name),"warning");
+				DialogUtils.alert("提醒","该组织存在下级组织，不能被删除。","warning");
 			}
 	});
 }
@@ -354,19 +331,15 @@ function disableFun(id,name){
 		id = rows[0].id;
 		name = rows[0].name;
 	}
-	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的职位");
-		return ;
-	}
 	//判断对应组织是否能被停用
 	$.post(
-		/*[[@{/post/modifyAble}]]*/_contextPath + 'post/modifyAble',
+		/*[[@{/organization/modifyAble}]]*/_contextPath + 'organization/modifyAble',
 		{id: id},
 		function(data){
 			if(data){
 			    DialogUtils.confirm(
 			    		"确认提醒" , 
-			    		$.formatString("是否确认禁用职位:[{0}]?",name), 
+			    		$.formatString("是否确认禁用组织:[{0}]?",name), 
 			    function(data){
 			    	if(data){
 			    		DialogUtils.progress({
@@ -374,17 +347,17 @@ function disableFun(id,name){
 			    		});
 			    		//如果确认删除对应组织
 			    		$.post(
-			    				/*[[@{/operatorPost/disableById}]]*/_contextPath + 'operatorPost/disableById',
+			    				/*[[@{/organization/disableById}]]*/_contextPath + 'organization/disableById',
 					    		{id:id},
 					    		function(){
 					    			DialogUtils.progress('close');
-					    			DialogUtils.tip("禁用 职位成功");
+					    			DialogUtils.tip("禁用组织成功");
 					    			$('#treegrid').treegrid('reload');
 					    });
 			    	}
 			    });
 			}else{
-				DialogUtils.alert("提醒","该 职位存在尚未禁用的下级 职位，不能被禁用。","warning");
+				DialogUtils.alert("提醒","该组织存在尚未禁用的下级组织，不能被禁用。","warning");
 			}
 	});
 }
@@ -394,14 +367,11 @@ function enableFun(id,name){
 		id = rows[0].id;
 		name = rows[0].name;
 	}
-	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的职位");
-		return ;
-	}
+	
 	//判断对应组织是否能被停用
     DialogUtils.confirm(
     		"确认提醒" , 
-    		$.formatString("是否确认启用 职位:[{0}]?",name), 
+    		$.formatString("是否确认启用组织:[{0}]?",name), 
     function(data){
     	if(data){
     		DialogUtils.progress({
@@ -409,95 +379,65 @@ function enableFun(id,name){
     		});
     		//如果确认删除对应组织
     		$.post(
-    				/*[[@{/post/enableById}]]*/_contextPath + 'post/enableById',
+    				/*[[@{/organization/enableById}]]*/_contextPath + 'organization/enableById',
 		    		{id:id},
 		    		function(){
 		    			DialogUtils.progress('close');
-		    			DialogUtils.tip("启用 职位成功");
+		    			DialogUtils.tip("启用组织成功");
 		    			$('#treegrid').treegrid('reload');
 		    });
     	}
     });
 }
-/*
- * 配置职位权限
- */
-function configPostAuth(id,name){
-	if (id == undefined) {
-		var rows = treegrid.treegrid('getSelections');
-		id = rows[0].id;
-		name = rows[0].name;
+function deselect(){
+	var selectedNode = virtualCenterTree.tree('getSelected');
+	if(selectedNode){
+		virtualCenterTree.find(".tree-node-selected").removeClass("tree-node-selected");
+		treegrid.treegrid('load',{});
 	}
-	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的职位");
-		return ;
-	}
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
-	DialogUtils.openModalDialog(
-		"configPostAuth",
-		$.formatString("配置职位权限_[{0}]",name),
-		$.formatString("${contextPath}/auth/toConfigPostAuth.action?postId={0}",id),
-		450,500,function(){
-			//$('#treegrid').treegrid('reload');
-			//alert('reload');
-		}
-	);
 }
-//配置职位人员
-function configPostOperator(id,name){
-	if (id == undefined) {
-		var rows = treegrid.treegrid('getSelections');
-		id = rows[0].id;
-		name = rows[0].name;
+function refreshTree(){
+	var selectedNode = virtualCenterTree.tree('getSelected');
+	virtualCenterTree.tree('reload');
+	if(selectedNode){
+		treegrid.treegrid('load',{
+			organizationId: '',
+			parentPostId: ''
+		});
 	}
-	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的职位");
-		return ;
-	}
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
-	DialogUtils.openModalDialog(
-		"configPostOperator",
-		$.formatString("配置职位人员_[{0}]",name),
-		$.formatString("${contextPath}/operatorRef/toConfigPostOperator.action?postId={0}",id),
-		850,550,function(){
-			//$('#treegrid').treegrid('reload');
-			//alert('reload');
-		}
-	);
 }
-/*]]>*/
 </script>
 </head>
+<body>
+
+</body>
+
 <body class="easyui-layout">
-	<div data-options="region:'west',title:'组织结构',split:true,
+	<div data-options="region:'west',title:'虚中心',split:true,
 		tools : [
 			{ iconCls : 'clear',handler : function() {deselect();} } ,
 			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
 		]"
 		style="width:230px;">
-		<ul id="orgTree"></ul>
+		<ul id="virtualCenterTree"></ul>
 	</div> 
 	
-	<div data-options="region:'center',border:false" style="padding:5px;background:#eee;overflow:hidden;"  title="">
-		<table id="treegrid" style="width:fit;height:fit"></table>
-	</div>
-	
-	<div id="toolbar" style="display: none;">
-		<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
-		<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
-		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
-		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
-		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
-		<a id="configPostAuthALink" onclick="configPostAuth();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">配置职位权限</a>
-		<a id="configPostOperatorALink" onclick="configPostOperator();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置职位人员</a>
-		<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
-		<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
-		<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" 
-			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
-	</div>
+	<div data-options="region:'center'" style="padding:5px;background:#eee;">
+		<div class="easyui-layout" data-options="fit:true,border:false">
+			<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+				<table id="treegrid" style="width:fit;height:fit"></table>
+			</div>
+		</div>
+		
+		<div id="toolbar" style="display: none;">
+			<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+			<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+			<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+			<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+			<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
+			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
+			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
+			<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+		</div>
+	</div> 
 </body>
-</html>

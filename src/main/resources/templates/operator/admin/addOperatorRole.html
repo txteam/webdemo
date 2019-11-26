@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>selectOrganization</title>
+	<title>addOperatorRole</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -39,33 +39,79 @@
 	/*]]>*/
 	</script>
 </block>
-
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-var tree = null;
-var event_name = /*[['select_organization_' + ${eventName}]]*/'select_organization_';
-$(document).ready(function() {
-	tree = $('#organizationTree').tree({
-		url : /*[[@{/organization/queryList}]]*/'',
-		idField : 'id',
-		parentField : 'parentId',
-		iconField : function(){
-			return 'folder_user';
-		},
-		textField : 'name',
-		border : false,
-		onClick : function(node){
-			$.triggerge(event_name,[node['object']]);
-		}
+$(document).ready(function(){
+	parent.DialogUtils.progress('close');
+	
+	//验证器
+	$('#entityForm').validator({
+	    valid: function(){
+	        //表单验证通过，提交表单到服务器
+	        DialogUtils.progress({
+	        	text : '数据提交中，请等待....'
+	        });
+			$('#entityForm').ajaxSubmit({
+			    url:/*[[@{/operatorRole/add}]]*/_contextPath + 'operatorRole/add',
+			    success: function(data) {
+			    	DialogUtils.progress('close');
+					if(data){
+						parent.DialogUtils.tip("新增角色成功");
+						parent.DialogUtils.closeDialogById("addRole");
+					}else{
+						parent.DialogUtils.tip("新增角色失败");
+					}
+			    } 
+			});
+			return false;
+	    }
 	});
 });
+function submitFun(){
+	$('#entityForm').submit();
+}
+function cancelFun(){
+	parent.DialogUtils.closeDialogById("addRole");
+}
 /*]]>*/
 </script>
 </head>
-<body class="body">
-	<div class="easyui-layout" data-options="fit:true,border:false">
-		<div data-options="region:'center',border:false" style="overflow-y:auto;" class="form">
-			<ul id="organizationTree"></ul>
-		</div>
+<body>
+<div class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+		<form id="entityForm" method="post" class="form" th:object="${operatorRole}">
+			<table class="table">
+				<tr>
+					<th class="narrow" width="25%">所属虚中心:<span class="tRed">*</span></th>
+					<td>
+						<select id="vcid" name="vcid" data-rule="所属业务中心:required;" >
+							<option value="">-- 请选择 --</option>
+							<option th:each="vc:${vcList}" th:value="${vc.id}" th:text="${vc.name}" th:selected="${role.vcid eq vc.id}"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow">名称:<span class="tRed">*</span></th>
+					<td>
+						<input id="name" name="name"
+							data-rule="名称:required;remote[${contextPath}/operatorRole/validate, vcid, name, id]"
+							th:data-rule="'名称:required;length[1~16];remote[' + @{/operatorRole/validate} + ', name]'"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow">备注:</th>
+					<td>
+						<textarea name="remark" rows="" cols="" class="longText" style="width:90%"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="rightOperRow" colspan="2" style="padding-right: 50px">
+						<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  
+						<a id="cancelBtn" onclick="cancelFun();return false;" href="#" class="easyui-linkbutton">取消</a>	
+					</td>
+				</tr>
+			</table>
+		</form>
 	</div>
+</div>
 </body>

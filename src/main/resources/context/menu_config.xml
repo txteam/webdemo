@@ -9,11 +9,11 @@
 		<menu id="config_nav_menu" text="配置" icon="&#xe605;" link="config_catalog" auths="config_nav_menu_auth" /><!-- 系统配置 -->
 		<menu id="debug_nav_menu" text="调试" icon="&#xe6bf;" link="debug_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 调试 -->
 		<menu id="documentation_nav_menu" text="文档" icon="&#xe60e;" link="documentation_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
-		<menu id="easyui_demo_nav_menu" text="演示" icon="&#xe60e;" link="easyui_demo_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
+		<menu id="easyui_demo_nav_menu" text="演示" icon="&#xe60e;" link="easyui_d12emo_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
 	</catalog>
 	
 	<!-- 工作台 -->
-	<catalog id="operator_workbench_catalog" auth="config_menu_auth" type="tab" text="系统管理员工作台菜单">
+	<catalog id="operator_workbench_catalog" type="tab" text="系统管理员工作台菜单">
 		<!-- 控制面板 -->
 		<menu id="control_panel_menu" text="控制面板">
 			<menu id="personal_center_menu" text="个人中心">
@@ -34,7 +34,7 @@
 	</catalog>
 	
 	<!-- 系统日志 -->
-	<catalog id="log_catalog" type="tab" text="日志菜单">
+	<catalog id="log_catalog" type="tab" text="日志菜单" auths="report_nav_menu_auth">
 		<menu id="system_operate_log_menus" text="系统操作日志">
 			<menu id="login_log_menu" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList"></menu>
 			<menu id="operator_manage_log_menu" text="系统日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList"></menu>
@@ -45,30 +45,36 @@
 	</catalog>
 	
 	<!-- 系统配置菜单分类 -->
-	<catalog id="config_catalog" text="配置菜单">
-		<menu id="operator_manage_center_menu" text="用户管理" auths="operator_manage_center_auth" type="tab">
-			<menu id="virtualcenter_manage_menu" text="虚中心管理" auths="virtualcenter_manage_auth" href="/virtualCenter/toQueryTreeList" type="tab"></menu>
+	<catalog id="config_catalog" text="配置菜单" auths="config_nav_menu_auth">
+		<menu id="admin_system_manage_menu" text="系统配置" roles="ROLE_SUPER_ADMIN" type="tab">
+			<menu id="virtualcenter_manage_menu" text="虚中心管理" href="/virtualCenter/toQueryTreeList" type="tab"></menu>
+			<menu id="admin_organization_manage_menu" text="组织管理" href="/admin/organization/toQueryList" type="tab"></menu>
+			<menu id="admin_post_manage_menu" text="职位管理" href="/admin/post/toQueryList" type="tab"></menu>
+			<menu id="admin_role_manage_menu" text="角色管理" href="/admin/operatorRole/toQueryList" type="tab"></menu>
+			<menu id="admin_operator_manage_menu" text="用户管理" href="/admin/operator/toQueryPagedList" type="tab"></menu>
+			<menu id="auth_manage_menu" text="权限管理" href="/admin/auth/toQueryAuthView" type="tab"></menu>
+		</menu>
+		<menu id="operator_manage_center_menu" text="系统管理" auths="operator_manage_center_auth" type="tab">
 			<menu id="organization_manage_menu" text="组织管理" auths="organization_manage_auth" href="/organization/toQueryList" type="tab"></menu>
 			<menu id="post_manage_menu" text="职位管理" auths="post_manage_auth" href="/post/toQueryList" type="tab"></menu>
-			<menu id="operator_manage_menu" text="用户管理" auths="operator_manage_auth" href="/operator/toQueryPagedList" type="tab"></menu>
 			<menu id="role_manage_menu" text="角色管理" auths="role_manage_auth" href="/operatorRole/toQueryList" type="tab"></menu>
-			<menu id="auth_manage_menu" text="权限管理" auths="auth_manage_auth" href="/auth/toQueryAuthView" type="tab"></menu>
+			<menu id="operator_manage_menu" text="用户管理" auths="operator_manage_auth" href="/operator/toQueryPagedList" type="tab"></menu>
 		</menu>
-		<menu id="basicdata_manage_center_menu" text="基础数据管理" auths="basicdata_manage_center_auth" type="tab" selectRefresh="false">
-			<menu id="datadict_manage_menu" text="数据字典管理" auths="basicdata_manage_auth" href="/basicdata/toQueryBasicDataMain" type="tab"></menu>
-			<menu id="district_manage_menu" text="区域" auths="district_manage_auth" href="/district/toQueryTreeList" type="tab"></menu>
-			<menu id="bankinfo_manage_menu" text="银行" auths="bankinfo_manage_auth" href="/bankInfo/toQueryList" type="tab"></menu>
-			<menu id="clientinfo_basicdata_manage_menu" text="客户信息基础数据" auths="clientinfo_basicdata_manage_auth" type="tab">
-				<menu id="clientsource_manage_menu" text="客户来源" auths="clientsource_manage_auth" href="/clientSource/toQueryList" type="tab"></menu>
-				<menu id="clientpromotionchannel_manage_menu" text="推广渠道" auths="clientpromotionchannel_manage_auth" href="/clientPromotionChannel/toQueryList" type="tab"></menu>
+		<menu id="basicdata_manage_center_menu" text="基础数据管理" auths="basicdata_manage_auth" type="tab" selectRefresh="false">
+			<menu id="datadict_manage_menu" text="数据字典管理" href="/basicdata/toQueryBasicDataMain" type="tab"></menu>
+			<menu id="district_manage_menu" text="区域" href="/district/toQueryTreeList" type="tab"></menu>
+			<menu id="bankinfo_manage_menu" text="银行" href="/bankInfo/toQueryList" type="tab"></menu>
+			<menu id="clientinfo_basicdata_manage_menu" text="客户信息基础数据" type="tab">
+				<menu id="clientsource_manage_menu" text="客户来源" href="/clientSource/toQueryList" type="tab"></menu>
+				<menu id="clientpromotionchannel_manage_menu" text="推广渠道" href="/clientPromotionChannel/toQueryList" type="tab"></menu>
 			</menu>
-			<menu id="blacklistsource_manage_menu" text="黑名单来源" auths="blacklistsource_manage_auth" href="/basicdata/toQuery?type=BlackListSource" type="tab"></menu>
+			<menu id="blacklistsource_manage_menu" text="黑名单来源" href="/basicdata/toQuery?type=BlackListSource" type="tab"></menu>
 		</menu>
-		<menu id="system_config_manage_menu" text="系统配置" auths="system_config_manage_auth" type="tab">
+		<menu id="system_config_manage_menu" text="系统配置" roles="ROLE_SUPER_ADMIN" type="tab">
 			<menu id="menu_manage_menu" text="菜单管理" auths="menu_manage_auth" href="/menu/toQueryMenuTreeList"/>
 			<menu id="config_manage_menu" text="配置项管理" auths="config_manage_auth" href="/config/toQueryConfigPropertyMain"/>
 		</menu>
-		<menu id="system_monitor_menu" text="系统监控" auths="system_monitor_auth" type="tab" selectRefresh="false">
+		<menu id="system_monitor_menu" text="系统监控" roles="ROLE_SUPER_ADMIN" type="tab" selectRefresh="false">
 			<menu id="druid_monitor_menu" text="druid监控视图" href="/druid"></menu>
 			<menu id="JavaMelody_monitor_menu" text="JavaMelody监控视图" href="/monitoring"></menu>
 		</menu>
@@ -103,7 +109,7 @@
 	</catalog>
 	
 	<!-- 编码 -->
-	<catalog id="easyui_demo_catalog" roles="super_admin" type="tab" text="easyui范例">
+	<catalog id="easyui_demo_catalog" roles="ROLE_SUPER_ADMIN" type="tab" text="easyui范例">
 		<menu id="component_demo_menu" text="组件">
 			<menu id="function_menus" text="基础">
 				<menu id="droppable_demo_menu" text="可放置" href="/easyui/demo/droppable" />

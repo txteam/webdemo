@@ -33,6 +33,9 @@ public class OperatorUserDetails implements UserDetails {
     /** 注释内容 */
     private static final long serialVersionUID = 6552523344301174231L;
     
+    /** 所属虚中心 */
+    private String vcid;
+    
     /** 操作人员 */
     private Operator operator;
     
@@ -64,6 +67,7 @@ public class OperatorUserDetails implements UserDetails {
             List<Auth> authList) {
         super();
         this.operator = operator;
+        this.vcid = this.operator.getVcid();
         
         this.roles = roleList == null ? new ArrayList<OperatorRole>()
                 : roleList;
@@ -87,22 +91,7 @@ public class OperatorUserDetails implements UserDetails {
         for (Auth authTemp : this.auths) {
             newAuthorites.add(new OperatorAuthAuthority(authTemp));
         }
-    }
-    
-    /**
-     * @param 对roles进行赋值
-     */
-    public void setRoles(List<OperatorRole> roles) {
-        this.roles = roles;
-        initAuthority();
-    }
-    
-    /**
-     * @param 对auths进行赋值
-     */
-    public void setAuths(List<Auth> auths) {
-        this.auths = auths;
-        initAuthority();
+        this.authorities = newAuthorites;
     }
     
     /**
@@ -199,9 +188,9 @@ public class OperatorUserDetails implements UserDetails {
      * @return 返回 vcid
      */
     public String getVcid() {
-        return this.operator.getVcid();
+        return vcid;
     }
-    
+
     /**
      * @return 返回 organization
      */
@@ -236,33 +225,32 @@ public class OperatorUserDetails implements UserDetails {
     public List<Auth> getAuths() {
         return auths;
     }
-    
+
     /**
-     * @param 对operator进行赋值
+     * @param 对vcid进行赋值
      */
-    public void setOperator(Operator operator) {
-        this.operator = operator;
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
     }
-    
+
     /**
      * @param 对organization进行赋值
      */
     public void setOrganization(Organization organization) {
         this.organization = organization;
     }
-    
-    /**
-     * @param 对mainPost进行赋值
-     */
-    public void setMainPost(Post mainPost) {
-        this.mainPost = mainPost;
-    }
-    
+
     /**
      * @param 对posts进行赋值
      */
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
-    
+
+    /**
+     * @param 对roles进行赋值
+     */
+    public void setRoles(List<OperatorRole> roles) {
+        this.roles = roles;
+    }
 }

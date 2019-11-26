@@ -339,8 +339,10 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
 		}
 		for (i = 0, l = data.length; i < l; i++) {
 			if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
-				if (!tmpMap[data[i][parentField]]['children'])
+				//|| !(tmpMap[data[i]['parentId']]['children'] instanceof Array)
+				if (!tmpMap[data[i][parentField]]['children']){
 					tmpMap[data[i][parentField]]['children'] = [];
+				}
 				data[i]['text'] = data[i][textField];
 				tmpMap[data[i][parentField]]['children'].push(data[i]);
 			} else {
@@ -373,8 +375,10 @@ $.fn.treegrid.defaults.loadFilter = function(data, parentId) {
 		}
 		for (i = 0, l = data.length; i < l; i++) {
 			if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
-				if (!tmpMap[data[i][parentField]]['children'])
+				//|| !(tmpMap[data[i]['parentId']]['children'] instanceof Array)
+				if (!tmpMap[data[i][parentField]]['children']){
 					tmpMap[data[i][parentField]]['children'] = [];
+				}
 				data[i]['text'] = data[i][textField];
 				tmpMap[data[i][parentField]]['children'].push(data[i]);
 			} else {

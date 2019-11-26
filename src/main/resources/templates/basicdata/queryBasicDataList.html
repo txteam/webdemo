@@ -183,7 +183,9 @@ $(document).ready(function(){
 		] ],
 		toolbar : '#toolbar',
 		onDblClickRow : function(index, row){
-			editFun(row[idFieldName], row[nameFieldName]);
+			if(row.modifyAble){
+				editFun(row[idFieldName], row[nameFieldName]);
+			}
 		},
 		onClickRow : function(index, row){
 			if(row.modifyAble){

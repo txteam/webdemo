@@ -275,8 +275,10 @@ layui.define(function(exports){
 	        }
 	        for (i = 0, l = data.length; i < l; i++) {
 	            if (tmpMap[data[i]['parentId']] && data[i]['id'] != data[i]['parentId']) {
-	                if (!tmpMap[data[i]['parentId']]['children'])
-	                    tmpMap[data[i]['parentId']]['children'] = [];
+	            	//|| !(tmpMap[data[i]['parentId']]['children'] instanceof Array)
+	                if (!tmpMap[data[i]['parentId']]['children'] ){
+	                	tmpMap[data[i]['parentId']]['children'] = [];
+	                }
 	                tmpMap[data[i]['parentId']]['children'].push(data[i]);
 	                tmpMap[data[i]['parentId']]['checked'] = false;
 	            } else {

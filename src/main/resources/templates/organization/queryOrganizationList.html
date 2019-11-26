@@ -50,22 +50,6 @@ $(document).ready(function() {
 	var  $enableALink = $("#enableALink");
 	var  $disableALink = $("#disableALink");
 	
-	virtualCenterTree = $('#virtualCenterTree').tree({
-		url : /*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
-		idField : 'id',
-		parentField : 'parentId',
-		iconField : function(){
-			return 'folder_database';
-		},
-		textField : 'name',
-		border : false,
-		onClick : function(node){
-			$('#treegrid').treegrid('load',{
-				vcid: node.id
-			});
-		}
-	});
-	
 	treegrid = $('#treegrid').treegrid({
 		url : /*[[@{/organization/queryList}]]*/'',
 		idField : 'id',
@@ -413,31 +397,20 @@ function refreshTree(){
 </body>
 
 <body class="easyui-layout">
-	<div data-options="region:'west',title:'虚中心',split:true,
-		tools : [
-			{ iconCls : 'clear',handler : function() {deselect();} } ,
-			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
-		]"
-		style="width:230px;">
-		<ul id="virtualCenterTree"></ul>
-	</div> 
+	<div class="easyui-layout" data-options="fit:true,border:false">
+		<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+			<table id="treegrid" style="width:fit;height:fit"></table>
+		</div>
+	</div>
 	
-	<div data-options="region:'center'" style="padding:5px;background:#eee;">
-		<div class="easyui-layout" data-options="fit:true,border:false">
-			<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-				<table id="treegrid" style="width:fit;height:fit"></table>
-			</div>
-		</div>
-		
-		<div id="toolbar" style="display: none;">
-			<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
-			<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
-			<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
-			<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
-			<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
-			<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
-			<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
-			<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
-		</div>
-	</div> 
+	<div id="toolbar" style="display: none;">
+		<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+		<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
+		<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
+		<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
+		<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+	</div>
 </body>

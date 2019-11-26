@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 操作权限 -->
 <auth_config>
-	<type id="AUTHTYPE_OPERATE" name="操作权限">
+	<type id="AUTH_TYPE_OPERATOR_OPERATE" text="系统操作员操作权限">
+		<auth id="report_nav_menu_auth" name="业务报表"></auth>
+		<auth id="log_nav_menu_auth" name="系统日志"></auth>
+		<auth id="config_nav_menu_auth" name="系统配置">
+			<auth id="operator_manage_center_auth" name="系统管理">
+				<auth id="organization_manage_auth" name="组织管理"></auth>
+				<auth id="post_manage_auth" name="职位管理"></auth>
+				<auth id="role_manage_auth" name="角色管理"></auth>
+				<auth id="operator_manage_auth" name="用户管理"></auth>
+			</auth>
+			<auth id="basicdata_manage_auth" name="基础数据管理"></auth>
+		</auth>
 	</type>
 </auth_config>
