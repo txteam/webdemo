@@ -837,7 +837,7 @@ var GlobalDialogUtils = null;
      * 默认为利用iframe打开
      * 由于iframe为固定大小所以这里不用考虑随着框体大小变化iframe大小变化的情况
      */
-    DialogUtils.openDialog = function(dialogHandleId,title,href,width,height,onClose,buttons,cache,notIframeDialog){
+    DialogUtils.openDialog = function(dialogHandleId,title,href,width,height,onClose,options,buttons,cache,notIframeDialog){
     	var $dialogHandle = null;
     	//获取到dialog句柄
     	$dialogHandle = $("#"+dialogHandleId);
@@ -846,6 +846,16 @@ var GlobalDialogUtils = null;
     		$("body").append($dialogHandle);
     	}
     	title && $dialogHandle.attr("title",title);
+    	var _options = $.extend({},{
+	    		title : title,
+        	    width: width,   
+        	    height: height,
+        	    closed: false,   
+        	    cache: true,
+        	    modal: false,
+        	    buttons: buttons,
+        	    onClose: onClose
+	    	},options);
     	
     	//如果是iframe类型的dialog
     	if(!notIframeDialog){
@@ -867,29 +877,10 @@ var GlobalDialogUtils = null;
     	    	}
     		}
     		
-        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
-        		title : title,
-        	    width: width,   
-        	    height: height,
-        	    closed: false,   
-        	    cache: true,
-        	    modal: false,
-        	    buttons: buttons,
-        	    onClose: onClose
-        	});
+        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,_options);
         	return _dialog;
     	}else{
-        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
-        		title : title,
-        		href: href,
-        	    width: width,   
-        	    height: height,
-        	    closed: false,   
-        	    cache: false,
-        	    modal: false,
-        	    buttons: buttons,
-        	    onClose: onClose
-        	});
+        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,_options);
         	return _dialog;
     	}
     };
@@ -897,7 +888,7 @@ var GlobalDialogUtils = null;
      * 打开对话框
      * notIframeDialog如果不设定值默认为iframeDialog
      */
-    DialogUtils.openModalDialog = function(dialogHandleId,title,href,width,height,onClose,buttons,cache,notIframeDialog){
+    DialogUtils.openModalDialog = function(dialogHandleId,title,href,width,height,onClose,options,buttons,cache,notIframeDialog){
     	var $dialogHandle = null;
     	//获取到dialog句柄
     	$dialogHandle = $("#"+dialogHandleId);
@@ -906,6 +897,16 @@ var GlobalDialogUtils = null;
     		$("body").append($dialogHandle);
     	}
     	title && $dialogHandle.attr("title",title);
+    	var _options = $.extend({},{
+	    		title : title,
+        	    width: width,   
+        	    height: height,
+        	    closed: false,
+        	    cache: true,
+        	    modal: true,
+        	    buttons: buttons,
+        	    onClose: onClose
+	    	},options);
     	
     	//如果是iframe类型的dialog
     	if(!notIframeDialog){
@@ -927,30 +928,12 @@ var GlobalDialogUtils = null;
     	    	}
     		}
     		
-    		var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
-        		title : title,
-        	    width: width,   
-        	    height: height,
-        	    closed: false,
-        	    cache: true,
-        	    modal: true,
-        	    buttons: buttons,
-        	    onClose: onClose
-        	});
+    		
+    		var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,_options);
         	return _dialog;
     	}else{
     		//如果不是dialog对话框
-        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,{
-        		title : title,
-        		href: href,
-        	    width: width,   
-        	    height: height,
-        	    closed: false,
-        	    cache: cache,
-        	    modal: true,
-        	    buttons: buttons,
-        	    onClose: onClose
-        	});
+        	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,_options);
         	return _dialog;
     	}
     };

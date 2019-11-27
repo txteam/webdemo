@@ -249,9 +249,14 @@ function addFun(id) {
 		"addVirtualCenter",
 		"添加虚中心",
 		addUrl,
-		600,193,function(){
-		$('#treegrid').treegrid('reload');
-	});
+		600,230,
+		function(){
+			$('#treegrid').treegrid('reload');
+		},
+		{
+			maximizable : true
+		}	
+	);
 }
 /*
  * 编辑虚中心
@@ -288,9 +293,11 @@ function editFun(id,name,modifyAble) {
     				"updateVirtualCenter",
     				"编辑虚中心:" + name,
     				updateUrl,
-    				600,175,function(){
+    				600,215,function(){
     					$('#treegrid').treegrid('reload');
-    			});
+    				},
+    				{maximizable : true}
+    			);
 			}else{
 				DialogUtils.alert("提醒","该虚中心不允许被编辑。","warning");
 			}

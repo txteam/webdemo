@@ -67,7 +67,7 @@ $(document).ready(function(){
 	});
 	
     //提交
-	$("#addBtn").click(function(){
+	$("#updateBtn").click(function(){
 		$('#entityForm').submit();
 	});
 });
@@ -100,13 +100,11 @@ $(document).ready(function(){
 						<textarea id="remark" name="remark" style="width: 60%" th:text="*{remark}"></textarea>
 					</td>
 				</tr>
-				<tr>
-					<td class="rightOperRow" colspan="2" style="padding-right: 50px">
-						<a id="addBtn" href="#" class="easyui-linkbutton">提交</a>  	
-					</td>
-				</tr>
 			</table>
 		</form>
+	</div>
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="updateBtn" href="javascript:void(0);" style="width: 75px;" class="easyui-linkbutton">提交</a>
 	</div>
 </div>
 </body>

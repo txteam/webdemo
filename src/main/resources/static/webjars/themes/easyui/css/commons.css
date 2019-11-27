@@ -19,6 +19,8 @@ input[readonly]{border: 1px solid #A0C2E5;background-color: #efefef;  }
 input[disabled]{border: 1px solid #A0C2E5;background-color: #efefef;}
 select[disabled]{border: 1px solid #A0C2E5;background-color: #efefef;}
 
+.footer-toolbar {line-height: 30px;background-color: #f2f2f2;border-top: none;text-align: right;overflow: hidden;}
+
 /* form table */
 .form { margin-bottom: 5px; }
 .form * {vertical-align: middle;}

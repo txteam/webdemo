@@ -141,6 +141,7 @@ $.widget("txcomponent.selectVirtualCenter",{
 				function(){
 					//onClose doNothing
 				},
+				{},
 				[{
 					text : '确认',
 					handler : function() {
