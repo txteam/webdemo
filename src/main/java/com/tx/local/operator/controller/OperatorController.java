@@ -248,8 +248,9 @@ public class OperatorController {
     @ResponseBody
     @RequestMapping("/validate")
     public Map<String, String> validate(
-            @RequestParam(value = "excludeId", required = false) String excludeId,
+            @RequestParam(value = "id", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
+        params.remove(excludeId);
         boolean flag = this.operatorService.exists(params, excludeId);
         
         Map<String, String> resMap = new HashMap<String, String>();

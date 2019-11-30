@@ -66,36 +66,36 @@ $(document).ready(function(){
 			return false;
 	    }
 	});
+	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("addRole");
+	});
+	//提交
+	$("#submitBtn").click(function(){
+		$('#entityForm').submit();
+	});
 });
-function submitFun(){
-	$('#entityForm').submit();
-}
-function cancelFun(){
-	parent.DialogUtils.closeDialogById("addRole");
-}
 /*]]>*/
 </script>
 </head>
-<body>
-<div class="easyui-layout" data-options="fit:true,border:false">
+<body class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form id="entityForm" method="post" class="form" th:object="${operatorRole}">
+			<input id="vcid" name="vcid" type="hidden" th:value="${vcid}"/>
 			<table class="table">
 				<tr>
-					<th class="narrow" width="25%">所属虚中心:<span class="tRed">*</span></th>
+					<th class="narrow" width="25%">名称:<span class="tRed">*</span></th>
 					<td>
-						<select id="vcid" name="vcid" data-rule="所属业务中心:required;" >
-							<option value="">-- 请选择 --</option>
-							<option th:each="vc:${vcList}" th:value="${vc.id}" th:text="${vc.name}" th:selected="${role.vcid eq vc.id}"></option>
-						</select>
+						<input id="name" name="name"
+							th:data-rule="'名称:required;length[1~16];remote[' + @{/operatorRole/validate} + ', name, vcid]'"/>
 					</td>
 				</tr>
 				<tr>
-					<th class="narrow">名称:<span class="tRed">*</span></th>
+					<th class="narrow" >编码:</th>
 					<td>
-						<input id="name" name="name"
-							data-rule="名称:required;remote[${contextPath}/operatorRole/validate, vcid, name, id]"
-							th:data-rule="'名称:required;length[1~16];remote[' + @{/operatorRole/validate} + ', name]'"/>
+						<input id="id" name="id"
+							th:data-rule="'名称:length[1~64];remote[' + @{/operatorRole/validate} + ', id]'"/>
 					</td>
 				</tr>
 				<tr>
@@ -104,14 +104,11 @@ function cancelFun(){
 						<textarea name="remark" rows="" cols="" class="longText" style="width:90%"></textarea>
 					</td>
 				</tr>
-				<tr>
-					<td class="rightOperRow" colspan="2" style="padding-right: 50px">
-						<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  
-						<a id="cancelBtn" onclick="cancelFun();return false;" href="#" class="easyui-linkbutton">取消</a>	
-					</td>
-				</tr>
 			</table>
 		</form>
 	</div>
-</div>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
+	</div>
 </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>addOperatorRole</title>
+	<title>configPostAuth</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -39,79 +39,93 @@
 	/*]]>*/
 	</script>
 </block>
+
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-$(document).ready(function(){
+var authTree = null;
+$(document).ready(function() {
 	parent.DialogUtils.progress('close');
 	
-	//验证器
-	$('#entityForm').validator({
-	    valid: function(){
-	        //表单验证通过，提交表单到服务器
-	        DialogUtils.progress({
-	        	text : '数据提交中，请等待....'
-	        });
-			$('#entityForm').ajaxSubmit({
-			    url:/*[[@{/operatorRole/add}]]*/_contextPath + 'operatorRole/add',
-			    success: function(data) {
-			    	DialogUtils.progress('close');
-					if(data){
-						parent.DialogUtils.tip("新增角色成功");
-						parent.DialogUtils.closeDialogById("addRole");
-					}else{
-						parent.DialogUtils.tip("新增角色失败");
-					}
-			    } 
+	authTree = $("#authTree").tree({
+		url : /*[[@{/auth/queryPost2AuthList(authTypeId=${authTypeId},postId=${postId})}]]*/_contextPath + 'auth/queryPost2AuthList?postId=xx&authTypeId=xx',
+		idField : 'id',
+		parentField : 'parentId',
+		textField : 'name',
+		iconField : function(item){
+			return 'database_key';	
+		},
+		checkbox : true,
+		//cascadeCheck : true,
+		lines : true,
+		onlyLeafCheck: false,
+		onClick : function(node){
+		}
+	});
+	
+	$("#confirmBtn").click(function(){
+		DialogUtils.progress({
+	        text : '数据提交中，请等待....'
+		});
+		var $treeEL = $("#authTree");
+		var checked = $treeEL.tree('getChecked',['checked','indeterminate']);
+		var authIds = [];
+		if(checked.length > 0){
+			$.each(checked,function(index,item){
+				authIds[index] = item.id;
 			});
-			return false;
-	    }
+		}
+		//提交数据
+		$.post(/*[[@{/auth/savePost2Auth}]]*/_contextPath + 'auth/savePost2Auth',
+			{
+				authTypeId: /*[[${authTypeId}]]*/'',
+		    	postId: /*[[${postId}]]*/'',
+		    	authId: authIds
+		    },
+		    function(data) {
+		    	DialogUtils.progress('close');
+				if(data){
+					parent.DialogUtils.tip("配置职位权限成功");
+					parent.DialogUtils.closeDialogById("configPostAuth");
+				}else{
+					DialogUtils.alert("错误提示","配置职位权限失败.","error");
+				}
+		    }
+		);
 	});
 });
-function submitFun(){
-	$('#entityForm').submit();
+function redo() {
+	var node = $currentAuthTreeEl.tree('getSelected');
+	if (node) {
+		$currentAuthTreeEl.tree('expandAll', node.id);
+	} else {
+		$currentAuthTreeEl.tree('expandAll');
+	}
 }
-function cancelFun(){
-	parent.DialogUtils.closeDialogById("addRole");
+function undo() {
+	var node = $currentAuthTreeEl.tree('getSelected');
+	if (node) {
+		$currentAuthTreeEl.tree('collapseAll', node.id);
+	} else {
+		$currentAuthTreeEl.tree('collapseAll');
+	}
 }
 /*]]>*/
 </script>
 </head>
-<body>
-<div class="easyui-layout" data-options="fit:true,border:false">
-	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form id="entityForm" method="post" class="form" th:object="${operatorRole}">
-			<table class="table">
-				<tr>
-					<th class="narrow" width="25%">所属虚中心:<span class="tRed">*</span></th>
-					<td>
-						<select id="vcid" name="vcid" data-rule="所属业务中心:required;" >
-							<option value="">-- 请选择 --</option>
-							<option th:each="vc:${vcList}" th:value="${vc.id}" th:text="${vc.name}" th:selected="${role.vcid eq vc.id}"></option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow">名称:<span class="tRed">*</span></th>
-					<td>
-						<input id="name" name="name"
-							data-rule="名称:required;remote[${contextPath}/operatorRole/validate, vcid, name, id]"
-							th:data-rule="'名称:required;length[1~16];remote[' + @{/operatorRole/validate} + ', name]'"/>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow">备注:</th>
-					<td>
-						<textarea name="remark" rows="" cols="" class="longText" style="width:90%"></textarea>
-					</td>
-				</tr>
-				<tr>
-					<td class="rightOperRow" colspan="2" style="padding-right: 50px">
-						<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  
-						<a id="cancelBtn" onclick="cancelFun();return false;" href="#" class="easyui-linkbutton">取消</a>	
-					</td>
-				</tr>
-			</table>
-		</form>
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" style="overflow-y:auto;" class="form">
+		<div class="datagrid-toolbar">
+	        <a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a>
+	        <a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a>
+	    </div>
+    
+		<input id="authTypeId" type="hidden" name="authTypeId" th:value="${authTypeId}"/>
+		<input id="postId" type="hidden" name="postId" th:value="postId"/>
+		
+		<ul id="authTree" style="margin-bottom: 40px;padding-top:2px;padding-left: 5px"></ul>
 	</div>
-</div>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="confirmBtn" href="javascript:void(0);" class="easyui-linkbutton" style="width: 85px">确认</a>
+	</div>
 </body>

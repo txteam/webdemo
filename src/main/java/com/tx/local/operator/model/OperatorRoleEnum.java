@@ -13,6 +13,9 @@ import com.tx.local.security.model.RoleTypeEnum;
 
 /**
  * 角色枚举<br/>
+ *    比较特殊的两个角色
+ *    该角色不用配置权限<br/>
+ *    ：在登陆期间，当发现当前用户拥有相关角色时做特殊处理<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -26,7 +29,7 @@ public enum OperatorRoleEnum implements Serializable, Role {
     SUPER_ADMIN("ROLE_SUPER_ADMIN", "超级管理员", RoleTypeEnum.ROLE_TYPE_ADMIN.getId()),
     
     /** 系统管理员 */
-    SYSTEM_ADMIN("ROLE_SYSTEM_ADMIN", "系统管理员", RoleTypeEnum.ROLE_TYPE_OPERATOR.getId());
+    SYSTEM_ADMIN("ROLE_SYSTEM_ADMIN", "系统管理员", RoleTypeEnum.ROLE_TYPE_ADMIN.getId());
     
     /** 数据库中主键，系统启动后会进行写入 */
     private final String id;

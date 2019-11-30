@@ -336,10 +336,9 @@ public class OperatorService {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         params.putAll(key2valueMap);
-        params.put("excludeId", excludeId);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.operatorDao.count(params);
+        int res = this.operatorDao.count(params, excludeId);
         
         return res > 0;
     }

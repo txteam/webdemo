@@ -7,10 +7,10 @@
 package com.tx.local.operator.dao;
 
 import com.tx.core.mybatis.dao.MybatisBaseDao;
-import com.tx.local.operator.model.OperatorRef;
+import com.tx.local.operator.model.OperatorRoleCatalog;
 
 /**
- * OperatorRef持久层
+ * OperatorRoleCatalog持久层
  * <功能详细描述>
  * 
  * @author  
@@ -18,5 +18,5 @@ import com.tx.local.operator.model.OperatorRef;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface OperatorRefDao extends MybatisBaseDao<OperatorRef, String>{
+public interface OperatorRoleCatalogDao extends MybatisBaseDao<OperatorRoleCatalog, String>{
 }

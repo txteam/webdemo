@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 
 import com.tx.core.mybatis.dao.impl.MybatisBaseDaoImpl;
 import com.tx.core.mybatis.support.MyBatisDaoSupport;
-import com.tx.local.operator.dao.OperatorRefDao;
-import com.tx.local.operator.model.OperatorRef;
+import com.tx.local.operator.dao.OperatorRoleCatalogDao;
+import com.tx.local.operator.model.OperatorRoleCatalog;
 
 /**
- * OperatorRef持久层
+ * OperatorRoleCatalog持久层
  * <功能详细描述>
  * 
  * @author  
@@ -24,10 +24,10 @@ import com.tx.local.operator.model.OperatorRef;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@Component("operatorRefDao")
-public class OperatorRefDaoImpl 
-		extends MybatisBaseDaoImpl<OperatorRef, String>
-		implements OperatorRefDao {
+@Component("operatorRoleCatalogDao")
+public class OperatorRoleCatalogDaoImpl 
+		extends MybatisBaseDaoImpl<OperatorRoleCatalog, String>
+		implements OperatorRoleCatalogDao {
     
     @Resource(name = "myBatisDaoSupport")
     private MyBatisDaoSupport myBatisDaoSupport;

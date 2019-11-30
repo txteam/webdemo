@@ -99,10 +99,7 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            <![CDATA[ AND P.parentId = #{parentId} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            <![CDATA[ AND P.remark = #{remark} ]]>
-	        </if>			
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
 	            <![CDATA[ AND P.organizationId = #{organizationId} ]]>
 	        </if>			
@@ -171,10 +168,7 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
 	            <![CDATA[ AND P.parentId = #{parentId} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            <![CDATA[ AND P.remark = #{remark} ]]>
-	        </if>			
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
 	            <![CDATA[ AND P.organizationId = #{organizationId} ]]>
 	        </if>			
@@ -268,17 +262,14 @@
 	    parameterType="java.util.Map">  
 	    UPDATE ORG_POST
 	    <trim prefix="SET" suffixOverrides=",">
-			<if test="_parameter.containsKey('fullName')">
-	    		fullName = #{fullName,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('lastUpdateDate')">
+	    	<if test="_parameter.containsKey('lastUpdateDate')">
 	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
-			<if test="_parameter.containsKey('name')">
+	    	<if test="_parameter.containsKey('name')">
 	    		name = #{name,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('vcid')">
-	    		vcid = #{vcid,javaType=java.lang.String},
+			<if test="_parameter.containsKey('fullName')">
+	    		fullName = #{fullName,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('valid')">
 	    		valid = #{valid,javaType=boolean},
@@ -292,6 +283,9 @@
 			<if test="_parameter.containsKey('organizationId')">
 	    		organizationId = #{organizationId,javaType=java.lang.String},
 	    	</if>
+			<!-- <if test="_parameter.containsKey('vcid')"> -->
+			<!-- vcid = #{vcid,javaType=java.lang.String}, -->
+			<!-- </if> -->
 	    </trim>
 	    WHERE
 		<trim prefixOverrides="AND | OR">

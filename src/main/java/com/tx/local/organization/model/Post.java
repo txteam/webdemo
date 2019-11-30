@@ -23,11 +23,22 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 职位<br/>
+ * 岗位(职位)<br/>
  *     职位和组织的关系<br/>
  *     不同的组织结构下面可能存在相同名字的职位
  *     或职责都相同的职位
  *     但在不同的组织结构下应该被认定为不同的职位。
+ * 岗位包括：
+ *    岗位描述
+ *    岗位职责
+ *    工作关系
+ *    任职资格
+ *    任职能力
+ *    考核标准
+ *    工作条件
+ *    流程指引
+ *    工作方式
+ *    ......    
  *     
  *     在本类中，如果存在parent的职位，
  *     则默认当前的职位的organizationId与父级职位相同<br/>

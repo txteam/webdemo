@@ -501,10 +501,12 @@ function configOperatorAuth(id,name){
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var configUrl = /*[[@{/auth/toConfigOperatorAuth}]]*/_contextPath + 'auth/toConfigOperatorAuth';
+	configUrl = configUrl + "?authTypeId=AUTH_TYPE_OPERATOR_OPERATE&operatorId=" + id;
 	DialogUtils.openModalDialog(
 		"configOperatorAuth",
 		$.formatString("配置人员权限_[{0}]",name),
-		$.formatString("${contextPath}/auth/toConfigOperatorAuth.action?operatorId={0}",id),
+		configUrl,
 		450,500,function(){
 		}
 	);

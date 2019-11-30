@@ -232,7 +232,8 @@ public class MenuController {
                     check = false;
                 }
             }
-            if (!CollectionUtils.isEmpty(menu.getAccess()) && check) {
+            // && check
+            if (!CollectionUtils.isEmpty(menu.getAccess())) {
                 if (!SecurityContext.getContext()
                         .access(StringUtils.join(menu.getAccess(), ","))) {
                     check = false;

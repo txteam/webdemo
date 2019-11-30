@@ -53,6 +53,25 @@ public class PostController {
     private VirtualCenterFacade virtualCenterFacade;
     
     /**
+     * 跳转到选择职位页面<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toSelect")
+    public String toSelect(
+            @RequestParam(value = "eventName", required = true) String eventName,
+            ModelMap responseMap) {
+        responseMap.put("vcid", WebContextUtils.getVcid());
+        responseMap.put("eventName", eventName);
+        
+        return "/organization/selectPost";
+    }
+    
+    /**
      * 跳转到查询职位列表页面<br/>
      * <功能详细描述>
      * @return [参数说明]
@@ -62,8 +81,11 @@ public class PostController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toQueryList")
-    public String toQueryList(ModelMap response) {
-        response.put("vcid", WebContextUtils.getVcidBySecurity());
+    public String toQueryList(
+            @RequestParam(value = "organizationId", required = false) String organizationId,
+            ModelMap response) {
+        response.put("vcid", WebContextUtils.getVcid());
+        response.put("organizationId", organizationId);
         
         return "organization/queryPostList";
     }
@@ -85,17 +107,23 @@ public class PostController {
         Post op = new Post();
         
         op.setParentId(parentId);
+        Organization org = null;
         if (!StringUtils.isEmpty(organizationId)) {
-            Organization org = this.organizationService
-                    .findById(organizationId);
+            org = this.organizationService.findById(organizationId);
             op.setOrganizationId(organizationId);
             op.setVcid(org.getVcid());
-            response.put("organization", org);
         }
         if (!StringUtils.isEmpty(parentId)) {
             Post parent = this.postService.findById(parentId);
             response.put("parent", parent);
+            
+            if (parent != null && org == null) {
+                org = this.organizationService
+                        .findById(parent.getOrganizationId());
+            }
         }
+        
+        response.put("organization", org);
         response.put("post", op);
         
         return "organization/addPost";
@@ -113,6 +141,17 @@ public class PostController {
     @RequestMapping("/toUpdate")
     public String toUpdate(@RequestParam("id") String id, ModelMap response) {
         Post post = this.postService.findById(id);
+        
+        if (post != null && !StringUtils.isEmpty(post.getOrganizationId())) {
+            Organization org = this.organizationService
+                    .findById(post.getOrganizationId());
+            response.put("organization", org);
+        }
+        if (post != null && !StringUtils.isEmpty(post.getParentId())) {
+            Post parent = this.postService.findById(post.getParentId());
+            response.put("parent", parent);
+        }
+        
         response.put("post", post);
         
         return "organization/updatePost";
@@ -130,10 +169,12 @@ public class PostController {
     @ResponseBody
     @RequestMapping("/queryList")
     public List<Post> queryList(
+            @RequestParam(value = "organizationId", required = false) String organizationId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", WebContextUtils.getVcidBySecurity());
+        params.put("vcid", WebContextUtils.getVcid());
+        params.put("organizationId", organizationId);
         
         List<Post> resList = this.postService.queryList(valid, params);
         
@@ -152,12 +193,14 @@ public class PostController {
     @ResponseBody
     @RequestMapping("/queryPagedList")
     public PagedList<Post> queryPagedList(
+            @RequestParam(value = "organizationId", required = false) String organizationId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", WebContextUtils.getVcidBySecurity());
+        params.put("vcid", WebContextUtils.getVcid());
+        params.put("organizationId", organizationId);
         
         PagedList<Post> resPagedList = this.postService.queryPagedList(valid,
                 params,
@@ -167,7 +210,7 @@ public class PostController {
     }
     
     /**
-     * 新增职位实例
+     * 新增职位实例<br/>
      * <功能详细描述>
      * @param post [参数说明]
      * 
@@ -178,9 +221,7 @@ public class PostController {
     @ResponseBody
     @RequestMapping("/add")
     public boolean add(Post post) {
-        Organization org = this.organizationService
-                .findById(post.getOrganizationId());
-        post.setVcid(org.getVcid());
+        post.setVcid(WebContextUtils.getVcid());
         
         this.postService.insert(post);
         return true;
@@ -300,8 +341,9 @@ public class PostController {
     @ResponseBody
     @RequestMapping("/validate")
     public Map<String, String> validate(
-            @RequestParam(value = "excludeId", required = false) String excludeId,
+            @RequestParam(value = "id", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
+        params.remove("id");
         boolean flag = this.postService.exists(params, excludeId);
         
         Map<String, String> resMap = new HashMap<String, String>();
@@ -345,11 +387,13 @@ public class PostController {
     @ResponseBody
     @RequestMapping("/queryChildren")
     public List<Post> queryChildren(
+            @RequestParam(value = "organizationId", required = false) String organizationId,
             @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", WebContextUtils.getVcidBySecurity());
+        params.put("vcid", WebContextUtils.getVcid());
+        params.put("organizationId", organizationId);
         
         List<Post> resList = this.postService.queryChildrenByParentId(parentId,
                 valid,
@@ -373,11 +417,13 @@ public class PostController {
     @ResponseBody
     @RequestMapping("/queryDescendants")
     public List<Post> queryDescendants(
+            @RequestParam(value = "organizationId", required = false) String organizationId,
             @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("vcid", WebContextUtils.getVcidBySecurity());
+        params.put("vcid", WebContextUtils.getVcid());
+        params.put("organizationId", organizationId);
         
         List<Post> resList = this.postService
                 .queryDescendantsByParentId(parentId, valid, params);

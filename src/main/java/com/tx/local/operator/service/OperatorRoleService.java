@@ -6,12 +6,17 @@
  */
 package com.tx.local.operator.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -28,6 +33,7 @@ import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.local.operator.dao.OperatorRoleDao;
 import com.tx.local.operator.model.OperatorRole;
+import com.tx.local.security.model.RoleTypeEnum;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
 
 /**
@@ -83,9 +89,15 @@ public class OperatorRoleService implements InitializingBean {
     public void insert(OperatorRole operatorRole) {
         //验证参数是否合法
         AssertUtils.notNull(operatorRole, "operatorRole is null.");
+        AssertUtils.notEmpty(operatorRole.getVcid(),
+                "operatorRole.vcid is empty.");
         
         //为添加的数据需要填入默认值的字段填入默认值
+        Date now = new Date();
         operatorRole.setValid(true);
+        operatorRole.setCreateDate(now);
+        operatorRole.setLastUpdateDate(now);
+        operatorRole.setRoleTypeId(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId());
         
         //调用数据持久层对实例进行持久化操作
         this.operatorRoleDao.insert(operatorRole);
@@ -145,8 +157,6 @@ public class OperatorRoleService implements InitializingBean {
      */
     public List<OperatorRole> queryList(Boolean valid,
             Map<String, Object> params) {
-        //判断条件合法性
-        
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
         params.put("valid", valid);
@@ -169,8 +179,6 @@ public class OperatorRoleService implements InitializingBean {
      * @see [类、类#方法、类#成员]
      */
     public List<OperatorRole> queryList(Boolean valid, Querier querier) {
-        //判断条件合法性
-        
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
@@ -315,10 +323,9 @@ public class OperatorRoleService implements InitializingBean {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         params.putAll(key2valueMap);
-        params.put("excludeId", excludeId);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.operatorRoleDao.count(params);
+        int res = this.operatorRoleDao.count(params, excludeId);
         
         return res > 0;
     }
@@ -440,5 +447,198 @@ public class OperatorRoleService implements InitializingBean {
         boolean flag = this.operatorRoleDao.update(params) > 0;
         
         return flag;
+    }
+    
+    /**
+     * 根据parentId查询角色子级实例列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param params
+     * @return [参数说明]
+     * 
+     * @return List<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public List<OperatorRole> queryChildrenByParentId(String parentId,
+            Boolean valid, Map<String, Object> params) {
+        //判断条件合法性
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
+        
+        //生成查询条件
+        params = params == null ? new HashMap<String, Object>() : params;
+        params.put("parentId", parentId);
+        params.put("valid", valid);
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        List<OperatorRole> resList = this.operatorRoleDao.queryList(params);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据parentId查询角色子级实例列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param querier
+     * @return [参数说明]
+     * 
+     * @return List<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public List<OperatorRole> queryChildrenByParentId(String parentId,
+            Boolean valid, Querier querier) {
+        //判断条件合法性
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
+        
+        //生成查询条件
+        querier = querier == null ? QuerierBuilder.newInstance().querier()
+                : querier;
+        if (valid != null) {
+            querier.getFilters().add(Filter.eq("valid", valid));
+        }
+        querier.getFilters().add(Filter.eq("parentId", parentId));
+        
+        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
+        List<OperatorRole> resList = this.operatorRoleDao.queryList(querier);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据parentId查询角色子、孙级实例列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param params
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public List<OperatorRole> queryDescendantsByParentId(String parentId,
+            Boolean valid, Map<String, Object> params) {
+        //判断条件合法性
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
+        
+        //生成查询条件
+        params = params == null ? new HashMap<String, Object>() : params;
+        Set<String> ids = new HashSet<>();
+        Set<String> parentIds = new HashSet<>();
+        parentIds.add(parentId);
+        
+        List<OperatorRole> resList = doNestedQueryChildren(valid,
+                ids,
+                parentIds,
+                params);
+        return resList;
+    }
+    
+    /**
+     * 查询嵌套列表<br/>
+     * <功能详细描述>
+     * @param ids
+     * @param parentIds
+     * @param params
+     * @return [参数说明]
+     * 
+     * @return List<Post> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private List<OperatorRole> doNestedQueryChildren(Boolean valid,
+            Set<String> ids, Set<String> parentIds,
+            Map<String, Object> params) {
+        if (CollectionUtils.isEmpty(parentIds)) {
+            return new ArrayList<OperatorRole>();
+        }
+        
+        //ids避免数据出错时导致无限循环
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.putAll(params);
+        queryParams.put("parentIds", parentIds);
+        List<OperatorRole> resList = queryList(valid, queryParams);
+        
+        Set<String> newParentIds = new HashSet<>();
+        for (OperatorRole bdTemp : resList) {
+            if (!ids.contains(bdTemp.getId())) {
+                newParentIds.add(bdTemp.getId());
+            }
+            ids.add(bdTemp.getId());
+        }
+        //嵌套查询下一层级
+        resList.addAll(doNestedQueryChildren(valid, ids, newParentIds, params));
+        return resList;
+    }
+    
+    /**
+     * 根据parentId查询角色子、孙级实例列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param querier
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public List<OperatorRole> queryDescendantsByParentId(String parentId,
+            Boolean valid, Querier querier) {
+        //判断条件合法性
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
+        
+        //生成查询条件
+        querier = querier == null ? QuerierBuilder.newInstance().querier()
+                : querier;
+        Set<String> ids = new HashSet<>();
+        Set<String> parentIds = new HashSet<>();
+        parentIds.add(parentId);
+        
+        List<OperatorRole> resList = doNestedQueryChildren(valid,
+                ids,
+                parentIds,
+                querier);
+        return resList;
+    }
+    
+    /**
+     * 嵌套查询列表<br/>
+     * <功能详细描述>
+     * @param ids
+     * @param parentIds
+     * @param querier
+     * @return [参数说明]
+     * 
+     * @return List<Post> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private List<OperatorRole> doNestedQueryChildren(Boolean valid,
+            Set<String> ids, Set<String> parentIds, Querier querier) {
+        if (CollectionUtils.isEmpty(parentIds)) {
+            return new ArrayList<OperatorRole>();
+        }
+        
+        //ids避免数据出错时导致无限循环
+        Querier querierClone = (Querier) querier.clone();
+        querierClone.getFilters().add(Filter.in("parentId", parentIds));
+        List<OperatorRole> resList = queryList(valid, querierClone);
+        
+        Set<String> newParentIds = new HashSet<>();
+        for (OperatorRole bdTemp : resList) {
+            if (!ids.contains(bdTemp.getId())) {
+                newParentIds.add(bdTemp.getId());
+            }
+            ids.add(bdTemp.getId());
+        }
+        //嵌套查询下一层级
+        resList.addAll(
+                doNestedQueryChildren(valid, ids, newParentIds, querier));
+        return resList;
     }
 }

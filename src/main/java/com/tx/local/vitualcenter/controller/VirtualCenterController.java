@@ -91,6 +91,11 @@ public class VirtualCenterController {
     public String toUpdate(@RequestParam("id") String id, ModelMap response) {
         VirtualCenter virtualCenter = this.virtualCenterService.findById(id);
         response.put("virtualCenter", virtualCenter);
+        if (!StringUtils.isEmpty(virtualCenter.getParentId())) {
+            VirtualCenter parent = this.virtualCenterService
+                    .findById(virtualCenter.getParentId());
+            response.put("parent", parent);
+        }
         
         return "virtualcenter/updateVirtualCenter";
     }
@@ -287,52 +292,14 @@ public class VirtualCenterController {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping("/validateCode")
-    public Map<String, String> validateCode(@RequestParam("code") String code,
-            @RequestParam(value = "id", required = false) String excludeId) {
+    @RequestMapping("/validate")
+    public Map<String, String> validate(
+            @RequestParam(value = "id", required = false) String excludeId,
+            @RequestParam Map<String, String> params) {
+        params.remove("id");
+        boolean flag = this.virtualCenterService.exists(params, excludeId);
+        
         Map<String, String> resMap = new HashMap<String, String>();
-        
-        if (StringUtils.isEmpty(code)) {
-            resMap.put("ok", "");
-            return resMap;
-        }
-        
-        Map<String, String> map = new HashMap<>();
-        map.put("code", code);
-        boolean flag = this.virtualCenterService.exists(map, excludeId);
-        
-        if (!flag) {
-            resMap.put("ok", "");
-        } else {
-            resMap.put("error", "重复的虚中心编码");
-        }
-        return resMap;
-    }
-    
-    /**
-     * 跳转到添加虚中心结构页面
-     * <功能详细描述>
-     * @param virtualCenterId [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ResponseBody
-    @RequestMapping("/validateName")
-    public Map<String, String> validateName(@RequestParam("name") String name,
-            @RequestParam(value = "id", required = false) String excludeId) {
-        Map<String, String> resMap = new HashMap<String, String>();
-        
-        if (StringUtils.isEmpty(name)) {
-            resMap.put("ok", "");
-            return resMap;
-        }
-        
-        Map<String, String> map = new HashMap<>();
-        map.put("name", name);
-        boolean flag = this.virtualCenterService.exists(map, excludeId);
-        
         if (!flag) {
             resMap.put("ok", "");
         } else {

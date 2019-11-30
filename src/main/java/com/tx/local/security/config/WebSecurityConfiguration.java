@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -45,6 +46,7 @@ import com.tx.local.security.strategy.UserSessionAuthenticationStrategy;
 @Import(value = { WebSecurityConfigurationImporter.class })
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     /** 日志记录句柄 */

@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.operator.model.OperatorRole;
 import com.tx.local.operator.service.OperatorRoleService;
-import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
+import com.tx.local.security.util.WebContextUtils;
 
 /**
  * 角色控制层<br/>
@@ -40,9 +41,24 @@ public class OperatorRoleController {
     @Resource(name = "operatorRoleService")
     private OperatorRoleService operatorRoleService;
     
-    //虚中心业务层
-    @Resource
-    private VirtualCenterFacade virtualCenterFacade;
+    /**
+     * 跳转到选择角色页面<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toSelect")
+    public String toSelect(
+            @RequestParam(value = "eventName", required = true) String eventName,
+            ModelMap responseMap) {
+        responseMap.put("vcid", WebContextUtils.getVcid());
+        responseMap.put("eventName", eventName);
+        
+        return "/operator/selectOperatorRole";
+    }
     
     /**
      * 跳转到查询角色列表页面<br/>
@@ -55,6 +71,7 @@ public class OperatorRoleController {
      */
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
+        response.put("vcid", WebContextUtils.getVcid());
         
         return "/operator/queryOperatorRoleList";
     }
@@ -70,15 +87,20 @@ public class OperatorRoleController {
      */
     @RequestMapping("/toAdd")
     public String toAdd(
-            @RequestParam(value = "vcid", required = false) String vcid,
+            @RequestParam(value = "parentId", required = false) String parentId,
             ModelMap response) {
         OperatorRole role = new OperatorRole();
-        role.setVcid(vcid);
         response.put("role", role);
+        String vcid = WebContextUtils.getVcid();
         response.put("vcid", vcid);
-        response.put("vcList",
-                this.virtualCenterFacade.queryList(true, null));
         
+        if (!StringUtils.isEmpty(parentId)) {
+            OperatorRole parent = this.operatorRoleService.findById(parentId);
+            if (parent != null && vcid.equals(parent.getVcid())) {
+                //操作员虚中心id等于父级角色的虚中心id时才写入parent
+                response.put("parent", parent);
+            }
+        }
         return "/operator/addOperatorRole";
     }
     
@@ -95,6 +117,14 @@ public class OperatorRoleController {
     public String toUpdate(@RequestParam("id") String id, ModelMap response) {
         OperatorRole operatorRole = this.operatorRoleService.findById(id);
         response.put("operatorRole", operatorRole);
+        response.put("vcid", WebContextUtils.getVcid());
+        
+        if (operatorRole != null
+                && !StringUtils.isEmpty(operatorRole.getParentId())) {
+            OperatorRole parent = this.operatorRoleService
+                    .findById(operatorRole.getParentId());
+            response.put("parent", parent);
+        }
         
         return "/operator/updateOperatorRole";
     }
@@ -114,6 +144,9 @@ public class OperatorRoleController {
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
+        params.put("vcid", WebContextUtils.getVcid());
+        params.put("code", request.getFirst("code"));
+        params.put("name", request.getFirst("name"));
         
         List<OperatorRole> resList = this.operatorRoleService.queryList(valid,
                 params);
@@ -138,7 +171,9 @@ public class OperatorRoleController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        //params.put("",request.getFirst(""));
+        params.put("vcid", WebContextUtils.getVcid());
+        params.put("code", request.getFirst("code"));
+        params.put("name", request.getFirst("name"));
         
         PagedList<OperatorRole> resPagedList = this.operatorRoleService
                 .queryPagedList(valid, params, pageIndex, pageSize);
@@ -157,6 +192,7 @@ public class OperatorRoleController {
     @ResponseBody
     @RequestMapping("/add")
     public boolean add(OperatorRole operatorRole) {
+        operatorRole.setVcid(WebContextUtils.getVcid());
         this.operatorRoleService.insert(operatorRole);
         return true;
     }
@@ -258,9 +294,10 @@ public class OperatorRoleController {
     @ResponseBody
     @RequestMapping("/validate")
     public Map<String, String> validate(
-            @RequestParam(value = "excludeId", required = false) String excludeId,
+            @RequestParam(value = "id", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
-        boolean flag = this.operatorRoleService.exists(params, excludeId);
+        ////角色的编码其实就是其ID，所有这里不用加入excludeId逻辑
+        boolean flag = this.operatorRoleService.exists(params, null);
         
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {
@@ -269,6 +306,60 @@ public class OperatorRoleController {
             resMap.put("error", "重复值");
         }
         return resMap;
+    }
+    
+    /**
+     * 根据条件查询角色子级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryChildren")
+    public List<OperatorRole> queryChildren(
+            @RequestParam(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("vcid", WebContextUtils.getVcid());
+        
+        List<OperatorRole> resList = this.operatorRoleService
+                .queryChildrenByParentId(parentId, valid, params);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据条件查询角色子、孙级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryDescendants")
+    public List<OperatorRole> queryDescendants(
+            @RequestParam(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("vcid", WebContextUtils.getVcid());
+        
+        List<OperatorRole> resList = this.operatorRoleService
+                .queryDescendantsByParentId(parentId, valid, params);
+        
+        return resList;
     }
     
 }

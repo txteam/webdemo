@@ -2,33 +2,33 @@
 <!DOCTYPE mapper 
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="operatorRef">
+<mapper namespace="operatorRefItem">
 
 	<!-- auto generate default resultMap -->
-	<resultMap id="operatorRefMap" 
-		type="com.tx.local.operator.model.OperatorRef">
+	<resultMap id="operatorRefItemMap" 
+		type="com.tx.local.operator.model.OperatorRefItem">
 	</resultMap>
 	
 	<!-- auto generate default find -->
 	<select id="find" 
-		parameterType="com.tx.local.operator.model.OperatorRef"
-		resultMap="operatorRefMap">
+		parameterType="com.tx.local.operator.model.OperatorRefItem"
+		resultMap="operatorRefItemMap">
 		SELECT 
-				OR.id,
-				OR.refId,
-				OR.refType,
-				OR.lastUpdateDate,
-				OR.lastUpdateOperatorId,
-				OR.createDate,
-				OR.createOperatorId,
-				OR.expiryDate,
-				OR.operatorId,
-				OR.effectiveDate
-		  FROM OPER_OPERATOR_REF OR
+				ORI.id,
+				ORI.refId,
+				ORI.refType,
+				ORI.lastUpdateDate,
+				ORI.lastUpdateOperatorId,
+				ORI.createDate,
+				ORI.createOperatorId,
+				ORI.expiryDate,
+				ORI.operatorId,
+				ORI.effectiveDate
+		  FROM OPER_OPERATOR_REF ORI
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            AND OR.id = #{id}
+	            AND ORI.id = #{id}
 	        </if>
 		</trim>
 	</select>
@@ -36,19 +36,19 @@
 	<!-- auto generate default query -->
 	<select id="query" 
 		parameterType="java.util.Map"
-		resultMap="operatorRefMap">
+		resultMap="operatorRefItemMap">
 		SELECT 
-				OR.id,
-				OR.refId,
-				OR.refType,
-				OR.lastUpdateDate,
-				OR.lastUpdateOperatorId,
-				OR.createDate,
-				OR.createOperatorId,
-				OR.expiryDate,
-				OR.operatorId,
-				OR.effectiveDate
-		  FROM OPER_OPERATOR_REF OR
+				ORI.id,
+				ORI.refId,
+				ORI.refType,
+				ORI.lastUpdateDate,
+				ORI.lastUpdateOperatorId,
+				ORI.createDate,
+				ORI.createOperatorId,
+				ORI.expiryDate,
+				ORI.operatorId,
+				ORI.effectiveDate
+		  FROM OPER_OPERATOR_REF ORI
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -66,31 +66,53 @@
 			</foreach>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            <![CDATA[ AND OR.id = #{id} ]]>
-	        </if>			
+	            <![CDATA[ AND ORI.id = #{id} ]]>
+	        </if>		
+	        
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
-	            <![CDATA[ AND OR.refId = #{refId} ]]>
+	            <![CDATA[ AND ORI.refId = #{refId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType)">  
-	            <![CDATA[ AND OR.refType = #{refType} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
-	            <![CDATA[ AND OR.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
-	        </if>			
+	            <![CDATA[ AND ORI.refType = #{refType} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refMap)">
+	        	AND
+	        	<foreach index="refTypeTemp" item="refIdsTemp" collection="refMap.entrySet()" open="(" close=")" separator="OR">
+	        		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refIds)">
+	        			ORI.refType = #{refTypeTemp,javaType=java.lang.String}
+	        			AND ORI.refId IN <foreach item="refIdTemp" collection="refIdsTemp" open="(" close=")" separator=",">#{refIdTemp,javaType=java.lang.String}</foreach>
+	        		</if>
+	        	</foreach>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            <![CDATA[ AND ORI.operatorId = #{operatorId} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(effective)">  
+	        	<choose>  
+			        <when test="@com.tx.core.util.OgnlUtils@isTrue(effective)">  
+			            <![CDATA[ AND ((ORI.expiryDate IS NULL OR ORI.expiryDate <= now(6)) AND (ORI.effectiveDate IS NULL OR ORI.effective >= now(6))) ]]>
+			        </when>
+			        <otherwise>  
+			            <![CDATA[ AND ((ORI.expiryDate IS NOT NULL AND ORI.expiryDate > now(6)) AND (ORI.effectiveDate IS NOT NULL OR ORI.effective < now(6))) ]]>
+			        </otherwise>  
+			    </choose>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(expried)">
+	        	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(expried)">  
+		            AND ((ORI.expiryDate IS NOT NULL AND ORI.expiryDate > now(6))
+		        </if>
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
-	            <![CDATA[ AND OR.createDate >= #{minCreateDate} ]]>
+	            <![CDATA[ AND ORI.createDate >= #{minCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
-	            <![CDATA[ AND OR.createDate < #{maxCreateDate} ]]>
+	            <![CDATA[ AND ORI.createDate < #{maxCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
-	            <![CDATA[ AND OR.createOperatorId = #{createOperatorId} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
-	            <![CDATA[ AND OR.operatorId = #{operatorId} ]]>
-	        </if>			
+	            <![CDATA[ AND ORI.createOperatorId = #{createOperatorId} ]]>
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
-				<![CDATA[ AND OR.id <> #{excludeId} ]]>
+				<![CDATA[ AND ORI.id <> #{excludeId} ]]>
 			</if>
 		</trim>
 		<choose>  
@@ -108,7 +130,7 @@
 		parameterType="java.util.Map"
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
-		  FROM OPER_OPERATOR_REF OR
+		  FROM OPER_OPERATOR_REF ORI
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -126,38 +148,60 @@
 			</foreach>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            <![CDATA[ AND OR.id = #{id} ]]>
-	        </if>			
+	            <![CDATA[ AND ORI.id = #{id} ]]>
+	        </if>		
+	        
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refId)">  
-	            <![CDATA[ AND OR.refId = #{refId} ]]>
+	            <![CDATA[ AND ORI.refId = #{refId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refType)">  
-	            <![CDATA[ AND OR.refType = #{refType} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
-	            <![CDATA[ AND OR.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
-	        </if>			
+	            <![CDATA[ AND ORI.refType = #{refType} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refMap)">
+	        	AND
+	        	<foreach index="refTypeTemp" item="refIdsTemp" collection="refMap.entrySet()" open="(" close=")" separator="OR">
+	        		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(refIds)">
+	        			ORI.refType = #{refTypeTemp,javaType=java.lang.String}
+	        			AND ORI.refId IN <foreach item="refIdTemp" collection="refIdsTemp" open="(" close=")" separator=",">#{refIdTemp,javaType=java.lang.String}</foreach>
+	        		</if>
+	        	</foreach>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            <![CDATA[ AND ORI.operatorId = #{operatorId} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(effective)">  
+	        	<choose>  
+			        <when test="@com.tx.core.util.OgnlUtils@isTrue(effective)">  
+			            <![CDATA[ AND ((ORI.expiryDate IS NULL OR ORI.expiryDate <= now(6)) AND (ORI.effectiveDate IS NULL OR ORI.effective >= now(6))) ]]>
+			        </when>
+			        <otherwise>  
+			            <![CDATA[ AND ((ORI.expiryDate IS NOT NULL AND ORI.expiryDate > now(6)) AND (ORI.effectiveDate IS NOT NULL OR ORI.effective < now(6))) ]]>
+			        </otherwise>  
+			    </choose>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(expried)">
+	        	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(expried)">  
+		            AND ((ORI.expiryDate IS NOT NULL AND ORI.expiryDate > now(6))
+		        </if>
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
-	            <![CDATA[ AND OR.createDate >= #{minCreateDate} ]]>
+	            <![CDATA[ AND ORI.createDate >= #{minCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
-	            <![CDATA[ AND OR.createDate < #{maxCreateDate} ]]>
+	            <![CDATA[ AND ORI.createDate < #{maxCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
-	            <![CDATA[ AND OR.createOperatorId = #{createOperatorId} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
-	            <![CDATA[ AND OR.operatorId = #{operatorId} ]]>
-	        </if>			
+	            <![CDATA[ AND ORI.createOperatorId = #{createOperatorId} ]]>
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
-				<![CDATA[ AND OR.id <> #{excludeId} ]]>
+				<![CDATA[ AND ORI.id <> #{excludeId} ]]>
 			</if>
 		</trim>
 	</select>
 	
 	<!-- auto generate default insert -->
     <insert id="insert" 
-		parameterType="com.tx.local.operator.model.OperatorRef">
+		parameterType="com.tx.local.operator.model.OperatorRefItem">
 		INSERT INTO OPER_OPERATOR_REF
 		(
 			id,
@@ -188,7 +232,7 @@
 	
 	<!-- auto generate default delete -->
 	<delete id="delete" 
-		parameterType="com.tx.local.operator.model.OperatorRef">
+		parameterType="com.tx.local.operator.model.OperatorRefItem">
 		DELETE FROM OPER_OPERATOR_REF  WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  

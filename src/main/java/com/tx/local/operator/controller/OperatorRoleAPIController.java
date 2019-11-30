@@ -223,4 +223,37 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
         
         return flag;
     }
+    
+    /**
+     * 根据条件查询查询职位子代列表<br/>
+     * @param parentId
+     * @param valid
+     * @param querier
+     * @return
+     */
+    @Override
+    public List<OperatorRole> queryChildrenByParentId(String parentId,
+            Boolean valid, Querier querier) {
+        List<OperatorRole> resList = this.operatorRoleService
+                .queryChildrenByParentId(parentId, valid, querier);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据条件查询查询职位后代列表<br/>
+     * @param parentId
+     * @param valid
+     * @param querier
+     * @return
+     */
+    @Override
+    public List<OperatorRole> queryDescendantsByParentId(String parentId,
+            Boolean valid, Querier querier) {
+        List<OperatorRole> resList = this.operatorRoleService
+                .queryDescendantsByParentId(parentId, valid, querier);
+        
+        return resList;
+    }
+    
 }

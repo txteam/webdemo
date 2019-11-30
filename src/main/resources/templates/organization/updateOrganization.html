@@ -35,14 +35,14 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
 
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-var updateurl = /*[[@{/organization/update}]]*/_contextPath + 'organization/update';
+var updateurl = /*[[@{/organization/update}]]*/'';
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	//初始化省市区下拉框
@@ -62,10 +62,17 @@ $(document).ready(function(){
 			    } 
 			});
 	});
+	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("updateOrganization");
+	});
+	//提交
+	$("#submitBtn").click(function(){
+		$('#entityForm').submit();
+	});
 });
-function submitFun(){
-	$('#entityForm').submit();
-}
+
 /*]]>*/
 </script>
 </head>
@@ -85,9 +92,14 @@ function submitFun(){
 				</tr>
 				<tr>
 					<th class="narrow">组织类型:<span class="tRed">*</span></th>
-					<td>
+					<td th:if="${organization.type.code == 'GROUP_COMPANY' or organization.type.code == 'COMPANY' or organization.type.code == 'BRANCH_COMPANY'}">
 						<input id="type" name="type" type="hidden" value="" th:value="*{type.code}" />
 						<input id="typeName" name="typeName" readonly="readonly" value="" th:value="*{type.name}" />
+					</td>
+					<td th:unless="${organization.type.code == 'GROUP_COMPANY' or organization.type.code == 'COMPANY' or organization.type.code == 'BRANCH_COMPANY'}">
+						<select id="type" name="type" data-rule="组织类型:required;">
+							<option th:each="type:${types}" th:value="${type.code}" th:text="${type.name}" th:selected="${type eq organization.type}"></option>
+						</select>
 					</td>
 					<th>上级组织:</th>
 					<td>
@@ -106,29 +118,17 @@ function submitFun(){
 					</td>
 				</tr>
 				<tr>
-					<th>所属业务中心:</th>
-					<td>
-						<input id="vcid" name="vcid" type="hidden" readonly="readonly" value="" th:value="*{vcid}"/>
-						<input id="virtualCenterName" name="virtualCenterName" class="selectInput" readonly="readonly" value="" th:value="${vc?.name?:''}"/>
-					</td>
-					<th>&nbsp;</th>
-					<td>
-						&nbsp;
-					</td>
-				</tr>
-				<tr>
 					<th>备注:</th>
 					<td colspan="3">
 						<textarea name="remark" rows="" cols="" class="longText" style="width:90%" th:text="*{remark}"></textarea>
 					</td>
 				</tr>
-				<tr>
-					<td class="rightOperRow" colspan="4" style="padding-right: 50px">
-						<a id="addBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton" style="width: 80px;">提交</a>  	
-					</td>
-				</tr>
 			</table>
 		</form:form>
+	</div>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
 	</div>
 </div>
 </body>

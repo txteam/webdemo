@@ -54,10 +54,10 @@ public interface OperatorRoleFacade {
      * @see [类、类#方法、类#成员]
      */
     @ApiOperation(value = "根据主键删除角色")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id);
-
+            @PathVariable(value = "id", required = true) String id);
+    
     /**
      * 更新角色<br/>
      * <功能详细描述>
@@ -70,9 +70,10 @@ public interface OperatorRoleFacade {
      */
     @ApiOperation(value = "修改角色")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody OperatorRole operatorRole);
-
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody OperatorRole operatorRole);
+    
     /**
      * 禁用角色<br/>
      * @param id
@@ -82,10 +83,10 @@ public interface OperatorRoleFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-	@ApiOperation(value = "禁用角色")
+    @ApiOperation(value = "禁用角色")
     @RequestMapping(value = "/disable/{id}", method = RequestMethod.PATCH)
     public boolean disableById(
-    		@PathVariable(value = "id", required = true) String id);
+            @PathVariable(value = "id", required = true) String id);
     
     /**
      * 启用角色<br/>
@@ -100,8 +101,8 @@ public interface OperatorRoleFacade {
     @ApiOperation(value = "启用角色")
     @RequestMapping(value = "/enable/{id}", method = RequestMethod.PATCH)
     public boolean enableById(
-    		@PathVariable(value = "id", required = true) String id);
-
+            @PathVariable(value = "id", required = true) String id);
+    
     /**
      * 根据主键查询角色<br/>
      * <功能详细描述>
@@ -115,7 +116,7 @@ public interface OperatorRoleFacade {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public OperatorRole findById(
             @PathVariable(value = "id", required = true) String id);
-
+    
     /**
      * 查询角色实例列表<br/>
      * <功能详细描述>
@@ -130,9 +131,8 @@ public interface OperatorRoleFacade {
     @ApiOperation(value = "查询角色列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<OperatorRole> queryList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-    		@RequestBody Querier querier
-    	);
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier);
     
     /**
      * 查询角色分页列表<br/>
@@ -150,13 +150,12 @@ public interface OperatorRoleFacade {
     @ApiOperation(value = "查询角色分页列表")
     @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
     public PagedList<OperatorRole> queryPagedList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	);
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize);
     
-	/**
+    /**
      * 查询角色数量<br/>
      * <功能详细描述>
      * @param valid
@@ -170,12 +169,12 @@ public interface OperatorRoleFacade {
     @ApiOperation(value = "查询角色数量")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int count(
-			@RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier);
-
-	/**
+    
+    /**
      * 查询角色是否存在<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 
@@ -185,8 +184,44 @@ public interface OperatorRoleFacade {
      */
     @ApiOperation(value = "查询角色是否存在")
     @RequestMapping(value = "/exists", method = RequestMethod.GET)
-    public boolean exists(
-    		@RequestBody Querier querier,
-            @RequestParam(value = "excludeId", required = false) String excludeId
-            );
+    public boolean exists(@RequestBody Querier querier,
+            @RequestParam(value = "excludeId", required = false) String excludeId);
+    
+    /**
+     * 根据条件查询查询角色子代列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param querier
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ApiOperation(value = "根据条件查询查询角色子代列表")
+    @RequestMapping(value = "/children/{parentId}", method = RequestMethod.GET)
+    public List<OperatorRole> queryChildrenByParentId(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier);
+    
+    /**
+     * 根据条件查询查询角色后代列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param querier
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ApiOperation(value = "根据条件查询查询角色后代列表")
+    @RequestMapping(value = "/descendants/{parentId}", method = RequestMethod.GET)
+    public List<OperatorRole> queryDescendantsByParentId(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier);
 }

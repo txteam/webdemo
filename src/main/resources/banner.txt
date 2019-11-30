@@ -24,3 +24,8 @@ ${AnsiColor.BRIGHT_YELLOW}
 ${AnsiColor.BRIGHT_RED}
 Application Version: ${application.version} | ${application.formatted-version}
 Spring Boot Version: ${spring-boot.version} | ${spring-boot.formatted-version}
+
+
+注意：
+1、webdemo项目直接下载后连接的redis以及mybatis数据都比较慢，在点击菜单期间会存在卡顿.
+	如果不能忍受该卡顿，方法一：关闭redis缓存  方法二： 将application.yml中redis切换为本机的缓存.

@@ -68,12 +68,12 @@ public class PostAPIController implements PostFacade {
      */
     @Override
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.postService.deleteById(id);
         return flag;
     }
-	
-	/**
+    
+    /**
      * 根据code删除职位<br/> 
      * <功能详细描述>
      * @param code
@@ -85,9 +85,9 @@ public class PostAPIController implements PostFacade {
      */
     @Override
     public boolean deleteByCode(
-    		@PathVariable(value = "code",required=true) String code){
+            @PathVariable(value = "code", required = true) String code) {
         boolean flag = this.postService.deleteByCode(code);
-        return flag;    
+        return flag;
     }
     
     /**
@@ -101,9 +101,10 @@ public class PostAPIController implements PostFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody Post post) {
-        boolean flag = this.postService.updateById(id,post);
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody Post post) {
+        boolean flag = this.postService.updateById(id, post);
         return flag;
     }
     
@@ -116,9 +117,9 @@ public class PostAPIController implements PostFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-	@Override
+    @Override
     public boolean disableById(
-    		@PathVariable(value = "id", required = true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.postService.disableById(id);
         return flag;
     }
@@ -135,11 +136,11 @@ public class PostAPIController implements PostFacade {
      */
     @Override
     public boolean enableById(
-    		@PathVariable(value = "id", required = true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.postService.enableById(id);
         return flag;
     }
-
+    
     /**
      * 根据主键查询职位<br/>
      * <功能详细描述>
@@ -156,7 +157,7 @@ public class PostAPIController implements PostFacade {
         
         return res;
     }
-
+    
     /**
      * 根据编码查询职位<br/>
      * <功能详细描述>
@@ -173,7 +174,7 @@ public class PostAPIController implements PostFacade {
         
         return res;
     }
-
+    
     /**
      * 查询职位实例列表<br/>
      * <功能详细描述>
@@ -187,14 +188,10 @@ public class PostAPIController implements PostFacade {
      */
     @Override
     public List<Post> queryList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-    		@RequestBody Querier querier
-    	) {
-        List<Post> resList = this.postService.queryList(
-			valid,
-			querier         
-        );
-  
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier) {
+        List<Post> resList = this.postService.queryList(valid, querier);
+        
         return resList;
     }
     
@@ -213,21 +210,18 @@ public class PostAPIController implements PostFacade {
      */
     @Override
     public PagedList<Post> queryPagedList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	) {
-        PagedList<Post> resPagedList = this.postService.queryPagedList(
-			valid,
-			querier,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize) {
+        PagedList<Post> resPagedList = this.postService.queryPagedList(valid,
+                querier,
+                pageIndex,
+                pageSize);
         return resPagedList;
     }
     
-	/**
+    /**
      * 查询职位数量<br/>
      * <功能详细描述>
      * @param valid
@@ -240,18 +234,16 @@ public class PostAPIController implements PostFacade {
      */
     @Override
     public int count(
-			@RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier) {
-        int count = this.postService.count(
-			valid,
-        	querier);
+        int count = this.postService.count(valid, querier);
         
         return count;
     }
-
-	/**
+    
+    /**
      * 查询职位是否存在<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 
@@ -266,8 +258,8 @@ public class PostAPIController implements PostFacade {
         
         return flag;
     }
-
-	/**
+    
+    /**
      * 根据条件查询基础数据分页列表<br/>
      * <功能详细描述>
      * @param parentId
@@ -280,18 +272,18 @@ public class PostAPIController implements PostFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<Post> queryChildrenByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-			@RequestParam(value = "valid", required = false) Boolean valid,
-            Querier querier){
+    public List<Post> queryChildrenByParentId(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            Querier querier) {
         List<Post> resList = this.postService.queryChildrenByParentId(parentId,
-			valid,
-			querier         
-        );
-  
+                valid,
+                querier);
+        
         return resList;
     }
-
-	/**
+    
+    /**
      * 根据条件查询基础数据分页列表<br/>
      * <功能详细描述>
      * @param parentId
@@ -304,14 +296,13 @@ public class PostAPIController implements PostFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<Post> queryDescendantsByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-			@RequestParam(value = "valid", required = false) Boolean valid,
-            Querier querier){
-        List<Post> resList = this.postService.queryDescendantsByParentId(parentId,
-			valid,
-			querier         
-        );
-  
+    public List<Post> queryDescendantsByParentId(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            Querier querier) {
+        List<Post> resList = this.postService
+                .queryDescendantsByParentId(parentId, valid, querier);
+        
         return resList;
     }
 }

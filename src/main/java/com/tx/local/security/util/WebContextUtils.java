@@ -6,17 +6,23 @@
  */
 package com.tx.local.security.util;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.tx.component.security.context.SecurityContext;
+import com.tx.component.security.model.AuthAuthority;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRoleEnum;
@@ -35,36 +41,41 @@ import com.tx.local.security.model.OperatorUserDetails;
 public class WebContextUtils {
     
     /**
-     * 获取请求中的虚中心id<br/>
+     * 获取当前用户拥有的权限集合<br/>
      * <功能详细描述>
-     * @param request
      * @return [参数说明]
      * 
-     * @return String [返回类型说明]
+     * @return Set<String> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public static String getVcidBySecurity() {
-        Authentication authentication = getAuthentication();
-        if (authentication == null) {
-            return null;
+    public static Set<String> getCurrentAuthIds() {
+        Set<GrantedAuthority> gas = getCurrentAuthorities();
+        if (CollectionUtils.isEmpty(gas)) {
+            return new HashSet<>();
         }
-        OperatorUserDetails detail = getUserDetails();
-        if (detail == null) {
-            return null;
-        }
-        String vcid = detail.getVcid();
-        if (isSuperAdmin()) {
-            HttpServletRequest request = getRequest();
-            if (request == null) {
-                return vcid;
-            }
-            String requestVcid = request.getParameter("vcid");
-            if (StringUtils.isNotEmpty(requestVcid)) {
-                vcid = requestVcid;
-            }
-        }
-        return vcid;
+        
+        Set<String> authIds = gas.stream()
+                .filter(a -> AuthAuthority.class.isInstance(a))
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toSet());
+        return authIds;
+    }
+    
+    /**
+     * 获取当前用户拥有的权限集合<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return Set<GrantedAuthority> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static Set<GrantedAuthority> getCurrentAuthorities() {
+        Authentication a = getAuthentication();
+        Set<GrantedAuthority> authorities = a != null
+                ? new HashSet<>(a.getAuthorities()) : new HashSet<>();
+        return authorities;
     }
     
     /**

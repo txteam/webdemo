@@ -244,8 +244,9 @@ public class EmployeeInfoController {
     @ResponseBody
     @RequestMapping("/validate")
     public Map<String, String> validate(
-            @RequestParam(value = "excludeId", required = false) String excludeId,
+            @RequestParam(value = "id", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
+        params.remove("id");
         boolean flag = this.employeeInfoService.exists(params, excludeId);
         
         Map<String, String> resMap = new HashMap<String, String>();

@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -55,27 +55,12 @@ $(document).ready(function(){
 			if(organization){
 				$("#parentName").val(organization.name);
 				$("#parentId").val(organization.id);
-				
-				$("#vcid").val(organization.vcid);
-				$("#vcid").attr("readonly","true");
 			}
 		},
 	    clearHandler: function(){
 	    	$("#parentName").val("");
 			$("#parentId").val("");
-			
-			$("#virtualCenterName").val("");
-			$("#vcid").val("");
 	    }
-	});
-	
-	//虚中心与组织存在联动关系，如果选中需中心，则组织仅能在选中的虚中心中选取
-	//所以在组织与虚中心任一发生变动时应当影响到对方
-	$("#vcid").change(function(){
-		if($('#type').val() != 'GROUP_COMPANY' || $('#type').val() != 'COMPANY' || $('#type').val() != 'BRANCH_COMPANY'){
-			$("#parentName").val("");
-			$("#parentId").val("");
-		}
 	});
 	
 	//验证器
@@ -101,7 +86,7 @@ $(document).ready(function(){
 			});
 	        //表单验证通过，提交表单到服务器
 			$('#entityForm').ajaxSubmit({
-			    url:/*[[@{/organization/add}]]*/_contextPath + 'organization/add',
+			    url:/*[[@{/organization/add}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
@@ -115,10 +100,16 @@ $(document).ready(function(){
 			return false;
 	    }
 	});
+	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("addOrganization");
+	});
+	//提交
+	$("#submitBtn").click(function(){
+		$('#entityForm').submit();
+	});
 });
-function submitFun(){
-	$('#entityForm').submit();
-}
 /*]]>*/
 </script>
 </head>
@@ -161,31 +152,17 @@ function submitFun(){
 					</td>
 				</tr>
 				<tr>
-					<th>所属业务中心:</th>
-					<td>
-						<select id="vcid" name="vcid">
-							<option value="">--请选择--</option>
-							<option th:each="vc:${virtualCenterList}" th:value="${vc.id}" th:text="${vc.name}" th:selected="${organization.vcid eq vc.id}"></option>
-						</select>
-					</td>
-					<th>&nbsp;</th>
-					<td>
-						&nbsp;
-					</td>
-				</tr>
-				<tr>
 					<th>备注:</th>
 					<td colspan="3">
-						<textarea name="remark" rows="" cols="" class="longText" style="width:90%"></textarea>
-					</td>
-				</tr>
-				<tr>
-					<td class="rightOperRow" colspan="4" style="padding-right: 50px">
-						<a id="addBtn"  onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  	
+						<textarea name="remark" rows="" cols="3" class="longText" style="width:90%"></textarea>
 					</td>
 				</tr>
 			</table>
 		</form>
+	</div>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
 	</div>
 </div>
 </body>

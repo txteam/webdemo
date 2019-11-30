@@ -1119,15 +1119,16 @@ $.fn.tree.defaults.loadFilter = function(data) {
         parentField = opt.parentField;
         textField = opt.textField || 'text';
         iconField = opt.iconField || 'iconCls';
-        checkedField = opt.iconField || 'checked';
+        checkedField = opt.checkedField || 'checked';
         var i, l, treeData = [], tmpMap = [];
         for (i = 0, l = data.length; i < l; i++) {
             tmpMap[data[i][idField]] = data[i];
         }
         for (i = 0, l = data.length; i < l; i++) {
             if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
-                if (!tmpMap[data[i][parentField]]['children'])
-                    tmpMap[data[i][parentField]]['children'] = [];
+                if (!tmpMap[data[i][parentField]]['children']){
+                	tmpMap[data[i][parentField]]['children'] = [];
+                }
                 if(!notIncludeTarget){
                 	data[i]['object'] = data[i];
                 } 
@@ -1149,7 +1150,8 @@ $.fn.tree.defaults.loadFilter = function(data) {
     }else{
         textField = opt.textField || 'text';
         iconField = opt.iconField || 'iconCls';
-        childrenField = opt.childrenField || 'children';  
+        childrenField = opt.childrenField || 'children';
+        checkedField = opt.checkedField || 'checked';
         function iteratorTreeData(item){
             if(item == null){
                 return ;
@@ -1160,6 +1162,7 @@ $.fn.tree.defaults.loadFilter = function(data) {
             item['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
             item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
             item['children'] = item[childrenField];
+            item['checked'] = item[checkedField];
             if(!$.ObjectUtils.isEmpty(item['children'])){
             	var k = 0;
             	var length = item['children'].length;
@@ -1177,6 +1180,18 @@ $.fn.tree.defaults.loadFilter = function(data) {
     return data;
 };
 
+$.fn.datagrid.defaults.onBeforeLoad = function(param){
+    //console.log(param);
+    param["pageNumber"] = param.page;
+    param["pageSize"] = param.rows;
+    param["sortName"] = param.order;
+    param["sortOrder"] = param.sort;
+    
+    delete param.order;
+   	delete param.rows;
+    delete param.page;
+    delete param.sort;
+};
 /**
  * 扩展treegrid
  * 使其支持平滑数据格式
@@ -1184,7 +1199,7 @@ $.fn.tree.defaults.loadFilter = function(data) {
  */
 $.fn.treegrid.defaults.loadFilter = function(data) {
     var opt = $(this).data().treegrid.options;
-    var idField, textField, parentField,iconField,iconField;
+    var idField, textField, parentField, iconField, childrenField;
     if (opt.parentField) {
         idField = opt.idField || 'id';
         textField = opt.textField || 'text';
@@ -1196,8 +1211,9 @@ $.fn.treegrid.defaults.loadFilter = function(data) {
         }
         for (i = 0, l = data.length; i < l; i++) {
             if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
-                if (!tmpMap[data[i][parentField]]['children'])
-                    tmpMap[data[i][parentField]]['children'] = [];
+                if (!tmpMap[data[i][parentField]]['children']){
+                	tmpMap[data[i][parentField]]['children'] = [];
+                }
                 data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
                 data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
@@ -1225,6 +1241,8 @@ $.fn.treegrid.defaults.loadFilter = function(data) {
                 for(k = 0 ; k < length ; k++){
                     iteratorTreeData(item['children'][k]);
                 }
+            }else{
+            	item['children'] = [];
             }
         }
         for (i = 0, l = data.length; i < l; i++) {
@@ -1334,6 +1352,41 @@ var FeeValueTypes = {};
 	};
 	FeeValueTypes.NA = {
 		disabled : true
+	};
+})(jQuery);
+
+/* 预制费中费用类型与numberBox效果之间的关系 */
+(function($, undefined) {
+	$.Formatters = {};
+	$.Formatters.dateFun = function(value, row, index){
+	    var text = '';
+	    if(!value){
+	        text = '';
+	    }else{
+	        var date = new Date();
+	        date.setTime(value);
+	        text = date.format('yyyy-MM-dd hh:mm:ss');
+	    }
+	    return text;
+	};
+	$.Formatters.escapeFun = function(value, row, index){
+		if (!value) {  
+	        return value;  
+	    }else {  
+	    	value = value === null ? "" : value;  
+	    	value =value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g,"&gt;")  
+	        	.replace(/"/g, "&quot;").replace(/'/g, "&#39;");      // &，大于，小于，双引号，单引号
+	        return value;
+	    }
+	};
+	$.Formatters.booleanFun = function(value, row, index){
+		var text = '';
+		if(value){
+			text = '是';
+		}else{
+			text = '否';
+		}
+		return text;
 	};
 })(jQuery); 
 

@@ -344,10 +344,9 @@ public class PostService {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         params.putAll(key2valueMap);
-        params.put("excludeId", excludeId);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.postDao.count(params);
+        int res = this.postDao.count(params, excludeId);
         
         return res > 0;
     }
@@ -389,16 +388,15 @@ public class PostService {
         AssertUtils.notEmpty(id, "id is empty.");
         AssertUtils.notEmpty(post.getCode(), "post.code is empty.");
         AssertUtils.notEmpty(post.getName(), "post.name is empty.");
-        AssertUtils.notEmpty(post.getVcid(), "post.vcid is empty.");
         AssertUtils.notEmpty(post.getParentId(), "post.parentId is empty.");
         
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //FIXME:需要更新的字段
+        //需要更新的字段
         updateRowMap.put("code", post.getCode());
         updateRowMap.put("fullName", post.getFullName());
         updateRowMap.put("name", post.getName());
-        updateRowMap.put("vcid", post.getVcid());
+        //updateRowMap.put("vcid", post.getVcid());
         updateRowMap.put("valid", post.isValid());
         updateRowMap.put("parentId", post.getParentId());
         updateRowMap.put("remark", post.getRemark());

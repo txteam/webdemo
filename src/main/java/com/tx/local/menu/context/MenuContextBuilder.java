@@ -260,9 +260,8 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
             String[] access = StringUtils
                     .splitByWholeSeparatorPreserveAllTokens(
                             menuConfig.getAccess(), ",");
-            
             if (!ArrayUtils.isEmpty(access)) {
-                menu.setRoles(new HashSet<>(Arrays.asList(access)));
+                menu.setAccess(new HashSet<>(Arrays.asList(access)));
             }
         }
         if (parent != null) {

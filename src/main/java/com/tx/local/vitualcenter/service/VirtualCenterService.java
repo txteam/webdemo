@@ -514,8 +514,6 @@ public class VirtualCenterService implements InitializingBean {
                 "virtualCenter.code is empty.");
         AssertUtils.notEmpty(virtualCenter.getName(),
                 "virtualCenter.name is empty.");
-        AssertUtils.notEmpty(virtualCenter.isModifyAble(),
-                "virtualCenter.modifyAble is empty.");
         
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
@@ -527,6 +525,8 @@ public class VirtualCenterService implements InitializingBean {
         updateRowMap.put("parentId", virtualCenter.getParentId());
         updateRowMap.put("remark", virtualCenter.getRemark());
         updateRowMap.put("lastUpdateDate", new Date());
+        
+        updateRowMap.put("parentId", virtualCenter.getParentId());
         
         boolean flag = this.virtualCenterDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改

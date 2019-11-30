@@ -6,9 +6,8 @@
  */
 package com.tx.local.security.model;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import com.tx.component.auth.model.Auth;
+import com.tx.component.security.model.AuthAuthority;
 import com.tx.core.exceptions.util.AssertUtils;
 
 /**
@@ -20,7 +19,7 @@ import com.tx.core.exceptions.util.AssertUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class OperatorAuthAuthority implements GrantedAuthority {
+public class OperatorAuthAuthority implements AuthAuthority {
     
     /** 注释内容 */
     private static final long serialVersionUID = -7769850368661901465L;
@@ -50,14 +49,14 @@ public class OperatorAuthAuthority implements GrantedAuthority {
         String authority = this.auth.getId();
         return authority;
     }
-
+    
     /**
      * @return 返回 auth
      */
     public Auth getAuth() {
         return auth;
     }
-
+    
     /**
      * @param 对auth进行赋值
      */

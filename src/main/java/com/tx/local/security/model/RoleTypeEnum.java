@@ -15,10 +15,10 @@ import com.tx.component.role.model.RoleType;
 public enum RoleTypeEnum implements RoleType {
     
     /** 系统管理员 */
-    ROLE_TYPE_ADMIN("ROLE_TYPE_ADMIN", "系统操作员"),
+    ROLE_TYPE_ADMIN("ROLE_TYPE_ADMIN", "超级管理员"),
     
     /** 系统管理员 */
-    ROLE_TYPE_OPERATOR("ROLE_TYPE_OPERATOR", "系统操作员"),
+    ROLE_TYPE_OPERATOR("ROLE_TYPE_OPERATOR", "系统管理员"),
     
     /** 系统管理员 */
     ROLE_TYPE_CLIENT("ROLE_TYPE_CLIENT", "客户");

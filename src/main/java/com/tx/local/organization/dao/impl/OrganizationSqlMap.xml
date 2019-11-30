@@ -8,7 +8,6 @@
 	<resultMap id="organizationMap" 
 		type="com.tx.local.organization.model.Organization">
 		<result column="companyId" property="company.id"/>
-		<result column="departmentId" property="department.id"/>
 	</resultMap>
 	
 	<!-- auto generate default find -->
@@ -31,8 +30,7 @@
 				O.remark,
 				O.address,
 				O.companyId,
-				O.districtId,
-				O.departmentId
+				O.districtId
 		  FROM ORG_ORGANIZATION O
 		 WHERE
 		<trim prefixOverrides="AND | OR">
@@ -65,8 +63,7 @@
 				O.remark,
 				O.address,
 				O.companyId,
-				O.districtId,
-				O.departmentId
+				O.districtId
 		  FROM ORG_ORGANIZATION O
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
@@ -136,12 +133,7 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
 	            <![CDATA[ AND O.districtId = #{districtId} ]]>
-	        </if>			
-			<if test="department != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(department.id)">  
-		            <![CDATA[ AND O.departmentId = #{department.id} ]]>
-		        </if>
-	        </if>			
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND O.id <> #{excludeId} ]]>
 			</if>
@@ -231,11 +223,6 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(districtId)">  
 	            <![CDATA[ AND O.districtId = #{districtId} ]]>
 	        </if>			
-			<if test="department != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(department.id)">  
-		            <![CDATA[ AND O.departmentId = #{department.id} ]]>
-		        </if>
-	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND O.id <> #{excludeId} ]]>
 			</if>
@@ -262,8 +249,7 @@
 			remark,
 			address,
 			companyId,
-			districtId,
-			departmentId
+			districtId
 		)
 		VALUES
 		(
@@ -282,8 +268,7 @@
 			#{remark},
 			#{address},
 			#{company.id},
-			#{districtId},
-			#{department.id}
+			#{districtId}
 		)
 	</insert>
 	
@@ -306,8 +291,7 @@
 			remark,
 			address,
 			companyId,
-			districtId,
-			departmentId
+			districtId
 		)
 		VALUES
 		(
@@ -326,8 +310,7 @@
 			#{remark},
 			#{address},
 			#{company.id},
-			#{districtId},
-			#{department.id}
+			#{districtId}
 		)
 	</insert>
 	
@@ -388,9 +371,6 @@
 	    	</if>
 			<if test="_parameter.containsKey('districtId')">
 	    		districtId = #{districtId,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('department')">
-	    		departmentId = #{department.id,javaType=java.lang.String},
 	    	</if>
 	    </trim>
 	    WHERE

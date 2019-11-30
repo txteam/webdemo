@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -71,7 +71,7 @@ $(document).ready(function(){
 			});
 	        //表单验证通过，提交表单到服务器
 			$('#entityForm').ajaxSubmit({
-			    url: /*[[@{/virtualCenter/add}]]*/_contextPath + 'virtualCenter/add',
+			    url: /*[[@{/virtualCenter/add}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
@@ -86,6 +86,10 @@ $(document).ready(function(){
 	    }
 	});
 	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("addVirtualCenter");
+	});
     //提交
 	$("#addBtn").click(function(){
 		$('#entityForm').submit();
@@ -103,14 +107,14 @@ $(document).ready(function(){
 					<th class="narrow" width="20%">名称:<span class="tRed">*</span></th>
 					<td>
 						<input id="name" name="name" data-tip="必填" style="width: 60%"
-							th:data-rule="'名称:required;length[2~16];remote[' + @{/virtualCenter/validateName} + ', name]'"/>
+							th:data-rule="'名称:required;length[2~16];remote[' + @{/virtualCenter/validate} + ', name]'"/>
 					</td>
 				</tr>
 				<tr>
 					<th class="narrow">编码:<span class="tRed">*</span></th>
 					<td>
 						<input id="code" name="code" data-tip="必填" style="width: 60%"
-							th:data-rule="'名称:required;length[2~16];remote[' + @{/virtualCenter/validateName} + ', name]'"/>
+							th:data-rule="'名称:required;length[2~16];remote[' + @{/virtualCenter/validate} + ', code]'"/>
 					</td>
 				</tr>
 				<tr>
@@ -130,7 +134,7 @@ $(document).ready(function(){
 		</form>
 	</div>
 	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
-		<a id="addBtn" href="javascript:void(0);" style="width: 75px;" class="easyui-linkbutton">提交</a>
+		<a id="addBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
 	</div>
 </div>
 </body>

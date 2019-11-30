@@ -7,12 +7,12 @@
 package com.tx.local.operator.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tx.component.role.model.Role;
 import com.tx.local.security.model.RoleTypeEnum;
 
@@ -26,7 +26,12 @@ import io.swagger.annotations.ApiModel;
  * 角色不同于职位
  *     相对于职位更加灵活
  *     一个人允许多个角色
- * <功能详细描述>
+ * 权限角色是系统功能权限设置的基础，相当于用户分组，所有用户对应到相应权限角色，便具有该权限角色所赋予的所有功能权限。
+ * 岗位(职位)是在组织架构下的精细岗位划分，是业务流程控制、业绩考核、预警体系的基础，不同的机构、部门下的同一职务是作为不同的岗位的。
+ * 并没有把岗位直接作为系统功能权限设置的对象而是引入了权限角色概念，是因为岗位非常多，而很多不同的机构、部门下的同一职务拥有同样的功能权限，如果直接用岗位来设置将极大增加重复工作量。
+ * 权限角色实际上有些相当于岗位权限分类的概念，即具有同样功能权限的岗位集合在一起，这样可以减少权限设置的工作量。
+ * 举例说明：
+ * 杂货部门饮料组主管和杂货部门粮油组主管是两个岗位，在业务流程控制、业绩考核、预警体系中是不同的，但其在系统中的功能模块权限是相同的，故都属于门店柜组主管这样一个权限角色。
  * 
  * @author  Administrator
  * @version  [版本号, 2014年11月10日]
@@ -45,6 +50,12 @@ public class OperatorRole implements Serializable, Role {
     @Id
     private String id;
     
+    /** 类目id */
+    private String catalogId;
+    
+    /** 父级角色id */
+    private String parentId;
+    
     /** 虚中心id */
     private String vcid;
     
@@ -59,6 +70,15 @@ public class OperatorRole implements Serializable, Role {
     
     /** 备注 */
     private String remark;
+    
+    /** 角色类型id: 这里是固定值，可以不做持久，或是在业务层控制 */
+    private String roleTypeId = RoleTypeEnum.ROLE_TYPE_OPERATOR.getId();
+    
+    /** 创建时间 */
+    private Date createDate;
+    
+    /** 最后更新时间 */
+    private Date lastUpdateDate;
     
     /** <默认构造函数> */
     public OperatorRole() {
@@ -79,6 +99,20 @@ public class OperatorRole implements Serializable, Role {
         this.id = id;
     }
     
+    /**
+     * @return 返回 catalogId
+     */
+    public String getCatalogId() {
+        return catalogId;
+    }
+
+    /**
+     * @param 对catalogId进行赋值
+     */
+    public void setCatalogId(String catalogId) {
+        this.catalogId = catalogId;
+    }
+
     /**
      * @return 返回 vcid
      */
@@ -150,20 +184,58 @@ public class OperatorRole implements Serializable, Role {
     }
     
     /**
-     * @return
+     * @return 返回 roleTypeId
      */
-    @Override
-    @JsonIgnore
     public String getRoleTypeId() {
-        return RoleTypeEnum.ROLE_TYPE_OPERATOR.getId();
+        return roleTypeId;
     }
     
     /**
-     * @return
+     * @param 对roleTypeId进行赋值
      */
-    @Override
-    @JsonIgnore
+    public void setRoleTypeId(String roleTypeId) {
+        this.roleTypeId = roleTypeId;
+    }
+    
+    /**
+     * @return 返回 parentId
+     */
     public String getParentId() {
-        return Role.super.getParentId();
+        return parentId;
+    }
+    
+    /**
+     * @param 对parentId进行赋值
+     */
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 }

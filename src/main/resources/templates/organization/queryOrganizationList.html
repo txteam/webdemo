@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -242,7 +242,7 @@ function addFun(id) {
 			id = ''
 		}
 	}
-	var addUrl = /*[[@{/organization/toAdd}]]*/_contextPath + 'organization/toAdd';
+	var addUrl = /*[[@{/organization/toAdd}]]*/'';
 	if(id){
 		addUrl = addUrl + '?parentId=' + id;
 	}
@@ -252,7 +252,8 @@ function addFun(id) {
 		addUrl,
 		600,220,function(){
 		$('#treegrid').treegrid('reload');
-	});
+		},{maximizable : true}	
+	);
 }
 function editFun(id) {
 	if (id == undefined) {
@@ -263,7 +264,7 @@ function editFun(id) {
         text : '加载中，请等待....'
 	});
 	
-	var url = /*[[@{/organization/toUpdate}]]*/_contextPath + 'organization/toUpdate';
+	var url = /*[[@{/organization/toUpdate}]]*/'';
 	url = url + "?id=" + id;
 	DialogUtils.openModalDialog(
 		"updateOrganization",
@@ -271,7 +272,8 @@ function editFun(id) {
 		url,
 		600,220,function(){
 			$('#treegrid').treegrid('reload');
-	});
+		},{maximizable : true}	
+	);
 }
 function deleteFun(id,name) {
 	if (id == undefined) {
@@ -281,7 +283,7 @@ function deleteFun(id,name) {
 	}
 	//判断对应组织是否能被停用
 	$.post(
-		/*[[@{/organization/modifyAble}]]*/_contextPath + 'organization/modifyAble',
+		/*[[@{/organization/modifyAble}]]*/'',
 		{id: id},
 		function(data){
 			if(data){
@@ -295,7 +297,7 @@ function deleteFun(id,name) {
 			    		});
 			    		//如果确认删除对应组织
 			    		$.post(
-			    				/*[[@{/organization/deleteById}]]*/_contextPath + 'organization/deleteById',
+			    				/*[[@{/organization/deleteById}]]*/'',
 					    		{id:id},
 					    		function(){
 					    			DialogUtils.progress('close');
@@ -317,7 +319,7 @@ function disableFun(id,name){
 	}
 	//判断对应组织是否能被停用
 	$.post(
-		/*[[@{/organization/modifyAble}]]*/_contextPath + 'organization/modifyAble',
+		/*[[@{/organization/modifyAble}]]*/'',
 		{id: id},
 		function(data){
 			if(data){
@@ -331,7 +333,7 @@ function disableFun(id,name){
 			    		});
 			    		//如果确认删除对应组织
 			    		$.post(
-			    				/*[[@{/organization/disableById}]]*/_contextPath + 'organization/disableById',
+			    				/*[[@{/organization/disableById}]]*/'',
 					    		{id:id},
 					    		function(){
 					    			DialogUtils.progress('close');
@@ -363,7 +365,7 @@ function enableFun(id,name){
     		});
     		//如果确认删除对应组织
     		$.post(
-    				/*[[@{/organization/enableById}]]*/_contextPath + 'organization/enableById',
+    				/*[[@{/organization/enableById}]]*/'',
 		    		{id:id},
 		    		function(){
 		    			DialogUtils.progress('close');
@@ -372,23 +374,6 @@ function enableFun(id,name){
 		    });
     	}
     });
-}
-function deselect(){
-	var selectedNode = virtualCenterTree.tree('getSelected');
-	if(selectedNode){
-		virtualCenterTree.find(".tree-node-selected").removeClass("tree-node-selected");
-		treegrid.treegrid('load',{});
-	}
-}
-function refreshTree(){
-	var selectedNode = virtualCenterTree.tree('getSelected');
-	virtualCenterTree.tree('reload');
-	if(selectedNode){
-		treegrid.treegrid('load',{
-			organizationId: '',
-			parentPostId: ''
-		});
-	}
 }
 </script>
 </head>

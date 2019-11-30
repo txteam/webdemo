@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -45,6 +45,24 @@
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
+	$("#parentName").selectVirtualCenter({
+		eventName : "forUpdateVirtualCenter",
+		contextPath : _contextPath,
+		title : "请选择父级虚中心",  
+		width : 260,
+		height : 400,
+		handler : function(vc){
+			if(vc != null){
+				$("#parentName").val(vc.name);
+				$("#parentId").val(vc.id);
+			}
+		},
+	    clearHandler: function(){
+	    	$("#parentName").val("");
+			$("#parentId").val("");
+	    }
+	});
+	
 	//验证器
 	$('#entityForm').validator({
 	    valid: function(){
@@ -53,7 +71,7 @@ $(document).ready(function(){
 			});
 	        //表单验证通过，提交表单到服务器
 			$('#entityForm').ajaxSubmit({
-			    url: /*[[@{/virtualCenter/update}]]*/_contextPath + 'virtualCenter/update',
+			    url: /*[[@{/virtualCenter/update}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
@@ -66,6 +84,10 @@ $(document).ready(function(){
 	    }
 	});
 	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("updateVirtualCenter");
+	});
     //提交
 	$("#updateBtn").click(function(){
 		$('#entityForm').submit();
@@ -79,7 +101,6 @@ $(document).ready(function(){
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form id="entityForm" method="post" class="form" th:object="${virtualCenter}">
 			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
-			<input id="parentId" name="parentId" type="hidden" value="" th:value="*{parentId}"/>
 			<table class="common_table">
 				<tr>
 					<th width="20%">编码：</th>
@@ -91,7 +112,14 @@ $(document).ready(function(){
 					<th class="narrow" width="20%">名称:<span class="tRed">*</span></th>
 					<td>
 						<input id="name" name="name" style="width: 60%" value="" th:value="*{name}"
-							th:data-rule="'名称:required;length[2~16];remote[' + @{/virtualCenter/validateName} + ', name, id]'"/>
+							th:data-rule="'名称:required;length[2~16];remote[' + @{/virtualCenter/validate} + ', name, id]'"/>
+					</td>
+				</tr>
+				<tr>
+					<th>上级类型分组：</th>
+					<td>
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly" th:value="${parent?.id }" style="width: 60%"/>
+						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" th:value="${parent?.name }" style="width: 60%"/>
 					</td>
 				</tr>
 				<tr>
@@ -104,7 +132,7 @@ $(document).ready(function(){
 		</form>
 	</div>
 	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
-		<a id="updateBtn" href="javascript:void(0);" style="width: 75px;" class="easyui-linkbutton">提交</a>
+		<a id="updateBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
 	</div>
 </div>
 </body>

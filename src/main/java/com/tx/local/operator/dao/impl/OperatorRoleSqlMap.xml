@@ -15,11 +15,15 @@
 		resultMap="operatorRoleMap">
 		SELECT 
 				R.id,
+				R.parentId,
+				R.roleTypeId,
 				R.name,
 				R.vcid,
 				R.valid,
 				R.modifyAble,
-				R.remark
+				R.remark,
+				R.createDate,
+				R.lastUpdateDate
 		  FROM OPER_ROLE R
 		 WHERE
 		<trim prefixOverrides="AND | OR">
@@ -35,11 +39,15 @@
 		resultMap="operatorRoleMap">
 		SELECT 
 				R.id,
+				R.parentId,
+				R.roleTypeId,
 				R.name,
 				R.vcid,
 				R.valid,
 				R.modifyAble,
-				R.remark
+				R.remark,
+				R.createDate,
+				R.lastUpdateDate
 		  FROM OPER_ROLE R
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
@@ -60,6 +68,21 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND R.id = #{id} ]]>
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
+	            AND R.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            <![CDATA[ AND R.parentId = #{parentId} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(roleTypeId)">  
+	            <![CDATA[ AND R.roleTypeId = #{roleTypeId} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND R.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND R.createDate < #{maxCreateDate} ]]>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND R.name = #{name} ]]>
 	        </if>			
@@ -71,10 +94,7 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
 	            <![CDATA[ AND R.modifyAble = #{modifyAble} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            <![CDATA[ AND R.remark = #{remark} ]]>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND R.id <> #{excludeId} ]]>
 			</if>
@@ -113,7 +133,22 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND R.id = #{id} ]]>
-	        </if>	
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
+	            AND R.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
+	            <![CDATA[ AND R.parentId = #{parentId} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(roleTypeId)">  
+	            <![CDATA[ AND R.roleTypeId = #{roleTypeId} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND R.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND R.createDate < #{maxCreateDate} ]]>
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND R.name = #{name} ]]>
 	        </if>			
@@ -125,10 +160,7 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
 	            <![CDATA[ AND R.modifyAble = #{modifyAble} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            <![CDATA[ AND R.remark = #{remark} ]]>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND R.id <> #{excludeId} ]]>
 			</if>
@@ -141,19 +173,27 @@
 		INSERT INTO OPER_ROLE
 		(
 			id,
+			parentId,
+			roleTypeId,
 			name,
 			vcid,
 			valid,
 			modifyAble,
+			createDate,
+			lastUpdateDate,
 			remark
 		)
 		VALUES
 		(
 			#{id},
+			#{parentId},
+			#{roleTypeId},
 			#{name},
 			#{vcid},
 			#{valid},
 			#{modifyAble},
+			#{createDate},
+			#{lastUpdateDate},
 			#{remark}
 		)
 	</insert>
@@ -163,19 +203,27 @@
 		INSERT INTO OPER_ROLE_HIS
 		(
 			id,
+			parentId,
+			roleTypeId,
 			name,
 			vcid,
 			valid,
 			modifyAble,
+			createDate,
+			lastUpdateDate,
 			remark
 		)
 		VALUES
 		(
 			#{id},
+			#{parentId},
+			#{roleTypeId},
 			#{name},
 			#{vcid},
 			#{valid},
 			#{modifyAble},
+			#{createDate},
+			#{lastUpdateDate},
 			#{remark}
 		)
 	</insert>
@@ -196,11 +244,14 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_ROLE
 	    <trim prefix="SET" suffixOverrides=",">
+	    	<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
 			<if test="_parameter.containsKey('name')">
 	    		name = #{name,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('vcid')">
-	    		vcid = #{vcid,javaType=java.lang.String},
+	    	<if test="_parameter.containsKey('parentId')">
+	    		parentId = #{parentId,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('valid')">
 	    		valid = #{valid,javaType=boolean},
@@ -211,6 +262,9 @@
 			<if test="_parameter.containsKey('remark')">
 	    		remark = #{remark,javaType=java.lang.String},
 	    	</if>
+	    	<!-- <if test="_parameter.containsKey('vcid')"> -->
+			<!-- vcid = #{vcid,javaType=java.lang.String}, -->
+			<!-- </if> -->
 	    </trim>
 	    WHERE
 		<trim prefixOverrides="AND | OR">

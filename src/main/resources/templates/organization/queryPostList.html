@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -44,6 +44,7 @@
 /*<![CDATA[*/
 var treegrid = null;
 var orgTree = null;
+var organizationId = /*[[${organizationId}]]*/'';
 $(document).ready(function() {
 	var  $editALink = $("#editALink");
 	var  $deleteALink = $("#deleteALink");
@@ -53,7 +54,7 @@ $(document).ready(function() {
 	var  $configPostOperatorALink = $("#configPostOperatorALink");
 	
 	orgTree = $('#orgTree').tree({
-		url : /*[[@{/organization/queryList(valid=true)}]]*/_contextPath + 'organization/queryList?valid=true',
+		url : /*[[@{/organization/queryList(valid=true)}]]*/'',
 		idField : 'id',
 		parentField : 'parentId',
 		iconField : function(){
@@ -65,17 +66,34 @@ $(document).ready(function() {
 			$('#treegrid').treegrid('load',{
 				organizationId: node.id
 			});
+			organizationId = node.id;
 		}
 	});
 	
+	var orgMap = {};
 	treegrid = $('#treegrid').treegrid({
-		url : /*[[@{/post/queryList}]]*/_contextPath + 'post/queryList',
+		url : /*[[@{/post/queryList}]]*/'',
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
 		striped : true,
 		iconField : function(item){
 			return 'group_group';	
+		},
+		onBeforeLoad: function(target, rows){
+			if(!$.ObjectUtils.isEmpty(orgMap)){
+				$.ajax({
+				 	async: false,
+				  	type : "get",
+				  	url : /*[[@{/organization/queryList(valid=true)}]]*/'',
+				  	datatype : 'json',
+				  	success : function(args) {
+				    	$.each(args,function(index,arg){
+				    		orgMap[arg.id] = arg;
+				    	});
+				  	}
+				});
+			}
 		},
 		fit : true,
 		fitColumns : true,
@@ -99,17 +117,14 @@ $(document).ready(function() {
 			title : '职位编号',
 			width : 230
 		},{
-			field : 'organization',
+			field : 'organizationId',
 			title : '所属组织',
+			width : 200,
 			formatter : function(value, row, index) {
-				if(value){
-					if(value.name){
-						return value.name;
-					}else{
-						return "";
-					}
+				if(value && orgMap[value]){
+					return orgMap[value].name;
 				}else{
-					return "";
+					return value;
 				}
 			}
 		}] ],
@@ -141,29 +156,21 @@ $(document).ready(function() {
 			width : 100,
 			formatter : function(value, row, index) {
 				var str = '';
-				if(!row.valid && $.canEnable){
+				if(!row.valid){
 					str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/control/control_play_blue.png');
 					str += '&nbsp;';
 				}
-				if($.canModify){
-					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil.png');
-					str += '&nbsp;';
-				}
-				
-				if($.canDelete){
-					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil_delete.png');
-					str += '&nbsp;';
-				}
-				if(row.valid && $.canDisable){
+				str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil.png');
+				str += '&nbsp;';
+				str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil_delete.png');
+				str += '&nbsp;';
+				if(row.valid){
 					str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/control/control_stop_blue.png');
 					str += '&nbsp;';
 				}
-				if ($.configPostAuth) {
-					str += $.formatString('<img onclick="configPostAuth(\'{0}\',\'{1}\');" src="{2}" title="配置职位权限"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/database_key.png');
-				}
-				if ($.configPostOperator) {
-					str += $.formatString('<img onclick="configPostOperator(\'{0}\',\'{1}\');" src="{2}" title="配置职位人员"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/folder/folder_user.png');
-				}
+				str += $.formatString('<img onclick="configPostAuth(\'{0}\',\'{1}\');" src="{2}" title="配置职位权限"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/database_key.png');
+				str += '&nbsp;';
+				str += $.formatString('<img onclick="configPostOperator(\'{0}\',\'{1}\');" src="{2}" title="配置职位人员"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/folder/folder_user.png');
 				return str;
 			}
 		}
@@ -224,7 +231,6 @@ function refreshTree(){
 			organizationId: '',
 			parentPostId: ''
 		});
-
 	}
 }
 function deselect(){
@@ -270,17 +276,23 @@ function addFun(id) {
 			}
 		}
 	}
-	var addUrl = /*[[@{/post/toAdd}]]*/_contextPath + 'post/toAdd';
+	var addUrl = /*[[@{/post/toAdd}]]*/'';
+	if(organizationId){
+		addUrl = addUrl + '?organizationId=' + organizationId + '&';
+	}else{
+		addUrl = addUrl + '?';
+	}
 	if(id){
-		addUrl = addUrl + '?parentId=' + id;
+		addUrl = addUrl + 'parentId=' + id;
 	}
 	DialogUtils.openModalDialog(
 		"addPost",
 		"添加职位",
 		addUrl,
-		500,220,function(){
-		treegrid.treegrid('reload');
-	});
+		500,235,function(){
+			treegrid.treegrid('reload');
+		},{maximizable : true}	
+	);
 }
 /**
  * 打开编辑职位页面
@@ -298,13 +310,15 @@ function editFun(id,name) {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var updateUrl = /*[[@{/post/toUpdate?id={0}}]]*/'';
 	DialogUtils.openModalDialog(
 		"updatePost",
 		"编辑职位:" + name,
-		$.formatString("${contextPath}/post/toUpdatePost.action?postId={0}",id),
+		$.formatString(updateUrl,id),
 		500,220,function(){
 			$('#treegrid').treegrid('reload');
-	});
+		},{maximizable : true}	
+	);
 }
 /*
  * 删除职位
@@ -321,8 +335,8 @@ function deleteFun(id,name) {
 	}
 	//判断对应职位是否能被停用
 	$.post(
-		'${contextPath}/post/isDeleteAble.action',
-		{postId: id},
+		/*[[@{/post/modifyAble}]]*/'',
+		{id: id},
 		function(data){
 			if(data){
 			    DialogUtils.confirm("确认提醒" , 
@@ -334,8 +348,8 @@ function deleteFun(id,name) {
 			    		});
 			    		//如果确认删除对应职位
 			    		$.post(
-					    		'${contextPath}/post/deletePostById.action',
-					    		{postId:id},
+			    				/*[[@{/post/deleteById}]]*/'',
+					    		{id:id},
 					    		function(){
 					    			DialogUtils.progress('close');
 					    			DialogUtils.tip("删除职位成功");
@@ -360,7 +374,7 @@ function disableFun(id,name){
 	}
 	//判断对应组织是否能被停用
 	$.post(
-		/*[[@{/post/modifyAble}]]*/_contextPath + 'post/modifyAble',
+		/*[[@{/post/modifyAble}]]*/'',
 		{id: id},
 		function(data){
 			if(data){
@@ -374,7 +388,7 @@ function disableFun(id,name){
 			    		});
 			    		//如果确认删除对应组织
 			    		$.post(
-			    				/*[[@{/operatorPost/disableById}]]*/_contextPath + 'operatorPost/disableById',
+			    				/*[[@{/post/disableById}]]*/'',
 					    		{id:id},
 					    		function(){
 					    			DialogUtils.progress('close');
@@ -409,7 +423,7 @@ function enableFun(id,name){
     		});
     		//如果确认删除对应组织
     		$.post(
-    				/*[[@{/post/enableById}]]*/_contextPath + 'post/enableById',
+    				/*[[@{/post/enableById}]]*/'',
 		    		{id:id},
 		    		function(){
 		    			DialogUtils.progress('close');
@@ -435,14 +449,13 @@ function configPostAuth(id,name){
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var configUrl = /*[[@{/auth/toConfigPostAuth}]]*/'';
+	configUrl = configUrl + "?authTypeId=AUTH_TYPE_OPERATOR_OPERATE&postId=" + id;
 	DialogUtils.openModalDialog(
 		"configPostAuth",
 		$.formatString("配置职位权限_[{0}]",name),
-		$.formatString("${contextPath}/auth/toConfigPostAuth.action?postId={0}",id),
-		450,500,function(){
-			//$('#treegrid').treegrid('reload');
-			//alert('reload');
-		}
+		configUrl,
+		450,500,function(){}
 	);
 }
 //配置职位人员

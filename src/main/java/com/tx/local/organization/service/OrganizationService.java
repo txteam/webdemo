@@ -33,6 +33,7 @@ import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.core.util.UUIDUtils;
 import com.tx.local.organization.dao.OrganizationDao;
 import com.tx.local.organization.model.Organization;
+import com.tx.local.organization.model.OrganizationTypeEnum;
 
 /**
  * 组织的业务层[OrganizationService]
@@ -153,9 +154,6 @@ public class OrganizationService {
             case BRANCH_COMPANY:
                 organization.setCompany(organization);
                 break;
-            case DEPARTMENT:
-                organization.setDepartment(organization);
-                break;
             default:
                 AssertUtils.notEmpty(organization.getParentId(),
                         "[组织新增:]上级组织不能为空!");
@@ -164,7 +162,6 @@ public class OrganizationService {
                 //设置分公司
                 if (parent != null) {
                     organization.setCompany(parent.getCompany());
-                    organization.setDepartment(parent.getDepartment());
                 }
                 break;
         }
@@ -438,10 +435,9 @@ public class OrganizationService {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         params.putAll(key2valueMap);
-        params.put("excludeId", excludeId);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.organizationDao.count(params);
+        int res = this.organizationDao.count(params, excludeId);
         
         return res > 0;
     }
@@ -487,10 +483,6 @@ public class OrganizationService {
                 "organization.name is empty.");
         AssertUtils.notEmpty(organization.getType(),
                 "organization.type is empty.");
-        AssertUtils.notEmpty(organization.getVcid(),
-                "organization.vcid is empty.");
-        AssertUtils.notEmpty(organization.getParentId(),
-                "organization.parentId is empty.");
         
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
@@ -507,11 +499,22 @@ public class OrganizationService {
         updateRowMap.put("fullAddress", organization.getFullAddress());
         
         updateRowMap.put("lastUpdateDate", new Date());
+        
+        //注意： 如果原组织类型为公司，原则上不允许进行修改，因为组织organization上有冗余字段company
+        //如果进行更新，则有可能影响子集的company字段的正确性
+        //如果想进行更新需要在底层考虑迭代更新
+        if (organization.getType() != OrganizationTypeEnum.GROUP_COMPANY
+                && organization.getType() != OrganizationTypeEnum.COMPANY
+                && organization
+                        .getType() != OrganizationTypeEnum.BRANCH_COMPANY) {
+            updateRowMap.put("type", organization.getType());
+        }
+        
         //需要更新的字段
         //updateRowMap.put("parentId", organization.getParentId());
         //updateRowMap.put("vcid", organization.getVcid());
         //updateRowMap.put("code", organization.getCode());
-        //updateRowMap.put("type", organization.getType());
+        
         //updateRowMap.put("valid", organization.isValid());
         //updateRowMap.put("company", organization.getCompany());
         //updateRowMap.put("department", organization.getDepartment());
@@ -523,6 +526,7 @@ public class OrganizationService {
     
     /**
      * 根据id更新组织实例<br/>
+     *    
      * <功能详细描述>
      * @param organization
      * @return [参数说明]

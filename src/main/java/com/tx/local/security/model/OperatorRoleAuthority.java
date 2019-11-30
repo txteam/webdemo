@@ -6,10 +6,8 @@
  */
 package com.tx.local.security.model;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.GrantedAuthority;
-
 import com.tx.component.role.model.Role;
+import com.tx.component.security.model.RoleAuthority;
 import com.tx.core.exceptions.util.AssertUtils;
 
 /**
@@ -21,7 +19,7 @@ import com.tx.core.exceptions.util.AssertUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class OperatorRoleAuthority implements GrantedAuthority {
+public class OperatorRoleAuthority implements RoleAuthority {
     
     /** 注释内容 */
     private static final long serialVersionUID = -7769850368661901465L;
@@ -49,11 +47,6 @@ public class OperatorRoleAuthority implements GrantedAuthority {
         AssertUtils.notEmpty(this.role.getId(), "role.id is empty.");
         
         String authority = this.role.getId();
-        if (StringUtils.startsWithIgnoreCase(authority, "ROLE_")) {
-            authority = "ROLE_" + authority.substring(5);
-        } else {
-            authority = "ROLE_" + authority;
-        }
         return authority;
     }
     

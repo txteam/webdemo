@@ -58,21 +58,6 @@ $(document).ready(function() {
 		cascadeCheck : true,
 		lines : true,
 		onlyLeafCheck: false,
-		/*
-		data: authItemList,
-		onCheck: function(node, checked){
-			if(checked){
-				alert("checked:true");
-				alert(node.nodeName);
-				var parentObj = $currentAuthTreeEl.tree('getParent');
-				alert("parentEl == null:" + (parentObj == null));
-			}else{
-				alert("checked:false");
-				var chidrensEls = $currentAuthTreeEl.tree('getChildren',node);
-				alert("chidrensEls == null:" + (chidrensEls == null));
-			}
-		},
-		*/
 		onClick : function(node){
 		}
 	});
@@ -138,11 +123,9 @@ function undo() {
 		<input id="operatorId" type="hidden" name="operatorId" th:value="${operatorId}"/>
 		
 		<ul id="authTree" style="margin-bottom: 40px;padding-top:2px;padding-left: 5px"></ul>
-		
-		
 	</div>
 	
-	<div data-options="region:'south',border:false" style="overflow:hidden;height: 43px;" class="dialog-button">
-		<a id="confirmBtn" href="javascript:void(0);" class="easyui-linkbutton" style="width: 85px">确认</a>&nbsp;&nbsp;&nbsp;
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="confirmBtn" href="javascript:void(0);" class="easyui-linkbutton" style="width: 85px">确认</a>
 	</div>
 </body>

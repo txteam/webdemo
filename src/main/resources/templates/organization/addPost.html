@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -61,7 +61,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("#parentName").choosePost({
+	$("#parentName").selectPost({
 		organizationId : $("#organizationId").val(),
 		eventName : "forAddPost",
 		contextPath : _contextPath,
@@ -77,6 +77,8 @@ $(document).ready(function(){
 			$("#parentId").val('');
 		}
 	});
+	
+	
 	//验证器
 	$('#postForm').validator({
 	    valid: function(){
@@ -85,12 +87,14 @@ $(document).ready(function(){
 	    	});
 	        //表单验证通过，提交表单到服务器
 			$('#postForm').ajaxSubmit({
-				url:/*[[@{/post/add}]]*/_contextPath + 'post/add',
+				url:/*[[@{/post/add}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
-						parent.DialogUtils.tip("新增组织成功");
+						parent.DialogUtils.tip("新增职位成功");
 						parent.DialogUtils.closeDialogById("addPost");
+					}else{
+						parent.DialogUtils.tip("新增职位失败.");
 					}
 			    } 
 			});
@@ -98,16 +102,19 @@ $(document).ready(function(){
 	    }
 	});
 	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("addPost");
+	});
+	//提交
+	$("#submitBtn").click(function(){
+		$('#postForm').submit();
+	});
 });
-//提交
-function submitFun(){
-	$('#postForm').submit();
-}
 /*]]>*/
 </script>
 </head>
-<body>
-<div class="easyui-layout" data-options="fit:true,border:false">
+<body class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form id="postForm" method="post" class="form" th:object="${post}">
 			<table class="table">
@@ -158,14 +165,12 @@ function submitFun(){
 						<textarea name="remark" rows="" cols="" class="longText" th:text="*{remark}" style="width:90%"></textarea>
 					</td>
 				</tr>
-				<tr>
-					<td class="rightOperRow" colspan="2" style="padding-right: 50px">
-						<a id="addBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  	
-					</td>
-				</tr>
 			</table>
 		</form:form>
 	</div>
-</div>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
+	</div>
 </body>
 </html>

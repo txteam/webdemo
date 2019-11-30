@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -50,7 +50,7 @@ $(document).ready(function() {
 	var $disableALink = $("#disableALink");
 	
 	treegrid = $('#treegrid').treegrid({
-		url : /*[[@{/virtualCenter/queryList}]]*/_contextPath + 'virtualCenter/queryList',
+		url : /*[[@{/virtualCenter/queryList}]]*/'',
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
@@ -241,7 +241,7 @@ function addFun(id) {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
-	var addUrl = /*[[@{/virtualCenter/toAdd}]]*/_contextPath + 'virtualCenter/toAdd';
+	var addUrl = /*[[@{/virtualCenter/toAdd}]]*/'';
 	if(id){
 		addUrl = addUrl + '?parentId=' + id;
 	}
@@ -252,10 +252,7 @@ function addFun(id) {
 		600,230,
 		function(){
 			$('#treegrid').treegrid('reload');
-		},
-		{
-			maximizable : true
-		}	
+		},{maximizable : true}	
 	);
 }
 /*
@@ -275,13 +272,13 @@ function editFun(id,name,modifyAble) {
 		DialogUtils.alert("没有选中的虚中心");
 		return ;
 	}
-	var updateUrl = /*[[@{/virtualCenter/toUpdate}]]*/_contextPath + 'virtualCenter/toUpdate';
+	var updateUrl = /*[[@{/virtualCenter/toUpdate}]]*/'';
 	if(id){
 		updateUrl = updateUrl + '?id=' + id;
 	}
 	//判断对应组织是否能被修改
 	$.post(
-		/*[[@{/virtualCenter/modifyAble}]]*/_contextPath + 'virtualCenter/modifyAble',
+		/*[[@{/virtualCenter/modifyAble}]]*/'',
 		{id: id},
 		function(data){
 			if(data){
@@ -320,7 +317,7 @@ function deleteFun(id,name,modifyAble) {
 	}
 	//判断对应组织是否能被修改
 	$.post(
-		/*[[@{/virtualCenter/modifyAble}]]*/_contextPath + 'virtualCenter/modifyAble',
+		/*[[@{/virtualCenter/modifyAble}]]*/'',
 		{id: id},
 		function(data){
 			if(data){
@@ -335,7 +332,7 @@ function deleteFun(id,name,modifyAble) {
 			    		
 			    		//如果确认删除对应组织
 			    		$.post(
-			    				/*[[@{/virtualCenter/deleteById}]]*/_contextPath + 'virtualCenter/deleteById',
+			    				/*[[@{/virtualCenter/deleteById}]]*/'',
 			    				{id: id},
 					    		function(){
 					    			DialogUtils.tip("删除虚中心成功");
@@ -370,7 +367,7 @@ function enableFun(id,name,modifyAble){
 	    		});
 	    		//如果确认删除对应组织
 	    		$.post(
-	    				/*[[@{/virtualCenter/enableById}]]*/_contextPath + 'virtualCenter/enableById',
+	    				/*[[@{/virtualCenter/enableById}]]*/'',
 			    		{id:id},
 			    		function(){
 			    			DialogUtils.progress('close');
@@ -402,7 +399,7 @@ function disableFun(id,name,modifyAble){
 	    		});
 	    		//如果确认删除对应组织
 	    		$.post(
-	    				/*[[@{/virtualCenter/disableById}]]*/_contextPath + 'virtualCenter/disableById',
+	    				/*[[@{/virtualCenter/disableById}]]*/'',
 			    		{id:id},
 			    		function(){
 			    			DialogUtils.progress('close');

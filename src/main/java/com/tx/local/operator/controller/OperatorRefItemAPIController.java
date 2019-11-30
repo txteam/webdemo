@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
-import com.tx.local.operator.facade.OperatorRefFacade;
-import com.tx.local.operator.model.OperatorRef;
-import com.tx.local.operator.service.OperatorRefService;
+import com.tx.local.operator.facade.OperatorRefItemFacade;
+import com.tx.local.operator.model.OperatorRefItem;
+import com.tx.local.operator.service.OperatorRefItemService;
 
 import io.swagger.annotations.Api;
 
 /**
- * OperatorRefAPI控制层[OperatorRefAPIController]<br/>
+ * OperatorRefItemAPI控制层[OperatorRefItemAPIController]<br/>
  * 
  * @author []
  * @version [版本号]
@@ -33,31 +33,32 @@ import io.swagger.annotations.Api;
  * @since [产品/模块版本]
  */
 @RestController
-@Api(tags = "OperatorRefAPI")
-@RequestMapping("/api/operatorRef")
-public class OperatorRefAPIController implements OperatorRefFacade {
+@Api(tags = "用户引用API")
+@RequestMapping("/api/operatorRefItem")
+public class OperatorRefItemAPIController implements OperatorRefItemFacade {
     
-    //OperatorRef业务层
-    @Resource(name = "operatorRefService")
-    private OperatorRefService operatorRefService;
+    //OperatorRefItem业务层
+    @Resource(name = "operatorRefItemService")
+    private OperatorRefItemService operatorRefItemService;
     
     /**
-     * 新增OperatorRef<br/>
+     * 新增OperatorRefItem<br/>
      * <功能详细描述>
-     * @param operatorRef [参数说明]
+     * @param operatorRefItem [参数说明]
      * 
      * @return void [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public OperatorRef insert(@RequestBody OperatorRef operatorRef) {
-        this.operatorRefService.insert(operatorRef);
-        return operatorRef;
+    public OperatorRefItem insert(
+            @RequestBody OperatorRefItem operatorRefItem) {
+        this.operatorRefItemService.insert(operatorRefItem);
+        return operatorRefItem;
     }
     
     /**
-     * 根据id删除OperatorRef<br/> 
+     * 根据id删除OperatorRefItem<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -68,15 +69,15 @@ public class OperatorRefAPIController implements OperatorRefFacade {
      */
     @Override
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id) {
-        boolean flag = this.operatorRefService.deleteById(id);
+            @PathVariable(value = "id", required = true) String id) {
+        boolean flag = this.operatorRefItemService.deleteById(id);
         return flag;
     }
     
     /**
-     * 更新OperatorRef<br/>
+     * 更新OperatorRefItem<br/>
      * <功能详细描述>
-     * @param operatorRef
+     * @param operatorRefItem
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -84,79 +85,73 @@ public class OperatorRefAPIController implements OperatorRefFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody OperatorRef operatorRef) {
-        boolean flag = this.operatorRefService.updateById(id,operatorRef);
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody OperatorRefItem operatorRefItem) {
+        boolean flag = this.operatorRefItemService.updateById(id,
+                operatorRefItem);
         return flag;
     }
     
-
     /**
-     * 根据主键查询OperatorRef<br/>
+     * 根据主键查询OperatorRefItem<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
-     * @return OperatorRef [返回类型说明]
+     * @return OperatorRefItem [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public OperatorRef findById(
+    public OperatorRefItem findById(
             @PathVariable(value = "id", required = true) String id) {
-        OperatorRef res = this.operatorRefService.findById(id);
+        OperatorRefItem res = this.operatorRefItemService.findById(id);
         
         return res;
     }
-
+    
     /**
-     * 查询OperatorRef实例列表<br/>
+     * 查询OperatorRefItem实例列表<br/>
      * <功能详细描述>
      * @param querier
      * @return [参数说明]
      * 
-     * @return List<OperatorRef> [返回类型说明]
+     * @return List<OperatorRefItem> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<OperatorRef> queryList(
-    		@RequestBody Querier querier
-    	) {
-        List<OperatorRef> resList = this.operatorRefService.queryList(
-			querier         
-        );
-  
+    public List<OperatorRefItem> queryList(@RequestBody Querier querier) {
+        List<OperatorRefItem> resList = this.operatorRefItemService
+                .queryList(querier);
+        
         return resList;
     }
     
     /**
-     * 查询OperatorRef分页列表<br/>
+     * 查询OperatorRefItem分页列表<br/>
      * <功能详细描述>
      * @param pageIndex
      * @param pageSize
      * @param querier
      * @return [参数说明]
      * 
-     * @return PagedList<OperatorRef> [返回类型说明]
+     * @return PagedList<OperatorRefItem> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public PagedList<OperatorRef> queryPagedList(
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	) {
-        PagedList<OperatorRef> resPagedList = this.operatorRefService.queryPagedList(
-			querier,
-			pageIndex,
-			pageSize
-        );
+    public PagedList<OperatorRefItem> queryPagedList(
+            @RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize) {
+        PagedList<OperatorRefItem> resPagedList = this.operatorRefItemService
+                .queryPagedList(querier, pageIndex, pageSize);
         return resPagedList;
     }
     
-	/**
-     * 查询OperatorRef数量<br/>
+    /**
+     * 查询OperatorRefItem数量<br/>
      * <功能详细描述>
      * @param querier
      * @return [参数说明]
@@ -166,17 +161,15 @@ public class OperatorRefAPIController implements OperatorRefFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public int count(
-            @RequestBody Querier querier) {
-        int count = this.operatorRefService.count(
-        	querier);
+    public int count(@RequestBody Querier querier) {
+        int count = this.operatorRefItemService.count(querier);
         
         return count;
     }
-
-	/**
-     * 查询OperatorRef是否存在<br/>
-	 * @param excludeId
+    
+    /**
+     * 查询OperatorRefItem是否存在<br/>
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 
@@ -187,7 +180,7 @@ public class OperatorRefAPIController implements OperatorRefFacade {
     @Override
     public boolean exists(@RequestBody Querier querier,
             @RequestParam(value = "excludeId", required = false) String excludeId) {
-        boolean flag = this.operatorRefService.exists(querier, excludeId);
+        boolean flag = this.operatorRefItemService.exists(querier, excludeId);
         
         return flag;
     }

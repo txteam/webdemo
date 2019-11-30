@@ -9,7 +9,6 @@ create table ORG_ORGANIZATION_HIS(
 	code varchar(64) not null,		
 	parentId varchar(64),
 	companyId varchar(64),
-	departmentId varchar(64),
 	name varchar(64) not null,
 	alias varchar(64),
 	fullName varchar(256),

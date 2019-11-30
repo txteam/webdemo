@@ -42,11 +42,12 @@ import com.tx.local.security.util.WebContextUtils;
  */
 @Controller("authController")
 @RequestMapping("/auth")
-public class AuthController implements InitializingBean {
+public class OperatorAuthController implements InitializingBean {
     
     @Resource
     private SecurityContext securityContext;
     
+    @SuppressWarnings("unused")
     private AuthTypeRegistry authTypeRegistry;
     
     private AuthRegistry authRegistry;
@@ -120,7 +121,7 @@ public class AuthController implements InitializingBean {
      * @return String [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
-    */
+     */
     @RequestMapping("/toConfigOperatorAuth")
     public String toConfigOperatorAuth(
             @RequestParam("authTypeId") String authTypeId,
@@ -205,6 +206,192 @@ public class AuthController implements InitializingBean {
     }
     
     /**
+     * 跳转到配置操作员权限列表页面<br/>
+     *<功能详细描述>
+     * @param modelMap
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toConfigPostAuth")
+    public String toConfigPostAuth(
+            @RequestParam("authTypeId") String authTypeId,
+            @RequestParam("postId") String postId, ModelMap modelMap) {
+        modelMap.put("authTypeId", authTypeId);
+        modelMap.put("postId", postId);
+        
+        return "/security/configPostAuth";
+    }
+    
+    /**
+     * 根据当前人员权限类型与权限列表<br/> 
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<AuthItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryPost2AuthList")
+    public List<CheckAbleAuth> queryPost2AuthList(
+            @RequestParam("authTypeId") String authTypeId,
+            @RequestParam("postId") String postId,
+            @RequestParam() MultiValueMap<String, String> request) {
+        
+        //获取可分配的权限，如果为超级管理员，则所有权限都可以进行分配，否则仅能分配自己拥有的权限
+        List<String> assignableAuthIds = getAssignableAuthIds(authTypeId);
+        List<CheckAbleAuth> resList = authRegistry.queryList(authTypeId)
+                .stream()
+                .filter(auth -> assignableAuthIds.contains(auth.getId()))
+                .map(auth -> new CheckAbleAuth(auth))
+                .collect(Collectors.toList());
+        
+        //让拥有的权限被选中
+        Set<String> hasAuthIdSet = this.authRefService
+                .queryListByRef(true,
+                        AuthConstants.AUTHREFTYPE_OPERATOR_POST,
+                        postId,
+                        null)
+                .stream()
+                .map(authRef -> authRef.getAuthId())
+                .collect(Collectors.toSet());
+        resList.stream().forEach(caAuth -> caAuth
+                .setChecked(hasAuthIdSet.contains(caAuth.getId())));
+        
+        return resList;
+    }
+    
+    /**
+     * 保存角色权限<br/>
+     *<功能详细描述>
+     * @param postId
+     * @param authType
+     * @param authItemIds
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/savePost2Auth")
+    public boolean savePost2Auth(@RequestParam("authTypeId") String authTypeId,
+            @RequestParam("postId") String postId,
+            @RequestParam(value = "authId[]", required = false) String[] authIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        List<String> authIdList = null;
+        if (authIds == null) {
+            authIdList = new ArrayList<String>();
+        } else {
+            authIdList = Arrays.asList(authIds);
+        }
+        
+        List<String> filterAuthIds = getAssignableAuthIds(authTypeId);
+        this.authRefService.saveForAuthIds(
+                AuthConstants.AUTHREFTYPE_OPERATOR_POST,
+                postId,
+                authIdList,
+                filterAuthIds);
+        return true;
+    }
+    
+    /**
+     * 跳转到配置操作员权限列表页面<br/>
+     *<功能详细描述>
+     * @param modelMap
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toConfigRoleAuth")
+    public String toConfigRoleAuth(
+            @RequestParam("authTypeId") String authTypeId,
+            @RequestParam("roleId") String roleId, ModelMap modelMap) {
+        modelMap.put("authTypeId", authTypeId);
+        modelMap.put("roleId", roleId);
+        
+        return "/security/configRoleAuth";
+    }
+    
+    /**
+     * 根据当前人员权限类型与权限列表<br/> 
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<AuthItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryRole2AuthList")
+    public List<CheckAbleAuth> queryRole2AuthList(
+            @RequestParam("authTypeId") String authTypeId,
+            @RequestParam("roleId") String roleId,
+            @RequestParam() MultiValueMap<String, String> request) {
+        
+        //获取可分配的权限，如果为超级管理员，则所有权限都可以进行分配，否则仅能分配自己拥有的权限
+        List<String> assignableAuthIds = getAssignableAuthIds(authTypeId);
+        List<CheckAbleAuth> resList = authRegistry.queryList(authTypeId)
+                .stream()
+                .filter(auth -> assignableAuthIds.contains(auth.getId()))
+                .map(auth -> new CheckAbleAuth(auth))
+                .collect(Collectors.toList());
+        
+        //让拥有的权限被选中
+        Set<String> hasAuthIdSet = this.authRefService
+                .queryListByRef(true,
+                        AuthConstants.AUTHREFTYPE_OPERATOR_ROLE,
+                        roleId,
+                        null)
+                .stream()
+                .map(authRef -> authRef.getAuthId())
+                .collect(Collectors.toSet());
+        resList.stream().forEach(caAuth -> caAuth
+                .setChecked(hasAuthIdSet.contains(caAuth.getId())));
+        
+        return resList;
+    }
+    
+    /**
+     * 保存角色权限<br/>
+     *<功能详细描述>
+     * @param postId
+     * @param authType
+     * @param authItemIds
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/saveRole2Auth")
+    public boolean saveRole2Auth(@RequestParam("authTypeId") String authTypeId,
+            @RequestParam("roleId") String roleId,
+            @RequestParam(value = "authId[]", required = false) String[] authIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        List<String> authIdList = null;
+        if (authIds == null) {
+            authIdList = new ArrayList<String>();
+        } else {
+            authIdList = Arrays.asList(authIds);
+        }
+        
+        List<String> filterAuthIds = getAssignableAuthIds(authTypeId);
+        this.authRefService.saveForAuthIds(
+                AuthConstants.AUTHREFTYPE_OPERATOR_ROLE,
+                roleId,
+                authIdList,
+                filterAuthIds);
+        return true;
+    }
+    
+    /**
      * 获取可分配的权限，如果为超级管理员，则所有权限都可以进行分配，否则仅能分配自己拥有的权限
      * <功能详细描述>
      * @param authTypeId
@@ -222,13 +409,9 @@ public class AuthController implements InitializingBean {
         if (WebContextUtils.isSuperAdmin() || WebContextUtils.isSystemAdmin()) {
             return resList;
         }
-        String currentOperatorId = WebContextUtils.getOperatorId();
-        Set<String> hasAuthIdSet = this.authRefService.queryListByRef(true,
-                AuthConstants.AUTHREFTYPE_OPERATOR,
-                currentOperatorId,
-                null).stream().map(authRef -> authRef.getAuthId()).collect(
-                        Collectors.toSet());
         
+        //根据当前用户的权限集合过滤可分配的权限集合
+        Set<String> hasAuthIdSet = WebContextUtils.getCurrentAuthIds();
         resList = resList.stream()
                 .filter(authIdTemp -> hasAuthIdSet.contains(authIdTemp))
                 .collect(Collectors.toList());

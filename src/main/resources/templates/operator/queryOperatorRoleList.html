@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -43,7 +43,7 @@
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 var vcTree = null;
-var grid = null;
+var treegrid = null;
 var idFieldName = 'id';
 var nameFieldName = 'name'; 
 var entityName = '角色';
@@ -56,31 +56,36 @@ $(document).ready(function(){
 	var  $configRoleAuthALink = $("#configRoleAuthALink");
 	var  $configRoleOperatorALink = $("#configRoleOperatorALink");
 	
-	var virtualCenterMapLoaded = false;
-	var virtualCenterMap = {};
-	grid = $('#grid').datagrid({
-		url : /*[[@{/operatorRole/queryList}]]*/_contextPath + 'operatorRole/queryList',
+	var vcMapLoaded = false;
+	var vcMap = {};
+	treegrid = $('#treegrid').treegrid({
+		url : /*[[@{/operatorRole/queryList}]]*/'',
+		idField : 'id',
+		parentField : 'parentId',
+		treeField : 'name',
+		striped : true,
 		fit : true,
 		fitColumns : true,
 		border : false,
-		idField : 'id',
-		checkOnSelect : false,
-		selectOnCheck : false,
-		nowrap : false,
-		striped : true,
-		singleSelect : true,
+		iconField : function(item){
+			return 'group_group';	
+		},
 		onBeforeLoad:function(){
-			if(!virtualCenterMapLoaded){
-				$.post(
-					/*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
-					function(rows){
-						virtualCenterLoaded = true;
+			if(!vcMapLoaded){
+				$.ajax({
+				 	async: false,
+				  	type : "get",
+				  	url : /*[[@{/virtualCenter/queryList(valid=true)}]]*/'',
+				  	datatype : 'json',
+				  	success : function(rows) {
+				  		vcMapLoaded = true;
 						if($.ObjectUtils.isEmpty(rows)){
 							return ;
 						}	
 						$.each(rows,function(index,vc){
-							virtualCenterMap[vc.id] = vc.name;
+							vcMap[vc.id] = vc.name;
 						});
+				  	}
 				});
 			}
 		},
@@ -99,18 +104,17 @@ $(document).ready(function(){
 		{
 			field : 'id',
 			title : '编码',
-			width : 300,
-			hidden : true
+			width : 350
 		},
 		{
 			field : 'vcid',
 			title : '所属业务中心',
 			width : 200,
 			formatter : function(value, row, index) {
-				if(virtualCenterMap[row.vcid]){
-					return virtualCenterMap[row.vcid];
+				if(vcMap[value]){
+					return vcMap[value];
 				}else{
-					return row.vcid;
+					return value;
 				}
 			}
 		},
@@ -167,17 +171,19 @@ $(document).ready(function(){
 					str += '&nbsp;';
 				}
 				str += $.formatString('<img onclick="configRoleAuth(\'{0}\',\'{1}\');" src="{2}" title="配置职位权限"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/database_key.png');
+				str += '&nbsp;';
 				str += $.formatString('<img onclick="configRoleOperator(\'{0}\',\'{1}\');" src="{2}" title="配置职位人员"/>', row.id, row.name,_contextPath + 'webjars/css/images/extjs_icons/folder/folder_user.png');
+				str += '&nbsp;';
 				
 				return str;
 			}
 		}
 		] ],
 		toolbar : '#toolbar',
-		onDblClickRow : function(index, row){
+		onDblClickRow : function(row){
 			editFun(row[idFieldName], row[nameFieldName]);
 		},
-		onClickRow: function(index,row){
+		onClickRow: function(row){
 			if(!row.modifyAble){
 				$editALink.linkbutton('disable');
 				$deleteALink.linkbutton('disable');
@@ -226,7 +232,7 @@ $(document).ready(function(){
  * 查询
  */
 function queryFun() {
-	grid.datagrid('load',$('#queryForm').serializeObject());
+	treegrid.treegrid('load',$('#queryForm').serializeObject());
 	return false;
 }
 /*
@@ -236,7 +242,7 @@ function addFun() {
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
-	var addUrl = /*[[@{/operatorRole/toAdd}]]*/_contextPath + 'operatorRole/toAdd';
+	var addUrl = /*[[@{/operatorRole/toAdd}]]*/'';
 	var vcidTemp = $("vcid").val();
 	if(!$.ObjectUtils.isEmpty(vcidTemp)){
 		addUrl = addUrl + "?vcid=" + vcidTemp;
@@ -246,7 +252,7 @@ function addFun() {
 		"新增" + entityName,
 		addUrl,
 		500,220,function(){
-			grid.datagrid('load',$('#queryForm').serializeObject());
+			treegrid.treegrid('load',$('#queryForm').serializeObject());
 	});
 	return false;
 }
@@ -255,26 +261,26 @@ function addFun() {
  */
 function editFun(id,name) {
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
-		id = rows[0][idFieldName];
-		name = rows[0][nameFieldName];
+		var rows = treegrid.treegrid('getSelections');
+		id = rows[0].id;
+		name = rows[0].name;
 	}
 	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的" + entityName);
+		DialogUtils.alert("没有选中的职位");
 		return ;
 	}
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
 	
-	var url = /*[[@{/operatorRole/toUpdate}]]*/_contextPath + 'operatorRole/toUpdate';
+	var url = /*[[@{/operatorRole/toUpdate}]]*/'';
 	url = url + "?id=" + id;
 	DialogUtils.openModalDialog(
 		"updateRole",
 		"编辑" + entityName + ":" + name,
 		url,
 		500,220,function(){
-			grid.datagrid('load',$('#queryForm').serializeObject());
+			treegrid.treegrid('load',$('#queryForm').serializeObject());
 	});
 	return false;
 }
@@ -283,7 +289,7 @@ function editFun(id,name) {
  */
 function deleteFun(id,name) {
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
+		var rows = treegrid.treegrid('getSelections');
 		id = rows[0][idFieldName];
 		name = rows[0][nameFieldName];
 	}
@@ -301,7 +307,7 @@ function deleteFun(id,name) {
 	    		});
 	    		//如果确认删除指定的Role
 	    		$.post(
-	    				/*[[@{/operatorRole/deleteById}]]*/_contextPath + 'operatorRole/deleteById',
+	    				/*[[@{/operatorRole/deleteById}]]*/'',
 			    		{id:id},
 			    		function(data){
 			    			DialogUtils.progress('close');
@@ -310,7 +316,7 @@ function deleteFun(id,name) {
 			    			}else{
 			    				$.formatString("删除{0}:{1}失败.指定{0}可能已经被其他管理员所删除.如果指定{0}依然存在，请联系系统管理员.",entityName,name);
 			    			}
-			    			grid.datagrid('load',$('#queryForm').serializeObject());
+			    			treegrid.treegrid('load',$('#queryForm').serializeObject());
 			    });
 	    	}
     });
@@ -321,7 +327,7 @@ function deleteFun(id,name) {
  */
 function disableFun(id,name){
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
+		var rows = treegrid.treegrid('getSelections');
 		id = rows[0][idFieldName];
 		name = rows[0][nameFieldName];
 	}
@@ -340,12 +346,12 @@ function disableFun(id,name){
     		});
     		//如果确认禁用指定Role
     		$.post(
-    				/*[[@{/operatorRole/disableById}]]*/_contextPath + 'operatorRole/disableById',
+    				/*[[@{/operatorRole/disableById}]]*/'',
 		    		{id:id},
 		    		function(){
 		    			DialogUtils.progress('close');
 		    			DialogUtils.tip("禁用" + entityName + "成功");
-		    			grid.datagrid('reload',$('#queryForm').serializeObject());
+		    			treegrid.treegrid('reload',$('#queryForm').serializeObject());
 		    });
     	}
     });
@@ -356,7 +362,7 @@ function disableFun(id,name){
  */
 function enableFun(id,name){
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
+		var rows = treegrid.treegrid('getSelections');
 		id = rows[0][idFieldName];
 		name = rows[0][nameFieldName];
 	}
@@ -375,12 +381,12 @@ function enableFun(id,name){
     		});
     		//如果确认启用指定Role
     		$.post(
-    				/*[[@{/operatorRole/enableById}]]*/_contextPath + 'operatorRole/enableById',
+    				/*[[@{/operatorRole/enableById}]]*/'',
 		    		{id:id},
 		    		function(){
 		    			DialogUtils.progress('close');
 		    			DialogUtils.tip("启用" + entityName + "成功");
-		    			grid.datagrid('reload',$('#queryForm').serializeObject());
+		    			treegrid.treegrid('reload',$('#queryForm').serializeObject());
 		    });
     	}
     });
@@ -391,7 +397,7 @@ function enableFun(id,name){
  */
 function configRoleAuth(id,name){
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
+		var rows = treegrid.treegrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
 	}
@@ -402,10 +408,12 @@ function configRoleAuth(id,name){
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var configUrl = /*[[@{/auth/toConfigRoleAuth}]]*/'';
+	configUrl = configUrl + "?authTypeId=AUTH_TYPE_OPERATOR_OPERATE&roleId=" + id;
 	DialogUtils.openModalDialog(
 		"configRoleAuth",
 		$.formatString("配置角色权限_[{0}]",name),
-		$.formatString("${contextPath}/auth/toConfigRoleAuth.action?roleId={0}",id),
+		configUrl,
 		450,500,function(){
 			//$('#treeGrid').treegrid('reload');
 			//alert('reload');
@@ -415,7 +423,7 @@ function configRoleAuth(id,name){
 //配置职位人员
 function configRoleOperator(id,name){
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
+		var rows = treegrid.treegrid('getSelections');
 		id = rows[0].id;
 		name = rows[0].name;
 	}
@@ -463,23 +471,18 @@ function deselect(){
 </script>
 </head>
 <body class="easyui-layout">
-	<!--//FIXME: 修改查询条件框体高度 -->
+	<!-- 修改查询条件框体高度 -->
 	<div data-options="region:'north',title:'查询条件',border:false" style="height: 105px; overflow: hidden;">
 		<form id="queryForm" class="form">
 			<table class="table table-hover table-condensed">
 				<tr>
-					<th>名称:</th>
-					<td><input id="name" name="name"/></td>
-					<th>编码:</th>
+					<th width="20%">编码:</th>
 					<td><input id="code" name="code"/></td>
-					<th>虚中心:</th>
-					<td>
-						<input id="vcid" name="vcid" type="hidden"/>
-						<input id="virtualCenterName" name="virtualCenterName" readonly="readonly"/>
-					</td>
+					<th width="20%">名称:</th>
+					<td><input id="name" name="name"/></td>
 				</tr>
 				<tr>
-					<td colspan="6" class="button operRow">
+					<td colspan="4" class="button operRow">
 						<a id="queryBtn" onclick="queryFun();return false;" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>
 					</td>
 				</tr>
@@ -487,7 +490,7 @@ function deselect(){
 		</form>
 	</div>
 	<div data-options="region:'center',border:false">
-		<table id="grid"></table>
+		<table id="treegrid" style="width:fit;height:fit"></table>
     </div>
     
     <div id="toolbar" style="display: none;">		

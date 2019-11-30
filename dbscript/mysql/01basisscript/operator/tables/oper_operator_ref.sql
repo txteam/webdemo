@@ -15,7 +15,8 @@ create table OPER_OPERATOR_REF(
 	createOperatorId varchar(64) ,
 	primary key(id)
 );
-CREATE UNIQUE INDEX idx_oper_operref_00 ON oper_operator_ref(refId,refType,operatorId);
-CREATE INDEX idx_oper_operref_01 ON oper_operator_ref(operatorId);
-CREATE INDEX idx_oper_operref_02 ON oper_operator_ref(effectiveDate);
-CREATE INDEX idx_oper_operref_03 ON oper_operator_ref(expiryDate);
+CREATE UNIQUE INDEX idx_oper_operref_00 ON OPER_OPERATOR_REF(refId,refType,operatorId);
+CREATE INDEX idx_oper_operref_01 ON OPER_OPERATOR_REF(operatorId);
+CREATE INDEX idx_oper_operref_02 ON OPER_OPERATOR_REF(effectiveDate);
+CREATE INDEX idx_oper_operref_03 ON OPER_OPERATOR_REF(expiryDate);
+CREATE INDEX idx_oper_operref_04 ON OPER_OPERATOR_REF(createDate);

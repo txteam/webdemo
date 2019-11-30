@@ -124,6 +124,13 @@ public class MenuItem implements Menu, Serializable {
     }
     
     /**
+     * @param 对roles进行赋值
+     */
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+    
+    /**
      * @return 返回 authorities
      */
     public Set<String> getAuths() {
@@ -139,6 +146,13 @@ public class MenuItem implements Menu, Serializable {
             }
         }
         return auths;
+    }
+    
+    /**
+     * @param 对authorities进行赋值
+     */
+    public void setAuths(Set<String> auths) {
+        this.auths = auths;
     }
     
     /**
@@ -161,6 +175,13 @@ public class MenuItem implements Menu, Serializable {
     }
     
     /**
+     * @param 对access进行赋值
+     */
+    public void setAccess(Set<String> access) {
+        this.access = access;
+    }
+    
+    /**
      * @param 对type进行赋值
      */
     public void setType(String type) {
@@ -172,20 +193,6 @@ public class MenuItem implements Menu, Serializable {
      */
     public void setAttributes(Map<String, String> attributes) {
         this.attributes = attributes == null ? new HashMap<>() : attributes;
-    }
-    
-    /**
-     * @param 对roles进行赋值
-     */
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
-    }
-    
-    /**
-     * @param 对authorities进行赋值
-     */
-    public void setAuths(Set<String> auths) {
-        this.auths = auths;
     }
     
     /**

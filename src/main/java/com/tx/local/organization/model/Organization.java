@@ -70,11 +70,6 @@ public class Organization
     @Column(nullable = true, length = 64, name = "companyId")
     private Organization company;
     
-    /** 部门id */
-    @ApiModelProperty("部门")
-    @Column(nullable = true, length = 64, name = "departmentId")
-    private Organization department;
-    
     /** 编码 */
     @Column(nullable = false, length = 64)
     private String code;
@@ -336,20 +331,6 @@ public class Organization
      */
     public void setCompany(Organization company) {
         this.company = company;
-    }
-
-    /**
-     * @return 返回 department
-     */
-    public Organization getDepartment() {
-        return department;
-    }
-
-    /**
-     * @param 对department进行赋值
-     */
-    public void setDepartment(Organization department) {
-        this.department = department;
     }
 
     /**

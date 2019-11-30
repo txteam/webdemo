@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
-import com.tx.local.operator.model.OperatorRef;
+import com.tx.local.operator.model.OperatorRefItem;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -39,9 +39,9 @@ public interface OperatorRefFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "新增OperatorRef")
+    @ApiOperation(value = "新增用户引用")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public OperatorRef insert(@RequestBody OperatorRef operatorRef);
+    public OperatorRefItem insert(@RequestBody OperatorRefItem operatorRef);
     
     /**
      * 根据id删除OperatorRef<br/> 
@@ -71,7 +71,7 @@ public interface OperatorRefFacade {
     @ApiOperation(value = "修改OperatorRef")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody OperatorRef operatorRef);
+    		@RequestBody OperatorRefItem operatorRef);
 
     /**
      * 根据主键查询OperatorRef<br/>
@@ -84,7 +84,7 @@ public interface OperatorRefFacade {
      */
     @ApiOperation(value = "根据主键查询OperatorRef")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public OperatorRef findById(
+    public OperatorRefItem findById(
             @PathVariable(value = "id", required = true) String id);
     
 
@@ -100,7 +100,7 @@ public interface OperatorRefFacade {
      */
     @ApiOperation(value = "查询OperatorRef列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<OperatorRef> queryList(
+    public List<OperatorRefItem> queryList(
     		@RequestBody Querier querier
     	);
     
@@ -118,7 +118,7 @@ public interface OperatorRefFacade {
      */
     @ApiOperation(value = "查询OperatorRef分页列表")
     @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
-    public PagedList<OperatorRef> queryPagedList(
+    public PagedList<OperatorRefItem> queryPagedList(
 			@RequestBody Querier querier,
 			@PathVariable(value = "pageNumber", required = true) int pageIndex,
             @PathVariable(value = "pageSize", required = true) int pageSize
