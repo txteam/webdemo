@@ -7,15 +7,16 @@
 package com.tx.local.demo.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -34,28 +35,26 @@ import io.swagger.annotations.ApiModelProperty;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "test_testmode")
+@Table(name = "test_demo")
 @ApiModel("测试对象")
-public class TestMode implements TreeAble<List<TestMode>, TestMode> {
+public class TestDemo extends TestDemoSuper
+        implements TreeAble<List<TestDemo>, TestDemo> {
     
     @Id
     private String id;
     
-    @Column(updatable = false, nullable = false, length = 32)
-    private String code;
-    
     private String parentId;
     
-    //@Column(name = "nested1Id")
-    //@OneToOne
-    //@JoinColumn(name="nested1",referencedColumnName="id",nullable=false)
-    @Transient
-    private TestModeNested1 nested1;
+    private TestDemoTypeEnum type;
+    
+    @Column(name = "nested1Id")
+    private TestDemoNested1 nested1;
+    
+    @JoinColumn(name = "nested2Code", nullable = false)
+    private TestDemoNested2 nested2;
     
     @Column(nullable = false, length = 32)
     private String name;
-    
-    private TestTypeEnum type;
     
     private String remark;
     
@@ -86,20 +85,29 @@ public class TestMode implements TreeAble<List<TestMode>, TestMode> {
     
     private Date expiryDate;
     
+    @ApiModelProperty("测试Integer值")
+    private Integer testInteger;
+    
+    @ApiModelProperty("测试BigDecimal值")
+    private BigDecimal testBigDecimal;
+    
     @ApiModelProperty("测试int值")
     private int testInt;
     
     @ApiModelProperty("测试Long值")
     private Long testLong;
     
-    @ApiModelProperty("测试BigDecimal值")
-    private BigDecimal testBigDecimal;
+    @Transient
+    private HashMap<String, String> testHashMap;
     
     @Transient
-    private List<TestMode> children;
+    private HashSet<String> testHashSet;
     
-    //@OneToMany
-    //private List<TestMode2> testMode2List;
+    @Transient
+    private ArrayList<String> testArrayList;
+    
+    @Transient
+    private List<TestDemo> children;
     
     /**
      * @return 返回 id
@@ -116,31 +124,87 @@ public class TestMode implements TreeAble<List<TestMode>, TestMode> {
     }
     
     /**
-     * @return 返回 code
-     */
-    public String getCode() {
-        return code;
-    }
-    
-    /**
-     * @param 对code进行赋值
-     */
-    public void setCode(String code) {
-        this.code = code;
-    }
-    
-    /**
      * @return 返回 nested1
      */
-    public TestModeNested1 getNested1() {
+    public TestDemoNested1 getNested1() {
         return nested1;
     }
     
     /**
      * @param 对nested1进行赋值
      */
-    public void setNested1(TestModeNested1 nested1) {
+    public void setNested1(TestDemoNested1 nested1) {
         this.nested1 = nested1;
+    }
+    
+    /**
+     * @return 返回 nested2
+     */
+    public TestDemoNested2 getNested2() {
+        return nested2;
+    }
+    
+    /**
+     * @param 对nested2进行赋值
+     */
+    public void setNested2(TestDemoNested2 nested2) {
+        this.nested2 = nested2;
+    }
+    
+    /**
+     * @return 返回 testInteger
+     */
+    public Integer getTestInteger() {
+        return testInteger;
+    }
+    
+    /**
+     * @param 对testInteger进行赋值
+     */
+    public void setTestInteger(Integer testInteger) {
+        this.testInteger = testInteger;
+    }
+    
+    /**
+     * @return 返回 testHashMap
+     */
+    public HashMap<String, String> getTestHashMap() {
+        return testHashMap;
+    }
+    
+    /**
+     * @param 对testHashMap进行赋值
+     */
+    public void setTestHashMap(HashMap<String, String> testHashMap) {
+        this.testHashMap = testHashMap;
+    }
+    
+    /**
+     * @return 返回 testHashSet
+     */
+    public HashSet<String> getTestHashSet() {
+        return testHashSet;
+    }
+    
+    /**
+     * @param 对testHashSet进行赋值
+     */
+    public void setTestHashSet(HashSet<String> testHashSet) {
+        this.testHashSet = testHashSet;
+    }
+    
+    /**
+     * @return 返回 testArrayList
+     */
+    public ArrayList<String> getTestArrayList() {
+        return testArrayList;
+    }
+    
+    /**
+     * @param 对testArrayList进行赋值
+     */
+    public void setTestArrayList(ArrayList<String> testArrayList) {
+        this.testArrayList = testArrayList;
     }
     
     /**
@@ -258,14 +322,14 @@ public class TestMode implements TreeAble<List<TestMode>, TestMode> {
     /**
      * @return 返回 type
      */
-    public TestTypeEnum getType() {
+    public TestDemoTypeEnum getType() {
         return type;
     }
     
     /**
      * @param 对type进行赋值
      */
-    public void setType(TestTypeEnum type) {
+    public void setType(TestDemoTypeEnum type) {
         this.type = type;
     }
     
@@ -314,14 +378,14 @@ public class TestMode implements TreeAble<List<TestMode>, TestMode> {
     /**
      * @return 返回 children
      */
-    public List<TestMode> getChildren() {
+    public List<TestDemo> getChildren() {
         return children;
     }
     
     /**
      * @param 对children进行赋值
      */
-    public void setChildren(List<TestMode> children) {
+    public void setChildren(List<TestDemo> children) {
         this.children = children;
     }
     
@@ -333,11 +397,11 @@ public class TestMode implements TreeAble<List<TestMode>, TestMode> {
     }
     
     *//**
-     * @param 对testMode2List进行赋值
-     *//*
-    public void setTestMode2List(List<TestMode2> testMode2List) {
-        this.testMode2List = testMode2List;
-    }*/
+      * @param 对testMode2List进行赋值
+      *//*
+        public void setTestMode2List(List<TestMode2> testMode2List) {
+         this.testMode2List = testMode2List;
+        }*/
     
     /**
      * @return 返回 parentId

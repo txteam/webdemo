@@ -90,15 +90,7 @@ $(document).ready(function(){
 					<td>
 						<input id="name" name="name" type="text" 
 							th:value="*{name}"
-							/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">vcid:</th>
-					<td>
-						<input id="vcid" name="vcid" type="text" 
-							th:value="*{vcid}"
-							/>
+							th:data-rule="'名称:required;length[1~127];remote[' + @{/operatorRoleCatalog/validate} + ', name, id]'"/>
 					</td>
 				</tr>			
 				<tr>
@@ -106,9 +98,17 @@ $(document).ready(function(){
 					<td>
 						<select id="modifyAble" name="modifyAble"
 							>
-							<option value="true" th:selected="*{modifyAble eq true}">是</form:option>
-							<option value="false" th:selected="*{modifyAble eq false}">否</form:option>
+							<option value="true" th:selected="${operatorRoleCatalog.modifyAble eq true}">是</form:option>
+							<option value="false" th:selected="${operatorRoleCatalog.modifyAble eq false}">否</form:option>
 						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">上级ID:</th>
+					<td>
+						<input id="parentId" name="parentId" type="text" 
+							th:value="*{parentId}"
+							data-rule="上级ID:length[1~127]"/>
 					</td>
 				</tr>			
 				<tr>
@@ -116,7 +116,7 @@ $(document).ready(function(){
 					<td>
 						<input id="remark" name="remark" type="text" 
 							th:value="*{remark}"
-							/>
+							data-rule="备注:length[1~127]"/>
 					</td>
 				</tr>			
 			</table>

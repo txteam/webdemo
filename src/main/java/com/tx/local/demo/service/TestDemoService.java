@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.local.demo.dao.TestM1Dao;
-import com.tx.local.demo.model.TestM1;
+import com.tx.local.demo.dao.TestDemoDao;
+import com.tx.local.demo.model.TestDemo;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Filter;
@@ -31,7 +31,7 @@ import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 
 /**
- * TestM1的业务层[TestM1Service]
+ * 测试对象的业务层[TestDemoService]
  * <功能详细描述>
  * 
  * @author  
@@ -39,44 +39,44 @@ import com.tx.core.querier.model.QuerierBuilder;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@Component("testM1Service")
-public class TestM1Service {
+@Component("testDemoService")
+public class TestDemoService {
     
     @SuppressWarnings("unused")
-    private Logger logger = LoggerFactory.getLogger(TestM1Service.class);
+    private Logger logger = LoggerFactory.getLogger(TestDemoService.class);
     
-    @Resource(name = "testM1Dao")
-    private TestM1Dao testM1Dao;
+    @Resource(name = "testDemoDao")
+    private TestDemoDao testDemoDao;
     
     /**
-     * 新增TestM1实例<br/>
-     * 将testM1插入数据库中保存
-     * 1、如果testM1 为空时抛出参数为空异常
-     * 2、如果testM1 中部分必要参数为非法值时抛出参数不合法异常
+     * 新增测试对象实例<br/>
+     * 将testDemo插入数据库中保存
+     * 1、如果testDemo 为空时抛出参数为空异常
+     * 2、如果testDemo 中部分必要参数为非法值时抛出参数不合法异常
      * 
-     * @param testM1 [参数说明]
+     * @param testDemo [参数说明]
      * @return void [返回类型说明]
      * @exception throws
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public void insert(TestM1 testM1) {
+    public void insert(TestDemo testDemo) {
         //验证参数是否合法
-        AssertUtils.notNull(testM1, "testM1 is null.");
-		AssertUtils.notEmpty(testM1.getCode(), "testM1.code is empty.");
-		AssertUtils.notEmpty(testM1.getName(), "testM1.name is empty.");
+        AssertUtils.notNull(testDemo, "testDemo is null.");
+		AssertUtils.notEmpty(testDemo.getCode(), "testDemo.code is empty.");
+		AssertUtils.notEmpty(testDemo.getName(), "testDemo.name is empty.");
            
         //FIXME:为添加的数据需要填入默认值的字段填入默认值
-		testM1.setLastUpdateDate(new Date());
-		testM1.setValid(true);
-		testM1.setCreateDate(new Date());
+		testDemo.setLastUpdateDate(new Date());
+		testDemo.setValid(true);
+		testDemo.setCreateDate(new Date());
         
         //调用数据持久层对实例进行持久化操作
-        this.testM1Dao.insert(testM1);
+        this.testDemoDao.insert(testDemo);
     }
     
     /**
-     * 根据id删除TestM1实例
+     * 根据id删除测试对象实例
      * 1、如果入参数为空，则抛出异常
      * 2、执行删除后，将返回数据库中被影响的条数 > 0，则返回true
      *
@@ -89,85 +89,85 @@ public class TestM1Service {
     public boolean deleteById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
         
-        TestM1 condition = new TestM1();
+        TestDemo condition = new TestDemo();
         condition.setId(id);
         
-        int resInt = this.testM1Dao.delete(condition);
+        int resInt = this.testDemoDao.delete(condition);
         boolean flag = resInt > 0;
         return flag;
     }
 
     /**
-     * 根据code删除TestM1实例
+     * 根据code删除测试对象实例
      * 1、当code为empty时抛出异常
      * 2、执行删除后，将返回数据库中被影响的条数 > 0，则返回true
      *
      * @param code
-     * @return TestM1 [返回类型说明]
+     * @return TestDemo [返回类型说明]
      * @exception throws
      * @see [类、类#方法、类#成员]
      */
     public boolean deleteByCode(String code) {
         AssertUtils.notEmpty(code, "code is empty.");
         
-        TestM1 condition = new TestM1();
+        TestDemo condition = new TestDemo();
         condition.setCode(code);
         
-        int resInt = this.testM1Dao.delete(condition);
+        int resInt = this.testDemoDao.delete(condition);
         boolean flag = resInt > 0;
         return flag;
     }
     
     /**
-     * 根据id查询TestM1实例
+     * 根据id查询测试对象实例
      * 1、当id为empty时抛出异常
      *
      * @param id
-     * @return TestM1 [返回类型说明]
+     * @return TestDemo [返回类型说明]
      * @exception throws
      * @see [类、类#方法、类#成员]
      */
-    public TestM1 findById(String id) {
+    public TestDemo findById(String id) {
         AssertUtils.notEmpty(id, "id is empty.");
         
-        TestM1 condition = new TestM1();
+        TestDemo condition = new TestDemo();
         condition.setId(id);
         
-        TestM1 res = this.testM1Dao.find(condition);
+        TestDemo res = this.testDemoDao.find(condition);
         return res;
     }
 
     /**
-     * 根据code查询TestM1实例
+     * 根据code查询测试对象实例
      * 1、当code为empty时抛出异常
      *
      * @param code
-     * @return TestM1 [返回类型说明]
+     * @return TestDemo [返回类型说明]
      * @exception throws
      * @see [类、类#方法、类#成员]
      */
-    public TestM1 findByCode(String code) {
+    public TestDemo findByCode(String code) {
         AssertUtils.notEmpty(code, "code is empty.");
         
-        TestM1 condition = new TestM1();
+        TestDemo condition = new TestDemo();
         condition.setCode(code);
         
-        TestM1 res = this.testM1Dao.find(condition);
+        TestDemo res = this.testDemoDao.find(condition);
         return res;
     }
     
     /**
-     * 查询TestM1实例列表
+     * 查询测试对象实例列表
      * <功能详细描述>
      * @param valid
      * @param params      
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<TestM1> queryList(
+    public List<TestDemo> queryList(
 		Boolean valid,
 		Map<String,Object> params   
     	) {
@@ -178,23 +178,23 @@ public class TestM1Service {
 		params.put("valid",valid);
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<TestM1> resList = this.testM1Dao.queryList(params);
+        List<TestDemo> resList = this.testDemoDao.queryList(params);
         
         return resList;
     }
     
     /**
-     * 查询TestM1实例列表
+     * 查询测试对象实例列表
      * <功能详细描述>
      * @param valid
      * @param querier      
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<TestM1> queryList(
+    public List<TestDemo> queryList(
 		Boolean valid,
 		Querier querier   
     	) {
@@ -208,13 +208,13 @@ public class TestM1Service {
         }
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<TestM1> resList = this.testM1Dao.queryList(querier);
+        List<TestDemo> resList = this.testDemoDao.queryList(querier);
         
         return resList;
     }
     
     /**
-     * 分页查询TestM1实例列表
+     * 分页查询测试对象实例列表
      * <功能详细描述>
      * @param valid
      * @param params    
@@ -224,11 +224,11 @@ public class TestM1Service {
      * <功能详细描述>
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<TestM1> queryPagedList(
+    public PagedList<TestDemo> queryPagedList(
 		Boolean valid,
 		Map<String,Object> params,
     	int pageIndex,
@@ -240,13 +240,13 @@ public class TestM1Service {
 		params.put("valid",valid);
  
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<TestM1> resPagedList = this.testM1Dao.queryPagedList(params, pageIndex, pageSize);
+        PagedList<TestDemo> resPagedList = this.testDemoDao.queryPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
     
 	/**
-     * 分页查询TestM1实例列表
+     * 分页查询测试对象实例列表
      * <功能详细描述>
      * @param valid
      * @param querier    
@@ -256,11 +256,11 @@ public class TestM1Service {
      * <功能详细描述>
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<TestM1> queryPagedList(
+    public PagedList<TestDemo> queryPagedList(
 		Boolean valid,
 		Querier querier,
     	int pageIndex,
@@ -275,19 +275,19 @@ public class TestM1Service {
         }
  
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<TestM1> resPagedList = this.testM1Dao.queryPagedList(querier, pageIndex, pageSize);
+        PagedList<TestDemo> resPagedList = this.testDemoDao.queryPagedList(querier, pageIndex, pageSize);
         
         return resPagedList;
     }
     
     /**
-     * 查询TestM1实例数量<br/>
+     * 查询测试对象实例数量<br/>
      * <功能详细描述>
      * @param valid
      * @param params      
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
@@ -302,19 +302,19 @@ public class TestM1Service {
 		params.put("valid",valid);
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.testM1Dao.count(params);
+        int res = this.testDemoDao.count(params);
         
         return res;
     }
     
     /**
-     * 查询TestM1实例数量<br/>
+     * 查询测试对象实例数量<br/>
      * <功能详细描述>
      * @param valid
      * @param querier      
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
@@ -332,13 +332,13 @@ public class TestM1Service {
         }
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.testM1Dao.count(querier);
+        int res = this.testDemoDao.count(querier);
         
         return res;
     }
     
     /**
-     * 判断TestM1实例是否已经存在<br/>
+     * 判断测试对象实例是否已经存在<br/>
      * <功能详细描述>
      * @param key2valueMap
      * @param excludeId
@@ -354,16 +354,15 @@ public class TestM1Service {
         //生成查询条件
         Map<String, Object> params = new HashMap<String, Object>();
         params.putAll(key2valueMap);
-        params.put("excludeId", excludeId);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.testM1Dao.count(params);
+        int res = this.testDemoDao.count(params,excludeId);
         
         return res > 0;
     }
     
     /**
-     * 判断TestM1实例是否已经存在<br/>
+     * 判断测试对象实例是否已经存在<br/>
      * <功能详细描述>
      * @param key2valueMap
      * @param excludeId
@@ -377,15 +376,15 @@ public class TestM1Service {
         AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.testM1Dao.count(querier,excludeId);
+        int res = this.testDemoDao.count(querier,excludeId);
         
         return res > 0;
     }
     
     /**
-     * 根据id更新TestM1实例<br/>
+     * 根据id更新测试对象实例<br/>
      * <功能详细描述>
-     * @param testM1
+     * @param testDemo
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -393,41 +392,49 @@ public class TestM1Service {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(String id,TestM1 testM1) {
+    public boolean updateById(String id,TestDemo testDemo) {
         //验证参数是否合法，必填字段是否填写
-        AssertUtils.notNull(testM1, "testM1 is null.");
+        AssertUtils.notNull(testDemo, "testDemo is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-		AssertUtils.notEmpty(testM1.getName(), "testM1.name is empty.");
+		AssertUtils.notEmpty(testDemo.getName(), "testDemo.name is empty.");
 
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         //FIXME:需要更新的字段
-		updateRowMap.put("lastUpdateOperatorId", testM1.getLastUpdateOperatorId());
-		updateRowMap.put("name", testM1.getName());
-		updateRowMap.put("testInt", testM1.getTestInt());
-		updateRowMap.put("testLong", testM1.getTestLong());
-		updateRowMap.put("testBigDecimal", testM1.getTestBigDecimal());
-		updateRowMap.put("type", testM1.getType());
-		updateRowMap.put("valid", testM1.isValid());
-		updateRowMap.put("expiryDate", testM1.getExpiryDate());
-		updateRowMap.put("modifyAble", testM1.isModifyAble());
-		updateRowMap.put("parentId", testM1.getParentId());
-		updateRowMap.put("remark", testM1.getRemark());
-		updateRowMap.put("success", testM1.getSuccess());
-		updateRowMap.put("effictiveDate", testM1.getEffictiveDate());
-		updateRowMap.put("attributes", testM1.getAttributes());
-		updateRowMap.put("description", testM1.getDescription());
+		updateRowMap.put("lastUpdateOperatorId", testDemo.getLastUpdateOperatorId());
+		updateRowMap.put("name", testDemo.getName());
+		updateRowMap.put("testInt", testDemo.getTestInt());
+		updateRowMap.put("testLong", testDemo.getTestLong());
+		updateRowMap.put("testInteger", testDemo.getTestInteger());
+		updateRowMap.put("testBigDecimal", testDemo.getTestBigDecimal());
+		updateRowMap.put("type", testDemo.getType());
+		updateRowMap.put("superInt", testDemo.getSuperInt());
+		updateRowMap.put("superBoolean", testDemo.isSuperBoolean());
+		updateRowMap.put("superDemo", testDemo.getSuperDemo());
+		updateRowMap.put("superBigDeceimal", testDemo.getSuperBigDeceimal());
+		updateRowMap.put("superIntegerObject", testDemo.getSuperIntegerObject());
+		updateRowMap.put("superIsBooleanObject", testDemo.getSuperIsBooleanObject());
+		updateRowMap.put("expiryDate", testDemo.getExpiryDate());
+		updateRowMap.put("modifyAble", testDemo.isModifyAble());
+		updateRowMap.put("parentId", testDemo.getParentId());
+		updateRowMap.put("remark", testDemo.getRemark());
+		updateRowMap.put("nested1", testDemo.getNested1());
+		updateRowMap.put("nested2", testDemo.getNested2());
+		updateRowMap.put("success", testDemo.getSuccess());
+		updateRowMap.put("effictiveDate", testDemo.getEffictiveDate());
+		updateRowMap.put("attributes", testDemo.getAttributes());
+		updateRowMap.put("description", testDemo.getDescription());
 		updateRowMap.put("lastUpdateDate", new Date());
 
-        boolean flag = this.testM1Dao.update(id,updateRowMap); 
+        boolean flag = this.testDemoDao.update(id,updateRowMap); 
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
     
     /**
-     * 根据id更新TestM1实例<br/>
+     * 根据id更新测试对象实例<br/>
      * <功能详细描述>
-     * @param testM1
+     * @param testDemo
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -435,18 +442,18 @@ public class TestM1Service {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(TestM1 testM1) {
+    public boolean updateById(TestDemo testDemo) {
         //验证参数是否合法，必填字段是否填写
-        AssertUtils.notNull(testM1, "testM1 is null.");
-        AssertUtils.notEmpty(testM1.getId(), "testM1.id is empty.");
+        AssertUtils.notNull(testDemo, "testDemo is null.");
+        AssertUtils.notEmpty(testDemo.getId(), "testDemo.id is empty.");
 
-        boolean flag = updateById(testM1.getId(),testM1); 
+        boolean flag = updateById(testDemo.getId(),testDemo); 
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
 
     /**
-     * 根据id禁用TestM1<br/>
+     * 根据id禁用测试对象<br/>
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -464,13 +471,13 @@ public class TestM1Service {
         params.put("id", id);
         params.put("valid", false);
         
-        boolean flag = this.testM1Dao.update(params) > 0;
+        boolean flag = this.testDemoDao.update(params) > 0;
         
         return flag;
     }
     
     /**
-     * 根据id启用TestM1<br/>
+     * 根据id启用测试对象<br/>
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -488,13 +495,13 @@ public class TestM1Service {
         params.put("id", id);
         params.put("valid", true);
         
-        boolean flag = this.testM1Dao.update(params) > 0;
+        boolean flag = this.testDemoDao.update(params) > 0;
         
         return flag;
     }
 
     /**
-     * 根据parentId查询TestM1子级实例列表<br/>
+     * 根据parentId查询测试对象子级实例列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid
@@ -505,7 +512,7 @@ public class TestM1Service {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<TestM1> queryChildrenByParentId(String parentId,
+    public List<TestDemo> queryChildrenByParentId(String parentId,
 			Boolean valid,
 			Map<String,Object> params) {
         //判断条件合法性
@@ -517,13 +524,13 @@ public class TestM1Service {
 		params.put("valid",valid);
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<TestM1> resList = this.testM1Dao.queryList(params);
+        List<TestDemo> resList = this.testDemoDao.queryList(params);
         
         return resList;
     }
     
     /**
-     * 根据parentId查询TestM1子级实例列表<br/>
+     * 根据parentId查询测试对象子级实例列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid
@@ -534,7 +541,7 @@ public class TestM1Service {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<TestM1> queryChildrenByParentId(String parentId,
+    public List<TestDemo> queryChildrenByParentId(String parentId,
 			Boolean valid,
 			Querier querier) {
         //判断条件合法性
@@ -549,13 +556,13 @@ public class TestM1Service {
 		querier.getFilters().add(Filter.eq("parentId", parentId));
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<TestM1> resList = this.testM1Dao.queryList(querier);
+        List<TestDemo> resList = this.testDemoDao.queryList(querier);
         
         return resList;
     }
     
     /**
-     * 根据parentId查询TestM1子、孙级实例列表<br/>
+     * 根据parentId查询测试对象子、孙级实例列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid
@@ -566,7 +573,7 @@ public class TestM1Service {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<TestM1> queryDescendantsByParentId(String parentId,
+    public List<TestDemo> queryDescendantsByParentId(String parentId,
 			Boolean valid,
             Map<String, Object> params) {
         //判断条件合法性
@@ -578,7 +585,7 @@ public class TestM1Service {
         Set<String> parentIds = new HashSet<>();
         parentIds.add(parentId);
         
-        List<TestM1> resList = doNestedQueryChildren(valid, ids, parentIds, params);
+        List<TestDemo> resList = doNestedQueryChildren(valid, ids, parentIds, params);
         return resList;
     }
     
@@ -590,25 +597,25 @@ public class TestM1Service {
      * @param params
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private List<TestM1> doNestedQueryChildren(
+    private List<TestDemo> doNestedQueryChildren(
 			Boolean valid,
     		Set<String> ids,Set<String> parentIds,Map<String, Object> params) {
         if (CollectionUtils.isEmpty(parentIds)) {
-            return new ArrayList<TestM1>();
+            return new ArrayList<TestDemo>();
         }
         
         //ids避免数据出错时导致无限循环
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.putAll(params);
         queryParams.put("parentIds", parentIds);
-        List<TestM1> resList = queryList(valid, queryParams);
+        List<TestDemo> resList = queryList(valid, queryParams);
         
         Set<String> newParentIds = new HashSet<>();
-        for (TestM1 bdTemp : resList) {
+        for (TestDemo bdTemp : resList) {
             if (!ids.contains(bdTemp.getId())) {
                 newParentIds.add(bdTemp.getId());
             }
@@ -620,7 +627,7 @@ public class TestM1Service {
     }
     
     /**
-     * 根据parentId查询TestM1子、孙级实例列表<br/>
+     * 根据parentId查询测试对象子、孙级实例列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid
@@ -631,7 +638,7 @@ public class TestM1Service {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<TestM1> queryDescendantsByParentId(String parentId,
+    public List<TestDemo> queryDescendantsByParentId(String parentId,
 			Boolean valid,
             Querier querier) {
         //判断条件合法性
@@ -644,7 +651,7 @@ public class TestM1Service {
         Set<String> parentIds = new HashSet<>();
         parentIds.add(parentId);
         
-        List<TestM1> resList = doNestedQueryChildren(valid, ids, parentIds, querier);
+        List<TestDemo> resList = doNestedQueryChildren(valid, ids, parentIds, querier);
         return resList;
     }
     
@@ -656,26 +663,26 @@ public class TestM1Service {
      * @param querier
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private List<TestM1> doNestedQueryChildren(
+    private List<TestDemo> doNestedQueryChildren(
 			Boolean valid,
     		Set<String> ids,
     		Set<String> parentIds,
     		Querier querier) {
         if (CollectionUtils.isEmpty(parentIds)) {
-            return new ArrayList<TestM1>();
+            return new ArrayList<TestDemo>();
         }
         
         //ids避免数据出错时导致无限循环
         Querier querierClone = (Querier)querier.clone();
         querierClone.getFilters().add(Filter.in("parentId", parentIds));
-        List<TestM1> resList = queryList(valid, querierClone);
+        List<TestDemo> resList = queryList(valid, querierClone);
         
         Set<String> newParentIds = new HashSet<>();
-        for (TestM1 bdTemp : resList) {
+        for (TestDemo bdTemp : resList) {
             if (!ids.contains(bdTemp.getId())) {
                 newParentIds.add(bdTemp.getId());
             }

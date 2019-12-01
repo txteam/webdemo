@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>查询角色分类树型列表[queryOperatorRoleCatalogTreeList]</title>
+	<title>查询测试对象分页列表[queryTestDemoPagedList]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -45,40 +45,66 @@
 var grid = null;
 var idFieldName = 'id';
 var nameFieldName = 'name'; 
-var entityName = '角色分类';
+var entityName = '测试对象';
 $(document).ready(function(){
 	var  $editALink = $("#editALink");
 	var  $deleteALink = $("#deleteALink");
 	var  $enableALink = $("#enableALink");
 	var  $disableALink = $("#disableALink");
 
-	grid = $('#grid').treegrid({
-		url :/*[[@{/operatorRoleCatalog/queryList}]]*/'',
+	grid = $('#grid').datagrid({
+		url :/*[[@{/testDemo/queryPagedList}]]*/'',
 		fit : true,
-        fitColumns : true,
+	    fitColumns : false,
 		border : false,
 		idField : 'id',
-		parentField : 'parentId',
-		treeField : 'name',
+		pagination : true,
+		pageSize : 10,
+		pageList : [10,20,30,40,50],
+		loadFilter: function(data){
+			var res = {total:0,rows:[]};
+			if(!$.ObjectUtils.isEmpty(data)
+					&& !$.ObjectUtils.isEmpty(data.list)){
+				res['total'] = data.count;
+				res['rows'] = data.list;
+			}
+			return res;
+		}, 
 		checkOnSelect : false,
 		selectOnCheck : false,
 		nowrap : true,
 		striped : true,
-		iconField : function(item){
-			return 'group_group';	
-		},
 		singleSelect : true,
 		frozenColumns: [ [ 
 			{title : 'id',width : 100,hidden:true,field:'id'}
 		] ],
 		columns: [ [
+			{title:'编码',width:100,field:'code'},
 			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
 			{title:'名称',width:100,field:'name'},
+			{title:'测试int值',width:100,field:'testInt'},
+			{title:'测试Long值',width:100,field:'testLong'},
+			{title:'测试Integer值',width:100,field:'testInteger'},
+			{title:'测试BigDecimal值',width:100,field:'testBigDecimal'},
+			{title:'类型',width:100,field:'type'},
+			{title:'superInt',width:100,field:'superInt'},
+			{title:'superBoolean',width:80,field:'superBoolean',formatter:$.Formatters.booleanFun},
+			{title:'superDemo',width:100,field:'superDemo'},
+			{title:'superBigDeceimal',width:100,field:'superBigDeceimal'},
+			{title:'superIntegerObject',width:100,field:'superIntegerObject'},
+			{title:'superIsBooleanObject',width:80,field:'superIsBooleanObject',formatter:$.Formatters.booleanFun},
 			{title:'是否有效',width:80,field:'valid',formatter:$.Formatters.booleanFun},
 			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
+			{title:'到期时间',width:100,field:'expiryDate',formatter:$.Formatters.dateFun},
 			{title:'是否可编辑',width:80,field:'modifyAble',formatter:$.Formatters.booleanFun},
 			{title:'上级ID',width:100,hidden:true,field:'parentId'},
 			{title:'备注',width:100,field:'remark'},
+			{title:'nested1',width:100,field:'nested1'},
+			{title:'nested2',width:100,field:'nested2'},
+			{title:'是否成功',width:80,field:'success',formatter:$.Formatters.booleanFun},
+			{title:'生效时间',width:100,field:'effictiveDate',formatter:$.Formatters.dateFun},
+			{title:'attributes',width:100,field:'attributes'},
+			{title:'描述',width:100,field:'description'},
 			{title:'操作',width:100,field:'_action',
 				formatter : function(value, row, index) {
 					var str = '&nbsp;';
@@ -99,10 +125,10 @@ $(document).ready(function(){
 			}
 		] ],
 		toolbar : '#toolbar',
-		onDblClickRow : function(row){
+		onDblClickRow : function(index, row){
 			editFun(row[idFieldName], row[nameFieldName]);
 		},
-		onClickRow : function(row){
+		onClickRow : function(index, row){
 			$editALink.linkbutton('enable');
 			$deleteALink.linkbutton('enable');
 			if(row.valid){
@@ -134,7 +160,7 @@ $(document).ready(function(){
  * 查询
  */
 function queryFun() {
-	grid.treegrid('load',$('#queryForm').serializeObject());
+	grid.datagrid('load',$('#queryForm').serializeObject());
 	return false;
 }
 /*
@@ -145,13 +171,13 @@ function addFun() {
         text : '加载中，请等待....'
 	});
 	
-	var addUrl = /*[[@{/operatorRoleCatalog/toAdd}]]*/'';
+	var addUrl = /*[[@{/testDemo/toAdd}]]*/'';
 	//FIXME: 修改新增modalDialog的width,height
 	DialogUtils.openModalDialog(
-		"addOperatorRoleCatalog",
+		"addTestDemo",
 		"新增" + entityName,
 		$.formatString(addUrl),
-		500,292,
+		500,650,
 		function(){
 			queryFun();
 		},{maximizable : true}
@@ -175,13 +201,13 @@ function editFun(id,name) {
         text : '加载中，请等待....'
 	});
 	
-	var updateUrl = /*[[@{/operatorRoleCatalog/toUpdate?id={0}}]]*/'';
+	var updateUrl = /*[[@{/testDemo/toUpdate?id={0}}]]*/'';
 	//FIXME: 修改编辑modalDialog的width,height
 	DialogUtils.openModalDialog(
-		"updateOperatorRoleCatalog",
+		"updateTestDemo",
 		"编辑" + entityName + ":" + name,
 		$.formatString(updateUrl,id),
-        500,292,
+        500,650,
         function(){
 			queryFun();
 		},{maximizable : true}
@@ -201,7 +227,7 @@ function deleteFun(id,name) {
 		DialogUtils.alert("没有选中的" + entityName);
 		return false;
 	}
-	//判断是否确认删除指定的角色分类
+	//判断是否确认删除指定的测试对象
 	DialogUtils.confirm("确认提醒" , 
     	$.formatString("是否确认删除{0}:[{1}]?",entityName,name) , 
     	function(data){
@@ -209,9 +235,9 @@ function deleteFun(id,name) {
 	    		DialogUtils.progress({
 	    	        text : '数据提交中，请等待....'
 	    		});
-	    		//如果确认删除指定的角色分类
+	    		//如果确认删除指定的测试对象
 	    		$.post(
-	    			/*[[@{/operatorRoleCatalog/deleteById}]]*/'',
+	    			/*[[@{/testDemo/deleteById}]]*/'',
 		    		{id:id},
 		    		function(data){
 		    			DialogUtils.progress('close');
@@ -241,7 +267,7 @@ function disableFun(id,name){
 		DialogUtils.alert("没有选中的" + entityName);
 		return false;
 	}
-	//判断是否确认禁用指定角色分类
+	//判断是否确认禁用指定测试对象
 	DialogUtils.confirm(
     		"确认提醒" , 
     		$.formatString("是否确认禁用{0}:[{1}]?",entityName,name), 
@@ -250,9 +276,9 @@ function disableFun(id,name){
     		DialogUtils.progress({
     	        text : '数据提交中，请等待....'
     		});
-    		//如果确认禁用指定角色分类
+    		//如果确认禁用指定测试对象
     		$.post(
-				/*[[@{/operatorRoleCatalog/disableById}]]*/'',
+				/*[[@{/testDemo/disableById}]]*/'',
 	    		{id:id},
 	    		function(data){
 	    			DialogUtils.progress('close');
@@ -282,7 +308,7 @@ function enableFun(id,name){
 		DialogUtils.alert("没有选中的" + entityName);
 		return false;
 	}
-	//判断是否确认禁用指定角色分类
+	//判断是否确认禁用指定测试对象
 	DialogUtils.confirm(
     		"确认提醒" , 
     		$.formatString("是否确认启用{0}:[{1}]?",entityName,name), 
@@ -291,9 +317,9 @@ function enableFun(id,name){
     		DialogUtils.progress({
     	        text : '数据提交中，请等待....'
     		});
-    		//如果确认启用指定角色分类
+    		//如果确认启用指定测试对象
     		$.post(
-				/*[[@{/operatorRoleCatalog/enableById}]]*/'',
+				/*[[@{/testDemo/enableById}]]*/'',
 	    		{id:id},
 	    		function(data){
 	    			DialogUtils.progress('close');
@@ -319,7 +345,17 @@ function enableFun(id,name){
 		<form id="queryForm" class="form">
 			<table class="table table-hover table-condensed">
 				<tr>
-					
+					<th width="20%">编码:</th>
+					<td width="30%"><input id="code" name="code"/></td>
+					<th width="20%">是否有效</th>
+					<td width="30%">
+						<select id="valid" name="valid">
+							<option value="">--- 不限 ---</option>
+							<option value="true">是</option>
+							<option value="false">否</option>
+						</select>
+					</td>
+				</tr>
 				<tr>
 					<td colspan="4" class="button operRow">
 						<a id="queryBtn" onclick="queryFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>

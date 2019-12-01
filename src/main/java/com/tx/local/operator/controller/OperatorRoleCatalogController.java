@@ -51,7 +51,7 @@ public class OperatorRoleCatalogController {
     @RequestMapping("/toQueryTreeList")
     public String toQueryTreeList(ModelMap response) {
         
-        return "/operator/queryOperatorRoleCatalogPagedList";
+        return "operator/queryOperatorRoleCatalogTreeList";
     }
     
     /**
@@ -67,7 +67,7 @@ public class OperatorRoleCatalogController {
     public String toAdd(ModelMap response) {
         response.put("operatorRoleCatalog", new OperatorRoleCatalog());
         
-        return "/operator/addOperatorRoleCatalog";
+        return "operator/addOperatorRoleCatalog";
     }
     
     /**
@@ -85,7 +85,7 @@ public class OperatorRoleCatalogController {
                 .findById(id);
         response.put("operatorRoleCatalog", operatorRoleCatalog);
         
-        return "/operator/updateOperatorRoleCatalog";
+        return "operator/updateOperatorRoleCatalog";
     }
     
     /**

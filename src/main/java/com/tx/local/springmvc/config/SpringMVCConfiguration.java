@@ -6,12 +6,16 @@
  */
 package com.tx.local.springmvc.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -19,6 +23,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.tx.core.springmvc.support.StringToDateConverter;
 
 /**
  * web配置器<br/>
@@ -44,6 +50,22 @@ public class SpringMVCConfiguration
         this.validator = new LocalValidatorFactoryBean();
     }
     
+    
+    
+    /**
+     * ApplicationConversionService中已存在
+     * DefaultConversionService.addDefaultConverters(registry);
+     * DefaultFormattingConversionService.addDefaultFormatters(registry);
+     * addApplicationConverters(registry);
+     * @param registry
+     */
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToDateConverter());
+    }
+
+
+
     /**
      * @param converters
      */
@@ -52,6 +74,13 @@ public class SpringMVCConfiguration
             List<HttpMessageConverter<?>> converters) {
         //bufferedImageConverter
         converters.add(new BufferedImageHttpMessageConverter());
+        
+        //jackson2converter
+        MappingJackson2HttpMessageConverter jackson2converter = new MappingJackson2HttpMessageConverter();
+        List<MediaType> mediaTypeList = new ArrayList<>();
+        mediaTypeList.add(MediaType.APPLICATION_JSON_UTF8);
+        jackson2converter.setSupportedMediaTypes(mediaTypeList);
+        converters.add(jackson2converter);
     }
     
     /**
@@ -61,7 +90,6 @@ public class SpringMVCConfiguration
     public void addArgumentResolvers(
             List<HandlerMethodArgumentResolver> resolvers) {
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
-        
         //resolvers.add(new VcidArgumentResolver());
     }
     

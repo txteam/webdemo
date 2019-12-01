@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.local.demo.model.TestM1;
-import com.tx.local.demo.service.TestM1Service;
+import com.tx.local.demo.model.TestDemo;
+import com.tx.local.demo.service.TestDemoService;
 import com.tx.core.paged.model.PagedList;
 
-import com.tx.local.demo.model.TestTypeEnum;
+import com.tx.local.demo.model.TestDemoTypeEnum;
 
 /**
- * TestM1控制层<br/>
+ * 测试对象控制层<br/>
  * 
  * @author []
  * @version [版本号]
@@ -34,31 +34,15 @@ import com.tx.local.demo.model.TestTypeEnum;
  * @since [产品/模块版本]
  */
 @Controller
-@RequestMapping("/testM1")
-public class TestM1Controller {
+@RequestMapping("/testDemo")
+public class TestDemoController {
     
-    //TestM1业务层
-    @Resource(name = "testM1Service")
-    private TestM1Service testM1Service;
-    
-    /**
-     * 跳转到查询TestM1列表页面<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/toQueryList")
-    public String toQueryList(ModelMap response) {
-		response.put("types", TestTypeEnum.values());
-
-        return "/demo/queryTestM1List";
-    }
+    //测试对象业务层
+    @Resource(name = "testDemoService")
+    private TestDemoService testDemoService;
     
     /**
-     * 跳转到查询TestM1列表页面<br/>
+     * 跳转到查询测试对象分页列表页面<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -68,13 +52,45 @@ public class TestM1Controller {
      */
     @RequestMapping("/toQueryTreeList")
     public String toQueryTreeList(ModelMap response) {
-		response.put("types", TestTypeEnum.values());
-
-        return "/demo/queryTestM1TreeList";
+        response.put("types", TestDemoTypeEnum.values());
+        
+        return "demo/queryTestDemoTreeList";
     }
     
     /**
-     * 跳转到新增TestM1页面<br/>
+     * 跳转到查询测试对象分页列表页面<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toQueryList")
+    public String toQueryList(ModelMap response) {
+        response.put("types", TestDemoTypeEnum.values());
+        
+        return "demo/queryTestDemoList";
+    }
+    
+    /**
+     * 跳转到查询测试对象分页列表页面<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toQueryPagedList")
+    public String toQueryPagedList(ModelMap response) {
+        response.put("types", TestDemoTypeEnum.values());
+        
+        return "demo/queryTestDemoPagedList";
+    }
+    
+    /**
+     * 跳转到新增测试对象页面<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -84,15 +100,15 @@ public class TestM1Controller {
      */
     @RequestMapping("/toAdd")
     public String toAdd(ModelMap response) {
-    	response.put("testM1", new TestM1());
-    	
-		response.put("types", TestTypeEnum.values());
-
-        return "/demo/addTestM1";
+        response.put("testDemo", new TestDemo());
+        
+        response.put("types", TestDemoTypeEnum.values());
+        
+        return "demo/addTestDemo";
     }
     
     /**
-     * 跳转到编辑TestM1页面
+     * 跳转到编辑测试对象页面
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -101,76 +117,65 @@ public class TestM1Controller {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdate")
-    public String toUpdate(
-    		@RequestParam("id") String id,
-            ModelMap response) {
-        TestM1 testM1 = this.testM1Service.findById(id); 
-        response.put("testM1", testM1);
-
-		response.put("types", TestTypeEnum.values());
+    public String toUpdate(@RequestParam("id") String id, ModelMap response) {
+        TestDemo testDemo = this.testDemoService.findById(id);
+        response.put("testDemo", testDemo);
         
-        return "/demo/updateTestM1";
+        response.put("types", TestDemoTypeEnum.values());
+        
+        return "demo/updateTestDemo";
     }
-
+    
     /**
-     * 查询TestM1实例列表<br/>
+     * 查询测试对象实例列表<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
     @RequestMapping("/queryList")
-    public List<TestM1> queryList(
-			@RequestParam(value="valid",required=false) Boolean valid,
-    		@RequestParam MultiValueMap<String, String> request
-    	) {
-        Map<String,Object> params = new HashMap<>();
+    public List<TestDemo> queryList(
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
         //params.put("",request.getFirst(""));
-    	
-        List<TestM1> resList = this.testM1Service.queryList(
-			valid,
-			params         
-        );
-  
+        
+        List<TestDemo> resList = this.testDemoService.queryList(valid, params);
+        
         return resList;
     }
     
     /**
-     * 查询TestM1实例分页列表<br/>
+     * 查询测试对象实例分页列表<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
     @RequestMapping("/queryPagedList")
-    public PagedList<TestM1> queryPagedList(
-			@RequestParam(value="valid",required=false) Boolean valid,
-			@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
+    public PagedList<TestDemo> queryPagedList(
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam MultiValueMap<String, String> request
-    	) {
-		Map<String,Object> params = new HashMap<>();
-		//params.put("",request.getFirst(""));
-
-        PagedList<TestM1> resPagedList = this.testM1Service.queryPagedList(
-			valid,
-			params,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        //params.put("",request.getFirst(""));
+        
+        PagedList<TestDemo> resPagedList = this.testDemoService
+                .queryPagedList(valid, params, pageIndex, pageSize);
         return resPagedList;
     }
     
     /**
-     * 新增TestM1实例
+     * 新增测试对象实例
      * <功能详细描述>
-     * @param testM1 [参数说明]
+     * @param testDemo [参数说明]
      * 
      * @return void [返回类型说明]
      * @exception throws [异常类型] [异常说明]
@@ -178,15 +183,15 @@ public class TestM1Controller {
      */
     @ResponseBody
     @RequestMapping("/add")
-    public boolean add(TestM1 testM1) {
-        this.testM1Service.insert(testM1);
+    public boolean add(TestDemo testDemo) {
+        this.testDemoService.insert(testDemo);
         return true;
     }
     
     /**
-     * 更新TestM1实例<br/>
+     * 更新测试对象实例<br/>
      * <功能详细描述>
-     * @param testM1
+     * @param testDemo
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -195,13 +200,13 @@ public class TestM1Controller {
      */
     @ResponseBody
     @RequestMapping("/update")
-    public boolean update(TestM1 testM1) {
-        boolean flag = this.testM1Service.updateById(testM1);
+    public boolean update(TestDemo testDemo) {
+        boolean flag = this.testDemoService.updateById(testDemo);
         return flag;
     }
     
     /**
-     * 根据主键查询TestM1实例<br/> 
+     * 根据主键查询测试对象实例<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -212,13 +217,13 @@ public class TestM1Controller {
      */
     @ResponseBody
     @RequestMapping("/findById")
-    public TestM1 findById(@RequestParam(value = "id") String id) {
-        TestM1 testM1 = this.testM1Service.findById(id);
-        return testM1;
+    public TestDemo findById(@RequestParam(value = "id") String id) {
+        TestDemo testDemo = this.testDemoService.findById(id);
+        return testDemo;
     }
-
-	/**
-     * 根据编码查询TestM1实例<br/> 
+    
+    /**
+     * 根据编码查询测试对象实例<br/> 
      * <功能详细描述>
      * @param code
      * @return [参数说明]
@@ -229,13 +234,13 @@ public class TestM1Controller {
      */
     @ResponseBody
     @RequestMapping("/findByCode")
-    public TestM1 findByCode(@RequestParam(value = "code") String code) {
-        TestM1 testM1 = this.testM1Service.findByCode(code);
-        return testM1;
+    public TestDemo findByCode(@RequestParam(value = "code") String code) {
+        TestDemo testDemo = this.testDemoService.findByCode(code);
+        return testDemo;
     }
     
     /**
-     * 删除TestM1实例<br/> 
+     * 删除测试对象实例<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -247,12 +252,12 @@ public class TestM1Controller {
     @ResponseBody
     @RequestMapping("/deleteById")
     public boolean deleteById(@RequestParam(value = "id") String id) {
-        boolean flag = this.testM1Service.deleteById(id);
+        boolean flag = this.testDemoService.deleteById(id);
         return flag;
     }
     
     /**
-     * 禁用TestM1实例
+     * 禁用测试对象实例
      * @param id
      * @return [参数说明]
      * 
@@ -263,12 +268,12 @@ public class TestM1Controller {
     @ResponseBody
     @RequestMapping("/disableById")
     public boolean disableById(@RequestParam(value = "id") String id) {
-        boolean flag = this.testM1Service.disableById(id);
+        boolean flag = this.testDemoService.disableById(id);
         return flag;
     }
     
     /**
-     * 启用TestM1实例<br/>
+     * 启用测试对象实例<br/>
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -280,13 +285,13 @@ public class TestM1Controller {
     @ResponseBody
     @RequestMapping("/enableById")
     public boolean enableById(@RequestParam(value = "id") String id) {
-        boolean flag = this.testM1Service.enableById(id);
+        boolean flag = this.testDemoService.enableById(id);
         return flag;
     }
     
-	/**
+    /**
      * 校验是否重复<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param params
      * @return [参数说明]
      * 
@@ -297,9 +302,10 @@ public class TestM1Controller {
     @ResponseBody
     @RequestMapping("/validate")
     public Map<String, String> validate(
-            @RequestParam(value = "excludeId", required = false) String excludeId,
+            @RequestParam(value = "id", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
-        boolean flag = this.testM1Service.exists(params, excludeId);
+        params.remove("id");
+        boolean flag = this.testDemoService.exists(params, excludeId);
         
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {
@@ -311,7 +317,7 @@ public class TestM1Controller {
     }
     
     /**
-     * 根据条件查询TestM1子级列表<br/>
+     * 根据条件查询测试对象子级列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid
@@ -324,20 +330,20 @@ public class TestM1Controller {
      */
     @ResponseBody
     @RequestMapping("/queryChildren")
-    public List<TestM1> queryChildren(
+    public List<TestDemo> queryChildren(
             @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         
-        List<TestM1> resList = this.testM1Service
+        List<TestDemo> resList = this.testDemoService
                 .queryChildrenByParentId(parentId, valid, params);
         
         return resList;
     }
     
     /**
-     * 根据条件查询TestM1子、孙级列表<br/>
+     * 根据条件查询测试对象子、孙级列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid
@@ -350,13 +356,13 @@ public class TestM1Controller {
      */
     @ResponseBody
     @RequestMapping("/queryDescendants")
-    public List<TestM1> queryDescendants(
+    public List<TestDemo> queryDescendants(
             @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         
-        List<TestM1> resList = this.testM1Service
+        List<TestDemo> resList = this.testDemoService
                 .queryDescendantsByParentId(parentId, valid, params);
         
         return resList;

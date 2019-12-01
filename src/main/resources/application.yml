@@ -171,7 +171,7 @@ spring:
     expose-spring-macro-helpers: false
     settings:
       template_update_delay: 0
-    #prefix:
+    prefix: classpath:/ftltemplates/
     suffix: .ftl
     #template-loader-path: classpath:/templates/
     enabled: true
@@ -195,7 +195,6 @@ spring:
     # REDIS
     store-type: NONE
     timeout: PT30M
-      
   #jpa
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect

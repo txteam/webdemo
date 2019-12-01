@@ -7,10 +7,10 @@
 package com.tx.local.demo.dao;
 
 import com.tx.core.mybatis.dao.MybatisBaseDao;
-import com.tx.local.demo.model.TestM1;
+import com.tx.local.demo.model.TestDemo;
 
 /**
- * TestM1持久层
+ * TestDemo持久层
  * <功能详细描述>
  * 
  * @author  
@@ -18,5 +18,5 @@ import com.tx.local.demo.model.TestM1;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface TestM1Dao extends MybatisBaseDao<TestM1, String>{
+public interface TestDemoDao extends MybatisBaseDao<TestDemo, String>{
 }

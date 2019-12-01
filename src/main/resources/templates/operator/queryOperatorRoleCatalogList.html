@@ -68,12 +68,12 @@ $(document).ready(function(){
 		] ],
 		columns: [ [
 			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
+			{title:'名称',width:100,field:'name'},
+			{title:'是否有效',width:80,field:'valid',formatter:$.Formatters.booleanFun},
+			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
+			{title:'是否可编辑',width:80,field:'modifyAble',formatter:$.Formatters.booleanFun},
 			{title:'上级ID',width:100,hidden:true,field:'parentId'},
-			{title:'名称',width:150,field:'name'},
-			{title:'是否有效',width:150,field:'valid',formatter:$.Formatters.booleanFun},
-			{title:'创建时间',width:150,field:'createDate',formatter:$.Formatters.dateFun},
-			{title:'是否可编辑',width:150,field:'modifyAble',formatter:$.Formatters.booleanFun},
-			{title:'备注',width:150,field:'remark'},
+			{title:'备注',width:100,field:'remark'},
 			{title:'操作',width:100,field:'_action',
 				formatter : function(value, row, index) {
 					var str = '&nbsp;';

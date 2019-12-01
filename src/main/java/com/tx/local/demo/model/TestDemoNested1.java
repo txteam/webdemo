@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModel;
+
 /**
  * <功能简述>
  * <功能详细描述>
@@ -22,8 +24,9 @@ import javax.persistence.Table;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "test_testnestedmode")
-public class TestModeNested1 {
+@Table(name = "test_demo_nested1")
+@ApiModel("测试嵌套对象1")
+public class TestDemoNested1 {
     
     @Id
     private String id;

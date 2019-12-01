@@ -2,46 +2,58 @@
 <!DOCTYPE mapper 
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="testMode">
+<mapper namespace="testDemo">
 
 	<!-- auto generate default resultMap -->
-	<resultMap id="testModeMap" 
-		type="com.tx.local.demo.model.TestMode">
+	<resultMap id="testDemoMap" 
+		type="com.tx.local.demo.model.TestDemo">
+		<result column="superDemoCode" property="superDemo.code"/>
+		<result column="nested1Id" property="nested1.id"/>
+		<result column="nested2Code" property="nested2.code"/>
 	</resultMap>
 	
 	<!-- auto generate default find -->
 	<select id="find" 
-		parameterType="com.tx.local.demo.model.TestMode"
-		resultMap="testModeMap">
+		parameterType="com.tx.local.demo.model.TestDemo"
+		resultMap="testDemoMap">
 		SELECT 
-				TM.id,
-				TM.code,
-				TM.lastUpdateDate,
-				TM.lastUpdateOperatorId,
-				TM.name,
-				TM.testInt,
-				TM.testLong,
-				TM.testBigDecimal,
-				TM.type,
-				TM.valid,
-				TM.createDate,
-				TM.createOperatorId,
-				TM.expiryDate,
-				TM.modifyAble,
-				TM.parentId,
-				TM.remark,
-				TM.success,
-				TM.effictiveDate,
-				TM.attributes,
-				TM.description
-		  FROM TEST_TESTMODE TM
+				TD.id,
+				TD.code,
+				TD.lastUpdateDate,
+				TD.lastUpdateOperatorId,
+				TD.name,
+				TD.testInt,
+				TD.testLong,
+				TD.testInteger,
+				TD.testBigDecimal,
+				TD.type,
+				TD.superInt,
+				TD.superBoolean,
+				TD.superDemoCode,
+				TD.superBigDeceimal,
+				TD.superIntegerObject,
+				TD.superIsBooleanObject,
+				TD.valid,
+				TD.createDate,
+				TD.createOperatorId,
+				TD.expiryDate,
+				TD.modifyAble,
+				TD.parentId,
+				TD.remark,
+				TD.nested1Id,
+				TD.nested2Code,
+				TD.success,
+				TD.effictiveDate,
+				TD.attributes,
+				TD.description
+		  FROM TEST_DEMO TD
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            AND TM.id = #{id}
+	            AND TD.id = #{id}
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            AND TM.code = #{code}
+	            AND TD.code = #{code}
 	        </if>
 		</trim>
 	</select>
@@ -49,29 +61,38 @@
 	<!-- auto generate default query -->
 	<select id="query" 
 		parameterType="java.util.Map"
-		resultMap="testModeMap">
+		resultMap="testDemoMap">
 		SELECT 
-				TM.id,
-				TM.code,
-				TM.lastUpdateDate,
-				TM.lastUpdateOperatorId,
-				TM.name,
-				TM.testInt,
-				TM.testLong,
-				TM.testBigDecimal,
-				TM.type,
-				TM.valid,
-				TM.createDate,
-				TM.createOperatorId,
-				TM.expiryDate,
-				TM.modifyAble,
-				TM.parentId,
-				TM.remark,
-				TM.success,
-				TM.effictiveDate,
-				TM.attributes,
-				TM.description
-		  FROM TEST_TESTMODE TM
+				TD.id,
+				TD.code,
+				TD.lastUpdateDate,
+				TD.lastUpdateOperatorId,
+				TD.name,
+				TD.testInt,
+				TD.testLong,
+				TD.testInteger,
+				TD.testBigDecimal,
+				TD.type,
+				TD.superInt,
+				TD.superBoolean,
+				TD.superDemoCode,
+				TD.superBigDeceimal,
+				TD.superIntegerObject,
+				TD.superIsBooleanObject,
+				TD.valid,
+				TD.createDate,
+				TD.createOperatorId,
+				TD.expiryDate,
+				TD.modifyAble,
+				TD.parentId,
+				TD.remark,
+				TD.nested1Id,
+				TD.nested2Code,
+				TD.success,
+				TD.effictiveDate,
+				TD.attributes,
+				TD.description
+		  FROM TEST_DEMO TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -89,64 +110,97 @@
 			</foreach>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
-	            AND TM.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
+	            AND TD.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            <![CDATA[ AND TM.id = #{id} ]]>
+	            <![CDATA[ AND TD.id = #{id} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            <![CDATA[ AND TM.code = #{code} ]]>
+	            <![CDATA[ AND TD.code = #{code} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
-	            <![CDATA[ AND TM.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
+	            <![CDATA[ AND TD.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
-	            <![CDATA[ AND TM.name = #{name} ]]>
+	            <![CDATA[ AND TD.name = #{name} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testInt)">  
-	            <![CDATA[ AND TM.testInt = #{testInt} ]]>
+	            <![CDATA[ AND TD.testInt = #{testInt} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testLong)">  
-	            <![CDATA[ AND TM.testLong = #{testLong} ]]>
+	            <![CDATA[ AND TD.testLong = #{testLong} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testInteger)">  
+	            <![CDATA[ AND TD.testInteger = #{testInteger} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testBigDecimal)">  
-	            <![CDATA[ AND TM.testBigDecimal = #{testBigDecimal} ]]>
+	            <![CDATA[ AND TD.testBigDecimal = #{testBigDecimal} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            <![CDATA[ AND TM.type = #{type} ]]>
+	            <![CDATA[ AND TD.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superInt)">  
+	            <![CDATA[ AND TD.superInt = #{superInt} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superBoolean)">  
+	            <![CDATA[ AND TD.superBoolean = #{superBoolean} ]]>
+	        </if>			
+			<if test="superDemo != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superDemo.code)">  
+		            <![CDATA[ AND TD.superDemoCode = #{superDemo.code} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superBigDeceimal)">  
+	            <![CDATA[ AND TD.superBigDeceimal = #{superBigDeceimal} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superIntegerObject)">  
+	            <![CDATA[ AND TD.superIntegerObject = #{superIntegerObject} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superIsBooleanObject)">  
+	            <![CDATA[ AND TD.superIsBooleanObject = #{superIsBooleanObject} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            <![CDATA[ AND TM.valid = #{valid} ]]>
+	            <![CDATA[ AND TD.valid = #{valid} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
-	            <![CDATA[ AND TM.createDate >= #{minCreateDate} ]]>
+	            <![CDATA[ AND TD.createDate >= #{minCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
-	            <![CDATA[ AND TM.createDate < #{maxCreateDate} ]]>
+	            <![CDATA[ AND TD.createDate < #{maxCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
-	            <![CDATA[ AND TM.createOperatorId = #{createOperatorId} ]]>
+	            <![CDATA[ AND TD.createOperatorId = #{createOperatorId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
-	            <![CDATA[ AND TM.modifyAble = #{modifyAble} ]]>
+	            <![CDATA[ AND TD.modifyAble = #{modifyAble} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
-	            <![CDATA[ AND TM.parentId = #{parentId} ]]>
+	            <![CDATA[ AND TD.parentId = #{parentId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            <![CDATA[ AND TM.remark = #{remark} ]]>
+	            <![CDATA[ AND TD.remark = #{remark} ]]>
+	        </if>			
+			<if test="nested1 != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nested1.id)">  
+		            <![CDATA[ AND TD.nested1Id = #{nested1.id} ]]>
+		        </if>
+	        </if>			
+			<if test="nested2 != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nested2.code)">  
+		            <![CDATA[ AND TD.nested2Code = #{nested2.code} ]]>
+		        </if>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(success)">  
-	            <![CDATA[ AND TM.success = #{success} ]]>
+	            <![CDATA[ AND TD.success = #{success} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(attributes)">  
-	            <![CDATA[ AND TM.attributes = #{attributes} ]]>
+	            <![CDATA[ AND TD.attributes = #{attributes} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
-	            <![CDATA[ AND TM.description = #{description} ]]>
+	            <![CDATA[ AND TD.description = #{description} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
-				<![CDATA[ AND TM.id <> #{excludeId} ]]>
+				<![CDATA[ AND TD.id <> #{excludeId} ]]>
 			</if>
 		</trim>
 		<choose>  
@@ -164,7 +218,7 @@
 		parameterType="java.util.Map"
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
-		  FROM TEST_TESTMODE TM
+		  FROM TEST_DEMO TD
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -182,72 +236,105 @@
 			</foreach>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
-	            AND TM.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
+	            AND TD.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
-	            <![CDATA[ AND TM.id = #{id} ]]>
+	            <![CDATA[ AND TD.id = #{id} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            <![CDATA[ AND TM.code = #{code} ]]>
+	            <![CDATA[ AND TD.code = #{code} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
-	            <![CDATA[ AND TM.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
+	            <![CDATA[ AND TD.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
-	            <![CDATA[ AND TM.name = #{name} ]]>
+	            <![CDATA[ AND TD.name = #{name} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testInt)">  
-	            <![CDATA[ AND TM.testInt = #{testInt} ]]>
+	            <![CDATA[ AND TD.testInt = #{testInt} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testLong)">  
-	            <![CDATA[ AND TM.testLong = #{testLong} ]]>
+	            <![CDATA[ AND TD.testLong = #{testLong} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testInteger)">  
+	            <![CDATA[ AND TD.testInteger = #{testInteger} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(testBigDecimal)">  
-	            <![CDATA[ AND TM.testBigDecimal = #{testBigDecimal} ]]>
+	            <![CDATA[ AND TD.testBigDecimal = #{testBigDecimal} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            <![CDATA[ AND TM.type = #{type} ]]>
+	            <![CDATA[ AND TD.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superInt)">  
+	            <![CDATA[ AND TD.superInt = #{superInt} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superBoolean)">  
+	            <![CDATA[ AND TD.superBoolean = #{superBoolean} ]]>
+	        </if>			
+			<if test="superDemo != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superDemo.code)">  
+		            <![CDATA[ AND TD.superDemoCode = #{superDemo.code} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superBigDeceimal)">  
+	            <![CDATA[ AND TD.superBigDeceimal = #{superBigDeceimal} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superIntegerObject)">  
+	            <![CDATA[ AND TD.superIntegerObject = #{superIntegerObject} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(superIsBooleanObject)">  
+	            <![CDATA[ AND TD.superIsBooleanObject = #{superIsBooleanObject} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
-	            <![CDATA[ AND TM.valid = #{valid} ]]>
+	            <![CDATA[ AND TD.valid = #{valid} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
-	            <![CDATA[ AND TM.createDate >= #{minCreateDate} ]]>
+	            <![CDATA[ AND TD.createDate >= #{minCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
-	            <![CDATA[ AND TM.createDate < #{maxCreateDate} ]]>
+	            <![CDATA[ AND TD.createDate < #{maxCreateDate} ]]>
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createOperatorId)">  
-	            <![CDATA[ AND TM.createOperatorId = #{createOperatorId} ]]>
+	            <![CDATA[ AND TD.createOperatorId = #{createOperatorId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
-	            <![CDATA[ AND TM.modifyAble = #{modifyAble} ]]>
+	            <![CDATA[ AND TD.modifyAble = #{modifyAble} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
-	            <![CDATA[ AND TM.parentId = #{parentId} ]]>
+	            <![CDATA[ AND TD.parentId = #{parentId} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
-	            <![CDATA[ AND TM.remark = #{remark} ]]>
+	            <![CDATA[ AND TD.remark = #{remark} ]]>
+	        </if>			
+			<if test="nested1 != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nested1.id)">  
+		            <![CDATA[ AND TD.nested1Id = #{nested1.id} ]]>
+		        </if>
+	        </if>			
+			<if test="nested2 != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nested2.code)">  
+		            <![CDATA[ AND TD.nested2Code = #{nested2.code} ]]>
+		        </if>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(success)">  
-	            <![CDATA[ AND TM.success = #{success} ]]>
+	            <![CDATA[ AND TD.success = #{success} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(attributes)">  
-	            <![CDATA[ AND TM.attributes = #{attributes} ]]>
+	            <![CDATA[ AND TD.attributes = #{attributes} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(description)">  
-	            <![CDATA[ AND TM.description = #{description} ]]>
+	            <![CDATA[ AND TD.description = #{description} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
-				<![CDATA[ AND TM.id <> #{excludeId} ]]>
+				<![CDATA[ AND TD.id <> #{excludeId} ]]>
 			</if>
 		</trim>
 	</select>
 	
 	<!-- auto generate default insert -->
     <insert id="insert" 
-		parameterType="com.tx.local.demo.model.TestMode">
-		INSERT INTO TEST_TESTMODE
+		parameterType="com.tx.local.demo.model.TestDemo">
+		INSERT INTO TEST_DEMO
 		(
 			id,
 			code,
@@ -256,8 +343,15 @@
 			name,
 			testInt,
 			testLong,
+			testInteger,
 			testBigDecimal,
 			type,
+			superInt,
+			superBoolean,
+			superDemoCode,
+			superBigDeceimal,
+			superIntegerObject,
+			superIsBooleanObject,
 			valid,
 			createDate,
 			createOperatorId,
@@ -265,6 +359,8 @@
 			modifyAble,
 			parentId,
 			remark,
+			nested1Id,
+			nested2Code,
 			success,
 			effictiveDate,
 			attributes,
@@ -279,8 +375,15 @@
 			#{name},
 			#{testInt},
 			#{testLong},
+			#{testInteger},
 			#{testBigDecimal},
 			#{type},
+			#{superInt},
+			#{superBoolean},
+			#{superDemo.code},
+			#{superBigDeceimal},
+			#{superIntegerObject},
+			#{superIsBooleanObject},
 			#{valid},
 			#{createDate},
 			#{createOperatorId},
@@ -288,6 +391,8 @@
 			#{modifyAble},
 			#{parentId},
 			#{remark},
+			#{nested1.id},
+			#{nested2.code},
 			#{success},
 			#{effictiveDate},
 			#{attributes},
@@ -297,8 +402,8 @@
 	
 	<!-- auto generate default delete -->
 	<delete id="delete" 
-		parameterType="com.tx.local.demo.model.TestMode">
-		DELETE FROM TEST_TESTMODE  WHERE
+		parameterType="com.tx.local.demo.model.TestDemo">
+		DELETE FROM TEST_DEMO  WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
@@ -312,7 +417,7 @@
 	<!-- auto generate default update -->
 	<update id="update"
 	    parameterType="java.util.Map">  
-	    UPDATE TEST_TESTMODE
+	    UPDATE TEST_DEMO
 	    <trim prefix="SET" suffixOverrides=",">
 			<if test="_parameter.containsKey('lastUpdateDate')">
 	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
@@ -329,11 +434,32 @@
 			<if test="_parameter.containsKey('testLong')">
 	    		testLong = #{testLong,javaType=java.lang.Long},
 	    	</if>
+			<if test="_parameter.containsKey('testInteger')">
+	    		testInteger = #{testInteger,javaType=java.lang.Integer},
+	    	</if>
 			<if test="_parameter.containsKey('testBigDecimal')">
 	    		testBigDecimal = #{testBigDecimal,javaType=java.math.BigDecimal},
 	    	</if>
 			<if test="_parameter.containsKey('type')">
-	    		type = #{type,javaType=com.tx.local.demo.model.TestTypeEnum},
+	    		type = #{type,javaType=com.tx.local.demo.model.TestDemoTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('superInt')">
+	    		superInt = #{superInt,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('superBoolean')">
+	    		superBoolean = #{superBoolean,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('superDemo')">
+	    		superDemoCode = #{superDemo.code,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('superBigDeceimal')">
+	    		superBigDeceimal = #{superBigDeceimal,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('superIntegerObject')">
+	    		superIntegerObject = #{superIntegerObject,javaType=java.lang.Integer},
+	    	</if>
+			<if test="_parameter.containsKey('superIsBooleanObject')">
+	    		superIsBooleanObject = #{superIsBooleanObject,javaType=java.lang.Boolean},
 	    	</if>
 			<if test="_parameter.containsKey('valid')">
 	    		valid = #{valid,javaType=boolean},
@@ -349,6 +475,12 @@
 	    	</if>
 			<if test="_parameter.containsKey('remark')">
 	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('nested1')">
+	    		nested1Id = #{nested1.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('nested2')">
+	    		nested2Code = #{nested2.code,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('success')">
 	    		success = #{success,javaType=java.lang.Boolean},

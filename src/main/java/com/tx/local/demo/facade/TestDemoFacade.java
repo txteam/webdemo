@@ -4,60 +4,47 @@
  * 修改时间:
  * <修改描述:>
  */
-package com.tx.local.demo.controller;
+package com.tx.local.demo.facade;
 
 import java.util.List;
-
-import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
-import com.tx.local.demo.facade.TestM1Facade;
-import com.tx.local.demo.model.TestM1;
-import com.tx.local.demo.service.TestM1Service;
+import com.tx.local.demo.model.TestDemo;
 
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
- * TestM1API控制层[TestM1APIController]<br/>
+ * 测试对象接口门面层[TestDemoFacade]<br/>
  * 
  * @author []
  * @version [版本号]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@RestController
-@Api(tags = "TestM1API")
-@RequestMapping("/api/testM1")
-public class TestM1APIController implements TestM1Facade {
-    
-    //TestM1业务层
-    @Resource(name = "testM1Service")
-    private TestM1Service testM1Service;
+public interface TestDemoFacade {
     
     /**
-     * 新增TestM1<br/>
+     * 新增测试对象<br/>
      * <功能详细描述>
-     * @param testM1 [参数说明]
+     * @param testDemo [参数说明]
      * 
      * @return void [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
-    public TestM1 insert(@RequestBody TestM1 testM1) {
-        this.testM1Service.insert(testM1);
-        return testM1;
-    }
+    @ApiOperation(value = "新增测试对象")
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public TestDemo insert(@RequestBody TestDemo testDemo);
     
     /**
-     * 根据id删除TestM1<br/> 
+     * 根据id删除测试对象<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -66,15 +53,13 @@ public class TestM1APIController implements TestM1Facade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "根据ID删除测试对象")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id) {
-        boolean flag = this.testM1Service.deleteById(id);
-        return flag;
-    }
+    		@PathVariable(value = "id",required=true) String id);
 	
 	/**
-     * 根据code删除TestM1<br/> 
+     * 根据code删除测试对象<br/> 
      * <功能详细描述>
      * @param code
      * @return [参数说明]
@@ -83,32 +68,28 @@ public class TestM1APIController implements TestM1Facade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "根据编码删除测试对象")
+    @RequestMapping(value = "/code/{code}", method = RequestMethod.DELETE) 
     public boolean deleteByCode(
-    		@PathVariable(value = "code",required=true) String code){
-        boolean flag = this.testM1Service.deleteByCode(code);
-        return flag;    
-    }
-    
+    		@PathVariable(value = "code",required=true) String code);
+
     /**
-     * 更新TestM1<br/>
+     * 更新测试对象<br/>
      * <功能详细描述>
-     * @param testM1
+     * @param testDemo
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "修改测试对象")
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody TestM1 testM1) {
-        boolean flag = this.testM1Service.updateById(id,testM1);
-        return flag;
-    }
-    
+    		@RequestBody TestDemo testDemo);
+
     /**
-     * 禁用TestM1<br/>
+     * 禁用测试对象<br/>
      * @param id
      * @return [参数说明]
      * 
@@ -116,15 +97,13 @@ public class TestM1APIController implements TestM1Facade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-	@Override
+	@ApiOperation(value = "禁用测试对象")
+    @RequestMapping(value = "/disable/{id}", method = RequestMethod.PATCH)
     public boolean disableById(
-    		@PathVariable(value = "id", required = true) String id) {
-        boolean flag = this.testM1Service.disableById(id);
-        return flag;
-    }
+    		@PathVariable(value = "id", required = true) String id);
     
     /**
-     * 启用TestM1<br/>
+     * 启用测试对象<br/>
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -133,73 +112,59 @@ public class TestM1APIController implements TestM1Facade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "启用测试对象")
+    @RequestMapping(value = "/enable/{id}", method = RequestMethod.PATCH)
     public boolean enableById(
-    		@PathVariable(value = "id", required = true) String id) {
-        boolean flag = this.testM1Service.enableById(id);
-        return flag;
-    }
+    		@PathVariable(value = "id", required = true) String id);
 
     /**
-     * 根据主键查询TestM1<br/>
+     * 根据主键查询测试对象<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
-     * @return TestM1 [返回类型说明]
+     * @return TestDemo [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
-    public TestM1 findById(
-            @PathVariable(value = "id", required = true) String id) {
-        TestM1 res = this.testM1Service.findById(id);
-        
-        return res;
-    }
-
+    @ApiOperation(value = "根据主键查询测试对象")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public TestDemo findById(
+            @PathVariable(value = "id", required = true) String id);
+    
     /**
-     * 根据编码查询TestM1<br/>
+     * 根据编码查询测试对象<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
-     * @return TestM1 [返回类型说明]
+     * @return TestDemo [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
-    public TestM1 findByCode(
-            @PathVariable(value = "code", required = true) String code) {
-        TestM1 res = this.testM1Service.findByCode(code);
-        
-        return res;
-    }
+    @ApiOperation(value = "根据编码查询测试对象")
+    @RequestMapping(value = "/code/{code}", method = RequestMethod.GET)
+    public TestDemo findByCode(
+            @PathVariable(value = "code", required = true) String code);
 
     /**
-     * 查询TestM1实例列表<br/>
+     * 查询测试对象实例列表<br/>
      * <功能详细描述>
      * @param valid
      * @param querier
      * @return [参数说明]
      * 
-     * @return List<TestM1> [返回类型说明]
+     * @return List<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
-    public List<TestM1> queryList(
+    @ApiOperation(value = "查询测试对象列表")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public List<TestDemo> queryList(
 			@RequestParam(value = "valid", required = false) Boolean valid,
     		@RequestBody Querier querier
-    	) {
-        List<TestM1> resList = this.testM1Service.queryList(
-			valid,
-			querier         
-        );
-  
-        return resList;
-    }
+    	);
     
     /**
-     * 查询TestM1分页列表<br/>
+     * 查询测试对象分页列表<br/>
      * <功能详细描述>
      * @param valid
      * @param pageIndex
@@ -207,28 +172,21 @@ public class TestM1APIController implements TestM1Facade {
      * @param querier
      * @return [参数说明]
      * 
-     * @return PagedList<TestM1> [返回类型说明]
+     * @return PagedList<TestDemo> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
-    public PagedList<TestM1> queryPagedList(
+    @ApiOperation(value = "查询测试对象分页列表")
+    @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
+    public PagedList<TestDemo> queryPagedList(
 			@RequestParam(value = "valid", required = false) Boolean valid,
 			@RequestBody Querier querier,
 			@PathVariable(value = "pageNumber", required = true) int pageIndex,
             @PathVariable(value = "pageSize", required = true) int pageSize
-    	) {
-        PagedList<TestM1> resPagedList = this.testM1Service.queryPagedList(
-			valid,
-			querier,
-			pageIndex,
-			pageSize
-        );
-        return resPagedList;
-    }
+    	);
     
 	/**
-     * 查询TestM1数量<br/>
+     * 查询测试对象数量<br/>
      * <功能详细描述>
      * @param valid
      * @param querier
@@ -238,19 +196,14 @@ public class TestM1APIController implements TestM1Facade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+    @ApiOperation(value = "查询测试对象数量")
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int count(
 			@RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier) {
-        int count = this.testM1Service.count(
-			valid,
-        	querier);
-        
-        return count;
-    }
+            @RequestBody Querier querier);
 
 	/**
-     * 查询TestM1是否存在<br/>
+     * 查询测试对象是否存在<br/>
 	 * @param excludeId
      * @param querier
      * @return [参数说明]
@@ -259,16 +212,15 @@ public class TestM1APIController implements TestM1Facade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
-    public boolean exists(@RequestBody Querier querier,
-            @RequestParam(value = "excludeId", required = false) String excludeId) {
-        boolean flag = this.testM1Service.exists(querier, excludeId);
-        
-        return flag;
-    }
+    @ApiOperation(value = "查询测试对象是否存在")
+    @RequestMapping(value = "/exists", method = RequestMethod.GET)
+    public boolean exists(
+    		@RequestBody Querier querier,
+            @RequestParam(value = "excludeId", required = false) String excludeId
+            );
 
 	/**
-     * 根据条件查询基础数据分页列表<br/>
+     * 根据条件查询查询测试对象子代列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid
@@ -279,20 +231,14 @@ public class TestM1APIController implements TestM1Facade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
-    public List<TestM1> queryChildrenByParentId(@PathVariable(value = "parentId", required = true) String parentId,
+    @ApiOperation(value = "根据条件查询查询测试对象子代列表")
+    @RequestMapping(value = "/children/{parentId}", method = RequestMethod.GET)
+    public List<TestDemo> queryChildrenByParentId(@PathVariable(value = "parentId", required = true) String parentId,
 			@RequestParam(value = "valid", required = false) Boolean valid,
-            Querier querier){
-        List<TestM1> resList = this.testM1Service.queryChildrenByParentId(parentId,
-			valid,
-			querier         
-        );
-  
-        return resList;
-    }
+            @RequestBody Querier querier);
 
 	/**
-     * 根据条件查询基础数据分页列表<br/>
+     * 根据条件查询查询测试对象后代列表<br/>
      * <功能详细描述>
      * @param parentId
      * @param valid
@@ -303,15 +249,9 @@ public class TestM1APIController implements TestM1Facade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
-    public List<TestM1> queryDescendantsByParentId(@PathVariable(value = "parentId", required = true) String parentId,
+    @ApiOperation(value = "根据条件查询查询测试对象后代列表")
+    @RequestMapping(value = "/descendants/{parentId}", method = RequestMethod.GET)
+    public List<TestDemo> queryDescendantsByParentId(@PathVariable(value = "parentId", required = true) String parentId,
 			@RequestParam(value = "valid", required = false) Boolean valid,
-            Querier querier){
-        List<TestM1> resList = this.testM1Service.queryDescendantsByParentId(parentId,
-			valid,
-			querier         
-        );
-  
-        return resList;
-    }
+            @RequestBody Querier querier);
 }
