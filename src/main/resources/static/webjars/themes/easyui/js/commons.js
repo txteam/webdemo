@@ -1283,6 +1283,7 @@ $(document).ready(function(){
 	            ,chinese: [/^[\u0391-\uFFE5]+$/, "请输入中文"]
 	            ,username: [/^\w{3,12}$/, "请输入3-12位数字、字母、下划线"]
 	            ,password: [/^[0-9a-zA-Z]{6,16}$/, "密码由6-16位数字、字母组成"]
+	            ,money: [/^(([^0][0-9]+|0)\.([0-9]{1,2})$)|^([^0][0-9]+|0)$/, "请输入正确的金额"]
 	            ,accept: function (element, params){
 	                if (!params) return true;
 	                var ext = params[0];

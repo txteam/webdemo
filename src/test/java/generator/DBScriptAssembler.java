@@ -11,6 +11,15 @@ import org.apache.commons.io.FileUtils;
 
 /**
  * 基础数据生成类<br/>
+ * type standard\_00_start_ct.sql tables\*.sql standard\_01_end_ct.sql   >..\scriptInput\tables\mainframe_Tables.sql
+ * type standard\_02_start_cv.sql views\*.sql  standard\_03_end_cv.sql        >..\scriptInput\views\mainframe_Views.sql
+ * type standard\_04_start_cf.sql functions\*.sql standard\_05_end_cf.sql     >..\scriptInput\functions\mainframe_Functions.sql
+ * type standard\_06_start_cp.sql procedures\*.sql  standard\_07_end_cp.sql   >..\scriptInput\procedures\mainframe_Procedures.sql
+ * type standard\_08_start_cs.sql sequences\*.sql  standard\_09_end_cs.sql    >..\scriptInput\sequences\mainframe_Sequences.sql
+ * type standard\_10_start_ini.sql initdata\*.sql standard\_11_end_ini.sql     >..\scriptInput\initdata\mainframe_Initdata.sql
+ * type standard\_12_start_cj.sql.sql jobs\*.sql  standard\_13_end_cj.sql         >..\scriptInput\jobs\mainframe_Jobs.sql
+ * type standard\_14_start_ctr.sql triggers\*.sql  standard\_15_end_ctr.sql    >..\scriptInput\triggers\mainframe_Triggers.sql
+ * type standard\_16_start_cpc.sql packages\*.sql  standard\_17_end_cpc.sql    >..\scriptInput\packages\mainframe_Packages.sql 
  *
  * @author Administrator
  * @version [版本号, 2014年3月2日]
@@ -83,6 +92,61 @@ public class DBScriptAssembler {
             }
         }
         
+        fw.append("-- views" + lineSeparator);
+        for (File folderTemp : folder.listFiles()) {
+            if (folderTemp.isFile()) {
+                continue;
+            }
+            for (File tablesFile : folderTemp.listFiles((dir, name) -> {
+                return "views".equals(name);
+            })) {
+                
+                for (File sqlFile : tablesFile.listFiles((dir, name) -> {
+                    return name.endsWith(".sql");
+                })) {
+                    fw.append(FileUtils.readFileToString(sqlFile, "UTF-8"));
+                    fw.append(lineSeparator);
+                    fw.flush();
+                }
+            }
+        }
+        
+        fw.append("-- functions" + lineSeparator);
+        for (File folderTemp : folder.listFiles()) {
+            if (folderTemp.isFile()) {
+                continue;
+            }
+            for (File tablesFile : folderTemp.listFiles((dir, name) -> {
+                return "functions".equals(name);
+            })) {
+                for (File sqlFile : tablesFile.listFiles((dir, name) -> {
+                    return name.endsWith(".sql");
+                })) {
+                    fw.append(FileUtils.readFileToString(sqlFile, "UTF-8"));
+                    fw.append(lineSeparator);
+                    fw.flush();
+                }
+            }
+        }
+        
+        fw.append("-- procedures" + lineSeparator);
+        for (File folderTemp : folder.listFiles()) {
+            if (folderTemp.isFile()) {
+                continue;
+            }
+            for (File tablesFile : folderTemp.listFiles((dir, name) -> {
+                return "procedures".equals(name);
+            })) {
+                for (File sqlFile : tablesFile.listFiles((dir, name) -> {
+                    return name.endsWith(".sql");
+                })) {
+                    fw.append(FileUtils.readFileToString(sqlFile, "UTF-8"));
+                    fw.append(lineSeparator);
+                    fw.flush();
+                }
+            }
+        }
+        
         fw.append("-- sequences" + lineSeparator);
         for (File folderTemp : folder.listFiles()) {
             if (folderTemp.isFile()) {
@@ -139,31 +203,13 @@ public class DBScriptAssembler {
             }
         }
         
-        fw.append("-- functions" + lineSeparator);
+        fw.append("-- jobs" + lineSeparator);
         for (File folderTemp : folder.listFiles()) {
             if (folderTemp.isFile()) {
                 continue;
             }
             for (File tablesFile : folderTemp.listFiles((dir, name) -> {
-                return "functions".equals(name);
-            })) {
-                for (File sqlFile : tablesFile.listFiles((dir, name) -> {
-                    return name.endsWith(".sql");
-                })) {
-                    fw.append(FileUtils.readFileToString(sqlFile, "UTF-8"));
-                    fw.append(lineSeparator);
-                    fw.flush();
-                }
-            }
-        }
-        
-        fw.append("-- procedures" + lineSeparator);
-        for (File folderTemp : folder.listFiles()) {
-            if (folderTemp.isFile()) {
-                continue;
-            }
-            for (File tablesFile : folderTemp.listFiles((dir, name) -> {
-                return "procedures".equals(name);
+                return "jobs".equals(name);
             })) {
                 for (File sqlFile : tablesFile.listFiles((dir, name) -> {
                     return name.endsWith(".sql");
@@ -182,24 +228,6 @@ public class DBScriptAssembler {
             }
             for (File tablesFile : folderTemp.listFiles((dir, name) -> {
                 return "triggers".equals(name);
-            })) {
-                for (File sqlFile : tablesFile.listFiles((dir, name) -> {
-                    return name.endsWith(".sql");
-                })) {
-                    fw.append(FileUtils.readFileToString(sqlFile, "UTF-8"));
-                    fw.append(lineSeparator);
-                    fw.flush();
-                }
-            }
-        }
-        
-        fw.append("-- jobs" + lineSeparator);
-        for (File folderTemp : folder.listFiles()) {
-            if (folderTemp.isFile()) {
-                continue;
-            }
-            for (File tablesFile : folderTemp.listFiles((dir, name) -> {
-                return "jobs".equals(name);
             })) {
                 for (File sqlFile : tablesFile.listFiles((dir, name) -> {
                     return name.endsWith(".sql");
