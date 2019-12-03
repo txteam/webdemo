@@ -64,12 +64,12 @@ $(document).ready(function(){
 		striped : true,
 		singleSelect : true,
 		frozenColumns: [ [ 
-			{title : 'id',width : 100,hidden:true,field:'id'}
-		] ],
-		columns: [ [
 			{title:'编码',width:100,field:'code'},
 			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
 			{title:'名称',width:100,field:'name'},
+			{title : 'id',width : 100,hidden:true,field:'id'}
+		] ],
+		columns: [ [
 			{title:'测试int值',width:100,field:'testInt'},
 			{title:'测试Long值',width:100,field:'testLong'},
 			{title:'测试Integer值',width:100,field:'testInteger'},

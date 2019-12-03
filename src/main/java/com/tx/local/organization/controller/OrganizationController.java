@@ -62,7 +62,7 @@ public class OrganizationController {
         response.put("types", OrganizationTypeEnum.values());
         response.put("vcid", WebContextUtils.getVcid());
         
-        return "/organization/queryOrganizationList";
+        return "organization/queryOrganizationList";
     }
     
     /**
@@ -94,7 +94,7 @@ public class OrganizationController {
         }
         response.put("organization", org);
         
-        return "/organization/addOrganization";
+        return "organization/addOrganization";
     }
     
     /**
@@ -121,12 +121,12 @@ public class OrganizationController {
             response.put("parent", parent);
         }
         
-        return "/organization/updateOrganization";
+        return "organization/updateOrganization";
     }
     
     /**
      * 跳转到选择组织页面
-     *<功能详细描述>
+     * <功能详细描述>
      * @return [参数说明]
      * 
      * @return String [返回类型说明]
@@ -140,7 +140,7 @@ public class OrganizationController {
         responseMap.put("vcid", WebContextUtils.getVcid());
         responseMap.put("eventName", eventName);
         
-        return "/organization/selectOrganization";
+        return "organization/selectOrganization";
     }
     
     /**

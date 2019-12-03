@@ -9,7 +9,7 @@
 		<menu id="config_nav_menu" text="配置" icon="&#xe605;" link="config_catalog" auths="config_nav_menu_auth" /><!-- 系统配置 -->
 		<menu id="debug_nav_menu" text="调试" icon="&#xe6bf;" link="debug_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 调试 -->
 		<menu id="documentation_nav_menu" text="文档" icon="&#xe60e;" link="documentation_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
-		<menu id="easyui_demo_nav_menu" text="演示" icon="&#xe60e;" link="easyui_d12emo_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
+		<menu id="easyui_demo_nav_menu" text="演示" icon="&#xe60e;" link="easyui_demo_catalog" roles="ROLE_SUPER_ADMIN"/><!-- 编码 -->
 	</catalog>
 	
 	<!-- 工作台 -->
@@ -34,7 +34,7 @@
 	</catalog>
 	
 	<!-- 系统日志 -->
-	<catalog id="log_catalog" type="tab" text="日志菜单" auths="report_nav_menu_auth">
+	<catalog id="log_catalog" type="tab" text="日志菜单">
 		<menu id="system_operate_log_menus" text="系统操作日志">
 			<menu id="login_log_menu" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList"></menu>
 			<menu id="operator_manage_log_menu" text="系统日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList"></menu>

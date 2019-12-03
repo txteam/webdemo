@@ -68,7 +68,7 @@ public class OperatorAPIController implements OperatorFacade {
      */
     @Override
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.operatorService.deleteById(id);
         return flag;
     }
@@ -84,9 +84,10 @@ public class OperatorAPIController implements OperatorFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody Operator operator) {
-        boolean flag = this.operatorService.updateById(id,operator);
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody Operator operator) {
+        boolean flag = this.operatorService.updateById(id, operator);
         return flag;
     }
     
@@ -99,9 +100,9 @@ public class OperatorAPIController implements OperatorFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-	@Override
+    @Override
     public boolean disableById(
-    		@PathVariable(value = "id", required = true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.operatorService.disableById(id);
         return flag;
     }
@@ -118,11 +119,11 @@ public class OperatorAPIController implements OperatorFacade {
      */
     @Override
     public boolean enableById(
-    		@PathVariable(value = "id", required = true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.operatorService.enableById(id);
         return flag;
     }
-
+    
     /**
      * 根据主键查询操作人员<br/>
      * <功能详细描述>
@@ -139,7 +140,18 @@ public class OperatorAPIController implements OperatorFacade {
         
         return res;
     }
-
+    
+    /**
+     * @param username
+     * @return
+     */
+    @Override
+    public Operator findByUsername(String username) {
+        Operator res = this.operatorService.findByUsername(username);
+        
+        return res;
+    }
+    
     /**
      * 查询操作人员实例列表<br/>
      * <功能详细描述>
@@ -153,14 +165,10 @@ public class OperatorAPIController implements OperatorFacade {
      */
     @Override
     public List<Operator> queryList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-    		@RequestBody Querier querier
-    	) {
-        List<Operator> resList = this.operatorService.queryList(
-			valid,
-			querier         
-        );
-  
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier) {
+        List<Operator> resList = this.operatorService.queryList(valid, querier);
+        
         return resList;
     }
     
@@ -179,21 +187,16 @@ public class OperatorAPIController implements OperatorFacade {
      */
     @Override
     public PagedList<Operator> queryPagedList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	) {
-        PagedList<Operator> resPagedList = this.operatorService.queryPagedList(
-			valid,
-			querier,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize) {
+        PagedList<Operator> resPagedList = this.operatorService
+                .queryPagedList(valid, querier, pageIndex, pageSize);
         return resPagedList;
     }
     
-	/**
+    /**
      * 查询操作人员数量<br/>
      * <功能详细描述>
      * @param valid
@@ -206,18 +209,16 @@ public class OperatorAPIController implements OperatorFacade {
      */
     @Override
     public int count(
-			@RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier) {
-        int count = this.operatorService.count(
-			valid,
-        	querier);
+        int count = this.operatorService.count(valid, querier);
         
         return count;
     }
-
-	/**
+    
+    /**
      * 查询操作人员是否存在<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 

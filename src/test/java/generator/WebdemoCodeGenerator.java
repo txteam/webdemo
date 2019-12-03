@@ -7,7 +7,8 @@ import java.io.IOException;
 
 import com.tx.core.generator2.CodeGenerator;
 import com.tx.core.generator2.model.ViewTypeEnum;
-import com.tx.local.operator.model.OperatorRoleCatalog;
+import com.tx.local.operator.model.Operator;
+import com.tx.local.operator.model.OperatorRole;
 
 /**
  * 基础数据生成类<br/>
@@ -21,7 +22,7 @@ public class WebdemoCodeGenerator {
     
     public static void main(String[] args) throws IOException {
         boolean toProjectPath = true;//是否生成覆盖到项目代码中，如果设置为false则会写入D盘的目录中
-        Class<?> entityType = OperatorRoleCatalog.class;
+        Class<?> entityType = OperatorRole.class;
         ViewTypeEnum viewType = ViewTypeEnum.TREELIST;
         boolean needConfirmOverwriteFile = true;//覆盖文件前是否需要提示
         

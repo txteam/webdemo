@@ -223,39 +223,6 @@ $(document).ready(function() {
 		}
 	});
 });
-function refreshTree(){
-	var selectedNode = orgTree.tree('getSelected');
-	orgTree.tree('reload');
-	if(selectedNode){
-		treegrid.treegrid('load',{
-			organizationId: '',
-			parentPostId: ''
-		});
-	}
-}
-function deselect(){
-	var selectedNode = orgTree.tree('getSelected');
-	if(selectedNode){
-		orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
-		treegrid.treegrid('load',{});
-	}
-}
-function redo() {
-	var node = treegrid.treegrid('getSelected');
-	if (node) {
-		treegrid.treegrid('expandAll', node.id);
-	} else {
-		treegrid.treegrid('expandAll');
-	}
-}
-function undo() {
-	var node = treegrid.treegrid('getSelected');
-	if (node) {
-		treegrid.treegrid('collapseAll', node.id);
-	} else {
-		treegrid.treegrid('collapseAll');
-	}
-}
 /*
  * 打开添加职位界面
  */
@@ -482,10 +449,44 @@ function configPostOperator(id,name){
 		}
 	);
 }
+
+function redo() {
+	var node = treegrid.treegrid('getSelected');
+	if (node) {
+		treegrid.treegrid('expandAll', node.id);
+	} else {
+		treegrid.treegrid('expandAll');
+	}
+}
+function undo() {
+	var node = treegrid.treegrid('getSelected');
+	if (node) {
+		treegrid.treegrid('collapseAll', node.id);
+	} else {
+		treegrid.treegrid('collapseAll');
+	}
+}
+function refreshTree(){
+	var selectedNode = orgTree.tree('getSelected');
+	orgTree.tree('reload');
+	if(selectedNode){
+		treegrid.treegrid('load',{
+			organizationId: '',
+			parentPostId: ''
+		});
+	}
+}
+function deselect(){
+	var selectedNode = orgTree.tree('getSelected');
+	if(selectedNode){
+		orgTree.find(".tree-node-selected").removeClass("tree-node-selected");
+		treegrid.treegrid('load',{});
+	}
+}
 /*]]>*/
 </script>
 </head>
-<body class="easyui-layout">
+<body class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'west',title:'组织结构',split:true,
 		tools : [
 			{ iconCls : 'clear',handler : function() {deselect();} } ,
@@ -506,7 +507,7 @@ function configPostOperator(id,name){
 		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
 		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
 		<a id="configPostAuthALink" onclick="configPostAuth();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">配置职位权限</a>
-		<a id="configPostOperatorALink" onclick="configPostOperator();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置职位人员</a>
+		<!--<a id="configPostOperatorALink" onclick="configPostOperator();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置职位人员</a>-->
 		<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
 		<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
 		<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" 

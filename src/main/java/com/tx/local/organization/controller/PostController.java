@@ -20,13 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.core.paged.model.PagedList;
 import com.tx.local.organization.model.Organization;
 import com.tx.local.organization.model.Post;
 import com.tx.local.organization.service.OrganizationService;
 import com.tx.local.organization.service.PostService;
+import com.tx.local.security.model.OrgPost;
 import com.tx.local.security.util.WebContextUtils;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
-import com.tx.core.paged.model.PagedList;
 
 /**
  * 职位控制层<br/>
@@ -51,25 +52,6 @@ public class PostController {
     //虚中心业务层
     @Resource
     private VirtualCenterFacade virtualCenterFacade;
-    
-    /**
-     * 跳转到选择职位页面<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/toSelect")
-    public String toSelect(
-            @RequestParam(value = "eventName", required = true) String eventName,
-            ModelMap responseMap) {
-        responseMap.put("vcid", WebContextUtils.getVcid());
-        responseMap.put("eventName", eventName);
-        
-        return "/organization/selectPost";
-    }
     
     /**
      * 跳转到查询职位列表页面<br/>
@@ -155,6 +137,50 @@ public class PostController {
         response.put("post", post);
         
         return "organization/updatePost";
+    }
+    
+    /**
+     * 跳转到选择职位页面<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toSelect")
+    public String toSelect(
+            @RequestParam(value = "eventName", required = true) String eventName,
+            ModelMap responseMap) {
+        responseMap.put("vcid", WebContextUtils.getVcid());
+        responseMap.put("eventName", eventName);
+        
+        return "organization/selectPost";
+    }
+    
+    /**
+     * 查询职位实例列表<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<Post> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryOrgPostList")
+    public List<OrgPost> queryOrgPostList(
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("vcid", WebContextUtils.getVcid());
+        
+        List<Post> postList = this.postService.queryList(valid, params);
+        List<Organization> orgList = this.organizationService.queryList(valid,
+                params);
+        List<OrgPost> resList = OrgPost.transform(orgList, postList);
+        
+        return resList;
     }
     
     /**

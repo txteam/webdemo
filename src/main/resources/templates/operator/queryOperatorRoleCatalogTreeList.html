@@ -65,19 +65,19 @@ $(document).ready(function(){
 		nowrap : true,
 		striped : true,
 		iconField : function(item){
-			return 'group_group';	
+			return 'folder_user';	
 		},
 		singleSelect : true,
 		frozenColumns: [ [ 
+			{title:'上级ID',width:100,hidden:true,field:'parentId'},
 			{title : 'id',width : 100,hidden:true,field:'id'}
 		] ],
 		columns: [ [
-			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
 			{title:'名称',width:100,field:'name'},
 			{title:'是否有效',width:80,field:'valid',formatter:$.Formatters.booleanFun},
-			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
 			{title:'是否可编辑',width:80,field:'modifyAble',formatter:$.Formatters.booleanFun},
-			{title:'上级ID',width:100,hidden:true,field:'parentId'},
+			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
+			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
 			{title:'备注',width:100,field:'remark'},
 			{title:'操作',width:100,field:'_action',
 				formatter : function(value, row, index) {
@@ -140,18 +140,26 @@ function queryFun() {
 /*
  * 新增
  */
-function addFun() {
+function addFun(id,name) {
+	if (id == undefined) {
+		var rows = grid.treegrid('getSelections');
+		if(rows && rows[0]){
+			id = rows[0][idFieldName];
+			name = rows[0][nameFieldName];
+		}else{
+			id='';
+		}
+	}
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
-	
-	var addUrl = /*[[@{/operatorRoleCatalog/toAdd}]]*/'';
+	var addUrl = /*[[@{/operatorRoleCatalog/toAdd?parentId={0}}]]*/'';
 	//FIXME: 修改新增modalDialog的width,height
 	DialogUtils.openModalDialog(
 		"addOperatorRoleCatalog",
 		"新增" + entityName,
-		$.formatString(addUrl),
-		500,292,
+		$.formatString(addUrl,id),
+		500,215,
 		function(){
 			queryFun();
 		},{maximizable : true}
@@ -163,7 +171,7 @@ function addFun() {
  */
 function editFun(id,name) {
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
+		var rows = grid.treegrid('getSelections');
 		id = rows[0][idFieldName];
 		name = rows[0][nameFieldName];
 	}
@@ -181,7 +189,7 @@ function editFun(id,name) {
 		"updateOperatorRoleCatalog",
 		"编辑" + entityName + ":" + name,
 		$.formatString(updateUrl,id),
-        500,292,
+        500,215,
         function(){
 			queryFun();
 		},{maximizable : true}
@@ -193,7 +201,7 @@ function editFun(id,name) {
  */
 function deleteFun(id,name) {
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
+		var rows = grid.treegrid('getSelections');
 		id = rows[0][idFieldName];
 		name = rows[0][nameFieldName];
 	}
@@ -233,7 +241,7 @@ function deleteFun(id,name) {
  */
 function disableFun(id,name){
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
+		var rows = grid.treegrid('getSelections');
 		id = rows[0][idFieldName];
 		name = rows[0][nameFieldName];
 	}
@@ -274,7 +282,7 @@ function disableFun(id,name){
  */
 function enableFun(id,name){
 	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
+		var rows = grid.treegrid('getSelections');
 		id = rows[0][idFieldName];
 		name = rows[0][nameFieldName];
 	}
@@ -315,11 +323,21 @@ function enableFun(id,name){
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
 	<!--//FIXME: 修改查询条件框体高度 -->
-	<div data-options="region:'north',title:'查询条件',border:false" style="height: 140px; overflow: hidden;">
+	<div data-options="region:'north',title:'查询条件',border:false" style="height: 105px; overflow: hidden;">
 		<form id="queryForm" class="form">
 			<table class="table table-hover table-condensed">
 				<tr>
-					
+					<th width="20%">编码:</th>
+					<td width="30%"><input id="code" name="code"/></td>
+					<th width="20%">是否有效</th>
+					<td width="30%">
+						<select id="valid" name="valid">
+							<option value="">--- 不限 ---</option>
+							<option value="true">是</option>
+							<option value="false">否</option>
+						</select>
+					</td>
+				</tr>
 				<tr>
 					<td colspan="4" class="button operRow">
 						<a id="queryBtn" onclick="queryFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>

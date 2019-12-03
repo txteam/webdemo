@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>addBasicData</title>
+	<title>编辑操作人员[updateOperator]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -35,14 +35,13 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
 
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-var entityName = /*[[${typeInfo?.name?:''}]]*/'';
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
@@ -51,64 +50,136 @@ $(document).ready(function(){
 	    valid: function(){
 	        //表单验证通过，提交表单到服务器
 	        DialogUtils.progress({
-	        	text : '数据提交中，请等待....'
-	        });
-	        var url = /*[[@{/basicdata/add}]]*/_contextPath + 'basicdata/add';
+	            text : '数据提交中，请等待....'
+	    	});
 			$('#entityForm').ajaxSubmit({
-			    url: url,
+			    url:/*[[@{/operator/update}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
-						parent.DialogUtils.tip("新增" + entityName + "成功.");
-						parent.DialogUtils.closeDialogById("addBasicData");
+						parent.DialogUtils.tip("修改操作人员成功.");
+						parent.DialogUtils.closeDialogById("updateOperator");
 					}else{
-						DialogUtils.alert("错误提示","新增" + entityName + "失败.","error");
+						DialogUtils.alert("错误提示","修改操作人员失败.","error");
 					}
 			    } 
 			});
 			return false;
 	    }
 	});
+	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("updateOperator");
+	});
+	//提交
+	$("#submitBtn").click(function(){
+		$('#entityForm').submit();
+	});
 });
-function submitFun(){
-	$('#entityForm').submit();
-}
-function cancelFun(){
-	parent.DialogUtils.closeDialogById("addBasicData");
-}
 /*]]>*/
 </script>
 </head>
-<body>
-<div class="easyui-layout" data-options="fit:true,border:false">
-	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form id="entityForm" method="post" class="form">
-			<input id="type" name="type" type="hidden" th:value="${typeInfo?.type}" value="" />
-			<table class="common_table">
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" title="" style="overflow-x: hidden;overflow-y: auto;">
+		<form id="entityForm" method="post" class="form" th:object="${operator}">
+			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
+			<table class="table">
 				<tr>
-					<th class="narrow" width="20%">编码:<span class="tRed">*</span></th>
-					<td width="80%">
-						<input id="code" name="code" data-rule="code:required;"/>
+					<th class="narrow" width="25%">pwdErrCount:</th>
+					<td>
+						<input id="pwdErrCount" name="pwdErrCount" type="text" 
+							th:value="*{pwdErrCount}"/>
 					</td>
-				</tr>
+				</tr>			
 				<tr>
-					<th class="narrow" width="20%">名称:<span class="tRed">*</span></th>
-					<td width="80%">
-						<input id="name" name="name" ata-rule="name:required;"/>
+					<th class="narrow" width="25%">pwdUpdateDate:</th>
+					<td>
+						<input id="pwdUpdateDate" name="pwdUpdateDate" type="text" readonly="readonly"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
+							th:value="${#dates.format(operator.pwdUpdateDate,'yyyy-MM-dd HH:mm:ss')}"/>
 					</td>
-				</tr>
+				</tr>			
 				<tr>
-					<th class="narrow" width="20%">备注:</th>
-					<td width="80%">
-						<textarea id="remark" name="remark" rows="4" cols="50"></textarea>
+					<th class="narrow" width="25%">mainPostId:</th>
+					<td>
+						<input id="mainPostId" name="mainPostId" type="text" 
+							th:value="*{mainPostId}"/>
 					</td>
-				</tr>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">名称:</th>
+					<td>
+						<input id="name" name="name" type="text" th:data-rule="'名称:required;length[1~127];remote[' + @{/operator/validate} + ', name, id];'"
+							th:value="*{name}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">locked:</th>
+					<td>
+						<select id="locked" name="locked" >
+							<option value="true" th:selected="${operator.locked eq true}">是</form:option>
+							<option value="false" th:selected="${operator.locked eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">是否可编辑:</th>
+					<td>
+						<select id="modifyAble" name="modifyAble" >
+							<option value="true" th:selected="${operator.modifyAble eq true}">是</form:option>
+							<option value="false" th:selected="${operator.modifyAble eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">examinePwd:</th>
+					<td>
+						<input id="examinePwd" name="examinePwd" type="text" data-rule="examinePwd:length[0~127];"
+							th:value="*{examinePwd}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">historyPwd:</th>
+					<td>
+						<input id="historyPwd" name="historyPwd" type="text" data-rule="historyPwd:length[0~127];"
+							th:value="*{historyPwd}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">invalidDate:</th>
+					<td>
+						<input id="invalidDate" name="invalidDate" type="text" readonly="readonly"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
+							th:value="${#dates.format(operator.invalidDate,'yyyy-MM-dd HH:mm:ss')}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">password:</th>
+					<td>
+						<input id="password" name="password" type="text" data-rule="password:length[0~127];"
+							th:value="*{password}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">username:</th>
+					<td>
+						<input id="username" name="username" type="text" data-rule="username:length[0~127];"
+							th:value="*{username}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">organizationId:</th>
+					<td>
+						<input id="organizationId" name="organizationId" type="text" 
+							th:value="*{organizationId}"/>
+					</td>
+				</tr>			
 			</table>
 		</form>
 	</div>
 	
 	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
-		<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton" style="width: 65px;">提交</a>  
+		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
 	</div>
-</div>
 </body>

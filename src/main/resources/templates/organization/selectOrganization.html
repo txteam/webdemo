@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -62,10 +62,8 @@ $(document).ready(function() {
 /*]]>*/
 </script>
 </head>
-<body class="body">
-	<div class="easyui-layout" data-options="fit:true,border:false">
-		<div data-options="region:'center',border:false" style="overflow-y:auto;" class="form">
-			<ul id="organizationTree"></ul>
-		</div>
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" style="overflow-y:auto;" class="form">
+		<ul id="organizationTree"></ul>
 	</div>
 </body>

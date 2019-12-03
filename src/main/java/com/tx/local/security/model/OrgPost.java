@@ -27,7 +27,7 @@ import com.tx.local.organization.model.Post;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class OrganizationPostNode {
+public class OrgPost {
     
     private Organization organization;
     
@@ -38,7 +38,7 @@ public class OrganizationPostNode {
     private NodeTypeEnum type;
     
     /** <默认构造函数> */
-    public OrganizationPostNode(Organization organization) {
+    public OrgPost(Organization organization) {
         super();
         AssertUtils.notNull(organization, "organization is null.");
         this.organization = organization;
@@ -46,7 +46,7 @@ public class OrganizationPostNode {
     }
     
     /** <默认构造函数> */
-    public OrganizationPostNode(Post post, Post parent) {
+    public OrgPost(Post post, Post parent) {
         super();
         AssertUtils.notNull(post, "post is null.");
         this.post = post;
@@ -88,7 +88,7 @@ public class OrganizationPostNode {
             default: {
                 String parentId = this.post.getParentId();
                 if (this.parent == null) {
-                    parentId = this.post.getId();
+                    parentId = this.post.getOrganizationId();
                 } else if (this.parent.getOrganizationId()
                         .equals(this.post.getOrganizationId())) {
                     parentId = this.post.getParentId();
@@ -165,28 +165,42 @@ public class OrganizationPostNode {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public static List<OrganizationPostNode> transform(
-            List<Organization> orgList, List<Post> postList) {
+    public static List<OrgPost> transform(List<Organization> orgList,
+            List<Post> postList) {
         if (orgList == null) {
             orgList = new ArrayList<Organization>();
         }
         if (postList == null) {
             orgList = new ArrayList<Organization>();
         }
-        List<OrganizationPostNode> resList = new ArrayList<>();
+        List<OrgPost> resList = new ArrayList<>();
         
         Map<String, Post> postMap = new HashMap<String, Post>();
         postList.stream().forEach(post -> postMap.put(post.getId(), post));
         
         resList.addAll(orgList.stream()
-                .map(org -> new OrganizationPostNode(org))
+                .map(org -> new OrgPost(org))
                 .collect(Collectors.toList()));
         resList.addAll(postList.stream()
-                .map(post -> new OrganizationPostNode(post,
+                .map(post -> new OrgPost(post,
                         StringUtils.isEmpty(post.getParentId()) ? null
                                 : postMap.get(post.getParentId())))
                 .collect(Collectors.toList()));
         return resList;
+    }
+    
+    /**
+     * @return 返回 type
+     */
+    public NodeTypeEnum getType() {
+        return type;
+    }
+    
+    /**
+     * @param 对type进行赋值
+     */
+    public void setType(NodeTypeEnum type) {
+        this.type = type;
     }
     
     /**

@@ -45,6 +45,24 @@
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
+	$("#parentName").selectRoleCatalog({
+		eventName : "forUpdateRoleCatalog",
+		contextPath : _contextPath,
+		title : "请选择父级角色分类",  
+		width : 260,
+		height : 400,
+		handler : function(vc){
+			if(vc != null){
+				$("#parentName").val(vc.name);
+				$("#parentId").val(vc.id);
+			}
+		},
+	    clearHandler: function(){
+	    	$("#parentName").val("");
+			$("#parentId").val("");
+	    }
+	});
+	
 	//验证器
 	$('#entityForm').validator({
 	    valid: function(){
@@ -86,37 +104,24 @@ $(document).ready(function(){
 			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
 			<table class="table">
 				<tr>
-					<th class="narrow" width="25%">名称:</th>
+					<th width="25%">上级角色分类：</th>
 					<td>
-						<input id="name" name="name" type="text" 
+						<input id="parentId" name="parentId" type="hidden" readonly="readonly" th:value="${parent?.id }" style="width: 60%"/>
+						<input id="parentName" name="parentName" class="selectInput" readonly="readonly" th:value="${parent?.name }" style="width: 60%"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow">名称:<span class="tRed">*</span></th>
+					<td>
+						<input id="name" name="name" type="text" style="width: 60%"
 							th:value="*{name}"
 							th:data-rule="'名称:required;length[1~127];remote[' + @{/operatorRoleCatalog/validate} + ', name, id]'"/>
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">是否可编辑:</th>
+					<th>备注：</th>
 					<td>
-						<select id="modifyAble" name="modifyAble"
-							>
-							<option value="true" th:selected="${operatorRoleCatalog.modifyAble eq true}">是</form:option>
-							<option value="false" th:selected="${operatorRoleCatalog.modifyAble eq false}">否</form:option>
-						</select>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">上级ID:</th>
-					<td>
-						<input id="parentId" name="parentId" type="text" 
-							th:value="*{parentId}"
-							data-rule="上级ID:length[1~127]"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">备注:</th>
-					<td>
-						<input id="remark" name="remark" type="text" 
-							th:value="*{remark}"
-							data-rule="备注:length[1~127]"/>
+						<textarea name="remark" rows="4" style="width: 60%" th:text="*{remark}"></textarea>
 					</td>
 				</tr>			
 			</table>

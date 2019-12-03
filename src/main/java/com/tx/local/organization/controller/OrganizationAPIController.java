@@ -68,12 +68,12 @@ public class OrganizationAPIController implements OrganizationFacade {
      */
     @Override
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.organizationService.deleteById(id);
         return flag;
     }
-	
-	/**
+    
+    /**
      * 根据code删除组织<br/> 
      * <功能详细描述>
      * @param code
@@ -85,9 +85,9 @@ public class OrganizationAPIController implements OrganizationFacade {
      */
     @Override
     public boolean deleteByCode(
-    		@PathVariable(value = "code",required=true) String code){
+            @PathVariable(value = "code", required = true) String code) {
         boolean flag = this.organizationService.deleteByCode(code);
-        return flag;    
+        return flag;
     }
     
     /**
@@ -101,9 +101,10 @@ public class OrganizationAPIController implements OrganizationFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody Organization organization) {
-        boolean flag = this.organizationService.updateById(id,organization);
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody Organization organization) {
+        boolean flag = this.organizationService.updateById(id, organization);
         return flag;
     }
     
@@ -116,9 +117,9 @@ public class OrganizationAPIController implements OrganizationFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-	@Override
+    @Override
     public boolean disableById(
-    		@PathVariable(value = "id", required = true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.organizationService.disableById(id);
         return flag;
     }
@@ -135,11 +136,11 @@ public class OrganizationAPIController implements OrganizationFacade {
      */
     @Override
     public boolean enableById(
-    		@PathVariable(value = "id", required = true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.organizationService.enableById(id);
         return flag;
     }
-
+    
     /**
      * 根据主键查询组织<br/>
      * <功能详细描述>
@@ -156,7 +157,7 @@ public class OrganizationAPIController implements OrganizationFacade {
         
         return res;
     }
-
+    
     /**
      * 根据编码查询组织<br/>
      * <功能详细描述>
@@ -173,7 +174,7 @@ public class OrganizationAPIController implements OrganizationFacade {
         
         return res;
     }
-
+    
     /**
      * 查询组织实例列表<br/>
      * <功能详细描述>
@@ -187,14 +188,11 @@ public class OrganizationAPIController implements OrganizationFacade {
      */
     @Override
     public List<Organization> queryList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-    		@RequestBody Querier querier
-    	) {
-        List<Organization> resList = this.organizationService.queryList(
-			valid,
-			querier         
-        );
-  
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier) {
+        List<Organization> resList = this.organizationService.queryList(valid,
+                querier);
+        
         return resList;
     }
     
@@ -213,21 +211,16 @@ public class OrganizationAPIController implements OrganizationFacade {
      */
     @Override
     public PagedList<Organization> queryPagedList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	) {
-        PagedList<Organization> resPagedList = this.organizationService.queryPagedList(
-			valid,
-			querier,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize) {
+        PagedList<Organization> resPagedList = this.organizationService
+                .queryPagedList(valid, querier, pageIndex, pageSize);
         return resPagedList;
     }
     
-	/**
+    /**
      * 查询组织数量<br/>
      * <功能详细描述>
      * @param valid
@@ -240,18 +233,16 @@ public class OrganizationAPIController implements OrganizationFacade {
      */
     @Override
     public int count(
-			@RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier) {
-        int count = this.organizationService.count(
-			valid,
-        	querier);
+        int count = this.organizationService.count(valid, querier);
         
         return count;
     }
-
-	/**
+    
+    /**
      * 查询组织是否存在<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 
@@ -266,8 +257,8 @@ public class OrganizationAPIController implements OrganizationFacade {
         
         return flag;
     }
-
-	/**
+    
+    /**
      * 根据条件查询基础数据分页列表<br/>
      * <功能详细描述>
      * @param parentId
@@ -280,18 +271,17 @@ public class OrganizationAPIController implements OrganizationFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<Organization> queryChildrenByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-			@RequestParam(value = "valid", required = false) Boolean valid,
-            Querier querier){
-        List<Organization> resList = this.organizationService.queryChildrenByParentId(parentId,
-			valid,
-			querier         
-        );
-  
+    public List<Organization> queryChildrenByParentId(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            Querier querier) {
+        List<Organization> resList = this.organizationService
+                .queryChildrenByParentId(parentId, valid, querier);
+        
         return resList;
     }
-
-	/**
+    
+    /**
      * 根据条件查询基础数据分页列表<br/>
      * <功能详细描述>
      * @param parentId
@@ -304,14 +294,13 @@ public class OrganizationAPIController implements OrganizationFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<Organization> queryDescendantsByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-			@RequestParam(value = "valid", required = false) Boolean valid,
-            Querier querier){
-        List<Organization> resList = this.organizationService.queryDescendantsByParentId(parentId,
-			valid,
-			querier         
-        );
-  
+    public List<Organization> queryDescendantsByParentId(
+            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            Querier querier) {
+        List<Organization> resList = this.organizationService
+                .queryDescendantsByParentId(parentId, valid, querier);
+        
         return resList;
     }
 }

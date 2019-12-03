@@ -68,7 +68,7 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
      */
     @Override
     public boolean deleteById(
-            @PathVariable(value = "id", required = true) String id) {
+    		@PathVariable(value = "id",required=true) String id) {
         boolean flag = this.operatorRoleService.deleteById(id);
         return flag;
     }
@@ -84,10 +84,9 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public boolean updateById(
-            @PathVariable(value = "id", required = true) String id,
-            @RequestBody OperatorRole operatorRole) {
-        boolean flag = this.operatorRoleService.updateById(id, operatorRole);
+    public boolean updateById(@PathVariable(value = "id",required=true) String id,
+    		@RequestBody OperatorRole operatorRole) {
+        boolean flag = this.operatorRoleService.updateById(id,operatorRole);
         return flag;
     }
     
@@ -100,9 +99,9 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Override
+	@Override
     public boolean disableById(
-            @PathVariable(value = "id", required = true) String id) {
+    		@PathVariable(value = "id", required = true) String id) {
         boolean flag = this.operatorRoleService.disableById(id);
         return flag;
     }
@@ -119,11 +118,11 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
      */
     @Override
     public boolean enableById(
-            @PathVariable(value = "id", required = true) String id) {
+    		@PathVariable(value = "id", required = true) String id) {
         boolean flag = this.operatorRoleService.enableById(id);
         return flag;
     }
-    
+
     /**
      * 根据主键查询角色<br/>
      * <功能详细描述>
@@ -140,7 +139,7 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
         
         return res;
     }
-    
+
     /**
      * 查询角色实例列表<br/>
      * <功能详细描述>
@@ -154,11 +153,14 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
      */
     @Override
     public List<OperatorRole> queryList(
-            @RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier) {
-        List<OperatorRole> resList = this.operatorRoleService.queryList(valid,
-                querier);
-        
+			@RequestParam(value = "valid", required = false) Boolean valid,
+    		@RequestBody Querier querier
+    	) {
+        List<OperatorRole> resList = this.operatorRoleService.queryList(
+			valid,
+			querier         
+        );
+  
         return resList;
     }
     
@@ -177,16 +179,21 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
      */
     @Override
     public PagedList<OperatorRole> queryPagedList(
-            @RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier,
-            @PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize) {
-        PagedList<OperatorRole> resPagedList = this.operatorRoleService
-                .queryPagedList(valid, querier, pageIndex, pageSize);
+			@RequestParam(value = "valid", required = false) Boolean valid,
+			@RequestBody Querier querier,
+			@PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize
+    	) {
+        PagedList<OperatorRole> resPagedList = this.operatorRoleService.queryPagedList(
+			valid,
+			querier,
+			pageIndex,
+			pageSize
+        );
         return resPagedList;
     }
     
-    /**
+	/**
      * 查询角色数量<br/>
      * <功能详细描述>
      * @param valid
@@ -199,16 +206,18 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
      */
     @Override
     public int count(
-            @RequestParam(value = "valid", required = false) Boolean valid,
+			@RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier) {
-        int count = this.operatorRoleService.count(valid, querier);
+        int count = this.operatorRoleService.count(
+			valid,
+        	querier);
         
         return count;
     }
-    
-    /**
+
+	/**
      * 查询角色是否存在<br/>
-     * @param excludeId
+	 * @param excludeId
      * @param querier
      * @return [参数说明]
      * 
@@ -223,37 +232,52 @@ public class OperatorRoleAPIController implements OperatorRoleFacade {
         
         return flag;
     }
-    
-    /**
-     * 根据条件查询查询职位子代列表<br/>
+
+	/**
+     * 根据条件查询基础数据分页列表<br/>
+     * <功能详细描述>
      * @param parentId
      * @param valid
      * @param querier
-     * @return
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<OperatorRole> queryChildrenByParentId(String parentId,
-            Boolean valid, Querier querier) {
-        List<OperatorRole> resList = this.operatorRoleService
-                .queryChildrenByParentId(parentId, valid, querier);
-        
+    public List<OperatorRole> queryChildrenByParentId(@PathVariable(value = "parentId", required = true) String parentId,
+			@RequestParam(value = "valid", required = false) Boolean valid,
+            Querier querier){
+        List<OperatorRole> resList = this.operatorRoleService.queryChildrenByParentId(parentId,
+			valid,
+			querier         
+        );
+  
         return resList;
     }
-    
-    /**
-     * 根据条件查询查询职位后代列表<br/>
+
+	/**
+     * 根据条件查询基础数据分页列表<br/>
+     * <功能详细描述>
      * @param parentId
      * @param valid
      * @param querier
-     * @return
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<OperatorRole> queryDescendantsByParentId(String parentId,
-            Boolean valid, Querier querier) {
-        List<OperatorRole> resList = this.operatorRoleService
-                .queryDescendantsByParentId(parentId, valid, querier);
-        
+    public List<OperatorRole> queryDescendantsByParentId(@PathVariable(value = "parentId", required = true) String parentId,
+			@RequestParam(value = "valid", required = false) Boolean valid,
+            Querier querier){
+        List<OperatorRole> resList = this.operatorRoleService.queryDescendantsByParentId(parentId,
+			valid,
+			querier         
+        );
+  
         return resList;
     }
-    
 }

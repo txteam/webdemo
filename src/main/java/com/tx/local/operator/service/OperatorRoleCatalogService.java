@@ -43,7 +43,8 @@ import com.tx.core.querier.model.QuerierBuilder;
 public class OperatorRoleCatalogService {
     
     @SuppressWarnings("unused")
-    private Logger logger = LoggerFactory.getLogger(OperatorRoleCatalogService.class);
+    private Logger logger = LoggerFactory
+            .getLogger(OperatorRoleCatalogService.class);
     
     @Resource(name = "operatorRoleCatalogDao")
     private OperatorRoleCatalogDao operatorRoleCatalogDao;
@@ -62,12 +63,13 @@ public class OperatorRoleCatalogService {
     @Transactional
     public void insert(OperatorRoleCatalog operatorRoleCatalog) {
         //验证参数是否合法
-        AssertUtils.notNull(operatorRoleCatalog, "operatorRoleCatalog is null.");
-           
-        //FIXME:为添加的数据需要填入默认值的字段填入默认值
-		operatorRoleCatalog.setLastUpdateDate(new Date());
-		operatorRoleCatalog.setValid(true);
-		operatorRoleCatalog.setCreateDate(new Date());
+        AssertUtils.notNull(operatorRoleCatalog,
+                "operatorRoleCatalog is null.");
+        
+        //为添加的数据需要填入默认值的字段填入默认值
+        operatorRoleCatalog.setLastUpdateDate(new Date());
+        operatorRoleCatalog.setValid(true);
+        operatorRoleCatalog.setCreateDate(new Date());
         
         //调用数据持久层对实例进行持久化操作
         this.operatorRoleCatalogDao.insert(operatorRoleCatalog);
@@ -125,18 +127,17 @@ public class OperatorRoleCatalogService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<OperatorRoleCatalog> queryList(
-		Boolean valid,
-		Map<String,Object> params   
-    	) {
+    public List<OperatorRoleCatalog> queryList(Boolean valid,
+            Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<OperatorRoleCatalog> resList = this.operatorRoleCatalogDao.queryList(params);
+        List<OperatorRoleCatalog> resList = this.operatorRoleCatalogDao
+                .queryList(params);
         
         return resList;
     }
@@ -152,21 +153,19 @@ public class OperatorRoleCatalogService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<OperatorRoleCatalog> queryList(
-		Boolean valid,
-		Querier querier   
-    	) {
+    public List<OperatorRoleCatalog> queryList(Boolean valid, Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<OperatorRoleCatalog> resList = this.operatorRoleCatalogDao.queryList(querier);
+        List<OperatorRoleCatalog> resList = this.operatorRoleCatalogDao
+                .queryList(querier);
         
         return resList;
     }
@@ -186,24 +185,22 @@ public class OperatorRoleCatalogService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<OperatorRoleCatalog> queryPagedList(
-		Boolean valid,
-		Map<String,Object> params,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<OperatorRoleCatalog> queryPagedList(Boolean valid,
+            Map<String, Object> params, int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
- 
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<OperatorRoleCatalog> resPagedList = this.operatorRoleCatalogDao.queryPagedList(params, pageIndex, pageSize);
+        PagedList<OperatorRoleCatalog> resPagedList = this.operatorRoleCatalogDao
+                .queryPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
     
-	/**
+    /**
      * 分页查询角色分类实例列表
      * <功能详细描述>
      * @param valid
@@ -218,22 +215,20 @@ public class OperatorRoleCatalogService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<OperatorRoleCatalog> queryPagedList(
-		Boolean valid,
-		Querier querier,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<OperatorRoleCatalog> queryPagedList(Boolean valid,
+            Querier querier, int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<OperatorRoleCatalog> resPagedList = this.operatorRoleCatalogDao.queryPagedList(querier, pageIndex, pageSize);
+        PagedList<OperatorRoleCatalog> resPagedList = this.operatorRoleCatalogDao
+                .queryPagedList(querier, pageIndex, pageSize);
         
         return resPagedList;
     }
@@ -249,16 +244,13 @@ public class OperatorRoleCatalogService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Boolean valid,
-		Map<String,Object> params   
-    	) {
+    public int count(Boolean valid, Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.operatorRoleCatalogDao.count(params);
         
@@ -276,19 +268,16 @@ public class OperatorRoleCatalogService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Boolean valid,
-		Querier querier   
-    	) {
+    public int count(Boolean valid, Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.operatorRoleCatalogDao.count(querier);
         
@@ -306,7 +295,7 @@ public class OperatorRoleCatalogService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public boolean exists(Map<String,String> key2valueMap, String excludeId) {
+    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
         AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
         
         //生成查询条件
@@ -314,7 +303,7 @@ public class OperatorRoleCatalogService {
         params.putAll(key2valueMap);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.operatorRoleCatalogDao.count(params,excludeId);
+        int res = this.operatorRoleCatalogDao.count(params, excludeId);
         
         return res > 0;
     }
@@ -334,7 +323,7 @@ public class OperatorRoleCatalogService {
         AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.operatorRoleCatalogDao.count(querier,excludeId);
+        int res = this.operatorRoleCatalogDao.count(querier, excludeId);
         
         return res > 0;
     }
@@ -350,22 +339,24 @@ public class OperatorRoleCatalogService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(String id,OperatorRoleCatalog operatorRoleCatalog) {
+    public boolean updateById(String id,
+            OperatorRoleCatalog operatorRoleCatalog) {
         //验证参数是否合法，必填字段是否填写
-        AssertUtils.notNull(operatorRoleCatalog, "operatorRoleCatalog is null.");
+        AssertUtils.notNull(operatorRoleCatalog,
+                "operatorRoleCatalog is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-
+        
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //FIXME:需要更新的字段
-		updateRowMap.put("name", operatorRoleCatalog.getName());
-		updateRowMap.put("vcid", operatorRoleCatalog.getVcid());
-		updateRowMap.put("modifyAble", operatorRoleCatalog.isModifyAble());
-		updateRowMap.put("parentId", operatorRoleCatalog.getParentId());
-		updateRowMap.put("remark", operatorRoleCatalog.getRemark());
-		updateRowMap.put("lastUpdateDate", new Date());
-
-        boolean flag = this.operatorRoleCatalogDao.update(id,updateRowMap); 
+        //需要更新的字段
+        //updateRowMap.put("vcid", operatorRoleCatalog.getVcid());
+        //updateRowMap.put("modifyAble", operatorRoleCatalog.isModifyAble());
+        updateRowMap.put("name", operatorRoleCatalog.getName());
+        updateRowMap.put("parentId", operatorRoleCatalog.getParentId());
+        updateRowMap.put("remark", operatorRoleCatalog.getRemark());
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        boolean flag = this.operatorRoleCatalogDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
@@ -383,14 +374,17 @@ public class OperatorRoleCatalogService {
     @Transactional
     public boolean updateById(OperatorRoleCatalog operatorRoleCatalog) {
         //验证参数是否合法，必填字段是否填写
-        AssertUtils.notNull(operatorRoleCatalog, "operatorRoleCatalog is null.");
-        AssertUtils.notEmpty(operatorRoleCatalog.getId(), "operatorRoleCatalog.id is empty.");
-
-        boolean flag = updateById(operatorRoleCatalog.getId(),operatorRoleCatalog); 
+        AssertUtils.notNull(operatorRoleCatalog,
+                "operatorRoleCatalog is null.");
+        AssertUtils.notEmpty(operatorRoleCatalog.getId(),
+                "operatorRoleCatalog.id is empty.");
+        
+        boolean flag = updateById(operatorRoleCatalog.getId(),
+                operatorRoleCatalog);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
-
+    
     /**
      * 根据id禁用角色分类<br/>
      * <功能详细描述>
@@ -438,7 +432,7 @@ public class OperatorRoleCatalogService {
         
         return flag;
     }
-
+    
     /**
      * 根据parentId查询角色分类子级实例列表<br/>
      * <功能详细描述>
@@ -452,18 +446,18 @@ public class OperatorRoleCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public List<OperatorRoleCatalog> queryChildrenByParentId(String parentId,
-			Boolean valid,
-			Map<String,Object> params) {
+            Boolean valid, Map<String, Object> params) {
         //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
         params.put("parentId", parentId);
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<OperatorRoleCatalog> resList = this.operatorRoleCatalogDao.queryList(params);
+        List<OperatorRoleCatalog> resList = this.operatorRoleCatalogDao
+                .queryList(params);
         
         return resList;
     }
@@ -481,21 +475,21 @@ public class OperatorRoleCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public List<OperatorRoleCatalog> queryChildrenByParentId(String parentId,
-			Boolean valid,
-			Querier querier) {
+            Boolean valid, Querier querier) {
         //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-		querier.getFilters().add(Filter.eq("parentId", parentId));
-
+        querier.getFilters().add(Filter.eq("parentId", parentId));
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<OperatorRoleCatalog> resList = this.operatorRoleCatalogDao.queryList(querier);
+        List<OperatorRoleCatalog> resList = this.operatorRoleCatalogDao
+                .queryList(querier);
         
         return resList;
     }
@@ -513,10 +507,9 @@ public class OperatorRoleCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public List<OperatorRoleCatalog> queryDescendantsByParentId(String parentId,
-			Boolean valid,
-            Map<String, Object> params) {
+            Boolean valid, Map<String, Object> params) {
         //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
@@ -524,7 +517,10 @@ public class OperatorRoleCatalogService {
         Set<String> parentIds = new HashSet<>();
         parentIds.add(parentId);
         
-        List<OperatorRoleCatalog> resList = doNestedQueryChildren(valid, ids, parentIds, params);
+        List<OperatorRoleCatalog> resList = doNestedQueryChildren(valid,
+                ids,
+                parentIds,
+                params);
         return resList;
     }
     
@@ -540,9 +536,9 @@ public class OperatorRoleCatalogService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private List<OperatorRoleCatalog> doNestedQueryChildren(
-			Boolean valid,
-    		Set<String> ids,Set<String> parentIds,Map<String, Object> params) {
+    private List<OperatorRoleCatalog> doNestedQueryChildren(Boolean valid,
+            Set<String> ids, Set<String> parentIds,
+            Map<String, Object> params) {
         if (CollectionUtils.isEmpty(parentIds)) {
             return new ArrayList<OperatorRoleCatalog>();
         }
@@ -578,10 +574,9 @@ public class OperatorRoleCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public List<OperatorRoleCatalog> queryDescendantsByParentId(String parentId,
-			Boolean valid,
-            Querier querier) {
+            Boolean valid, Querier querier) {
         //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
+        AssertUtils.notEmpty(parentId, "parentId is empty.");
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
@@ -590,7 +585,10 @@ public class OperatorRoleCatalogService {
         Set<String> parentIds = new HashSet<>();
         parentIds.add(parentId);
         
-        List<OperatorRoleCatalog> resList = doNestedQueryChildren(valid, ids, parentIds, querier);
+        List<OperatorRoleCatalog> resList = doNestedQueryChildren(valid,
+                ids,
+                parentIds,
+                querier);
         return resList;
     }
     
@@ -606,17 +604,14 @@ public class OperatorRoleCatalogService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private List<OperatorRoleCatalog> doNestedQueryChildren(
-			Boolean valid,
-    		Set<String> ids,
-    		Set<String> parentIds,
-    		Querier querier) {
+    private List<OperatorRoleCatalog> doNestedQueryChildren(Boolean valid,
+            Set<String> ids, Set<String> parentIds, Querier querier) {
         if (CollectionUtils.isEmpty(parentIds)) {
             return new ArrayList<OperatorRoleCatalog>();
         }
         
         //ids避免数据出错时导致无限循环
-        Querier querierClone = (Querier)querier.clone();
+        Querier querierClone = (Querier) querier.clone();
         querierClone.getFilters().add(Filter.in("parentId", parentIds));
         List<OperatorRoleCatalog> resList = queryList(valid, querierClone);
         
@@ -628,7 +623,8 @@ public class OperatorRoleCatalogService {
             ids.add(bdTemp.getId());
         }
         //嵌套查询下一层级
-        resList.addAll(doNestedQueryChildren(valid, ids, newParentIds, querier));
+        resList.addAll(
+                doNestedQueryChildren(valid, ids, newParentIds, querier));
         return resList;
     }
 }

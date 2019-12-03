@@ -33,7 +33,6 @@ import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.local.operator.dao.OperatorRoleDao;
 import com.tx.local.operator.model.OperatorRole;
-import com.tx.local.security.model.RoleTypeEnum;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
 
 /**
@@ -91,13 +90,15 @@ public class OperatorRoleService implements InitializingBean {
         AssertUtils.notNull(operatorRole, "operatorRole is null.");
         AssertUtils.notEmpty(operatorRole.getVcid(),
                 "operatorRole.vcid is empty.");
+        AssertUtils.notEmpty(operatorRole.getName(),
+                "operatorRole.name is empty.");
+        AssertUtils.notEmpty(operatorRole.getId(), "operatorRole.id is empty.");
         
         //为添加的数据需要填入默认值的字段填入默认值
         Date now = new Date();
         operatorRole.setValid(true);
         operatorRole.setCreateDate(now);
         operatorRole.setLastUpdateDate(now);
-        operatorRole.setRoleTypeId(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId());
         
         //调用数据持久层对实例进行持久化操作
         this.operatorRoleDao.insert(operatorRole);
@@ -369,11 +370,14 @@ public class OperatorRoleService implements InitializingBean {
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         //需要更新的字段
-        updateRowMap.put("name", operatorRole.getName());
         //updateRowMap.put("vcid", operatorRole.getVcid());
         //updateRowMap.put("valid", operatorRole.isValid());
         //updateRowMap.put("modifyAble", operatorRole.isModifyAble());
+        updateRowMap.put("parentId", operatorRole.getParentId());
+        updateRowMap.put("catalogId", operatorRole.getCatalogId());
+        updateRowMap.put("name", operatorRole.getName());
         updateRowMap.put("remark", operatorRole.getRemark());
+        updateRowMap.put("lastUpdateDate", new Date());
         
         boolean flag = this.operatorRoleDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
@@ -419,6 +423,7 @@ public class OperatorRoleService implements InitializingBean {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("id", id);
         params.put("valid", false);
+        params.put("lastUpdateDate", new Date());
         
         boolean flag = this.operatorRoleDao.update(params) > 0;
         
@@ -443,6 +448,7 @@ public class OperatorRoleService implements InitializingBean {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("id", id);
         params.put("valid", true);
+        params.put("lastUpdateDate", new Date());
         
         boolean flag = this.operatorRoleDao.update(params) > 0;
         

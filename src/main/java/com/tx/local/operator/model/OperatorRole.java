@@ -71,9 +71,6 @@ public class OperatorRole implements Serializable, Role {
     /** 备注 */
     private String remark;
     
-    /** 角色类型id: 这里是固定值，可以不做持久，或是在业务层控制 */
-    private String roleTypeId = RoleTypeEnum.ROLE_TYPE_OPERATOR.getId();
-    
     /** 创建时间 */
     private Date createDate;
     
@@ -105,14 +102,14 @@ public class OperatorRole implements Serializable, Role {
     public String getCatalogId() {
         return catalogId;
     }
-
+    
     /**
      * @param 对catalogId进行赋值
      */
     public void setCatalogId(String catalogId) {
         this.catalogId = catalogId;
     }
-
+    
     /**
      * @return 返回 vcid
      */
@@ -184,20 +181,6 @@ public class OperatorRole implements Serializable, Role {
     }
     
     /**
-     * @return 返回 roleTypeId
-     */
-    public String getRoleTypeId() {
-        return roleTypeId;
-    }
-    
-    /**
-     * @param 对roleTypeId进行赋值
-     */
-    public void setRoleTypeId(String roleTypeId) {
-        this.roleTypeId = roleTypeId;
-    }
-    
-    /**
      * @return 返回 parentId
      */
     public String getParentId() {
@@ -210,32 +193,39 @@ public class OperatorRole implements Serializable, Role {
     public void setParentId(String parentId) {
         this.parentId = parentId;
     }
-
+    
     /**
      * @return 返回 createDate
      */
     public Date getCreateDate() {
         return createDate;
     }
-
+    
     /**
      * @param 对createDate进行赋值
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-
+    
     /**
      * @return 返回 lastUpdateDate
      */
     public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
-
+    
     /**
      * @param 对lastUpdateDate进行赋值
      */
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+    
+    /**
+     * @return 返回 roleTypeId
+     */
+    public String getRoleTypeId() {
+        return RoleTypeEnum.ROLE_TYPE_OPERATOR.getId();
     }
 }

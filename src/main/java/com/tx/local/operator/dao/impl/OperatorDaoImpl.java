@@ -25,9 +25,8 @@ import com.tx.local.operator.model.Operator;
  * @since [产品/模块版本]
  */
 @Component("operatorDao")
-public class OperatorDaoImpl 
-		extends MybatisBaseDaoImpl<Operator, String>
-		implements OperatorDao {
+public class OperatorDaoImpl extends MybatisBaseDaoImpl<Operator, String>
+        implements OperatorDao {
     
     @Resource(name = "myBatisDaoSupport")
     private MyBatisDaoSupport myBatisDaoSupport;
@@ -38,7 +37,7 @@ public class OperatorDaoImpl
     public MyBatisDaoSupport getMyBatisDaoSupport() {
         return myBatisDaoSupport;
     }
-
+    
     /**
      * @param 对myBatisDaoSupport进行赋值
      */

@@ -44,6 +44,24 @@
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
+	$("#catalogName").selectRoleCatalog({
+		eventName : "forAddRole",
+		contextPath : _contextPath,
+		title : "请选择角色分类",  
+		width : 260,
+		height : 400,
+		handler : function(vc){
+			if(vc != null){
+				$("#catalogName").val(vc.name);
+				$("#catalogId").val(vc.id);
+			}
+		},
+	    clearHandler: function(){
+	    	$("#catalogName").val("");
+			$("#catalogId").val("");
+	    }
+	});
+	
 	//验证器
 	var url = /*[[@{/operatorRole/update}]]*/_contextPath + 'operatorRole/update';
 	$('#entityForm').validator({
@@ -58,7 +76,7 @@ $(document).ready(function(){
 			    	DialogUtils.progress('close');
 					if(data){
 						parent.DialogUtils.tip("修改角色成功");
-						parent.DialogUtils.closeDialogById("updateRole");
+						parent.DialogUtils.closeDialogById("updateOperatorRole");
 					}else{
 						parent.DialogUtils.tip("修改角色失败");
 					}
@@ -70,11 +88,11 @@ $(document).ready(function(){
 	
 	//退出
 	$("#cancelBtn").click(function(){
-		parent.DialogUtils.closeDialogById("updateRole");
+		parent.DialogUtils.closeDialogById("updateOperatorRole");
 	});
 	//提交
 	$("#submitBtn").click(function(){
-		$('#roleForm').submit();
+		$('#entityForm').submit();
 	});
 });
 /*]]>*/
@@ -84,27 +102,33 @@ $(document).ready(function(){
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form id="entityForm" method="post" class="form" th:object="${operatorRole}">
-			<input id="id" name="id" type="hidden"  th:value="*{id}" value=""/>
-			<input id="vcid" name="vcid" type="hidden"  th:value="*{vcid}" value=""/>
-			<table class="common_table">
+			<input id="vcid" name="vcid" type="hidden" th:value="${vcid}"/>
+			<table class="table">
 				<tr>
-					<th class="narrow" width="25%">名称:<span class="tRed">*</span></th>
+					<th class="narrow" width="25%">编码:<span class="tRed">*</span></th>
 					<td>
-						<input id="name" name="name" th:value="*{name}"
+						<input id="id" name="id" style="width: 60%" th:value="*{id}" readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow">名称:<span class="tRed">*</span></th>
+					<td>
+						<input id="name" name="name" style="width: 60%" th:value="*{name}"
 							th:data-rule="'名称:required;length[1~16];remote[' + @{/operatorRole/validate} + ', name, vcid, id]'"/>
 					</td>
 				</tr>
+				
 				<tr>
-					<th class="narrow" >编码:</th>
+					<th class="narrow">角色分类:</th>
 					<td>
-						<input id="id" name="id" th:value="*{id}"
-							th:data-rule="'名称:length[1~64];remote[' + @{/operatorRole/validate} + ', id]'"/>
+						<input id="catalogId" name="catalogId" type="hidden"  th:value="${catalog?.id}"/>
+						<input id="catalogName" name="catalogName" th:value="${catalog?.name}" readonly="readonly" style="width: 60%"/>
 					</td>
 				</tr>
 				<tr>
-					<th class="narrow">备注:</th>
+					<th>备注：</th>
 					<td>
-						<textarea name="remark" rows="" cols="" class="longText" style="width:90%" th:text="*{remark}"></textarea>
+						<textarea name="remark" rows="4" style="width: 60%" th:text="*{remark}"></textarea>
 					</td>
 				</tr>
 			</table>

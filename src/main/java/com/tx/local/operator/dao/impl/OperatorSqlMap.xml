@@ -19,16 +19,18 @@
 				O.pwdUpdateDate,
 				O.lastUpdateDate,
 				O.mainPostId,
-				O.userName,
+				O.name,
 				O.vcid,
-				O.loginName,
 				O.valid,
 				O.createDate,
 				O.locked,
+				O.modifyAble,
 				O.examinePwd,
 				O.historyPwd,
 				O.invalidDate,
 				O.password,
+				O.username,
+				O.usernameChangeCount,
 				O.organizationId
 		  FROM OPER_OPERATOR O
 		 WHERE
@@ -36,8 +38,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND O.id = #{id}
 	        </if>
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
-	            AND O.loginName = #{loginName}
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(username)">  
+	            AND O.username = #{username}
 	        </if>
 		</trim>
 	</select>
@@ -52,16 +54,18 @@
 				O.pwdUpdateDate,
 				O.lastUpdateDate,
 				O.mainPostId,
-				O.userName,
+				O.name,
 				O.vcid,
-				O.loginName,
 				O.valid,
 				O.createDate,
 				O.locked,
+				O.modifyAble,
 				O.examinePwd,
 				O.historyPwd,
 				O.invalidDate,
 				O.password,
+				O.username,
+				O.usernameChangeCount,
 				O.organizationId
 		  FROM OPER_OPERATOR O
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -89,14 +93,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPostId)">  
 	            <![CDATA[ AND O.mainPostId = #{mainPostId} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
-	            <![CDATA[ AND O.userName = #{userName} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND O.name = #{name} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
 	            <![CDATA[ AND O.vcid = #{vcid} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
-	            <![CDATA[ AND O.loginName = #{loginName} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND O.valid = #{valid} ]]>
@@ -110,6 +111,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
 	            <![CDATA[ AND O.locked = #{locked} ]]>
 	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND O.modifyAble = #{modifyAble} ]]>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
 	            <![CDATA[ AND O.examinePwd = #{examinePwd} ]]>
 	        </if>			
@@ -118,6 +122,9 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
 	            <![CDATA[ AND O.password = #{password} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(username)">  
+	            <![CDATA[ AND O.username = #{username} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
 	            <![CDATA[ AND O.organizationId = #{organizationId} ]]>
@@ -167,14 +174,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mainPostId)">  
 	            <![CDATA[ AND O.mainPostId = #{mainPostId} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userName)">  
-	            <![CDATA[ AND O.userName = #{userName} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND O.name = #{name} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
 	            <![CDATA[ AND O.vcid = #{vcid} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loginName)">  
-	            <![CDATA[ AND O.loginName = #{loginName} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND O.valid = #{valid} ]]>
@@ -188,6 +192,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
 	            <![CDATA[ AND O.locked = #{locked} ]]>
 	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND O.modifyAble = #{modifyAble} ]]>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(examinePwd)">  
 	            <![CDATA[ AND O.examinePwd = #{examinePwd} ]]>
 	        </if>			
@@ -196,6 +203,9 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(password)">  
 	            <![CDATA[ AND O.password = #{password} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(username)">  
+	            <![CDATA[ AND O.username = #{username} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
 	            <![CDATA[ AND O.organizationId = #{organizationId} ]]>
@@ -216,16 +226,18 @@
 			pwdUpdateDate,
 			lastUpdateDate,
 			mainPostId,
-			userName,
+			name,
 			vcid,
-			loginName,
 			valid,
 			createDate,
 			locked,
+			modifyAble,
 			examinePwd,
 			historyPwd,
 			invalidDate,
 			password,
+			username,
+			usernameChangeCount,
 			organizationId
 		)
 		VALUES
@@ -235,16 +247,18 @@
 			#{pwdUpdateDate},
 			#{lastUpdateDate},
 			#{mainPostId},
-			#{userName},
+			#{name},
 			#{vcid},
-			#{loginName},
 			#{valid},
 			#{createDate},
 			#{locked},
+			#{modifyAble},
 			#{examinePwd},
 			#{historyPwd},
 			#{invalidDate},
 			#{password},
+			#{username},
+			#{usernameChangeCount},
 			#{organizationId}
 		)
 	</insert>
@@ -277,20 +291,20 @@
 			<if test="_parameter.containsKey('mainPostId')">
 	    		mainPostId = #{mainPostId,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('userName')">
-	    		userName = #{userName,javaType=java.lang.String},
+			<if test="_parameter.containsKey('name')">
+	    		name = #{name,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('vcid')">
 	    		vcid = #{vcid,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('loginName')">
-	    		loginName = #{loginName,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('valid')">
 	    		valid = #{valid,javaType=boolean},
 	    	</if>
 			<if test="_parameter.containsKey('locked')">
 	    		locked = #{locked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('modifyAble')">
+	    		modifyAble = #{modifyAble,javaType=boolean},
 	    	</if>
 			<if test="_parameter.containsKey('examinePwd')">
 	    		examinePwd = #{examinePwd,javaType=java.lang.String},
@@ -303,6 +317,12 @@
 	    	</if>
 			<if test="_parameter.containsKey('password')">
 	    		password = #{password,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('username')">
+	    		username = #{username,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('usernameChangeCount')">
+	    		usernameChangeCount = #{usernameChangeCount,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('organizationId')">
 	    		organizationId = #{organizationId,javaType=java.lang.String},

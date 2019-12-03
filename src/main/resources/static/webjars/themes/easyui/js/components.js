@@ -198,6 +198,72 @@ $.widget("txcomponent.selectPost",{
     }
 });
 //控件：选择操作员角色
+$.widget("txcomponent.selectRoleCatalog",{
+	options: {
+		eventName : "selectRoleCatalog",
+		contextPath : "",
+		title : "请选择角色分类",
+		width : 600,
+		height : 500,
+		openDialogHandler : window.parent.DialogUtils,
+		clearHandler: null,
+		chooseHandler: null,
+        handler : null
+	},
+	_$clear: null,
+	_create: function(){
+		var _this = this;
+		var _element = _this.element;
+		var _option = _this.options;
+		var action = _option.contextPath + 'operatorRoleCatalog/toSelect?eventName=' + _option.eventName;
+		if(_option.clearHandler && $.isFunction(_option.clearHandler)){
+			_$clear = $('<span class="icon_span clear"></span>')
+			$(_element).after(_$clear);
+			_$clear.click(function(){
+				_option.clearHandler();
+			});
+		}
+		$(_element).click(function(){
+			var dialog_ = _option.openDialogHandler.openModalDialog("component_dialog_select_role_catalog",
+					_option.title,
+					action,
+					_option.width,
+					_option.height,
+					function(){
+						//onClose doNothing
+					},
+					{},
+					[{
+						text : '确认',
+						handler : function() {
+						    if(_option.handler){
+                                _option.handler.call(_option.handler,_option._choosedData);
+                            }
+                            _option.openDialogHandler.closeDialogById("component_dialog_select_role_catalog");
+						}
+					}]);
+			return false;
+		});
+		//绑定响应选中事件
+		$.bindge("select_role_catalog_" + _option.eventName,function(event,post){
+		    _option._choosedData = post;
+		    if (_option.chooseHandler) {
+                _option.chooseHandler.call(_option.chooseHandler, post);
+            }
+		});
+	},
+    destroy : function(){
+    	var _this = this;
+		var _element = _this.element;
+		var _option = _this.options;
+		
+		_$clear.remove();
+    	$(_element).unbind("click");
+    	$.unbindge("select_role_catalog_" + _option.eventName);
+    	$.Widget.prototype.destroy.call(this);
+    }
+});
+//控件：选择操作员角色
 $.widget("txcomponent.selectRole",{
 	options: {
 		eventName : "selectRole",

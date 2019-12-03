@@ -4,7 +4,7 @@ create table OPER_ROLE_HIS(
 	name varchar(64) not null,
 	vcid varchar(64) not null,
 	parentId varchar(64),
-	roleTypeId varchar(64) not null,
+	catalogId varchar(64) ,
 	valid bit not null default 1,
 	modifyAble bit not null default 1,
 	remark varchar(512) ,

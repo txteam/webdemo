@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.core.paged.model.PagedList;
 import com.tx.local.operator.model.OperatorRoleCatalog;
 import com.tx.local.operator.service.OperatorRoleCatalogService;
-import com.tx.core.paged.model.PagedList;
+import com.tx.local.organization.model.OrganizationTypeEnum;
+import com.tx.local.security.util.WebContextUtils;
 
 /**
  * 角色分类控制层<br/>
@@ -64,8 +67,26 @@ public class OperatorRoleCatalogController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAdd")
-    public String toAdd(ModelMap response) {
-        response.put("operatorRoleCatalog", new OperatorRoleCatalog());
+    public String toAdd(
+            @RequestParam(value = "parentId", required = false) String parentId,
+            ModelMap response) {
+        OperatorRoleCatalog catalog = new OperatorRoleCatalog();
+        String vcid = WebContextUtils.getVcid();
+        catalog.setVcid(vcid);
+        
+        response.put("types", OrganizationTypeEnum.values());
+        if (!StringUtils.isEmpty(parentId)) {
+            OperatorRoleCatalog parent = this.operatorRoleCatalogService
+                    .findById(parentId);
+            response.put("parent", parent);
+            
+            //避免在操作期间出现VCID异常变动的情况
+            if (parent != null && !parent.getVcid().equals(vcid)) {
+                catalog.setParentId(null);
+            }
+        }
+        response.put("operatorRoleCatalog", catalog);
+        response.put("vcid", vcid);
         
         return "operator/addOperatorRoleCatalog";
     }
@@ -81,11 +102,36 @@ public class OperatorRoleCatalogController {
      */
     @RequestMapping("/toUpdate")
     public String toUpdate(@RequestParam("id") String id, ModelMap response) {
-        OperatorRoleCatalog operatorRoleCatalog = this.operatorRoleCatalogService
+        OperatorRoleCatalog catalog = this.operatorRoleCatalogService
                 .findById(id);
-        response.put("operatorRoleCatalog", operatorRoleCatalog);
+        response.put("operatorRoleCatalog", catalog);
+        
+        if (!StringUtils.isEmpty(catalog.getParentId())) {
+            OperatorRoleCatalog parent = this.operatorRoleCatalogService
+                    .findById(catalog.getParentId());
+            response.put("parent", parent);
+        }
         
         return "operator/updateOperatorRoleCatalog";
+    }
+    
+    /**
+     * 跳转到选择组织页面
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toSelect")
+    public String toSelect(
+            @RequestParam(value = "eventName", required = true) String eventName,
+            ModelMap responseMap) {
+        responseMap.put("vcid", WebContextUtils.getVcid());
+        responseMap.put("eventName", eventName);
+        
+        return "operator/selectOperatorRoleCatalog";
     }
     
     /**
@@ -104,6 +150,7 @@ public class OperatorRoleCatalogController {
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         //params.put("",request.getFirst(""));
+        params.put("vcid", WebContextUtils.getVcid());
         
         List<OperatorRoleCatalog> resList = this.operatorRoleCatalogService
                 .queryList(valid, params);
@@ -129,6 +176,7 @@ public class OperatorRoleCatalogController {
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         //params.put("",request.getFirst(""));
+        params.put("vcid", WebContextUtils.getVcid());
         
         PagedList<OperatorRoleCatalog> resPagedList = this.operatorRoleCatalogService
                 .queryPagedList(valid, params, pageIndex, pageSize);
@@ -147,6 +195,8 @@ public class OperatorRoleCatalogController {
     @ResponseBody
     @RequestMapping("/add")
     public boolean add(OperatorRoleCatalog operatorRoleCatalog) {
+        operatorRoleCatalog.setVcid(WebContextUtils.getVcid());
+        
         this.operatorRoleCatalogService.insert(operatorRoleCatalog);
         return true;
     }
@@ -164,6 +214,7 @@ public class OperatorRoleCatalogController {
     @ResponseBody
     @RequestMapping("/update")
     public boolean update(OperatorRoleCatalog operatorRoleCatalog) {
+        operatorRoleCatalog.setVcid(WebContextUtils.getVcid());
         boolean flag = this.operatorRoleCatalogService
                 .updateById(operatorRoleCatalog);
         return flag;
@@ -284,6 +335,7 @@ public class OperatorRoleCatalogController {
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
+        params.put("vcid", WebContextUtils.getVcid());
         
         List<OperatorRoleCatalog> resList = this.operatorRoleCatalogService
                 .queryChildrenByParentId(parentId, valid, params);
@@ -310,6 +362,7 @@ public class OperatorRoleCatalogController {
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
+        params.put("vcid", WebContextUtils.getVcid());
         
         List<OperatorRoleCatalog> resList = this.operatorRoleCatalogService
                 .queryDescendantsByParentId(parentId, valid, params);

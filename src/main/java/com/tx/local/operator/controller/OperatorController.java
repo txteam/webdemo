@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.service.OperatorService;
+import com.tx.local.security.util.WebContextUtils;
 
 /**
  * 操作人员控制层<br/>
@@ -64,7 +65,8 @@ public class OperatorController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toAdd")
-    public String toAdd(@RequestParam(value = "vcid", required = false) String vcid,
+    public String toAdd(
+            @RequestParam(value = "vcid", required = false) String vcid,
             @RequestParam(value = "organizationId", required = false) String organizationId,
             ModelMap response) {
         response.put("operator", new Operator());
@@ -100,10 +102,11 @@ public class OperatorController {
      */
     @ResponseBody
     @RequestMapping("/queryList")
-    public List<Operator> queryList(@RequestParam(value = "vcid", required = false) String vcid,
+    public List<Operator> queryList(
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
+        String vcid = WebContextUtils.getVcid();
         params.put("vcid", vcid);
         
         List<Operator> resList = this.operatorService.queryList(valid, params);
@@ -122,12 +125,13 @@ public class OperatorController {
      */
     @ResponseBody
     @RequestMapping("/queryPagedList")
-    public PagedList<Operator> queryPagedList(@RequestParam(value = "vcid", required = false) String vcid,
+    public PagedList<Operator> queryPagedList(
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
+        String vcid = WebContextUtils.getVcid();
         params.put("vcid", vcid);
         
         PagedList<Operator> resPagedList = this.operatorService
@@ -147,6 +151,7 @@ public class OperatorController {
     @ResponseBody
     @RequestMapping("/add")
     public boolean add(Operator operator) {
+        operator.setVcid(WebContextUtils.getVcid());
         this.operatorService.insert(operator);
         return true;
     }
@@ -203,6 +208,33 @@ public class OperatorController {
     }
     
     /**
+     * 校验是否重复<br/>
+     * @param excludeId
+     * @param params
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/validate")
+    public Map<String, String> validate(
+            @RequestParam(value = "id", required = false) String excludeId,
+            @RequestParam Map<String, String> params) {
+        params.remove(excludeId);
+        boolean flag = this.operatorService.exists(params, excludeId);
+        
+        Map<String, String> resMap = new HashMap<String, String>();
+        if (!flag) {
+            resMap.put("ok", "");
+        } else {
+            resMap.put("error", "重复值");
+        }
+        return resMap;
+    }
+    
+    /**
      * 禁用操作人员实例
      * @param id
      * @return [参数说明]
@@ -236,9 +268,8 @@ public class OperatorController {
     }
     
     /**
-     * 校验是否重复<br/>
-     * @param excludeId
-     * @param params
+     * 锁定操作人员实例
+     * @param id
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -246,20 +277,27 @@ public class OperatorController {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping("/validate")
-    public Map<String, String> validate(
-            @RequestParam(value = "id", required = false) String excludeId,
-            @RequestParam Map<String, String> params) {
-        params.remove(excludeId);
-        boolean flag = this.operatorService.exists(params, excludeId);
-        
-        Map<String, String> resMap = new HashMap<String, String>();
-        if (!flag) {
-            resMap.put("ok", "");
-        } else {
-            resMap.put("error", "重复值");
-        }
-        return resMap;
+    @RequestMapping("/lockById")
+    public boolean lockById(@RequestParam(value = "id") String id) {
+        boolean flag = this.operatorService.lockById(id);
+        return flag;
+    }
+    
+    /**
+     * 启用操作人员实例<br/>
+     * <功能详细描述>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/unlockById")
+    public boolean unlockById(@RequestParam(value = "id") String id) {
+        boolean flag = this.operatorService.unlockById(id);
+        return flag;
     }
     
 }

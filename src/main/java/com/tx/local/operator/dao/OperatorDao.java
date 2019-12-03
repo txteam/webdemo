@@ -10,7 +10,7 @@ import com.tx.core.mybatis.dao.MybatisBaseDao;
 import com.tx.local.operator.model.Operator;
 
 /**
- * Operator持久层
+ * Operator持久层<br/>
  * <功能详细描述>
  * 
  * @author  
@@ -18,5 +18,5 @@ import com.tx.local.operator.model.Operator;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface OperatorDao extends MybatisBaseDao<Operator, String>{
+public interface OperatorDao extends MybatisBaseDao<Operator, String> {
 }

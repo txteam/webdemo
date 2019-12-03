@@ -33,7 +33,7 @@ import io.swagger.annotations.Api;
  * @since [产品/模块版本]
  */
 @RestController
-@Api(tags = "VirtualCenterAPI")
+@Api(tags = "虚中心API")
 @RequestMapping("/api/virtualCenter")
 public class VirtualCenterAPIController implements VirtualCenterFacade {
     

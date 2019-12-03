@@ -1106,6 +1106,22 @@ var GlobalDialogUtils = null;
 
 
 /**
+ * 修改datagrid中默认的onBeforeLoad方法<br/>
+ */
+$.fn.datagrid.defaults.onBeforeLoad = function(param){
+    //console.log(param);
+    param["pageNumber"] = param.page;
+    param["pageSize"] = param.rows;
+    //param["sortName"] = param.order;
+    //param["sortOrder"] = param.sort;
+    
+   	delete param.rows;
+    delete param.page;
+    //delete param.order;
+    //delete param.sort;
+};
+
+/**
  * 扩展tree 
  * 使其支持平滑数据格式
  * 支持指定几个主要字段
@@ -1113,14 +1129,14 @@ var GlobalDialogUtils = null;
 $.fn.tree.defaults.loadFilter = function(data) {
     var opt = $(this).data().tree.options;
     var idField, textField, parentField,iconField,childrenField,checkedField;
-    var notIncludeTarget =  opt.notIncludeTarget;
+    var excludeObject =  opt.excludeObject;
     if (opt.parentField) {
+    	parentField = opt.parentField;
         idField = opt.idField || 'id';
-        parentField = opt.parentField;
         textField = opt.textField || 'text';
         iconField = opt.iconField || 'iconCls';
         checkedField = opt.checkedField || 'checked';
-        var i, l, treeData = [], tmpMap = [];
+        var i, l, roots = [], tmpMap = [];
         for (i = 0, l = data.length; i < l; i++) {
             tmpMap[data[i][idField]] = data[i];
         }
@@ -1129,69 +1145,75 @@ $.fn.tree.defaults.loadFilter = function(data) {
                 if (!tmpMap[data[i][parentField]]['children']){
                 	tmpMap[data[i][parentField]]['children'] = [];
                 }
-                if(!notIncludeTarget){
+                if(!excludeObject){
                 	data[i]['object'] = data[i];
                 } 
-                data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
-                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
+                
+                data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
+                data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
+                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
+                data[i]['checked'] = $.isFunction(checkedField) ? checkedField.call(this,data[i]) : data[i][checkedField];
+                
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
+                //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
                 tmpMap[data[i][parentField]]['checked'] = false;
             } else {
-            	if(!notIncludeTarget){
+            	if(!excludeObject){
             		data[i]['object'] = data[i];
                 }
-                data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
-                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
-                data[i]['checked'] = data[i][checkedField];
-                treeData.push(data[i]);
+                
+                data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
+                data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
+                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
+                data[i]['checked'] = $.isFunction(checkedField) ? checkedField.call(this,data[i]) : data[i][checkedField];
+                
+                roots.push(data[i]);
             }
         }
-        return treeData;
+        return roots;
     }else{
+        idField = opt.idField || 'id';
         textField = opt.textField || 'text';
         iconField = opt.iconField || 'iconCls';
-        childrenField = opt.childrenField || 'children';
         checkedField = opt.checkedField || 'checked';
-        function iteratorTreeData(item){
+        childrenField = opt.childrenField || 'children';
+        
+        function nestedFilter(item){
             if(item == null){
                 return ;
             }
-            if(!notIncludeTarget){
+            if(!excludeObject){
             	item['object'] = item;
             }
-            item['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
-            item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
-            item['children'] = item[childrenField];
-            item['checked'] = item[checkedField];
+            
+            item['id'] = $.isFunction(idField) ? idField.call(this,item) : item[idField];
+            item['text'] = $.isFunction(textField) ? textField.call(this,item) : item[textField];
+            item['iconCls'] = $.isFunction(iconField) ? iconField.call(this,item) : item[iconField];
+            item['checked'] = $.isFunction(checkedField) ? checkedField.call(this,item) : item[checkedField];
+            item['children'] = $.isFunction(childrenField) ? childrenField.call(this,item) : item[childrenField];
+            if (!item['children']){
+            	item['children'] = [];
+            }
             if(!$.ObjectUtils.isEmpty(item['children'])){
-            	var k = 0;
-            	var length = item['children'].length;
-                for(k = 0 ; k < length ; k++){
-                    iteratorTreeData(item['children'][k]);
+            	var nestedI = 0;
+            	var nestedL = item['children'].length;
+                for(nestedI = 0 ; nestedI < nestedL ; nestedI++){
+                    nestedFilter(item['children'][nestedI]);
                 }
+                //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
+                item['checked'] = false;
             }
         }
         for (i = 0, l = data.length; i < l; i++) {
         	if(data[i] != null){
-        		iteratorTreeData(data[i]);
+        		nestedFilter(data[i]);
         	}
         }
+        return data;
     }
-    return data;
 };
 
-$.fn.datagrid.defaults.onBeforeLoad = function(param){
-    //console.log(param);
-    param["pageNumber"] = param.page;
-    param["pageSize"] = param.rows;
-    param["sortName"] = param.order;
-    param["sortOrder"] = param.sort;
-    
-    delete param.order;
-   	delete param.rows;
-    delete param.page;
-    delete param.sort;
-};
+
 /**
  * 扩展treegrid
  * 使其支持平滑数据格式
@@ -1201,11 +1223,12 @@ $.fn.treegrid.defaults.loadFilter = function(data) {
     var opt = $(this).data().treegrid.options;
     var idField, textField, parentField, iconField, childrenField;
     if (opt.parentField) {
+    	parentField = opt.parentField;
         idField = opt.idField || 'id';
         textField = opt.textField || 'text';
         iconField = opt.iconField || 'iconCls';
-        parentField = opt.parentField;
-        var i, l, treeData = [], tmpMap = [];
+        
+        var i, l, roots = [], tmpMap = [];
         for (i = 0, l = data.length; i < l; i++) {
             tmpMap[data[i][idField]] = data[i];
         }
@@ -1214,42 +1237,57 @@ $.fn.treegrid.defaults.loadFilter = function(data) {
                 if (!tmpMap[data[i][parentField]]['children']){
                 	tmpMap[data[i][parentField]]['children'] = [];
                 }
-                data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
-                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
+                
+                data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
+                data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
+                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
+                
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
+                //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
+                tmpMap[data[i][parentField]]['checked'] = false;
             } else {
-                data[i]['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
-                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,data[i]) : data[i][iconField];
-                treeData.push(data[i]);
+                
+                data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
+                data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
+                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
+                
+                roots.push(data[i]);
             }
         }
-        return treeData;
+        return roots;
     }else{
+        idField = opt.idField || 'id';
         textField = opt.textField || 'text';
         iconField = opt.iconField || 'iconCls';
         childrenField = opt.childrenField || 'children';
-        function iteratorTreeData(item){
+        function nestedFilter(item){
             if(item == null){
                 return ;
             }
-            item['text'] = $.isFunction(textField) ? textField.call(textField,data[i]) : data[i][textField];
-            item['iconCls'] = $.isFunction(iconField) ? iconField.call(iconField,item) : item[iconField];
-            item['children'] = item[childrenField];
-            if(!$.ObjectUtils.isEmpty(item['children'])){
-            	var k = 0;
-            	var length = item['children'].length;
-                for(k = 0 ; k < length ; k++){
-                    iteratorTreeData(item['children'][k]);
-                }
-            }else{
+            
+            item['id'] = $.isFunction(idField) ? idField.call(this,item) : item[idField];
+            item['text'] = $.isFunction(textField) ? textField.call(this,item) : item[textField];
+            item['iconCls'] = $.isFunction(iconField) ? iconField.call(this,item) : item[iconField];
+            item['checked'] = $.isFunction(checkedField) ? checkedField.call(this,item) : item[checkedField];
+            item['children'] = $.isFunction(childrenField) ? childrenField.call(this,item) : item[childrenField];
+            if (!item['children']){
             	item['children'] = [];
+            }
+            if(!$.ObjectUtils.isEmpty(item['children'])){
+            	var nestedI = 0;
+            	var nestedL = item['children'].length;
+                for(nestedI = 0 ; nestedI < nestedL ; nestedI++){
+                    nestedFilter(item['children'][nestedI]);
+                }
             }
         }
         for (i = 0, l = data.length; i < l; i++) {
-            iteratorTreeData(data[i]);
+        	if(data[i] != null){
+        		nestedFilter(data[i]);
+        	}
         }
+        return data;
     }
-    return data;
 };
 
 /**
@@ -1269,6 +1307,7 @@ $(document).ready(function(){
 		    theme: 'yellow_right_effect',
 		    rules: {
 	            digits: [/^\d+$/, "请输入数字"]
+	            ,code : [/^[a-z0-9A-Z._%]+$/,"请输入正确的编码,仅允许数字、字母、'.'、'_'"]
 				,number: [/^[\-|\d]+(.[0-9]*)*$/,"请输入数字"]
 	            ,letters: [/^[a-z]+$/i, "{0}只能输入字母"]
 	            ,tel: [/^(?:(?:0\d{2,3}[- ]?[1-9]\d{6,7})|(?:[48]00[- ]?[1-9]\d{6}))$/, "电话格式不正确"]

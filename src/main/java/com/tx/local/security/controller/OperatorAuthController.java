@@ -252,7 +252,7 @@ public class OperatorAuthController implements InitializingBean {
         //让拥有的权限被选中
         Set<String> hasAuthIdSet = this.authRefService
                 .queryListByRef(true,
-                        AuthConstants.AUTHREFTYPE_OPERATOR_POST,
+                        AuthConstants.AUTHREFTYPE_POST,
                         postId,
                         null)
                 .stream()
@@ -290,8 +290,7 @@ public class OperatorAuthController implements InitializingBean {
         }
         
         List<String> filterAuthIds = getAssignableAuthIds(authTypeId);
-        this.authRefService.saveForAuthIds(
-                AuthConstants.AUTHREFTYPE_OPERATOR_POST,
+        this.authRefService.saveForAuthIds(AuthConstants.AUTHREFTYPE_POST,
                 postId,
                 authIdList,
                 filterAuthIds);
@@ -345,7 +344,7 @@ public class OperatorAuthController implements InitializingBean {
         //让拥有的权限被选中
         Set<String> hasAuthIdSet = this.authRefService
                 .queryListByRef(true,
-                        AuthConstants.AUTHREFTYPE_OPERATOR_ROLE,
+                        AuthConstants.AUTHREFTYPE_ROLE,
                         roleId,
                         null)
                 .stream()
@@ -383,8 +382,7 @@ public class OperatorAuthController implements InitializingBean {
         }
         
         List<String> filterAuthIds = getAssignableAuthIds(authTypeId);
-        this.authRefService.saveForAuthIds(
-                AuthConstants.AUTHREFTYPE_OPERATOR_ROLE,
+        this.authRefService.saveForAuthIds(AuthConstants.AUTHREFTYPE_ROLE,
                 roleId,
                 authIdList,
                 filterAuthIds);
@@ -402,18 +400,8 @@ public class OperatorAuthController implements InitializingBean {
      * @see [类、类#方法、类#成员]
      */
     private List<String> getAssignableAuthIds(String authTypeId) {
-        List<String> resList = authRegistry.queryList(authTypeId)
+        List<String> resList = WebContextUtils.getCurrentAuthIds()
                 .stream()
-                .map(auth -> auth.getId())
-                .collect(Collectors.toList());
-        if (WebContextUtils.isSuperAdmin() || WebContextUtils.isSystemAdmin()) {
-            return resList;
-        }
-        
-        //根据当前用户的权限集合过滤可分配的权限集合
-        Set<String> hasAuthIdSet = WebContextUtils.getCurrentAuthIds();
-        resList = resList.stream()
-                .filter(authIdTemp -> hasAuthIdSet.contains(authIdTemp))
                 .collect(Collectors.toList());
         return resList;
     }

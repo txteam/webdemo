@@ -44,6 +44,24 @@
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
+	$("#catalogName").selectRoleCatalog({
+		eventName : "forAddRole",
+		contextPath : _contextPath,
+		title : "请选择角色分类",  
+		width : 260,
+		height : 400,
+		handler : function(vc){
+			if(vc != null){
+				$("#catalogName").val(vc.name);
+				$("#catalogId").val(vc.id);
+			}
+		},
+	    clearHandler: function(){
+	    	$("#catalogName").val("");
+			$("#catalogId").val("");
+	    }
+	});
+	
 	//验证器
 	$('#entityForm').validator({
 	    valid: function(){
@@ -57,7 +75,7 @@ $(document).ready(function(){
 			    	DialogUtils.progress('close');
 					if(data){
 						parent.DialogUtils.tip("新增角色成功");
-						parent.DialogUtils.closeDialogById("addRole");
+						parent.DialogUtils.closeDialogById("addOperatorRole");
 					}else{
 						parent.DialogUtils.tip("新增角色失败");
 					}
@@ -69,7 +87,7 @@ $(document).ready(function(){
 	
 	//退出
 	$("#cancelBtn").click(function(){
-		parent.DialogUtils.closeDialogById("addRole");
+		parent.DialogUtils.closeDialogById("addOperatorRole");
 	});
 	//提交
 	$("#submitBtn").click(function(){
@@ -85,23 +103,30 @@ $(document).ready(function(){
 			<input id="vcid" name="vcid" type="hidden" th:value="${vcid}"/>
 			<table class="table">
 				<tr>
-					<th class="narrow" width="25%">名称:<span class="tRed">*</span></th>
+					<th class="narrow" width="20%">编码:<span class="tRed">*</span></th>
 					<td>
-						<input id="name" name="name"
+						<input id="id" name="id" style="width: 40%"
+							th:data-rule="'名称:required;length[1~32];code;remote[' + @{/operatorRole/validate} + ', id]'"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow">名称:<span class="tRed">*</span></th>
+					<td>
+						<input id="name" name="name" style="width: 40%"
 							th:data-rule="'名称:required;length[1~16];remote[' + @{/operatorRole/validate} + ', name, vcid]'"/>
 					</td>
 				</tr>
 				<tr>
-					<th class="narrow" >编码:</th>
+					<th class="narrow">角色分类:</th>
 					<td>
-						<input id="id" name="id"
-							th:data-rule="'名称:length[1~64];remote[' + @{/operatorRole/validate} + ', id]'"/>
+						<input id="catalogId" name="catalogId" type="hidden"  th:value="${catalog?.id}"/>
+						<input id="catalogName" name="catalogName" th:value="${catalog?.name}" readonly="readonly" style="width: 40%"/>
 					</td>
 				</tr>
 				<tr>
-					<th class="narrow">备注:</th>
+					<th>备注：</th>
 					<td>
-						<textarea name="remark" rows="" cols="" class="longText" style="width:90%"></textarea>
+						<textarea name="remark" rows="4" style="width: 60%" th:text="*{remark}"></textarea>
 					</td>
 				</tr>
 			</table>

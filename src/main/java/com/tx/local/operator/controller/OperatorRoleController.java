@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.operator.model.OperatorRole;
+import com.tx.local.operator.model.OperatorRoleCatalog;
+import com.tx.local.operator.service.OperatorRoleCatalogService;
 import com.tx.local.operator.service.OperatorRoleService;
 import com.tx.local.security.util.WebContextUtils;
 
@@ -41,6 +43,9 @@ public class OperatorRoleController {
     @Resource(name = "operatorRoleService")
     private OperatorRoleService operatorRoleService;
     
+    @Resource
+    private OperatorRoleCatalogService operatorRoleCatalogService;
+    
     /**
      * 跳转到选择角色页面<br/>
      * <功能详细描述>
@@ -57,7 +62,7 @@ public class OperatorRoleController {
         responseMap.put("vcid", WebContextUtils.getVcid());
         responseMap.put("eventName", eventName);
         
-        return "/operator/selectOperatorRole";
+        return "operator/selectOperatorRole";
     }
     
     /**
@@ -73,7 +78,7 @@ public class OperatorRoleController {
     public String toQueryList(ModelMap response) {
         response.put("vcid", WebContextUtils.getVcid());
         
-        return "/operator/queryOperatorRoleList";
+        return "operator/queryOperatorRoleList";
     }
     
     /**
@@ -90,7 +95,7 @@ public class OperatorRoleController {
             @RequestParam(value = "parentId", required = false) String parentId,
             ModelMap response) {
         OperatorRole role = new OperatorRole();
-        response.put("role", role);
+        response.put("operatorRole", role);
         String vcid = WebContextUtils.getVcid();
         response.put("vcid", vcid);
         
@@ -101,7 +106,7 @@ public class OperatorRoleController {
                 response.put("parent", parent);
             }
         }
-        return "/operator/addOperatorRole";
+        return "operator/addOperatorRole";
     }
     
     /**
@@ -125,8 +130,14 @@ public class OperatorRoleController {
                     .findById(operatorRole.getParentId());
             response.put("parent", parent);
         }
+        if (operatorRole != null
+                && !StringUtils.isEmpty(operatorRole.getCatalogId())) {
+            OperatorRoleCatalog catalog = this.operatorRoleCatalogService
+                    .findById(operatorRole.getCatalogId());
+            response.put("catalog", catalog);
+        }
         
-        return "/operator/updateOperatorRole";
+        return "operator/updateOperatorRole";
     }
     
     /**
@@ -145,8 +156,9 @@ public class OperatorRoleController {
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         params.put("vcid", WebContextUtils.getVcid());
-        params.put("code", request.getFirst("code"));
+        params.put("id", request.getFirst("id"));
         params.put("name", request.getFirst("name"));
+        params.put("catalogId", request.getFirst("catalogId"));
         
         List<OperatorRole> resList = this.operatorRoleService.queryList(valid,
                 params);
@@ -172,8 +184,9 @@ public class OperatorRoleController {
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         params.put("vcid", WebContextUtils.getVcid());
-        params.put("code", request.getFirst("code"));
+        params.put("id", request.getFirst("id"));
         params.put("name", request.getFirst("name"));
+        params.put("catalogId", request.getFirst("catalogId"));
         
         PagedList<OperatorRole> resPagedList = this.operatorRoleService
                 .queryPagedList(valid, params, pageIndex, pageSize);
@@ -297,7 +310,13 @@ public class OperatorRoleController {
             @RequestParam(value = "id", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
         ////角色的编码其实就是其ID，所有这里不用加入excludeId逻辑
-        boolean flag = this.operatorRoleService.exists(params, null);
+        boolean flag = false;
+        if (params.size() > 1) {
+            params.remove("id");
+            flag = this.operatorRoleService.exists(params, excludeId);
+        } else {
+            flag = this.operatorRoleService.exists(params, null);
+        }
         
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {
@@ -328,6 +347,9 @@ public class OperatorRoleController {
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         params.put("vcid", WebContextUtils.getVcid());
+        params.put("id", request.getFirst("id"));
+        params.put("name", request.getFirst("name"));
+        params.put("catalogId", request.getFirst("catalogId"));
         
         List<OperatorRole> resList = this.operatorRoleService
                 .queryChildrenByParentId(parentId, valid, params);
@@ -355,6 +377,9 @@ public class OperatorRoleController {
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         params.put("vcid", WebContextUtils.getVcid());
+        params.put("id", request.getFirst("id"));
+        params.put("name", request.getFirst("name"));
+        params.put("catalogId", request.getFirst("catalogId"));
         
         List<OperatorRole> resList = this.operatorRoleService
                 .queryDescendantsByParentId(parentId, valid, params);

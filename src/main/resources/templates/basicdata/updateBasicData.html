@@ -104,14 +104,12 @@ function cancelFun(){
 						<textarea id="remark" name="remark" rows="4" cols="50" th:text="*{remark}" ></textarea>
 					</td>
 				</tr>
-				<tr>
-					<td class="rightOperRow" colspan="4" style="padding-right: 50px">
-						<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  
-						<a id="cancelBtn" onclick="cancelFun();return false;" href="#" class="easyui-linkbutton">取消</a>	
-					</td>
-				</tr>
 			</table>
-		</form:form>
+		</form>
+	</div>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton" style="width: 65px;">提交</a>  
 	</div>
 </div>
 </body>

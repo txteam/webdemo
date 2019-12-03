@@ -53,11 +53,11 @@ public interface OperatorFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据主键删除操作人员")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
+    @ApiOperation(value = "根据ID删除操作人员")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id);
-
+            @PathVariable(value = "id", required = true) String id);
+    
     /**
      * 更新操作人员<br/>
      * <功能详细描述>
@@ -70,9 +70,10 @@ public interface OperatorFacade {
      */
     @ApiOperation(value = "修改操作人员")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody Operator operator);
-
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody Operator operator);
+    
     /**
      * 禁用操作人员<br/>
      * @param id
@@ -82,10 +83,10 @@ public interface OperatorFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-	@ApiOperation(value = "禁用操作人员")
+    @ApiOperation(value = "禁用操作人员")
     @RequestMapping(value = "/disable/{id}", method = RequestMethod.PATCH)
     public boolean disableById(
-    		@PathVariable(value = "id", required = true) String id);
+            @PathVariable(value = "id", required = true) String id);
     
     /**
      * 启用操作人员<br/>
@@ -100,8 +101,8 @@ public interface OperatorFacade {
     @ApiOperation(value = "启用操作人员")
     @RequestMapping(value = "/enable/{id}", method = RequestMethod.PATCH)
     public boolean enableById(
-    		@PathVariable(value = "id", required = true) String id);
-
+            @PathVariable(value = "id", required = true) String id);
+    
     /**
      * 根据主键查询操作人员<br/>
      * <功能详细描述>
@@ -116,7 +117,20 @@ public interface OperatorFacade {
     public Operator findById(
             @PathVariable(value = "id", required = true) String id);
     
-
+    /**
+     * 根据主键查询操作人员<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return Operator [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ApiOperation(value = "根据用户名查询操作人员")
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    public Operator findByUsername(
+            @PathVariable(value = "username", required = true) String username);
+    
     /**
      * 查询操作人员实例列表<br/>
      * <功能详细描述>
@@ -131,9 +145,8 @@ public interface OperatorFacade {
     @ApiOperation(value = "查询操作人员列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<Operator> queryList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-    		@RequestBody Querier querier
-    	);
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier);
     
     /**
      * 查询操作人员分页列表<br/>
@@ -151,13 +164,12 @@ public interface OperatorFacade {
     @ApiOperation(value = "查询操作人员分页列表")
     @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
     public PagedList<Operator> queryPagedList(
-			@RequestParam(value = "valid", required = false) Boolean valid,
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	);
+            @RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize);
     
-	/**
+    /**
      * 查询操作人员数量<br/>
      * <功能详细描述>
      * @param valid
@@ -171,12 +183,12 @@ public interface OperatorFacade {
     @ApiOperation(value = "查询操作人员数量")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int count(
-			@RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier);
-
-	/**
+    
+    /**
      * 查询操作人员是否存在<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 
@@ -186,8 +198,6 @@ public interface OperatorFacade {
      */
     @ApiOperation(value = "查询操作人员是否存在")
     @RequestMapping(value = "/exists", method = RequestMethod.GET)
-    public boolean exists(
-    		@RequestBody Querier querier,
-            @RequestParam(value = "excludeId", required = false) String excludeId
-            );
+    public boolean exists(@RequestBody Querier querier,
+            @RequestParam(value = "excludeId", required = false) String excludeId);
 }

@@ -310,7 +310,7 @@ function deleteFun(id,name) {
 			    		function(data){
 			    			DialogUtils.progress('close');
 			    			if(data){
-			    				DialogUtils.tip("删除${basicDataType.name}成功");
+			    				DialogUtils.tip("删除" + entityName + "成功.");
 			    			}else{
 			    				var errorMessage = $.formatString("删除{0}失败.可能已被处理.如有疑问,请联系管理员.",entityName);
 			    				DialogUtils.alert("错误提示",errorMessage,"error");

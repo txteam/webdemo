@@ -14,8 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.tx.component.auth.model.Auth;
+import com.tx.component.role.model.Role;
 import com.tx.local.operator.model.Operator;
-import com.tx.local.operator.model.OperatorRole;
 import com.tx.local.organization.model.Organization;
 import com.tx.local.organization.model.Post;
 
@@ -52,7 +52,7 @@ public class OperatorUserDetails implements UserDetails {
     private List<Auth> auths;
     
     /** 角色 */
-    private List<OperatorRole> roles;
+    private List<Role> roles;
     
     /** 权限 */
     private Collection<? extends GrantedAuthority> authorities;
@@ -63,14 +63,13 @@ public class OperatorUserDetails implements UserDetails {
     }
     
     /** <默认构造函数> */
-    public OperatorUserDetails(Operator operator, List<OperatorRole> roleList,
+    public OperatorUserDetails(Operator operator, List<Role> roleList,
             List<Auth> authList) {
         super();
         this.operator = operator;
         this.vcid = this.operator.getVcid();
         
-        this.roles = roleList == null ? new ArrayList<OperatorRole>()
-                : roleList;
+        this.roles = roleList == null ? new ArrayList<Role>() : roleList;
         this.auths = authList == null ? new ArrayList<Auth>() : authList;
         initAuthority();
     }
@@ -85,7 +84,7 @@ public class OperatorUserDetails implements UserDetails {
      */
     private void initAuthority() {
         List<GrantedAuthority> newAuthorites = new ArrayList<>();
-        for (OperatorRole roleTemp : this.roles) {
+        for (Role roleTemp : this.roles) {
             newAuthorites.add(new OperatorRoleAuthority(roleTemp));
         }
         for (Auth authTemp : this.auths) {
@@ -150,7 +149,7 @@ public class OperatorUserDetails implements UserDetails {
      */
     @Override
     public String getUsername() {
-        return this.operator.getLoginName();
+        return this.operator.getUsername();
     }
     
     /**
@@ -190,7 +189,7 @@ public class OperatorUserDetails implements UserDetails {
     public String getVcid() {
         return vcid;
     }
-
+    
     /**
      * @return 返回 organization
      */
@@ -215,7 +214,7 @@ public class OperatorUserDetails implements UserDetails {
     /**
      * @return 返回 roles
      */
-    public List<OperatorRole> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
     
@@ -225,32 +224,32 @@ public class OperatorUserDetails implements UserDetails {
     public List<Auth> getAuths() {
         return auths;
     }
-
+    
     /**
      * @param 对vcid进行赋值
      */
     public void setVcid(String vcid) {
         this.vcid = vcid;
     }
-
+    
     /**
      * @param 对organization进行赋值
      */
     public void setOrganization(Organization organization) {
         this.organization = organization;
     }
-
+    
     /**
      * @param 对posts进行赋值
      */
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
-
+    
     /**
      * @param 对roles进行赋值
      */
-    public void setRoles(List<OperatorRole> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 }
