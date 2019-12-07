@@ -60,7 +60,7 @@ public class ContentInfoCategory implements
     
     /** 内容类型:界面根据该值加载不同的新增，编辑的界面 */
     @Column(name = "typeCode")
-    private ContentInfoType type;
+    private ContentInfoTypeEnum type;
     
     /** 内容的树层级，设定方面，父级id一旦设置后则不能修改，所以下级的内容仅需要渠道其父级内容level+1即可 */
     private int level = 0;
@@ -124,14 +124,14 @@ public class ContentInfoCategory implements
     /**
      * @return 返回 type
      */
-    public ContentInfoType getType() {
+    public ContentInfoTypeEnum getType() {
         return type;
     }
     
     /**
      * @param 对type进行赋值
      */
-    public void setType(ContentInfoType type) {
+    public void setType(ContentInfoTypeEnum type) {
         this.type = type;
     }
     

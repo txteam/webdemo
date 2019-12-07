@@ -28,7 +28,8 @@ public class OperatorPasswordEncoder implements PasswordEncoder {
     @Override
     public String encode(CharSequence rawPassword) {
         String encodePassword = DigestUtils
-                .md5DigestAsHex(rawPassword.toString().getBytes());
+                .md5DigestAsHex(rawPassword.toString().getBytes())
+                .toUpperCase();
         return encodePassword;
     }
     
@@ -45,7 +46,8 @@ public class OperatorPasswordEncoder implements PasswordEncoder {
         }
         //全不为空
         String rawEncodedPassword = DigestUtils
-                .md5DigestAsHex(rawPassword.toString().getBytes());
+                .md5DigestAsHex(rawPassword.toString().getBytes())
+                .toUpperCase();
         if (StringUtils.equalsAnyIgnoreCase(rawEncodedPassword,
                 encodedPassword)) {
             return true;

@@ -97,7 +97,6 @@ $(document).ready(function(){
 				  	url : /*[[@{/operatorRoleCatalog/queryList(valid=true)}]]*/'',
 				  	datatype : 'json',
 				  	success : function(rows) {
-				  		catalogMapLoaded = true;
 						if($.ObjectUtils.isEmpty(rows)){
 							return ;
 						}	
@@ -106,6 +105,7 @@ $(document).ready(function(){
 						});
 				  	}
 				});
+				catalogMapLoaded = true;
 			}
 		},
 		fit : true,

@@ -39,15 +39,14 @@ public class ContentInfo implements EntryAble<EntityEntry> {
     private String id;
     
     /** 内容类型：一般内容类型于内容所在分类的类型一致 */
-    @Column(name = "typeCode")
-    private ContentInfoType type;
+    private ContentInfoTypeEnum type;
     
     /** 内容分类 */
-    @Column(name = "categoryCode")
+    @Column(name = "categoryId")
     private ContentInfoCategory category;
     
     /** 信息级别： */
-    @Column(name = "levelCode")
+    @Column(name = "levelId")
     private ContentInfoLevel level;
     
     /** 名称 */
@@ -113,14 +112,14 @@ public class ContentInfo implements EntryAble<EntityEntry> {
     /**
      * @return 返回 type
      */
-    public ContentInfoType getType() {
+    public ContentInfoTypeEnum getType() {
         return type;
     }
 
     /**
      * @param 对type进行赋值
      */
-    public void setType(ContentInfoType type) {
+    public void setType(ContentInfoTypeEnum type) {
         this.type = type;
     }
 

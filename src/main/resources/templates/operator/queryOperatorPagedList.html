@@ -78,6 +78,7 @@ $(document).ready(function(){
 		}
 	});
 
+	var orgMap = {},postMap = {},mapLoaded=false;
 	grid = $('#grid').datagrid({
 		url :/*[[@{/operator/queryPagedList}]]*/'',
 		fit : true,
@@ -87,6 +88,33 @@ $(document).ready(function(){
 		pagination : true,
 		pageSize : 10,
 		pageList : [10,20,30,40,50],
+		onBeforeLoad:function(){
+			if(!mapLoaded){
+				$.ajax({
+				 	async: false,
+				  	type : "get",
+				  	url : /*[[@{/organization/queryList(valid=true)}]]*/'',
+				  	datatype : 'json',
+				  	success : function(args) {
+				    	$.each(args,function(index,arg){
+				    		orgMap[arg.id] = arg;
+				    	});
+				  	}
+				});
+				$.ajax({
+				 	async: false,
+				  	type : "get",
+				  	url : /*[[@{/post/queryList(valid=true)}]]*/'',
+				  	datatype : 'json',
+				  	success : function(args) {
+				    	$.each(args,function(index,arg){
+				    		postMap[arg.id] = arg;
+				    	});
+				  	}
+				});
+				mapLoaded = true;
+			}
+		},
 		loadFilter: function(data){
 			var res = {total:0,rows:[]};
 			if(!$.ObjectUtils.isEmpty(data)
@@ -107,11 +135,19 @@ $(document).ready(function(){
 		] ],
 		columns: [ [
 			{title:'名称',width:100,field:'name'},
-			{title:'组织',width:100,field:'organizationId',formatter:function(value, row, index) {
-				return value;
+			{title:'组织',width:100,field:'organizationId',formatter : function(value, row, index) {
+				if(value && orgMap[value]){
+					return orgMap[value].name;
+				}else{
+					return value;
+				}
 			}},
-			{title:'职位',width:100,field:'mainPostId',formatter:function(value, row, index) {
-				return value;
+			{title:'职位',width:100,field:'mainPostId',formatter : function(value, row, index) {
+				if(value && postMap[value]){
+					return postMap[value].name;
+				}else{
+					return value;
+				}
 			}},
 			{title:'是否可编辑',width:80,field:'modifyAble',formatter:$.Formatters.booleanFun},
 			{title:'是否锁定',width:80,field:'locked',formatter:function(value, row, index){
@@ -679,8 +715,8 @@ function configOperatorRole(id,name){
 		<a id="unlockALink" onclick="unlockFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'lock_open'">解锁</a>
 		
 		<a id="resetPwdALink" onclick="resetPwdFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">重置密码</a>
-		<a id="configOperatorAuthALink" onclick="configOperatorAuth();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">配置权限</a>
 		<a id="configOperatorPostALink" onclick="configOperatorPost();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'group_group'">配置职位</a>
+		<a id="configOperatorAuthALink" onclick="configOperatorAuth();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">配置权限</a>
 		<a id="configOperatorRoleALink" onclick="configOperatorRole();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置角色</a>
 		<a onclick="datagrid.datagrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 	</div>

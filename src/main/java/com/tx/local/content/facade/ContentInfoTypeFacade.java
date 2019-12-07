@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
-import com.tx.local.content.model.ContentInfoType;
+import com.tx.local.content.model.ContentInfoTypeEnum;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -41,7 +41,7 @@ public interface ContentInfoTypeFacade {
      */
     @ApiOperation(value = "新增内容信息类型")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ContentInfoType insert(@RequestBody ContentInfoType contentInfoType);
+    public ContentInfoTypeEnum insert(@RequestBody ContentInfoTypeEnum contentInfoType);
     
     /**
      * 根据id删除内容信息类型<br/> 
@@ -86,7 +86,7 @@ public interface ContentInfoTypeFacade {
     @ApiOperation(value = "修改内容信息类型")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody ContentInfoType contentInfoType);
+    		@RequestBody ContentInfoTypeEnum contentInfoType);
 
     /**
      * 禁用内容信息类型<br/>
@@ -128,7 +128,7 @@ public interface ContentInfoTypeFacade {
      */
     @ApiOperation(value = "根据主键查询内容信息类型")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ContentInfoType findById(
+    public ContentInfoTypeEnum findById(
             @PathVariable(value = "id", required = true) String id);
     
     /**
@@ -142,7 +142,7 @@ public interface ContentInfoTypeFacade {
      */
     @ApiOperation(value = "根据编码查询内容信息类型")
     @RequestMapping(value = "/code/{code}", method = RequestMethod.GET)
-    public ContentInfoType findByCode(
+    public ContentInfoTypeEnum findByCode(
             @PathVariable(value = "code", required = true) String code);
 
     /**
@@ -158,7 +158,7 @@ public interface ContentInfoTypeFacade {
      */
     @ApiOperation(value = "查询内容信息类型列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<ContentInfoType> queryList(
+    public List<ContentInfoTypeEnum> queryList(
 			@RequestParam(value = "valid", required = false) Boolean valid,
     		@RequestBody Querier querier
     	);
@@ -178,7 +178,7 @@ public interface ContentInfoTypeFacade {
      */
     @ApiOperation(value = "查询内容信息类型分页列表")
     @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
-    public PagedList<ContentInfoType> queryPagedList(
+    public PagedList<ContentInfoTypeEnum> queryPagedList(
 			@RequestParam(value = "valid", required = false) Boolean valid,
 			@RequestBody Querier querier,
 			@PathVariable(value = "pageNumber", required = true) int pageIndex,

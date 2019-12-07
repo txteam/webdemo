@@ -93,6 +93,24 @@ public class OperatorController {
     }
     
     /**
+     * 跳转到配置人员角色界面<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toConfigPost")
+    public String toConfigPost(@RequestParam("id") String id,
+            ModelMap response) {
+        Operator operator = this.operatorService.findById(id);
+        response.put("operator", operator);
+        
+        return "operator/configPost";
+    }
+    
+    /**
      * 查询操作人员实例列表<br/>
      * <功能详细描述>
      * @return [参数说明]
@@ -330,6 +348,25 @@ public class OperatorController {
     @RequestMapping("/resetPwdById")
     public boolean resetPwdById(@RequestParam(value = "id") String id) {
         boolean flag = this.operatorService.resetPwdById(id);
+        return flag;
+    }
+    
+    /**
+     * 配置客户的职位<br/>
+     * <功能详细描述>
+     * @param id
+     * @param postId
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/configPostById")
+    public boolean configPostById(@RequestParam(value = "id") String id,
+            @RequestParam(value = "postId") String postId) {
+        boolean flag = this.operatorService.updateMainPostById(id, postId);
         return flag;
     }
     

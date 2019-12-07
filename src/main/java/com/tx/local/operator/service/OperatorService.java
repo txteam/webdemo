@@ -441,9 +441,23 @@ public class OperatorService {
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         //updateRowMap.put("vcid", operator.getVcid());
         //updateRowMap.put("username", operator.getUsername());
+        //updateRowMap.put("examinePwd", operator.getExaminePwd());
+        //处理职位
+        if (!StringUtils.isEmpty(operator.getMainPostId())) {
+            String mainPostId = operator.getMainPostId();
+            Post mp = this.postFacade.findById(mainPostId);
+            AssertUtils.isTrue(operator.getVcid().equals(mp.getVcid()),
+                    "operator.vcid:{} not eq post.vcid:{}",
+                    operator.getVcid(),
+                    mp.getVcid());
+            if (mp != null) {
+                operator.setOrganizationId(mp.getOrganizationId());
+            }
+        }
+        
+        //更新客户信息
         updateRowMap.put("organizationId", operator.getOrganizationId());
         updateRowMap.put("mainPostId", operator.getMainPostId());
-        updateRowMap.put("examinePwd", operator.getExaminePwd());
         updateRowMap.put("name", operator.getName());
         updateRowMap.put("lastUpdateDate", new Date());
         
@@ -481,7 +495,9 @@ public class OperatorService {
         //需要更新的字段
         Date now = new Date();
         String rawPwd = this.operatorPasswordEncoder.encode(newPassword);
+        
         updateRowMap.put("password", rawPwd);
+        updateRowMap.put("historyPwd", oper.getPassword());
         updateRowMap.put("pwdUpdateDate", now);
         updateRowMap.put("lastUpdateDate", now);
         
