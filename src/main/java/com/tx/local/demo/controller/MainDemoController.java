@@ -7,7 +7,6 @@
 package com.tx.local.demo.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
@@ -35,32 +34,32 @@ public class MainDemoController {
      */
     @RequestMapping("/index")
     public String toPortalIndex(){
-        return "/portal/index";
+        return "portal/index";
     }
     
     @RequestMapping("/changeLog")
     public String toChangeLog(){
-        return "/portal/changeLog";
+        return "portal/changeLog";
     }
     
     @RequestMapping("/bugView")
     public String toBugView(){
-        return "/portal/bugView";
+        return "portal/bugView";
     }
     
     @RequestMapping("/links")
     public String toLinks(){
-        return "/portal/links";
+        return "portal/links";
     }
     
     @RequestMapping("/calandar")
     public String toCalandar(){
-        return "/portal/calandar";
+        return "portal/calandar";
     }
 
     @RequestMapping("/inspinia")
     public String inspinia(){
-        return "/inspinia-demo";
+        return "inspinia-demo";
     }
 
     

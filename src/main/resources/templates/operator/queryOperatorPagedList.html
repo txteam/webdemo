@@ -114,8 +114,24 @@ $(document).ready(function(){
 				return value;
 			}},
 			{title:'是否可编辑',width:80,field:'modifyAble',formatter:$.Formatters.booleanFun},
-			{title:'是否锁定',width:80,field:'locked',formatter:$.Formatters.booleanFun},
-			{title:'是否有效',width:80,field:'valid',formatter:$.Formatters.booleanFun},
+			{title:'是否锁定',width:80,field:'locked',formatter:function(value, row, index){
+				var text = '';
+				if(value){
+					text = '<font color="red">是</font>';
+				}else{
+					text = '否';
+				}
+				return text;
+			}},
+			{title:'是否有效',width:80,field:'valid',formatter:function(value, row, index){
+				var text = '';
+				if(value){
+					text = '是';
+				}else{
+					text = '<font color="red">否</font>';
+				}
+				return text;
+			}},
 			{title:'失效时间',width:100,field:'invalidDate',hidden:true,formatter:$.Formatters.dateFun},
 			{title:'密码错误次数',width:100,hidden:true,field:'pwdErrCount'},
 			{title:'密码最后更新时间',width:100,field:'pwdUpdateDate',hidden:true,formatter:$.Formatters.dateFun},
@@ -191,6 +207,11 @@ $(document).ready(function(){
 					$lockALink.show();
 					$lockALink.linkbutton('enable');
 				}
+				
+				$resetPwdALink.linkbutton('enable');
+				$configOperatorAuthALink.linkbutton('enable');
+				$configOperatorPostALink.linkbutton('enable');
+				$configOperatorRoleALink.linkbutton('enable');
 			}else{
 				$editALink.linkbutton('disable');
 				$deleteALink.linkbutton('disable');
@@ -204,12 +225,12 @@ $(document).ready(function(){
 				$lockALink.linkbutton('disable');
 				$unlockALink.hide();
 				$lockALink.show();
+				
+				$resetPwdALink.linkbutton('disable');
+				$configOperatorAuthALink.linkbutton('disable');
+				$configOperatorPostALink.linkbutton('disable');
+				$configOperatorRoleALink.linkbutton('disable');
 			}
-			
-			$resetPwdALink.linkbutton('enable');
-			$configOperatorAuthALink.linkbutton('enable');
-			$configOperatorPostALink.linkbutton('enable');
-			$configOperatorRoleALink.linkbutton('enable');
 		},
 		onLoadSuccess : function() {
 			$(this).datagrid('unselectAll');
@@ -481,6 +502,42 @@ function unlockFun(id,name){
     	}
     });
 }
+//重置密码
+function resetPwdFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断对应组织是否能被停用
+    DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认重置操作员:[{0}]密码?",name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		$.post(/*[[@{/operator/resetPwdById}]]*/'',
+        			{id:id},
+		    		function(data){
+		    			if(data){
+			    			DialogUtils.progress('close');
+			    			//DialogUtils.tip("重置密码成功");
+			    			DialogUtils.tip("重置密码成功");
+			    			$('#datagrid').datagrid('reload',$('#queryForm').serializeObject());
+		    			}else{
+							DialogUtils.progress('close');
+							DialogUtils.tip("重置密码失败");
+		    			}
+		    });
+    	}
+    });
+}
 /*
  * 配置操作人员权限
  */
@@ -548,43 +605,6 @@ function configOperatorRole(id,name){
 		850,550,function(){
 		}
 	);
-}
-//重置密码
-function resetPwdFun(id,name){
-	if (id == undefined) {
-		var rows = grid.datagrid('getSelections');
-		id = rows[0][idFieldName];
-		name = rows[0][nameFieldName];
-	}
-	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的" + entityName);
-		return false;
-	}
-	//判断对应组织是否能被停用
-    DialogUtils.confirm(
-    		"确认提醒" , 
-    		$.formatString("是否确认重置操作员:[{0}]密码?",name), 
-    function(data){
-    	if(data){
-    		DialogUtils.progress({
-    	        text : '数据提交中，请等待....'
-    		});
-    		$.post(
-		    		'${contextPath}/operator/resetPasswordOperatorById.action',
-		    		{operatorId:id},
-		    		function(data){
-		    			if(data){
-			    			DialogUtils.progress('close');
-			    			//DialogUtils.tip("重置密码成功");
-			    			DialogUtils.tip("重置密码成功");
-			    			$('#datagrid').datagrid('reload',$('#queryForm').serializeObject());
-		    			}else{
-							DialogUtils.progress('close');
-							DialogUtils.tip("重置密码失败");
-		    			}
-		    });
-    	}
-    });
 }
 /*]]>*/
 </script>

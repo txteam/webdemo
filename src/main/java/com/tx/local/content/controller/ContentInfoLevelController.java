@@ -52,7 +52,7 @@ public class ContentInfoLevelController {
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
 
-        return "/content/queryContentInfoLevelList";
+        return "content/queryContentInfoLevelList";
     }
     
     /**
@@ -69,7 +69,7 @@ public class ContentInfoLevelController {
     	response.put("contentInfoLevel", new ContentInfoLevel());
     	
 
-        return "/content/addContentInfoLevel";
+        return "content/addContentInfoLevel";
     }
     
     /**
@@ -89,7 +89,7 @@ public class ContentInfoLevelController {
         response.put("contentInfoLevel", contentInfoLevel);
 
         
-        return "/content/updateContentInfoLevel";
+        return "content/updateContentInfoLevel";
     }
 
     /**

@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -52,7 +53,7 @@ public class OperatorController {
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
         
-        return "/operator/queryOperatorPagedList";
+        return "operator/queryOperatorPagedList";
     }
     
     /**
@@ -71,7 +72,7 @@ public class OperatorController {
             ModelMap response) {
         response.put("operator", new Operator());
         
-        return "/operator/addOperator";
+        return "operator/addOperator";
     }
     
     /**
@@ -88,7 +89,7 @@ public class OperatorController {
         Operator operator = this.operatorService.findById(id);
         response.put("operator", operator);
         
-        return "/operator/updateOperator";
+        return "operator/updateOperator";
     }
     
     /**
@@ -108,8 +109,15 @@ public class OperatorController {
         Map<String, Object> params = new HashMap<>();
         String vcid = WebContextUtils.getVcid();
         params.put("vcid", vcid);
+        String operatorId = WebContextUtils.getOperatorId();
+        params.put("currentOperatorId", operatorId);
         
         List<Operator> resList = this.operatorService.queryList(valid, params);
+        resList.forEach(oper -> {
+            if (StringUtils.equals(oper.getId(), operatorId)) {
+                oper.setModifyAble(false);
+            }
+        });
         
         return resList;
     }
@@ -133,9 +141,17 @@ public class OperatorController {
         Map<String, Object> params = new HashMap<>();
         String vcid = WebContextUtils.getVcid();
         params.put("vcid", vcid);
+        String operatorId = WebContextUtils.getOperatorId();
+        params.put("currentOperatorId", operatorId);
         
         PagedList<Operator> resPagedList = this.operatorService
                 .queryPagedList(valid, params, pageIndex, pageSize);
+        resPagedList.getList().forEach(oper -> {
+            if (StringUtils.equals(oper.getId(), operatorId)) {
+                oper.setModifyAble(false);
+            }
+        });
+        
         return resPagedList;
     }
     
@@ -297,6 +313,23 @@ public class OperatorController {
     @RequestMapping("/unlockById")
     public boolean unlockById(@RequestParam(value = "id") String id) {
         boolean flag = this.operatorService.unlockById(id);
+        return flag;
+    }
+    
+    /**
+     * 启用操作人员实例<br/>
+     * <功能详细描述>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/resetPwdById")
+    public boolean resetPwdById(@RequestParam(value = "id") String id) {
+        boolean flag = this.operatorService.resetPwdById(id);
         return flag;
     }
     

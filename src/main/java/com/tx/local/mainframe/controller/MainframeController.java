@@ -55,6 +55,6 @@ public class MainframeController {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         model.addAttribute("now", df.format(new Date()));
         
-        return "/mainframe/mainframe";
+        return "mainframe/mainframe";
     }
 }

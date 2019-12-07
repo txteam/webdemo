@@ -70,7 +70,7 @@ public class ClientSourceController {
     	response.put("clientSource", new ClientSource());
     	
 
-        return "/clientinfo/addClientSource";
+        return "clientinfo/addClientSource";
     }
     
     /**
@@ -90,7 +90,7 @@ public class ClientSourceController {
         response.put("clientSource", clientSource);
 
         
-        return "/clientinfo/updateClientSource";
+        return "clientinfo/updateClientSource";
     }
 
     /**

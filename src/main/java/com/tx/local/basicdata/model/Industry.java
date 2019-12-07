@@ -1,15 +1,20 @@
 package com.tx.local.basicdata.model;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.tx.component.basicdata.annotation.BasicDataEntity;
+import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
+import com.tx.component.basicdata.model.TreeAbleBasicData;
 
 /**
- * 
- * 行业
+ * 行业<br/>
  * <功能详细描述>
  * 
  * @author  Bobby
@@ -18,8 +23,10 @@ import javax.persistence.Table;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "BD_INDUSTRY")
-public class Industry implements Serializable {
+@Table(name = "bd_industry")
+@BasicDataEntity(name = "区域信息", viewType = BasicDataViewTypeEnum.PAGEDLIST)
+public class Industry implements TreeAbleBasicData<Industry> {
+    
     /** 注释内容 */
     private static final long serialVersionUID = 4404205135030732547L;
     
@@ -27,11 +34,24 @@ public class Industry implements Serializable {
     @Id
     private String id;
     
+    /**上级id**/
+    @Column(name = "parentId")
+    private Industry parent;
+    
+    /** 一级行业id */
+    private String firstLevelId;
+    
+    /** 行业分级 */
+    private int level;
+    
     /** 编码 */
     private String code;
     
     /** 名称 */
     private String name;
+    
+    /** 是否可编辑 */
+    private boolean modifyAble = true;
     
     /** 是否有效 */
     private boolean valid = true;
@@ -45,31 +65,30 @@ public class Industry implements Serializable {
     /** 备注 */
     private String remark;
     
-    /**上级id**/
-    private String parentId;
-    
-    /** 一级行业id */
-    private String baseParentId;
+    /** 子级节点 */
+    @Transient
+    private List<Industry> children;
     
     /**
-     * @return 返回 baseParentId
+     * @return 返回 parentId
      */
-    public String getBaseParentId() {
-        return baseParentId;
+    @Override
+    public String getParentId() {
+        return this.parent != null ? this.parent.getId() : null;
     }
     
     /**
-     * @return 返回 code
+     * @return 返回 parent
      */
-    public String getCode() {
-        return code;
+    public Industry getParent() {
+        return parent;
     }
     
     /**
-     * @return 返回 createDate
+     * @param 对parent进行赋值
      */
-    public Date getCreateDate() {
-        return createDate;
+    public void setParent(Industry parent) {
+        this.parent = parent;
     }
     
     /**
@@ -80,45 +99,45 @@ public class Industry implements Serializable {
     }
     
     /**
-     * @return 返回 lastUpdateDate
+     * @param 对id进行赋值
      */
-    public Date getLastUpdateDate() {
-        return lastUpdateDate;
+    public void setId(String id) {
+        this.id = id;
     }
     
     /**
-     * @return 返回 name
+     * @return 返回 firstLevelId
      */
-    public String getName() {
-        return name;
+    public String getFirstLevelId() {
+        return firstLevelId;
     }
     
     /**
-     * @return 返回 parentId
+     * @param 对firstLevelId进行赋值
      */
-    public String getParentId() {
-        return parentId;
+    public void setFirstLevelId(String firstLevelId) {
+        this.firstLevelId = firstLevelId;
     }
     
     /**
-     * @return 返回 remark
+     * @return 返回 level
      */
-    public String getRemark() {
-        return remark;
+    public int getLevel() {
+        return level;
     }
     
     /**
-     * @return 返回 valid
+     * @param 对level进行赋值
      */
-    public boolean isValid() {
-        return valid;
+    public void setLevel(int level) {
+        this.level = level;
     }
     
     /**
-     * @param 对baseParentId进行赋值
+     * @return 返回 code
      */
-    public void setBaseParentId(String baseParentId) {
-        this.baseParentId = baseParentId;
+    public String getCode() {
+        return code;
     }
     
     /**
@@ -129,24 +148,10 @@ public class Industry implements Serializable {
     }
     
     /**
-     * @param 对createDate进行赋值
+     * @return 返回 name
      */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-    
-    /**
-     * @param 对id进行赋值
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    /**
-     * @param 对lastUpdateDate进行赋值
-     */
-    public void setLastUpdateDate(Date lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
+    public String getName() {
+        return name;
     }
     
     /**
@@ -157,10 +162,66 @@ public class Industry implements Serializable {
     }
     
     /**
-     * @param 对parentId进行赋值
+     * @return 返回 modifyAble
      */
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public boolean isModifyAble() {
+        return modifyAble;
+    }
+    
+    /**
+     * @param 对modifyAble进行赋值
+     */
+    public void setModifyAble(boolean modifyAble) {
+        this.modifyAble = modifyAble;
+    }
+    
+    /**
+     * @return 返回 valid
+     */
+    public boolean isValid() {
+        return valid;
+    }
+    
+    /**
+     * @param 对valid进行赋值
+     */
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+    
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+    
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+    
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+    
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+    
+    /**
+     * @return 返回 remark
+     */
+    public String getRemark() {
+        return remark;
     }
     
     /**
@@ -171,9 +232,17 @@ public class Industry implements Serializable {
     }
     
     /**
-     * @param 对valid进行赋值
+     * @return 返回 children
      */
-    public void setValid(boolean valid) {
-        this.valid = valid;
+    public List<Industry> getChildren() {
+        return children;
     }
+    
+    /**
+     * @param 对children进行赋值
+     */
+    public void setChildren(List<Industry> children) {
+        this.children = children;
+    }
+    
 }

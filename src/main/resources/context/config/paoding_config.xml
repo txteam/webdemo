@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config>
-	<config name="庖丁分词配置">
-		<config name="analyzer">
+<configs>
+	<catalog code="paoding" name="庖丁分词配置">
+		<catalog code="paoding.analyzer">
 			<config>
 				<name>mode</name>
 				<code>paoding.analyzer.mode</code>
@@ -12,8 +12,8 @@
 				<code>paoding.analyzer.dictionaries.compiler</code>
 				<value>net.paoding.analysis.analyzer.impl.MostWordsModeDictionariesCompiler</value>
 			</config>
-		</config>
-		<config name="dic">
+		</catalog>
+		<catalog code="paoding.dic">
 			<config>
 				<name>home</name>
 				<code>paoding.dic.home</code>
@@ -24,8 +24,8 @@
 				<code>paoding.dic.detector.interval</code>
 				<value>60</value>
 			</config>
-		</config>
-		<config name="knife.class">	
+		</catalog>
+		<catalog code="paoding.knife">
 			<config>
 				<name>letterKnife</name>
 				<code>paoding.knife.class.letterKnife</code>
@@ -41,6 +41,6 @@
 				<code>paoding.knife.class.cjkKnife</code>
 				<value>net.paoding.analysis.knife.CJKKnife</value>
 			</config>
-		</config>
-	</config>
-</config>
+		</catalog>
+	</catalog>
+</configs>

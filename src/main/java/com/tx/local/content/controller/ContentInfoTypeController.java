@@ -52,7 +52,7 @@ public class ContentInfoTypeController {
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
 
-        return "/content/queryContentInfoTypeList";
+        return "content/queryContentInfoTypeList";
     }
     
     /**
@@ -69,7 +69,7 @@ public class ContentInfoTypeController {
     	response.put("contentInfoType", new ContentInfoType());
     	
 
-        return "/content/addContentInfoType";
+        return "content/addContentInfoType";
     }
     
     /**
@@ -89,7 +89,7 @@ public class ContentInfoTypeController {
         response.put("contentInfoType", contentInfoType);
 
         
-        return "/content/updateContentInfoType";
+        return "content/updateContentInfoType";
     }
 
     /**

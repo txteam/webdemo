@@ -24,6 +24,6 @@ public class WorkbenchController {
     
     @RequestMapping(value = { "", "/", "/index", "/index.html" })
     public String index() {
-        return "/background/default";
+        return "background/default";
     }
 }

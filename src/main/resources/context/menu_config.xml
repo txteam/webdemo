@@ -53,7 +53,7 @@
 			<menu id="admin_role_catalog_manage_menu" text="角色分类" href="/admin/vciframe?src=/operatorRoleCatalog/toQueryTreeList" type="tab"></menu>
 			<menu id="admin_role_manage_menu" text="角色管理" href="/admin/vciframe?src=/operatorRole/toQueryList" type="tab"></menu>
 			<menu id="admin_operator_manage_menu" text="用户管理" href="/admin/vciframe?src=/operator/toQueryPagedList" type="tab"></menu>
-			<menu id="auth_manage_menu" text="权限管理" href="/auth/toQueryAuthView" type="tab"></menu>
+			<menu id="auth_manage_menu" text="权限管理" href="/auth/toQueryAuthMain" type="tab"></menu>
 		</menu>
 		<menu id="operator_manage_center_menu" text="系统管理" auths="operator_manage_center_auth" access="not hasRole('ROLE_SUPER_ADMIN')" type="tab">
 			<menu id="organization_manage_menu" text="组织管理" auths="organization_manage_auth" href="/organization/toQueryList" type="tab"></menu>

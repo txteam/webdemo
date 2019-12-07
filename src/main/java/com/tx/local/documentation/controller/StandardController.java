@@ -33,7 +33,7 @@ public class StandardController {
      */
     @RequestMapping("/java")
     public String java() {
-        return "/documentation/standard/java";
+        return "documentation/standard/java";
     }
     
     /**
@@ -47,7 +47,7 @@ public class StandardController {
      */
     @RequestMapping("/database")
     public String database() {
-        return "/documentation/standard/database";
+        return "documentation/standard/database";
     }
     
     /**
@@ -61,7 +61,7 @@ public class StandardController {
      */
     @RequestMapping("/naming")
     public String naming() {
-        return "/documentation/standard/naming";
+        return "documentation/standard/naming";
     }
     
     /**
@@ -75,6 +75,6 @@ public class StandardController {
      */
     @RequestMapping("/page")
     public String page() {
-        return "/documentation/standard/page";
+        return "documentation/standard/page";
     }
 }

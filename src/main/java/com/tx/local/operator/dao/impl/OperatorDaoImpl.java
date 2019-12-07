@@ -32,6 +32,14 @@ public class OperatorDaoImpl extends MybatisBaseDaoImpl<Operator, String>
     private MyBatisDaoSupport myBatisDaoSupport;
     
     /**
+     * @param entity
+     */
+    @Override
+    public void insertToHis(Operator operatorRole) {
+        this.myBatisDaoSupport.insert("operator.insertToHis", operatorRole);
+    }
+    
+    /**
      * @return 返回 myBatisDaoSupport
      */
     public MyBatisDaoSupport getMyBatisDaoSupport() {

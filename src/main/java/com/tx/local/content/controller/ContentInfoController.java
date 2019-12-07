@@ -52,7 +52,7 @@ public class ContentInfoController {
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
 
-        return "/content/queryContentInfoPagedList";
+        return "content/queryContentInfoPagedList";
     }
     
     /**
@@ -69,7 +69,7 @@ public class ContentInfoController {
     	response.put("contentInfo", new ContentInfo());
     	
 
-        return "/content/addContentInfo";
+        return "content/addContentInfo";
     }
     
     /**
@@ -89,7 +89,7 @@ public class ContentInfoController {
         response.put("contentInfo", contentInfo);
 
         
-        return "/content/updateContentInfo";
+        return "content/updateContentInfo";
     }
 
     /**

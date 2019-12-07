@@ -26,6 +26,7 @@ import com.tx.component.auth.AuthConstants;
 import com.tx.component.auth.context.AuthRegistry;
 import com.tx.component.auth.context.AuthTypeRegistry;
 import com.tx.component.auth.model.Auth;
+import com.tx.component.auth.model.AuthType;
 import com.tx.component.auth.service.AuthRefService;
 import com.tx.component.security.context.SecurityContext;
 import com.tx.local.security.model.CheckAbleAuth;
@@ -41,13 +42,12 @@ import com.tx.local.security.util.WebContextUtils;
  * @since  [产品/模块版本]
  */
 @Controller("authController")
-@RequestMapping("/auth")
+@RequestMapping({ "/auth", "/operator/auth" })
 public class OperatorAuthController implements InitializingBean {
     
     @Resource
     private SecurityContext securityContext;
     
-    @SuppressWarnings("unused")
     private AuthTypeRegistry authTypeRegistry;
     
     private AuthRegistry authRegistry;
@@ -75,12 +75,12 @@ public class OperatorAuthController implements InitializingBean {
      */
     @RequestMapping("/toQueryAuthMain")
     public String toQueryAuthView(ModelMap modelMap) {
-        return "/mainframe/queryAuthMain";
+        return "mainframe/queryAuthMain";
     }
     
     /**
      * 根据当前人员权限类型与权限列表<br/> 
-     *<功能详细描述>
+     * <功能详细描述>
      * @return [参数说明]
      * 
      * @return List<AuthItem> [返回类型说明]
@@ -88,16 +88,32 @@ public class OperatorAuthController implements InitializingBean {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping("/queryAuthTypeListBySecurity")
-    public List<Auth> queryAuthTypeListBySecurity(
-            @RequestParam(value = "authTypeId", required = true) String authTypeId) {
-        
-        return null;
+    @RequestMapping("/queryAuthTypeList")
+    public List<AuthType> queryAuthTypeListBySecurity() {
+        List<AuthType> resList = authTypeRegistry.queryList();
+        return resList;
     }
     
     /**
      * 根据当前人员权限类型与权限列表<br/> 
-     *<功能详细描述>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<AuthItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryAuthList")
+    public List<Auth> queryAuthList(
+            @RequestParam(value = "authTypeId", required = true) String authTypeId) {
+        List<Auth> resList = authRegistry.queryList(authTypeId);
+        return resList;
+    }
+    
+    /**
+     * 根据当前人员权限类型与权限列表<br/> 
+     * <功能详细描述>
      * @return [参数说明]
      * 
      * @return List<AuthItem> [返回类型说明]
@@ -106,10 +122,13 @@ public class OperatorAuthController implements InitializingBean {
      */
     @ResponseBody
     @RequestMapping("/queryAuthListBySecurity")
-    public List<CheckAbleAuth> queryAuthListBySecurity(
+    public List<Auth> queryAuthListBySecurity(
             @RequestParam(value = "authTypeId", required = true) String authTypeId) {
-        
-        return null;
+        List<Auth> resList = WebContextUtils.getCurrentAuths()
+                .stream()
+                .filter(a -> authTypeId.equals(a.getAuthTypeId()))
+                .collect(Collectors.toList());
+        return resList;
     }
     
     /**
@@ -129,7 +148,7 @@ public class OperatorAuthController implements InitializingBean {
         modelMap.put("authTypeId", authTypeId);
         modelMap.put("operatorId", operatorId);
         
-        return "/security/configOperatorAuth";
+        return "security/configOperatorAuth";
     }
     
     /**
@@ -222,7 +241,7 @@ public class OperatorAuthController implements InitializingBean {
         modelMap.put("authTypeId", authTypeId);
         modelMap.put("postId", postId);
         
-        return "/security/configPostAuth";
+        return "security/configPostAuth";
     }
     
     /**
@@ -314,7 +333,7 @@ public class OperatorAuthController implements InitializingBean {
         modelMap.put("authTypeId", authTypeId);
         modelMap.put("roleId", roleId);
         
-        return "/security/configRoleAuth";
+        return "security/configRoleAuth";
     }
     
     /**
@@ -400,8 +419,10 @@ public class OperatorAuthController implements InitializingBean {
      * @see [类、类#方法、类#成员]
      */
     private List<String> getAssignableAuthIds(String authTypeId) {
-        List<String> resList = WebContextUtils.getCurrentAuthIds()
+        List<String> resList = WebContextUtils.getCurrentAuths()
                 .stream()
+                .filter(auth -> authTypeId.equals(auth.getAuthTypeId()))
+                .map(auth -> auth.getId())
                 .collect(Collectors.toList());
         return resList;
     }

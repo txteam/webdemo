@@ -53,6 +53,6 @@ public class IndexController {
     */
     @RequestMapping("/login")
     public String toLogin() {
-        return "/background/login";
+        return "background/login";
     }
 }

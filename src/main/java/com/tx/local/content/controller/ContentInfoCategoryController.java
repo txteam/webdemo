@@ -52,7 +52,7 @@ public class ContentInfoCategoryController {
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
 
-        return "/content/queryContentInfoCategoryList";
+        return "content/queryContentInfoCategoryList";
     }
     
     /**
@@ -69,7 +69,7 @@ public class ContentInfoCategoryController {
     	response.put("contentInfoCategory", new ContentInfoCategory());
     	
 
-        return "/content/addContentInfoCategory";
+        return "content/addContentInfoCategory";
     }
     
     /**
@@ -89,7 +89,7 @@ public class ContentInfoCategoryController {
         response.put("contentInfoCategory", contentInfoCategory);
 
         
-        return "/content/updateContentInfoCategory";
+        return "content/updateContentInfoCategory";
     }
 
     /**

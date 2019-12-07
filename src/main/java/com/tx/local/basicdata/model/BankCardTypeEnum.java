@@ -23,19 +23,13 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum BankCardTypeEnum {
     
-    /**
-     * 虚拟卡(非储蓄卡或信用卡)
-     */
+    /** 虚拟卡(非储蓄卡或信用卡) */
     VIRTUAL_CARD("VIRTUAL_CARD", "虚拟卡"),
     
-    /**
-     * 信用卡(贷记卡和准贷记卡)
-     */
+    /** 信用卡(贷记卡和准贷记卡) */
     CREDIT_CARD("CREDIT_CARD", "信用卡"),
     
-    /**
-     * 储蓄卡
-     */
+    /** 储蓄卡 */
     DEBIT_CARD("DEBIT_CARD", "储蓄卡");
     
     private String chinapayCode;

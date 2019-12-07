@@ -13,21 +13,26 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tx.component.configuration.util.ConfigContextUtils;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Filter;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
-import com.tx.core.util.MD5Utils;
+import com.tx.local.WebdemoConstants;
 import com.tx.local.operator.dao.OperatorDao;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.organization.facade.OrganizationFacade;
+import com.tx.local.organization.facade.PostFacade;
 import com.tx.local.organization.model.Organization;
+import com.tx.local.organization.model.Post;
 
 /**
  * 操作人员的业务层[OperatorService]
@@ -44,11 +49,17 @@ public class OperatorService {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(OperatorService.class);
     
+    @Resource(name = "operatorPasswordEncoder")
+    public PasswordEncoder operatorPasswordEncoder;
+    
     @Resource(name = "operatorDao")
     private OperatorDao operatorDao;
     
     @Resource
     private OrganizationFacade organizationFacade;
+    
+    @Resource
+    private PostFacade postFacade;
     
     /**
      * 新增操作人员实例<br/>
@@ -94,7 +105,29 @@ public class OperatorService {
         
         //密码加密
         //获取配置的默认密码并设值
-        operator.setPassword(MD5Utils.encode("123456"));
+        String rawPwd = "";
+        if (StringUtils.isEmpty(operator.getPassword())) {
+            String defaultPwd = ConfigContextUtils
+                    .getValue(WebdemoConstants.CONFIG_DEFAULT_PASSWORD);
+            rawPwd = this.operatorPasswordEncoder.encode(defaultPwd);
+        } else {
+            rawPwd = this.operatorPasswordEncoder
+                    .encode(operator.getPassword());
+        }
+        operator.setPassword(rawPwd);
+        
+        //处理职位
+        if (!StringUtils.isEmpty(operator.getMainPostId())) {
+            String mainPostId = operator.getMainPostId();
+            Post mp = this.postFacade.findById(mainPostId);
+            AssertUtils.isTrue(operator.getVcid().equals(mp.getVcid()),
+                    "operator.vcid:{} not eq post.vcid:{}",
+                    operator.getVcid(),
+                    mp.getVcid());
+            if (mp != null) {
+                operator.setOrganizationId(mp.getOrganizationId());
+            }
+        }
         
         //调用数据持久层对实例进行持久化操作
         this.operatorDao.insert(operator);
@@ -410,18 +443,8 @@ public class OperatorService {
         //updateRowMap.put("username", operator.getUsername());
         updateRowMap.put("organizationId", operator.getOrganizationId());
         updateRowMap.put("mainPostId", operator.getMainPostId());
-        updateRowMap.put("pwdErrCount", operator.getPwdErrCount());
         updateRowMap.put("examinePwd", operator.getExaminePwd());
         updateRowMap.put("name", operator.getName());
-        //禁用、启用逻辑中已经存在
-        //updateRowMap.put("valid", operator.isValid());
-        //updateRowMap.put("invalidDate", operator.getInvalidDate());
-        //锁定、解锁逻辑中已存在
-        //updateRowMap.put("locked", operator.isLocked());
-        //修改密码中存在
-        //updateRowMap.put("historyPwd", operator.getHistoryPwd());
-        //updateRowMap.put("pwdUpdateDate", operator.getPwdUpdateDate());
-        //updateRowMap.put("password", operator.getPassword());
         updateRowMap.put("lastUpdateDate", new Date());
         
         boolean flag = this.operatorDao.update(id, updateRowMap);
@@ -457,8 +480,8 @@ public class OperatorService {
         
         //需要更新的字段
         Date now = new Date();
-        updateRowMap.put("password", newPassword);
-        updateRowMap.put("password", newPassword);
+        String rawPwd = this.operatorPasswordEncoder.encode(newPassword);
+        updateRowMap.put("password", rawPwd);
         updateRowMap.put("pwdUpdateDate", now);
         updateRowMap.put("lastUpdateDate", now);
         
@@ -483,11 +506,16 @@ public class OperatorService {
             String newPassword) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notEmpty(id, "id is empty.");
+        AssertUtils.notEmpty(hisPassword, "hisPassword is empty.");
         AssertUtils.notEmpty(newPassword, "newPassword is empty.");
         
         Operator oper = findById(id);
         if (oper == null) {
             return false;
+        }
+        String rawHisPwd = this.operatorPasswordEncoder.encode(newPassword);
+        if (StringUtils.equalsIgnoreCase(rawHisPwd, oper.getPassword())) {
+            
         }
         
         //生成需要更新字段的hashMap
@@ -496,8 +524,8 @@ public class OperatorService {
         
         //需要更新的字段
         Date now = new Date();
-        updateRowMap.put("password", newPassword);
-        updateRowMap.put("password", newPassword);
+        String rawPwd = this.operatorPasswordEncoder.encode(newPassword);
+        updateRowMap.put("password", rawPwd);
         updateRowMap.put("pwdUpdateDate", now);
         updateRowMap.put("lastUpdateDate", now);
         
@@ -531,9 +559,14 @@ public class OperatorService {
         
         Date now = new Date();
         updateRowMap.put("pwdErrCount", 0);
-        updateRowMap.put("pwdUpdateDate", now);
+        //重置密码后，密码更新时间设置为null，首次登陆检查密码更新时间为空，则跳转到修改密码界面
+        updateRowMap.put("pwdUpdateDate", null);
         updateRowMap.put("historyPwd", oper.getPassword());
-        updateRowMap.put("password", MD5Utils.encode("123456"));
+        
+        String defaultPwd = ConfigContextUtils
+                .getValue(WebdemoConstants.CONFIG_DEFAULT_PASSWORD);
+        String rawPwd = this.operatorPasswordEncoder.encode(defaultPwd);
+        updateRowMap.put("password", rawPwd);
         updateRowMap.put("lastUpdateDate", now);
         
         @SuppressWarnings("unused")
@@ -559,6 +592,7 @@ public class OperatorService {
         
         updateRowMap.put("locked", true);
         updateRowMap.put("lastUpdateDate", new Date());
+        updateRowMap.put("pwdErrCount", 0);//锁定的时候，同事将密码错误次数重置为0
         
         boolean flag = this.operatorDao.update(updateRowMap) > 0;
         return flag;
@@ -583,6 +617,7 @@ public class OperatorService {
         
         updateRowMap.put("locked", false);
         updateRowMap.put("lastUpdateDate", new Date());
+        updateRowMap.put("pwdErrCount", 0);//解锁的时候，同事将密码错误次数重置为0
         
         boolean flag = this.operatorDao.update(updateRowMap) > 0;
         return flag;
@@ -640,4 +675,44 @@ public class OperatorService {
         return flag;
     }
     
+    /**
+     * 更新职位<br/>
+     * <功能详细描述>
+     * @param id
+     * @param newPassword
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean updateMainPostById(String id, String postId) {
+        //验证参数是否合法，必填字段是否填写
+        AssertUtils.notEmpty(id, "id is empty.");
+        AssertUtils.notEmpty(postId, "postId is empty.");
+        
+        Operator oper = findById(id);
+        if (oper == null) {
+            return false;
+        }
+        
+        //生成需要更新字段的hashMap
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", id);
+        
+        //需要更新的字段
+        Date now = new Date();
+        Post post = this.postFacade.findById(postId);
+        AssertUtils.notNull(post, "post is null.postId:{}", postId);
+        
+        updateRowMap.put("mainPostId", post.getId());
+        updateRowMap.put("organizationId", post.getOrganizationId());
+        updateRowMap.put("lastUpdateDate", now);
+        
+        int updateRowCount = this.operatorDao.update(updateRowMap);
+        
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return updateRowCount >= 1;
+    }
 }

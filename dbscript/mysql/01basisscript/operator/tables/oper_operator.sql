@@ -14,7 +14,7 @@ create table OPER_OPERATOR(
 	password varchar(64) not null,
 	historyPwd varchar(64),
 	pwdErrCount integer not null default 0,
-	pwdUpdateDate datetime(6) not null default now(6),
+	pwdUpdateDate datetime(6),
 	examinePwd varchar(64),
 	locked bit not null default 0,
 	modifyAble bit not null default 1,

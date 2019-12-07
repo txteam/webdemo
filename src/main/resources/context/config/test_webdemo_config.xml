@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+	<catalog code="test1" name="测试全局配置项目组1">
+		<catalog name="测试全局配置项子组1">
+			<config modifyAble="true">
+				<name>超时时间</name>
+				<code>test1.testchild1.timeout</code>
+				<value>2000</value>
+				<remark>单位毫秒,小于或等于0，表示不限制超时时间</remark>
+				<validateExpression>超时时间:required;integer[+0];range[0~60000]</validateExpression>
+			</config>
+			<config>
+				<name>服务地址</name>
+				<code>test1.testchild1.url</code>
+				<value>http://localhost:8080/HelloWorldService</value>
+			</config>
+		</catalog>
+		<config modifyAble="true">
+			<name>超时时间</name>
+			<code>test1.timeout</code>
+			<value>2000</value>
+			<remark>单位毫秒,小于或等于0，表示不限制超时时间</remark>
+		</config>
+		<config modifyAble="true">
+			<name>服务地址</name>
+			<code>test1.url</code>
+			<value>http://localhost:8080/HelloWorldService</value>
+		</config>
+	</catalog>
+	<config modifyAble="true">
+		<name>超时时间</name>
+		<code>timeout</code>
+		<value>2000</value>
+		<remark>单位毫秒,小于或等于0，表示不限制超时时间</remark>
+	</config>
+	<config modifyAble="true">
+		<name>服务地址</name>
+		<code>url</code>
+		<value>http://localhost:8080/HelloWorldService</value>
+	</config>
+</configs>

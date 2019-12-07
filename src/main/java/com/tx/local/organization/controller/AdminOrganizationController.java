@@ -53,6 +53,6 @@ public class AdminOrganizationController {
         response.put("types", OrganizationTypeEnum.values());
         response.put("vcid", WebContextUtils.getVcid());
         
-        return "/organization/admin/queryOrganizationList";
+        return "organization/admin/queryOrganizationList";
     }
 }

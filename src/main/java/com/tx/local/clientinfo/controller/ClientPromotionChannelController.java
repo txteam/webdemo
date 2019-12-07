@@ -52,7 +52,7 @@ public class ClientPromotionChannelController {
     @RequestMapping("/toQueryList")
     public String toQueryList(ModelMap response) {
 
-        return "/clientinfo/queryClientPromotionChannelList";
+        return "clientinfo/queryClientPromotionChannelList";
     }
     
     
@@ -70,7 +70,7 @@ public class ClientPromotionChannelController {
     	response.put("clientPromotionChannel", new ClientPromotionChannel());
     	
 
-        return "/clientinfo/addClientPromotionChannel";
+        return "clientinfo/addClientPromotionChannel";
     }
     
     /**
@@ -90,7 +90,7 @@ public class ClientPromotionChannelController {
         response.put("clientPromotionChannel", clientPromotionChannel);
 
         
-        return "/clientinfo/updateClientPromotionChannel";
+        return "clientinfo/updateClientPromotionChannel";
     }
 
     /**

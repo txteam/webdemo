@@ -50,7 +50,7 @@ public class BankInfoController {
      */
     @RequestMapping("/toQueryList")
     public String toQueryBankInfoList(ModelMap response) {
-        return "/basicdata/queryBankInfoList";
+        return "basicdata/queryBankInfoList";
     }
     
     /**
@@ -67,7 +67,7 @@ public class BankInfoController {
         BankInfo bankInfo = new BankInfo();
         response.put("bankInfo", bankInfo);
         
-        return "/basicdata/addBankInfo";
+        return "basicdata/addBankInfo";
     }
     
     /**
@@ -85,7 +85,7 @@ public class BankInfoController {
         BankInfo resBankInfo = this.bankInfoService.findById(bankInfoId);
         response.put("bankInfo", resBankInfo);
         
-        return "/basicdata/updateBankInfo";
+        return "basicdata/updateBankInfo";
     }
     
     /**

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -198,5 +199,10 @@ public class OperatorUserDetailsService
         Organization org = new Organization();
         userDetail.setOrganization(org);
         return userDetail;
+    }
+    
+    public static void main(String[] args) {
+        String rawPwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123321qQ");
+        System.out.println(rawPwd);
     }
 }

@@ -14,6 +14,9 @@
 		parameterType="com.tx.local.operator.model.Operator"
 		resultMap="operatorMap">
 		SELECT 
+				O.password,
+				O.examinePwd,
+				O.historyPwd,
 				O.id,
 				O.pwdErrCount,
 				O.pwdUpdateDate,
@@ -25,10 +28,7 @@
 				O.createDate,
 				O.locked,
 				O.modifyAble,
-				O.examinePwd,
-				O.historyPwd,
 				O.invalidDate,
-				O.password,
 				O.username,
 				O.usernameChangeCount,
 				O.organizationId
@@ -60,10 +60,7 @@
 				O.createDate,
 				O.locked,
 				O.modifyAble,
-				O.examinePwd,
-				O.historyPwd,
 				O.invalidDate,
-				O.password,
 				O.username,
 				O.usernameChangeCount,
 				O.organizationId
@@ -220,6 +217,53 @@
     <insert id="insert" 
 		parameterType="com.tx.local.operator.model.Operator">
 		INSERT INTO OPER_OPERATOR
+		(
+			id,
+			pwdErrCount,
+			pwdUpdateDate,
+			lastUpdateDate,
+			mainPostId,
+			name,
+			vcid,
+			valid,
+			createDate,
+			locked,
+			modifyAble,
+			examinePwd,
+			historyPwd,
+			invalidDate,
+			password,
+			username,
+			usernameChangeCount,
+			organizationId
+		)
+		VALUES
+		(
+			#{id},
+			#{pwdErrCount},
+			#{pwdUpdateDate},
+			#{lastUpdateDate},
+			#{mainPostId},
+			#{name},
+			#{vcid},
+			#{valid},
+			#{createDate},
+			#{locked},
+			#{modifyAble},
+			#{examinePwd},
+			#{historyPwd},
+			#{invalidDate},
+			#{password},
+			#{username},
+			#{usernameChangeCount},
+			#{organizationId}
+		)
+	</insert>
+	
+	<!-- auto generate default insert -->
+    <insert id="insertToHis" 
+		parameterType="com.tx.local.operator.model.Operator">
+		INSERT INTO OPER_OPERATOR_HIS
 		(
 			id,
 			pwdErrCount,

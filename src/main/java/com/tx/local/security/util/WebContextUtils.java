@@ -21,8 +21,11 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.tx.component.auth.model.Auth;
+import com.tx.component.role.model.Role;
 import com.tx.component.security.context.SecurityContext;
 import com.tx.component.security.model.AuthAuthority;
+import com.tx.component.security.model.RoleAuthority;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRoleEnum;
@@ -49,6 +52,50 @@ public class WebContextUtils {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
+    public static Set<String> getCurrentRoleIds() {
+        Set<GrantedAuthority> gas = getCurrentAuthorities();
+        if (CollectionUtils.isEmpty(gas)) {
+            return new HashSet<>();
+        }
+        
+        Set<String> roleIds = gas.stream()
+                .filter(a -> AuthAuthority.class.isInstance(a))
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toSet());
+        return roleIds;
+    }
+    
+    /**
+     * 获取当前用户拥有的权限集合<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return Set<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static Set<Role> getCurrentRoles() {
+        Set<GrantedAuthority> gas = getCurrentAuthorities();
+        if (CollectionUtils.isEmpty(gas)) {
+            return new HashSet<>();
+        }
+        
+        Set<Role> roles = gas.stream()
+                .filter(a -> RoleAuthority.class.isInstance(a))
+                .map(a -> ((RoleAuthority) a).getRole())
+                .collect(Collectors.toSet());
+        return roles;
+    }
+    
+    /**
+     * 获取当前用户拥有的权限集合<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return Set<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
     public static Set<String> getCurrentAuthIds() {
         Set<GrantedAuthority> gas = getCurrentAuthorities();
         if (CollectionUtils.isEmpty(gas)) {
@@ -60,6 +107,28 @@ public class WebContextUtils {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
         return authIds;
+    }
+    
+    /**
+     * 获取当前用户拥有的权限集合<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return Set<String> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static Set<Auth> getCurrentAuths() {
+        Set<GrantedAuthority> gas = getCurrentAuthorities();
+        if (CollectionUtils.isEmpty(gas)) {
+            return new HashSet<>();
+        }
+        
+        Set<Auth> auths = gas.stream()
+                .filter(a -> AuthAuthority.class.isInstance(a))
+                .map(a -> ((AuthAuthority) a).getAuth())
+                .collect(Collectors.toSet());
+        return auths;
     }
     
     /**

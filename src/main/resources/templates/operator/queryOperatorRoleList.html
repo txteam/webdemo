@@ -57,6 +57,12 @@ $(document).ready(function(){
 		iconField : function(){
 			return 'folder_user';
 		},
+		onLoadSuccess : function(node, data) {
+			if(data.length == 0){
+				//$('.easyui-layout').layout('collapse','west');
+				$('.easyui-layout').layout('remove','west');
+			}
+		},
 		textField : 'name',
 		border : false,
 		onClick : function(node){
@@ -447,7 +453,7 @@ function deselect(){
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
-	<div data-options="region:'west',title:'角色分类',split:true,
+	<div id="west" data-options="region:'west',title:'角色分类',split:true,
 		tools : [
 			{ iconCls : 'clear',handler : function() {deselect();} } ,
 			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }

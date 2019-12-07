@@ -8,7 +8,6 @@ package com.tx.local.security.config;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,13 +16,14 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.util.DigestUtils;
 
 import com.tx.local.security.entrypoint.SecurityLoginAuthenticationEntryPoint;
 import com.tx.local.security.filter.ClientAuthenticationProcessingFilter;
 import com.tx.local.security.filter.OperatorAuthenticationProcessingFilter;
 import com.tx.local.security.handler.SecurityAuthenticationFailureHandler;
 import com.tx.local.security.handler.SecurityAuthenticationSuccessHandler;
+import com.tx.local.security.model.ClientPasswordEncoder;
+import com.tx.local.security.model.OperatorPasswordEncoder;
 import com.tx.local.security.provider.ClientAuthenticationProvider;
 import com.tx.local.security.provider.OperatorAuthenticationProvider;
 import com.tx.local.security.service.ClientUserDetailsService;
@@ -42,7 +42,7 @@ import com.tx.local.security.service.OperatorUserDetailsService;
 public class WebSecurityConfigurationImporter {
     
     /**
-     * 密码验证器<br/>
+     * 操作人员密码验证器<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -50,46 +50,24 @@ public class WebSecurityConfigurationImporter {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Bean("md5PasswordEncoder")
-    public PasswordEncoder md5PasswordEncoder() {
-        PasswordEncoder encoder = new PasswordEncoder() {
-            
-            /**
-             * 密码验证
-             * @param rawPassword
-             * @param encodedPassword
-             * @return
-             */
-            @Override
-            public boolean matches(CharSequence rawPassword,
-                    String encodedPassword) {
-                if (rawPassword == null) {
-                    //如果为空
-                    return false;
-                }
-                //全不为空
-                String rawEncodedPassword = DigestUtils
-                        .md5DigestAsHex(rawPassword.toString().getBytes());
-                if (StringUtils.equalsAnyIgnoreCase(rawEncodedPassword,
-                        encodedPassword)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            
-            /**
-             * 密码加密<br/>
-             * @param rawPassword
-             * @return
-             */
-            @Override
-            public String encode(CharSequence rawPassword) {
-                String encodePassword = DigestUtils
-                        .md5DigestAsHex(rawPassword.toString().getBytes());
-                return encodePassword;
-            }
-        };
+    @Bean("operatorPasswordEncoder")
+    public PasswordEncoder operatorPasswordEncoder() {
+        PasswordEncoder encoder = new OperatorPasswordEncoder();
+        return encoder;
+    }
+    
+    /**
+     * 操作人员密码验证器<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return PasswordEncoder [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("clientPasswordEncoder")
+    public PasswordEncoder clientPasswordEncoder() {
+        PasswordEncoder encoder = new ClientPasswordEncoder();
         return encoder;
     }
     
@@ -126,7 +104,7 @@ public class WebSecurityConfigurationImporter {
         // 禁止隐藏用户未找到异常
         provider.setHideUserNotFoundExceptions(false);
         // 使用BCrypt进行密码的hash
-        provider.setPasswordEncoder(md5PasswordEncoder());
+        provider.setPasswordEncoder(operatorPasswordEncoder());
         return provider;
     }
     
@@ -164,7 +142,7 @@ public class WebSecurityConfigurationImporter {
         // 禁止隐藏用户未找到异常
         provider.setHideUserNotFoundExceptions(false);
         // 使用BCrypt进行密码的hash
-        provider.setPasswordEncoder(md5PasswordEncoder());
+        provider.setPasswordEncoder(clientPasswordEncoder());
         return provider;
     }
     
