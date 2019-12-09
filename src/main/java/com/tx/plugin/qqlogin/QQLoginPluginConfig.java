@@ -6,7 +6,7 @@
  */
 package com.tx.plugin.qqlogin;
 
-import com.tx.component.configuration.annotation.ConfigEntity;
+import com.tx.component.configuration.annotation.ConfigCatalog;
 import com.tx.component.plugin.loginplugin.LoginPluginConfig;
 
 /**
@@ -18,7 +18,7 @@ import com.tx.component.plugin.loginplugin.LoginPluginConfig;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@ConfigEntity(code = "plugin.login.qq", name = "插件配置")
+@ConfigCatalog(code = "plugin.login.qq", name = "插件配置")
 public class QQLoginPluginConfig extends LoginPluginConfig {
     
     private String methodName;

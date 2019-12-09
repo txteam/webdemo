@@ -42,12 +42,12 @@
 
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-var authTree = null;
+var roleTree = null;
 $(document).ready(function() {
 	parent.DialogUtils.progress('close');
 	
-	authTree = $("#authTree").tree({
-		url : /*[[@{/operator/auth/queryOperator2AuthList(authTypeId=${authTypeId},operatorId=${operatorId})}]]*/'',
+	roleTree = $("#roleTree").tree({
+		url : /*[[@{/operator/role/queryOperator2RoleList(roleTypeId=${roleTypeId},operatorId=${operatorId})}]]*/'',
 		idField : 'id',
 		parentField : 'parentId',
 		textField : 'name',
@@ -66,20 +66,20 @@ $(document).ready(function() {
 		DialogUtils.progress({
 	        text : '数据提交中，请等待....'
 		});
-		var $treeEL = $("#authTree");
+		var $treeEL = $("#roleTree");
 		var checked = $treeEL.tree('getChecked',['checked','indeterminate']);
-		var authIds = [];
+		var roleIds = [];
 		if(checked.length > 0){
 			$.each(checked,function(index,item){
-				authIds[index] = item.id;
+				roleIds[index] = item.id;
 			});
 		}
 		//提交数据
-		$.post(/*[[@{/operator/auth/saveOperator2Auth}]]*/'',
+		$.post(/*[[@{/operator/role/saveOperator2Role}]]*/'',
 			{
-				authTypeId: /*[[${authTypeId}]]*/'',
+				roleTypeId: /*[[${roleTypeId}]]*/'',
 		    	operatorId: /*[[${operatorId}]]*/'',
-		    	authId: authIds
+		    	roleId: roleIds
 		    },
 		    function(data) {
 		    	DialogUtils.progress('close');
@@ -119,10 +119,10 @@ function undo() {
 	        <a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a>
 	    </div>
     
-		<input id="authTypeId" type="hidden" name="authTypeId" th:value="${authTypeId}"/>
+		<input id="roleTypeId" type="hidden" name="roleTypeId" th:value="${roleTypeId}"/>
 		<input id="operatorId" type="hidden" name="operatorId" th:value="${operatorId}"/>
 		
-		<ul id="authTree" style="margin-bottom: 40px;padding-top:2px;padding-left: 5px"></ul>
+		<ul id="roleTree" style="margin-bottom: 40px;padding-top:2px;padding-left: 5px"></ul>
 	</div>
 	
 	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">

@@ -93,6 +93,7 @@ public class OperatorUserDetailsService
         Operator operator = this.operatorService.findByUsername(username);
         //用户权限
         MultiValueMap<String, String> refMap = new LinkedMultiValueMap<>();
+        //人员权限
         refMap.add(AuthConstants.AUTHREFTYPE_OPERATOR, operator.getId());
         //组织权限
         refMap.add(AuthConstants.AUTHREFTYPE_ORGANIZATION,
@@ -105,7 +106,6 @@ public class OperatorUserDetailsService
         
         //角色权限
         boolean isSuperAdmin = false;
-        boolean isSystemAdmin = false;
         List<RoleRef> roleRefList = this.roleRefService.queryListByRef(true,
                 RoleConstants.ROLEREFTYPE_OPERATOR,
                 operator.getId(),
@@ -116,12 +116,6 @@ public class OperatorUserDetailsService
                 .collect(Collectors.toSet())
                 .stream()
                 .forEach(roleIdTemp -> {
-                    //                    if(OperatorRoleEnum.SUPER_ADMIN.getId().equals(roleIdTemp)){
-                    //                        isSuperAdmin = true;
-                    //                    }
-                    //                    if(OperatorRoleEnum.SYSTEM_ADMIN.getId().equals(roleIdTemp)){
-                    //                        isSystemAdmin = true;
-                    //                    }
                     Role role = roleRegistry.findById(roleIdTemp);
                     if (role == null) {
                         return;
@@ -129,10 +123,15 @@ public class OperatorUserDetailsService
                     roles.add(role);
                     refMap.add(AuthConstants.AUTHREFTYPE_ROLE, roleIdTemp);
                 });
+        for (Role r : roles) {
+            if (OperatorRoleEnum.SUPER_ADMIN.getId().equals(r.getId())) {
+                isSuperAdmin = true;
+            }
+        }
         
         //查询用户的权限：根据用户的所属组织，职位，角色查询
         List<Auth> auths = new ArrayList<>();
-        if (isSuperAdmin || isSystemAdmin) {
+        if (isSuperAdmin) {
             List<AuthRef> authRefList = this.authRefService
                     .queryListByRefMap(true, refMap);
             for (AuthRef arTemp : authRefList) {
@@ -202,7 +201,8 @@ public class OperatorUserDetailsService
     }
     
     public static void main(String[] args) {
-        String rawPwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123321qQ");
+        String rawPwd = PasswordEncoderFactories
+                .createDelegatingPasswordEncoder().encode("123321qQ");
         System.out.println(rawPwd);
     }
 }

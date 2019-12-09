@@ -7,12 +7,14 @@
 package com.tx.local.operator.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -26,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.tx.component.role.context.RoleManager;
+import com.tx.component.role.model.Role;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Filter;
@@ -33,6 +37,7 @@ import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.local.operator.dao.OperatorRoleDao;
 import com.tx.local.operator.model.OperatorRole;
+import com.tx.local.security.model.RoleTypeEnum;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
 
 /**
@@ -45,7 +50,7 @@ import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
  * @since [产品/模块版本]
  */
 @Component("operatorRoleService")
-public class OperatorRoleService implements InitializingBean {
+public class OperatorRoleService implements InitializingBean, RoleManager {
     
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(OperatorRoleService.class);
@@ -71,6 +76,69 @@ public class OperatorRoleService implements InitializingBean {
                 //init();
             }
         });
+    }
+    
+    /**
+     * @param roleId
+     * @return
+     */
+    @Override
+    public Role findRoleById(String roleId) {
+        Role role = findById(roleId);
+        return role;
+    }
+    
+    /**
+     * @param roleTypeIds
+     * @return
+     */
+    @Override
+    public List<Role> queryRoleList(String... roleTypeIds) {
+        List<String> roleTypeList = Arrays.asList(roleTypeIds);
+        if (!roleTypeList.contains(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId())) {
+            return new ArrayList<>();
+        }
+        List<Role> resList = queryList(true, (Map<String, Object>) null)
+                .stream().collect(Collectors.toList());
+        return resList;
+    }
+    
+    /**
+     * @param parentId
+     * @param roleTypeIds
+     * @return
+     */
+    @Override
+    public List<Role> queryChildrenRoleByParentId(String parentId,
+            String... roleTypeIds) {
+        List<String> roleTypeList = Arrays.asList(roleTypeIds);
+        if (!roleTypeList.contains(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId())) {
+            return new ArrayList<>();
+        }
+        List<Role> resList = queryChildrenByParentId(parentId,
+                true,
+                (Map<String, Object>) null).stream()
+                        .collect(Collectors.toList());
+        return resList;
+    }
+    
+    /**
+     * @param parentId
+     * @param roleTypeIds
+     * @return
+     */
+    @Override
+    public List<Role> queryDescendantsRoleByParentId(String parentId,
+            String... roleTypeIds) {
+        List<String> roleTypeList = Arrays.asList(roleTypeIds);
+        if (!roleTypeList.contains(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId())) {
+            return new ArrayList<>();
+        }
+        List<Role> resList = queryDescendantsByParentId(parentId,
+                true,
+                (Map<String, Object>) null).stream()
+                        .collect(Collectors.toList());
+        return resList;
     }
     
     /**
