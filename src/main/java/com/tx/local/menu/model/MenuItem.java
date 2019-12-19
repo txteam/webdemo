@@ -40,6 +40,7 @@ public class MenuItem implements Menu, Serializable {
     private String parentId;
     
     /** 父菜单类型 */
+    @JsonIgnore
     private MenuCatalogItem catalog;
     
     /** 菜单名 */

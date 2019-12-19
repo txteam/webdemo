@@ -68,7 +68,7 @@ $(document).ready(function() {
 		parentField : 'parentId',
 		treeField : 'name',
 		iconField : function(item){
-			if(item.type == '0'){
+			if(!item.leaf){
 				return 'folder_wrench';
 			}else{
 				return 'cog';

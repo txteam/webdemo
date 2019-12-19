@@ -17,31 +17,65 @@ package com.tx.local.basicdata.model;
  */
 public enum IDCardTypeEnum {
     
-    身份证,
+    SFZ("SFZ", "身份证"),
     
-    香港身份证,
+    XGSFZ("XGSFZ", "香港身份证"),
     
-    临时身份证,
+    LSSFZ("LSSFZ", "临时身份证"),
     
-    护照,
+    HZ("HZ", "护照"),
     
-    户口簿,
+    HKB("HKB", "户口簿"),
     
-    军人身份证,
+    SBZ("SBZ", "士兵证"),
     
-    武装警察身份证,
+    JINGGZ("JGZ", "警官证"),
     
-    港澳台居民往来内地通行证,
+    WZGBZ("WZGBZ", "文职干部证"),
     
-    外交人员身份证,
+    WZRYZ("WZRYZ", "文职人员证"),
     
-    外国人居留许可证,
+    YWBZ("YWBZ", "义务兵证"),
     
-    边民出入境通行证,
+    JGZ("JUNGZ", "军官证"),
     
-    对私其它,
-        
-    驻华机构登记证,
-  
-    统一社会信用代码;
+    SGZ("SGZ", "士官证"),
+    
+    //    港澳台居民往来内地通行证,
+    //    
+    //    外交人员身份证,
+    //    
+    //    外国人居留许可证,
+    //    
+    //    边民出入境通行证,
+    //    
+    //    对私其它,
+    //        
+    //    驻华机构登记证,
+    
+    TYSHXYDM("TYSHXYDM", "统一社会信用代码");
+    
+    private final String code;
+    
+    private final String name;
+    
+    /** <默认构造函数> */
+    private IDCardTypeEnum(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+    
+    /**
+     * @return 返回 code
+     */
+    public String getCode() {
+        return code;
+    }
+    
+    /**
+     * @return 返回 name
+     */
+    public String getName() {
+        return name;
+    }
 }

@@ -25,7 +25,7 @@ import com.tx.local.security.handler.SecurityAuthenticationSuccessHandler;
 import com.tx.local.security.model.ClientPasswordEncoder;
 import com.tx.local.security.model.OperatorPasswordEncoder;
 import com.tx.local.security.provider.ClientAuthenticationProvider;
-import com.tx.local.security.provider.OperatorAuthenticationProvider;
+import com.tx.local.security.provider.OperatorLoginFormAuthenticationProvider;
 import com.tx.local.security.service.ClientUserDetailsService;
 import com.tx.local.security.service.OperatorUserDetailsService;
 
@@ -96,9 +96,9 @@ public class WebSecurityConfigurationImporter {
      * @see [类、类#方法、类#成员]
      */
     @Bean("operatorAuthenticationProvider")
-    public OperatorAuthenticationProvider operatorAuthenticationProvider(
+    public OperatorLoginFormAuthenticationProvider operatorAuthenticationProvider(
             OperatorUserDetailsService operatorUserDetailsService) {
-        OperatorAuthenticationProvider provider = new OperatorAuthenticationProvider();
+        OperatorLoginFormAuthenticationProvider provider = new OperatorLoginFormAuthenticationProvider();
         // 设置userDetailsService
         provider.setUserDetailsService(operatorUserDetailsService);
         // 禁止隐藏用户未找到异常

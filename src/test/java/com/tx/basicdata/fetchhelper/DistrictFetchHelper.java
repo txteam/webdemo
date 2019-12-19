@@ -23,13 +23,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.tx.basicdata.fetchhelper.HttpClientUtils.HttpClient;
 import com.tx.core.datasource.DataSourceFinder;
 import com.tx.core.datasource.finder.SimpleDataSourceFinder;
 import com.tx.core.mybatis.support.MyBatisDaoSupport;
 import com.tx.core.mybatis.support.MyBatisDaoSupportHelper;
 import com.tx.core.support.jsoup.JsoupUtils;
-import com.tx.core.util.HttpClientUtils;
-import com.tx.core.util.HttpClientUtils.HttpClient;
 import com.tx.core.util.PinyinUtils;
 import com.tx.core.util.dialect.DataSourceTypeEnum;
 import com.tx.local.basicdata.dao.DistrictDao;

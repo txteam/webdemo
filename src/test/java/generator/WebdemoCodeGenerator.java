@@ -5,10 +5,12 @@ package generator;
 
 import java.io.IOException;
 
+import com.tx.component.plugin.model.PluginInstance;
 import com.tx.core.generator2.CodeGenerator;
 import com.tx.core.generator2.model.ViewTypeEnum;
-import com.tx.local.operator.model.Operator;
-import com.tx.local.operator.model.OperatorRole;
+import com.tx.local.operator.model.EmployeeInfo;
+import com.tx.local.operator.model.OperSecurityAccount;
+import com.tx.local.operator.model.OperSocialAccount;
 
 /**
  * 基础数据生成类<br/>
@@ -22,8 +24,8 @@ public class WebdemoCodeGenerator {
     
     public static void main(String[] args) throws IOException {
         boolean toProjectPath = true;//是否生成覆盖到项目代码中，如果设置为false则会写入D盘的目录中
-        Class<?> entityType = OperatorRole.class;
-        ViewTypeEnum viewType = ViewTypeEnum.TREELIST;
+        Class<?> entityType = EmployeeInfo.class;
+        ViewTypeEnum viewType = ViewTypeEnum.PAGEDLIST;
         boolean needConfirmOverwriteFile = true;//覆盖文件前是否需要提示
         
         //基础数据逻辑代码生成存放目录com.tx.component.basicdata.generator.

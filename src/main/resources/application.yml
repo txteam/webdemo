@@ -150,15 +150,30 @@ spring:
     date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZ
     serialization:
       write-dates-as-timestamps: true
+  # mvc:
+  #  static-path-pattern: 
+  # resources:
+  #  static-locations:
+  #  - 
   thymeleaf:
+    #是否为Web框架启用Thymeleaf视图解析
+    enabled: true
+    #在SpringEL表达式中启用SpringEL编译器
+    enable-spring-el-compiler: true
     #开发时关闭缓存,不然没法看到实时页面
     cache: ${thymeleaf.cache}
+    #是否在呈现模板之前检查模板是否存在
+    check-template: true
+    #检查模板位置是否正确(默认值:true)
+    # check-template-location: true
     #prefix需要以/结束，DefaultErrorViewResolver中的实现为"error/xxx"
     prefix: classpath:/templates/
     suffix: .html
     #mode: HTML5
     #encoding: UTF-8
     #content-type: text/html
+    #Thymeleaf模板解析器在解析器链中的顺序。默认情况下，它排第一位。顺序从1开始，只有在定义了额外的TemplateResolver Bean时才需要设置这个属性
+    #template-resolver-order: 1
   freemarker:
     allow-request-override: false
     allow-session-override: false

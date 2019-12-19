@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,8 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.core.paged.model.PagedList;
+import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.service.OperatorService;
+import com.tx.local.organization.facade.OrganizationFacade;
+import com.tx.local.organization.facade.PostFacade;
+import com.tx.local.organization.model.Organization;
+import com.tx.local.organization.model.Post;
 import com.tx.local.security.util.WebContextUtils;
 
 /**
@@ -36,6 +42,12 @@ import com.tx.local.security.util.WebContextUtils;
 @Controller
 @RequestMapping("/operator")
 public class OperatorController {
+    
+    @Resource
+    private OrganizationFacade organizationFacade;
+    
+    @Resource
+    private PostFacade postFacade;
     
     //操作人员业务层
     @Resource(name = "operatorService")
@@ -52,6 +64,17 @@ public class OperatorController {
      */
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
+        String vcid = WebContextUtils.getVcid();
+        response.put("organizations",
+                this.organizationFacade.queryList(true,
+                        QuerierBuilder.newInstance()
+                                .searchProperty("vcid", vcid)
+                                .querier()));
+        response.put("posts",
+                this.postFacade.queryList(true,
+                        QuerierBuilder.newInstance()
+                                .searchProperty("vcid", vcid)
+                                .querier()));
         
         return "operator/queryOperatorPagedList";
     }
@@ -67,10 +90,26 @@ public class OperatorController {
      */
     @RequestMapping("/toAdd")
     public String toAdd(
-            @RequestParam(value = "vcid", required = false) String vcid,
             @RequestParam(value = "organizationId", required = false) String organizationId,
+            @RequestParam(value = "postId", required = false) String postId,
             ModelMap response) {
-        response.put("operator", new Operator());
+        String vcid = WebContextUtils.getVcid();
+        Operator operator = new Operator();
+        if (!StringUtils.isEmpty(organizationId)) {
+            Organization org = this.organizationFacade.findById(organizationId);
+            if (org != null && StringUtils.equals(vcid, org.getVcid())) {
+                response.put("organization", org);
+                operator.setOrganizationId(organizationId);
+            }
+        }
+        if (!StringUtils.isEmpty(postId)) {
+            Post post = this.postFacade.findById(postId);
+            if (post != null && StringUtils.equals(vcid, post.getVcid())) {
+                response.put("post", post);
+                operator.setMainPostId(postId);
+            }
+        }
+        response.put("operator", operator);
         
         return "operator/addOperator";
     }
@@ -86,9 +125,23 @@ public class OperatorController {
      */
     @RequestMapping("/toUpdate")
     public String toUpdate(@RequestParam("id") String id, ModelMap response) {
+        String vcid = WebContextUtils.getVcid();
         Operator operator = this.operatorService.findById(id);
         response.put("operator", operator);
-        
+        if (!StringUtils.isEmpty(operator.getOrganizationId())) {
+            Organization org = this.organizationFacade
+                    .findById(operator.getOrganizationId());
+            if (org != null && StringUtils.equals(vcid, org.getVcid())) {
+                response.put("organization", org);
+            }
+        }
+        if (!StringUtils.isEmpty(operator.getMainPostId())) {
+            Post post = this.postFacade.findById(operator.getMainPostId());
+            if (post != null && StringUtils.equals(vcid, post.getVcid())) {
+                response.put("post", post);
+                operator.setMainPostId(operator.getMainPostId());
+            }
+        }
         return "operator/updateOperator";
     }
     
@@ -107,7 +160,7 @@ public class OperatorController {
         Operator operator = this.operatorService.findById(id);
         response.put("operator", operator);
         
-        return "operator/configPost";
+        return "operator/configOperatorPost";
     }
     
     /**
@@ -160,7 +213,14 @@ public class OperatorController {
         String vcid = WebContextUtils.getVcid();
         params.put("vcid", vcid);
         String operatorId = WebContextUtils.getOperatorId();
-        params.put("currentOperatorId", operatorId);
+        //params.put("excludeId", operatorId);
+        params.put("valid", valid);
+        String locked = request.getFirst("locked");
+        params.put("locked",
+                StringUtils.isEmpty(locked) ? null
+                        : BooleanUtils.toBoolean(locked));
+        params.put("organizationId", request.getFirst("organizationId"));
+        params.put("mainPostId", request.getFirst("mainPostId"));
         
         PagedList<Operator> resPagedList = this.operatorService
                 .queryPagedList(valid, params, pageIndex, pageSize);

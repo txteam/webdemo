@@ -55,7 +55,7 @@ $(document).ready(function() {
 	var  $disableALink = $("#disableALink");
 	
 	treeview = $('#treeview').tree({
-		url : /*[[@{/district/queryList?maxLevel=1}]]*/_contextPath + 'district/queryList?maxLevel=2',
+		url : /*[[@{/district/queryList?maxLevel=1}]]*/'',
 		idField : 'id',
 		parentField : 'parentId',
 		iconField : function(){
@@ -70,7 +70,7 @@ $(document).ready(function() {
 		}
 	});
 	treegrid = $('#treegrid').treegrid({
-		url : /*[[@{/district/queryList?maxLevel=2}]]*/_contextPath + 'district/queryList?maxLevel=3',
+		url : /*[[@{/district/queryList?maxLevel=3}]]*/'',
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',

@@ -70,7 +70,7 @@ public class ClientInfo implements Client, Serializable {
     private String username;
     
     /** 证件类型 */
-    private IDCardTypeEnum idCardType = IDCardTypeEnum.身份证;
+    private IDCardTypeEnum idCardType;
     
     /** 身份证号码 */
     private String idCardNumber;

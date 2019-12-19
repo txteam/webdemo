@@ -72,23 +72,6 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
         boolean flag = this.employeeInfoService.deleteById(id);
         return flag;
     }
-	
-	/**
-     * 根据code删除员工信息<br/> 
-     * <功能详细描述>
-     * @param code
-     * @return [参数说明]
-     * 
-     * @return boolean [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @Override
-    public boolean deleteByCode(
-    		@PathVariable(value = "code",required=true) String code){
-        boolean flag = this.employeeInfoService.deleteByCode(code);
-        return flag;    
-    }
     
     /**
      * 更新员工信息<br/>
@@ -121,23 +104,6 @@ public class EmployeeInfoAPIController implements EmployeeInfoFacade {
     public EmployeeInfo findById(
             @PathVariable(value = "id", required = true) String id) {
         EmployeeInfo res = this.employeeInfoService.findById(id);
-        
-        return res;
-    }
-
-    /**
-     * 根据编码查询员工信息<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return EmployeeInfo [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @Override
-    public EmployeeInfo findByCode(
-            @PathVariable(value = "code", required = true) String code) {
-        EmployeeInfo res = this.employeeInfoService.findByCode(code);
         
         return res;
     }

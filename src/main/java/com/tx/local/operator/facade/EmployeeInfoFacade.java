@@ -53,25 +53,10 @@ public interface EmployeeInfoFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据主键删除员工信息")
+    @ApiOperation(value = "根据ID删除员工信息")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
     public boolean deleteById(
     		@PathVariable(value = "id",required=true) String id);
-	
-	/**
-     * 根据code删除员工信息<br/> 
-     * <功能详细描述>
-     * @param code
-     * @return [参数说明]
-     * 
-     * @return boolean [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ApiOperation(value = "根据编码删除员工信息")
-    @RequestMapping(value = "/code/{code}", method = RequestMethod.DELETE) 
-    public boolean deleteByCode(
-    		@PathVariable(value = "code",required=true) String code);
 
     /**
      * 更新员工信息<br/>
@@ -102,19 +87,6 @@ public interface EmployeeInfoFacade {
     public EmployeeInfo findById(
             @PathVariable(value = "id", required = true) String id);
     
-    /**
-     * 根据编码查询员工信息<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return EmployeeInfo [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ApiOperation(value = "根据编码查询员工信息")
-    @RequestMapping(value = "/code/{code}", method = RequestMethod.GET)
-    public EmployeeInfo findByCode(
-            @PathVariable(value = "code", required = true) String code);
 
     /**
      * 查询员工信息实例列表<br/>

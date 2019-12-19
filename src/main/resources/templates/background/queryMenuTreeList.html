@@ -109,7 +109,7 @@ $(document).ready(function() {
 	treegrid = $('#treegrid').treegrid({
 		url : _contextPath + 'menu/queryList',
 		queryParams: {
-			//catalog: 'operator_workbench_catalog'
+			catalog: 'operator_workbench_catalog'
 		},
 		idField : 'id',
 		parentField : 'parentId',
@@ -117,10 +117,10 @@ $(document).ready(function() {
 		iconField : function(item){
 			if(item['icon']){
 				return item['icon'];
-			}else if($.ObjectUtils.isEmpty(item['children'])){
-				return 'database';
+			}else if(item['children'] && item['children'].length > 0){
+				return 'folder_wrench';
 			}else{
-				return 'database_gear';
+				return 'database';
 			}
 		},
 		fit : true,
@@ -203,7 +203,6 @@ function redo() {
 		treegrid.treegrid('expandAll');
 	}
 }
-
 function undo() {
 	var node = treegrid.treegrid('getSelected');
 	if (node) {

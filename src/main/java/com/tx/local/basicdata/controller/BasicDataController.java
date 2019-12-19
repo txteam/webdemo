@@ -133,7 +133,7 @@ public class BasicDataController implements InitializingBean,
      * @return String [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
-    */
+     */
     @RequestMapping("/toQuery")
     public String toQuery(
             @RequestParam(value = "type", required = false) String type,
@@ -561,15 +561,15 @@ public class BasicDataController implements InitializingBean,
     }
     
     /**
-      * 获取页面名称<br/>
-      * <功能详细描述>
-      * @param pageType
-      * @param basicDataTypeCode
-      * @return [参数说明]
-      *
-      * @return String [返回类型说明]
-      * @exception throws [异常类型] [异常说明]
-      * @see [类、类#方法、类#成员]
+     * 获取页面名称<br/>
+     * <功能详细描述>
+     * @param pageType
+     * @param basicDataTypeCode
+     * @return [参数说明]
+     *
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
      */
     private String getPageName(BasicDataEntityInfo entityInfo,
             PageTypeEnum pageType) {
@@ -618,22 +618,22 @@ public class BasicDataController implements InitializingBean,
      * @see [类、类#方法、类#成员]
      */
     private boolean existPage(String page) {
-        //        View view = null;
-        //        try {
-        //            view = this.viewResolverComposite.resolveViewName(page, null);
-        //        } catch (Exception e) {
-        //            view = null;
-        //        }
-        //        if (view == null) {
-        //            return false;
-        //        } else {
-        //            return true;
-        //        }
-        StringBuilder jspPageSB = new StringBuilder("/templates");
-        jspPageSB.append(page).append(".html");
-        org.springframework.core.io.Resource jspPageResource = resourceLoader
-                .getResource(jspPageSB.toString());
-        if (jspPageResource.exists()) {
+        //View view = null;
+        //try {
+        //    view = this.viewResolverComposite.resolveViewName(page, null);
+        //} catch (Exception e) {
+        //    view = null;
+        //}
+        //if (view == null) {
+        //    return false;
+        //} else {
+        //    return true;
+        //}
+        StringBuilder pageSB = new StringBuilder("classpath:templates/");
+        pageSB.append(page).append(".html");
+        org.springframework.core.io.Resource pageResource = resourceLoader
+                .getResource(pageSB.toString());
+        if (pageResource.exists()) {
             return true;
         } else {
             return false;

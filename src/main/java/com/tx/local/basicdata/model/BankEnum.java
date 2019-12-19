@@ -156,7 +156,7 @@ public enum BankEnum implements BasicDataEnum {
     BHRCB("BHRCB", "天津滨海农村商业银行");
     
     /** 关键字 */
-    private final String key;
+    private final String code;
     
     /** 银行名 */
     private final String name;
@@ -171,25 +171,25 @@ public enum BankEnum implements BasicDataEnum {
     private String institutionLoginUrl = "";
     
     /** <默认构造函数> */
-    private BankEnum(String key, String name) {
-        this.key = key;
+    private BankEnum(String code, String name) {
+        this.code = code;
         this.name = name;
         
         this.aliases = aliases(name, null);
     }
     
     /** <默认构造函数> */
-    private BankEnum(String key, String name, String[] aliases) {
-        this.key = key;
+    private BankEnum(String code, String name, String[] aliases) {
+        this.code = code;
         this.name = name;
         
         this.aliases = aliases(name, aliases);
     }
     
     /** <默认构造函数> */
-    private BankEnum(String key, String name, String personalLoginUrl,
+    private BankEnum(String code, String name, String personalLoginUrl,
             String institutionLoginUrl) {
-        this.key = key;
+        this.code = code;
         this.name = name;
         this.personalLoginUrl = personalLoginUrl;
         this.institutionLoginUrl = institutionLoginUrl;
@@ -198,9 +198,9 @@ public enum BankEnum implements BasicDataEnum {
     }
     
     /** <默认构造函数> */
-    private BankEnum(String key, String name, String personalLoginUrl,
+    private BankEnum(String code, String name, String personalLoginUrl,
             String institutionLoginUrl, String[] aliases) {
-        this.key = key;
+        this.code = code;
         this.name = name;
         this.personalLoginUrl = personalLoginUrl;
         this.institutionLoginUrl = institutionLoginUrl;
@@ -238,10 +238,10 @@ public enum BankEnum implements BasicDataEnum {
     }
     
     /**
-     * @return 返回 key
+     * @return 返回 code
      */
-    public String getKey() {
-        return key;
+    public String getCode() {
+        return code;
     }
     
     /**
@@ -322,17 +322,22 @@ public enum BankEnum implements BasicDataEnum {
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder();
         for (BankEnum bank : BankEnum.values()) {
-            System.out.println(MessageFormatter.arrayFormat("update cl_baseClientInfo set bank='{}',bankCardType='{}',bankCardName='{}' where bankCardName='{}' or bankCardName='{}';",
+            System.out.println(MessageFormatter.arrayFormat(
+                    "update cl_baseClientInfo set bank='{}',bankCardType='{}',bankCardName='{}' where bankCardName='{}' or bankCardName='{}';",
                     new Object[] { bank.toString(), "借记卡", bank.getName(),
-                            bank.getName(), bank.getKey() })
+                            bank.getName(), bank.getCode() })
                     .getMessage());
             
-            sb.append("'").append(bank.getKey()).append("',");
+            sb.append("'").append(bank.getCode()).append("',");
             sb.append("'").append(bank.getName()).append("',");
         }
         String resStr = sb.substring(0, sb.length() - 1);
-        System.out.println(MessageFormatter.arrayFormat("update cl_baseClientInfo set bank=null,bankCardType='{}' where bankCardName not in ({});",
-                new Object[] { "借记卡", resStr })
-                .getMessage());
+        System.out
+                .println(
+                        MessageFormatter
+                                .arrayFormat(
+                                        "update cl_baseClientInfo set bank=null,bankCardType='{}' where bankCardName not in ({});",
+                                        new Object[] { "借记卡", resStr })
+                                .getMessage());
     }
 }

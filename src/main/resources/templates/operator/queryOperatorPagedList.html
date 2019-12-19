@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 	<title>查询操作人员分页列表[queryOperatorPagedList]</title>
 	<meta charset="utf-8"/>
@@ -72,11 +73,18 @@ $(document).ready(function(){
 		},
 		textField : 'name',
 		border : false,
-		onClick : function(node){
-			//$("#organizationId").val(node.id);
-			//$('#datagrid').datagrid('load',$('#queryForm').serializeObject());
+		onClick : function(item){
+			if('organization' == item.type){
+				$("#organizationId").val(item['object'].organizationId);
+				queryFun();
+			}else{
+				$("#mainPostId").val(item['object'].postId);
+				$("#organizationId").val(item['object'].organizationId);
+				queryFun();
+			}
 		}
 	});
+	
 
 	var orgMap = {},postMap = {},mapLoaded=false;
 	grid = $('#grid').datagrid({
@@ -88,7 +96,7 @@ $(document).ready(function(){
 		pagination : true,
 		pageSize : 10,
 		pageList : [10,20,30,40,50],
-		onBeforeLoad:function(){
+		onBeforeLoad:function(param){
 			if(!mapLoaded){
 				$.ajax({
 				 	async: false,
@@ -114,6 +122,8 @@ $(document).ready(function(){
 				});
 				mapLoaded = true;
 			}
+			//默认的参数处理
+			$.fn.datagrid.defaults.onBeforeLoad.call(this,param);
 		},
 		loadFilter: function(data){
 			var res = {total:0,rows:[]};
@@ -292,6 +302,24 @@ $(document).ready(function(){
 		}
 	});
 });
+function deselect(){
+	var selectedNode = orgPostTree.tree('getSelected');
+	if(selectedNode){
+		orgPostTree.find(".tree-node-selected").removeClass("tree-node-selected");
+	}
+	$("#mainPostId").val('');
+	$("#organizationId").val('');
+	queryFun();
+}
+function refresh(){
+	var selectedNode = orgPostTree.tree('getSelected');
+	if(selectedNode){
+		orgPostTree.find(".tree-node-selected").removeClass("tree-node-selected");
+	}
+	$("#mainPostId").val('');
+	$("#organizationId").val('');
+	queryFun();
+}
 /*
  * 查询
  */
@@ -313,7 +341,7 @@ function addFun() {
 		"addOperator",
 		"新增" + entityName,
 		$.formatString(addUrl),
-		500,516,
+		650,160,
 		function(){
 			queryFun();
 		},{maximizable : true}
@@ -648,7 +676,7 @@ function configOperatorRole(id,name){
 	<div data-options="region:'west',title:'组织结构',split:true,
 		tools : [
 			{ iconCls : 'clear',handler : function() {deselect();} } ,
-			{ iconCls : 'database_refresh',handler : function() {refreshTree();} }
+			{ iconCls : 'database_refresh',handler : function() {refresh();} }
 		]"
 		style="width:230px;">
 		<ul id="orgPostTree"></ul>
@@ -659,38 +687,50 @@ function configOperatorRole(id,name){
 			<div data-options="region:'north',title:'查询条件',border:false" 
 				style="height: 130px; overflow: hidden;">
 				<form method="post" id="queryForm" name="queryForm" class="form">
-				<!-- query condition -->
-				<input type="hidden" id="organizationId" name="organizationId" value=""/>
 				<div>
 					<table>
 						<tbody>
 						<tr>
 							<th class="narrow">登录名:</th>
-							<td><input name="loginName" class="text" type="text" value=''/></td>
+							<td><input name="username" class="text" type="text" value=''/></td>
 							<th class="narrow">姓名:</th>
-							<td><input name="userName" class="text" type="text" value=''/></td>
+							<td><input name="name" class="text" type="text" value=''/></td>
+							<th class="narrow">是否锁定:</th>
+							<td>
+								<select name="locked">
+									<option value="">--- 不限 ---</option>
+									<option value="true">--- 是 ---</option>
+									<option value="false">--- 否 ---</option>
+								</select>
+							</td>
 						</tr>
 						<tr>
-							<th class="narrow">状态:</th>
+							<th class="narrow">部门:</th>
 							<td>
-								<select name="state" class="select">
-									<optgroup label=""> 
-										<option value="">--- 不限 ---</option>
-										<option value="正常">--- 正常 ---</option>
-										<option value="锁定">--- 锁定 ---</option>
-										<option value="停用">--- 禁用 ---</option>
-									</optgroup>
+								<select name="organizationId" id="organizationId">
+									<option value="">--- 不限 ---</option>
+									<option th:each="org:${organizations}" th:value="${org.id}" th:text="${org.name}"></option>
 								</select>
 							</td>
 							<th class="narrow">职位</th>
 							<td>
-								<input id="postName" name="postName" class="text" type="text" value='' readonly="readonly">
-								<input id="postId" name="postId" class="text" type="hidden" value=''/>
+								<select name="mainPostId" id="mainPostId">
+									<option value="">--- 不限 ---</option>
+									<option th:each="p:${posts}" th:value="${p.id}" th:text="${p.name}"></option>
+								</select>
+							</td>
+							<th class="narrow">是否有效:</th>
+							<td>
+								<select name="valid" class="select">
+									<option value="">--- 不限 ---</option>
+									<option value="true">--- 是 ---</option>
+									<option value="false">--- 否 ---</option>
+								</select>
 							</td>
 						</tr>
 						<tr>
-							<td colspan="4" class="button operRow">
-								<a id="queryBtn" href="#" class="easyui-linkbutton">查询</a>
+							<td colspan="6" class="button operRow">
+								<a id="queryBtn" onclick="queryFun()" href="#" class="easyui-linkbutton">查询</a>
 							</td>
 						</tr>
 						</tbody>

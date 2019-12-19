@@ -39,6 +39,12 @@ public class FeignConfiguration {
         return new Retryer.Default();
     }
     
+    //    public PoolingHttpClientConnectionManager poolingHttpClientConnectionManager() {
+    //        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+    //        connectionManager.setMaxTotal(200);
+    //        connectionManager.setDefaultMaxPerRoute(100);
+    //        return connectionManager;
+    //    }
     //    @Bean
     //    public Contract feignContract() {
     //        //这将SpringMvc Contract 替换为feign.Contract.Default

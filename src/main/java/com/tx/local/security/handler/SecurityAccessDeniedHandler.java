@@ -29,6 +29,7 @@ import com.tx.local.security.entrypoint.SecurityLoginAuthenticationEntryPoint;
  */
 public class SecurityAccessDeniedHandler implements AccessDeniedHandler {
     
+    @SuppressWarnings("unused")
     private SecurityLoginAuthenticationEntryPoint loginAuthenticationEntryPoint;
     
     /**

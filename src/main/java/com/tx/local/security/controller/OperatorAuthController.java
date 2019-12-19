@@ -75,7 +75,7 @@ public class OperatorAuthController implements InitializingBean {
      */
     @RequestMapping("/toQueryAuthMain")
     public String toQueryAuthView(ModelMap modelMap) {
-        return "mainframe/queryAuthMain";
+        return "security/queryAuthMain";
     }
     
     /**

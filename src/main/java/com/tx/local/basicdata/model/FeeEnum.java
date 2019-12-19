@@ -58,22 +58,22 @@ public enum FeeEnum implements BasicDataEnum {
     ZXHHK("ZXHHK", "注销后回款");
     
     /** 费用项关键字 */
-    private final String key;
+    private final String code;
     
     /** 费用项名称 */
     private final String name;
     
     /** <默认构造函数> */
-    private FeeEnum(String key, String name) {
-        this.key = key;
+    private FeeEnum(String code, String name) {
+        this.code = code;
         this.name = name;
     }
     
     /**
-     * @return 返回 key
+     * @return 返回 code
      */
-    public String getKey() {
-        return key;
+    public String getCode() {
+        return code;
     }
     
     /**

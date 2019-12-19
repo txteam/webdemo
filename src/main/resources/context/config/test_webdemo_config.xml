@@ -9,7 +9,7 @@
 				<remark>单位毫秒,小于或等于0，表示不限制超时时间</remark>
 				<validateExpression>超时时间:required;integer[+0];range[0~60000]</validateExpression>
 			</config>
-			<config>
+			<config modifyAble="true">
 				<name>服务地址</name>
 				<code>test1.testchild1.url</code>
 				<value>http://localhost:8080/HelloWorldService</value>

@@ -377,3 +377,19 @@ a.c8:hover{
     color: #536383;
     font-style: normal;
 }
+
+/* 配置页 */
+.breadcrumb {
+	height: 38px;
+	line-height: 38px;
+	padding-left: 6px;
+	overflow: hidden;
+	border-bottom: 1px solid #f2f2f2;
+	background-color: #fff;
+}
+span.requiredField {
+	line-height: 28px;
+	margin-right: 2px;
+	color: #ff6d6d;
+	font-size: 10px;
+}

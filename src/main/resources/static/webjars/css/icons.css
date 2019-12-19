@@ -843,6 +843,11 @@
   content: "\e8a5";
 }
 
+/* images */
+.qq {background: url('images/qq.png') no-repeat center center;}
+.weibo {background: url('images/weibo.png') no-repeat center center;}
+.weixin {background: url('images/weixin.png') no-repeat center center;}
+
 /* 本地图标  */
 .folder_wrench {background: url('images/extjs_icons/folder/folder_wrench.png') no-repeat center center;}
 .anchor {background: url('images/extjs_icons/anchor.png') no-repeat center center;}

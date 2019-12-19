@@ -32,7 +32,7 @@ public class OperatorWXAuthenticationProcessingFilter extends AbstractAuthentica
     /** <默认构造函数> */
     protected OperatorWXAuthenticationProcessingFilter(
             RequestMatcher requiresAuthenticationRequestMatcher) {
-        super(new AntPathRequestMatcher("/operator/wx/doLogin", "POST"));
+        super(new AntPathRequestMatcher("/operator/wx/login", "POST"));
     }
 
     /**

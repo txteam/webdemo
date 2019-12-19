@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="operSecurityAccount">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="operSecurityAccountMap" 
+		type="com.tx.local.operator.model.OperSecurityAccount">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.operator.model.OperSecurityAccount"
+		resultMap="operSecurityAccountMap">
+		SELECT 
+				OSA.id,
+				OSA.idCardType,
+				OSA.idCardNumber,
+				OSA.idCardExpiryDate,
+				OSA.lastUpdateDate,
+				OSA.realNameAuthenticated,
+				OSA.realNameErrCount,
+				OSA.realNameLastErrDate,
+				OSA.email,
+				OSA.emailBinding,
+				OSA.createDate,
+				OSA.mobileNumber,
+				OSA.mobileBinding,
+				OSA.operatorId
+		  FROM OPER_SECURITY_ACCOUNT OSA
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND OSA.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="operSecurityAccountMap">
+		SELECT 
+				OSA.id,
+				OSA.idCardType,
+				OSA.idCardNumber,
+				OSA.idCardExpiryDate,
+				OSA.lastUpdateDate,
+				OSA.realNameAuthenticated,
+				OSA.realNameErrCount,
+				OSA.realNameLastErrDate,
+				OSA.email,
+				OSA.emailBinding,
+				OSA.createDate,
+				OSA.mobileNumber,
+				OSA.mobileBinding,
+				OSA.operatorId
+		  FROM OPER_SECURITY_ACCOUNT OSA
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND OSA.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND OSA.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND OSA.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realNameAuthenticated)">  
+	            <![CDATA[ AND OSA.realNameAuthenticated = #{realNameAuthenticated} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realNameErrCount)">  
+	            <![CDATA[ AND OSA.realNameErrCount = #{realNameErrCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
+	            <![CDATA[ AND OSA.email = #{email} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(emailBinding)">  
+	            <![CDATA[ AND OSA.emailBinding = #{emailBinding} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND OSA.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND OSA.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileNumber)">  
+	            <![CDATA[ AND OSA.mobileNumber = #{mobileNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileBinding)">  
+	            <![CDATA[ AND OSA.mobileBinding = #{mobileBinding} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            <![CDATA[ AND OSA.operatorId = #{operatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND OSA.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM OPER_SECURITY_ACCOUNT OSA
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND OSA.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND OSA.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND OSA.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realNameAuthenticated)">  
+	            <![CDATA[ AND OSA.realNameAuthenticated = #{realNameAuthenticated} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realNameErrCount)">  
+	            <![CDATA[ AND OSA.realNameErrCount = #{realNameErrCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
+	            <![CDATA[ AND OSA.email = #{email} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(emailBinding)">  
+	            <![CDATA[ AND OSA.emailBinding = #{emailBinding} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND OSA.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND OSA.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileNumber)">  
+	            <![CDATA[ AND OSA.mobileNumber = #{mobileNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileBinding)">  
+	            <![CDATA[ AND OSA.mobileBinding = #{mobileBinding} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            <![CDATA[ AND OSA.operatorId = #{operatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND OSA.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.operator.model.OperSecurityAccount">
+		INSERT INTO OPER_SECURITY_ACCOUNT
+		(
+			id,
+			idCardType,
+			idCardNumber,
+			idCardExpiryDate,
+			lastUpdateDate,
+			realNameAuthenticated,
+			realNameErrCount,
+			realNameLastErrDate,
+			email,
+			emailBinding,
+			createDate,
+			mobileNumber,
+			mobileBinding,
+			operatorId
+		)
+		VALUES
+		(
+			#{id},
+			#{idCardType},
+			#{idCardNumber},
+			#{idCardExpiryDate},
+			#{lastUpdateDate},
+			#{realNameAuthenticated},
+			#{realNameErrCount},
+			#{realNameLastErrDate},
+			#{email},
+			#{emailBinding},
+			#{createDate},
+			#{mobileNumber},
+			#{mobileBinding},
+			#{operatorId}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.operator.model.OperSecurityAccount">
+		DELETE FROM OPER_SECURITY_ACCOUNT  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE OPER_SECURITY_ACCOUNT
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('idCardType')">
+	    		idCardType = #{idCardType,javaType=com.tx.local.basicdata.model.IDCardTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('idCardNumber')">
+	    		idCardNumber = #{idCardNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('idCardExpiryDate')">
+	    		idCardExpiryDate = #{idCardExpiryDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('realNameAuthenticated')">
+	    		realNameAuthenticated = #{realNameAuthenticated,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('realNameErrCount')">
+	    		realNameErrCount = #{realNameErrCount,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('realNameLastErrDate')">
+	    		realNameLastErrDate = #{realNameLastErrDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('email')">
+	    		email = #{email,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('emailBinding')">
+	    		emailBinding = #{emailBinding,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('mobileNumber')">
+	    		mobileNumber = #{mobileNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('mobileBinding')">
+	    		mobileBinding = #{mobileBinding,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('operatorId')">
+	    		operatorId = #{operatorId,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

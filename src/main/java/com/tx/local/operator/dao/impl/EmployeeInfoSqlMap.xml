@@ -16,17 +16,16 @@
 		resultMap="employeeInfoMap">
 		SELECT 
 				EI.id,
-				EI.code,
 				EI.idCardType,
 				EI.idCardNumber,
-				EI.age,
 				EI.sex,
 				EI.lastUpdateDate,
-				EI.name,
+				EI.realName,
 				EI.email,
 				EI.entryDate,
-				EI.phoneNumber,
 				EI.createDate,
+				EI.mobileNumber,
+				EI.number,
 				EI.leaving,
 				EI.leavingDate,
 				EI.birthday,
@@ -39,9 +38,6 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND EI.id = #{id}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            AND EI.code = #{code}
-	        </if>
 		</trim>
 	</select>
 	
@@ -51,17 +47,16 @@
 		resultMap="employeeInfoMap">
 		SELECT 
 				EI.id,
-				EI.code,
 				EI.idCardType,
 				EI.idCardNumber,
-				EI.age,
 				EI.sex,
 				EI.lastUpdateDate,
-				EI.name,
+				EI.realName,
 				EI.email,
 				EI.entryDate,
-				EI.phoneNumber,
 				EI.createDate,
+				EI.mobileNumber,
+				EI.number,
 				EI.leaving,
 				EI.leavingDate,
 				EI.birthday,
@@ -88,29 +83,20 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND EI.id = #{id} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            <![CDATA[ AND EI.code = #{code} ]]>
-	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
 	            <![CDATA[ AND EI.idCardType = #{idCardType} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
 	            <![CDATA[ AND EI.idCardNumber = #{idCardNumber} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
-	            <![CDATA[ AND EI.age = #{age} ]]>
-	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
 	            <![CDATA[ AND EI.sex = #{sex} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
-	            <![CDATA[ AND EI.name = #{name} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realName)">  
+	            <![CDATA[ AND EI.realName = #{realName} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
 	            <![CDATA[ AND EI.email = #{email} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phoneNumber)">  
-	            <![CDATA[ AND EI.phoneNumber = #{phoneNumber} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
 	            <![CDATA[ AND EI.createDate >= #{minCreateDate} ]]>
@@ -118,6 +104,12 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
 	            <![CDATA[ AND EI.createDate < #{maxCreateDate} ]]>
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileNumber)">  
+	            <![CDATA[ AND EI.mobileNumber = #{mobileNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(number)">  
+	            <![CDATA[ AND EI.number = #{number} ]]>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(leaving)">  
 	            <![CDATA[ AND EI.leaving = #{leaving} ]]>
 	        </if>			
@@ -168,29 +160,20 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND EI.id = #{id} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            <![CDATA[ AND EI.code = #{code} ]]>
-	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
 	            <![CDATA[ AND EI.idCardType = #{idCardType} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
 	            <![CDATA[ AND EI.idCardNumber = #{idCardNumber} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(age)">  
-	            <![CDATA[ AND EI.age = #{age} ]]>
-	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
 	            <![CDATA[ AND EI.sex = #{sex} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
-	            <![CDATA[ AND EI.name = #{name} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realName)">  
+	            <![CDATA[ AND EI.realName = #{realName} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(email)">  
 	            <![CDATA[ AND EI.email = #{email} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phoneNumber)">  
-	            <![CDATA[ AND EI.phoneNumber = #{phoneNumber} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
 	            <![CDATA[ AND EI.createDate >= #{minCreateDate} ]]>
@@ -198,6 +181,12 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
 	            <![CDATA[ AND EI.createDate < #{maxCreateDate} ]]>
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileNumber)">  
+	            <![CDATA[ AND EI.mobileNumber = #{mobileNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(number)">  
+	            <![CDATA[ AND EI.number = #{number} ]]>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(leaving)">  
 	            <![CDATA[ AND EI.leaving = #{leaving} ]]>
 	        </if>			
@@ -221,17 +210,16 @@
 		INSERT INTO OPER_EMPLOYEE_INFO
 		(
 			id,
-			code,
 			idCardType,
 			idCardNumber,
-			age,
 			sex,
 			lastUpdateDate,
-			name,
+			realName,
 			email,
 			entryDate,
-			phoneNumber,
 			createDate,
+			mobileNumber,
+			number,
 			leaving,
 			leavingDate,
 			birthday,
@@ -242,17 +230,16 @@
 		VALUES
 		(
 			#{id},
-			#{code},
 			#{idCardType},
 			#{idCardNumber},
-			#{age},
 			#{sex},
 			#{lastUpdateDate},
-			#{name},
+			#{realName},
 			#{email},
 			#{entryDate},
-			#{phoneNumber},
 			#{createDate},
+			#{mobileNumber},
+			#{number},
 			#{leaving},
 			#{leavingDate},
 			#{birthday},
@@ -270,9 +257,6 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            AND code = #{code}
-	        </if>
 		</trim>
 	</delete>
 	
@@ -287,17 +271,14 @@
 			<if test="_parameter.containsKey('idCardNumber')">
 	    		idCardNumber = #{idCardNumber,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('age')">
-	    		age = #{age,javaType=int},
-	    	</if>
 			<if test="_parameter.containsKey('sex')">
-	    		sex = #{sex,javaType=int},
+	    		sex = #{sex,javaType=com.tx.local.basicdata.model.SexEnum},
 	    	</if>
 			<if test="_parameter.containsKey('lastUpdateDate')">
 	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
-			<if test="_parameter.containsKey('name')">
-	    		name = #{name,javaType=java.lang.String},
+			<if test="_parameter.containsKey('realName')">
+	    		realName = #{realName,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('email')">
 	    		email = #{email,javaType=java.lang.String},
@@ -305,8 +286,11 @@
 			<if test="_parameter.containsKey('entryDate')">
 	    		entryDate = #{entryDate,javaType=java.util.Date},
 	    	</if>
-			<if test="_parameter.containsKey('phoneNumber')">
-	    		phoneNumber = #{phoneNumber,javaType=java.lang.String},
+			<if test="_parameter.containsKey('mobileNumber')">
+	    		mobileNumber = #{mobileNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('number')">
+	    		number = #{number,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('leaving')">
 	    		leaving = #{leaving,javaType=boolean},
@@ -331,9 +315,6 @@
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
-	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
-	            AND code = #{code}
 	        </if>
 		</trim>
 	</update> 

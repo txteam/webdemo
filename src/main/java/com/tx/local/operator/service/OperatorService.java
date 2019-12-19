@@ -89,11 +89,11 @@ public class OperatorService {
                 operator.getVcid(),
                 operator.getOrganizationId(),
                 org.getVcid());
-        operator.setVcid(org.getVcid());
         
         //为添加的数据需要填入默认值的字段填入默认值
         operator.setValid(true);
         operator.setLocked(false);
+        operator.setModifyAble(true);
         
         //写入默认时间
         Date now = new Date();
@@ -259,8 +259,6 @@ public class OperatorService {
      */
     public PagedList<Operator> queryPagedList(Boolean valid,
             Map<String, Object> params, int pageIndex, int pageSize) {
-        //T判断条件合法性
-        
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
         params.put("valid", valid);

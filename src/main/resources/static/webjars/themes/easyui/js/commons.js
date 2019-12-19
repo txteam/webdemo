@@ -1146,29 +1146,23 @@ $.fn.tree.defaults.loadFilter = function(data) {
                 	tmpMap[data[i][parentField]]['children'] = [];
                 }
                 if(!excludeObject){
-                	data[i]['object'] = data[i];
-                } 
-                
-                data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
-                data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
-                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
-                data[i]['checked'] = $.isFunction(checkedField) ? checkedField.call(this,data[i]) : data[i][checkedField];
-                
+	            	data[i]['object'] = data[i];
+	            } 
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
                 //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
                 tmpMap[data[i][parentField]]['checked'] = false;
             } else {
-            	if(!excludeObject){
-            		data[i]['object'] = data[i];
-                }
-                
-                data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
-                data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
-                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
-                data[i]['checked'] = $.isFunction(checkedField) ? checkedField.call(this,data[i]) : data[i][checkedField];
-                
+	            if(!excludeObject){
+	            	data[i]['object'] = data[i];
+	            } 
                 roots.push(data[i]);
             }
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+        	data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
+            data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
+            data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
+            data[i]['checked'] = $.isFunction(checkedField) ? checkedField.call(this,data[i]) : data[i][checkedField];
         }
         return roots;
     }else{
@@ -1237,22 +1231,17 @@ $.fn.treegrid.defaults.loadFilter = function(data) {
                 if (!tmpMap[data[i][parentField]]['children']){
                 	tmpMap[data[i][parentField]]['children'] = [];
                 }
-                
-                data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
-                data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
-                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
-                
                 tmpMap[data[i][parentField]]['children'].push(data[i]);
                 //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
                 tmpMap[data[i][parentField]]['checked'] = false;
             } else {
-                
-                data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
-                data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
-                data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
-                
                 roots.push(data[i]);
             }
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+            data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
+            data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
+            data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
         }
         return roots;
     }else{

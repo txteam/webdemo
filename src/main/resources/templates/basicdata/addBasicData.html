@@ -79,8 +79,7 @@ function cancelFun(){
 /*]]>*/
 </script>
 </head>
-<body>
-<div class="easyui-layout" data-options="fit:true,border:false">
+<body class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form id="entityForm" method="post" class="form">
 			<input id="type" name="type" type="hidden" th:value="${typeInfo?.type}" value="" />
@@ -110,5 +109,4 @@ function cancelFun(){
 	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
 		<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton" style="width: 65px;">提交</a>  
 	</div>
-</div>
 </body>

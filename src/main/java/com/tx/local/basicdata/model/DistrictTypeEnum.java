@@ -32,24 +32,24 @@ public enum DistrictTypeEnum implements BasicDataEnum {
     
     PROVINCE("PROVINCE", "省", 0);
     
-    private final String key;
+    private final String code;
     
     private final String name;
     
     private final int level;
     
     /** <默认构造函数> */
-    private DistrictTypeEnum(String key, String name, int level) {
-        this.key = key;
+    private DistrictTypeEnum(String code, String name, int level) {
+        this.code = code;
         this.name = name;
         this.level = level;
     }
     
     /**
-     * @return 返回 key
+     * @return 返回 code
      */
-    public String getKey() {
-        return key;
+    public String getCode() {
+        return code;
     }
     
     /**

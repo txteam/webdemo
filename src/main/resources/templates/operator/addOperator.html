@@ -44,8 +44,8 @@
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
 	
-	$("#organizationName").chooseOrganization({
-		eventName : "chooseOrganizationForAddPost",
+	$("#organizationName").selectOrganization({
+		eventName : "forAddOperator",
 		contextPath : _contextPath,
 		title : "请选择所属组织",
 		width : 260,
@@ -60,38 +60,48 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("#postName").choosePost({
-		eventName : "choosePostForAddOperator",
+	$("#mainPostName").selectPost({
+		eventName : "forAddOperator",
 		contextPath : _contextPath,
 		title : "请选择职位",  
 		width : 800,
 		height : 450,
 		handler : function(post){
 			if(post != null){
-				$("#postName").val(post.name);
-				$("#postId").val(post.id);
+				$("#mainPostName").val(post.name);
+				$("#mainPostId").val(post.id);
+				if(post.organizationId && ($("#organizationId").val() != post.organizationId)){
+					$.post(/*[[@{/organization/findById}]]*/'',
+		        			{id:post.organizationId},
+				    		function(organization){
+		        				$("#organizationName").val(organization.name);
+		        				$("#organizationId").val(organization.id);
+				    });
+				}
 			}
 		},
 	    clearHandler: function(){
-	    	$("#postName").val("");
-			$("#postId").val("");
+	    	$("#mainPostName").val("");
+			$("#mainPostId").val("");
 	    }
 	});
 	
 	//验证器
-	$('#operatorForm').validator({
+	$('#entityForm').validator({
 	    valid: function(){
 	        //表单验证通过，提交表单到服务器
 	        DialogUtils.progress({
 	        	text : '数据提交中，请等待....'
 	        });
-			$('#operatorForm').ajaxSubmit({
-			    url:"${contextPath}/operator/addOperator.action",
+			$('#entityForm').ajaxSubmit({
+			    url:/*[[@{/operator/add}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 			    	if(data){
-						parent.DialogUtils.tip("新人员成功.新增人员默认登陆密码为:123456");
+						parent.DialogUtils.tip("新增操作人员成功.新增人员默认登陆密码为:123456");
 						parent.DialogUtils.closeDialogById("addOperator");
+					}else{
+						DialogUtils.alert("错误提示","新增操作人员失败.","error");
 					}
 			    } 
 			});
@@ -101,119 +111,48 @@ $(document).ready(function(){
 
 });
 function submitFun(){
-	$('#operatorForm').submit();
+	$('#entityForm').submit();
 }
 /*]]>*/
 </script>
 </head>
-<body>
-<div class="easyui-layout" data-options="fit:true,border:false">
+<body class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<form id="operatorForm" method="post" class="form" th:object="${operator}">
+		<form id="entityForm" method="post" class="form" th:object="${operator}">
 			<form:hidden path="id"/>
 			<table class="common_table">
 				<tr>
-					<th class="narrow" width="30%">登录名：<span class="tRed">*</span></th>
-					<td width="70%">
-						<form:input path="loginName" 
-							data-rule="登录名:required;remote[get:${contextPath }/operator/loginNameIsExist.action, loginName]"
-							data-tip="必填"/>
+					<th class="narrow" width="20%">用户名：<span class="tRed">*</span></th>
+					<td width="30%">
+						<input id="username" name="username"
+							th:data-rule="'用户名:required;length[6~20];remote[' + @{/operator/validate} + ', username]'"/>
 					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >姓名：<span class="tRed">*</span></th>
-					<td>
-						<form:input path="userName" cssClass="text"
-							data-rule="姓名:required;"/>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >性别：<span class="tRed">*</span></th>
-					<td>
-						<input type="radio" name="sex" value="0" checked="checked"/>男
-						<input type="radio" name="sex" value="1"/>女
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >入职时间：</th>
-					<td>
-						<input name="entryDate" type="text" 
-						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >试用期到期时间：</th>
-					<td>
-						<input name="trialPeriodEndDate" type="text" 
-						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >转正时间：</th>
-					<td>
-						<input name="officialDate" type="text" 
-						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >离职时间：</th>
-					<td>
-						<input name="leavingDate" type="text" 
-						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >账户有效时间：</th>
-					<td>
-						<input name="invalidDate" type="text" 
-						onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"  />
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >邮箱：</th>
-					<td>
-						<input name="email" type="text"  data-rule="email;"/>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >电话：</th>
-					<td>
-						<input name="phone" type="text"  data-rule="mobile;"/>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" >RTX：</th>
-					<td>
-						<input name="rtx" type="text"  data-rule="qq;"/>
+					<th class="narrow" width="20%">姓名：</th>
+					<td width="30%">
+						<input id="name" name="name"/>
 					</td>
 				</tr>
 				<tr>
 					<th class="narrow">所属组织<span class="tRed">*</span></th>
 					<td>
-						<input id="organizationId" name="organization.id" type="hidden"
-							value="${organization.id }"
-							readonly="readonly"/>
-						<input id="organizationName" name="organization.name"
-							value="${organization.name }" 
-							data-rule="所属组织:required;"
-							class="selectInput" readonly="readonly"/>
+						<input id="organizationId" name="organizationId" type="hidden" readonly="readonly"
+							th:value="${organization?.id }"/>
+						<input id="organizationName" name="organizationName" data-rule="所属组织:required;" readonly="readonly"
+							th:value="${organization?.name }" />
 					</td>
-				</tr>
-				<tr>
-					<th class="narrow">职位<span class="tRed">*</span></th>
+					<th class="narrow">职位</th>
 					<td>
-						<input id="postName" name="postName" class="text" type="text" readonly="readonly">
-						<input id="postId" name="mainPost.id" class="text" type="hidden" data-rule="职位:required;"/>
-					</td>
-				</tr>
-				<tr>
-					<td class="rightOperRow" colspan="2" style="padding-right: 50px">
-						<a id="addBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton">提交</a>  	
+						<input id="mainPostId" name="mainPostId" class="text" type="hidden" th:value="${post?.id }"/>
+						<input id="mainPostName" name="mainPostName" class="text" type="text" readonly="readonly" 
+							th:value="${post?.name }">
 					</td>
 				</tr>
 			</table>
 			<p style="margin-left: 5px;display: none" id="operatorPassword">操作员密码：<span class="tRed" id="password"></span></p>
 		</form>
 	</div>
-</div>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="submitBtn" onclick="submitFun();return false;" href="#" class="easyui-linkbutton" style="width: 65px;">提交</a>  
+	</div>
 </body>

@@ -88,27 +88,6 @@ public class EmployeeInfoService {
         boolean flag = resInt > 0;
         return flag;
     }
-
-    /**
-     * 根据code删除员工信息实例
-     * 1、当code为empty时抛出异常
-     * 2、执行删除后，将返回数据库中被影响的条数 > 0，则返回true
-     *
-     * @param code
-     * @return EmployeeInfo [返回类型说明]
-     * @exception throws
-     * @see [类、类#方法、类#成员]
-     */
-    public boolean deleteByCode(String code) {
-        AssertUtils.notEmpty(code, "code is empty.");
-        
-        EmployeeInfo condition = new EmployeeInfo();
-        condition.setCode(code);
-        
-        int resInt = this.employeeInfoDao.delete(condition);
-        boolean flag = resInt > 0;
-        return flag;
-    }
     
     /**
      * 根据id查询员工信息实例
@@ -124,25 +103,6 @@ public class EmployeeInfoService {
         
         EmployeeInfo condition = new EmployeeInfo();
         condition.setId(id);
-        
-        EmployeeInfo res = this.employeeInfoDao.find(condition);
-        return res;
-    }
-
-    /**
-     * 根据code查询员工信息实例
-     * 1、当code为empty时抛出异常
-     *
-     * @param code
-     * @return EmployeeInfo [返回类型说明]
-     * @exception throws
-     * @see [类、类#方法、类#成员]
-     */
-    public EmployeeInfo findByCode(String code) {
-        AssertUtils.notEmpty(code, "code is empty.");
-        
-        EmployeeInfo condition = new EmployeeInfo();
-        condition.setCode(code);
         
         EmployeeInfo res = this.employeeInfoDao.find(condition);
         return res;
@@ -368,15 +328,14 @@ public class EmployeeInfoService {
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         //FIXME:需要更新的字段
-		updateRowMap.put("code", employeeInfo.getCode());
 		updateRowMap.put("idCardType", employeeInfo.getIdCardType());
 		updateRowMap.put("idCardNumber", employeeInfo.getIdCardNumber());
-		updateRowMap.put("age", employeeInfo.getAge());
 		updateRowMap.put("sex", employeeInfo.getSex());
-		updateRowMap.put("name", employeeInfo.getName());
+		updateRowMap.put("realName", employeeInfo.getRealName());
 		updateRowMap.put("email", employeeInfo.getEmail());
 		updateRowMap.put("entryDate", employeeInfo.getEntryDate());
-		updateRowMap.put("phoneNumber", employeeInfo.getPhoneNumber());
+		updateRowMap.put("mobileNumber", employeeInfo.getMobileNumber());
+		updateRowMap.put("number", employeeInfo.getNumber());
 		updateRowMap.put("leaving", employeeInfo.isLeaving());
 		updateRowMap.put("leavingDate", employeeInfo.getLeavingDate());
 		updateRowMap.put("birthday", employeeInfo.getBirthday());

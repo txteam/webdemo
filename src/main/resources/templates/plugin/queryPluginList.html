@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>查询插件列表[queryPluginList]</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+var grid = null;
+var idFieldName = 'id';
+var nameFieldName = 'name'; 
+var entityName = '插件';
+$(document).ready(function(){
+	var  $settingALink = $("#settingALink");
+	var  $installALink = $("#installALink");
+	var  $uninstallALink = $("#uninstallALink");
+	var  $enableALink = $("#enableALink");
+	var  $disableALink = $("#disableALink");
+
+	grid = $('#grid').datagrid({
+		url :/*[[@{/plugin/queryList}]]*/'',
+		fit : true,
+	    fitColumns : true,
+		border : false,
+		idField : 'id',
+		checkOnSelect : false,
+		selectOnCheck : false,
+		nowrap : true,
+		striped : true,
+		singleSelect : true,
+		frozenColumns: [ [ 
+			{title : 'ID',width : 200,field:'id'},
+			{title:'分类',width:100,field:'catalog',hidden:true}
+		] ],
+		columns: [ [
+			{title:'名称',width:100,field:'name'},
+			{title:'版本号',width:60,field:'version'},
+			{title:'配置前缀',width:100,field:'prefix'},
+			{title:'是否安装',width:60,field:'installed',formatter:$.Formatters.booleanFun},
+			{title:'是否有效',width:60,field:'valid',formatter:$.Formatters.booleanFun},
+			{title:'备注',width:100,field:'remark'},
+			{title:'作者',width:100,field:'author',hidden:true},
+			{title:'优先级',width:100,field:'priority',hidden:true},
+			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
+			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
+			{title:'操作',width:100,field:'_action',
+				formatter : function(value, row, index) {
+					var str = '&nbsp;';
+					if(!row.valid){
+						if(row.installed){
+							str += $.formatString('<img onclick="uninstallFun(\'{0}\',\'{1}\');" src="{2}" title="卸载"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/cog_delete.png');
+							str += '&nbsp;';
+							str += $.formatString('<img onclick="settingFun(\'{0}\',\'{1}\');" src="{2}" title="配置"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/cog.png');
+							str += '&nbsp;';
+							str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/control/control_play_blue.png');
+							str += '&nbsp;';
+						}else{
+							str += $.formatString('<img onclick="installFun(\'{0}\',\'{1}\');" src="{2}" title="安装"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/cog_add.png');
+							str += '&nbsp;';
+						}
+					}else{
+						str += $.formatString('<img onclick="settingFun(\'{0}\',\'{1}\');" src="{2}" title="配置"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/cog.png');
+						str += '&nbsp;';
+						str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/control/control_stop_blue.png');
+						str += '&nbsp;';
+					}
+					return str;
+				}
+			}
+		] ],
+		toolbar : '#toolbar',
+		onDblClickRow : function(index, row){
+			settingFun(row[idFieldName], row[nameFieldName]);
+		},
+		onClickRow : function(index, row){
+			if(!row.valid){
+				if(row.installed){
+					$uninstallALink.show();
+					$uninstallALink.linkbutton('enable');
+					$uninstallALink.show();
+					$uninstallALink.linkbutton('enable');
+					$settingALink.show();
+					$settingALink.linkbutton('enable');
+					$enableALink.show();
+					$enableALink.linkbutton('enable');
+					
+					$disableALink.hide();
+					$disableALink.linkbutton('disable');
+					$installALink.hide();
+					$installALink.linkbutton('disable');
+				}else{
+					$installALink.show();
+					$installALink.linkbutton('enable');
+					
+					$enableALink.hide();
+					$enableALink.linkbutton('disable');
+					$disableALink.hide();
+					$disableALink.linkbutton('disable');
+					$disableALink.hide();
+					$disableALink.linkbutton('disable');
+					$uninstallALink.hide();
+					$uninstallALink.linkbutton('disable');
+					$settingALink.hide();
+					$settingALink.linkbutton('disable');
+				}
+			}else{
+				$disableALink.show();
+				$disableALink.linkbutton('enable');
+				$settingALink.show();
+				$settingALink.linkbutton('enable');
+				
+				$enableALink.hide();
+				$enableALink.linkbutton('disable');
+				$installALink.hide();
+				$installALink.linkbutton('disable');
+				$uninstallALink.hide();
+				$uninstallALink.linkbutton('disable');
+			}
+		},
+		onLoadSuccess : function() {
+			$(this).datagrid('unselectAll');
+			$(this).datagrid('tooltip');
+			
+			$enableALink.show();
+			$disableALink.hide();
+			$installALink.show();
+			$uninstallALink.hide();
+			$installALink.linkbutton('disable');
+			$uninstallALink.linkbutton('disable');
+			$settingALink.linkbutton('disable');
+			$enableALink.linkbutton('disable');
+			$disableALink.linkbutton('disable');
+		}
+	});
+});
+/*
+ * 查询
+ */
+function queryFun() {
+	grid.datagrid('load',$('#queryForm').serializeObject());
+	return false;
+}
+/**
+ * 编辑
+ */
+function settingFun(id,name) {
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return ;
+	}
+	
+	var settingUrl = /*[[@{/plugin/toSetting?id={0}}]]*/'';
+	DialogUtils.openModalDialog(
+		'setting',
+		"配置" + entityName + ":" + name,
+		$.formatString(settingUrl,id),
+		700,450,
+        function(){
+			queryFun();
+		},{maximizable : true}
+	);
+	//配置插件
+	/*
+	$.triggerge("addTab",{
+		id: id + 'Setting',
+        title : "配置:" + name,
+        href : $.formatString(settingUrl,id),
+        iconCls : 'cog'
+    });
+	*/
+	return false;
+}
+/*
+ * 卸载
+ */
+function uninstallFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定PluginInstance
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认卸载{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认禁用指定Plugin
+    		$.post(
+				/*[[@{/plugin/uninstall}]]*/'',
+	    		{id:id},
+	    		function(data){
+	    			DialogUtils.progress('close');
+	    			if(data){
+	    				DialogUtils.tip("卸载" + entityName + "成功.");
+	    			}else{
+	    				var errorMessage = $.formatString("卸载{0}失败.",entityName);
+	    				DialogUtils.alert("错误提示",errorMessage,"error");
+	    			}
+	    			queryFun();
+	    		}
+		    );
+    	}
+    });
+    return false;
+}
+/*
+ * 安装
+ */
+function installFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定PluginInstance
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认安装{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认启用指定Plugin
+    		$.post(
+				/*[[@{/plugin/install}]]*/'',
+	    		{id:id},
+	    		function(data){
+	    			DialogUtils.progress('close');
+	    			if(data){
+	    				DialogUtils.tip("安装" + entityName + "成功.");
+	    			}else{
+	    				var errorMessage = $.formatString("安装{0}失败.",entityName);
+	    				DialogUtils.alert("错误提示",errorMessage,"error");
+	    			}
+	    			queryFun();
+		    	}
+		    );
+    	}
+    });
+    return false;
+}
+/*
+ * 禁用
+ */
+function disableFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定PluginInstance
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认禁用{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认禁用指定PluginInstance
+    		$.post(
+				/*[[@{/plugin/disable}]]*/'',
+	    		{id:id},
+	    		function(data){
+	    			DialogUtils.progress('close');
+	    			if(data){
+	    				DialogUtils.tip("禁用" + entityName + "成功.");
+	    			}else{
+	    				var errorMessage = $.formatString("禁用{0}失败.",entityName);
+	    				DialogUtils.alert("错误提示",errorMessage,"error");
+	    			}
+	    			queryFun();
+	    		}
+		    );
+    	}
+    });
+    return false;
+}
+/*
+ * 启用
+ */
+function enableFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定PluginInstance
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认启用{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认启用指定PluginInstance
+    		$.post(
+				/*[[@{/plugin/enable}]]*/'',
+	    		{id:id},
+	    		function(data){
+	    			DialogUtils.progress('close');
+	    			if(data){
+	    				DialogUtils.tip("启用" + entityName + "成功.");
+	    			}else{
+	    				var errorMessage = $.formatString("启用{0}失败.",entityName);
+	    				DialogUtils.alert("错误提示",errorMessage,"error");
+	    			}
+	    			queryFun();
+		    	}
+		    );
+    	}
+    });
+    return false;
+}
+/*]]>*/
+</script>
+</head>
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<!--//FIXME: 修改查询条件框体高度 -->
+	<div data-options="region:'north',title:'查询条件',border:false" style="height: 105px; overflow: hidden;">
+		<form id="queryForm" class="form">
+			<table class="table table-hover table-condensed">
+				<tr>
+					<th width="20%">名称:</th>
+					<td width="30%"><input id="name" name="name"/></td>
+					<th width="20%">是否有效</th>
+					<td width="30%">
+						<select id="valid" name="valid">
+							<option value="">--- 不限 ---</option>
+							<option value="true">是</option>
+							<option value="false">否</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" class="button operRow">
+						<a id="queryBtn" onclick="queryFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search'">查询</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div data-options="region:'center',border:false">
+		<table id="grid"></table>
+    </div> 
+    
+	<div id="toolbar" style="display: none;">
+		<a id="installALink" onclick="installFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'cog_add'">安装</a>
+		<a id="uninstallALink" onclick="uninstallFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'cog_delete'">卸载</a>	
+		<a id="settingALink" onclick="settingFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'cog'">配置</a>
+		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
+		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
+			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+	</div>
+</body>
