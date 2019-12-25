@@ -18,12 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.local.operator.dao.OperSecurityAccountDao;
-import com.tx.local.operator.model.OperSecurityAccount;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.local.operator.dao.OperSecurityAccountDao;
+import com.tx.local.operator.model.OperSecurityAccount;
 
 /**
  * 操作人员账户安全设置的业务层[OperSecurityAccountService]
@@ -38,10 +38,37 @@ import com.tx.core.querier.model.QuerierBuilder;
 public class OperSecurityAccountService {
     
     @SuppressWarnings("unused")
-    private Logger logger = LoggerFactory.getLogger(OperSecurityAccountService.class);
+    private Logger logger = LoggerFactory
+            .getLogger(OperSecurityAccountService.class);
     
     @Resource(name = "operSecurityAccountDao")
     private OperSecurityAccountDao operSecurityAccountDao;
+    
+    /**
+     * 保存用户安全账户信息<br/>
+     * <功能详细描述>
+     * @param operSecurityAccount [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public void save(OperSecurityAccount operSecurityAccount) {
+        //验证参数是否合法
+        AssertUtils.notNull(operSecurityAccount,
+                "operSecurityAccount is null.");
+        AssertUtils.notEmpty(operSecurityAccount.getOperatorId(),
+                "operSecurityAccount.operatorId is empty.");
+        
+        OperSecurityAccount db = findByOperatorId(
+                operSecurityAccount.getOperatorId());
+        if (db == null) {
+            insert(operSecurityAccount);
+        } else {
+            updateById(db.getId(), operSecurityAccount);
+        }
+    }
     
     /**
      * 新增操作人员账户安全设置实例<br/>
@@ -57,11 +84,14 @@ public class OperSecurityAccountService {
     @Transactional
     public void insert(OperSecurityAccount operSecurityAccount) {
         //验证参数是否合法
-        AssertUtils.notNull(operSecurityAccount, "operSecurityAccount is null.");
-           
-        //FIXME:为添加的数据需要填入默认值的字段填入默认值
-		operSecurityAccount.setLastUpdateDate(new Date());
-		operSecurityAccount.setCreateDate(new Date());
+        AssertUtils.notNull(operSecurityAccount,
+                "operSecurityAccount is null.");
+        AssertUtils.notEmpty(operSecurityAccount.getOperatorId(),
+                "operSecurityAccount.operatorId is empty.");
+        
+        //为添加的数据需要填入默认值的字段填入默认值
+        operSecurityAccount.setLastUpdateDate(new Date());
+        operSecurityAccount.setCreateDate(new Date());
         
         //调用数据持久层对实例进行持久化操作
         this.operSecurityAccountDao.insert(operSecurityAccount);
@@ -109,6 +139,26 @@ public class OperSecurityAccountService {
     }
     
     /**
+     * 根据用户id查询用户安全账户<br/>
+     * <功能详细描述>
+     * @param operatorId
+     * @return [参数说明]
+     * 
+     * @return OperSecurityAccount [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public OperSecurityAccount findByOperatorId(String operatorId) {
+        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+        
+        OperSecurityAccount condition = new OperSecurityAccount();
+        condition.setOperatorId(operatorId);
+        
+        OperSecurityAccount res = this.operSecurityAccountDao.find(condition);
+        return res;
+    }
+    
+    /**
      * 查询操作人员账户安全设置实例列表
      * <功能详细描述>
      * @param params      
@@ -118,16 +168,15 @@ public class OperSecurityAccountService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<OperSecurityAccount> queryList(
-		Map<String,Object> params   
-    	) {
+    public List<OperSecurityAccount> queryList(Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<OperSecurityAccount> resList = this.operSecurityAccountDao.queryList(params);
+        List<OperSecurityAccount> resList = this.operSecurityAccountDao
+                .queryList(params);
         
         return resList;
     }
@@ -142,17 +191,16 @@ public class OperSecurityAccountService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<OperSecurityAccount> queryList(
-		Querier querier   
-    	) {
+    public List<OperSecurityAccount> queryList(Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<OperSecurityAccount> resList = this.operSecurityAccountDao.queryList(querier);
+        List<OperSecurityAccount> resList = this.operSecurityAccountDao
+                .queryList(querier);
         
         return resList;
     }
@@ -172,21 +220,20 @@ public class OperSecurityAccountService {
      * @see [类、类#方法、类#成员]
      */
     public PagedList<OperSecurityAccount> queryPagedList(
-		Map<String,Object> params,
-    	int pageIndex,
-        int pageSize) {
+            Map<String, Object> params, int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<OperSecurityAccount> resPagedList = this.operSecurityAccountDao.queryPagedList(params, pageIndex, pageSize);
+        PagedList<OperSecurityAccount> resPagedList = this.operSecurityAccountDao
+                .queryPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
     
-	/**
+    /**
      * 分页查询操作人员账户安全设置实例列表
      * <功能详细描述>
      * @param querier    
@@ -200,18 +247,17 @@ public class OperSecurityAccountService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<OperSecurityAccount> queryPagedList(
-		Querier querier,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<OperSecurityAccount> queryPagedList(Querier querier,
+            int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<OperSecurityAccount> resPagedList = this.operSecurityAccountDao.queryPagedList(querier, pageIndex, pageSize);
+        PagedList<OperSecurityAccount> resPagedList = this.operSecurityAccountDao
+                .queryPagedList(querier, pageIndex, pageSize);
         
         return resPagedList;
     }
@@ -226,14 +272,12 @@ public class OperSecurityAccountService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Map<String,Object> params   
-    	) {
+    public int count(Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.operSecurityAccountDao.count(params);
         
@@ -250,15 +294,13 @@ public class OperSecurityAccountService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Querier querier   
-    	) {
+    public int count(Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.operSecurityAccountDao.count(querier);
         
@@ -276,7 +318,7 @@ public class OperSecurityAccountService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public boolean exists(Map<String,String> key2valueMap, String excludeId) {
+    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
         AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
         
         //生成查询条件
@@ -284,7 +326,7 @@ public class OperSecurityAccountService {
         params.putAll(key2valueMap);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.operSecurityAccountDao.count(params,excludeId);
+        int res = this.operSecurityAccountDao.count(params, excludeId);
         
         return res > 0;
     }
@@ -304,7 +346,7 @@ public class OperSecurityAccountService {
         AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.operSecurityAccountDao.count(querier,excludeId);
+        int res = this.operSecurityAccountDao.count(querier, excludeId);
         
         return res > 0;
     }
@@ -320,28 +362,37 @@ public class OperSecurityAccountService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(String id,OperSecurityAccount operSecurityAccount) {
+    public boolean updateById(String id,
+            OperSecurityAccount operSecurityAccount) {
         //验证参数是否合法，必填字段是否填写
-        AssertUtils.notNull(operSecurityAccount, "operSecurityAccount is null.");
+        AssertUtils.notNull(operSecurityAccount,
+                "operSecurityAccount is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-
+        
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //FIXME:需要更新的字段
-		updateRowMap.put("idCardType", operSecurityAccount.getIdCardType());
-		updateRowMap.put("idCardNumber", operSecurityAccount.getIdCardNumber());
-		updateRowMap.put("idCardExpiryDate", operSecurityAccount.getIdCardExpiryDate());
-		updateRowMap.put("realNameAuthenticated", operSecurityAccount.isRealNameAuthenticated());
-		updateRowMap.put("realNameErrCount", operSecurityAccount.getRealNameErrCount());
-		updateRowMap.put("realNameLastErrDate", operSecurityAccount.getRealNameLastErrDate());
-		updateRowMap.put("email", operSecurityAccount.getEmail());
-		updateRowMap.put("emailBinding", operSecurityAccount.isEmailBinding());
-		updateRowMap.put("mobileNumber", operSecurityAccount.getMobileNumber());
-		updateRowMap.put("mobileBinding", operSecurityAccount.isMobileBinding());
-		updateRowMap.put("operatorId", operSecurityAccount.getOperatorId());
-		updateRowMap.put("lastUpdateDate", new Date());
-
-        boolean flag = this.operSecurityAccountDao.update(id,updateRowMap); 
+        //需要更新的字段
+        updateRowMap.put("idCardType", operSecurityAccount.getIdCardType());
+        updateRowMap.put("idCardNumber", operSecurityAccount.getIdCardNumber());
+        updateRowMap.put("idCardExpiryDate",
+                operSecurityAccount.getIdCardExpiryDate());
+        updateRowMap.put("realNameAuthenticated",
+                operSecurityAccount.isRealNameAuthenticated());
+        updateRowMap.put("realNameErrCount",
+                operSecurityAccount.getRealNameErrCount());
+        updateRowMap.put("realNameLastErrDate",
+                operSecurityAccount.getRealNameLastErrDate());
+        updateRowMap.put("email", operSecurityAccount.getEmail());
+        updateRowMap.put("emailBinding", operSecurityAccount.isEmailBinding());
+        updateRowMap.put("mobileNumber", operSecurityAccount.getMobileNumber());
+        updateRowMap.put("mobileBinding",
+                operSecurityAccount.isMobileBinding());
+        updateRowMap.put("mobileLoginEnable",
+                operSecurityAccount.isMobileLoginEnable());
+        //updateRowMap.put("operatorId", operSecurityAccount.getOperatorId());
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        boolean flag = this.operSecurityAccountDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
@@ -359,10 +410,13 @@ public class OperSecurityAccountService {
     @Transactional
     public boolean updateById(OperSecurityAccount operSecurityAccount) {
         //验证参数是否合法，必填字段是否填写
-        AssertUtils.notNull(operSecurityAccount, "operSecurityAccount is null.");
-        AssertUtils.notEmpty(operSecurityAccount.getId(), "operSecurityAccount.id is empty.");
-
-        boolean flag = updateById(operSecurityAccount.getId(),operSecurityAccount); 
+        AssertUtils.notNull(operSecurityAccount,
+                "operSecurityAccount is null.");
+        AssertUtils.notEmpty(operSecurityAccount.getId(),
+                "operSecurityAccount.id is empty.");
+        
+        boolean flag = updateById(operSecurityAccount.getId(),
+                operSecurityAccount);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }

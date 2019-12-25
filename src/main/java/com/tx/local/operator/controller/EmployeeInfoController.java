@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.local.operator.model.EmployeeInfo;
+import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.service.EmployeeInfoService;
 import com.tx.core.paged.model.PagedList;
 
@@ -53,9 +54,9 @@ public class EmployeeInfoController {
      */
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
-		response.put("idCardTypes", IDCardTypeEnum.values());
-		response.put("sexs", SexEnum.values());
-
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        response.put("sexs", SexEnum.values());
+        
         return "operator/queryEmployeeInfoPagedList";
     }
     
@@ -70,11 +71,11 @@ public class EmployeeInfoController {
      */
     @RequestMapping("/toAdd")
     public String toAdd(ModelMap response) {
-    	response.put("employeeInfo", new EmployeeInfo());
-    	
-		response.put("idCardTypes", IDCardTypeEnum.values());
-		response.put("sexs", SexEnum.values());
-
+        response.put("employeeInfo", new EmployeeInfo());
+        
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        response.put("sexs", SexEnum.values());
+        
         return "operator/addEmployeeInfo";
     }
     
@@ -88,18 +89,42 @@ public class EmployeeInfoController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdate")
-    public String toUpdate(
-    		@RequestParam("id") String id,
-            ModelMap response) {
-        EmployeeInfo employeeInfo = this.employeeInfoService.findById(id); 
+    public String toUpdate(@RequestParam("id") String id, ModelMap response) {
+        EmployeeInfo employeeInfo = this.employeeInfoService.findById(id);
         response.put("employeeInfo", employeeInfo);
-
-		response.put("idCardTypes", IDCardTypeEnum.values());
-		response.put("sexs", SexEnum.values());
+        
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        response.put("sexs", SexEnum.values());
         
         return "operator/updateEmployeeInfo";
     }
-
+    
+    /**
+     * 跳转到保存员工信息页面
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toSave")
+    public String toSave(@RequestParam(value = "operatorId") String operatorId,
+            ModelMap response) {
+        EmployeeInfo employeeInfo = this.employeeInfoService
+                .findByOperatorId(operatorId);
+        if (employeeInfo == null) {
+            employeeInfo = new EmployeeInfo();
+            employeeInfo.setOperator(new Operator());
+            employeeInfo.getOperator().setId(operatorId);
+        }
+        response.put("employeeInfo", employeeInfo);
+        
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        response.put("sexs", SexEnum.values());
+        return "operator/saveEmployeeInfo";
+    }
+    
     /**
      * 查询员工信息实例列表<br/>
      * <功能详细描述>
@@ -112,15 +137,12 @@ public class EmployeeInfoController {
     @ResponseBody
     @RequestMapping("/queryList")
     public List<EmployeeInfo> queryList(
-    		@RequestParam MultiValueMap<String, String> request
-    	) {
+            @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-    	
-        List<EmployeeInfo> resList = this.employeeInfoService.queryList(
-			params         
-        );
-  
+        params.put("name", request.getFirst("name"));
+        
+        List<EmployeeInfo> resList = this.employeeInfoService.queryList(params);
+        
         return resList;
     }
     
@@ -136,18 +158,14 @@ public class EmployeeInfoController {
     @ResponseBody
     @RequestMapping("/queryPagedList")
     public PagedList<EmployeeInfo> queryPagedList(
-			@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam MultiValueMap<String, String> request
-    	) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-
-        PagedList<EmployeeInfo> resPagedList = this.employeeInfoService.queryPagedList(
-			params,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", request.getFirst("name"));
+        
+        PagedList<EmployeeInfo> resPagedList = this.employeeInfoService
+                .queryPagedList(params, pageIndex, pageSize);
         return resPagedList;
     }
     
@@ -185,6 +203,24 @@ public class EmployeeInfoController {
     }
     
     /**
+     * 更新员工信息实例<br/>
+     * <功能详细描述>
+     * @param employeeInfo
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/save")
+    public boolean save(EmployeeInfo employeeInfo) {
+        this.employeeInfoService.save(employeeInfo);
+        boolean flag = true;
+        return flag;
+    }
+    
+    /**
      * 根据主键查询员工信息实例<br/> 
      * <功能详细描述>
      * @param id
@@ -200,7 +236,7 @@ public class EmployeeInfoController {
         EmployeeInfo employeeInfo = this.employeeInfoService.findById(id);
         return employeeInfo;
     }
-
+    
     /**
      * 删除员工信息实例<br/> 
      * <功能详细描述>
@@ -218,9 +254,9 @@ public class EmployeeInfoController {
         return flag;
     }
     
-	/**
+    /**
      * 校验是否重复<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param params
      * @return [参数说明]
      * 

@@ -42,11 +42,11 @@ public interface OperatorConstants {
     String AUTHKEY_QUERY_ALL_ORG = "query_all_org";
     
     /** 人员引用类型：职位 */
-    String OPERATORREF_TYPE_POST = "post";
+    String OPERATOR_REF_TYPE_POST = "post";
     
     /** 人员引用类型: 组织 */
-    String OPERATORREF_TYPE_ORGANIZATIOIN = "organization";
+    String OPERATOR_REF_TYPE_ORGANIZATIOIN = "organization";
     
     /** 人员引用类型：职位 */
-    String OPERATORREF_TYPE_ROLE = "role";
+    String OPERATOR_REF_TYPE_ROLE = "role";
 }

@@ -5,7 +5,13 @@
  */
 package com.tx.plugin.login;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.servlet.ModelAndView;
+
 import com.tx.component.plugin.context.Plugin;
+import com.tx.plugin.login.exception.AuthorizeException;
+import com.tx.plugin.login.model.LoginUserInfo;
 
 /**
  * 登陆插件<br/>
@@ -26,4 +32,72 @@ public abstract class LoginPlugin<CONFIG extends LoginPluginConfig>
     public String getCatalog() {
         return "login";
     }
+    
+    public ModelAndView loginHandle(HttpServletRequest request) {
+        return null;
+    }
+    
+    public ModelAndView bindHandle(String operatorId,
+            HttpServletRequest request) {
+        return null;
+    }
+    
+    public ModelAndView login() {
+        return null;
+    }
+    
+    public ModelAndView bind() {
+        return null;
+    }
+    
+    /**
+     * 跳转到请求code的页<br/>
+     * <功能详细描述>
+     * @param viewName
+     * @param redirectUrl
+     * @param state
+     * @param scope
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return ModelAndView [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public abstract ModelAndView getCodeHandle(String viewName,
+            String redirectUrl, String state, String scope,
+            HttpServletRequest request);
+    
+    /**
+     * 获取用户第三方用户信息<br/>
+     * <功能详细描述>
+     * @param code
+     * @param state
+     * @param request
+     * @return
+     * @throws AuthorizeException [参数说明]
+     * 
+     * @return LoginUserInfo [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public abstract LoginUserInfo getUserInfo(String code, String state,
+            HttpServletRequest request) throws AuthorizeException;
+    
+    /**
+     * 获取用户在第三方的唯一键<br/>
+     * <功能详细描述>
+     * @param code
+     * @param state
+     * @param request
+     * @return
+     * @throws AuthorizeException [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public abstract String getUniqueId(String code, String state,
+            HttpServletRequest request) throws AuthorizeException;
+    
 }

@@ -122,8 +122,8 @@ public class OperatorRoleController implements InitializingBean {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping("/queryAuthListBySecurity")
-    public List<Role> queryAuthListBySecurity(
+    @RequestMapping("/queryRoleListBySecurity")
+    public List<Role> queryRoleListBySecurity(
             @RequestParam(value = "roleTypeId", required = true) String roleTypeId) {
         List<Role> resList = WebContextUtils.getCurrentRoles()
                 .stream()

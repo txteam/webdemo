@@ -38,6 +38,12 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND EI.id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(number)">  
+	            AND EI.number = #{number}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operator)">  
+	            AND EI.operatorId = #{operator.id}
+	        </if>
 		</trim>
 	</select>
 	

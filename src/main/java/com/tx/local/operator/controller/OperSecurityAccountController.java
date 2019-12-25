@@ -52,8 +52,8 @@ public class OperSecurityAccountController {
      */
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
-		response.put("idCardTypes", IDCardTypeEnum.values());
-
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        
         return "operator/queryOperSecurityAccountPagedList";
     }
     
@@ -68,10 +68,10 @@ public class OperSecurityAccountController {
      */
     @RequestMapping("/toAdd")
     public String toAdd(ModelMap response) {
-    	response.put("operSecurityAccount", new OperSecurityAccount());
-    	
-		response.put("idCardTypes", IDCardTypeEnum.values());
-
+        response.put("operSecurityAccount", new OperSecurityAccount());
+        
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        
         return "operator/addOperSecurityAccount";
     }
     
@@ -85,17 +85,40 @@ public class OperSecurityAccountController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdate")
-    public String toUpdate(
-    		@RequestParam("id") String id,
-            ModelMap response) {
-        OperSecurityAccount operSecurityAccount = this.operSecurityAccountService.findById(id); 
+    public String toUpdate(@RequestParam("id") String id, ModelMap response) {
+        OperSecurityAccount operSecurityAccount = this.operSecurityAccountService
+                .findById(id);
         response.put("operSecurityAccount", operSecurityAccount);
-
-		response.put("idCardTypes", IDCardTypeEnum.values());
+        
+        response.put("idCardTypes", IDCardTypeEnum.values());
         
         return "operator/updateOperSecurityAccount";
     }
-
+    
+    /**
+     * 跳转到编辑操作人员账户安全设置页面
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toSave")
+    public String toSave(@RequestParam("operatorId") String operatorId,
+            ModelMap response) {
+        OperSecurityAccount operSecurityAccount = this.operSecurityAccountService
+                .findByOperatorId(operatorId);
+        if (operSecurityAccount == null) {
+            operSecurityAccount = new OperSecurityAccount();
+            operSecurityAccount.setOperatorId(operatorId);
+        }
+        response.put("operSecurityAccount", operSecurityAccount);
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        
+        return "operator/saveOperSecurityAccount";
+    }
+    
     /**
      * 查询操作人员账户安全设置实例列表<br/>
      * <功能详细描述>
@@ -108,15 +131,13 @@ public class OperSecurityAccountController {
     @ResponseBody
     @RequestMapping("/queryList")
     public List<OperSecurityAccount> queryList(
-    		@RequestParam MultiValueMap<String, String> request
-    	) {
+            @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-    	
-        List<OperSecurityAccount> resList = this.operSecurityAccountService.queryList(
-			params         
-        );
-  
+        params.put("name", request.getFirst("name"));
+        
+        List<OperSecurityAccount> resList = this.operSecurityAccountService
+                .queryList(params);
+        
         return resList;
     }
     
@@ -132,19 +153,31 @@ public class OperSecurityAccountController {
     @ResponseBody
     @RequestMapping("/queryPagedList")
     public PagedList<OperSecurityAccount> queryPagedList(
-			@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam MultiValueMap<String, String> request
-    	) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-
-        PagedList<OperSecurityAccount> resPagedList = this.operSecurityAccountService.queryPagedList(
-			params,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", request.getFirst("name"));
+        
+        PagedList<OperSecurityAccount> resPagedList = this.operSecurityAccountService
+                .queryPagedList(params, pageIndex, pageSize);
         return resPagedList;
+    }
+    
+    /**
+     * 保存操作人员账户安全设置实例
+     * <功能详细描述>
+     * @param operSecurityAccount [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/save")
+    public boolean save(OperSecurityAccount operSecurityAccount) {
+        this.operSecurityAccountService.save(operSecurityAccount);
+        return true;
     }
     
     /**
@@ -176,7 +209,8 @@ public class OperSecurityAccountController {
     @ResponseBody
     @RequestMapping("/update")
     public boolean update(OperSecurityAccount operSecurityAccount) {
-        boolean flag = this.operSecurityAccountService.updateById(operSecurityAccount);
+        boolean flag = this.operSecurityAccountService
+                .updateById(operSecurityAccount);
         return flag;
     }
     
@@ -193,10 +227,11 @@ public class OperSecurityAccountController {
     @ResponseBody
     @RequestMapping("/findById")
     public OperSecurityAccount findById(@RequestParam(value = "id") String id) {
-        OperSecurityAccount operSecurityAccount = this.operSecurityAccountService.findById(id);
+        OperSecurityAccount operSecurityAccount = this.operSecurityAccountService
+                .findById(id);
         return operSecurityAccount;
     }
-
+    
     /**
      * 删除操作人员账户安全设置实例<br/> 
      * <功能详细描述>
@@ -214,9 +249,9 @@ public class OperSecurityAccountController {
         return flag;
     }
     
-	/**
+    /**
      * 校验是否重复<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param params
      * @return [参数说明]
      * 
@@ -230,7 +265,8 @@ public class OperSecurityAccountController {
             @RequestParam(value = "id", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
         params.remove("id");
-        boolean flag = this.operSecurityAccountService.exists(params, excludeId);
+        boolean flag = this.operSecurityAccountService.exists(params,
+                excludeId);
         
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {

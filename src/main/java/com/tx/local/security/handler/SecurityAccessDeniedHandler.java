@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-import com.tx.core.util.WebRequestUtils;
+import com.tx.core.util.WebUtils;
 import com.tx.local.security.entrypoint.SecurityLoginAuthenticationEntryPoint;
 
 /**
@@ -43,7 +43,7 @@ public class SecurityAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response,
             AccessDeniedException accessDeniedException)
             throws IOException, ServletException {
-        if (WebRequestUtils.isAjaxRequest(request)) {
+        if (WebUtils.isAjaxRequest(request)) {
             //AJAX请求,使用response发送403
             response.sendError(403);
         } else if (!response.isCommitted()) {

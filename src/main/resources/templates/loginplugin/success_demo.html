@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>绑定成功</title>
+        <link rel="stylesheet" href="https://passport.baidu.com/static/phoenix/css/common/phoenix_93786e5.css" type="text/css" media="screen" />
+    </head>
+    <body data-site="bind_success" class="popup">
+        <div class="wrapper" id="Wrapper">
+                        <div class="passnewbind-content">
+                <div class="passnewbind-img"><img src="https://passport.baidu.com/static/phoenix/img/success.png" /></div>
+                <p class="passnewbind-title"><img src="https://passport.baidu.com/static/phoenix/img/ok.png" /><span>绑定成功！</span></p>
+                <p class="passnewbind-msg">
+                                            您的新浪微博"彭清杨"已成功绑定您的百度帐号"lanchao7pqy"
+                                    </p>
+                <p class="passnewbind-jump">
+                    <span class="secs" id="sec">3000</span>秒后自动关闭
+                </p>
+            </div>
+                        
+                        <img src="https://user.hao123.com/static/crossdomain.php?bdu=SlZTM2RMZURWSmJqUXlORVE1TmkwemJtUkJXbVZKTFRoVUxVcDVZblkyZWxCdVlUazJaMjFGWTJoQlEzUmxSVkZCUVVGQkpDUUFBQUFBQUFBQUFBRUFBQUR3NllvSGJHRnVZMmhoYnpkd2NYa0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFDRnpBMTRoY3dOZVlX" onload="suc" onerror="suc" alt="" style="display:none" />
+            <img src="https://www.nuomi.com/pclogin/main/crossdomain?bdu=SlZTM2RMZURWSmJqUXlORVE1TmkwemJtUkJXbVZKTFRoVUxVcDVZblkyZWxCdVlUazJaMjFGWTJoQlEzUmxSVkZCUVVGQkpDUUFBQUFBQUFBQUFBRUFBQUR3NllvSGJHRnVZMmhoYnpkd2NYa0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFDRnpBMTRoY3dOZVlX" onload="suc" onerror="suc" alt="" style="display:none" />
+            <img src="https://passport.chuanke.com/api/sync?bdu=SlZTM2RMZURWSmJqUXlORVE1TmkwemJtUkJXbVZKTFRoVUxVcDVZblkyZWxCdVlUazJaMjFGWTJoQlEzUmxSVkZCUVVGQkpDUUFBQUFBQUFBQUFBRUFBQUR3NllvSGJHRnVZMmhoYnpkd2NYa0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFDRnpBMTRoY3dOZVlX" onload="suc" onerror="suc" alt="" style="display:none" />
+            <img src="https://passport.zongheng.com/bdpass/crossdomain.do?bdu=SlZTM2RMZURWSmJqUXlORVE1TmkwemJtUkJXbVZKTFRoVUxVcDVZblkyZWxCdVlUazJaMjFGWTJoQlEzUmxSVkZCUVVGQkpDUUFBQUFBQUFBQUFBRUFBQUR3NllvSGJHRnVZMmhoYnpkd2NYa0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFDRnpBMTRoY3dOZVlX" onload="suc" onerror="suc" alt="" style="display:none" />
+                    </div>
+
+        <script type="text/javascript">
+        var config = {
+            is_xd: ''.length,
+            display: 'popup',
+            is_bind: +'',
+            xd: '' + '&success=1&next=' + encodeURIComponent('https://passport.baidu.com/accountbind?tpl='),
+            displayname: "lanchao7pqy",
+            passport_uname: "lanchao7pqy",
+            next_url: "https:\/\/passport.baidu.com\/accountbind?tpl=",
+            os_type: ""
+        };
+
+        config.xd += '&isFirstBind=1&os_type=' + config.os_type + '&displayname=' + encodeURIComponent(config.displayname) + '&passport_uname=' + encodeURIComponent(config.passport_uname);
+
+        function jumpNormal() {
+            if (config.is_xd) {
+                window.document.location.replace(config.xd);
+            } else {
+                var target = window.opener ? window.opener.top : window;
+                try{
+                    target.document.location.replace(config.next_url);
+                }catch(e){
+                    target.location.replace(config.next_url);
+                }
+                if(target !==window){
+                    window.open('', '_parent', '');
+                    window.close();
+                }
+            }
+        }
+        if(document.getElementById("link")){
+            document.getElementById("link").onclick = jumpNormal;
+        }
+        
+
+        var suc = function() {
+            var secs = 3000;
+
+            function countdown() {
+                document.getElementById('sec').innerHTML = secs;
+                if (secs == 0) {
+                    if (config.display != 'dialog') {
+                        jumpNormal();
+                    }
+                } else {
+                    secs--;
+                    setTimeout(countdown, 1000);
+                }
+            }
+            countdown();
+        }
+                    window.setTimeout(function() {
+               suc()
+            }, 1000);
+                (function() {
+            var window_display = config.display;
+            if (window_display == "popup") {
+                var b = 0,
+                    a = 0;
+                var c = function() {
+
+                    var e = window.outerHeight ? (window.outerHeight - window.innerHeight + 10) : 60;
+                    var f = window.outerWidth ? (window.outerWidth - window.innerWidth) : 4
+
+                    var j = document.getElementById("Wrapper").offsetWidth + f + 30,
+                        d = document.getElementById("Wrapper").offsetHeight + e + 30;
+                    if (b == d) {
+                        return
+                    } else {
+                        b = d
+                    }
+                    window.resizeTo(j, d)
+
+                };
+                c();
+                setInterval(c, 500);
+            }
+        })();
+        </script>
+    </body>
+</html>

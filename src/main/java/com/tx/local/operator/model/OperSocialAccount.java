@@ -52,6 +52,9 @@ public class OperSocialAccount
     /** 第三方的用户名，或昵称等 */
     private String username;
     
+    /** 第三方用户头像url */
+    private String headImgUrl;
+    
     /** 昵称 */
     private String attributes;
     
@@ -159,6 +162,20 @@ public class OperSocialAccount
         this.createDate = createDate;
     }
     
+    /**
+     * @return 返回 headImgUrl
+     */
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    /**
+     * @param 对headImgUrl进行赋值
+     */
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
+    }
+
     /**
      * @return 返回 lastUpdateDate
      */

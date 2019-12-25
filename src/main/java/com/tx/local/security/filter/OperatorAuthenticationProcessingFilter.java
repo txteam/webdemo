@@ -85,7 +85,6 @@ public class OperatorAuthenticationProcessingFilter
         
         OperatorLoginFormAuthenticationToken authRequest = new OperatorLoginFormAuthenticationToken(
                 username, password);
-        
         // Allow subclasses to set the "details" property
         setDetails(request, authRequest);
         

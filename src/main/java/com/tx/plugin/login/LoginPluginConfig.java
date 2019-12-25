@@ -21,6 +21,10 @@ import com.tx.component.plugin.context.PluginConfig;
 @ConfigCatalog(code = "plugin.login", name = "登陆插件配置")
 public abstract class LoginPluginConfig extends PluginConfig {
     
+    //  /** 登陆url:这里只是用以验证参数不可编辑的场景，其实可以在filter中直接写死链接即可 */
+    //    @ApiModelProperty(accessMode = AccessMode.READ_ONLY, value = "登陆Url")
+    //    private String processesUrl = "/operator/wx/login";
+    
     /** 登陆备注 */
     private String remark;
     

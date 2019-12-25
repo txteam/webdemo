@@ -51,8 +51,13 @@ $(document).ready(function(){
 		width : 260,
 		height : 400,
 		handler : function(organization){
+			var oldOrgId = $("#organizationId").val();
 			$("#organizationName").val(organization.name);
 			$("#organizationId").val(organization.id);
+			if(organization.id != oldOrgId){
+				$("#mainPostName").val('');
+				$("#mainPostId").val('');
+			}
 		},
 		clearHandler: function(){
 			$("#organizationName").val('');

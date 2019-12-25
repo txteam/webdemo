@@ -146,6 +146,42 @@ public class OperatorController {
     }
     
     /**
+     * 跳转到编辑操作人员主页面<br/>
+     *   可编辑用户信息
+     *   可在其中编辑雇员信息
+     *   可在其中编辑安全账户信息
+     *   可在其中实现绑定第三方账号以及解绑功能
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toModifyMain")
+    public String toModifyMain(@RequestParam("id") String id,
+            ModelMap response) {
+        String vcid = WebContextUtils.getVcid();
+        Operator operator = this.operatorService.findById(id);
+        response.put("operator", operator);
+        if (!StringUtils.isEmpty(operator.getOrganizationId())) {
+            Organization org = this.organizationFacade
+                    .findById(operator.getOrganizationId());
+            if (org != null && StringUtils.equals(vcid, org.getVcid())) {
+                response.put("organization", org);
+            }
+        }
+        if (!StringUtils.isEmpty(operator.getMainPostId())) {
+            Post post = this.postFacade.findById(operator.getMainPostId());
+            if (post != null && StringUtils.equals(vcid, post.getVcid())) {
+                response.put("post", post);
+                operator.setMainPostId(operator.getMainPostId());
+            }
+        }
+        return "operator/modifyOperatorMain";
+    }
+    
+    /**
      * 跳转到配置人员角色界面<br/>
      * <功能详细描述>
      * @return [参数说明]

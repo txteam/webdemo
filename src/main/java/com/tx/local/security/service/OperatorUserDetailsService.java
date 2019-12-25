@@ -33,6 +33,7 @@ import com.tx.component.role.model.Role;
 import com.tx.component.role.model.RoleRef;
 import com.tx.component.role.service.RoleRefService;
 import com.tx.component.security.context.SecurityContext;
+import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRole;
 import com.tx.local.operator.model.OperatorRoleEnum;
@@ -79,6 +80,24 @@ public class OperatorUserDetailsService
     }
     
     /**
+     * 根据用户id加载UserDetail对象<br/>
+     * <功能详细描述>
+     * @param userId
+     * @return [参数说明]
+     * 
+     * @return UserDetails [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public UserDetails loadUserByUserId(String userId) {
+        AssertUtils.notEmpty(userId, "userId is empty.");
+        
+        Operator operator = this.operatorService.findById(userId);
+        OperatorUserDetails userDetail = loadUserDetailByOperator(operator);
+        return userDetail;
+    }
+    
+    /**
      * @param username
      * @return
      * @throws UsernameNotFoundException
@@ -86,11 +105,28 @@ public class OperatorUserDetailsService
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
+        AssertUtils.notEmpty(username, "username is empty.");
+        
         if ("admin".equalsIgnoreCase(username)) {
             UserDetails user = mockUser();
             return user;
         }
         Operator operator = this.operatorService.findByUsername(username);
+        OperatorUserDetails userDetail = loadUserDetailByOperator(operator);
+        return userDetail;
+    }
+    
+    /** 
+     * 根据operator加载OperatorUserDetail对象<br/>
+     * <功能详细描述>
+     * @param operator
+     * @return [参数说明]
+     * 
+     * @return OperatorUserDetails [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private OperatorUserDetails loadUserDetailByOperator(Operator operator) {
         //用户权限
         MultiValueMap<String, String> refMap = new LinkedMultiValueMap<>();
         //人员权限
@@ -103,7 +139,6 @@ public class OperatorUserDetailsService
             refMap.add(AuthConstants.AUTHREFTYPE_POST,
                     operator.getMainPostId());
         }
-        
         //角色权限
         boolean isSuperAdmin = false;
         List<RoleRef> roleRefList = this.roleRefService.queryListByRef(true,

@@ -15,18 +15,27 @@
 		resultMap="operSocialAccountMap">
 		SELECT 
 				OSA.id,
-				OSA.lastUpdateDate,
-				OSA.type,
-				OSA.createDate,
-				OSA.uniqueId,
 				OSA.operatorId,
+				OSA.uniqueId,
+				OSA.type,
 				OSA.username,
-				OSA.attributes
+				OSA.headImgUrl,
+				OSA.attributes,
+				OSA.createDate,
+				OSA.lastUpdateDate
 		  FROM OPER_SOCIAL_ACCOUNT OSA
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND OSA.id = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            AND OSA.operatorId = #{operatorId}
+	            AND OSA.type = #{type}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(uniqueId)">  
+	            AND OSA.uniqueId = #{uniqueId}
+	            AND OSA.type = #{type}
 	        </if>
 		</trim>
 	</select>
@@ -37,13 +46,14 @@
 		resultMap="operSocialAccountMap">
 		SELECT 
 				OSA.id,
-				OSA.lastUpdateDate,
-				OSA.type,
-				OSA.createDate,
-				OSA.uniqueId,
 				OSA.operatorId,
+				OSA.uniqueId,
+				OSA.type,
 				OSA.username,
-				OSA.attributes
+				OSA.headImgUrl,
+				OSA.attributes,
+				OSA.createDate,
+				OSA.lastUpdateDate
 		  FROM OPER_SOCIAL_ACCOUNT OSA
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
@@ -157,24 +167,26 @@
 		INSERT INTO OPER_SOCIAL_ACCOUNT
 		(
 			id,
-			lastUpdateDate,
 			type,
-			createDate,
-			uniqueId,
 			operatorId,
+			uniqueId,
 			username,
-			attributes
+			headImgUrl,
+			attributes,
+			lastUpdateDate,
+			createDate
 		)
 		VALUES
 		(
 			#{id},
-			#{lastUpdateDate},
 			#{type},
-			#{createDate},
-			#{uniqueId},
 			#{operatorId},
+			#{uniqueId},
 			#{username},
-			#{attributes}
+			#{headImgUrl},
+			#{attributes},
+			#{lastUpdateDate},
+			#{createDate}
 		)
 	</insert>
 	
@@ -186,6 +198,14 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            AND operatorId = #{operatorId}
+	            AND type = #{type}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(uniqueId)">  
+	            AND uniqueId = #{uniqueId}
+	            AND type = #{type}
+	        </if>
 		</trim>
 	</delete>
 	
@@ -194,14 +214,23 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_SOCIAL_ACCOUNT
 	    <trim prefix="SET" suffixOverrides=",">
+	    	<!-- <if test="_parameter.containsKey('operatorId')"> -->
+			<!-- operatorId = #{operatorId,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('uniqueId')"> -->
+			<!-- uniqueId = #{uniqueId,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('type')"> -->
+			<!-- type = #{type,javaType=com.tx.local.operator.model.OperSocialAccountTypeEnum}, -->
+			<!-- </if> -->
 			<if test="_parameter.containsKey('lastUpdateDate')">
 	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
-			<if test="_parameter.containsKey('type')">
-	    		type = #{type,javaType=com.tx.local.operator.model.OperSocialAccountTypeEnum},
-	    	</if>
 			<if test="_parameter.containsKey('username')">
 	    		username = #{username,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('headImgUrl')">
+	    		headImgUrl = #{headImgUrl,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('attributes')">
 	    		attributes = #{attributes,javaType=java.lang.String},

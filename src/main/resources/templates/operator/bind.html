@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>bind</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta name="author" content="cqtianxin" />
+	<meta name="copyright" content="cqtianxin" />
+</head>
+<body onload="javascript: document.forms[0].submit();">
+	<form th:action="${requestUrl}">
+		<input type="hidden"  th:each="entry : ${parameterMap.entrySet()}" th:name="${entry.key}" th:value="${entry.value}"/>
+	</form>
+</body>
+</html>

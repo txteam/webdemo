@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.core.paged.model.PagedList;
+import com.tx.local.organization.model.OrgPost;
 import com.tx.local.organization.model.Organization;
 import com.tx.local.organization.model.Post;
 import com.tx.local.organization.service.OrganizationService;
 import com.tx.local.organization.service.PostService;
-import com.tx.local.security.model.OrgPost;
 import com.tx.local.security.util.WebContextUtils;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
 

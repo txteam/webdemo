@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
@@ -224,7 +224,6 @@ $(document).ready(function(){
 			if(row.modifyAble){
 				editFun(row[idFieldName], row[nameFieldName]);
 			}
-			
 		},
 		onClickRow : function(index, row){
 			if(row.modifyAble){
@@ -361,12 +360,14 @@ function editFun(id,name) {
 		DialogUtils.alert("没有选中的" + entityName);
 		return ;
 	}
+	
+	/*
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
-	
-	var updateUrl = /*[[@{/operator/toUpdate?id={0}}]]*/'';
-	//FIXME: 修改编辑modalDialog的width,height
+	*/
+	//var updateUrl = /*[[@{/operator/toUpdate?id={0}}]]*/'';
+	/*
 	DialogUtils.openModalDialog(
 		"updateOperator",
 		"编辑" + entityName + ":" + name,
@@ -376,6 +377,15 @@ function editFun(id,name) {
 			queryFun();
 		},{maximizable : true}
 	);
+	*/
+	var modifyMainUrl = /*[[@{/operator/toModifyMain?id={0}}]]*/'';
+	//修改编辑modalDialog的width,height
+	$.triggerge("addTab",{
+		refresh : false,
+		id: 'modifyOperator_' + id,
+        title : "编辑" + entityName + ":" + name,
+        href : $.formatString(modifyMainUrl,id)
+    });
 	return false;
 }
 /*

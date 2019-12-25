@@ -14,24 +14,25 @@
 		parameterType="com.tx.local.operator.model.Operator"
 		resultMap="operatorMap">
 		SELECT 
-				O.password,
-				O.examinePwd,
-				O.historyPwd,
 				O.id,
-				O.pwdErrCount,
-				O.pwdUpdateDate,
-				O.lastUpdateDate,
-				O.mainPostId,
-				O.name,
-				O.vcid,
-				O.valid,
-				O.createDate,
-				O.locked,
-				O.modifyAble,
-				O.invalidDate,
 				O.username,
 				O.usernameChangeCount,
-				O.organizationId
+				O.usernameChangeAble,
+				O.name,
+				O.vcid,
+				O.password,
+				O.pwdErrCount,
+				O.pwdUpdateDate,
+				O.examinePwd,
+				O.historyPwd,
+				O.modifyAble,
+				O.locked,
+				O.valid,
+				O.invalidDate,
+				O.organizationId,
+				O.mainPostId,
+				O.lastUpdateDate,
+				O.createDate
 		  FROM OPER_OPERATOR O
 		 WHERE
 		<trim prefixOverrides="AND | OR">
@@ -50,20 +51,24 @@
 		resultMap="operatorMap">
 		SELECT 
 				O.id,
-				O.pwdErrCount,
-				O.pwdUpdateDate,
-				O.lastUpdateDate,
-				O.mainPostId,
-				O.name,
-				O.vcid,
-				O.valid,
-				O.createDate,
-				O.locked,
-				O.modifyAble,
-				O.invalidDate,
 				O.username,
 				O.usernameChangeCount,
-				O.organizationId
+				O.usernameChangeAble,
+				O.name,
+				O.vcid,
+				O.password,
+				O.pwdErrCount,
+				O.pwdUpdateDate,
+				O.examinePwd,
+				O.historyPwd,
+				O.modifyAble,
+				O.locked,
+				O.valid,
+				O.invalidDate,
+				O.organizationId,
+				O.mainPostId,
+				O.lastUpdateDate,
+				O.createDate
 		  FROM OPER_OPERATOR O
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
@@ -219,44 +224,46 @@
 		INSERT INTO OPER_OPERATOR
 		(
 			id,
+			vcid,
+			name,
+			username,
+			usernameChangeCount,
+			usernameChangeAble,
+			password,
 			pwdErrCount,
 			pwdUpdateDate,
-			lastUpdateDate,
-			mainPostId,
-			name,
-			vcid,
 			valid,
-			createDate,
 			locked,
 			modifyAble,
 			examinePwd,
 			historyPwd,
 			invalidDate,
-			password,
-			username,
-			usernameChangeCount,
-			organizationId
+			organizationId,
+			mainPostId,
+			lastUpdateDate,
+			createDate
 		)
 		VALUES
 		(
 			#{id},
+			#{vcid},
+			#{name},
+			#{username},
+			#{usernameChangeCount},
+			#{usernameChangeAble},
+			#{password},
 			#{pwdErrCount},
 			#{pwdUpdateDate},
-			#{lastUpdateDate},
-			#{mainPostId},
-			#{name},
-			#{vcid},
 			#{valid},
-			#{createDate},
 			#{locked},
 			#{modifyAble},
 			#{examinePwd},
 			#{historyPwd},
 			#{invalidDate},
-			#{password},
-			#{username},
-			#{usernameChangeCount},
-			#{organizationId}
+			#{organizationId},
+			#{mainPostId},
+			#{lastUpdateDate},
+			#{createDate}
 		)
 	</insert>
 	
@@ -266,44 +273,46 @@
 		INSERT INTO OPER_OPERATOR_HIS
 		(
 			id,
+			vcid,
+			name,
+			username,
+			usernameChangeCount,
+			usernameChangeAble,
+			password,
 			pwdErrCount,
 			pwdUpdateDate,
-			lastUpdateDate,
-			mainPostId,
-			name,
-			vcid,
 			valid,
-			createDate,
 			locked,
 			modifyAble,
 			examinePwd,
 			historyPwd,
 			invalidDate,
-			password,
-			username,
-			usernameChangeCount,
-			organizationId
+			organizationId,
+			mainPostId,
+			lastUpdateDate,
+			createDate
 		)
 		VALUES
 		(
 			#{id},
+			#{vcid},
+			#{name},
+			#{username},
+			#{usernameChangeCount},
+			#{usernameChangeAble},
+			#{password},
 			#{pwdErrCount},
 			#{pwdUpdateDate},
-			#{lastUpdateDate},
-			#{mainPostId},
-			#{name},
-			#{vcid},
 			#{valid},
-			#{createDate},
 			#{locked},
 			#{modifyAble},
 			#{examinePwd},
 			#{historyPwd},
 			#{invalidDate},
-			#{password},
-			#{username},
-			#{usernameChangeCount},
-			#{organizationId}
+			#{organizationId},
+			#{mainPostId},
+			#{lastUpdateDate},
+			#{createDate}
 		)
 	</insert>
 	
@@ -323,23 +332,17 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_OPERATOR
 	    <trim prefix="SET" suffixOverrides=",">
+			<!-- <if test="_parameter.containsKey('vcid')"> -->
+			<!-- vcid = #{vcid,javaType=java.lang.String}, -->
+			<!-- </if> -->
 			<if test="_parameter.containsKey('pwdErrCount')">
 	    		pwdErrCount = #{pwdErrCount,javaType=java.lang.Integer},
 	    	</if>
 			<if test="_parameter.containsKey('pwdUpdateDate')">
 	    		pwdUpdateDate = #{pwdUpdateDate,javaType=java.util.Date},
 	    	</if>
-			<if test="_parameter.containsKey('lastUpdateDate')">
-	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
-	    	</if>
-			<if test="_parameter.containsKey('mainPostId')">
-	    		mainPostId = #{mainPostId,javaType=java.lang.String},
-	    	</if>
 			<if test="_parameter.containsKey('name')">
 	    		name = #{name,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('vcid')">
-	    		vcid = #{vcid,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('valid')">
 	    		valid = #{valid,javaType=boolean},
@@ -368,8 +371,17 @@
 	    	<if test="_parameter.containsKey('usernameChangeCount')">
 	    		usernameChangeCount = #{usernameChangeCount,javaType=java.lang.String},
 	    	</if>
+	    	<if test="_parameter.containsKey('usernameChangeAble')">
+	    		usernameChangeAble = #{usernameChangeAble,javaType=boolean},
+	    	</if>
 			<if test="_parameter.containsKey('organizationId')">
 	    		organizationId = #{organizationId,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('mainPostId')">
+	    		mainPostId = #{mainPostId,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
 	    </trim>
 	    WHERE

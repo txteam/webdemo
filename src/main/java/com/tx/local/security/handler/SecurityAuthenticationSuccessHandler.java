@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
+import com.tx.core.util.WebUtils;
 
 /**
  * ajax认证成功句柄<br/>
@@ -28,23 +30,34 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
  * @since  [产品/模块版本]
  */
 public class SecurityAuthenticationSuccessHandler
-        implements AuthenticationSuccessHandler {
+        extends SavedRequestAwareAuthenticationSuccessHandler {
     
     /** 日志记录器 */
     private Logger logger = LoggerFactory
             .getLogger(SecurityAuthenticationSuccessHandler.class);
+    
+    /** <默认构造函数> */
+    public SecurityAuthenticationSuccessHandler() {
+        super();
+        setDefaultTargetUrl("/");
+    }
     
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
             HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
         logger.info("登录成功：" + authentication.getName());
+        if (WebUtils.isAjaxRequest(request)) {
+            //如果为ajax请求，则返回ajax结果
+            response.setContentType("application/json;charset=utf-8");
+            PrintWriter out = response.getWriter();
+            out.write("{" + "\"status\":\"success\"," + "\"msg\":\"登录成功\","
+                    + "\"data\":\"mainframe\"" + "}");
+            out.flush();
+            out.close();
+            return;
+        }
         
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter out = response.getWriter();
-        out.write("{" + "\"status\":\"success\"," + "\"msg\":\"登录成功\","
-                + "\"data\":\"mainframe\"" + "}");
-        out.flush();
-        out.close();
+        super.onAuthenticationSuccess(request, response, authentication);
     }
 }

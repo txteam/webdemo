@@ -6,6 +6,7 @@
  */
 package com.tx.local.operator.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -29,7 +30,10 @@ import io.swagger.annotations.ApiModel;
 @Entity
 @Table(name = "oper_security_account")
 @ApiModel("操作人员账户安全设置")
-public class OperSecurityAccount {
+public class OperSecurityAccount implements Serializable {
+    
+    /** 注释内容 */
+    private static final long serialVersionUID = -192107970248948939L;
     
     /** 主键 */
     private String id;
@@ -42,6 +46,9 @@ public class OperSecurityAccount {
     
     /** 是否绑定电话号码 */
     private boolean mobileBinding = false;
+    
+    /** 是否可以手机登陆：特指手机接收短信验证码实现登陆 */
+    private boolean mobileLoginEnable = false;
     
     /** 电子邮件 */
     private String email;
@@ -129,6 +136,20 @@ public class OperSecurityAccount {
      */
     public void setMobileBinding(boolean mobileBinding) {
         this.mobileBinding = mobileBinding;
+    }
+    
+    /**
+     * @return 返回 mobileLoginEnable
+     */
+    public boolean isMobileLoginEnable() {
+        return mobileLoginEnable;
+    }
+    
+    /**
+     * @param 对mobileLoginEnable进行赋值
+     */
+    public void setMobileLoginEnable(boolean mobileLoginEnable) {
+        this.mobileLoginEnable = mobileLoginEnable;
     }
     
     /**
@@ -242,32 +263,33 @@ public class OperSecurityAccount {
     public void setRealNameLastErrDate(Date realNameLastErrDate) {
         this.realNameLastErrDate = realNameLastErrDate;
     }
-
+    
     /**
      * @return 返回 createDate
      */
     public Date getCreateDate() {
         return createDate;
     }
-
+    
     /**
      * @param 对createDate进行赋值
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-
+    
     /**
      * @return 返回 lastUpdateDate
      */
     public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
-
+    
     /**
      * @param 对lastUpdateDate进行赋值
      */
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
+    
 }

@@ -6,6 +6,9 @@
  */
 package com.tx.local.operator.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tx.component.basicdata.model.BasicDataEnum;
+import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 
 /**
  * 操作人员第三方账户类型<br/>
@@ -16,13 +19,42 @@ package com.tx.local.operator.model;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public enum OperSocialAccountTypeEnum {
+@JsonSerialize(using = BasicDataEnumJsonSerializer.class)
+public enum OperSocialAccountTypeEnum implements BasicDataEnum {
     
-    WX,
+    WX("WX", "微信"),
     
-    QQ,
+    QQ("QQ", "QQ"),
     
-    WB,
+    WB("WB", "微博"),
     
-    ALIPAY;
+    BD("BD", "百度"),
+    
+    GH("GH", "Github");
+    
+    /** 编码 */
+    private final String code;
+    
+    /** 名称 */
+    private final String name;
+    
+    /** <默认构造函数> */
+    private OperSocialAccountTypeEnum(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+    
+    /**
+     * @return 返回 code
+     */
+    public String getCode() {
+        return code;
+    }
+    
+    /**
+     * @return 返回 name
+     */
+    public String getName() {
+        return name;
+    }
 }

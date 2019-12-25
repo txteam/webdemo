@@ -6,6 +6,10 @@
  */
 package com.tx.local.basicdata.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tx.component.basicdata.model.BasicDataEnum;
+import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
+
 /**
  * 身份证件类型大类<br/>
  * <功能详细描述>
@@ -15,7 +19,8 @@ package com.tx.local.basicdata.model;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public enum IDCardTypeEnum {
+@JsonSerialize(using = BasicDataEnumJsonSerializer.class)
+public enum IDCardTypeEnum implements BasicDataEnum{
     
     SFZ("SFZ", "身份证"),
     

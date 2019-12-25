@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.stereotype.Component;
 
-import com.tx.local.operator.model.Operator;
 import com.tx.local.security.SecurityConstants;
 import com.tx.local.security.model.OperatorUserDetails;
 
@@ -41,11 +40,9 @@ public class UserSessionAuthenticationStrategy
     public void onAuthentication(Authentication authentication,
             HttpServletRequest request, HttpServletResponse response)
             throws SessionAuthenticationException {
-        OperatorUserDetails userDetail = (OperatorUserDetails) authentication
-                .getPrincipal();
-        Operator user = userDetail.getUser();
-        
-        request.getSession().setAttribute(SecurityConstants.SESSION_USER, user);
+        //OperatorUserDetails userDetail = (OperatorUserDetails) authentication.getPrincipal();
+        //Operator user = userDetail.getUser();
+        //request.getSession().setAttribute(SecurityConstants.SESSION_USER,userDetail);
     }
     
 }

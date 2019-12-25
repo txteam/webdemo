@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.local.operator.dao.EmployeeInfoDao;
 import com.tx.local.operator.model.EmployeeInfo;
+import com.tx.local.operator.model.Operator;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
@@ -55,13 +56,50 @@ public class EmployeeInfoService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
+    public void save(EmployeeInfo employeeInfo) {
+        //验证参数是否合法
+        AssertUtils.notNull(employeeInfo, "employeeInfo is null.");
+        AssertUtils.notEmpty(employeeInfo.getNumber(),
+                "employeeInfo.number is empty.");
+        AssertUtils.notNull(employeeInfo.getOperator(),
+                "employeeInfo.operator is null.");
+        AssertUtils.notEmpty(employeeInfo.getOperator().getId(),
+                "employeeInfo.operator.id is empty.");
+        
+        String operatorId = employeeInfo.getOperator().getId();
+        EmployeeInfo db = findByOperatorId(operatorId);
+        if (db == null) {
+            insert(employeeInfo);
+        } else {
+            updateById(db.getId(), employeeInfo);
+        }
+    }
+    
+    /**
+     * 新增员工信息实例<br/>
+     * 将employeeInfo插入数据库中保存
+     * 1、如果employeeInfo 为空时抛出参数为空异常
+     * 2、如果employeeInfo 中部分必要参数为非法值时抛出参数不合法异常
+     * 
+     * @param employeeInfo [参数说明]
+     * @return void [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
     public void insert(EmployeeInfo employeeInfo) {
         //验证参数是否合法
         AssertUtils.notNull(employeeInfo, "employeeInfo is null.");
-           
-        //FIXME:为添加的数据需要填入默认值的字段填入默认值
-		employeeInfo.setLastUpdateDate(new Date());
-		employeeInfo.setCreateDate(new Date());
+        AssertUtils.notEmpty(employeeInfo.getNumber(),
+                "employeeInfo.number is empty.");
+        AssertUtils.notNull(employeeInfo.getOperator(),
+                "employeeInfo.operator is null.");
+        AssertUtils.notEmpty(employeeInfo.getOperator().getId(),
+                "employeeInfo.operator.id is empty.");
+        
+        //为添加的数据需要填入默认值的字段填入默认值
+        employeeInfo.setLastUpdateDate(new Date());
+        employeeInfo.setCreateDate(new Date());
         
         //调用数据持久层对实例进行持久化操作
         this.employeeInfoDao.insert(employeeInfo);
@@ -109,6 +147,45 @@ public class EmployeeInfoService {
     }
     
     /**
+     * 根据id查询员工信息实例
+     * 1、当id为empty时抛出异常
+     *
+     * @param id
+     * @return EmployeeInfo [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    public EmployeeInfo findByNumber(String number) {
+        AssertUtils.notEmpty(number, "number is empty.");
+        
+        EmployeeInfo condition = new EmployeeInfo();
+        condition.setNumber(number);
+        
+        EmployeeInfo res = this.employeeInfoDao.find(condition);
+        return res;
+    }
+    
+    /**
+     * 根据id查询员工信息实例
+     * 1、当id为empty时抛出异常
+     *
+     * @param id
+     * @return EmployeeInfo [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    public EmployeeInfo findByOperatorId(String operatorId) {
+        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+        
+        EmployeeInfo condition = new EmployeeInfo();
+        condition.setOperator(new Operator());
+        condition.getOperator().setId(operatorId);
+        
+        EmployeeInfo res = this.employeeInfoDao.find(condition);
+        return res;
+    }
+    
+    /**
      * 查询员工信息实例列表
      * <功能详细描述>
      * @param params      
@@ -118,14 +195,10 @@ public class EmployeeInfoService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<EmployeeInfo> queryList(
-		Map<String,Object> params   
-    	) {
-        //判断条件合法性
-        
+    public List<EmployeeInfo> queryList(Map<String, Object> params) {
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<EmployeeInfo> resList = this.employeeInfoDao.queryList(params);
         
@@ -142,15 +215,13 @@ public class EmployeeInfoService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<EmployeeInfo> queryList(
-		Querier querier   
-    	) {
+    public List<EmployeeInfo> queryList(Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<EmployeeInfo> resList = this.employeeInfoDao.queryList(querier);
         
@@ -171,22 +242,21 @@ public class EmployeeInfoService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<EmployeeInfo> queryPagedList(
-		Map<String,Object> params,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<EmployeeInfo> queryPagedList(Map<String, Object> params,
+            int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<EmployeeInfo> resPagedList = this.employeeInfoDao.queryPagedList(params, pageIndex, pageSize);
+        PagedList<EmployeeInfo> resPagedList = this.employeeInfoDao
+                .queryPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
     
-	/**
+    /**
      * 分页查询员工信息实例列表
      * <功能详细描述>
      * @param querier    
@@ -200,18 +270,17 @@ public class EmployeeInfoService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<EmployeeInfo> queryPagedList(
-		Querier querier,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<EmployeeInfo> queryPagedList(Querier querier,
+            int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<EmployeeInfo> resPagedList = this.employeeInfoDao.queryPagedList(querier, pageIndex, pageSize);
+        PagedList<EmployeeInfo> resPagedList = this.employeeInfoDao
+                .queryPagedList(querier, pageIndex, pageSize);
         
         return resPagedList;
     }
@@ -226,14 +295,12 @@ public class EmployeeInfoService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Map<String,Object> params   
-    	) {
+    public int count(Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.employeeInfoDao.count(params);
         
@@ -250,15 +317,13 @@ public class EmployeeInfoService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Querier querier   
-    	) {
+    public int count(Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.employeeInfoDao.count(querier);
         
@@ -276,7 +341,7 @@ public class EmployeeInfoService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public boolean exists(Map<String,String> key2valueMap, String excludeId) {
+    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
         AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
         
         //生成查询条件
@@ -284,7 +349,7 @@ public class EmployeeInfoService {
         params.putAll(key2valueMap);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.employeeInfoDao.count(params,excludeId);
+        int res = this.employeeInfoDao.count(params, excludeId);
         
         return res > 0;
     }
@@ -304,7 +369,7 @@ public class EmployeeInfoService {
         AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.employeeInfoDao.count(querier,excludeId);
+        int res = this.employeeInfoDao.count(querier, excludeId);
         
         return res > 0;
     }
@@ -320,31 +385,31 @@ public class EmployeeInfoService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(String id,EmployeeInfo employeeInfo) {
+    public boolean updateById(String id, EmployeeInfo employeeInfo) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(employeeInfo, "employeeInfo is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-
+        
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //FIXME:需要更新的字段
-		updateRowMap.put("idCardType", employeeInfo.getIdCardType());
-		updateRowMap.put("idCardNumber", employeeInfo.getIdCardNumber());
-		updateRowMap.put("sex", employeeInfo.getSex());
-		updateRowMap.put("realName", employeeInfo.getRealName());
-		updateRowMap.put("email", employeeInfo.getEmail());
-		updateRowMap.put("entryDate", employeeInfo.getEntryDate());
-		updateRowMap.put("mobileNumber", employeeInfo.getMobileNumber());
-		updateRowMap.put("number", employeeInfo.getNumber());
-		updateRowMap.put("leaving", employeeInfo.isLeaving());
-		updateRowMap.put("leavingDate", employeeInfo.getLeavingDate());
-		updateRowMap.put("birthday", employeeInfo.getBirthday());
-		updateRowMap.put("official", employeeInfo.isOfficial());
-		updateRowMap.put("officialDate", employeeInfo.getOfficialDate());
-		updateRowMap.put("operator", employeeInfo.getOperator());
-		updateRowMap.put("lastUpdateDate", new Date());
-
-        boolean flag = this.employeeInfoDao.update(id,updateRowMap); 
+        //需要更新的字段
+        updateRowMap.put("idCardType", employeeInfo.getIdCardType());
+        updateRowMap.put("idCardNumber", employeeInfo.getIdCardNumber());
+        updateRowMap.put("sex", employeeInfo.getSex());
+        updateRowMap.put("realName", employeeInfo.getRealName());
+        updateRowMap.put("email", employeeInfo.getEmail());
+        updateRowMap.put("entryDate", employeeInfo.getEntryDate());
+        updateRowMap.put("mobileNumber", employeeInfo.getMobileNumber());
+        updateRowMap.put("number", employeeInfo.getNumber());
+        updateRowMap.put("leaving", employeeInfo.isLeaving());
+        updateRowMap.put("leavingDate", employeeInfo.getLeavingDate());
+        updateRowMap.put("birthday", employeeInfo.getBirthday());
+        updateRowMap.put("official", employeeInfo.isOfficial());
+        updateRowMap.put("officialDate", employeeInfo.getOfficialDate());
+        //updateRowMap.put("operator", employeeInfo.getOperator());
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        boolean flag = this.employeeInfoDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
@@ -364,8 +429,8 @@ public class EmployeeInfoService {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(employeeInfo, "employeeInfo is null.");
         AssertUtils.notEmpty(employeeInfo.getId(), "employeeInfo.id is empty.");
-
-        boolean flag = updateById(employeeInfo.getId(),employeeInfo); 
+        
+        boolean flag = updateById(employeeInfo.getId(), employeeInfo);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }

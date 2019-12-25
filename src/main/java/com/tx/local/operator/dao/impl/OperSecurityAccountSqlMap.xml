@@ -27,12 +27,16 @@
 				OSA.createDate,
 				OSA.mobileNumber,
 				OSA.mobileBinding,
+				OSA.mobileLoginEnable,
 				OSA.operatorId
 		  FROM OPER_SECURITY_ACCOUNT OSA
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND OSA.id = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            AND OSA.operatorId = #{operatorId}
 	        </if>
 		</trim>
 	</select>
@@ -55,6 +59,7 @@
 				OSA.createDate,
 				OSA.mobileNumber,
 				OSA.mobileBinding,
+				OSA.mobileLoginEnable,
 				OSA.operatorId
 		  FROM OPER_SECURITY_ACCOUNT OSA
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -105,7 +110,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileBinding)">  
 	            <![CDATA[ AND OSA.mobileBinding = #{mobileBinding} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileLoginEnable)">  
+	            <![CDATA[ AND OSA.mobileLoginEnable = #{mobileLoginEnable} ]]>
+	        </if>					
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
 	            <![CDATA[ AND OSA.operatorId = #{operatorId} ]]>
 	        </if>			
@@ -177,7 +185,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileBinding)">  
 	            <![CDATA[ AND OSA.mobileBinding = #{mobileBinding} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(mobileLoginEnable)">  
+	            <![CDATA[ AND OSA.mobileLoginEnable = #{mobileLoginEnable} ]]>
+	        </if>					
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
 	            <![CDATA[ AND OSA.operatorId = #{operatorId} ]]>
 	        </if>			
@@ -205,6 +216,7 @@
 			createDate,
 			mobileNumber,
 			mobileBinding,
+			mobileLoginEnable,
 			operatorId
 		)
 		VALUES
@@ -222,6 +234,7 @@
 			#{createDate},
 			#{mobileNumber},
 			#{mobileBinding},
+			#{mobileLoginEnable},
 			#{operatorId}
 		)
 	</insert>
@@ -242,6 +255,9 @@
 	    parameterType="java.util.Map">  
 	    UPDATE OPER_SECURITY_ACCOUNT
 	    <trim prefix="SET" suffixOverrides=",">
+			<!-- <if test="_parameter.containsKey('operatorId')"> -->
+			<!-- operatorId = #{operatorId,javaType=java.lang.String}, -->
+			<!-- </if> -->
 			<if test="_parameter.containsKey('idCardType')">
 	    		idCardType = #{idCardType,javaType=com.tx.local.basicdata.model.IDCardTypeEnum},
 	    	</if>
@@ -275,8 +291,8 @@
 			<if test="_parameter.containsKey('mobileBinding')">
 	    		mobileBinding = #{mobileBinding,javaType=boolean},
 	    	</if>
-			<if test="_parameter.containsKey('operatorId')">
-	    		operatorId = #{operatorId,javaType=java.lang.String},
+	    	<if test="_parameter.containsKey('mobileLoginEnable')">
+	    		mobileLoginEnable = #{mobileLoginEnable,javaType=boolean},
 	    	</if>
 	    </trim>
 	    WHERE

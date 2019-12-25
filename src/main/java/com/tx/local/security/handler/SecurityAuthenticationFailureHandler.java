@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
-import com.tx.core.util.WebRequestUtils;
+import com.tx.core.util.WebUtils;
 import com.tx.local.security.util.AuthenticationUtils;
 
 /**
@@ -58,7 +58,7 @@ public class SecurityAuthenticationFailureHandler
         
         logger.warn("登录失败：" + exception.getMessage());
         
-        if (WebRequestUtils.isAjaxRequest(request)) {
+        if (WebUtils.isAjaxRequest(request)) {
             response.setContentType("application/json;charset=utf-8");
             
             PrintWriter out = response.getWriter();

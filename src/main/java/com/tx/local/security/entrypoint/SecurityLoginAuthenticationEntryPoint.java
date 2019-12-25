@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
-import com.tx.core.util.WebRequestUtils;
+import com.tx.core.util.WebUtils;
 import com.tx.local.security.SecurityConstants;
 import com.tx.local.security.util.WebContextUtils;
 
@@ -60,7 +60,7 @@ public class SecurityLoginAuthenticationEntryPoint
     public void commence(HttpServletRequest request,
             HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
-        if (WebRequestUtils.isAjaxRequest(request)) {
+        if (WebUtils.isAjaxRequest(request)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                     authException.getMessage());
         } else {

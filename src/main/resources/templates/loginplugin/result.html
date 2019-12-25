@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>result</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	/*]]>*/
+	</script>
+</block>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	//验证器
+	var msg = $('#msg').val();
+	var success = $('#success').val();
+	if(success == 'true'){
+		parent.DialogUtils.tip(msg);
+		parent.DialogUtils.closeDialogById("signin");
+	}else{
+		parent.DialogUtils.alert("错误提示",msg,"error");
+		parent.DialogUtils.closeDialogById("signin");
+	}
+	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("signin");
+	});
+});
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+		<input id="success" name="success" th:value="${success}" type="hidden"/>
+		<input id="msg" name="msg" th:value="${msg}" type="hidden"/>
+		
+		<div class="passnewbind-content">
+			<div class="passnewbind-img"><img src="https://passport.baidu.com/static/phoenix/img/success.png" /></div>
+			<p class="passnewbind-title"><img src="https://passport.baidu.com/static/phoenix/img/ok.png" /><span>绑定成功！</span></p>
+			<!-- 您的新浪微博"彭清杨"已成功绑定您的百度帐号"lanchao7pqy" -->
+		    <p class="passnewbind-msg">已成功绑定您的帐号</p>
+		    <p class="passnewbind-jump">
+		        <span class="secs" id="sec">3</span>秒后自动关闭
+		    </p>
+		</div>
+	</div>
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="cancelBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">立即关闭</a>
+	</div>
+</div>
+</body>
