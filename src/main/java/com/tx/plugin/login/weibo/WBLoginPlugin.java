@@ -296,6 +296,7 @@ public class WBLoginPlugin extends LoginPlugin<WBLoginPluginConfig> {
         user.setSex(StringUtils.equalsAnyIgnoreCase("m",
                 node.get("gender").asText()) ? SexEnum.MALE : SexEnum.FEMALE);
         user.setUniqueId(accessToken.getUniqueId());
+        user.setHeadImgUrl(node.get("profile_image_url").asText());
         JSONObject json = user.getAttributeJSONObject();
         json.put("screen_name", node.get("screen_name").asText());
         json.put("domain", node.get("domain").asText());
@@ -304,7 +305,6 @@ public class WBLoginPlugin extends LoginPlugin<WBLoginPluginConfig> {
         json.put("location", node.get("location").asText());
         json.put("description", node.get("description").asText());
         json.put("url", node.get("url").asText());
-        json.put("profile_image_url", node.get("profile_image_url").asText());
         return user;
     }
     

@@ -7,6 +7,8 @@
 package com.tx.local.security.filter;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -47,6 +49,28 @@ public class OperatorSocialAuthenticationProcessingFilter
     @Resource
     private OperatorUserDetailsService operatorUserDetailsService;
     
+    //请求的url表达式
+    private static final Pattern URL_PATTERN = Pattern
+            .compile("^/operator/social/login/(.+?)([/|\\?].*)*$");
+    
+    //public static void main(String[] args) {
+    //    Matcher m1 = URL_PATTERN.matcher("/operator/social/login/GH");
+    //    m1.matches();
+    //    System.out.println(m1.group(1));
+    //    Matcher m2 = URL_PATTERN.matcher("/operator/social/login/GH/");
+    //    m2.matches();
+    //    System.out.println(m2.group(1));
+    //    Matcher m3 = URL_PATTERN.matcher("/operator/social/login/GH/123123/123123");
+    //    m3.matches();
+    //    System.out.println(m3.group(1));
+    //    Matcher m4 = URL_PATTERN.matcher("/operator/social/login/GH?test=1&test2=2");
+    //    m4.matches();
+    //    System.out.println(m4.group(1));
+    //    Matcher m5 = URL_PATTERN.matcher("/operator/social/login/GH/test?test=1&test2=2");
+    //    m5.matches();
+    //    System.out.println(m5.group(1));
+    //}
+    
     /** <默认构造函数> */
     public OperatorSocialAuthenticationProcessingFilter() {
         super(new AntPathRequestMatcher("/operator/social/login/**", "GET"));
@@ -64,7 +88,14 @@ public class OperatorSocialAuthenticationProcessingFilter
     public Authentication attemptAuthentication(HttpServletRequest request,
             HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
-        String plugin = "WB";
+        String servletUrl = request.getServletPath();
+        System.out.println(servletUrl);
+        Matcher m = URL_PATTERN.matcher(servletUrl);
+        if (!m.matches()) {
+            throw new SocialUserLoginException(
+                    "解析servletUrl中的plugin值失败.servletUrl:" + servletUrl);
+        }
+        String plugin = m.group(1);
         LoginPlugin<?> loginPlugin = LoginPluginUtils.getLoginPlugin(plugin);
         if (loginPlugin == null) {
             throw new SocialUserLoginException("插件未找到.plugin:" + plugin);

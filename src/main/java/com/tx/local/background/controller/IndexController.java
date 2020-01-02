@@ -19,7 +19,6 @@ import com.tx.local.security.SecurityConstants;
 import com.tx.local.security.util.WebContextUtils;
 import com.tx.plugin.login.github.GHLoginPlugin;
 import com.tx.plugin.login.weibo.WBLoginPlugin;
-import com.tx.plugin.login.weibo.WBLoginPluginConfig;
 
 /**
  * 主框架页面逻辑层<br/>

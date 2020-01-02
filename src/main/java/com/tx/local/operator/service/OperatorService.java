@@ -816,7 +816,14 @@ public class OperatorService {
                 })
                 .collect(Collectors.toList());
         for(String idTemp : needDeleteOperIds){
-            updateMainPostById(idTemp, null);
+            //生成需要更新字段的hashMap
+            Map<String, Object> updateRowMap = new HashMap<String, Object>();
+            updateRowMap.put("id", idTemp);
+            //需要更新的字段
+            Date now = new Date();
+            updateRowMap.put("mainPostId", null);
+            updateRowMap.put("lastUpdateDate", now);
+            this.operatorDao.update(updateRowMap);
         }
         
         //识别需要添加的权限列表

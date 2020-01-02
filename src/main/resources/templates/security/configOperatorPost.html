@@ -42,9 +42,9 @@
 
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-var postId = /*[[${postId}]]*/'';
+var operatorId = /*[[${operatorId}]]*/'';
 var orgTree = null;
-var grid = null;
+var treegrid = null;
 $(document).ready(function() {
 	parent.DialogUtils.progress('close');
 	
@@ -71,11 +71,13 @@ $(document).ready(function() {
 		idField : 'id',
 		parentField : 'parentId',
 		treeField : 'name',
+		checkbox : false,
+		cascadeCheck: false,
+		onlyLeafCheck: false,
+		lines:true,
 		striped : true,
 		nowrap : false,
 		striped : true,
-		checkOnSelect : true,
-		selectOnCheck : true,
 		singleSelect : true,
 		fit : true,
 		fitColumns : true,
@@ -100,25 +102,27 @@ $(document).ready(function() {
 			}
 		},
 		frozenColumns : [ [ 
-			{field:'checkbox',title : '',width : 180,checkbox : true},
-			{title: '职位id',field : 'id',width : 150,hidden : true},
-			{field: 'parentId',title : '上级职位ID',width : 150,hidden : true},
-			{field: 'name',title : '职位名称',width : 200}, 
-			{field: 'code',title : '职位编号',width : 230},
-			{field: 'organizationId',title : '所属组织',width : 200,formatter : function(value, row, index) {
+			{title:'职位id',field: 'id',width : 150,hidden : true},
+			{field:'parentId',title: '上级职位ID',width : 150,hidden : true},
+			{field:'name',title: '职位名称',width : 300}
+		] ],
+		columns : [ [
+			{field:'code',title: '职位编号',width : 230},
+			{field:'organizationId',title: '所属组织',width : 200,formatter : function(value, row, index) {
 				if(value && orgMap[value]){
 					return orgMap[value].name;
 				}else{
 					return value;
 				}
-			}}
-		] ],
-		columns : [ [
-			{field: 'fullName',title : '职位全称',width : 150,hidden : true},
-			{field: 'remark',title : '备注',width : 200,}
+			}},
+			{field:'fullName',title : '职位全称',width : 150,hidden : true},
+			{field:'remark',title : '备注',width : 200,hidden : true}
 		] ],
 		toolbar : '#toolbar',
 		onClickRow: function(row){
+		},
+		onBeforeCheckNode: function(row,index){
+			alert(row.index);
 		}
 	});
 });
@@ -141,17 +145,13 @@ function deselect(){
 }
 /* 查询 */
 function queryFun() {
-	grid.datagrid('load',$('#queryForm').serializeObject());
+	treegrid.treegrid('load',$('#queryForm').serializeObject());
 	return false;
 }
 function initCheck(){
-	var rows = grid.datagrid('getRows');
-	var operatorIds = [];
-	$.each(rows,function(index,rowTemp){
-		operatorIds.push(rowTemp.id);
-	});
-	$.post(/*[[@{/operator/role/queryRole2OperatorIds}]]*/'',
-			{'roleId' : roleId, 'operatorId': operatorIds},function(checkedIds){
+	var rows = treegrid.datagrid('getRows');
+	$.post(/*[[@{/operator/role/queryOperator2PostIds}]]*/'',
+			{'operatorId': operatorId},function(checkedIds){
 		$.each(checkedIds,function(index,idTemp){
 			$.each(rows,function(index,rowTemp){
 				if(idTemp == rowTemp.id){

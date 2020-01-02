@@ -8,7 +8,7 @@ create table OPER_SOCIAL_ACCOUNT(
 	type varchar(64) not null,
 	uniqueId varchar(64) not null,
 	username varchar(64),
-	headImgUrl varchar(128),
+	headImgUrl varchar(256),
 	attributes varchar(1000),
 	lastUpdateDate datetime(6) not null default now(6),
 	createDate datetime(6) not null default now(6),

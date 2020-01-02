@@ -10,7 +10,7 @@
 	<meta name="copyright" content="cqtianxin" />
 </head>
 <body onload="javascript: document.forms[0].submit();">
-	<form th:action="${requestUrl}">
+	<form th:action="${requestUrl}" method="get">
 		<input type="hidden"  th:each="entry : ${parameterMap.entrySet()}" th:name="${entry.key}" th:value="${entry.value}"/>
 	</form>
 </body>

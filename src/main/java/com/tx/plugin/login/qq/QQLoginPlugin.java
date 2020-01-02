@@ -32,7 +32,7 @@
 //
 ///**
 // * QQ登陆插件<br/>
-// * https://wiki.open.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E4%BD%BF%E7%94%A8Authorization_Code%E8%8E%B7%E5%8F%96Access_Token
+// * https://wiki.open.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91OAuth2.0%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3
 // * 腾讯开放平台  http://op.open.qq.com/index.php
 // * 
 // * <功能详细描述>

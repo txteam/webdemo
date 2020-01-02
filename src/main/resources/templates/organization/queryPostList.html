@@ -439,17 +439,16 @@ function configPostOperator(id,name){
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var configUrl = /*[[@{/operator/post/toConfigPostOperator?postId={0}}]]*/'';
 	DialogUtils.openModalDialog(
 		"configPostOperator",
-		$.formatString("配置职位人员_[{0}]",name),
-		$.formatString("${contextPath}/operatorRef/toConfigPostOperator.action?postId={0}",id),
+		$.formatString("配置角色人员_[{0}]",name),
+		$.formatString(configUrl,id),
 		850,550,function(){
-			//$('#treegrid').treegrid('reload');
-			//alert('reload');
+			queryFun();
 		}
 	);
 }
-
 function redo() {
 	var node = treegrid.treegrid('getSelected');
 	if (node) {
@@ -507,7 +506,7 @@ function deselect(){
 		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
 		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
 		<a id="configPostAuthALink" onclick="configPostAuth();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">配置职位权限</a>
-		<!--<a id="configPostOperatorALink" onclick="configPostOperator();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置职位人员</a>-->
+		<a id="configPostOperatorALink" onclick="configPostOperator();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'folder_user'">配置职位人员</a>
 		<a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a> 
 		<a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a> 
 		<a onclick="treegrid.treegrid('reload');" href="javascript:void(0);" 

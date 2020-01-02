@@ -235,6 +235,13 @@ $(document).ready(function() {
 		            			<b class="weibo-icon"></b><span>微博</span></a>
 		            			<span class="line">|</span>
 		                  	</li>
+		                  	<li th:if="${wbLoginEnable}">
+		            			<a href="javascript:void(0)" 
+		            				th:onclick="'window.location=\'' + @{/operator/social/toLogin/GH} + '\'+window.location.search;return false;'"
+		            				class="pdl">
+		            			<b class="github-icon"></b><span>Github</span></a>
+		            			<span class="line">|</span>
+		                  	</li>
 		                  	<li class="extra-r" th:if="${registEnable}">
 		                  		<div>
 		                  			<div class="regist-link">

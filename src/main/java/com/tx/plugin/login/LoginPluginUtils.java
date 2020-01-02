@@ -14,6 +14,7 @@ import com.tx.component.plugin.context.PluginContext;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.operator.model.OperSocialAccountTypeEnum;
 import com.tx.local.security.util.WebContextUtils;
+import com.tx.plugin.login.github.GHLoginPlugin;
 import com.tx.plugin.login.weibo.WBLoginPlugin;
 
 /**
@@ -176,7 +177,8 @@ public abstract class LoginPluginUtils {
                 loginPlugin = null;
                 break;
             case "GH":
-                loginPlugin = null;
+                loginPlugin = PluginContext.getContext()
+                        .getPlugin(GHLoginPlugin.class);
                 break;
         }
         return loginPlugin;

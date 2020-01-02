@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>wblogin_setting[微博登陆插件配置]</title>
+	<title>github_login_setting[Github登陆插件配置]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -35,7 +35,7 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
@@ -80,25 +80,25 @@ $(document).ready(function(){
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<div class="breadcrumb">
-			微信登陆插件配置
+			Github登陆插件配置
 		</div>
 		<form id="configEntityForm" method="post" class="form" th:object="${config}">
 			<input id="pluginId" name="pluginId" th:value="${pluginId}" type="hidden"/>
 			<table class="table">
 				<tr>
 					<th style="width: 25%">
-						<span class="requiredField" >*</span>appKey:
+						<span class="requiredField" >*</span>clientId:
 					</th>
 					<td style="width: 75%">
-						<input type="text" name="appKey" class="text" value="" th:value="*{appKey}" style="width: 50%"/>
+						<input type="text" name="clientId" class="text" value="" th:value="*{clientId}" style="width: 50%"/>
 					</td>
 				</tr>
 				<tr>
 					<th>
-						<span class="requiredField">*</span>appSecret:
+						<span class="requiredField">*</span>clientSecret:
 					</th>
 					<td>
-						<input type="text" name="appSecret" class="text" value="" th:value="*{appSecret}" style="width: 50%"/>
+						<input type="text" name="clientSecret" class="text" value="" th:value="*{clientSecret}" style="width: 50%"/>
 					</td>
 				</tr>
 			</table>

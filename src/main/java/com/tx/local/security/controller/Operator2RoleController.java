@@ -286,8 +286,10 @@ public class Operator2RoleController implements InitializingBean {
             @RequestParam(value = "operatorId[]", required = false) String[] operatorIds,
             @RequestParam(value = "filterOperatorId[]", required = false) String[] filterOperatorIds,
             @RequestParam() MultiValueMap<String, String> request) {
-        List<String> refIds = Arrays.asList(operatorIds);
-        List<String> filterRefIds = Arrays.asList(filterOperatorIds);
+        List<String> refIds = ArrayUtils.isEmpty(operatorIds)
+                ? new ArrayList<>() : Arrays.asList(operatorIds);
+        List<String> filterRefIds = ArrayUtils.isEmpty(filterOperatorIds)
+                ? new ArrayList<>() : Arrays.asList(filterOperatorIds);
         this.roleRefService.saveForRefIds(roleId,
                 RoleConstants.ROLEREFTYPE_OPERATOR,
                 refIds,

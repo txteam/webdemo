@@ -225,6 +225,7 @@ public class PluginController implements InitializingBean, ResourceLoaderAware {
         //页面缓存键
         String pageCacheKey = plugin.getId();
         String page = "";
+        pageMap.clear();
         if (pageMap.containsKey(pageCacheKey)) {
             page = pageMap.get(pageCacheKey);
             return page;
@@ -232,12 +233,19 @@ public class PluginController implements InitializingBean, ResourceLoaderAware {
         
         String[] paths = StringUtils.splitByWholeSeparator(
                 AopUtils.getTargetClass(plugin).getName(), ".");
-        String viewpackage = paths.length >= 2 ? paths[paths.length - 2]
-                : paths[paths.length - 1].toLowerCase();
+        if (paths.length <= 4) {
+            page = "plugin/setting";
+        } else {
+            StringBuilder sb = new StringBuilder(
+                    TxConstants.INITIAL_STR_LENGTH);
+            sb.append("plugin/");
+            for (int i = 3; i < paths.length - 1; i++) {
+                sb.append(paths[i]).append("/");
+            }
+            sb.append("setting");
+            page = sb.toString();
+        }
         
-        StringBuilder sb = new StringBuilder(TxConstants.INITIAL_STR_LENGTH);
-        sb.append("plugin/").append(viewpackage).append("/setting");
-        page = sb.toString();
         if (!existPage(page)) {
             //如果页面不存在获取其对应的默认页面
             page = DEFAULT_SETTING_PAGE;

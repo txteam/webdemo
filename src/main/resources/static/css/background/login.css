@@ -44,6 +44,7 @@ body{margin:0 auto;min-width:980px;font-family:"Microsoft YaHei","iconfont"!impo
 .loginright .oauth-login-layout li a.pdl b.qq-icon {background: url('../../webjars/css/images/qq.png') no-repeat center center;background-size: 120% 120%;}
 .loginright .oauth-login-layout li a.pdl b.weixin-icon {background: url('../../webjars/css/images/weixin.png') no-repeat center center;background-size: 120% 120%;}
 .loginright .oauth-login-layout li a.pdl b.weibo-icon {background: url('../../webjars/css/images/weibo.png') no-repeat center center;background-size: 120% 120%;}
+.loginright .oauth-login-layout li a.pdl b.github-icon {background: url('../../webjars/css/images/github.png') no-repeat center center;background-size: 100% 100%;}
 
 .loginright .oauth-login-layout li.extra-r {float: right;}
 .loginright .oauth-login-layout .regist-link {color: #0a73bc;font-size: 14px;}

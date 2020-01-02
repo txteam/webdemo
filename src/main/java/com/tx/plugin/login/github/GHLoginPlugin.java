@@ -27,7 +27,6 @@ import com.tx.core.util.HttpClientUtils;
 import com.tx.core.util.JsonUtils;
 import com.tx.core.util.MessageUtils;
 import com.tx.core.util.WebUtils;
-import com.tx.local.basicdata.model.SexEnum;
 import com.tx.plugin.login.LoginPlugin;
 import com.tx.plugin.login.LoginPluginUtils;
 import com.tx.plugin.login.exception.SocialAuthorizeException;
@@ -160,7 +159,7 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
         GHLoginPluginConfig config = getConfig();
         ModelAndView mview = new ModelAndView();
         
-        Map<String, Object> parameterMap = new LinkedHashMap<>();
+        Map<String, String> parameterMap = new LinkedHashMap<>();
         parameterMap.put("response_type", "code");
         parameterMap.put("client_id", config.getClientId());
         parameterMap.put("redirect_uri", redirectUri);
@@ -169,7 +168,25 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
         mview.addObject("requestUrl", CODE_REQUEST_URL);
         mview.addObject("parameterMap", parameterMap);
         mview.setViewName(viewName);
-        
+        //List<NameValuePair> nameValuePairs = new ArrayList<>();
+        //for (Entry<String, String> entryTemp : parameterMap.entrySet()) {
+        //    if (StringUtils.isEmpty(entryTemp.getKey())) {
+        //        continue;
+        //    }
+        //    nameValuePairs.add(new BasicNameValuePair(entryTemp.getKey(),
+        //            entryTemp.getValue()));
+        //}
+        //
+        ////mview.addObject("parameterMap", parameterMap);
+        //String url = CODE_REQUEST_URL;
+        //try {
+        //    url = url + (StringUtils.contains(url, "?") ? "&" : "?")
+        //            + EntityUtils.toString(
+        //                    new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+        //} catch (ParseException | IOException e) {
+        //    throw new SILException("拼接redirectUrl异常.", e);
+        //}
+        //mview.setViewName("redirect:" + CODE_REQUEST_URL);
         return mview;
     }
     
@@ -217,22 +234,12 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
                 appSecret,
                 code,
                 result);
-        //{"access_token":"2.00zleWPB01Gkhc5cc927db85Da_qIB","remind_in":"157679999","expires_in":157679999,"uid":"1145561103","isRealName":"true"}
-        
-        JsonNode node = JsonUtils.toTree(result);
-        String accessToken = node.get("access_token").textValue();
-        String uid = node.get("uid").textValue();
+        //getAccessToken:{client_id:e89c345917ce6375e634,client_secret:c9757c70a8af2c01e2a85b5f6e06fc240c122867,code:48896d56a152d946da65,result:access_token=dc400027043a1980222dcdf3fb90858b1b7ac75b&scope=&token_type=bearer}
+        //access_token=dc400027043a1980222dcdf3fb90858b1b7ac75b&scope=&token_type=bearer
+        Map<String, String> tokenMap = WebUtils.parse(result);
+        String accessToken = tokenMap.get("access_token");
         LoginAccessToken token = new LoginAccessToken();
-        token.setUniqueId(uid);
         token.setAccessToken(accessToken);
-        token.setExpiresIn(node.get("expires_in").longValue());
-        token.getAttributeJSONObject().put("remind_in",
-                node.get("remind_in").longValue());
-        token.getAttributeJSONObject().put("isRealName",
-                node.get("isRealName").booleanValue());
-        if (StringUtils.isEmpty(token.getUniqueId())) {
-            throw new SocialAuthorizeException("获取UniqueId失败.");
-        }
         if (StringUtils.isEmpty(token.getAccessToken())) {
             throw new SocialAuthorizeException("获取AccessToken失败.");
         }
@@ -254,36 +261,46 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
     public LoginUserInfo getUserInfo(LoginAccessToken accessToken,
             HttpServletRequest request) {
         AssertUtils.notNull(accessToken, "accessToken is null.");
-        AssertUtils.notEmpty(accessToken.getUniqueId(),
-                "accessToken.uniqueId is empty.");
         AssertUtils.notEmpty(accessToken.getAccessToken(),
                 "accessToken.accessToken is empty.");
         
         Map<String, String> params = new HashMap<String, String>();
         params.put("access_token", accessToken.getAccessToken());
-        params.put("uid", accessToken.getUniqueId());
         String result = HttpClientUtils.get(USER_INFO_REQUEST_URL, params);
         logger.info("--- getUserInfo:{access_token:{},openid:{},result:{}}",
                 accessToken.getAccessToken(),
                 accessToken.getUniqueId(),
                 result);
-        
+        //getUserInfo:{access_token:b7ae403f31c13fb524c9777b7aed8aa3824eb475,openid:null,result:{"login":"240638006","id":2492318,"node_id":"MDQ6VXNlcjI0OTIzMTg=","avatar_url":"https://avatars3.githubusercontent.com/u/2492318?v=4","gravatar_id":"","url":"https://api.github.com/users/240638006","html_url":"https://github.com/240638006","followers_url":"https://api.github.com/users/240638006/followers","following_url":"https://api.github.com/users/240638006/following{/other_user}","gists_url":"https://api.github.com/users/240638006/gists{/gist_id}","starred_url":"https://api.github.com/users/240638006/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/240638006/subscriptions","organizations_url":"https://api.github.com/users/240638006/orgs","repos_url":"https://api.github.com/users/240638006/repos","events_url":"https://api.github.com/users/240638006/events{/privacy}","received_events_url":"https://api.github.com/users/240638006/received_events","type":"User","site_admin":false,"name":"Tim.PQY","company":"ChongQingTianXinWangLuoKeJiYouXianGongSi","blog":"","location":null,"email":"240638006@qq.com","hireable":true,"bio":null,"public_repos":14,"public_gists":0,"followers":1,"following":2,"created_at":"2012-10-05T07:58:47Z","updated_at":"2020-01-02T03:53:42Z"}}
+        //{"login":"240638006","id":2492318,"node_id":"MDQ6VXNlcjI0OTIzMTg=","avatar_url":"https://avatars3.githubusercontent.com/u/2492318?v=4","gravatar_id":"","type":"User","site_admin":false,"name":"Tim.PQY","company":"ChongQingTianXinWangLuoKeJiYouXianGongSi","blog":"","location":null,"email":"240638006@qq.com","hireable":true,"bio":null,"public_repos":14,"public_gists":0,"followers":1,"following":2,"created_at":"2012-10-05T07:58:47Z","updated_at":"2020-01-02T03:53:42Z"}
+        //Map<String, String> userMap = WebUtils.parse(result);
         JsonNode node = JsonUtils.toTree(result);
+        String uniqueId = node.get("id").asText();
+        String username = node.get("login").asText();
+        String headImgUrl = node.get("avatar_url") != null
+                ? node.get("avatar_url").asText() : null;
+        
+        String name = node.get("name").asText();
+        String location = node.get("location") != null
+                ? node.get("location").asText() : null;
+        String company = node.get("company") != null
+                ? node.get("company").asText() : null;
+        String blog = node.get("blog") != null ? node.get("blog").asText()
+                : null;
+        String email = node.get("email") != null ? node.get("email").asText()
+                : null;
         LoginUserInfo user = new LoginUserInfo();
-        user.setId(node.get("id").asText());
-        user.setUsername(node.get("name").asText());
-        user.setSex(StringUtils.equalsAnyIgnoreCase("m",
-                node.get("gender").asText()) ? SexEnum.MALE : SexEnum.FEMALE);
-        user.setUniqueId(accessToken.getUniqueId());
+        user.setId(uniqueId);
+        user.setUsername(username);
+        user.setHeadImgUrl(headImgUrl);
+        user.setSex(null);
+        user.setUniqueId(uniqueId);
         JSONObject json = user.getAttributeJSONObject();
-        json.put("screen_name", node.get("screen_name").asText());
-        json.put("domain", node.get("domain").asText());
-        json.put("province", node.get("province").asText());
-        json.put("city", node.get("city").asText());
-        json.put("location", node.get("location").asText());
-        json.put("description", node.get("description").asText());
-        json.put("url", node.get("url").asText());
-        json.put("profile_image_url", node.get("profile_image_url").asText());
+        json.put("name", name);
+        json.put("location", location);
+        json.put("company", company);
+        json.put("blog", blog);
+        json.put("email", email);
         return user;
     }
     
@@ -299,12 +316,11 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
     public String getUniqueId(LoginAccessToken accessToken,
             HttpServletRequest request) throws SocialAuthorizeException {
         AssertUtils.notNull(accessToken, "accessToken is null.");
-        AssertUtils.notEmpty(accessToken.getUniqueId(),
-                "accessToken.uniqueId is empty.");
         AssertUtils.notEmpty(accessToken.getAccessToken(),
                 "accessToken.accessToken is empty.");
         
-        String uniqueId = accessToken.getUniqueId();
+        LoginUserInfo userInfo = getUserInfo(accessToken, request);
+        String uniqueId = userInfo.getUniqueId();
         return uniqueId;
     }
 }

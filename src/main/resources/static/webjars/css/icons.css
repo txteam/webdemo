@@ -35,6 +35,12 @@
 	opacity: 0.8;
 }
 
+/* images */
+.qq {background: url('images/qq.png') no-repeat center center;}
+.weibo {background: url('images/weibo.png') no-repeat center center;}
+.weixin {background: url('images/weixin.png') no-repeat center center;}
+.weixin {background: url('images/github.png') no-repeat center center;}
+
 .icon-shezhi:before {
   content: "\e605";
 }
@@ -842,11 +848,6 @@
 .icon-slider:before {
   content: "\e8a5";
 }
-
-/* images */
-.qq {background: url('images/qq.png') no-repeat center center;}
-.weibo {background: url('images/weibo.png') no-repeat center center;}
-.weixin {background: url('images/weixin.png') no-repeat center center;}
 
 /* 本地图标  */
 .folder_wrench {background: url('images/extjs_icons/folder/folder_wrench.png') no-repeat center center;}
