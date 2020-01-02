@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tx.component.plugin.context.Plugin;
-import com.tx.plugin.login.exception.AuthorizeException;
+import com.tx.plugin.login.exception.SocialAuthorizeException;
+import com.tx.plugin.login.model.LoginAccessToken;
 import com.tx.plugin.login.model.LoginUserInfo;
 
 /**
@@ -33,16 +34,26 @@ public abstract class LoginPlugin<CONFIG extends LoginPluginConfig>
         return "login";
     }
     
+    /**
+     * 登陆前置句柄
+     * <功能详细描述>
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return ModelAndView [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
     public ModelAndView loginHandle(HttpServletRequest request) {
+        return null;
+    }
+    
+    public ModelAndView login() {
         return null;
     }
     
     public ModelAndView bindHandle(String operatorId,
             HttpServletRequest request) {
-        return null;
-    }
-    
-    public ModelAndView login() {
         return null;
     }
     
@@ -69,20 +80,35 @@ public abstract class LoginPlugin<CONFIG extends LoginPluginConfig>
             HttpServletRequest request);
     
     /**
+     * 获取AccessToken值<br/>
+     * <功能详细描述>
+     * @param code
+     * @param state
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return LoginAccessToken [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public abstract LoginAccessToken getAccessToken(String code, String state,
+            HttpServletRequest request) throws SocialAuthorizeException;
+    
+    /**
      * 获取用户第三方用户信息<br/>
      * <功能详细描述>
      * @param code
      * @param state
      * @param request
      * @return
-     * @throws AuthorizeException [参数说明]
+     * @throws SocialAuthorizeException [参数说明]
      * 
      * @return LoginUserInfo [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public abstract LoginUserInfo getUserInfo(String code, String state,
-            HttpServletRequest request) throws AuthorizeException;
+    public abstract LoginUserInfo getUserInfo(LoginAccessToken token,
+            HttpServletRequest request) throws SocialAuthorizeException;
     
     /**
      * 获取用户在第三方的唯一键<br/>
@@ -91,13 +117,13 @@ public abstract class LoginPlugin<CONFIG extends LoginPluginConfig>
      * @param state
      * @param request
      * @return
-     * @throws AuthorizeException [参数说明]
+     * @throws SocialAuthorizeException [参数说明]
      * 
      * @return String [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public abstract String getUniqueId(String code, String state,
-            HttpServletRequest request) throws AuthorizeException;
+    public abstract String getUniqueId(LoginAccessToken token,
+            HttpServletRequest request) throws SocialAuthorizeException;
     
 }

@@ -162,20 +162,20 @@ public class WebContextUtils {
         return hasSuperAdminRole;
     }
     
-    /**
-     * 是否为超级管理员<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return boolean [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public static boolean isSystemAdmin() {
-        boolean hasSuperAdminRole = SecurityContext.getContext()
-                .hasRole(OperatorRoleEnum.SYSTEM_ADMIN.getId());
-        return hasSuperAdminRole || isSuperAdmin();
-    }
+    //    /**
+    //     * 是否为超级管理员<br/>
+    //     * <功能详细描述>
+    //     * @return [参数说明]
+    //     * 
+    //     * @return boolean [返回类型说明]
+    //     * @exception throws [异常类型] [异常说明]
+    //     * @see [类、类#方法、类#成员]
+    //     */
+    //    public static boolean isSystemAdmin() {
+    //        boolean hasSuperAdminRole = SecurityContext.getContext()
+    //                .hasRole(OperatorRoleEnum.SYSTEM_ADMIN.getId());
+    //        return hasSuperAdminRole || isSuperAdmin();
+    //    }
     
     /**
      * 获取安全框架认证信息<br/>

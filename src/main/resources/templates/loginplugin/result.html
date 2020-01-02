@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>result</title>
+	<title>应用授权</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -43,16 +43,15 @@
 /*<![CDATA[*/
 $(document).ready(function(){
 	//验证器
-	var msg = $('#msg').val();
-	var success = $('#success').val();
-	if(success == 'true'){
+	var msg = $('#message').val();
+	var code = $('#code').val();
+	if(code == '0'){
 		parent.DialogUtils.tip(msg);
-		parent.DialogUtils.closeDialogById("signin");
+		parent.DialogUtils.closeDialogById("bind");
 	}else{
 		parent.DialogUtils.alert("错误提示",msg,"error");
-		parent.DialogUtils.closeDialogById("signin");
+		parent.DialogUtils.closeDialogById("bind");
 	}
-	
 	//退出
 	$("#cancelBtn").click(function(){
 		parent.DialogUtils.closeDialogById("signin");
@@ -64,10 +63,10 @@ $(document).ready(function(){
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-		<input id="success" name="success" th:value="${success}" type="hidden"/>
-		<input id="msg" name="msg" th:value="${msg}" type="hidden"/>
+		<input id="code" name="code" th:value="${result.code}" type="hidden"/>
+		<input id="message" name="message" th:value="${result.message}" type="hidden"/>
 		
-		<div class="passnewbind-content">
+		<div class="passnewbind-content" style="display: none;">
 			<div class="passnewbind-img"><img src="https://passport.baidu.com/static/phoenix/img/success.png" /></div>
 			<p class="passnewbind-title"><img src="https://passport.baidu.com/static/phoenix/img/ok.png" /><span>绑定成功！</span></p>
 			<!-- 您的新浪微博"彭清杨"已成功绑定您的百度帐号"lanchao7pqy" -->

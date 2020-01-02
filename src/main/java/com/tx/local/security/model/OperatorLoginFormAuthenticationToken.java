@@ -46,7 +46,4 @@ public class OperatorLoginFormAuthenticationToken
     public void setDetails(Object details) {
         super.setDetails(details);
     }
-    
-    
-    
 }

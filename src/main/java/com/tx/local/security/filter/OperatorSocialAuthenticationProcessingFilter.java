@@ -8,6 +8,7 @@ package com.tx.local.security.filter;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +17,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import com.tx.core.exceptions.SILException;
+import com.tx.local.operator.model.OperSocialAccount;
+import com.tx.local.operator.model.OperSocialAccountTypeEnum;
+import com.tx.local.operator.service.OperSocialAccountService;
+import com.tx.local.security.exception.SocialUserLoginException;
+import com.tx.local.security.model.OperatorSocialAuthenticationToken;
+import com.tx.local.security.service.OperatorUserDetailsService;
+import com.tx.plugin.login.LoginPlugin;
+import com.tx.plugin.login.LoginPluginUtils;
+import com.tx.plugin.login.model.LoginAccessToken;
 
 /**
  * 操作权认证处理过滤器<br/>
@@ -27,14 +38,20 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class OperatorSocialAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter{
-
+public class OperatorSocialAuthenticationProcessingFilter
+        extends AbstractAuthenticationProcessingFilter {
+    
+    @Resource
+    private OperSocialAccountService operSocialAccountService;
+    
+    @Resource
+    private OperatorUserDetailsService operatorUserDetailsService;
+    
     /** <默认构造函数> */
-    protected OperatorSocialAuthenticationProcessingFilter(
-            RequestMatcher requiresAuthenticationRequestMatcher) {
-        super(new AntPathRequestMatcher("/operator/social/login", "POST"));
+    public OperatorSocialAuthenticationProcessingFilter() {
+        super(new AntPathRequestMatcher("/operator/social/login/**", "GET"));
     }
-
+    
     /**
      * @param request
      * @param response
@@ -47,9 +64,65 @@ public class OperatorSocialAuthenticationProcessingFilter extends AbstractAuthen
     public Authentication attemptAuthentication(HttpServletRequest request,
             HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
-        // TODO Auto-generated method stub
-        return null;
+        String plugin = "WB";
+        LoginPlugin<?> loginPlugin = LoginPluginUtils.getLoginPlugin(plugin);
+        if (loginPlugin == null) {
+            throw new SocialUserLoginException("插件未找到.plugin:" + plugin);
+        }
+        
+        String code = request.getParameter("code");
+        String state = request.getParameter("state");
+        LoginAccessToken token = null;
+        String uniqueId = null;
+        try {
+            token = loginPlugin.getAccessToken(code, state, request);
+            uniqueId = loginPlugin.getUniqueId(token, request);
+        } catch (SocialUserLoginException | SILException e) {
+            throw new SocialUserLoginException("获取第三方唯一键异常.", e);
+        } catch (Exception e) {
+            throw new SocialUserLoginException("获取第三方唯一键异常.", e);
+        }
+        
+        OperSocialAccountTypeEnum type = LoginPluginUtils
+                .getTypeByPlugin(plugin);
+        if (type == null) {
+            throw new SocialUserLoginException("关联类型解析异常.plugin:" + plugin);
+        }
+        OperSocialAccount acc = this.operSocialAccountService
+                .findByUniqueId(uniqueId, type);
+        if (acc == null) {
+            throw new SocialUserLoginException("没有关联的账号 .");
+        }
+        
+        String userId = acc.getOperatorId();
+        String accessToken = token.getAccessToken();
+        
+        OperatorSocialAuthenticationToken authenticationToken = new OperatorSocialAuthenticationToken(
+                userId, accessToken);
+        // Allow subclasses to set the "details" property
+        setDetails(request, authenticationToken);
+        
+        return this.getAuthenticationManager()
+                .authenticate(authenticationToken);
     }
     
+    /**
+     * Provided so that subclasses may configure what is put into the authentication
+     * request's details property.
+     *
+     * @param request that an authentication request is being created for
+     * @param authRequest the authentication request object that should have its details
+     * set
+     */
+    protected void setDetails(HttpServletRequest request,
+            OperatorSocialAuthenticationToken authRequest) {
+        authRequest
+                .setDetails(authenticationDetailsSource.buildDetails(request));
+    }
+    
+    protected boolean requiresAuthentication(HttpServletRequest request,
+            HttpServletResponse response) {
+        return super.requiresAuthentication(request, response);
+    }
     
 }

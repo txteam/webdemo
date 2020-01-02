@@ -401,7 +401,7 @@ function configRoleAuth(id,name){
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
-	var configUrl = /*[[@{/auth/toConfigRoleAuth}]]*/'';
+	var configUrl = /*[[@{/operator/auth/toConfigRoleAuth}]]*/'';
 	configUrl = configUrl + "?authTypeId=AUTH_TYPE_OPERATOR_OPERATE&roleId=" + id;
 	DialogUtils.openModalDialog(
 		"configRoleAuth",
@@ -420,16 +420,17 @@ function configRoleOperator(id,name){
 		name = rows[0].name;
 	}
 	if($.ObjectUtils.isEmpty(id)){
-		DialogUtils.alert("没有选中的职位");
+		DialogUtils.alert("没有选中的角色");
 		return ;
 	}
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var configUrl = /*[[@{/operator/role/toConfigRoleOperator?roleId={0}}]]*/'';
 	DialogUtils.openModalDialog(
-		"configPostOperator",
+		"configRoleOperator",
 		$.formatString("配置角色人员_[{0}]",name),
-		$.formatString("${contextPath}/operatorRef/toConfigRoleOperator.action?roleId={0}",id),
+		$.formatString(configUrl,id),
 		850,550,function(){
 			queryFun();
 		}

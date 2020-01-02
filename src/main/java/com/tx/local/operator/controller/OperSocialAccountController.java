@@ -282,7 +282,7 @@ public class OperSocialAccountController {
             @RequestParam("operatorId") String operatorId,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("name", request.getFirst("name"));
+        params.put("operatorId", operatorId);
         List<OperSocialAccount> resList = this.operSocialAccountService
                 .queryList(params);
         

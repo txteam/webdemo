@@ -8,12 +8,17 @@ package com.tx.local.security.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,16 +29,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.component.role.RoleConstants;
 import com.tx.component.role.context.RoleRegistry;
-import com.tx.component.role.context.RoleTypeRegistry;
 import com.tx.component.role.model.Role;
-import com.tx.component.role.model.RoleType;
 import com.tx.component.role.service.RoleRefService;
 import com.tx.component.security.context.SecurityContext;
+import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.local.operator.facade.OperatorFacade;
+import com.tx.local.organization.facade.OrganizationFacade;
+import com.tx.local.organization.facade.PostFacade;
 import com.tx.local.security.model.CheckAbleRole;
+import com.tx.local.security.model.RoleTypeEnum;
 import com.tx.local.security.util.WebContextUtils;
 
 /**
- * 权限显示层<br/>
+ * 人员对角色控制层<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -41,14 +49,21 @@ import com.tx.local.security.util.WebContextUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Controller("roleController")
-@RequestMapping({ "/role", "/operator/role" })
-public class OperatorRoleController implements InitializingBean {
+@Controller("operator2RoleController")
+@RequestMapping({ "/operator/role" })
+public class Operator2RoleController implements InitializingBean {
+    
+    @Resource
+    private OperatorFacade operatorFacade;
+    
+    @Resource
+    private OrganizationFacade organizationFacade;
+    
+    @Resource
+    private PostFacade postFacade;
     
     @Resource
     private SecurityContext securityContext;
-    
-    private RoleTypeRegistry roleTypeRegistry;
     
     private RoleRegistry roleRegistry;
     
@@ -60,56 +75,7 @@ public class OperatorRoleController implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         this.roleRegistry = securityContext.getRoleRegistry();
-        this.roleTypeRegistry = securityContext.getRoleTypeRegistry();
         this.roleRefService = securityContext.getRoleRefService();
-    }
-    
-    /**
-     * 跳转到查询权限视图<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/toQueryRoleMain")
-    public String toQueryRoleMain(ModelMap modelMap) {
-        return "mainframe/queryRoleMain";
-    }
-    
-    /**
-     * 根据当前人员权限类型与权限列表<br/> 
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<AuthItem> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ResponseBody
-    @RequestMapping("/queryRoleTypeList")
-    public List<RoleType> queryAuthTypeListBySecurity(
-            @RequestParam(value = "roleTypeId", required = true) String roleTypeId) {
-        List<RoleType> resList = roleTypeRegistry.queryList();
-        return resList;
-    }
-    
-    /**
-     * 根据当前人员权限类型与权限列表<br/> 
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return List<AuthItem> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ResponseBody
-    @RequestMapping("/queryRoleList")
-    public List<Role> queryRoleList(
-            @RequestParam(value = "roleTypeId", required = true) String roleTypeId) {
-        List<Role> resList = roleRegistry.queryList(roleTypeId);
-        return resList;
     }
     
     /**
@@ -124,11 +90,15 @@ public class OperatorRoleController implements InitializingBean {
     @ResponseBody
     @RequestMapping("/queryRoleListBySecurity")
     public List<Role> queryRoleListBySecurity(
-            @RequestParam(value = "roleTypeId", required = true) String roleTypeId) {
+            @RequestParam(value = "roleTypeId", required = false) String roleTypeId) {
         List<Role> resList = WebContextUtils.getCurrentRoles()
                 .stream()
-                .filter(a -> roleTypeId.equals(a.getRoleTypeId()))
                 .collect(Collectors.toList());
+        if (!StringUtils.isEmpty(roleTypeId)) {
+            resList = resList.stream()
+                    .filter(a -> roleTypeId.equals(a.getRoleTypeId()))
+                    .collect(Collectors.toList());
+        }
         return resList;
     }
     
@@ -143,10 +113,8 @@ public class OperatorRoleController implements InitializingBean {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toConfigOperatorRole")
-    public String toConfigOperatorAuth(
-            @RequestParam("roleTypeId") String roleTypeId,
+    public String toConfigOperatorRole(
             @RequestParam("operatorId") String operatorId, ModelMap modelMap) {
-        modelMap.put("roleTypeId", roleTypeId);
         modelMap.put("operatorId", operatorId);
         
         return "security/configOperatorRole";
@@ -163,19 +131,14 @@ public class OperatorRoleController implements InitializingBean {
      */
     @ResponseBody
     @RequestMapping("/queryOperator2RoleList")
-    public List<CheckAbleRole> queryOperator2AuthList(
-            @RequestParam("roleTypeId") String roleTypeId,
+    public List<CheckAbleRole> queryOperator2RoleList(
             @RequestParam("operatorId") String operatorId,
             @RequestParam() MultiValueMap<String, String> request) {
-        
-        //获取可分配的权限，如果为超级管理员，则所有权限都可以进行分配，否则仅能分配自己拥有的权限
-        List<String> assignableRoleIds = getAssignableRoleIds(roleTypeId);
-        List<CheckAbleRole> resList = roleRegistry.queryList(roleTypeId)
+        List<CheckAbleRole> resList = roleRegistry
+                .queryList(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId())
                 .stream()
-                .filter(role -> assignableRoleIds.contains(role.getId()))
                 .map(role -> new CheckAbleRole(role))
                 .collect(Collectors.toList());
-        
         //让拥有的权限被选中
         Set<String> hasRoleIdSet = this.roleRefService
                 .queryListByRef(true,
@@ -185,9 +148,8 @@ public class OperatorRoleController implements InitializingBean {
                 .stream()
                 .map(roleRef -> roleRef.getRoleId())
                 .collect(Collectors.toSet());
-        resList.stream().forEach(caAuth -> caAuth
-                .setChecked(hasRoleIdSet.contains(caAuth.getId())));
-        
+        resList.stream().forEach(caRole -> caRole
+                .setChecked(hasRoleIdSet.contains(caRole.getId())));
         return resList;
     }
     
@@ -242,5 +204,94 @@ public class OperatorRoleController implements InitializingBean {
                 .map(role -> role.getId())
                 .collect(Collectors.toList());
         return resList;
+    }
+    
+    /**
+     * 跳转到配置操作员权限列表页面<br/>
+     * <功能详细描述>
+     * @param response
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toConfigRoleOperator")
+    public String toConfigRoleOperator(@RequestParam("roleId") String roleId,
+            ModelMap response) {
+        response.put("roleId", roleId);
+        
+        String vcid = WebContextUtils.getVcid();
+        response.put("organizations",
+                this.organizationFacade.queryList(true,
+                        QuerierBuilder.newInstance()
+                                .searchProperty("vcid", vcid)
+                                .querier()));
+        response.put("posts",
+                this.postFacade.queryList(true,
+                        QuerierBuilder.newInstance()
+                                .searchProperty("vcid", vcid)
+                                .querier()));
+        return "security/configRoleOperator";
+    }
+    
+    /**
+     * 根据当前人员权限类型与权限列表<br/> 
+     *<功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<AuthItem> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryRole2OperatorIds")
+    public Set<String> queryRole2OperatorIdList(
+            @RequestParam("roleId") String roleId,
+            @RequestParam(value = "operatorId[]", required = false) String[] operatorIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        if (ArrayUtils.isEmpty(operatorIds)) {
+            return new HashSet<>();
+        }
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("refIds", operatorIds);
+        
+        //让拥有的权限被选中
+        Set<String> operatorIdSet = this.roleRefService
+                .queryListByRoleId(true,
+                        roleId,
+                        RoleConstants.ROLEREFTYPE_OPERATOR,
+                        params)
+                .stream()
+                .map(roleRef -> roleRef.getRefId())
+                .collect(Collectors.toSet());
+        return operatorIdSet;
+    }
+    
+    /**
+     * 保存角色权限<br/>
+     * <功能详细描述>
+     * @param roleTypeId
+     * @param operatorId
+     * @param roleIds
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+    */
+    @ResponseBody
+    @RequestMapping("/saveRole2Operator")
+    public boolean saveRole2Operator(@RequestParam("roleId") String roleId,
+            @RequestParam(value = "operatorId[]", required = false) String[] operatorIds,
+            @RequestParam(value = "filterOperatorId[]", required = false) String[] filterOperatorIds,
+            @RequestParam() MultiValueMap<String, String> request) {
+        List<String> refIds = Arrays.asList(operatorIds);
+        List<String> filterRefIds = Arrays.asList(filterOperatorIds);
+        this.roleRefService.saveForRefIds(roleId,
+                RoleConstants.ROLEREFTYPE_OPERATOR,
+                refIds,
+                filterRefIds);
+        return true;
     }
 }

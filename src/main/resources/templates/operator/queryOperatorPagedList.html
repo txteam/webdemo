@@ -651,10 +651,11 @@ function configOperatorPost(id,name){
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
+	var configUrl = /*[[@{/operator/post/toConfigOperatorPost?operatorId={0}}]]*/'';
 	DialogUtils.openModalDialog(
 		"configOperatorPost",
 		$.formatString("配置人员职位_[{0}]",name),
-		$.formatString("${contextPath}/operatorRef/toConfigOperatorPost.action?operatorId={0}",id),
+		$.formatString(configUrl,id),
 		850,550,function(){
 		}
 	);

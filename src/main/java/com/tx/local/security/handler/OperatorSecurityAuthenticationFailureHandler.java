@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
+import com.tx.core.remote.RemoteResult;
+import com.tx.core.util.JsonUtils;
 import com.tx.core.util.WebUtils;
 import com.tx.local.security.util.AuthenticationUtils;
 
@@ -30,17 +32,16 @@ import com.tx.local.security.util.AuthenticationUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class SecurityAuthenticationFailureHandler
+public class OperatorSecurityAuthenticationFailureHandler
         extends SimpleUrlAuthenticationFailureHandler {
     
     /** 日志记录器 */
     private Logger logger = LoggerFactory
-            .getLogger(SecurityAuthenticationFailureHandler.class);
+            .getLogger(OperatorSecurityAuthenticationFailureHandler.class);
     
     /** <默认构造函数> */
-    public SecurityAuthenticationFailureHandler() {
-        super();
-        setDefaultFailureUrl("/login");
+    public OperatorSecurityAuthenticationFailureHandler() {
+        super("/background/login");
     }
     
     /**
@@ -60,8 +61,9 @@ public class SecurityAuthenticationFailureHandler
             response.setContentType("application/json;charset=utf-8");
             
             PrintWriter out = response.getWriter();
-            out.write("{\"status\":\"error\",\"msg\":\""
-                    + AuthenticationUtils.loginErrorMessage(exception) + "\"}");
+            RemoteResult<?> result = RemoteResult.FAIL(-1,
+                    AuthenticationUtils.loginErrorMessage(exception));
+            out.write(JsonUtils.toJson(result));
             out.flush();
             out.close();
         } else {

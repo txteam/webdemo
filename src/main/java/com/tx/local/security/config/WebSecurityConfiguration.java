@@ -32,6 +32,7 @@ import com.tx.component.security.filter.SecurityThreadLocalResourceSupportFilter
 import com.tx.local.security.entrypoint.SecurityLoginAuthenticationEntryPoint;
 import com.tx.local.security.filter.ClientAuthenticationProcessingFilter;
 import com.tx.local.security.filter.OperatorAuthenticationProcessingFilter;
+import com.tx.local.security.filter.OperatorSocialAuthenticationProcessingFilter;
 import com.tx.local.security.strategy.UserSessionAuthenticationStrategy;
 
 /**
@@ -55,6 +56,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private UserSessionAuthenticationStrategy userSessionAuthenticationStrategy;
+    
+    @Autowired
+    private OperatorSocialAuthenticationProcessingFilter operatorSocialAuthenticationProcessingFilter;
     
     @Autowired
     private OperatorAuthenticationProcessingFilter operatorAuthenticationProcessingFilter;
@@ -138,7 +142,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         
         //logout配置
         //http.logout().disable();
-        http.logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+        http.logout().logoutUrl("/logout").logoutSuccessUrl("/background/login");
         
         //login配置
         http.formLogin().disable();
@@ -147,12 +151,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         registerAuthenticationEntryPoint(http);
         
         //添加登录过滤器
+        http.addFilterBefore(this.operatorSocialAuthenticationProcessingFilter,
+                UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(this.operatorAuthenticationProcessingFilter,
                 UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(this.clientAuthenticationProcessingFilter,
                 UsernamePasswordAuthenticationFilter.class);
         //必须条件该过滤器，不然权限容器中线程变量逻辑会存在问题
-        http.addFilterAfter(new SecurityThreadLocalResourceSupportFilter(), SwitchUserFilter.class);
+        http.addFilterAfter(new SecurityThreadLocalResourceSupportFilter(),
+                SwitchUserFilter.class);
         
         //.usernameParameter("username").passwordParameter("password").loginPage("/login")
         //.loginProcessingUrl(this.loginProcessingUrl).permitAll().successHandler(successHandler).failureHandler(failureHandler);
@@ -170,8 +177,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //允许进入登陆页面
         http.authorizeRequests().antMatchers("/error/**").permitAll();
         http.authorizeRequests()
-                .antMatchers("/", "/index", "/login", "/client/login")//"",
+                .antMatchers("/", "/index", "/login", "/client/login")
                 .permitAll();
+        
+        //第三方用户登陆
+        http.authorizeRequests()
+                .antMatchers("/operator/social/**", "/loginplugin/**")
+                .permitAll();
+        //后台登陆页
         http.authorizeRequests()
                 .antMatchers("/background",
                         "/background/",
@@ -179,6 +192,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/background/login",
                         "/operator/login")
                 .permitAll();
+        //验证码
         http.authorizeRequests().antMatchers("/captcha/**").permitAll();
         
         //其他
@@ -196,14 +210,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //http.addFilterBefore(captchaValidateAuthenticationFilter(),
         //                UsernamePasswordAuthenticationFilter.class);
         //http.addFilterAt(filter, atFilter)
-        
-        //filterChainDefinitionMap.put("/auth/2step-code", "anon");//登录验证码
-        //filterChainDefinitionMap.put("/sys/common/view/**", "anon");//图片预览不限制token
-        //filterChainDefinitionMap.put("/sys/common/download/**", "anon");//文件下载不限制token
-        //filterChainDefinitionMap.put("/sys/common/pdf/**", "anon");//pdf预览
-        //filterChainDefinitionMap.put("/generic/**", "anon");//pdf预览需要文件
-        //filterChainDefinitionMap.put("/", "anon");
-        //filterChainDefinitionMap.put("/**/*.html", "anon");
     }
     
     /**

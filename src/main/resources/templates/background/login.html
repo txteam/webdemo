@@ -87,21 +87,28 @@ function loginFun(){
 	$("#loginform").submit();
 }
 //页面加载完后的逻辑处理
+var $errorMessage = null;
+function showErrorMessage(message){
+	var msgHtml = "<b></b>" + message;
+	$errorMessage.html(msgHtml);
+	$errorMessage.show();
+}
+//隐藏错误信息
+function hideErrorMessage(){
+	$errorMessage.hide();
+}
+var result = {};
+result.code = /*[[${code}]]*/0;
+result.message = /*[[${message}]]*/'';
+
 $(document).ready(function() {
 	var $formBody = $('#loginform');
-    var $errorMessage = $('#error-message');
+    $errorMessage = $('.error-message');
+    hideErrorMessage();
     
-    function showErrorMessage(message){
-    	var msgHtml = "<b></b>" + message;
-    	$errorMessage.html(msgHtml);
-    	$errorMessage.show();
-    	//DialogUtils.alert("登陆失败",message,"error");
+    if(result.code != 0){
+    	showErrorMessage(result.message);
     }
-    //隐藏错误信息
-    function hideErrorMessage(){
-    	$errorMessage.hide();
-    }
-  	
     //验证提示信息样式自定义
     $formBody.validator({
         stopOnError: false, //关闭此开关，以便一次性显示所有消息
@@ -115,22 +122,15 @@ $(document).ready(function() {
         },
         valid: function(){
         	hideErrorMessage();
-        	//DialogUtils.progress({
-	        //	text : '数据提交中，请等待....'
-	        //});
+        	DialogUtils.loading();
 	        $formBody.ajaxSubmit({
-			    url:/*[[@{/operator/login}]]*/'/operator/login',
+			    url:/*[[@{/operator/login}]]*/'',
 			    success: function(data) {
-			    	DialogUtils.progress('close');
-					if(data.status == 'success'){
+			    	DialogUtils.loading('close')
+					if(data.code == 0){
 						window.location.href = /*[[@{/background/mainframe}]]*/'/' + data.data;
 					}else{
-						showErrorMessage(data.msg);
-						if($.ObjectUtils.isEmpty(data.msg)){
-							//showErrorMessage(data.msg);
-						}else{
-							//window.location.href = "/" + data.data;
-						}
+						showErrorMessage(data.message);
 					}
 			    } 
 			});
@@ -151,6 +151,7 @@ $(document).ready(function() {
 
 <!--loginbg start-->
 <div class="loginbg">
+	<div id="textboxDiv"></div>
     <!--login start-->
 	<div class="login" style="display: none;">
     	<!--loginbox start-->
@@ -187,10 +188,8 @@ $(document).ready(function() {
 				                <li style="display: block;">
 				                	<div class="forget-pw-wrap">
 				                		<em><input class="easyui-checkbox" type="checkbox" name="remember_me" value="0"></em><b>记住用户名密码</b>
-				                	
 					                	<span class="forget-pw-safe">
-											<a href="//passport.jd.com/uc/links?tag=safe" class="" target="_blank" 
-												clstag="pageclick|keycount|login_pc_201804112|6">忘记密码</a>
+											<a href="//passport.jd.com/uc/links?tag=safe" class="" target="_blank">忘记密码</a>
 										</span>
 				                	</div>
 				                </li>
@@ -209,30 +208,37 @@ $(document).ready(function() {
 			            		th:src="@{/images/login/examples_QRcode.png}"/>
 			            </div>
 			        </div>
-			        <!--二维码登录窗口框架-->
 			        
 			        <!-- 第三方登陆 -->
 		        	<div class="oauth-login-layout">
 		            	<ul>
-		            		<li>
+		            		<li th:if="${qqLoginEnable}">
 			            		<b></b>
 			            		<a href="javascript:void(0)"
-			            			onclick="window.location='//qq.jd.com/new/qq/login.aspx'+window.location.search;return false;"
-			            			clstag="pageclick|keycount|login_pc_201804112|3" class="pdl">
-			            		<b class="QQ-icon"></b><span>QQ</span></a>
+			            			th:onclick="'window.location=\'' + @{/operator/social/toLogin/QQ} + '\'+window.location.search;return false;'"
+			            			class="pdl">
+			            			<b class="qq-icon"></b><span>QQ</span>
+			            		</a>
 			            		<span class="line">|</span>
 		            		</li>
-		            		<li>
-		            			<a href="javascript:void(0)" 
-		            				onclick="window.location='//qq.jd.com/new/wx/login.action'+window.location.search;return false;" 
-		            				clstag="pageclick|keycount|login_pc_201804112|4" class="pdl">
+		            		<li th:if="${wxLoginEnable}">
+		            			<a href="javascript:void(0)"
+		            				th:onclick="'window.location=\'' + @{/operator/social/toLogin/WX} + '\'+window.location.search;return false;'"
+		            				class="pdl">
 		            			<b class="weixin-icon"></b><span>微信</span></a>
+		            			<span class="line">|</span>
 		                  	</li>
-		                  	<li class="extra-r">
+		                  	<li th:if="${wbLoginEnable}">
+		            			<a href="javascript:void(0)" 
+		            				th:onclick="'window.location=\'' + @{/operator/social/toLogin/WB} + '\'+window.location.search;return false;'"
+		            				class="pdl">
+		            			<b class="weibo-icon"></b><span>微博</span></a>
+		            			<span class="line">|</span>
+		                  	</li>
+		                  	<li class="extra-r" th:if="${registEnable}">
 		                  		<div>
 		                  			<div class="regist-link">
-		                          		<a href="//reg.jd.com/reg/person?ReturnUrl=http%3A%2F%2Fwww.jd.com" 
-		                          			clstag="pageclick|keycount|login_pc_201804112|5" target="_blank"><b></b>立即注册</a>
+		                          		<a href="//reg.jd.com/reg/person?ReturnUrl=http%3A%2F%2Fwww.jd.com" target="_blank"><b></b>立即注册</a>
 		                          	</div>
 		              			</div>
 		              		</li>

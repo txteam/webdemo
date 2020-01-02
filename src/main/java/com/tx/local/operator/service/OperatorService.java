@@ -10,9 +10,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -775,5 +777,54 @@ public class OperatorService {
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
+    }
+    
+    /**
+     * 保存职位和用户之间的关联关系<br/>
+     * <功能详细描述>
+     * @param postId
+     * @param operatorIds
+     * @param filterOperatorIds [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public void savePost2Operators(String postId, List<String> operatorIds,
+            List<String> filterOperatorIds) {
+        AssertUtils.notEmpty(postId, "postId is empty.");
+        
+        //查询原关联权限
+        Map<String, Object> params = new HashMap<>();
+        params.put("mainPostId", postId);
+        //原拥有该职位的人员
+        List<String> sourceIdList = queryList(null, params).stream()
+                .map(oper -> oper.getId())
+                .collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(filterOperatorIds)) {
+            sourceIdList = sourceIdList.stream().filter(idTemp -> {
+                return filterOperatorIds.contains(idTemp);
+            }).collect(Collectors.toList());
+        }
+        final List<String> finalSourceIdList = sourceIdList;
+        
+        //识别需要删除的权限
+        List<String> needDeleteOperIds = finalSourceIdList.stream()
+                .filter(idTemp -> {
+                    return !operatorIds.contains(idTemp);
+                })
+                .collect(Collectors.toList());
+        for(String idTemp : needDeleteOperIds){
+            updateMainPostById(idTemp, null);
+        }
+        
+        //识别需要添加的权限列表
+        List<String> needAddOperIds = operatorIds.stream().filter(refIdTemp -> {
+            return !finalSourceIdList.contains(refIdTemp);
+        }).collect(Collectors.toList());
+        for(String idTemp : needAddOperIds){
+            updateMainPostById(idTemp, postId);
+        }
     }
 }

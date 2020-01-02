@@ -30,7 +30,7 @@ import com.tx.core.util.WebUtils;
 import com.tx.local.basicdata.model.SexEnum;
 import com.tx.plugin.login.LoginPlugin;
 import com.tx.plugin.login.LoginPluginUtils;
-import com.tx.plugin.login.exception.AuthorizeException;
+import com.tx.plugin.login.exception.SocialAuthorizeException;
 import com.tx.plugin.login.model.LoginAccessToken;
 import com.tx.plugin.login.model.LoginUserInfo;
 
@@ -169,44 +169,8 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
         mview.addObject("requestUrl", CODE_REQUEST_URL);
         mview.addObject("parameterMap", parameterMap);
         mview.setViewName(viewName);
+        
         return mview;
-    }
-    
-    /**
-     * 获取第三方用户信息<br/>
-     * @param code
-     * @param request
-     * @return
-     * @throws AuthorizeException
-     */
-    @Override
-    public LoginUserInfo getUserInfo(String code, String state,
-            HttpServletRequest request) throws AuthorizeException {
-        LoginAccessToken accessToken = getAccessToken(code, state, request);
-        if (accessToken == null
-                || StringUtils.isEmpty(accessToken.getUniqueId())
-                || StringUtils.isEmpty(accessToken.getAccessToken())) {
-            throw new AuthorizeException("获取AccessToken失败.");
-        }
-        //获取用户信息
-        LoginUserInfo userInfo = getUserInfo(accessToken, request);
-        return userInfo;
-    }
-    
-    /**
-     * 获取登陆用户的第三方唯一键<br/>
-     * @param code
-     * @param state
-     * @param request
-     * @return
-     * @throws AuthorizeException
-     */
-    @Override
-    public String getUniqueId(String code, String state,
-            HttpServletRequest request) throws AuthorizeException {
-        LoginAccessToken token = getAccessToken(code, state, request);
-        String uniqueId = token.getUniqueId();
-        return uniqueId;
     }
     
     /**
@@ -222,12 +186,13 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
+    @Override
     public LoginAccessToken getAccessToken(String code, String state,
-            HttpServletRequest request) throws AuthorizeException {
+            HttpServletRequest request) throws SocialAuthorizeException {
         String sessionState = LoginPluginUtils
                 .popAttribute(STATE_ATTRIBUTE_NAME);
         if (!StringUtils.equals(state, sessionState)) {
-            throw new AuthorizeException(MessageUtils.format(
+            throw new SocialAuthorizeException(MessageUtils.format(
                     "state value is invalid.request_state:{}  session_state:{}",
                     state,
                     sessionState));
@@ -266,10 +231,10 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
         token.getAttributeJSONObject().put("isRealName",
                 node.get("isRealName").booleanValue());
         if (StringUtils.isEmpty(token.getUniqueId())) {
-            throw new AuthorizeException("获取UniqueId失败.");
+            throw new SocialAuthorizeException("获取UniqueId失败.");
         }
         if (StringUtils.isEmpty(token.getAccessToken())) {
-            throw new AuthorizeException("获取AccessToken失败.");
+            throw new SocialAuthorizeException("获取AccessToken失败.");
         }
         return token;
     }
@@ -285,6 +250,7 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
+    @Override
     public LoginUserInfo getUserInfo(LoginAccessToken accessToken,
             HttpServletRequest request) {
         AssertUtils.notNull(accessToken, "accessToken is null.");
@@ -319,5 +285,26 @@ public class GHLoginPlugin extends LoginPlugin<GHLoginPluginConfig> {
         json.put("url", node.get("url").asText());
         json.put("profile_image_url", node.get("profile_image_url").asText());
         return user;
+    }
+    
+    /**
+     * 获取登陆用户的第三方唯一键<br/>
+     * @param code
+     * @param state
+     * @param request
+     * @return
+     * @throws SocialAuthorizeException
+     */
+    @Override
+    public String getUniqueId(LoginAccessToken accessToken,
+            HttpServletRequest request) throws SocialAuthorizeException {
+        AssertUtils.notNull(accessToken, "accessToken is null.");
+        AssertUtils.notEmpty(accessToken.getUniqueId(),
+                "accessToken.uniqueId is empty.");
+        AssertUtils.notEmpty(accessToken.getAccessToken(),
+                "accessToken.accessToken is empty.");
+        
+        String uniqueId = accessToken.getUniqueId();
+        return uniqueId;
     }
 }

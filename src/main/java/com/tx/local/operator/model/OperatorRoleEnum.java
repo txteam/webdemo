@@ -26,10 +26,7 @@ import com.tx.local.security.model.RoleTypeEnum;
 public enum OperatorRoleEnum implements Serializable, Role {
     
     /** 系统管理员 */
-    SUPER_ADMIN("ROLE_SUPER_ADMIN", "超级管理员", RoleTypeEnum.ROLE_TYPE_ADMIN.getId()),
-    
-    /** 系统管理员 */
-    SYSTEM_ADMIN("ROLE_SYSTEM_ADMIN", "系统管理员", RoleTypeEnum.ROLE_TYPE_ADMIN.getId());
+    SUPER_ADMIN("ROLE_SUPER_ADMIN", "超级管理员", RoleTypeEnum.ROLE_TYPE_ADMIN.getId());
     
     /** 数据库中主键，系统启动后会进行写入 */
     private final String id;

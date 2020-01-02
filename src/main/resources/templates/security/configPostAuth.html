@@ -47,7 +47,7 @@ $(document).ready(function() {
 	parent.DialogUtils.progress('close');
 	
 	authTree = $("#authTree").tree({
-		url : /*[[@{/auth/queryPost2AuthList(authTypeId=${authTypeId},postId=${postId})}]]*/_contextPath + 'auth/queryPost2AuthList?postId=xx&authTypeId=xx',
+		url : /*[[@{/operator/auth/queryPost2AuthList(authTypeId=${authTypeId},postId=${postId})}]]*/'',
 		idField : 'id',
 		parentField : 'parentId',
 		textField : 'name',
@@ -75,7 +75,7 @@ $(document).ready(function() {
 			});
 		}
 		//提交数据
-		$.post(/*[[@{/auth/savePost2Auth}]]*/_contextPath + 'auth/savePost2Auth',
+		$.post(/*[[@{/operator/auth/savePost2Auth}]]*/'',
 			{
 				authTypeId: /*[[${authTypeId}]]*/'',
 		    	postId: /*[[${postId}]]*/'',

@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tx.component.role.model.Role;
 import com.tx.local.security.model.RoleTypeEnum;
 
@@ -225,6 +226,7 @@ public class OperatorRole implements Serializable, Role {
     /**
      * @return 返回 roleTypeId
      */
+    @JsonIgnore
     public String getRoleTypeId() {
         return RoleTypeEnum.ROLE_TYPE_OPERATOR.getId();
     }

@@ -6,6 +6,8 @@
  */
 package com.tx.plugin.login.qq.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * QQ用户信息<br/>
  * <功能详细描述>
@@ -25,16 +27,16 @@ public class QQUserInfo {
     
     private String figureurl;
     
-    //@SerializedName("figureurl_1")
+    @JSONField(name="figureurl_1")
     private String figureurl1;
     
-    //@SerializedName("figureurl_2")
+    @JSONField(name="figureurl_2")
     private String figureurl2;
     
-    //@SerializedName("figureurl_qq_1")
+    @JSONField(name="figureurl_qq_1")
     private String figureurlQQ1;
     
-    //@SerializedName("figureurl_qq_2")
+    @JSONField(name="figureurl_qq_2")
     private String figureurlQQ2;
     
     private String gender;

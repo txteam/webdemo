@@ -16,8 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
+import com.tx.core.remote.RemoteResult;
+import com.tx.core.util.JsonUtils;
 import com.tx.core.util.WebUtils;
 
 /**
@@ -29,19 +31,20 @@ import com.tx.core.util.WebUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class SecurityAuthenticationSuccessHandler
-        extends SavedRequestAwareAuthenticationSuccessHandler {
+public class OperatorSecurityAuthenticationSuccessHandler
+        extends SimpleUrlAuthenticationSuccessHandler {
     
     /** 日志记录器 */
     private Logger logger = LoggerFactory
-            .getLogger(SecurityAuthenticationSuccessHandler.class);
+            .getLogger(OperatorSecurityAuthenticationSuccessHandler.class);
     
     /** <默认构造函数> */
-    public SecurityAuthenticationSuccessHandler() {
+    public OperatorSecurityAuthenticationSuccessHandler() {
         super();
-        setDefaultTargetUrl("/");
+        setDefaultTargetUrl("/background/mainframe");
     }
     
+    /** 登陆成功处理逻辑 */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
             HttpServletResponse response, Authentication authentication)
@@ -52,13 +55,19 @@ public class SecurityAuthenticationSuccessHandler
             //如果为ajax请求，则返回ajax结果
             response.setContentType("application/json;charset=utf-8");
             PrintWriter out = response.getWriter();
-            out.write("{" + "\"status\":\"success\"," + "\"msg\":\"登录成功\","
-                    + "\"data\":\"mainframe\"" + "}");
+            
+            RemoteResult<String> result = RemoteResult
+                    .SUCCESS("/background/mainframe");
+            result.setMessage("登录成功");
+            out.write(JsonUtils.toJson(result));
+            
             out.flush();
             out.close();
+            
+            //清理最后一次错误信息
+            clearAuthenticationAttributes(request);
             return;
         }
-        
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }

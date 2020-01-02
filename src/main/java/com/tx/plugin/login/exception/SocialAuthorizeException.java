@@ -15,18 +15,18 @@ package com.tx.plugin.login.exception;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class AuthorizeException extends Exception {
+public class SocialAuthorizeException extends Exception {
     
     /** 注释内容 */
     private static final long serialVersionUID = -6304694102905618058L;
     
     /** <默认构造函数> */
-    public AuthorizeException(String message, Throwable cause) {
+    public SocialAuthorizeException(String message, Throwable cause) {
         super(message, cause);
     }
     
     /** <默认构造函数> */
-    public AuthorizeException(String message) {
+    public SocialAuthorizeException(String message) {
         super(message);
     }
     

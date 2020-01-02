@@ -6,11 +6,20 @@
  */
 package com.tx.local.background.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tx.component.plugin.context.PluginContext;
 import com.tx.local.security.SecurityConstants;
 import com.tx.local.security.util.WebContextUtils;
+import com.tx.plugin.login.github.GHLoginPlugin;
+import com.tx.plugin.login.weibo.WBLoginPlugin;
+import com.tx.plugin.login.weibo.WBLoginPluginConfig;
 
 /**
  * 主框架页面逻辑层<br/>
@@ -52,7 +61,38 @@ public class IndexController {
      * @see [类、类#方法、类#成员]
     */
     @RequestMapping("/login")
-    public String toLogin() {
+    public String toLogin(HttpServletRequest request, ModelMap response) {
+        boolean error = false;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            Exception e = (Exception) session
+                    .getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+            if (e != null) {
+                error = true;
+                response.put("code", -1);
+                response.put("message", e.getMessage());
+            }
+        }
+        
+        if (!error) {
+            response.put("code", 0);
+            response.put("message", "");
+        }
+        if (PluginContext.getContext()
+                .getConfig(WBLoginPlugin.class)
+                .isEnable()) {
+            response.put("wbLoginEnable", true);
+        }
+        if (PluginContext.getContext()
+                .getConfig(GHLoginPlugin.class)
+                .isEnable()) {
+            response.put("ghLoginEnable", true);
+        }
+        //        if (false) {
+        //            response.put("wxLoginEnable", false);
+        //            response.put("qqLoginEnable", false);
+        //        }
+        response.put("registEnable", false);
         return "background/login";
     }
 }

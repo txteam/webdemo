@@ -198,8 +198,8 @@ public class PluginController implements InitializingBean, ResourceLoaderAware {
         String path = getSettingPage(plugin);
         if (DEFAULT_SETTING_PAGE.equals(path)) {
             response.put("properties",
-                    ConfigContext.getContext().setupConfigProperties(
-                            plugin.getPrefix(), plugin.getConfigEntityType()));
+                    ConfigContext.getContext().parse(plugin.getPrefix(),
+                            plugin.getConfigEntityType()));
         } else {
             PluginConfig config = plugin.getConfig();
             response.put("config", config);

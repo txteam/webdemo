@@ -109,12 +109,7 @@ public class OperatorRoleService implements InitializingBean, RoleManager {
      * @return
      */
     @Override
-    public List<Role> queryChildrenRoleByParentId(String parentId,
-            String... roleTypeIds) {
-        List<String> roleTypeList = Arrays.asList(roleTypeIds);
-        if (!roleTypeList.contains(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId())) {
-            return new ArrayList<>();
-        }
+    public List<Role> queryChildrenRoleByParentId(String parentId) {
         List<Role> resList = queryChildrenByParentId(parentId,
                 true,
                 (Map<String, Object>) null).stream()
@@ -128,12 +123,7 @@ public class OperatorRoleService implements InitializingBean, RoleManager {
      * @return
      */
     @Override
-    public List<Role> queryDescendantsRoleByParentId(String parentId,
-            String... roleTypeIds) {
-        List<String> roleTypeList = Arrays.asList(roleTypeIds);
-        if (!roleTypeList.contains(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId())) {
-            return new ArrayList<>();
-        }
+    public List<Role> queryDescendantsRoleByParentId(String parentId) {
         List<Role> resList = queryDescendantsByParentId(parentId,
                 true,
                 (Map<String, Object>) null).stream()

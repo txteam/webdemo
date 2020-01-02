@@ -40,9 +40,11 @@ body{margin:0 auto;min-width:980px;font-family:"Microsoft YaHei","iconfont"!impo
 .loginright .oauth-login-layout li {float: left;}
 .loginright .oauth-login-layout li a.pdl {display:inline-block; position:relative; padding-left: 24px; color: #666;}
 .loginright .oauth-login-layout li .line {color:#ccc; padding:0 10px;}
-.loginright .oauth-login-layout li a.pdl b {width: 19px;height: 18px;display: block;margin: 0 auto;position: absolute;float: left;left: 0;top: 16px;background: url(../../images/login/QQ-weixin.png) no-repeat;}
-.loginright .oauth-login-layout li a.pdl b.QQ-icon {background-position: 0 0;}
-.loginright .oauth-login-layout li a.pdl b.weixin-icon {background-position: -20px 0;}
+.loginright .oauth-login-layout li a.pdl b {width: 19px;height: 18px;display: block;margin: 0 auto;position: absolute;float: left;left: 0;top: 16px;}
+.loginright .oauth-login-layout li a.pdl b.qq-icon {background: url('../../webjars/css/images/qq.png') no-repeat center center;background-size: 120% 120%;}
+.loginright .oauth-login-layout li a.pdl b.weixin-icon {background: url('../../webjars/css/images/weixin.png') no-repeat center center;background-size: 120% 120%;}
+.loginright .oauth-login-layout li a.pdl b.weibo-icon {background: url('../../webjars/css/images/weibo.png') no-repeat center center;background-size: 120% 120%;}
+
 .loginright .oauth-login-layout li.extra-r {float: right;}
 .loginright .oauth-login-layout .regist-link {color: #0a73bc;font-size: 14px;}
 .loginright .oauth-login-layout .regist-link a {color: #0a73bc;}

@@ -218,6 +218,28 @@ public class OperSocialAccountService {
     }
     
     /**
+     * 根据operatorId查询操作人员第三方账户实例
+     * 1、当id为empty时抛出异常
+     *
+     * @param id
+     * @return OperSocialAccount [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    public OperSocialAccount findByUniqueId(String uniqueId,
+            OperSocialAccountTypeEnum type) {
+        AssertUtils.notEmpty(uniqueId, "uniqueId is empty.");
+        AssertUtils.notNull(type, "type is null.");
+        
+        OperSocialAccount condition = new OperSocialAccount();
+        condition.setUniqueId(uniqueId);
+        condition.setType(type);
+        
+        OperSocialAccount res = this.operSocialAccountDao.find(condition);
+        return res;
+    }
+    
+    /**
      * 查询操作人员第三方账户实例列表
      * <功能详细描述>
      * @param params      

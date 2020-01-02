@@ -6,13 +6,14 @@
  */
 package com.tx.plugin.login.controller;
 
-import java.util.Map;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.core.remote.RemoteConstants;
+import com.tx.core.remote.RemoteResult;
 import com.tx.core.util.MessageUtils;
 import com.tx.local.operator.model.OperSocialAccount;
 import com.tx.local.operator.model.OperSocialAccountTypeEnum;
@@ -29,6 +32,8 @@ import com.tx.local.security.util.WebContextUtils;
 import com.tx.plugin.login.LoginPlugin;
 import com.tx.plugin.login.LoginPluginConstants;
 import com.tx.plugin.login.LoginPluginUtils;
+import com.tx.plugin.login.exception.SocialAuthorizeException;
+import com.tx.plugin.login.model.LoginAccessToken;
 import com.tx.plugin.login.model.LoginUserInfo;
 
 /**
@@ -44,10 +49,10 @@ import com.tx.plugin.login.model.LoginUserInfo;
 @RequestMapping("/operator/social/")
 public class OperatorSocialLoginController {
     
-    /** 账户类型映射 */
-    private final static Map<String, OperSocialAccountTypeEnum> ACCOUNT_TYPE_MAP = EnumUtils
-            .getEnumMap(OperSocialAccountTypeEnum.class);
+    /** 日志记录句柄 */
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     
+    /** 第三方用户账户业务层 */
     @Resource
     private OperSocialAccountService operSocialAccountService;
     
@@ -77,9 +82,9 @@ public class OperatorSocialLoginController {
         LoginPlugin<?> loginPlugin = LoginPluginUtils.getLoginPlugin(plugin);
         if (loginPlugin == null) {
             ModelAndView mv = new ModelAndView();
-            mv.getModelMap().put("result", "false");
-            mv.getModelMap().put("msg",
+            RemoteResult<?> result = RemoteResult.FAIL(-1,
                     MessageUtils.format("登陆插件不存在.plugin:{}", plugin));
+            mv.getModelMap().put("result", result);
             mv.setViewName("/loginplugin/result");
             return mv;
         }
@@ -109,11 +114,13 @@ public class OperatorSocialLoginController {
             HttpServletRequest request, ModelMap response) {
         LoginPlugin<?> loginPlugin = LoginPluginUtils.getLoginPlugin(plugin);
         if (loginPlugin == null) {
-            ModelAndView mv = new ModelAndView();
-            mv.getModelMap().put("result", "false");
-            mv.getModelMap().put("msg",
+            HttpSession session = request.getSession(true);
+            SocialAuthorizeException e = new SocialAuthorizeException(
                     MessageUtils.format("登陆插件不存在.plugin:{}", plugin));
-            mv.setViewName("/loginplugin/result");
+            session.setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, e);
+            
+            ModelAndView mv = new ModelAndView();
+            mv.setViewName("redirect:/background/login");
             return mv;
         }
         
@@ -143,27 +150,47 @@ public class OperatorSocialLoginController {
             @RequestParam(value = "code", required = false) String code,
             HttpServletRequest request, ModelMap response) {
         if (StringUtils.isEmpty(code)) {
-            response.put("success", false);
-            response.put("msg", MessageUtils.format("登陆失败."));
+            RemoteResult<?> result = RemoteResult.FAIL(-1,
+                    MessageUtils.format("绑定失败.code is empty."));
+            response.put("result", result);
             return "/loginplugin/result";
         }
         LoginPlugin<?> loginPlugin = LoginPluginUtils.getLoginPlugin(plugin);
         if (loginPlugin == null) {
-            response.put("success", false);
-            response.put("msg",
+            RemoteResult<?> result = RemoteResult.FAIL(-1,
                     MessageUtils.format("登陆插件不存在.plugin:{}", plugin));
+            response.put("result", result);
             return "/loginplugin/result";
         }
         
         //将用户id出栈
         String operatorId = LoginPluginUtils.popUserId();
         LoginUserInfo userInfo = null;
-        OperSocialAccountTypeEnum type = ACCOUNT_TYPE_MAP.get(plugin);
+        OperSocialAccountTypeEnum type = LoginPluginUtils
+                .getTypeByPlugin(plugin);
         try {
+            if (type == null) {
+                RemoteResult<?> result = RemoteResult.FAIL(-1,
+                        MessageUtils.format("绑定失败：账号类型解析失败..plugin:{}",
+                                plugin));
+                response.put("result", result);
+                return "/loginplugin/result";
+            }
             AssertUtils.notNull(type, "type is null.plugin:{}", plugin);
             
-            userInfo = loginPlugin.getUserInfo(code, state, request);
-            OperSocialAccount account = new OperSocialAccount();
+            LoginAccessToken accessToken = loginPlugin.getAccessToken(code,
+                    state,
+                    request);
+            userInfo = loginPlugin.getUserInfo(accessToken, request);
+            OperSocialAccount account = this.operSocialAccountService
+                    .findByUniqueId(userInfo.getUniqueId(), type);
+            if (account != null) {
+                RemoteResult<?> result = RemoteResult.FAIL(-1,
+                        MessageUtils.format("绑定失败：该账户已与其他账号绑定."));
+                response.put("result", result);
+                return "/loginplugin/result";
+            }
+            account = new OperSocialAccount();
             account.setType(type);
             account.setOperatorId(operatorId);
             account.setUniqueId(userInfo.getUniqueId());
@@ -172,11 +199,13 @@ public class OperatorSocialLoginController {
             account.setAttributes(userInfo.getAttributes());
             this.operSocialAccountService.insert(account);
             
-            response.put("msg", "绑定成功.");
-            response.put("success", true);
+            RemoteResult<?> result = RemoteResult
+                    .RESULT(RemoteConstants.CODE_SUCCESS, "绑定成功.", true);
+            response.put("result", result);
         } catch (Exception e) {
-            response.put("result", false);
-            response.put("msg", e.getMessage());
+            RemoteResult<?> result = RemoteResult.FAIL(-1,
+                    MessageUtils.format("绑定账户失败:" + e.getMessage()));
+            response.put("result", result);
         }
         return "/loginplugin/result";
     }

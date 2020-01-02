@@ -73,7 +73,7 @@ public class LoginPluginController {
                 return "forward:/client/social/bind/" + plugin;
             }
             case LoginPluginConstants.TARGET_NAME_LOGIN_4_OPERATOR: {
-                return "forward:/operator/social/login/" + plugin;
+                return "redirect:/operator/social/login/" + plugin + "?code=" + code + "&state=" + state;
             }
             case LoginPluginConstants.TARGET_NAME_LOGIN_4_CLIENT:
             default: {

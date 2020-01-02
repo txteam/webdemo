@@ -2,6 +2,8 @@ package com.tx.plugin.login.github.model;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * git hub 用户信息
  *
@@ -24,6 +26,7 @@ public class GitHubUserInfo {
     
     private String email;
     
+    @JSONField(name="createdDate")
     private Date createdDate;
     
     private String profileImageUrl;

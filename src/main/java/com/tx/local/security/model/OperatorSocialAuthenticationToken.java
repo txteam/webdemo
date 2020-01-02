@@ -6,8 +6,10 @@
  */
 package com.tx.local.security.model;
 
+import java.util.Collection;
+
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * 操作人员登陆表单认证Token<br/>
@@ -22,37 +24,47 @@ public class OperatorSocialAuthenticationToken
         extends AbstractAuthenticationToken {
     
     /** 注释内容 */
-    private static final long serialVersionUID = 5955091348782437065L;
+    private static final long serialVersionUID = 3734790035098259128L;
     
-    /** 插件 */
-    private String plugin;
+    /** 主键 */
+    private Object principal;
     
-    /** 编码 */
-    private String code;
-    
-    /** 状态值 */
-    private String state;
+    /** 证书 */
+    private Object credentials;
     
     /** <默认构造函数> */
-    public OperatorSocialAuthenticationToken() {
+    public OperatorSocialAuthenticationToken(Object principal,
+            Object credentials) {
         super(null);
+        this.principal = principal;
+        this.credentials = credentials;
+        setAuthenticated(false);
+    }
+    
+    /** <默认构造函数> */
+    public OperatorSocialAuthenticationToken(Object principal,
+            Object credentials,
+            Collection<? extends GrantedAuthority> authorities) {
+        super(authorities);
+        this.principal = principal;
+        this.credentials = credentials;
+        super.setAuthenticated(true); // must use super, as we override
     }
     
     /**
-     * @param details
+     * 获取用户id<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
      */
-    @Override
-    public void setDetails(Object details) {
-        super.setDetails(details);
-    }
-    
-    /**
-     * @return
-     */
-    @Override
-    public Object getCredentials() {
-        // TODO Auto-generated method stub
-        return null;
+    public String getUserId() {
+        if (this.getPrincipal() instanceof OperatorUserDetails) {
+            return ((OperatorUserDetails) this.getPrincipal()).getUserId();
+        }
+        return (this.getPrincipal() == null) ? "" : this.getPrincipal().toString();
     }
     
     /**
@@ -60,8 +72,34 @@ public class OperatorSocialAuthenticationToken
      */
     @Override
     public Object getPrincipal() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.principal;
     }
     
+    /**
+     * @return
+     */
+    @Override
+    public Object getCredentials() {
+        return this.credentials;
+    }
+    
+    /**
+     * 覆盖改写是否认证状态<br/>
+     * @param isAuthenticated
+     * @throws IllegalArgumentException
+     */
+    public void setAuthenticated(boolean isAuthenticated)
+            throws IllegalArgumentException {
+        if (isAuthenticated) {
+            throw new IllegalArgumentException(
+                    "Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead");
+        }
+        super.setAuthenticated(false);
+    }
+    
+    @Override
+    public void eraseCredentials() {
+        super.eraseCredentials();
+        credentials = null;
+    }
 }

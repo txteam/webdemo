@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,9 +42,9 @@ import com.tx.local.security.util.WebContextUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Controller("authController")
-@RequestMapping({ "/auth", "/operator/auth" })
-public class OperatorAuthController implements InitializingBean {
+@Controller("operator2AuthController")
+@RequestMapping({ "/operator/auth" })
+public class Operator2AuthController implements InitializingBean {
     
     @Resource
     private SecurityContext securityContext;
@@ -123,11 +124,16 @@ public class OperatorAuthController implements InitializingBean {
     @ResponseBody
     @RequestMapping("/queryAuthListBySecurity")
     public List<Auth> queryAuthListBySecurity(
-            @RequestParam(value = "authTypeId", required = true) String authTypeId) {
+            @RequestParam(value = "authTypeId", required = false) String authTypeId) {
         List<Auth> resList = WebContextUtils.getCurrentAuths()
                 .stream()
-                .filter(a -> authTypeId.equals(a.getAuthTypeId()))
                 .collect(Collectors.toList());
+        if (!StringUtils.isEmpty(authTypeId)) {
+            resList = WebContextUtils.getCurrentAuths()
+                    .stream()
+                    .filter(a -> authTypeId.equals(a.getAuthTypeId()))
+                    .collect(Collectors.toList());
+        }
         return resList;
     }
     

@@ -255,6 +255,10 @@ public class OperatorController {
         params.put("locked",
                 StringUtils.isEmpty(locked) ? null
                         : BooleanUtils.toBoolean(locked));
+        String modifyAble = request.getFirst("modifyAble");
+        params.put("modifyAble",
+                StringUtils.isEmpty(modifyAble) ? null
+                        : BooleanUtils.toBoolean(modifyAble));
         params.put("organizationId", request.getFirst("organizationId"));
         params.put("mainPostId", request.getFirst("mainPostId"));
         

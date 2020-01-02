@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>configRoleAuth</title>
+	<title>operator_login_failure</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -35,112 +35,50 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/';
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
 	/*]]>*/
 	</script>
 </block>
-
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-var authTree = null;
-$(document).ready(function() {
-	parent.DialogUtils.progress('close');
+$(document).ready(function(){
+	//验证器
+	var msg = $('#msg').val();
+	var success = $('#success').val();
+	if(success == 'true'){
+		parent.DialogUtils.tip(msg);
+		parent.DialogUtils.closeDialogById("signin");
+	}else{
+		parent.DialogUtils.alert("错误提示",msg,"error");
+		parent.DialogUtils.closeDialogById("signin");
+	}
 	
-	authTree = $("#authTree").tree({
-		url : /*[[@{/operator/auth/queryRole2AuthList(authTypeId=${authTypeId},roleId=${roleId})}]]*/'',
-		idField : 'id',
-		parentField : 'parentId',
-		textField : 'name',
-		iconField : function(item){
-			return 'database_key';	
-		},
-		checkbox : true,
-		cascadeCheck : true,
-		lines : true,
-		onlyLeafCheck: false,
-		/*
-		data: authItemList,
-		onCheck: function(node, checked){
-			if(checked){
-				alert("checked:true");
-				alert(node.nodeName);
-				var parentObj = $currentAuthTreeEl.tree('getParent');
-				alert("parentEl == null:" + (parentObj == null));
-			}else{
-				alert("checked:false");
-				var chidrensEls = $currentAuthTreeEl.tree('getChildren',node);
-				alert("chidrensEls == null:" + (chidrensEls == null));
-			}
-		},
-		*/
-		onClick : function(node){
-		}
-	});
-	
-	$("#confirmBtn").click(function(){
-		DialogUtils.progress({
-	        text : '数据提交中，请等待....'
-		});
-		var $treeEL = $("#authTree");
-		var checked = $treeEL.tree('getChecked',['checked','indeterminate']);
-		var authIds = [];
-		if(checked.length > 0){
-			$.each(checked,function(index,item){
-				authIds[index] = item.id;
-			});
-		}
-		//提交数据
-		$.post(/*[[@{/operator/auth/saveRole2Auth}]]*/'',
-			{
-				authTypeId: /*[[${authTypeId}]]*/'',
-		    	roleId: /*[[${roleId}]]*/'',
-		    	authId: authIds
-		    },
-		    function(data) {
-		    	DialogUtils.progress('close');
-				if(data){
-					parent.DialogUtils.tip("配置角色权限成功");
-					parent.DialogUtils.closeDialogById("configRoleAuth");
-				}else{
-					DialogUtils.alert("错误提示","新增配置角色权限失败.","error");
-				}
-		    }
-		);
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("signin");
 	});
 });
-function redo() {
-	var node = $currentAuthTreeEl.tree('getSelected');
-	if (node) {
-		$currentAuthTreeEl.tree('expandAll', node.id);
-	} else {
-		$currentAuthTreeEl.tree('expandAll');
-	}
-}
-function undo() {
-	var node = $currentAuthTreeEl.tree('getSelected');
-	if (node) {
-		$currentAuthTreeEl.tree('collapseAll', node.id);
-	} else {
-		$currentAuthTreeEl.tree('collapseAll');
-	}
-}
 /*]]>*/
 </script>
 </head>
-<body class="easyui-layout" data-options="fit:true,border:false">
-	<div data-options="region:'center',border:false" style="overflow-y:auto;" class="form">
-		<div class="datagrid-toolbar">
-	        <a onclick="redo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_next'">展开</a>
-	        <a onclick="undo();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'resultset_previous'">折叠</a>
-	    </div>
-    
-		<input id="authTypeId" type="hidden" name="authTypeId" th:value="${authTypeId}"/>
-		<input id="operatorId" type="hidden" name="operatorId" th:value="${operatorId}"/>
+<body>
+<div class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+		<input id="success" name="success" th:value="${success}" type="hidden"/>
+		<input id="msg" name="msg" th:value="${msg}" type="hidden"/>
 		
-		<ul id="authTree" style="margin-bottom: 40px;padding-top:2px;padding-left: 5px"></ul>
+		<div class="passnewbind-content" style="display: none;">
+			<div class="passnewbind-img"><img src="https://passport.baidu.com/static/phoenix/img/success.png" /></div>
+			<p class="passnewbind-title"><img src="https://passport.baidu.com/static/phoenix/img/ok.png" /><span>绑定成功！</span></p>
+			<!-- 您的新浪微博"彭清杨"已成功绑定您的百度帐号"lanchao7pqy" -->
+		    <p class="passnewbind-msg">已成功绑定您的帐号</p>
+		    <p class="passnewbind-jump">
+		        <span class="secs" id="sec">3</span>秒后自动关闭
+		    </p>
+		</div>
 	</div>
-	
 	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
-		<a id="confirmBtn" href="javascript:void(0);" class="easyui-linkbutton" style="width: 85px">确认</a>
+		<a id="cancelBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">立即关闭</a>
 	</div>
+</div>
 </body>

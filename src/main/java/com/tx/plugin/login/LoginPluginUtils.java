@@ -6,12 +6,15 @@
  */
 package com.tx.plugin.login;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.EnumUtils;
+
 import com.tx.component.plugin.context.PluginContext;
 import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.local.operator.model.OperSocialAccountTypeEnum;
 import com.tx.local.security.util.WebContextUtils;
-import com.tx.plugin.login.qq.QQLoginPlugin;
 import com.tx.plugin.login.weibo.WBLoginPlugin;
-import com.tx.plugin.login.weixin.WXLoginPlugin;
 
 /**
  * 登陆插件常用工具类<br/>
@@ -23,6 +26,25 @@ import com.tx.plugin.login.weixin.WXLoginPlugin;
  * @since  [产品/模块版本]
  */
 public abstract class LoginPluginUtils {
+    
+    /** 账户类型映射 */
+    private final static Map<String, OperSocialAccountTypeEnum> ACCOUNT_TYPE_MAP = EnumUtils
+            .getEnumMap(OperSocialAccountTypeEnum.class);
+    
+    /**
+     * 根据插件寻找到对应的账户类型<br/>
+     * <功能详细描述>
+     * @param plugin
+     * @return [参数说明]
+     * 
+     * @return OperSocialAccountTypeEnum [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static OperSocialAccountTypeEnum getTypeByPlugin(String plugin) {
+        OperSocialAccountTypeEnum type = ACCOUNT_TYPE_MAP.get(plugin);
+        return type;
+    }
     
     /**
      * 将值进行压入会话
@@ -138,14 +160,14 @@ public abstract class LoginPluginUtils {
     public static LoginPlugin<?> getLoginPlugin(String plugin) {
         LoginPlugin<?> loginPlugin = null;
         switch (plugin) {
-            case "WX":
-                loginPlugin = PluginContext.getContext()
-                        .getPlugin(WXLoginPlugin.class);
-                break;
-            case "QQ":
-                loginPlugin = PluginContext.getContext()
-                        .getPlugin(QQLoginPlugin.class);
-                break;
+//            case "WX":
+//                loginPlugin = PluginContext.getContext()
+//                        .getPlugin(WXLoginPlugin.class);
+//                break;
+//            case "QQ":
+//                loginPlugin = PluginContext.getContext()
+//                        .getPlugin(QQLoginPlugin.class);
+//                break;
             case "WB":
                 loginPlugin = PluginContext.getContext()
                         .getPlugin(WBLoginPlugin.class);

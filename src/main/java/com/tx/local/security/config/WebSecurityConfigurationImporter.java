@@ -20,12 +20,14 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import com.tx.local.security.entrypoint.SecurityLoginAuthenticationEntryPoint;
 import com.tx.local.security.filter.ClientAuthenticationProcessingFilter;
 import com.tx.local.security.filter.OperatorAuthenticationProcessingFilter;
-import com.tx.local.security.handler.SecurityAuthenticationFailureHandler;
-import com.tx.local.security.handler.SecurityAuthenticationSuccessHandler;
+import com.tx.local.security.filter.OperatorSocialAuthenticationProcessingFilter;
+import com.tx.local.security.handler.OperatorSecurityAuthenticationFailureHandler;
+import com.tx.local.security.handler.OperatorSecurityAuthenticationSuccessHandler;
 import com.tx.local.security.model.ClientPasswordEncoder;
 import com.tx.local.security.model.OperatorPasswordEncoder;
 import com.tx.local.security.provider.ClientAuthenticationProvider;
 import com.tx.local.security.provider.OperatorLoginFormAuthenticationProvider;
+import com.tx.local.security.provider.OperatorSocialAuthenticationProvider;
 import com.tx.local.security.service.ClientUserDetailsService;
 import com.tx.local.security.service.OperatorUserDetailsService;
 
@@ -95,8 +97,8 @@ public class WebSecurityConfigurationImporter {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Bean("operatorAuthenticationProvider")
-    public OperatorLoginFormAuthenticationProvider operatorAuthenticationProvider(
+    @Bean("operatorLoginFormAuthenticationProvider")
+    public OperatorLoginFormAuthenticationProvider operatorLoginFormAuthenticationProvider(
             OperatorUserDetailsService operatorUserDetailsService) {
         OperatorLoginFormAuthenticationProvider provider = new OperatorLoginFormAuthenticationProvider();
         // 设置userDetailsService
@@ -105,6 +107,27 @@ public class WebSecurityConfigurationImporter {
         provider.setHideUserNotFoundExceptions(false);
         // 使用BCrypt进行密码的hash
         provider.setPasswordEncoder(operatorPasswordEncoder());
+        return provider;
+    }
+    
+    /**
+     * 第三方用户登陆Provider<br/>
+     * <功能详细描述>
+     * @param operatorUserDetailsService
+     * @return [参数说明]
+     * 
+     * @return OperatorSocialAuthenticationProvider [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("operatorSocialAuthenticationProvider")
+    public OperatorSocialAuthenticationProvider operatorSocialAuthenticationProvider(
+            OperatorUserDetailsService operatorUserDetailsService) {
+        OperatorSocialAuthenticationProvider provider = new OperatorSocialAuthenticationProvider();
+        // 设置userDetailsService
+        provider.setUserDetailsService(operatorUserDetailsService);
+        // 禁止隐藏用户未找到异常
+        provider.setHideUserNotFoundExceptions(false);
         return provider;
     }
     
@@ -147,36 +170,6 @@ public class WebSecurityConfigurationImporter {
     }
     
     /**
-     * 认证成功处理句柄<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return AuthenticationSuccessHandler [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @Bean(name = "authenticationSuccessHandler")
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        SecurityAuthenticationSuccessHandler handler = new SecurityAuthenticationSuccessHandler();
-        return handler;
-    }
-    
-    /**
-     * 认证失败处理句柄<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return AuthenticationFailureHandler [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @Bean(name = "authenticationFailureHandler")
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        SecurityAuthenticationFailureHandler handler = new SecurityAuthenticationFailureHandler();
-        return handler;
-    }
-    
-    /**
      * 认证管理器实现<br/>
      * <功能详细描述>
      * @param providers
@@ -194,6 +187,36 @@ public class WebSecurityConfigurationImporter {
     }
     
     /**
+     * 认证成功处理句柄<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return AuthenticationSuccessHandler [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean(name = "operatorAuthenticationSuccessHandler")
+    public OperatorSecurityAuthenticationSuccessHandler operatorAuthenticationSuccessHandler() {
+        OperatorSecurityAuthenticationSuccessHandler handler = new OperatorSecurityAuthenticationSuccessHandler();
+        return handler;
+    }
+    
+    /**
+     * 认证失败处理句柄<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return AuthenticationFailureHandler [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean(name = "operatorSecurityAuthenticationFailureHandler")
+    public OperatorSecurityAuthenticationFailureHandler operatorSecurityAuthenticationFailureHandler() {
+        OperatorSecurityAuthenticationFailureHandler handler = new OperatorSecurityAuthenticationFailureHandler();
+        return handler;
+    }
+    
+    /**
      * 操作人员认证处理过滤器<br/>
      * <功能详细描述>
      * @param authenticationManager
@@ -208,9 +231,34 @@ public class WebSecurityConfigurationImporter {
     @Bean(name = "operatorAuthenticationProcessingFilter")
     public OperatorAuthenticationProcessingFilter operatorAuthenticationProcessingFilter(
             AuthenticationManager authenticationManager,
-            AuthenticationSuccessHandler successHandler,
-            AuthenticationFailureHandler failureHandler) {
+            OperatorSecurityAuthenticationSuccessHandler successHandler,
+            OperatorSecurityAuthenticationFailureHandler failureHandler) {
         OperatorAuthenticationProcessingFilter filter = new OperatorAuthenticationProcessingFilter();
+        filter.setAuthenticationSuccessHandler(successHandler);
+        filter.setAuthenticationFailureHandler(failureHandler);
+        
+        filter.setAuthenticationManager(authenticationManager);
+        return filter;
+    }
+    
+    /**
+     * 第三方用户登陆拦截器<br/>
+     * <功能详细描述>
+     * @param authenticationManager
+     * @param successHandler
+     * @param failureHandler
+     * @return [参数说明]
+     * 
+     * @return OperatorSocialAuthenticationProcessingFilter [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean(name = "operatorSocialAuthenticationProcessingFilter")
+    public OperatorSocialAuthenticationProcessingFilter operatorSocialAuthenticationProcessingFilter(
+            AuthenticationManager authenticationManager,
+            OperatorSecurityAuthenticationSuccessHandler successHandler,
+            OperatorSecurityAuthenticationFailureHandler failureHandler) {
+        OperatorSocialAuthenticationProcessingFilter filter = new OperatorSocialAuthenticationProcessingFilter();
         filter.setAuthenticationSuccessHandler(successHandler);
         filter.setAuthenticationFailureHandler(failureHandler);
         

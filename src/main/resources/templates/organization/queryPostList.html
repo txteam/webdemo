@@ -416,7 +416,7 @@ function configPostAuth(id,name){
 	DialogUtils.progress({
         text : '加载中，请等待....'
 	});
-	var configUrl = /*[[@{/auth/toConfigPostAuth}]]*/'';
+	var configUrl = /*[[@{/operator/auth/toConfigPostAuth}]]*/'';
 	configUrl = configUrl + "?authTypeId=AUTH_TYPE_OPERATOR_OPERATE&postId=" + id;
 	DialogUtils.openModalDialog(
 		"configPostAuth",

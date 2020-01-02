@@ -19,7 +19,8 @@ import com.tx.local.security.model.OperatorLoginFormAuthenticationToken;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class OperatorLoginFormAuthenticationProvider extends DaoAuthenticationProvider {
+public class OperatorLoginFormAuthenticationProvider
+        extends DaoAuthenticationProvider {
     
     /**
      * @param authentication
@@ -30,5 +31,4 @@ public class OperatorLoginFormAuthenticationProvider extends DaoAuthenticationPr
         return (OperatorLoginFormAuthenticationToken.class
                 .isAssignableFrom(authentication));
     }
-    
 }

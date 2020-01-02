@@ -744,7 +744,35 @@ var GlobalDialogUtils = null;
     		DialogUtils._progress(opt);
     	}
     };
-    
+    var loading_dialog_id = "loading_dialog";
+    DialogUtils.loading = function(obj){
+    	var $loadingDialogHandle = null;
+		$loadingDialogHandle = $("#"+loading_dialog_id);
+		if($loadingDialogHandle.size() == 0){
+			$loadingDialogHandle = $("<div/>").attr("id",loading_dialog_id);
+			$loadingDialogHandle.appendTo("body");
+			$('<div class="loading"><span class="loading-item"><b class="loading-icon"></b><span></div>').appendTo($loadingDialogHandle);
+		}
+    	if($.type(obj) === "string"){
+    		if(obj === "close"){
+    			$loadingDialogHandle.dialog('close');
+    		}
+    	}else{
+    		var _options = $.extend({},{
+    			closeable : false,
+		    	collapsible : false,
+		    	minimizable : false,
+		    	maximizable : false,
+		    	resizable : false,
+		    	border : false,
+		    	title : '',
+    			width : 63,
+				height : 48,
+		    	modal: true
+        	},obj);
+    		$loadingDialogHandle.dialog(_options);
+    	}
+    };
     /*
      * 默认dialogpe配置
      */
@@ -819,18 +847,11 @@ var GlobalDialogUtils = null;
     		config.title && $dialogHandle.attr("title",config.title)
     	}
     	
-    	var option = $.extend({},{
-    		title : title,
-    	    width: width,   
-    	    height: height,
-    	    closed: false,   
-    	    cache: false,
-    	    modal: false,
-    	    onClose: onClose
-    	},config);
+    	var option = $.extend({},DialogUtils._defaultDialogConfig,config);
     	var _dialog = DialogUtils._createOrOpenDialog(dialogHandleId,$dialogHandle,config);
     	return _dialog;
     };
+    
     /*
      * 打开对话框
      * notIframeDialog如果不设定值默认为iframeDialog

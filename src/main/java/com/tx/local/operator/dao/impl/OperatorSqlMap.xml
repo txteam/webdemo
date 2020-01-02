@@ -130,7 +130,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
 	            <![CDATA[ AND O.organizationId = #{organizationId} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(ids)">  
+	            AND O.id IN <foreach item="idTemp" collection="ids" open="(" close=")" separator=",">#{idTemp,javaType=java.lang.String}</foreach>
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND O.id <> #{excludeId} ]]>
 			</if>
@@ -211,7 +214,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
 	            <![CDATA[ AND O.organizationId = #{organizationId} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(ids)">  
+	            AND O.id IN <foreach item="idTemp" collection="ids" open="(" close=")" separator=",">#{idTemp,javaType=java.lang.String}</foreach>
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND O.id <> #{excludeId} ]]>
 			</if>

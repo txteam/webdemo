@@ -18,7 +18,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -35,12 +34,11 @@ import com.tx.component.role.service.RoleRefService;
 import com.tx.component.security.context.SecurityContext;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.operator.model.Operator;
-import com.tx.local.operator.model.OperatorRole;
 import com.tx.local.operator.model.OperatorRoleEnum;
 import com.tx.local.operator.service.OperatorService;
-import com.tx.local.organization.model.Organization;
 import com.tx.local.security.model.AuthTypeEnum;
 import com.tx.local.security.model.OperatorUserDetails;
+import com.tx.plugin.login.exception.UserIdNotFoundException;
 
 /**
  * 操作人员用户登陆业务层<br/>
@@ -93,6 +91,10 @@ public class OperatorUserDetailsService
         AssertUtils.notEmpty(userId, "userId is empty.");
         
         Operator operator = this.operatorService.findById(userId);
+        if (operator == null) {
+            throw new UserIdNotFoundException(
+                    "Operator is not exsits.userId:" + userId);
+        }
         OperatorUserDetails userDetail = loadUserDetailByOperator(operator);
         return userDetail;
     }
@@ -107,11 +109,11 @@ public class OperatorUserDetailsService
             throws UsernameNotFoundException {
         AssertUtils.notEmpty(username, "username is empty.");
         
-        if ("admin".equalsIgnoreCase(username)) {
-            UserDetails user = mockUser();
-            return user;
-        }
         Operator operator = this.operatorService.findByUsername(username);
+        if (operator == null) {
+            throw new UsernameNotFoundException(
+                    "Operator is not exsits.username:" + username);
+        }
         OperatorUserDetails userDetail = loadUserDetailByOperator(operator);
         return userDetail;
     }
@@ -145,7 +147,9 @@ public class OperatorUserDetailsService
                 RoleConstants.ROLEREFTYPE_OPERATOR,
                 operator.getId(),
                 null);
+        isSuperAdmin = isSuperAdmin(operator, roleRefList);
         List<Role> roles = new ArrayList<>();
+        //无论是否是超级管理员，都需要将其所有角色进行加载
         roleRefList.stream()
                 .map(roleRefTemp -> roleRefTemp.getRoleId())
                 .collect(Collectors.toSet())
@@ -158,15 +162,22 @@ public class OperatorUserDetailsService
                     roles.add(role);
                     refMap.add(AuthConstants.AUTHREFTYPE_ROLE, roleIdTemp);
                 });
-        for (Role r : roles) {
-            if (OperatorRoleEnum.SUPER_ADMIN.getId().equals(r.getId())) {
-                isSuperAdmin = true;
-            }
+        if (isSuperAdmin) {
+            //如果为超级管理员，则将超级管理员角色加入
+            roles.add(roleRegistry
+                    .findById(OperatorRoleEnum.SUPER_ADMIN.getId()));
         }
         
         //查询用户的权限：根据用户的所属组织，职位，角色查询
         List<Auth> auths = new ArrayList<>();
         if (isSuperAdmin) {
+            String[] authTypeIds = Arrays
+                    .asList(AuthTypeEnum.AUTH_TYPE_OPERATOR_OPERATE.getId(),
+                            AuthTypeEnum.AUTH_TYPE_OPERATOR_DATA.getId())
+                    .stream()
+                    .toArray(String[]::new);
+            auths.addAll(this.authRegistry.queryList(authTypeIds));
+        } else {
             List<AuthRef> authRefList = this.authRefService
                     .queryListByRefMap(true, refMap);
             for (AuthRef arTemp : authRefList) {
@@ -176,68 +187,85 @@ public class OperatorUserDetailsService
                 }
                 auths.add(auth);
             }
-        } else {
-            String[] authTypeIds = Arrays
-                    .asList(AuthTypeEnum.AUTH_TYPE_OPERATOR_OPERATE.getId(),
-                            AuthTypeEnum.AUTH_TYPE_OPERATOR_DATA.getId())
-                    .stream()
-                    .toArray(String[]::new);
-            auths.addAll(SecurityContext.getContext()
-                    .getAuthRegistry()
-                    .queryList(authTypeIds));
         }
         OperatorUserDetails userDetail = new OperatorUserDetails(operator,
                 roles, auths);
         return userDetail;
     }
     
-    protected UserDetails mockUser() {
-        String jtVcid = "1000000000";
-        
-        Operator user = new Operator();
-        user.setVcid(jtVcid);
-        user.setUsername("admin");
-        user.setName("超级管理员");
-        user.setValid(true);
-        user.setLocked(false);
-        
-        //System.out.println((new Md5PasswordEncoder()).encodePassword("123456", ""));
-        user.setPassword("E10ADC3949BA59ABBE56E057F20F883E");
-        user.setId("1");
-        user.setValid(true);
-        user.setLocked(false);
-        
-        List<Role> roles = new ArrayList<Role>();
-        OperatorRole role1 = new OperatorRole();
-        role1.setId(OperatorRoleEnum.SUPER_ADMIN.getId());
-        role1.setName(OperatorRoleEnum.SUPER_ADMIN.getName());
-        roles.add(role1);
-        OperatorRole role2 = new OperatorRole();
-        role2.setId(OperatorRoleEnum.SYSTEM_ADMIN.getId());
-        role2.setName(OperatorRoleEnum.SYSTEM_ADMIN.getName());
-        roles.add(role2);
-        
-        List<Auth> auths = new ArrayList<>();
-        String[] authTypeIds = SecurityContext.getContext()
-                .getAuthTypeRegistry()
-                .queryList()
-                .stream()
-                .map(at -> at.getId())
-                .toArray(String[]::new);
-        auths.addAll(SecurityContext.getContext()
-                .getAuthRegistry()
-                .queryList(authTypeIds));
-        
-        OperatorUserDetails userDetail = new OperatorUserDetails(user, roles,
-                auths);
-        Organization org = new Organization();
-        userDetail.setOrganization(org);
-        return userDetail;
+    /** 
+     * 判断当前用户是否为超级管理员<br/>
+     * <功能详细描述>
+     * @param operator
+     * @param isSuperAdmin
+     * @param roleRefList
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    protected boolean isSuperAdmin(Operator operator,
+            List<RoleRef> roleRefList) {
+        String username = operator.getUsername();
+        if (StringUtils.equals(username, "admin")) {
+            return true;
+        }
+        for (RoleRef rf : roleRefList) {
+            if (OperatorRoleEnum.SUPER_ADMIN.getId().equals(rf.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
     
-    public static void main(String[] args) {
-        String rawPwd = PasswordEncoderFactories
-                .createDelegatingPasswordEncoder().encode("123321qQ");
-        System.out.println(rawPwd);
-    }
+    //    protected UserDetails mockUser() {
+    //        String jtVcid = "1000000000";
+    //        
+    //        Operator user = new Operator();
+    //        user.setVcid(jtVcid);
+    //        user.setUsername("admin");
+    //        user.setName("超级管理员");
+    //        user.setValid(true);
+    //        user.setLocked(false);
+    //        
+    //        //System.out.println((new Md5PasswordEncoder()).encodePassword("123456", ""));
+    //        user.setPassword("E10ADC3949BA59ABBE56E057F20F883E");
+    //        user.setId("1");
+    //        user.setValid(true);
+    //        user.setLocked(false);
+    //        
+    //        List<Role> roles = new ArrayList<Role>();
+    //        OperatorRole role1 = new OperatorRole();
+    //        role1.setId(OperatorRoleEnum.SUPER_ADMIN.getId());
+    //        role1.setName(OperatorRoleEnum.SUPER_ADMIN.getName());
+    //        roles.add(role1);
+    //        OperatorRole role2 = new OperatorRole();
+    //        role2.setId(OperatorRoleEnum.SYSTEM_ADMIN.getId());
+    //        role2.setName(OperatorRoleEnum.SYSTEM_ADMIN.getName());
+    //        roles.add(role2);
+    //        
+    //        List<Auth> auths = new ArrayList<>();
+    //        String[] authTypeIds = SecurityContext.getContext()
+    //                .getAuthTypeRegistry()
+    //                .queryList()
+    //                .stream()
+    //                .map(at -> at.getId())
+    //                .toArray(String[]::new);
+    //        auths.addAll(SecurityContext.getContext()
+    //                .getAuthRegistry()
+    //                .queryList(authTypeIds));
+    //        
+    //        OperatorUserDetails userDetail = new OperatorUserDetails(user, roles,
+    //                auths);
+    //        Organization org = new Organization();
+    //        userDetail.setOrganization(org);
+    //        return userDetail;
+    //    }
+    //    
+    //    public static void main(String[] args) {
+    //        String rawPwd = PasswordEncoderFactories
+    //                .createDelegatingPasswordEncoder().encode("123321qQ");
+    //        System.out.println(rawPwd);
+    //    }
 }
