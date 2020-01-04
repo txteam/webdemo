@@ -2,10 +2,10 @@
 <content_config>
 	<category code="GG" name="公告">
 		<category code="GG_XTGG" name="系统公告" type="dbRichContent">
-			<level code="GG_XTGG_JJZD" name="紧急置顶" orderIndex="0"></level>
-			<level code="GG_XTGG_ZD" name="置顶" orderIndex="1"></level>
-			<level code="GG_XTGG_JJ" name="紧急" orderIndex="2"></level>
-			<level code="GG_XTGG_PT" name="普通" orderIndex="3"></level>
+			<level code="GG_XTGG_JJZD" name="紧急置顶" priority="0"></level>
+			<level code="GG_XTGG_ZD" name="置顶" priority="1"></level>
+			<level code="GG_XTGG_JJ" name="紧急" priority="2"></level>
+			<level code="GG_XTGG_PT" name="普通" priority="3"></level>
 		</category>
 		<category code="GG_SKGG" name="收款公告" type="dbRichContent"></category>
 	</category>

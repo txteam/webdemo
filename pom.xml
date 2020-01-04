@@ -26,6 +26,13 @@
 	</properties>
 
 	<dependencies>
+		<!-- lombok支持 -->
+		<dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+	
 		<!--启动时启动内置tomcat -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -192,10 +199,10 @@
 			<groupId>com.tx</groupId>
 			<artifactId>tx-component-starter-security</artifactId>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>com.tx</groupId> -->
-		<!-- <artifactId>tx-component-servicelog</artifactId> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>com.tx</groupId>
+			<artifactId>tx-component-starter-servicelogger</artifactId>
+		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>com.tx</groupId> -->
 		<!-- <artifactId>tx-component-configuration</artifactId> -->

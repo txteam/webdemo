@@ -6,8 +6,21 @@ package generator;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.sql.DataSource;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.BeanInstantiationException;
+import org.springframework.beans.BeanUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.tx.core.datasource.finder.SimpleDataSourceFinder;
+import com.tx.core.dbscript.initializer.TableInitializer;
+import com.tx.core.ddlutil.executor.TableDDLExecutor;
+import com.tx.core.ddlutil.executor.impl.MysqlTableDDLExecutor;
+import com.tx.core.util.ClassScanUtils;
 
 /**
  * 基础数据生成类<br/>
@@ -26,9 +39,31 @@ import org.apache.commons.io.FileUtils;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@SuppressWarnings("deprecation")
 public class DBScriptAssembler {
     
+    /** 表DDL执行器 */
+    private static TableDDLExecutor tableDDLExecutor;
+    
+    private static final String DRIVER = "com.mysql.jdbc.Driver";
+    
+    private static final String URL = "jdbc:mysql://120.24.75.25:3306/webdemo_new?useUnicode=true&characterEncoding=UTF-8";
+    
+    private static final String USERNAME = "pqy";
+    
+    private static final String PASSWORD = "pqy";
+    
+    public static void initTableDDLExecutor() {
+        SimpleDataSourceFinder dataSourceFinder = new SimpleDataSourceFinder(
+                DRIVER, URL, USERNAME, PASSWORD);
+        DataSource ds = dataSourceFinder.getDataSource();
+        JdbcTemplate jt = new JdbcTemplate(ds);
+        tableDDLExecutor = new MysqlTableDDLExecutor(jt);
+    }
+    
     public static void main(String[] args) throws IOException {
+        initTableDDLExecutor();
+        
         boolean skipCreateDBAndUser = true;
         //windows下的文本文件换行符:\r\n
         //linux/unix下的文本文件换行符:\r
@@ -45,6 +80,9 @@ public class DBScriptAssembler {
         if (!scriptFile.exists()) {
             FileUtils.forceMkdirParent(scriptFile);
             scriptFile.createNewFile();
+        }else{
+            scriptFile.delete();
+            scriptFile.createNewFile();
         }
         FileWriter fw = new FileWriter(scriptFile);
         
@@ -55,6 +93,20 @@ public class DBScriptAssembler {
             fw.close();
             return;
         }
+        
+        //fw.append(tableDDLExecutor.);
+        Set<Class<? extends TableInitializer>> tableInitializerClasses = ClassScanUtils.scanByParentClass(TableInitializer.class, "com.tx");
+        Set<TableInitializer> tableInitializers = new HashSet<>();
+        for(Class<? extends TableInitializer> initializerClazz : tableInitializerClasses){
+            try {
+                TableInitializer initializer = BeanUtils.instantiateClass(initializerClazz);
+                tableInitializers.add(initializer);
+            } catch (BeanInstantiationException e) {
+                System.out.println("initializerClazz: " + initializerClazz.getName() + " 无法进行实例化，跳过.");
+                continue;
+            }
+        }
+        
         if (!skipCreateDBAndUser) {
             fw.append("-- create_database" + lineSeparator);
             File createDBFile = new File(
@@ -72,6 +124,26 @@ public class DBScriptAssembler {
             }
             fw.append(lineSeparator);
         }
+        
+        fw.append("-- tableInitializers: " + lineSeparator);
+        tableInitializers.stream().forEach(initializer -> {
+            try {
+                fw.append("-- tables" + lineSeparator);
+                fw.append(initializer.tables(tableDDLExecutor, false));
+                fw.append(lineSeparator);
+                fw.flush();
+            } catch (IOException e) {
+                System.out.println("tableInitializers append error.");
+            }
+            try {
+                fw.append("-- initdata" + lineSeparator);
+                fw.append(initializer.initdatas(tableDDLExecutor, false));
+                fw.append(lineSeparator);
+                fw.flush();
+            } catch (IOException e) {
+                System.out.println("tableInitializers append error.");
+            }
+        });
         
         fw.append("-- tables" + lineSeparator);
         for (File folderTemp : folder.listFiles()) {

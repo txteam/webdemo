@@ -1,42 +1,32 @@
 /*
  * 描          述:  <描述>
  * 修  改   人:  Administrator
- * 修改时间:  2016年9月5日
+ * 修改时间:  2020年1月5日
  * <修改描述:>
  */
-package com.tx.local.noticemessage.model;
+package com.tx.local.message.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
-import com.tx.core.support.initable.model.ConfigInitAble;
+import com.tx.component.basicdata.model.BasicData;
 
 /**
- * 站内消息类型<br/>
+ * 通知分类<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
- * @version  [版本号, 2016年9月5日]
+ * @version  [版本号, 2020年1月5日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@XmlRootElement(name = "notice_message_type")
-@XmlAccessorType(XmlAccessType.FIELD)
-@Entity
-@Table(name = "nm_notice_message_type")
-public class NoticeMessageType implements ConfigInitAble, Serializable {
+public class NoticeCatalog implements BasicData {
     
     /** 注释内容 */
-    private static final long serialVersionUID = -7465833297070650304L;
+    private static final long serialVersionUID = -1814087341863649942L;
     
     /** 唯一键id */
     @Id

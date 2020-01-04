@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,9 +58,6 @@ import com.tx.plugin.login.model.LoginUserInfo;
  */
 @Component("wbLoginPlugin")
 public class WBLoginPlugin extends LoginPlugin<WBLoginPluginConfig> {
-    
-    /** 日志记录器 */
-    private Logger logger = LoggerFactory.getLogger(WBLoginPlugin.class);
     
     /** code请求URL */
     private static final String CODE_REQUEST_URL = "https://api.weibo.com/oauth2/authorize";

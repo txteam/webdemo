@@ -7,6 +7,8 @@ package com.tx.plugin.login;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tx.component.plugin.context.Plugin;
@@ -25,6 +27,9 @@ import com.tx.plugin.login.model.LoginUserInfo;
  */
 public abstract class LoginPlugin<CONFIG extends LoginPluginConfig>
         extends Plugin<CONFIG> {
+    
+    /** 日志记录器 */
+    protected Logger logger = LoggerFactory.getLogger(LoginPlugin.class);
     
     /**
      * @return

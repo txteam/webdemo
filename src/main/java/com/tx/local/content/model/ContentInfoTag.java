@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiModel;
  */
 @Entity
 @Table(name = "ci_content_tag")
-@BasicDataEntity(name = "内容信息级别", viewType = BasicDataViewTypeEnum.LIST)
+@BasicDataEntity(name = "内容信息标签", viewType = BasicDataViewTypeEnum.LIST)
 @ApiModel("内容信息级别")
 public class ContentInfoTag implements BasicData{
     

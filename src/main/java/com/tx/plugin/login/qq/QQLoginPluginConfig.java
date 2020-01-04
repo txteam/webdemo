@@ -21,37 +21,37 @@ import com.tx.plugin.login.LoginPluginConfig;
 @ConfigCatalog(code = "plugin.login.qq", name = "QQ登陆插件配置")
 public class QQLoginPluginConfig extends LoginPluginConfig {
     
-    /** clientId */
-    private String clientId;
+    /** clientId：1110189368 */
+    private String appId;
     
-    /** clientSecret */
-    private String clientSecret;
+    /** clientSecret: V7Ev3HMdQFguWzwQ */
+    private String appKey;
 
     /**
-     * @return 返回 clientId
+     * @return 返回 appId
      */
-    public String getClientId() {
-        return clientId;
+    public String getAppId() {
+        return appId;
     }
 
     /**
-     * @param 对clientId进行赋值
+     * @param 对appId进行赋值
      */
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     /**
-     * @return 返回 clientSecret
+     * @return 返回 appKey
      */
-    public String getClientSecret() {
-        return clientSecret;
+    public String getAppKey() {
+        return appKey;
     }
 
     /**
-     * @param 对clientSecret进行赋值
+     * @param 对appKey进行赋值
      */
-    public void setClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
     }
 }

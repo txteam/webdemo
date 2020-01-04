@@ -53,24 +53,6 @@ public class OperatorSocialAuthenticationProcessingFilter
     private static final Pattern URL_PATTERN = Pattern
             .compile("^/operator/social/login/(.+?)([/|\\?].*)*$");
     
-    //public static void main(String[] args) {
-    //    Matcher m1 = URL_PATTERN.matcher("/operator/social/login/GH");
-    //    m1.matches();
-    //    System.out.println(m1.group(1));
-    //    Matcher m2 = URL_PATTERN.matcher("/operator/social/login/GH/");
-    //    m2.matches();
-    //    System.out.println(m2.group(1));
-    //    Matcher m3 = URL_PATTERN.matcher("/operator/social/login/GH/123123/123123");
-    //    m3.matches();
-    //    System.out.println(m3.group(1));
-    //    Matcher m4 = URL_PATTERN.matcher("/operator/social/login/GH?test=1&test2=2");
-    //    m4.matches();
-    //    System.out.println(m4.group(1));
-    //    Matcher m5 = URL_PATTERN.matcher("/operator/social/login/GH/test?test=1&test2=2");
-    //    m5.matches();
-    //    System.out.println(m5.group(1));
-    //}
-    
     /** <默认构造函数> */
     public OperatorSocialAuthenticationProcessingFilter() {
         super(new AntPathRequestMatcher("/operator/social/login/**", "GET"));
@@ -89,7 +71,6 @@ public class OperatorSocialAuthenticationProcessingFilter
             HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
         String servletUrl = request.getServletPath();
-        System.out.println(servletUrl);
         Matcher m = URL_PATTERN.matcher(servletUrl);
         if (!m.matches()) {
             throw new SocialUserLoginException(

@@ -1,38 +1,38 @@
 /*
  * 描          述:  <描述>
  * 修  改   人:  Administrator
- * 修改时间:  2017年3月5日
+ * 修改时间:  2018年12月27日
  * <修改描述:>
  */
-package com.tx.local.content.model;
-
-import com.tx.component.basicdata.model.BasicDataEnum;
+package com.tx.local.basicdata.model;
 
 /**
- * 类容类型<br/>
+ * 客户端类型枚举<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
- * @version  [版本号, 2017年3月5日]
+ * @version  [版本号, 2018年12月27日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public enum ContentInfoTypeEnum implements BasicDataEnum {
+public enum AgentTypeEnum {
     
-    LINK("LINK", "链接"),
+    UNKNOW("UNKNOW", "UNKNOW"),
     
-    IMAGE("IMAGE", "图片"),
+    WX("WX", "WX"),
     
-    BLOB_ARTICLE("BLOB_ARTICLE", "文章");
+    ANDROID("ANDROID", "ANDROID"),
     
-    /** 对应枚举关键字：该字段可以为空 */
+    IPHONE("IPHONE", "IPHONE"),
+    
+    IPAD("IPAD", "IPAD");
+    
     private final String code;
     
-    /** 内容信息类型名 */
     private final String name;
     
     /** <默认构造函数> */
-    private ContentInfoTypeEnum(String code, String name) {
+    private AgentTypeEnum(String code, String name) {
         this.code = code;
         this.name = name;
     }

@@ -1,10 +1,10 @@
 /*
  * 描          述:  <描述>
  * 修  改   人:  Administrator
- * 修改时间:  2016年9月5日
+ * 修改时间:  2020年1月5日
  * <修改描述:>
  */
-package com.tx.local.noticemessage.model;
+package com.tx.local.message.model;
 
 import java.util.Date;
 
@@ -15,32 +15,32 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * 站内消息<br/>
+ * 站内公告消息<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
- * @version  [版本号, 2016年9月5日]
+ * @version  [版本号, 2020年1月5日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "nm_notice_message")
-public class NoticeMessage {
+@Table(name = "msg_notice")
+public class Notice {
     
     /** 站内消息id */
     @Id
     private String id;
     
-    /** 客户类型 */
-    private NoticeMessageClientTypeEnum clientType;
-    
-    /** 站内消息优先级 */
-    private NoticeMessagePriorityEnum priority;
-    
     /** 站内消息类型 */
     @ManyToOne
-    @JoinColumn(name = "noticeMessageTypeId")
-    private NoticeMessageType noticeMessageType;
+    @JoinColumn(name = "noticeCatalogCode")
+    private NoticeCatalog noticeCatalog;
+    
+    /** 站内消息优先级 */
+    private NoticePriorityEnum priority = NoticePriorityEnum.PT;
+    
+    /** 客户类型 */
+    private MessageUserTypeEnum userType;
     
     /** 站内消息标题 */
     private String title;
@@ -48,41 +48,23 @@ public class NoticeMessage {
     /** 站内消息内容 */
     private String content;
     
+    /** 是否撤销 */
+    private boolean published = false;
+    
     /** 发布时间 */
     private Date publishDate = new Date();
     
-    /** 是否撤销 */
-    private boolean revokeFlag = false;
+    /** 是否有效 */
+    private boolean valid;
     
-    /** 撤销时间 */
-    private Date revokeDate;
+    /** 无效时间 */
+    private Date invalidDate;
     
     /** 创建时间 */
     private Date createDate = new Date();
     
     /** 最后更新时间 */
     private Date lastUpdateDate = new Date();
-    
-    /** <默认构造函数> */
-    public NoticeMessage() {
-        super();
-    }
-    
-    /** <默认构造函数> */
-    public NoticeMessage(String title, String content) {
-        super();
-        this.title = title;
-        this.content = content;
-    }
-    
-    /** <默认构造函数> */
-    public NoticeMessage(NoticeMessageType noticeMessageType, String title,
-            String content) {
-        super();
-        this.noticeMessageType = noticeMessageType;
-        this.title = title;
-        this.content = content;
-    }
     
     /**
      * @return 返回 id
@@ -99,45 +81,45 @@ public class NoticeMessage {
     }
     
     /**
-     * @return 返回 clientType
+     * @return 返回 noticeCatalog
      */
-    public NoticeMessageClientTypeEnum getClientType() {
-        return clientType;
+    public NoticeCatalog getNoticeCatalog() {
+        return noticeCatalog;
     }
     
     /**
-     * @param 对clientType进行赋值
+     * @param 对noticeCatalog进行赋值
      */
-    public void setClientType(NoticeMessageClientTypeEnum clientType) {
-        this.clientType = clientType;
+    public void setNoticeCatalog(NoticeCatalog noticeCatalog) {
+        this.noticeCatalog = noticeCatalog;
     }
     
     /**
      * @return 返回 priority
      */
-    public NoticeMessagePriorityEnum getPriority() {
+    public NoticePriorityEnum getPriority() {
         return priority;
     }
     
     /**
      * @param 对priority进行赋值
      */
-    public void setPriority(NoticeMessagePriorityEnum priority) {
+    public void setPriority(NoticePriorityEnum priority) {
         this.priority = priority;
     }
     
     /**
-     * @return 返回 noticeMessageType
+     * @return 返回 userType
      */
-    public NoticeMessageType getNoticeMessageType() {
-        return noticeMessageType;
+    public MessageUserTypeEnum getUserType() {
+        return userType;
     }
     
     /**
-     * @param 对noticeMessageType进行赋值
+     * @param 对userType进行赋值
      */
-    public void setNoticeMessageType(NoticeMessageType noticeMessageType) {
-        this.noticeMessageType = noticeMessageType;
+    public void setUserType(MessageUserTypeEnum userType) {
+        this.userType = userType;
     }
     
     /**
@@ -169,6 +151,20 @@ public class NoticeMessage {
     }
     
     /**
+     * @return 返回 published
+     */
+    public boolean isPublished() {
+        return published;
+    }
+    
+    /**
+     * @param 对published进行赋值
+     */
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+    
+    /**
      * @return 返回 publishDate
      */
     public Date getPublishDate() {
@@ -183,31 +179,31 @@ public class NoticeMessage {
     }
     
     /**
-     * @return 返回 revokeFlag
+     * @return 返回 valid
      */
-    public boolean isRevokeFlag() {
-        return revokeFlag;
+    public boolean isValid() {
+        return valid;
     }
     
     /**
-     * @param 对revokeFlag进行赋值
+     * @param 对valid进行赋值
      */
-    public void setRevokeFlag(boolean revokeFlag) {
-        this.revokeFlag = revokeFlag;
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
     
     /**
-     * @return 返回 revokeDate
+     * @return 返回 invalidDate
      */
-    public Date getRevokeDate() {
-        return revokeDate;
+    public Date getInvalidDate() {
+        return invalidDate;
     }
     
     /**
-     * @param 对revokeDate进行赋值
+     * @param 对invalidDate进行赋值
      */
-    public void setRevokeDate(Date revokeDate) {
-        this.revokeDate = revokeDate;
+    public void setInvalidDate(Date invalidDate) {
+        this.invalidDate = invalidDate;
     }
     
     /**
@@ -237,5 +233,4 @@ public class NoticeMessage {
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
-    
 }

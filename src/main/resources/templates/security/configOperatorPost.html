@@ -102,7 +102,7 @@ $(document).ready(function() {
 			}
 		},
 		frozenColumns : [ [ 
-			{title:'职位id',field: 'id',width : 150,hidden : true},
+			{field:'id',title:'职位ID',width : 150,hidden : true},
 			{field:'parentId',title: '上级职位ID',width : 150,hidden : true},
 			{field:'name',title: '职位名称',width : 300}
 		] ],
@@ -123,6 +123,9 @@ $(document).ready(function() {
 		},
 		onBeforeCheckNode: function(row,index){
 			alert(row.index);
+		},
+		onLoadSuccess : function() {
+			initCheck();
 		}
 	});
 });
@@ -149,13 +152,13 @@ function queryFun() {
 	return false;
 }
 function initCheck(){
-	var rows = treegrid.datagrid('getRows');
-	$.post(/*[[@{/operator/role/queryOperator2PostIds}]]*/'',
+	var rows = treegrid.treegrid('getRows');
+	$.post(/*[[@{/operator/post/queryOperator2PostIds}]]*/'',
 			{'operatorId': operatorId},function(checkedIds){
 		$.each(checkedIds,function(index,idTemp){
 			$.each(rows,function(index,rowTemp){
 				if(idTemp == rowTemp.id){
-					grid.datagrid('checkRow',index);
+					treegrid.treegrid('checkRow',index);
 				}
 			});
 		});
@@ -176,7 +179,7 @@ function configOperatorPost(){
 	DialogUtils.progress({
         text : '数据提交中，请等待....'
 	});
-	$.post(/*[[@{/operator/role/saveRole2Operator}]]*/'',
+	$.post(/*[[@{/operator/post/saveRole2Operator}]]*/'',
 			{roleId:roleId,operatorId:operatorIds,filterOperatorId:filterOperatorIds}, 
 			function(data){
 		DialogUtils.progress('close');

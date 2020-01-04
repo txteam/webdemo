@@ -1,6 +1,9 @@
 package com.tx.local.security.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.tx.component.auth.model.AuthType;
+import com.tx.core.support.json.BaseEnum;
+import com.tx.core.support.json.BaseEnumJsonSerializer;
 
 /**
  * 权限类型枚举<br/>
@@ -11,7 +14,8 @@ import com.tx.component.auth.model.AuthType;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public enum AuthTypeEnum implements AuthType {
+@JsonSerialize(using = BaseEnumJsonSerializer.class)
+public enum AuthTypeEnum implements AuthType, BaseEnum {
     
     /** 系统管理员 */
     AUTH_TYPE_OPERATOR_OPERATE("AUTH_TYPE_OPERATOR_OPERATE", "系统操作员操作权限"),

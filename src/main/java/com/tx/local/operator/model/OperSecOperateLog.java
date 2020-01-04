@@ -1,0 +1,48 @@
+/*
+ * 描          述:  <描述>
+ * 修  改   人:  Administrator
+ * 修改时间:  2020年1月4日
+ * <修改描述:>
+ */
+package com.tx.local.operator.model;
+
+import javax.persistence.Column;
+
+import com.tx.component.servicelogger.annotation.ServiceLog;
+import com.tx.component.servicelogger.model.AbstractServiceLogger;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+/**
+ * 操作人员敏感操作日志<br/>
+ * <功能详细描述>
+ * 
+ * @author  Administrator
+ * @version  [版本号, 2020年1月4日]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ServiceLog("oper_sec_operate_log")
+public class OperSecOperateLog extends AbstractServiceLogger {
+    
+    //:操作人员id
+    @Column(nullable = false, length = 64)
+    private String operatorId;
+    
+    //:操作记录
+    @Column(nullable = false, length = 64)
+    private String message;
+    
+    //:客户端ip地址
+    @Column(nullable = false, length = 64)
+    private String clientIpAddress;
+}

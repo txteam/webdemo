@@ -42,11 +42,11 @@ public class ContentInfo implements EntryAble<EntityEntry> {
     private ContentInfoTypeEnum type;
     
     /** 内容分类 */
-    @Column(name = "categoryId")
+    @Column(name = "categoryCode")
     private ContentInfoCategory category;
     
     /** 信息级别： */
-    @Column(name = "levelId")
+    @Column(name = "levelCode")
     private ContentInfoLevel level;
     
     /** 名称 */

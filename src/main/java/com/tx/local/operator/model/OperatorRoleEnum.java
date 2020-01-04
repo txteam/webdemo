@@ -8,6 +8,8 @@ package com.tx.local.operator.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 import com.tx.component.role.model.Role;
 import com.tx.local.security.model.RoleTypeEnum;
 
@@ -23,6 +25,7 @@ import com.tx.local.security.model.RoleTypeEnum;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum OperatorRoleEnum implements Serializable, Role {
     
     /** 系统管理员 */

@@ -59,7 +59,7 @@ public class WebContextUtils {
         }
         
         Set<String> roleIds = gas.stream()
-                .filter(a -> AuthAuthority.class.isInstance(a))
+                .filter(a -> RoleAuthority.class.isInstance(a))
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
         return roleIds;

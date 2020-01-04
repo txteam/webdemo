@@ -1,6 +1,9 @@
 package com.tx.local.security.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.tx.component.role.model.RoleType;
+import com.tx.core.support.json.BaseEnum;
+import com.tx.core.support.json.BaseEnumJsonSerializer;
 
 /**
  * 
@@ -12,7 +15,8 @@ import com.tx.component.role.model.RoleType;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public enum RoleTypeEnum implements RoleType {
+@JsonSerialize(using = BaseEnumJsonSerializer.class)
+public enum RoleTypeEnum implements RoleType, BaseEnum {
     
     /** 系统管理员 */
     ROLE_TYPE_ADMIN("ROLE_TYPE_ADMIN", "超级管理员"),

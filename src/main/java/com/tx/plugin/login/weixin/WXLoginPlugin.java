@@ -30,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.tx.core.exceptions.SILException;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.util.HttpClientUtils;
 import com.tx.core.util.JsonUtils;
@@ -53,7 +54,11 @@ import com.tx.plugin.login.model.LoginUserInfo;
  *  微信平台的各种API接口请参考：微信开放平台提供的官方文档
  *  微信扫码登录的开发权限需要在微信开放平台中进行企业资质认证（个人用户无法获得）
  *  回调url 的域必需在微信开放平台中进行填写备案，本地开发时传递的 回调url 参数必须和备案一致
- *  
+ * 
+ * 参考： https://blog.csdn.net/qq_34190023/article/details/81133619
+ * 参考： https://www.cnblogs.com/0201zcr/p/5131602.html
+ * https://blog.csdn.net/qq_34664239/article/details/79107529
+ * 
  * https://open.weixin.qq.com/
  * 账号：p7engqingyang@qq.com 密码:私有密码
  * 
@@ -68,10 +73,11 @@ public class WXLoginPlugin extends LoginPlugin<WXLoginPluginConfig> {
     /** 日志记录器 */
     private Logger logger = LoggerFactory.getLogger(WXLoginPlugin.class);
     
-    public static final String CODE_REQUEST_QR_URL = "https://open.weixin.qq.com/connect/qrconnect#wechat_redirect";
+    /** 二维码登陆 */
+    public static final String QR_CODE_REQUEST_QR_URL = "https://open.weixin.qq.com/connect/qrconnect#wechat_redirect";
     
-    /** code请求URL */
-    public static final String CODE_REQUEST_URL = "https://open.weixin.qq.com/connect/oauth2/authorize#wechat_redirect";
+    /** wap端登陆 */
+    public static final String WAP_CODE_REQUEST_URL = "https://open.weixin.qq.com/connect/oauth2/authorize#wechat_redirect";
     
     /** openId请求URL */
     public static final String OPEN_ID_REQUEST_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
@@ -197,7 +203,7 @@ public class WXLoginPlugin extends LoginPlugin<WXLoginPluginConfig> {
             parameterMap.put("scope", scope);
         }
         
-        mview.addObject("requestUrl", CODE_REQUEST_URL);
+        mview.addObject("requestUrl", QR_CODE_REQUEST_QR_URL);
         mview.addObject("parameterMap", parameterMap);
         mview.setViewName(viewName);
         return mview;
@@ -225,6 +231,7 @@ public class WXLoginPlugin extends LoginPlugin<WXLoginPluginConfig> {
         if (StringUtils.isEmpty(state)) {
             throw new SocialAuthorizeException("state is empty.");
         }
+        
         WXLoginPluginConfig config = getConfig();
         try {
             //从源代码分析，oauthClient是否重复使用，对性能无影响，URLConnectionClient的构造函数并无多余动作
@@ -237,8 +244,8 @@ public class WXLoginPlugin extends LoginPlugin<WXLoginPluginConfig> {
             String secret = config.getAppSecret();
             builder.setParameter("appid", appid);
             builder.setParameter("secret", secret);
-            builder.setCode(code);
             builder.setGrantType(GrantType.AUTHORIZATION_CODE);
+            builder.setCode(code);
             OAuthClientRequest accessTokenRequest = builder.buildQueryMessage();
             OAuthJSONAccessTokenResponse response = oAuthClient
                     .accessToken(accessTokenRequest, OAuth.HttpMethod.GET);
@@ -262,7 +269,8 @@ public class WXLoginPlugin extends LoginPlugin<WXLoginPluginConfig> {
                 throw new SocialAuthorizeException("获取微信用户openid失败.");
             }
             return token;
-        } catch (OAuthSystemException | OAuthProblemException e) {
+        } catch (OAuthSystemException | OAuthProblemException
+                | SILException e) {
             throw new SocialAuthorizeException(
                     "获取微信用户openid失败.发生异常:" + e.getMessage(), e);
         }
