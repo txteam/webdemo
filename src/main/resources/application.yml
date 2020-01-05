@@ -255,7 +255,7 @@ tx:
   component:
     persister:
       type: mybatis
-      table-auto-initialize: true
+      table-auto-initialize: false
     basicdata:
       enable: true
       base-packages: com.tx.local
@@ -263,6 +263,8 @@ tx:
       enable: true
       duration: 1d
     security:
+      enable: true
+    servicelogger:
       enable: true
     # event:
       # enable: false

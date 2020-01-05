@@ -81,7 +81,7 @@ $.widget("txcomponent.imageUploader",{
 		_this.$placeHolder.appendTo(_this.$imageQueueList);
 		_this.$placeHolder.css('width',_option.imageWidth).css('height',_option.imageHeight);
 		_this.$placeHolder.find("img").css('width',_option.imageHeight * 0.45).css('height',_option.imageHeight * 0.4)
-    		.attr("src",_option.contextPath + "/js/webuploader/images/image.png");
+    		.attr("src",_option.contextPath + "/webjars/js/webuploader/images/image.png");
 		_this.$placeHolder.find("div[name=picker]").attr("id",_option.pick.id);
 		_this.$placeHolder.find("p").text(_option.pick.tip);
 		//实例化

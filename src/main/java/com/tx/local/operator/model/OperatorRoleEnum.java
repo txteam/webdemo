@@ -8,9 +8,12 @@ package com.tx.local.operator.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 import com.tx.component.role.model.Role;
+import com.tx.core.support.json.BaseEnum;
+import com.tx.core.support.json.BaseEnumJsonSerializer;
 import com.tx.local.security.model.RoleTypeEnum;
 
 /**
@@ -25,8 +28,8 @@ import com.tx.local.security.model.RoleTypeEnum;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@JsonSerialize(using = BasicDataEnumJsonSerializer.class)
-public enum OperatorRoleEnum implements Serializable, Role {
+@JsonSerialize(using = BaseEnumJsonSerializer.class)
+public enum OperatorRoleEnum implements Serializable, Role, BaseEnum {
     
     /** 系统管理员 */
     SUPER_ADMIN("ROLE_SUPER_ADMIN", "超级管理员", RoleTypeEnum.ROLE_TYPE_ADMIN.getId());
@@ -67,5 +70,13 @@ public enum OperatorRoleEnum implements Serializable, Role {
     @Override
     public String getRoleTypeId() {
         return this.roleTypeId;
+    }
+    
+    
+    public static void main(String[] args) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+        String r = om.writeValueAsString(OperatorRoleEnum.SUPER_ADMIN);
+        System.out.println(r);
+        
     }
 }
