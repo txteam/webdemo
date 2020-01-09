@@ -303,6 +303,22 @@ public class WebContextUtils {
     }
     
     /**
+     * 获取当前操作人员的id
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static String getOperatorUsername() {
+        Operator operator = getOperator();
+        String operatorUsername = operator == null ? null
+                : operator.getUsername();
+        return operatorUsername;
+    }
+    
+    /**
      * 将当前登录人员放入当前会话中
      *<功能详细描述>
      * @param operator [参数说明]

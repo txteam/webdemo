@@ -474,6 +474,43 @@ public class OperatorService {
     }
     
     /**
+     * 更新密码错误次数<br/>
+     * <功能详细描述>
+     * @param id
+     * @param errorCount
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean updatePwdErrorCountById(String id, int errorCount) {
+        //验证参数是否合法，必填字段是否填写
+        AssertUtils.notEmpty(id, "id is empty.");
+        
+        Operator oper = findById(id);
+        if (oper == null) {
+            return false;
+        }
+        
+        //生成需要更新字段的hashMap
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", id);
+        
+        //需要更新的字段
+        Date now = new Date();
+        
+        updateRowMap.put("pwdErrCount", errorCount);
+        updateRowMap.put("lastUpdateDate", now);
+        
+        int updateRowCount = this.operatorDao.update(updateRowMap);
+        
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return updateRowCount >= 1;
+    }
+    
+    /**
      * 更新密码<br/>
      * <功能详细描述>
      * @param id
@@ -815,7 +852,7 @@ public class OperatorService {
                     return !operatorIds.contains(idTemp);
                 })
                 .collect(Collectors.toList());
-        for(String idTemp : needDeleteOperIds){
+        for (String idTemp : needDeleteOperIds) {
             //生成需要更新字段的hashMap
             Map<String, Object> updateRowMap = new HashMap<String, Object>();
             updateRowMap.put("id", idTemp);
@@ -830,7 +867,7 @@ public class OperatorService {
         List<String> needAddOperIds = operatorIds.stream().filter(refIdTemp -> {
             return !finalSourceIdList.contains(refIdTemp);
         }).collect(Collectors.toList());
-        for(String idTemp : needAddOperIds){
+        for (String idTemp : needAddOperIds) {
             updateMainPostById(idTemp, postId);
         }
     }

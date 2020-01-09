@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //@EnableEurekaClient
 //@EntityScan(basePackages = { "com.tx.local" })
 //@EnableJpaRepositories(basePackages = { "com.tx.local" })
+@EnableAspectJAutoProxy()
 @EnableFeignClients(basePackages = { "com.tx.local" })
 @SpringBootApplication(scanBasePackages = { "com.tx.local", "com.tx.plugin" })
 @EnableSwagger2

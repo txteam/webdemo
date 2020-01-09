@@ -9,7 +9,8 @@ package com.tx.local.message.model;
 import java.util.Date;
 
 /**
- * <功能简述>
+ * 通知到用户的详情<br/>
+ *    用于检索当前用户有哪些消息的一次性查询<br/>
  * <功能详细描述>
  * 
  * @author  Administrator

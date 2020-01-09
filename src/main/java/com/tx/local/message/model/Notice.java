@@ -33,14 +33,14 @@ public class Notice {
     
     /** 站内消息类型 */
     @ManyToOne
-    @JoinColumn(name = "noticeCatalogCode")
+    @JoinColumn(name = "noticeCatalogId")
     private NoticeCatalog noticeCatalog;
     
     /** 站内消息优先级 */
     private NoticePriorityEnum priority = NoticePriorityEnum.PT;
     
     /** 客户类型 */
-    private MessageUserTypeEnum userType;
+    private MsgUserTypeEnum userType;
     
     /** 站内消息标题 */
     private String title;
@@ -111,14 +111,14 @@ public class Notice {
     /**
      * @return 返回 userType
      */
-    public MessageUserTypeEnum getUserType() {
+    public MsgUserTypeEnum getUserType() {
         return userType;
     }
     
     /**
      * @param 对userType进行赋值
      */
-    public void setUserType(MessageUserTypeEnum userType) {
+    public void setUserType(MsgUserTypeEnum userType) {
         this.userType = userType;
     }
     

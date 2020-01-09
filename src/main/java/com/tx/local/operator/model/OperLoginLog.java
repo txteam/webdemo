@@ -33,16 +33,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ServiceLog("oper_login_log")
+@ServiceLog("OPER_LOGIN_LOG")
 public class OperLoginLog extends AbstractServiceLogger {
     
     //:操作人员id
     @Column(nullable = false, length = 64)
     private String operatorId;
     
+    //:操作人员id
+    @Column(nullable = false, length = 64)
+    private String operatorUsername;
+    
+    //:登陆方式
+    @Column(nullable = false, length = 64)
+    private String loginMode;
+    
     //:客户端ip地址
     @Column(nullable = false, length = 64)
     private String clientIpAddress;
+    
+    //:登陆信息
+    @Column(nullable = true, length = 256)
+    private String message;
     
     //： 设备签名
     @Column(nullable = true, length = 64)
@@ -57,7 +69,7 @@ public class OperLoginLog extends AbstractServiceLogger {
     private String realIpAddress;
     
     //中转ip地址(写入以前应该对长度进行特殊处理)
-    @Column(nullable = true, length = 512)
+    @Column(nullable = true, length = 256)
     private String forwardedIpAddress;
     
     //远端调用ip地址

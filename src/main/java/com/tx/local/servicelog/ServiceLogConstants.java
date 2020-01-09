@@ -1,24 +1,22 @@
 /*
  * 描          述:  <描述>
  * 修  改   人:  Administrator
- * 修改时间:  2020年1月4日
+ * 修改时间:  2020年1月9日
  * <修改描述:>
  */
-package com.tx.local.message.model;
+package com.tx.local.servicelog;
 
 
 /**
- * 问题的答复<br/>
+ * 业务日志常量<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
- * @version  [版本号, 2020年1月4日]
+ * @version  [版本号, 2020年1月9日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class QuestionAnswer {
+public interface ServiceLogConstants {
     
-    private String id;
     
-    private String questionId;
 }

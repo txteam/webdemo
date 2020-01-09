@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModel;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "prm_private_message")
+@Table(name = "msg_private_message")
 @ApiModel("私信")
 public class PrivateMessage {
     
@@ -43,4 +43,5 @@ public class PrivateMessage {
     private String sendUserId;
     
     private Date createDate;
+    
 }

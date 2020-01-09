@@ -36,7 +36,7 @@
 	<!-- 系统日志 -->
 	<catalog id="log_catalog" type="tab" text="日志菜单">
 		<menu id="system_operate_log_menus" text="系统操作日志">
-			<menu id="login_log_menu" text="登录日志" href="/servicelog/mainframe/loginLog/toQueryLoginLogPagedList"></menu>
+			<menu id="login_log_menu" text="登录日志" href="/servicelog/toQueryPagedList?type=OperLoginLog"></menu>
 			<menu id="operator_manage_log_menu" text="系统日志" href="/servicelog/mainframe/systemOperateLog/toQuerySystemOperateLogPagedList"></menu>
 		</menu>
 		<menu id="interface message_log_menus" text="接口报文日志">

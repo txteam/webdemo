@@ -126,13 +126,13 @@ $(document).ready(function() {
 	        $formBody.ajaxSubmit({
 			    url:/*[[@{/operator/login}]]*/'',
 			    success: function(data) {
-			    	DialogUtils.loading('close')
+			    	DialogUtils.loading('close');
 					if(data.code == 0){
 						window.location.href = /*[[@{/background/mainframe}]]*/'/' + data.data;
 					}else{
 						showErrorMessage(data.message);
 					}
-			    } 
+			    }
 			});
 			return false;
 	    }

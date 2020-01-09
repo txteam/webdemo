@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -103,19 +102,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //filterChainDefinitionMap.put("/v2/**", "anon");
     }
     
-    /**
-     * 用户验证
-     * @param auth
-     * @throws Exception
-     */
-    @Override
-    protected void configure(AuthenticationManagerBuilder builder)
-            throws Exception {
-        //AuthenticationProvider upProvider = usernamePasswordAuthenticationProvider();
-        //注入usernamePasswordAuthenticationProvider
-        //auth.authenticationProvider(upProvider);
-        //auth.userDetailsService(userDetailsService)
-    }
+    ///**
+    // * 用户验证
+    // * @param auth
+    // * @throws Exception
+    // */
+    //@Override
+    //protected void configure(AuthenticationManagerBuilder builder)
+    //        throws Exception {
+    //    //AuthenticationProvider upProvider = usernamePasswordAuthenticationProvider();
+    //    //注入usernamePasswordAuthenticationProvider
+    //    //auth.authenticationProvider(upProvider);
+    //    //auth.userDetailsService(userDetailsService)
+    //}
     
     /**
      * httpSecurity配置
@@ -144,9 +143,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //http.logout().disable();
         http.logout().logoutUrl("/logout").logoutSuccessUrl("/background/login");
         
-        //login配置
+        //login配置，disable后利用filter实现替代
         http.formLogin().disable();
         //http.formLogin().loginPage(loginPage)
+        
         //注册登录入口
         registerAuthenticationEntryPoint(http);
         

@@ -225,7 +225,7 @@ public class PluginController implements InitializingBean, ResourceLoaderAware {
         //页面缓存键
         String pageCacheKey = plugin.getId();
         String page = "";
-        pageMap.clear();
+        //pageMap.clear();
         if (pageMap.containsKey(pageCacheKey)) {
             page = pageMap.get(pageCacheKey);
             return page;
@@ -255,7 +255,7 @@ public class PluginController implements InitializingBean, ResourceLoaderAware {
     }
     
     /**
-     * 判断Jsp页面是否存在
+     * 判断html页面是否存在
      * <功能详细描述>
      * @param page
      * @return [参数说明]

@@ -21,7 +21,7 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
  * @since  [产品/模块版本]
  */
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
-public enum MessageUserTypeEnum implements Serializable {
+public enum MsgUserTypeEnum implements Serializable {
     
     ALL_CLIENT,
     

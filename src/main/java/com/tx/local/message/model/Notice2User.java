@@ -32,8 +32,8 @@ public class Notice2User {
     /** 站内消息id */
     private String noticeId;
     
-    /** 客户类型 */
-    private MessageUserTypeEnum userType;
+    /** 客户类型:这里的类型可以与具体公告中的不一样，这里只有toClient,toOperator不考虑对角色等的支持 */
+    private MsgUserTypeEnum userType;
     
     /** 用户id */
     private String userId;
@@ -85,14 +85,14 @@ public class Notice2User {
     /**
      * @return 返回 userType
      */
-    public MessageUserTypeEnum getUserType() {
+    public MsgUserTypeEnum getUserType() {
         return userType;
     }
 
     /**
      * @param 对userType进行赋值
      */
-    public void setUserType(MessageUserTypeEnum userType) {
+    public void setUserType(MsgUserTypeEnum userType) {
         this.userType = userType;
     }
 
