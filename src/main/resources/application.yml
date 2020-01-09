@@ -259,14 +259,14 @@ tx:
     basicdata:
       enable: true
       base-packages: com.tx.local
-      cache-manager-ref: webdemo.cacheManager
+      cache-manager-ref: cacheManager
     config:
       enable: true
       duration: 1d
-      cache-manager-ref: webdemo.cacheManager
+      cache-manager-ref: cacheManager
     security:
       enable: true
-      cache-manager-ref: webdemo.cacheManager
+      cache-manager-ref: cacheManager
     servicelogger:
       enable: true
     # event:

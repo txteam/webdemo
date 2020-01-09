@@ -105,7 +105,7 @@ public class WebdemoBootApplication {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Bean("webdemo.cacheManager")
+    @Bean("cacheManager")
     public CacheManager cacheManager(){
         CacheManager cm = new ConcurrentMapCacheManager();
         CacheManager res = new TransactionAwareCacheManagerProxy(cm);

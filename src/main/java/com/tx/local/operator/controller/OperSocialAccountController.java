@@ -22,11 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.component.plugin.context.PluginContext;
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.operator.model.OperSocialAccount;
 import com.tx.local.operator.model.OperSocialAccountTypeEnum;
 import com.tx.local.operator.service.OperSocialAccountService;
 import com.tx.local.security.util.WebContextUtils;
+import com.tx.plugin.login.github.GHLoginPlugin;
+import com.tx.plugin.login.qq.QQLoginPlugin;
+import com.tx.plugin.login.weibo.WBLoginPlugin;
+import com.tx.plugin.login.weixin.WXLoginPlugin;
 
 /**
  * 操作人员第三方账户控制层<br/>
@@ -289,31 +294,36 @@ public class OperSocialAccountController {
         Set<OperSocialAccountTypeEnum> types = resList.stream()
                 .map(sa -> sa.getType())
                 .collect(Collectors.toSet());
-        if (!types.contains(OperSocialAccountTypeEnum.WX)) {
+        if (PluginContext.getContext().getConfig(WXLoginPlugin.class).isEnable()
+                && !types.contains(OperSocialAccountTypeEnum.WX)) {
             OperSocialAccount osa = new OperSocialAccount();
             osa.setOperatorId(operatorId);
             osa.setType(OperSocialAccountTypeEnum.WX);
             resList.add(osa);
         }
-        if (!types.contains(OperSocialAccountTypeEnum.QQ)) {
+        if (PluginContext.getContext().getConfig(QQLoginPlugin.class).isEnable()
+                && !types.contains(OperSocialAccountTypeEnum.QQ)) {
             OperSocialAccount osa = new OperSocialAccount();
             osa.setOperatorId(operatorId);
             osa.setType(OperSocialAccountTypeEnum.QQ);
             resList.add(osa);
         }
-        if (!types.contains(OperSocialAccountTypeEnum.WB)) {
+        if (PluginContext.getContext().getConfig(WBLoginPlugin.class).isEnable()
+                && !types.contains(OperSocialAccountTypeEnum.WB)) {
             OperSocialAccount osa = new OperSocialAccount();
             osa.setOperatorId(operatorId);
             osa.setType(OperSocialAccountTypeEnum.WB);
             resList.add(osa);
         }
-        if (!types.contains(OperSocialAccountTypeEnum.BD)) {
-            OperSocialAccount osa = new OperSocialAccount();
-            osa.setOperatorId(operatorId);
-            osa.setType(OperSocialAccountTypeEnum.BD);
-            resList.add(osa);
-        }
-        if (!types.contains(OperSocialAccountTypeEnum.GH)) {
+        //if (PluginContext.getContext().getConfig(bdgi.class).isEnable() &&
+        //        !types.contains(OperSocialAccountTypeEnum.BD)) {
+        //    OperSocialAccount osa = new OperSocialAccount();
+        //    osa.setOperatorId(operatorId);
+        //    osa.setType(OperSocialAccountTypeEnum.BD);
+        //    resList.add(osa);
+        //}
+        if (PluginContext.getContext().getConfig(GHLoginPlugin.class).isEnable()
+                && !types.contains(OperSocialAccountTypeEnum.GH)) {
             OperSocialAccount osa = new OperSocialAccount();
             osa.setOperatorId(operatorId);
             osa.setType(OperSocialAccountTypeEnum.GH);
