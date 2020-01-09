@@ -1123,229 +1123,7 @@ var GlobalDialogUtils = null;
     	});
     	GlobalDialogUtils._show(option);
     }
-})(jQuery); 
-
-
-/**
- * 修改datagrid中默认的onBeforeLoad方法<br/>
- */
-$.fn.datagrid.defaults.onBeforeLoad = function(param){
-    //console.log(param);
-    param["pageNumber"] = param.page;
-    param["pageSize"] = param.rows;
-    //param["sortName"] = param.order;
-    //param["sortOrder"] = param.sort;
-    
-   	delete param.rows;
-    delete param.page;
-    //delete param.order;
-    //delete param.sort;
-};
-
-/**
- * 扩展tree 
- * 使其支持平滑数据格式
- * 支持指定几个主要字段
- */
-$.fn.tree.defaults.loadFilter = function(data) {
-    var opt = $(this).data().tree.options;
-    var idField, textField, parentField,iconField,childrenField,checkedField;
-    var excludeObject =  opt.excludeObject;
-    if (opt.parentField) {
-    	parentField = opt.parentField;
-        idField = opt.idField || 'id';
-        textField = opt.textField || 'text';
-        iconField = opt.iconField || 'iconCls';
-        checkedField = opt.checkedField || 'checked';
-        var i, l, roots = [], tmpMap = [];
-        for (i = 0, l = data.length; i < l; i++) {
-            tmpMap[data[i][idField]] = data[i];
-        }
-        for (i = 0, l = data.length; i < l; i++) {
-            if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
-                if (!tmpMap[data[i][parentField]]['children']){
-                	tmpMap[data[i][parentField]]['children'] = [];
-                }
-                if(!excludeObject){
-	            	data[i]['object'] = data[i];
-	            } 
-                tmpMap[data[i][parentField]]['children'].push(data[i]);
-                //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
-                tmpMap[data[i][parentField]]['checked'] = false;
-            } else {
-	            if(!excludeObject){
-	            	data[i]['object'] = data[i];
-	            } 
-                roots.push(data[i]);
-            }
-        }
-        for (i = 0, l = data.length; i < l; i++) {
-        	data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
-            data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
-            data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
-            data[i]['checked'] = $.isFunction(checkedField) ? checkedField.call(this,data[i]) : data[i][checkedField];
-        }
-        return roots;
-    }else{
-        idField = opt.idField || 'id';
-        textField = opt.textField || 'text';
-        iconField = opt.iconField || 'iconCls';
-        checkedField = opt.checkedField || 'checked';
-        childrenField = opt.childrenField || 'children';
-        
-        function nestedFilter(item){
-            if(item == null){
-                return ;
-            }
-            if(!excludeObject){
-            	item['object'] = item;
-            }
-            
-            item['id'] = $.isFunction(idField) ? idField.call(this,item) : item[idField];
-            item['text'] = $.isFunction(textField) ? textField.call(this,item) : item[textField];
-            item['iconCls'] = $.isFunction(iconField) ? iconField.call(this,item) : item[iconField];
-            item['checked'] = $.isFunction(checkedField) ? checkedField.call(this,item) : item[checkedField];
-            item['children'] = $.isFunction(childrenField) ? childrenField.call(this,item) : item[childrenField];
-            if (!item['children']){
-            	item['children'] = [];
-            }
-            if(!$.ObjectUtils.isEmpty(item['children'])){
-            	var nestedI = 0;
-            	var nestedL = item['children'].length;
-                for(nestedI = 0 ; nestedI < nestedL ; nestedI++){
-                    nestedFilter(item['children'][nestedI]);
-                }
-                //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
-                item['checked'] = false;
-            }
-        }
-        for (i = 0, l = data.length; i < l; i++) {
-        	if(data[i] != null){
-        		nestedFilter(data[i]);
-        	}
-        }
-        return data;
-    }
-};
-
-
-/**
- * 扩展treegrid
- * 使其支持平滑数据格式
- * 支持指定几个主要字段
- */
-$.fn.treegrid.defaults.loadFilter = function(data) {
-    var opt = $(this).data().treegrid.options;
-    var idField, textField, parentField, iconField, childrenField;
-    if (opt.parentField) {
-    	parentField = opt.parentField;
-        idField = opt.idField || 'id';
-        textField = opt.textField || 'text';
-        iconField = opt.iconField || 'iconCls';
-        
-        var i, l, roots = [], tmpMap = [];
-        for (i = 0, l = data.length; i < l; i++) {
-            tmpMap[data[i][idField]] = data[i];
-        }
-        for (i = 0, l = data.length; i < l; i++) {
-            if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
-                if (!tmpMap[data[i][parentField]]['children']){
-                	tmpMap[data[i][parentField]]['children'] = [];
-                }
-                tmpMap[data[i][parentField]]['children'].push(data[i]);
-                //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
-                tmpMap[data[i][parentField]]['checked'] = false;
-            } else {
-                roots.push(data[i]);
-            }
-        }
-        for (i = 0, l = data.length; i < l; i++) {
-            data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
-            data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
-            data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
-        }
-        return roots;
-    }else{
-        idField = opt.idField || 'id';
-        textField = opt.textField || 'text';
-        iconField = opt.iconField || 'iconCls';
-        childrenField = opt.childrenField || 'children';
-        function nestedFilter(item){
-            if(item == null){
-                return ;
-            }
-            
-            item['id'] = $.isFunction(idField) ? idField.call(this,item) : item[idField];
-            item['text'] = $.isFunction(textField) ? textField.call(this,item) : item[textField];
-            item['iconCls'] = $.isFunction(iconField) ? iconField.call(this,item) : item[iconField];
-            item['checked'] = $.isFunction(checkedField) ? checkedField.call(this,item) : item[checkedField];
-            item['children'] = $.isFunction(childrenField) ? childrenField.call(this,item) : item[childrenField];
-            if (!item['children']){
-            	item['children'] = [];
-            }
-            if(!$.ObjectUtils.isEmpty(item['children'])){
-            	var nestedI = 0;
-            	var nestedL = item['children'].length;
-                for(nestedI = 0 ; nestedI < nestedL ; nestedI++){
-                    nestedFilter(item['children'][nestedI]);
-                }
-            }
-        }
-        for (i = 0, l = data.length; i < l; i++) {
-        	if(data[i] != null){
-        		nestedFilter(data[i]);
-        	}
-        }
-        return data;
-    }
-};
-
-/**
- * 扩展treegrid 
- * 使其支持平滑数据格式
- * 支持指定几个主要字段
- */
-$.fn.combotree.defaults.loadFilter = $.fn.tree.defaults.loadFilter;
-
-/**
- * 修改默认的验证器设置
- */
-$(document).ready(function(){
-	if($.validator){
-		$.validator.config({
-			stopOnError: false,
-		    theme: 'yellow_right_effect',
-		    rules: {
-	            digits: [/^\d+$/, "请输入数字"]
-	            ,code : [/^[a-z0-9A-Z._%]+$/,"请输入正确的编码,仅允许数字、字母、'.'、'_'"]
-				,number: [/^[\-|\d]+(.[0-9]*)*$/,"请输入数字"]
-	            ,letters: [/^[a-z]+$/i, "{0}只能输入字母"]
-	            ,tel: [/^(?:(?:0\d{2,3}[- ]?[1-9]\d{6,7})|(?:[48]00[- ]?[1-9]\d{6}))$/, "电话格式不正确"]
-	            ,mobile: [/^1[3-9]\d{9}$/, "手机号格式不正确"]
-	            ,email: [/^(?:[a-z0-9]+[_\-+.]?)*[a-z0-9]+@(?:([a-z0-9]+-?)*[a-z0-9]+\.)+([a-z]{2,})+$/i, "邮箱格式不正确"]
-	            ,qq: [/^[1-9]\d{4,}$/, "QQ号格式不正确"]
-	            ,date: [/^\d{4}-\d{1,2}-\d{1,2}$/, "请输入正确的日期,例:yyyy-mm-dd"]
-	            ,time: [/^([01]\d|2[0-3])(:[0-5]\d){1,2}$/, "请输入正确的时间,例:14:30或14:30:00"]
-	            ,ID_card: [/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[A-Z])$/, "请输入正确的身份证号码"]
-	            ,url: [/^(https?|ftp):\/\/[^\s]+$/i, "网址格式不正确"]
-	            ,postcode: [/^[1-9]\d{5}$/, "邮政编码格式不正确"]
-	            ,chinese: [/^[\u0391-\uFFE5]+$/, "请输入中文"]
-	            ,username: [/^\w{3,12}$/, "请输入3-12位数字、字母、下划线"]
-	            ,password: [/^[0-9a-zA-Z]{6,16}$/, "密码由6-16位数字、字母组成"]
-	            ,money: [/^(([^0][0-9]+|0)\.([0-9]{1,2})$)|^([^0][0-9]+|0)$/, "请输入正确的金额"]
-	            ,accept: function (element, params){
-	                if (!params) return true;
-	                var ext = params[0];
-	                return (ext === '*') ||
-	                       (new RegExp(".(?:" + (ext || "png|jpg|jpeg|gif") + ")$", "i")).test(element.value) ||
-	                       this.renderMsg("只接受{1}后缀", ext.replace('|', ','));
-	            }
-	            
-	        }
-		});
-	}
-});
-
+})(jQuery);
 //将指定form的所有input清空，一般用于清空查询条件，传入表单ID
 function clearFormWithFormId(formId) {
 	$("#" + formId).find(':input').each(function() {
@@ -1363,7 +1141,6 @@ function clearFormWithFormId(formId) {
 		}
 	});
 }
-
 /* 预制费中费用类型与numberBox效果之间的关系 */
 var FeeValueTypes = {};
 (function($, undefined) {
@@ -1404,7 +1181,6 @@ var FeeValueTypes = {};
 		disabled : true
 	};
 })(jQuery);
-
 /* 预制费中费用类型与numberBox效果之间的关系 */
 (function($, undefined) {
 	$.Formatters = {};
@@ -1438,5 +1214,43 @@ var FeeValueTypes = {};
 		}
 		return text;
 	};
-})(jQuery); 
+})(jQuery);
+/**
+ * 修改默认的验证器设置
+ */
+$(document).ready(function(){
+	if($.validator){
+		$.validator.config({
+			stopOnError: false,
+		    theme: 'yellow_right_effect',
+		    rules: {
+	            digits: [/^\d+$/, "请输入数字"]
+	            ,code : [/^[a-z0-9A-Z._%]+$/,"请输入正确的编码,仅允许数字、字母、'.'、'_'"]
+				,number: [/^[\-|\d]+(.[0-9]*)*$/,"请输入数字"]
+	            ,letters: [/^[a-z]+$/i, "{0}只能输入字母"]
+	            ,tel: [/^(?:(?:0\d{2,3}[- ]?[1-9]\d{6,7})|(?:[48]00[- ]?[1-9]\d{6}))$/, "电话格式不正确"]
+	            ,mobile: [/^1[3-9]\d{9}$/, "手机号格式不正确"]
+	            ,email: [/^(?:[a-z0-9]+[_\-+.]?)*[a-z0-9]+@(?:([a-z0-9]+-?)*[a-z0-9]+\.)+([a-z]{2,})+$/i, "邮箱格式不正确"]
+	            ,qq: [/^[1-9]\d{4,}$/, "QQ号格式不正确"]
+	            ,date: [/^\d{4}-\d{1,2}-\d{1,2}$/, "请输入正确的日期,例:yyyy-mm-dd"]
+	            ,time: [/^([01]\d|2[0-3])(:[0-5]\d){1,2}$/, "请输入正确的时间,例:14:30或14:30:00"]
+	            ,ID_card: [/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[A-Z])$/, "请输入正确的身份证号码"]
+	            ,url: [/^(https?|ftp):\/\/[^\s]+$/i, "网址格式不正确"]
+	            ,postcode: [/^[1-9]\d{5}$/, "邮政编码格式不正确"]
+	            ,chinese: [/^[\u0391-\uFFE5]+$/, "请输入中文"]
+	            ,username: [/^\w{3,12}$/, "请输入3-12位数字、字母、下划线"]
+	            ,password: [/^[0-9a-zA-Z]{6,16}$/, "密码由6-16位数字、字母组成"]
+	            ,money: [/^(([^0][0-9]+|0)\.([0-9]{1,2})$)|^([^0][0-9]+|0)$/, "请输入正确的金额"]
+	            ,accept: function (element, params){
+	                if (!params) return true;
+	                var ext = params[0];
+	                return (ext === '*') ||
+	                       (new RegExp(".(?:" + (ext || "png|jpg|jpeg|gif") + ")$", "i")).test(element.value) ||
+	                       this.renderMsg("只接受{1}后缀", ext.replace('|', ','));
+	            }
+	            
+	        }
+		});
+	}
+});
 

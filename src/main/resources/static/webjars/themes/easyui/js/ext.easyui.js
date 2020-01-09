@@ -1,9 +1,185 @@
 /**
+ * 修改datagrid中默认的onBeforeLoad方法<br/>
+ */
+$.fn.datagrid.defaults.onBeforeLoad = function(param){
+    //console.log(param);
+    param["pageNumber"] = param.page;
+    param["pageSize"] = param.rows;
+    //param["sortName"] = param.order;
+    //param["sortOrder"] = param.sort;
+    
+   	delete param.rows;
+    delete param.page;
+    //delete param.order;
+    //delete param.sort;
+};
+/**
+ * 扩展tree 
+ * 使其支持平滑数据格式
+ * 支持指定几个主要字段
+ */
+$.fn.tree.defaults.loadFilter = function(data) {
+    var opt = $(this).data().tree.options;
+    var idField, textField, parentField,iconField,childrenField,checkedField;
+    var excludeObject =  opt.excludeObject;
+    if (opt.parentField) {
+    	parentField = opt.parentField;
+        idField = opt.idField || 'id';
+        textField = opt.textField || 'text';
+        iconField = opt.iconField || 'iconCls';
+        checkedField = opt.checkedField || 'checked';
+        var i, l, roots = [], tmpMap = [];
+        for (i = 0, l = data.length; i < l; i++) {
+            tmpMap[data[i][idField]] = data[i];
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+            if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
+                if (!tmpMap[data[i][parentField]]['children']){
+                	tmpMap[data[i][parentField]]['children'] = [];
+                }
+                if(!excludeObject){
+	            	data[i]['object'] = data[i];
+	            } 
+                tmpMap[data[i][parentField]]['children'].push(data[i]);
+                //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
+                tmpMap[data[i][parentField]]['checked'] = false;
+            } else {
+	            if(!excludeObject){
+	            	data[i]['object'] = data[i];
+	            } 
+                roots.push(data[i]);
+            }
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+        	data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
+            data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
+            data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
+            data[i]['checked'] = $.isFunction(checkedField) ? checkedField.call(this,data[i]) : data[i][checkedField];
+        }
+        return roots;
+    }else{
+        idField = opt.idField || 'id';
+        textField = opt.textField || 'text';
+        iconField = opt.iconField || 'iconCls';
+        checkedField = opt.checkedField || 'checked';
+        childrenField = opt.childrenField || 'children';
+        
+        function nestedFilter(item){
+            if(item == null){
+                return ;
+            }
+            if(!excludeObject){
+            	item['object'] = item;
+            }
+            
+            item['id'] = $.isFunction(idField) ? idField.call(this,item) : item[idField];
+            item['text'] = $.isFunction(textField) ? textField.call(this,item) : item[textField];
+            item['iconCls'] = $.isFunction(iconField) ? iconField.call(this,item) : item[iconField];
+            item['checked'] = $.isFunction(checkedField) ? checkedField.call(this,item) : item[checkedField];
+            item['children'] = $.isFunction(childrenField) ? childrenField.call(this,item) : item[childrenField];
+            if (!item['children']){
+            	item['children'] = [];
+            }
+            if(!$.ObjectUtils.isEmpty(item['children'])){
+            	var nestedI = 0;
+            	var nestedL = item['children'].length;
+                for(nestedI = 0 ; nestedI < nestedL ; nestedI++){
+                    nestedFilter(item['children'][nestedI]);
+                }
+                //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
+                item['checked'] = false;
+            }
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+        	if(data[i] != null){
+        		nestedFilter(data[i]);
+        	}
+        }
+        return data;
+    }
+};
+/**
+ * 扩展treegrid
+ * 使其支持平滑数据格式
+ * 支持指定几个主要字段
+ */
+$.fn.treegrid.defaults.loadFilter = function(data) {
+    var opt = $(this).data().treegrid.options;
+    var idField, textField, parentField, iconField, childrenField;
+    if (opt.parentField) {
+    	parentField = opt.parentField;
+        idField = opt.idField || 'id';
+        textField = opt.textField || 'text';
+        iconField = opt.iconField || 'iconCls';
+        
+        var i, l, roots = [], tmpMap = [];
+        for (i = 0, l = data.length; i < l; i++) {
+            tmpMap[data[i][idField]] = data[i];
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+            if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
+                if (!tmpMap[data[i][parentField]]['children']){
+                	tmpMap[data[i][parentField]]['children'] = [];
+                }
+                tmpMap[data[i][parentField]]['children'].push(data[i]);
+                //TODO:考虑将opt参数中是否级联的参数放进来 (临时解决： 如果未嵌套查询，上级节点被选中后，子级节点就自动被选中了)
+                tmpMap[data[i][parentField]]['checked'] = false;
+            } else {
+                roots.push(data[i]);
+            }
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+            data[i]['id'] = $.isFunction(idField) ? idField.call(this,data[i]) : data[i][idField];
+            data[i]['text'] = $.isFunction(textField) ? textField.call(this,data[i]) : data[i][textField];
+            data[i]['iconCls'] = $.isFunction(iconField) ? iconField.call(this,data[i]) : data[i][iconField];
+        }
+        return roots;
+    }else{
+        idField = opt.idField || 'id';
+        textField = opt.textField || 'text';
+        iconField = opt.iconField || 'iconCls';
+        childrenField = opt.childrenField || 'children';
+        function nestedFilter(item){
+            if(item == null){
+                return ;
+            }
+            
+            item['id'] = $.isFunction(idField) ? idField.call(this,item) : item[idField];
+            item['text'] = $.isFunction(textField) ? textField.call(this,item) : item[textField];
+            item['iconCls'] = $.isFunction(iconField) ? iconField.call(this,item) : item[iconField];
+            item['checked'] = $.isFunction(checkedField) ? checkedField.call(this,item) : item[checkedField];
+            item['children'] = $.isFunction(childrenField) ? childrenField.call(this,item) : item[childrenField];
+            if (!item['children']){
+            	item['children'] = [];
+            }
+            if(!$.ObjectUtils.isEmpty(item['children'])){
+            	var nestedI = 0;
+            	var nestedL = item['children'].length;
+                for(nestedI = 0 ; nestedI < nestedL ; nestedI++){
+                    nestedFilter(item['children'][nestedI]);
+                }
+            }
+        }
+        for (i = 0, l = data.length; i < l; i++) {
+        	if(data[i] != null){
+        		nestedFilter(data[i]);
+        	}
+        }
+        return data;
+    }
+};
+/**
+ * 扩展treegrid 
+ * 使其支持平滑数据格式
+ * 支持指定几个主要字段
+ */
+$.fn.combotree.defaults.loadFilter = $.fn.tree.defaults.loadFilter;
+/**
  * @author 彭清杨
  * @requires jQuery,EasyUI 由于系统中存在大量的错误使用idFileld的逻辑 为关闭idFiled引起的复选选中问题，作以下修正
  */
 (function ($) {
-/*
+	/*
 	function getSelectRows(target) {
 		var _datagrid = $.data(target,"datagrid");
 		var opts = _datagrid.options;
@@ -37,7 +213,7 @@
 			return getCheckedRows(jq[0]);
 		}
 	});
-*/
+	*/
 })(jQuery);
 /**
  * 使panel和datagrid在加载时提示

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/operator/ucenter")
-public class OperatorUCenter {
+public class OperatorUCenterController {
     
     /**
      * 操作人员用户中心<br/>

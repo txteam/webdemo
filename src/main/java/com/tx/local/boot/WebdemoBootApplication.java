@@ -8,6 +8,9 @@ package com.tx.local.boot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
+import org.springframework.cache.transaction.TransactionAwareCacheManagerProxy;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -91,6 +94,22 @@ public class WebdemoBootApplication {
                 .contact(new Contact("xxxxxx", "xxxxxx@xx.xxx", ""))
                 .version("9.0")
                 .build();
+    }
+    
+    /**
+     * 用内存缓存代替redis
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return CacheManager [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("webdemo.cacheManager")
+    public CacheManager cacheManager(){
+        CacheManager cm = new ConcurrentMapCacheManager();
+        CacheManager res = new TransactionAwareCacheManagerProxy(cm);
+        return res;
     }
     
     ///**

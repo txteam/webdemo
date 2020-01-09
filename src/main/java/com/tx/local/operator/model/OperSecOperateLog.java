@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import com.tx.component.servicelogger.annotation.ServiceLog;
 import com.tx.component.servicelogger.model.AbstractServiceLogger;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,14 +36,22 @@ import lombok.NoArgsConstructor;
 public class OperSecOperateLog extends AbstractServiceLogger {
     
     //:操作人员id
+    @ApiModelProperty(value = "操作人员id", hidden = true, position = 0)
     @Column(nullable = false, length = 64)
     private String operatorId;
     
+    //:操作人员id
+    @ApiModelProperty(value = "用户名", position = 1)
+    @Column(nullable = false, length = 64)
+    private String operatorUsername;
+    
     //:操作记录
+    @ApiModelProperty(value = "操作记录", position = 2)
     @Column(nullable = false, length = 64)
     private String message;
     
     //:客户端ip地址
+    @ApiModelProperty(value = "IP地址", position = 3)
     @Column(nullable = false, length = 64)
-    private String clientIpAddress;
+    private String ipAddress;
 }

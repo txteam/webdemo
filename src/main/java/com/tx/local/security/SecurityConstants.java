@@ -17,7 +17,11 @@ package com.tx.local.security;
  */
 public interface SecurityConstants {
     
-    
+    String[] IGNORING_MATCHERS = { "/webjars/**", "css/**", "images/**",
+            "js/**", "/**/*.js", "/**/*.css", "/**/*.jpg", "/**/*.png",
+            "/**/*.woff2", "/**/*.svg", "/**/*.ico", "/actuator/metrics/**",
+            "/actuator/httptrace/**", "/actuator/redis/**", "/swagger-ui.html",
+            "/swagger**/**", "/druid/**", "/druid/**" };
     
     /** 当前登录用户名 */
     String COOKIE_CURRENT_USERNAME = "currentUsername";

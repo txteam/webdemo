@@ -1,4 +1,4 @@
-debug: false
+debug: true
 
 #server
 server:
@@ -259,11 +259,14 @@ tx:
     basicdata:
       enable: true
       base-packages: com.tx.local
+      cache-manager-ref: webdemo.cacheManager
     config:
       enable: true
       duration: 1d
+      cache-manager-ref: webdemo.cacheManager
     security:
       enable: true
+      cache-manager-ref: webdemo.cacheManager
     servicelogger:
       enable: true
     # event:
