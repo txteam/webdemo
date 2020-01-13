@@ -47,7 +47,7 @@ public class ClientUserDetailsService implements UserDetailsService {
     
     private UserDetails mockUser() {
         ClientInfo user = new ClientInfo();
-        user.setLoginname("admin");
+        user.setUsername("admin");
         //System.out.println((new Md5PasswordEncoder()).encodePassword("123456", ""));
         user.setPassword("E10ADC3949BA59ABBE56E057F20F883E");
         user.setId("1");

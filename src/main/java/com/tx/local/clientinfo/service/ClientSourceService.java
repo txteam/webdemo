@@ -18,13 +18,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.local.clientinfo.dao.ClientSourceDao;
-import com.tx.local.clientinfo.model.ClientSource;
+import com.tx.component.basicdata.service.AbstractBasicDataService;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Filter;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.local.clientinfo.dao.ClientSourceDao;
+import com.tx.local.clientinfo.model.ClientSource;
 
 /**
  * 客户来源的业务层[ClientSourceService]
@@ -36,7 +37,8 @@ import com.tx.core.querier.model.QuerierBuilder;
  * @since [产品/模块版本]
  */
 @Component("clientSourceService")
-public class ClientSourceService {
+public class ClientSourceService
+        extends AbstractBasicDataService<ClientSource> {
     
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(ClientSourceService.class);
@@ -59,14 +61,15 @@ public class ClientSourceService {
     public void insert(ClientSource clientSource) {
         //验证参数是否合法
         AssertUtils.notNull(clientSource, "clientSource is null.");
-		AssertUtils.notEmpty(clientSource.getCode(), "clientSource.code is empty.");
-		AssertUtils.notEmpty(clientSource.getName(), "clientSource.name is empty.");
-		AssertUtils.notEmpty(clientSource.isModifyAble(), "clientSource.modifyAble is empty.");
-           
-        //FIXME:为添加的数据需要填入默认值的字段填入默认值
-		clientSource.setLastUpdateDate(new Date());
-		clientSource.setValid(true);
-		clientSource.setCreateDate(new Date());
+        AssertUtils.notEmpty(clientSource.getCode(),
+                "clientSource.code is empty.");
+        AssertUtils.notEmpty(clientSource.getName(),
+                "clientSource.name is empty.");
+        
+        //为添加的数据需要填入默认值的字段填入默认值
+        clientSource.setValid(true);
+        clientSource.setLastUpdateDate(new Date());
+        clientSource.setCreateDate(new Date());
         
         //调用数据持久层对实例进行持久化操作
         this.clientSourceDao.insert(clientSource);
@@ -93,7 +96,7 @@ public class ClientSourceService {
         boolean flag = resInt > 0;
         return flag;
     }
-
+    
     /**
      * 根据code删除客户来源实例
      * 1、当code为empty时抛出异常
@@ -133,7 +136,7 @@ public class ClientSourceService {
         ClientSource res = this.clientSourceDao.find(condition);
         return res;
     }
-
+    
     /**
      * 根据code查询客户来源实例
      * 1、当code为empty时抛出异常
@@ -164,16 +167,14 @@ public class ClientSourceService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<ClientSource> queryList(
-		Boolean valid,
-		Map<String,Object> params   
-    	) {
+    public List<ClientSource> queryList(Boolean valid,
+            Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<ClientSource> resList = this.clientSourceDao.queryList(params);
         
@@ -191,19 +192,16 @@ public class ClientSourceService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<ClientSource> queryList(
-		Boolean valid,
-		Querier querier   
-    	) {
+    public List<ClientSource> queryList(Boolean valid, Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<ClientSource> resList = this.clientSourceDao.queryList(querier);
         
@@ -225,24 +223,22 @@ public class ClientSourceService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<ClientSource> queryPagedList(
-		Boolean valid,
-		Map<String,Object> params,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<ClientSource> queryPagedList(Boolean valid,
+            Map<String, Object> params, int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
- 
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<ClientSource> resPagedList = this.clientSourceDao.queryPagedList(params, pageIndex, pageSize);
+        PagedList<ClientSource> resPagedList = this.clientSourceDao
+                .queryPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
     
-	/**
+    /**
      * 分页查询客户来源实例列表
      * <功能详细描述>
      * @param valid
@@ -257,22 +253,20 @@ public class ClientSourceService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<ClientSource> queryPagedList(
-		Boolean valid,
-		Querier querier,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<ClientSource> queryPagedList(Boolean valid,
+            Querier querier, int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<ClientSource> resPagedList = this.clientSourceDao.queryPagedList(querier, pageIndex, pageSize);
+        PagedList<ClientSource> resPagedList = this.clientSourceDao
+                .queryPagedList(querier, pageIndex, pageSize);
         
         return resPagedList;
     }
@@ -288,16 +282,13 @@ public class ClientSourceService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Boolean valid,
-		Map<String,Object> params   
-    	) {
+    public int count(Boolean valid, Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.clientSourceDao.count(params);
         
@@ -315,19 +306,16 @@ public class ClientSourceService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Boolean valid,
-		Querier querier   
-    	) {
+    public int count(Boolean valid, Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.clientSourceDao.count(querier);
         
@@ -345,7 +333,7 @@ public class ClientSourceService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public boolean exists(Map<String,String> key2valueMap, String excludeId) {
+    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
         AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
         
         //生成查询条件
@@ -374,7 +362,7 @@ public class ClientSourceService {
         AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.clientSourceDao.count(querier,excludeId);
+        int res = this.clientSourceDao.count(querier, excludeId);
         
         return res > 0;
     }
@@ -390,23 +378,25 @@ public class ClientSourceService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(String id,ClientSource clientSource) {
+    public boolean updateById(String id, ClientSource clientSource) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(clientSource, "clientSource is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-		AssertUtils.notEmpty(clientSource.getName(), "clientSource.name is empty.");
-		AssertUtils.notEmpty(clientSource.isModifyAble(), "clientSource.modifyAble is empty.");
-
+        AssertUtils.notEmpty(clientSource.getName(),
+                "clientSource.name is empty.");
+        AssertUtils.notEmpty(clientSource.isModifyAble(),
+                "clientSource.modifyAble is empty.");
+        
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //FIXME:需要更新的字段
-		updateRowMap.put("name", clientSource.getName());
-		updateRowMap.put("valid", clientSource.isValid());
-		updateRowMap.put("modifyAble", clientSource.isModifyAble());
-		updateRowMap.put("remark", clientSource.getRemark());
-		updateRowMap.put("lastUpdateDate", new Date());
-
-        boolean flag = this.clientSourceDao.update(id,updateRowMap); 
+        //需要更新的字段
+        updateRowMap.put("name", clientSource.getName());
+        updateRowMap.put("valid", clientSource.isValid());
+        updateRowMap.put("modifyAble", clientSource.isModifyAble());
+        updateRowMap.put("remark", clientSource.getRemark());
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        boolean flag = this.clientSourceDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
@@ -426,12 +416,12 @@ public class ClientSourceService {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(clientSource, "clientSource is null.");
         AssertUtils.notEmpty(clientSource.getId(), "clientSource.id is empty.");
-
-        boolean flag = updateById(clientSource.getId(),clientSource); 
+        
+        boolean flag = updateById(clientSource.getId(), clientSource);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
-
+    
     /**
      * 根据id禁用客户来源<br/>
      * <功能详细描述>

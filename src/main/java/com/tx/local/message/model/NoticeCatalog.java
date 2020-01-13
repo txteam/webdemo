@@ -8,6 +8,7 @@ package com.tx.local.message.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -25,15 +26,21 @@ import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@BasicDataEntity(name = "通知公告分类", viewType = BasicDataViewTypeEnum.LIST)
+@BasicDataEntity(name = "通知分类", viewType = BasicDataViewTypeEnum.LIST)
 public class NoticeCatalog implements BasicData {
     
     /** 注释内容 */
-    private static final long serialVersionUID = -1814087341863649942L;
+    private static final long serialVersionUID = 9012816768442348568L;
     
     /** 唯一键id */
     @Id
     private String id;
+    
+    /** 所属虚中心id */
+    //在该类中允许虚中心为null，当虚中心为空时，则为多虚中心公用
+    @XmlAttribute
+    @Column(nullable = true)
+    private String vcid;
     
     /** 通知消息类型编码 */
     @XmlAttribute
@@ -70,6 +77,20 @@ public class NoticeCatalog implements BasicData {
      */
     public void setId(String id) {
         this.id = id;
+    }
+    
+    /**
+     * @return 返回 vcid
+     */
+    public String getVcid() {
+        return vcid;
+    }
+    
+    /**
+     * @param 对vcid进行赋值
+     */
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
     }
     
     /**

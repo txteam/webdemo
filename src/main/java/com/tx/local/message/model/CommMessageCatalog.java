@@ -25,7 +25,7 @@ import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@BasicDataEntity(name = "会话信息分类", viewType = BasicDataViewTypeEnum.LIST)
+@BasicDataEntity(name = "会话消息分类", viewType = BasicDataViewTypeEnum.LIST)
 public class CommMessageCatalog implements BasicData{
     
     /** 注释内容 */

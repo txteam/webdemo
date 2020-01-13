@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../skins/default/main.css" />
+<link href="../js/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="../js/framework/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="../js/framework/common.js"></script>
+<script type="text/javascript" src="../js/framework/otherControl.js"></script>
+<script type="text/javascript" src="../js/framework/dialogControl.js"></script>
+<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+	<div class="dataQuery">
+    	<table class="fullWidth">
+        	<colgroup>
+                <col width="60">
+				<col width="150">
+				<col width="80">
+				<col width="150">
+				<col width="80">
+				<col width="150">
+                <col>
+			</colgroup>
+        	<tr>
+            	<td>事件描述</td>
+                <td><input type="text" class="text"/></td>
+                <th>事件范围</th>
+                <td>
+                	<select class="select">
+                    	<option></option>
+                    </select>
+                </td>
+                <th>事件策略</th>
+                <td>
+                	<select class="select">
+                    	<option></option>
+                    </select>
+                </td>
+                <td>
+					<input name="" type="button" class="button floatRight" value="返回上页面" onclick="history.back();"/>
+                </td>
+            </tr>
+            <tr>
+            	<td>创建时间</td>
+                <td colspan="3">
+                	<input name="" type="text"  onFocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm'})" class="Wdate"/>
+                    -
+                	<input name="input" type="text"  onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm'})" class="Wdate"/>
+                	<input type="button" class="button" value="查询"/>
+                </td>
+                <td colspan="3">
+                	<input name="create" type="button" class="button floatRight" value="新增" id="create"/>
+                </td>
+            </tr>
+        </table>
+  </div>
+  <div class="dataGrid">
+    <table>
+      <colgroup>
+      <col width="15"/>
+      <col/>
+      <col/>
+      <col width="60"/>
+      <col width="40"/>
+      <col/>
+      <col/>
+      <col/>
+      <col/>
+      <col/>
+      <col/>
+      <col width="70"/>
+      </colgroup>
+      <thead>
+        <tr>
+          <th><input name="" type="checkbox" value="" /></th>
+          <th>事件分类</th>
+          <th>描述</th>
+          <th>事件范围</th>
+          <th>策略</th>
+          <th>开始时间</th>
+          <th>结束时间</th>
+          <th>提醒方式</th>
+          <th>提醒人</th>
+          <th>创建人</th>
+          <th>创建时间</th>
+          <th class="tCenter">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input name="" type="checkbox" value="" /></td>
+          <td>员工动员大会</td>
+          <td title="19-2召开员工动员大会，请大家准备好笔记本和笔，准时参加">请大家准备...</td>
+          <td>公共事件</td>
+          <td>按日</td>
+          <td>2010-07-03 10:00:00</td>
+          <td>2010-07-03 12:00:00</td>
+          <td>提前15分钟提醒</td>
+          <td title="52011杨建  区客服中心(班组)">52011...</td>
+          <td>52011杨建</td>
+          <td>2010-07-02 12:00:00</td>
+          <td class="tCenter">
+          	<a href="calendar/addEvent.html" id="calendarModify">修改</a>&nbsp;
+          	<a href="###">删除</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+	</div>
+    <div class="paginationContainer">
+        <div class="pagination floatRight">
+            <span class="total">共20条</span>
+            <span class="current">第1/2页</span>
+            <a href="#" class="first disable" title="第一页"></a>
+            <a href="#" class="prev disable" title="上一页"></a>
+            <a href="#" class="next" title="下一页"></a>
+            <a href="#" class="last" title="最后页"></a>
+            <span class="total">每页</span>
+            <select>
+                <option>10</option>
+                <option>15</option>
+                <option>20</option>
+                <option>50</option>
+            </select>
+            <span>条</span>
+        </div>
+        <input name="" type="button" class="button floatLeft" value="删除" />
+    </div>
+</body>
+</html>

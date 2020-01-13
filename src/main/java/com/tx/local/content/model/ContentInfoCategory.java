@@ -12,8 +12,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -35,7 +33,7 @@ import io.swagger.annotations.ApiModel;
  */
 @Entity
 @Table(name = "ci_content_category")
-@BasicDataEntity(name = "内容信息分类", viewType=BasicDataViewTypeEnum.LIST)
+@BasicDataEntity(name = "内容信息分类", viewType=BasicDataViewTypeEnum.PAGEDLIST)
 @ApiModel("内容信息分类")
 public class ContentInfoCategory implements
         TreeAbleBasicData<ContentInfoCategory> {
@@ -47,16 +45,15 @@ public class ContentInfoCategory implements
     @Id
     private String id;
     
+    /** 父级分类 */
+    @Column(name = "parentId")
+    private ContentInfoCategory parent;
+    
     /** 对应枚举关键字：该字段可以为空 */
     private String code;
     
     /** 内容信息类型名 */
     private String name;
-    
-    /** 父级分类 */
-    @ManyToOne
-    @JoinColumn(name = "parentId")
-    private ContentInfoCategory parent;
     
     /** 内容类型:界面根据该值加载不同的新增，编辑的界面 */
     @Column(name = "typeCode")

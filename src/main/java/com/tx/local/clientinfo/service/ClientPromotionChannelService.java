@@ -18,13 +18,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.local.clientinfo.dao.ClientPromotionChannelDao;
-import com.tx.local.clientinfo.model.ClientPromotionChannel;
+import com.tx.component.basicdata.service.AbstractBasicDataService;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Filter;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.local.clientinfo.dao.ClientPromotionChannelDao;
+import com.tx.local.clientinfo.model.ClientPromotionChannel;
 
 /**
  * 客户推广渠道的业务层[ClientPromotionChannelService]
@@ -36,10 +37,12 @@ import com.tx.core.querier.model.QuerierBuilder;
  * @since [产品/模块版本]
  */
 @Component("clientPromotionChannelService")
-public class ClientPromotionChannelService {
+public class ClientPromotionChannelService
+        extends AbstractBasicDataService<ClientPromotionChannel> {
     
     @SuppressWarnings("unused")
-    private Logger logger = LoggerFactory.getLogger(ClientPromotionChannelService.class);
+    private Logger logger = LoggerFactory
+            .getLogger(ClientPromotionChannelService.class);
     
     @Resource(name = "clientPromotionChannelDao")
     private ClientPromotionChannelDao clientPromotionChannelDao;
@@ -58,15 +61,17 @@ public class ClientPromotionChannelService {
     @Transactional
     public void insert(ClientPromotionChannel clientPromotionChannel) {
         //验证参数是否合法
-        AssertUtils.notNull(clientPromotionChannel, "clientPromotionChannel is null.");
-		AssertUtils.notEmpty(clientPromotionChannel.getCode(), "clientPromotionChannel.code is empty.");
-		AssertUtils.notEmpty(clientPromotionChannel.getName(), "clientPromotionChannel.name is empty.");
-		AssertUtils.notEmpty(clientPromotionChannel.isModifyAble(), "clientPromotionChannel.modifyAble is empty.");
-           
-        //FIXME:为添加的数据需要填入默认值的字段填入默认值
-		clientPromotionChannel.setLastUpdateDate(new Date());
-		clientPromotionChannel.setValid(true);
-		clientPromotionChannel.setCreateDate(new Date());
+        AssertUtils.notNull(clientPromotionChannel,
+                "clientPromotionChannel is null.");
+        AssertUtils.notEmpty(clientPromotionChannel.getCode(),
+                "clientPromotionChannel.code is empty.");
+        AssertUtils.notEmpty(clientPromotionChannel.getName(),
+                "clientPromotionChannel.name is empty.");
+        
+        //为添加的数据需要填入默认值的字段填入默认值
+        clientPromotionChannel.setLastUpdateDate(new Date());
+        clientPromotionChannel.setValid(true);
+        clientPromotionChannel.setCreateDate(new Date());
         
         //调用数据持久层对实例进行持久化操作
         this.clientPromotionChannelDao.insert(clientPromotionChannel);
@@ -93,7 +98,7 @@ public class ClientPromotionChannelService {
         boolean flag = resInt > 0;
         return flag;
     }
-
+    
     /**
      * 根据code删除客户推广渠道实例
      * 1、当code为empty时抛出异常
@@ -130,10 +135,11 @@ public class ClientPromotionChannelService {
         ClientPromotionChannel condition = new ClientPromotionChannel();
         condition.setId(id);
         
-        ClientPromotionChannel res = this.clientPromotionChannelDao.find(condition);
+        ClientPromotionChannel res = this.clientPromotionChannelDao
+                .find(condition);
         return res;
     }
-
+    
     /**
      * 根据code查询客户推广渠道实例
      * 1、当code为empty时抛出异常
@@ -149,7 +155,8 @@ public class ClientPromotionChannelService {
         ClientPromotionChannel condition = new ClientPromotionChannel();
         condition.setCode(code);
         
-        ClientPromotionChannel res = this.clientPromotionChannelDao.find(condition);
+        ClientPromotionChannel res = this.clientPromotionChannelDao
+                .find(condition);
         return res;
     }
     
@@ -164,18 +171,17 @@ public class ClientPromotionChannelService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<ClientPromotionChannel> queryList(
-		Boolean valid,
-		Map<String,Object> params   
-    	) {
+    public List<ClientPromotionChannel> queryList(Boolean valid,
+            Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<ClientPromotionChannel> resList = this.clientPromotionChannelDao.queryList(params);
+        List<ClientPromotionChannel> resList = this.clientPromotionChannelDao
+                .queryList(params);
         
         return resList;
     }
@@ -191,21 +197,20 @@ public class ClientPromotionChannelService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<ClientPromotionChannel> queryList(
-		Boolean valid,
-		Querier querier   
-    	) {
+    public List<ClientPromotionChannel> queryList(Boolean valid,
+            Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<ClientPromotionChannel> resList = this.clientPromotionChannelDao.queryList(querier);
+        List<ClientPromotionChannel> resList = this.clientPromotionChannelDao
+                .queryList(querier);
         
         return resList;
     }
@@ -225,24 +230,22 @@ public class ClientPromotionChannelService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<ClientPromotionChannel> queryPagedList(
-		Boolean valid,
-		Map<String,Object> params,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<ClientPromotionChannel> queryPagedList(Boolean valid,
+            Map<String, Object> params, int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
- 
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<ClientPromotionChannel> resPagedList = this.clientPromotionChannelDao.queryPagedList(params, pageIndex, pageSize);
+        PagedList<ClientPromotionChannel> resPagedList = this.clientPromotionChannelDao
+                .queryPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
     
-	/**
+    /**
      * 分页查询客户推广渠道实例列表
      * <功能详细描述>
      * @param valid
@@ -257,22 +260,20 @@ public class ClientPromotionChannelService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<ClientPromotionChannel> queryPagedList(
-		Boolean valid,
-		Querier querier,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<ClientPromotionChannel> queryPagedList(Boolean valid,
+            Querier querier, int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<ClientPromotionChannel> resPagedList = this.clientPromotionChannelDao.queryPagedList(querier, pageIndex, pageSize);
+        PagedList<ClientPromotionChannel> resPagedList = this.clientPromotionChannelDao
+                .queryPagedList(querier, pageIndex, pageSize);
         
         return resPagedList;
     }
@@ -288,16 +289,13 @@ public class ClientPromotionChannelService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Boolean valid,
-		Map<String,Object> params   
-    	) {
+    public int count(Boolean valid, Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-		params.put("valid",valid);
-
+        params.put("valid", valid);
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.clientPromotionChannelDao.count(params);
         
@@ -315,19 +313,16 @@ public class ClientPromotionChannelService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Boolean valid,
-		Querier querier   
-    	) {
+    public int count(Boolean valid, Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-		if (valid != null) {
+        if (valid != null) {
             querier.getFilters().add(Filter.eq("valid", valid));
         }
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.clientPromotionChannelDao.count(querier);
         
@@ -345,7 +340,7 @@ public class ClientPromotionChannelService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public boolean exists(Map<String,String> key2valueMap, String excludeId) {
+    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
         AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
         
         //生成查询条件
@@ -374,7 +369,7 @@ public class ClientPromotionChannelService {
         AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.clientPromotionChannelDao.count(querier,excludeId);
+        int res = this.clientPromotionChannelDao.count(querier, excludeId);
         
         return res > 0;
     }
@@ -390,23 +385,27 @@ public class ClientPromotionChannelService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(String id,ClientPromotionChannel clientPromotionChannel) {
+    public boolean updateById(String id,
+            ClientPromotionChannel clientPromotionChannel) {
         //验证参数是否合法，必填字段是否填写
-        AssertUtils.notNull(clientPromotionChannel, "clientPromotionChannel is null.");
+        AssertUtils.notNull(clientPromotionChannel,
+                "clientPromotionChannel is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-		AssertUtils.notEmpty(clientPromotionChannel.getName(), "clientPromotionChannel.name is empty.");
-		AssertUtils.notEmpty(clientPromotionChannel.isModifyAble(), "clientPromotionChannel.modifyAble is empty.");
-
+        AssertUtils.notEmpty(clientPromotionChannel.getName(),
+                "clientPromotionChannel.name is empty.");
+        AssertUtils.notEmpty(clientPromotionChannel.isModifyAble(),
+                "clientPromotionChannel.modifyAble is empty.");
+        
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         //FIXME:需要更新的字段
-		updateRowMap.put("name", clientPromotionChannel.getName());
-		updateRowMap.put("valid", clientPromotionChannel.isValid());
-		updateRowMap.put("modifyAble", clientPromotionChannel.isModifyAble());
-		updateRowMap.put("remark", clientPromotionChannel.getRemark());
-		updateRowMap.put("lastUpdateDate", new Date());
-
-        boolean flag = this.clientPromotionChannelDao.update(id,updateRowMap); 
+        updateRowMap.put("name", clientPromotionChannel.getName());
+        updateRowMap.put("valid", clientPromotionChannel.isValid());
+        updateRowMap.put("modifyAble", clientPromotionChannel.isModifyAble());
+        updateRowMap.put("remark", clientPromotionChannel.getRemark());
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        boolean flag = this.clientPromotionChannelDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
@@ -424,14 +423,17 @@ public class ClientPromotionChannelService {
     @Transactional
     public boolean updateById(ClientPromotionChannel clientPromotionChannel) {
         //验证参数是否合法，必填字段是否填写
-        AssertUtils.notNull(clientPromotionChannel, "clientPromotionChannel is null.");
-        AssertUtils.notEmpty(clientPromotionChannel.getId(), "clientPromotionChannel.id is empty.");
-
-        boolean flag = updateById(clientPromotionChannel.getId(),clientPromotionChannel); 
+        AssertUtils.notNull(clientPromotionChannel,
+                "clientPromotionChannel is null.");
+        AssertUtils.notEmpty(clientPromotionChannel.getId(),
+                "clientPromotionChannel.id is empty.");
+        
+        boolean flag = updateById(clientPromotionChannel.getId(),
+                clientPromotionChannel);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
-
+    
     /**
      * 根据id禁用客户推广渠道<br/>
      * <功能详细描述>

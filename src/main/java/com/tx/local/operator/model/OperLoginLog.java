@@ -7,8 +7,6 @@
 package com.tx.local.operator.model;
 
 import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
 import com.tx.component.servicelogger.annotation.ServiceLog;
 import com.tx.component.servicelogger.model.AbstractServiceLogger;
@@ -81,7 +79,7 @@ public class OperLoginLog extends AbstractServiceLogger {
     private String imei;
     
     //操作系统类型
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     @Column(nullable = true, length = 64)
     private String osAgentType;
     

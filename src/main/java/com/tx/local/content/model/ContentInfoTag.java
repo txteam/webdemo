@@ -20,7 +20,7 @@ import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 import io.swagger.annotations.ApiModel;
 
 /**
- * <功能简述>
+ * 内容信息标签<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -31,7 +31,7 @@ import io.swagger.annotations.ApiModel;
 @Entity
 @Table(name = "ci_content_tag")
 @BasicDataEntity(name = "内容信息标签", viewType = BasicDataViewTypeEnum.LIST)
-@ApiModel("内容信息级别")
+@ApiModel("内容信息标签")
 public class ContentInfoTag implements BasicData{
     
     /** 注释内容 */

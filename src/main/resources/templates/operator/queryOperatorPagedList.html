@@ -657,6 +657,7 @@ function configOperatorPost(id,name){
 		$.formatString("配置人员职位_[{0}]",name),
 		$.formatString(configUrl,id),
 		850,550,function(){
+			queryFun();
 		}
 	);
 }

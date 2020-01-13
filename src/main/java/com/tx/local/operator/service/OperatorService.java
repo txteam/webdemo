@@ -23,13 +23,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tx.component.configuration.util.ConfigContextUtils;
+import com.tx.component.servicelogger.util.ServiceLoggerUtils;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Filter;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.core.util.MessageUtils;
 import com.tx.local.WebdemoConstants;
 import com.tx.local.operator.dao.OperatorDao;
+import com.tx.local.operator.model.OperSecOperateLog;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.organization.facade.OrganizationFacade;
 import com.tx.local.organization.facade.PostFacade;
@@ -133,6 +136,12 @@ public class OperatorService {
         
         //调用数据持久层对实例进行持久化操作
         this.operatorDao.insert(operator);
+        
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("新增操作人员[{}].",
+                        operator.getUsername()))
+                .build());
     }
     
     /**
@@ -154,6 +163,12 @@ public class OperatorService {
         
         int resInt = this.operatorDao.delete(condition);
         boolean flag = resInt > 0;
+        
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("删除操作人员[{}].", id))
+                .build());
+        
         return flag;
     }
     
@@ -470,6 +485,12 @@ public class OperatorService {
         
         boolean flag = this.operatorDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("更新操作人员[{}].", id))
+                .build());
+        
         return flag;
     }
     
@@ -546,6 +567,11 @@ public class OperatorService {
         updateRowMap.put("lastUpdateDate", now);
         
         int updateRowCount = this.operatorDao.update(updateRowMap);
+        
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("操作人员[{}]修改密码.", id))
+                .build());
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
@@ -631,6 +657,12 @@ public class OperatorService {
         
         @SuppressWarnings("unused")
         int updateRowCount = this.operatorDao.update(updateRowMap);
+        
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("操作人员[{}]重置密码.", id))
+                .build());
+        
         return true;
     }
     
@@ -670,6 +702,11 @@ public class OperatorService {
         
         int updateRowCount = this.operatorDao.update(updateRowMap);
         
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("操作人员[{}]修改用户名.", id))
+                .build());
+        
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;
     }
@@ -677,7 +714,7 @@ public class OperatorService {
     /**
      * 锁定操作员<br/>
      * <功能详细描述>
-     * @param operatorId
+     * @param id
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -685,16 +722,22 @@ public class OperatorService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean lockById(String operatorId) {
-        AssertUtils.notEmpty(operatorId, "operatorId is empty.");
+    public boolean lockById(String id) {
+        AssertUtils.notEmpty(id, "id is empty.");
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        updateRowMap.put("id", operatorId);
+        updateRowMap.put("id", id);
         
         updateRowMap.put("locked", true);
         updateRowMap.put("lastUpdateDate", new Date());
         updateRowMap.put("pwdErrCount", 0);//锁定的时候，同事将密码错误次数重置为0
         
         boolean flag = this.operatorDao.update(updateRowMap) > 0;
+        
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("锁定操作人员[{}].", id))
+                .build());
+        
         return flag;
     }
     
@@ -720,6 +763,11 @@ public class OperatorService {
         updateRowMap.put("pwdErrCount", 0);//解锁的时候，同事将密码错误次数重置为0
         
         boolean flag = this.operatorDao.update(updateRowMap) > 0;
+        
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("解锁操作人员[{}].", id))
+                .build());
         return flag;
     }
     
@@ -745,6 +793,11 @@ public class OperatorService {
         updateRowMap.put("lastUpdateDate", new Date());
         
         boolean flag = this.operatorDao.update(updateRowMap) > 0;
+        
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("禁用操作人员[{}].", id))
+                .build());
         
         return flag;
     }
@@ -772,6 +825,11 @@ public class OperatorService {
         
         boolean flag = this.operatorDao.update(updateRowMap) > 0;
         
+        //记录业务日志
+        ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .message(MessageUtils.format("启用操作人员[{}].", id))
+                .build());
+        
         return flag;
     }
     
@@ -790,7 +848,7 @@ public class OperatorService {
     public boolean updateMainPostById(String id, String postId) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notEmpty(id, "id is empty.");
-        AssertUtils.notEmpty(postId, "postId is empty.");
+        //AssertUtils.notEmpty(postId, "postId is empty.");
         
         Operator oper = findById(id);
         if (oper == null) {
@@ -803,11 +861,14 @@ public class OperatorService {
         
         //需要更新的字段
         Date now = new Date();
-        Post post = this.postFacade.findById(postId);
-        AssertUtils.notNull(post, "post is null.postId:{}", postId);
-        
-        updateRowMap.put("mainPostId", post.getId());
-        updateRowMap.put("organizationId", post.getOrganizationId());
+        if (StringUtils.isEmpty(postId)) {
+            updateRowMap.put("mainPostId", null);
+        } else {
+            Post post = this.postFacade.findById(postId);
+            AssertUtils.notNull(post, "post is null.postId:{}", postId);
+            updateRowMap.put("mainPostId", post.getId());
+            updateRowMap.put("organizationId", post.getOrganizationId());
+        }
         updateRowMap.put("lastUpdateDate", now);
         
         int updateRowCount = this.operatorDao.update(updateRowMap);

@@ -30,13 +30,23 @@ public enum ClientTypeEnum implements BasicDataEnum {
     /** 个人用户 */
     PERSONAL("PERSONAL", "个人");
     
+    /** 编码 */
+    private final String code;
+    
+    /** 名称 */
     private final String name;
     
-    private final String key;
-    
-    private ClientTypeEnum(String key, String name) {
-        this.key = key;
+    /** <默认构造函数> */
+    private ClientTypeEnum(String code, String name) {
+        this.code = code;
         this.name = name;
+    }
+    
+    /**
+     * @return 返回 code
+     */
+    public String getCode() {
+        return code;
     }
     
     /**
@@ -44,13 +54,6 @@ public enum ClientTypeEnum implements BasicDataEnum {
      */
     public String getName() {
         return name;
-    }
-    
-    /**
-     * @return 返回 key
-     */
-    public String getKey() {
-        return key;
     }
     
 }

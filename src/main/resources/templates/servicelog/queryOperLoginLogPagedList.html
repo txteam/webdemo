@@ -76,7 +76,7 @@ $(document).ready(function(){
 			{title:'id',width:150,hidden:true,field:'id'},
 		] ],
 		columns: [ [
-			{title:'操作人员id',width:100,field:'operatorId'},
+			{title:'操作人员id',width:100,hidden:true,field:'operatorId'},
 			{title:'用户名',width:100,field:'operatorUsername'},
 			{title:'登陆方式',width:100,field:'loginMode'},
 			{title:'登陆用户IP',width:100,field:'clientIpAddress'},
@@ -127,7 +127,7 @@ function queryFun() {
 						</tr>
 						<tr>
 							<td colspan="6" class="button operRow">
-								<a id="queryBtn" onclick="queryFun()" href="#" class="easyui-linkbutton">查询</a>
+								<a id="queryBtn" onclick="queryFun()" href="#" class="easyui-linkbutton" style="width: 65px;">查询</a>
 							</td>
 						</tr>
 						</tbody>

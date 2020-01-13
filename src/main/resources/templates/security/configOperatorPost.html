@@ -65,6 +65,7 @@ $(document).ready(function() {
 		}
 	});
 	
+	var beforeSelectId = "";
 	var orgMap = {},mapLoaded=false;
 	treegrid = $('#treegrid').treegrid({
 		url : /*[[@{/post/queryList(valid=true)}]]*/'',
@@ -101,9 +102,10 @@ $(document).ready(function() {
 				});
 			}
 		},
+		//checkbox: function(row){return true},
 		frozenColumns : [ [ 
-			{field:'id',title:'职位ID',width : 150,hidden : true},
-			{field:'parentId',title: '上级职位ID',width : 150,hidden : true},
+			{field:'id',title:'职位ID',width : 100,hidden : true},
+			{field:'parentId',title: '上级职位ID',width : 100,hidden : true},
 			{field:'name',title: '职位名称',width : 300}
 		] ],
 		columns : [ [
@@ -119,10 +121,26 @@ $(document).ready(function() {
 			{field:'remark',title : '备注',width : 200,hidden : true}
 		] ],
 		toolbar : '#toolbar',
-		onClickRow: function(row){
+		onCheckNode: function(row,checked){
+			//alert('onCheckNode:');
 		},
-		onBeforeCheckNode: function(row,index){
-			alert(row.index);
+		onBeforeSelect: function(row){
+			//alert('onBeforeSelect:');
+			var selectedRows = treegrid.treegrid('getSelections');
+			$.each(selectedRows,function(index,rowTemp){
+				beforeSelectId = rowTemp.id;
+			});
+			
+		},
+		onSelect: function(row){
+			//alert('onSelect:');
+		},
+		onClickRow: function(row){
+			//alert('onClickRow:');
+			if(row.id == beforeSelectId){
+				treegrid.treegrid('unselect',row.id);
+				beforeSelectId = "";
+			}
 		},
 		onLoadSuccess : function() {
 			initCheck();
@@ -152,44 +170,33 @@ function queryFun() {
 	return false;
 }
 function initCheck(){
-	var rows = treegrid.treegrid('getRows');
 	$.post(/*[[@{/operator/post/queryOperator2PostIds}]]*/'',
 			{'operatorId': operatorId},function(checkedIds){
 		$.each(checkedIds,function(index,idTemp){
-			$.each(rows,function(index,rowTemp){
-				if(idTemp == rowTemp.id){
-					treegrid.treegrid('checkRow',index);
-				}
-			});
+			treegrid.treegrid('select',idTemp);
 		});
 	});
 }
 function configOperatorPost(){
-	var operatorIds = [];
-	var checkedRows = grid.datagrid('getChecked');
-	$.each(checkedRows,function(index,rowTemp){
-		operatorIds.push(rowTemp.id);
+	var postIds = [];
+	var selectedRows = treegrid.treegrid('getSelections');
+	$.each(selectedRows,function(index,rowTemp){
+		postIds.push(rowTemp.id);
 	});
 	
-	var filterOperatorIds = [];
-	var rows = grid.datagrid('getRows');
-	$.each(rows,function(index,rowTemp){
-		filterOperatorIds.push(rowTemp.id);
-	});
 	DialogUtils.progress({
         text : '数据提交中，请等待....'
 	});
-	$.post(/*[[@{/operator/post/saveRole2Operator}]]*/'',
-			{roleId:roleId,operatorId:operatorIds,filterOperatorId:filterOperatorIds}, 
+	$.post(/*[[@{/operator/post/saveOperator2Post}]]*/'',
+			{operatorId:operatorId,postId:postIds}, 
 			function(data){
 		DialogUtils.progress('close');
 		if(data){
-			parent.DialogUtils.tip("配置角色人员成功");
-			parent.DialogUtils.closeDialogById("configRoleOperator");
+			parent.DialogUtils.tip("配置人员职位成功.");
+			parent.DialogUtils.closeDialogById("configOperatorPost");
 		}else{
-			DialogUtils.alert("错误提示","配置角色人员失败.","error");
+			DialogUtils.alert("错误提示","配置人员职位失败.","error");
 		}
-		
 	});
 }
 /*]]>*/

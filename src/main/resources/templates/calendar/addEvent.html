@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="../skins/default/main.css" rel="stylesheet" type="text/css">
+<link href="../js/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../js/framework/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="../js/framework/common.js"></script>
+<script type='text/javascript' src="../js/framework/calendarEventAdd.js"></script>
+<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<div class="popwin">
+	<div class="tabForm">
+		<table>
+        	<tr>
+            	<th class="narrowMin">
+                	事件范围&nbsp;
+                    <span class="tRed">*</span>
+                </th>
+                <td>
+					<input name="radio1" type="radio" id="r1" value="radio" onclick=""/>
+					<label for="r1">个人事件</label>
+					<input type="radio" name="radio1" id="r2" value="radio" onclick=""/>
+					<label for="r2">公共事件</label>
+				</td>
+            </tr>
+            <tr>
+            	<th>
+                	事件分类&nbsp;
+                    <span class="tRed">*</span>
+                </th>
+                <td>
+                	<select class="select">
+                    	<option>请选择</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+            	<th>事件描述</th>
+                <td>
+                	<input type="text" class="text longText"/>
+                </td>
+            </tr>
+			<tr>
+        		<th class="narrowMin">
+                	事件策略&nbsp;
+                    <span class="tRed">*</span>
+                </th>
+				<td>
+					<input name="radio" type="radio" id="ra1" value="radio" checked="checked" onclick="showDate('week')"/>
+					<label for="ra1">按周</label>
+					<input type="radio" name="radio" id="ra2" value="radio" onclick="showDate('day')"/>
+					<label for="ra2">按日</label>
+				</td>
+			</tr>
+      <tr id="week">
+        <th>&nbsp;</th>
+        <td>
+        	<input name="checkbox" type="checkbox" id="checkbox0" value="1" checked="checked"/>
+            <label for="checkbox0">星期一</label>
+            <input name="checkbox" type="checkbox" id="checkbox1" value="2" checked="checked"/>
+            <label for="checkbox1">星期二</label>
+            <input name="checkbox" type="checkbox" id="checkbox2" value="3" checked="checked"/>
+            <label for="checkbox2"/>星期三</label>
+            <input name="checkbox" type="checkbox" id="checkbox3" value="4"/>
+            <label for="checkbox3"/>星期四</label>
+            <input name="checkbox" type="checkbox" id="checkbox4" value="5"/>
+            <label for="checkbox4"/>星期五</label>
+            <input name="checkbox" type="checkbox" id="checkbox5" value="6"/>
+			<label for="checkbox5"/>星期六</label>
+            <input name="checkbox" type="checkbox" id="checkbox6" value="7"/>
+			<label for="checkbox6"/>星期日</label>
+		</td>
+      </tr>
+      <tr  id="day"  style="display:none" >
+        <th>&nbsp;</th>
+        <td>
+        	<input type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'yyyy-MM-dd'})"/>
+            -
+            <input type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'yyyy-MM-dd'})"/>
+        </td>
+      </tr>      
+      <!--<tr>
+        <th>Time Period</th>
+        <td><input type="text" id="d" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'H:mm',lang:'en'})" class="Wdate"/>
+          -
+          <input type="text" id="d2" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'H:mm',lang:'en'})" class="Wdate"/></td>
+      </tr>-->
+		<tr>
+			<th>
+            	起止时间&nbsp;
+                <span class="tRed">*</span>
+            </th>
+            <td>
+            	<input type="text" class="Wdate shortText" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'HH:mm'})" id="time1"/>
+            -
+            <input type="text" class="Wdate shortText" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'HH:mm'})" id="time2"/>
+                <input name="checkbox"  type="checkbox" id="checkboxday" value="7"/>
+                <label for="checkboxday">全天</label> 
+			</td>   
+		</tr>
+		<tr>
+			<th>
+            	提醒方式&nbsp;
+                <span class="tRed">*</span>
+            </th>
+			<td>
+            	<select class="select">
+                	<option>不提醒</option>
+                </select>
+			</td>
+        </tr>
+        <tr>
+			<th>
+            	提醒次数&nbsp;
+                <span class="tRed">*</span>
+            </th>
+			<td>
+            	<input type="text" class="text"/>	
+			</td>
+        </tr>
+        <tr>
+        	<th>
+            	提醒人员&nbsp;
+                <span class="tRed">*</span>
+            </th>
+			<td>
+            	<div class="optionList floatLeft">
+                	<p>
+                    	待选人&nbsp;
+                    	<input class="text longText inputTips" type="text" initColor="true" value="查询待选人"/>
+					</p>
+                    <select name="" multiple="multiple">
+                  		<option>96180服务监督热线接话组(班组)</option>
+                  		<option>白色工单流处理组(班组)</option>
+                  		<option>52011 杨建</option>
+					</select>
+                </div>
+                <div class="selectBtn floatLeft">
+                	<a href="###" title="单个选入">
+                    	<img alt="单个选入" src="../skins/default/images/iconSelectSingleR.gif" width="20" height="20" />
+					</a>
+                    <a href="###" title="单个选出">
+                    	<img alt="单个选出" src="../skins/default/images/iconSelectSingleL.gif" width="20" height="20" />
+                    </a>
+                    <a href="###" title="全部选入">
+                    	<img alt="全部选入" src="../skins/default/images/iconSelectAllR.gif" width="20" height="20" />
+                    </a>
+                    <a href="###" title="全部选出">
+                    	<img alt="全部选出" src="../skins/default/images/iconSelectAllL.gif" width="20" height="20" />
+                    </a>
+                </div>
+                <div class="selectedList">
+                	<p>已选人</p>
+                	<select name="select2"multiple="multiple">
+                  		<option>52011 杨建</option>
+                  		<option>白色工单流处理组(班组)</option>
+                	</select>
+                </div>
+			</td>
+		</tr>
+	</table>
+  </div>
+	<div class="doClose">
+		<input id="applybutton" type="submit" class="button" value="确定"  />
+	</div>
+</div>
+</body>
+</html>

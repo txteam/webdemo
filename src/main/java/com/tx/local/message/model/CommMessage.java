@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.tx.core.support.json.JSONAttributesSupport;
+
 import io.swagger.annotations.ApiModel;
 
 /**
@@ -36,7 +38,7 @@ import io.swagger.annotations.ApiModel;
 @Entity
 @Table(name = "msg_comm_message")
 @ApiModel("会话消息")
-public class CommMessage implements Serializable {
+public class CommMessage implements Serializable, JSONAttributesSupport {
     
     /** 注释内容 */
     private static final long serialVersionUID = 760874841288229239L;
@@ -70,149 +72,205 @@ public class CommMessage implements Serializable {
     @Column(name = "statusId", nullable = true)
     private CommMessageStatus status;
     
+    /** 关联类型 */
+    @Column(name = "refType", nullable = true)
+    private MsgRefTypeEnum refType;
+    
+    /** 关联id */
+    @Column(name = "refId", nullable = true)
+    private String refId;
+    
     /** 建议类容 */
     @Column(name = "content", length = 4000)
     private String content;
     
+    /** 额外的其他属性 */
+    @Column(name = "attributes", length = 4000)
+    private String attributes;
+    
     /** 最后修改时间 */
+    @Column(name = "lastUpdateDate", nullable = false, updatable = true)
     private Date lastUpdateDate;
     
     /** 创建时间 */
+    @Column(name = "createDate", nullable = false, updatable = false)
     private Date createDate;
-
+    
     /**
      * @return 返回 id
      */
     public String getId() {
         return id;
     }
-
+    
     /**
      * @param 对id进行赋值
      */
     public void setId(String id) {
         this.id = id;
     }
-
+    
     /**
      * @return 返回 parentId
      */
     public String getParentId() {
         return parentId;
     }
-
+    
     /**
      * @param 对parentId进行赋值
      */
     public void setParentId(String parentId) {
         this.parentId = parentId;
     }
-
+    
     /**
      * @return 返回 vcid
      */
     public String getVcid() {
         return vcid;
     }
-
+    
     /**
      * @param 对vcid进行赋值
      */
     public void setVcid(String vcid) {
         this.vcid = vcid;
     }
-
+    
     /**
      * @return 返回 userType
      */
     public MsgUserTypeEnum getUserType() {
         return userType;
     }
-
+    
     /**
      * @param 对userType进行赋值
      */
     public void setUserType(MsgUserTypeEnum userType) {
         this.userType = userType;
     }
-
+    
     /**
      * @return 返回 userId
      */
     public String getUserId() {
         return userId;
     }
-
+    
     /**
      * @param 对userId进行赋值
      */
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
+    
     /**
      * @return 返回 catalog
      */
     public CommMessageCatalog getCatalog() {
         return catalog;
     }
-
+    
     /**
      * @param 对catalog进行赋值
      */
     public void setCatalog(CommMessageCatalog catalog) {
         this.catalog = catalog;
     }
-
+    
     /**
      * @return 返回 status
      */
     public CommMessageStatus getStatus() {
         return status;
     }
-
+    
     /**
      * @param 对status进行赋值
      */
     public void setStatus(CommMessageStatus status) {
         this.status = status;
     }
-
+    
+    /**
+     * @return 返回 refType
+     */
+    public MsgRefTypeEnum getRefType() {
+        return refType;
+    }
+    
+    /**
+     * @param 对refType进行赋值
+     */
+    public void setRefType(MsgRefTypeEnum refType) {
+        this.refType = refType;
+    }
+    
+    /**
+     * @return 返回 refId
+     */
+    public String getRefId() {
+        return refId;
+    }
+    
+    /**
+     * @param 对refId进行赋值
+     */
+    public void setRefId(String refId) {
+        this.refId = refId;
+    }
+    
     /**
      * @return 返回 content
      */
     public String getContent() {
         return content;
     }
-
+    
     /**
      * @param 对content进行赋值
      */
     public void setContent(String content) {
         this.content = content;
     }
-
+    
+    /**
+     * @return 返回 attributes
+     */
+    public String getAttributes() {
+        return attributes;
+    }
+    
+    /**
+     * @param 对attributes进行赋值
+     */
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
+    }
+    
     /**
      * @return 返回 lastUpdateDate
      */
     public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
-
+    
     /**
      * @param 对lastUpdateDate进行赋值
      */
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
-
+    
     /**
      * @return 返回 createDate
      */
     public Date getCreateDate() {
         return createDate;
     }
-
+    
     /**
      * @param 对createDate进行赋值
      */

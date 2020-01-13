@@ -96,7 +96,7 @@ public class ClientUserDetails implements UserDetails {
      */
     @Override
     public String getUsername() {
-        return this.client.getLoginname();
+        return this.client.getUsername();
     }
     
     /**
