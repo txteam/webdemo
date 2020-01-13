@@ -11,6 +11,9 @@ package com.tx.local.vitualcenter.model;
  */
 public enum VirtualCenterEnum {
     
+    /** 平台:前端显示系统，当内容是服务前端显示系统时需要通过该虚中心进行配置　*/
+    PT("PT", "平台"),
+    
     /** 集团公司　*/
     JT("JT", "集团公司"),
     

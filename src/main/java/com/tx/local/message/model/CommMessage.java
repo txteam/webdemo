@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiModel;
 @Entity
 @Table(name = "msg_comm_message")
 @ApiModel("会话消息")
-public class CommMessage implements Serializable{
+public class CommMessage implements Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = 760874841288229239L;
@@ -46,13 +46,13 @@ public class CommMessage implements Serializable{
     @Column(name = "id", nullable = false)
     private String id;
     
-    /** 回复信息时，填入被回复的信息 */
-    @Column(name = "parentId", nullable = true)
-    private String parentId;
-    
     /** 所属虚中心id */
     @Column(name = "vcid", nullable = false)
     private String vcid;
+    
+    /** 回复信息时，填入被回复的信息 */
+    @Column(name = "parentId", nullable = true)
+    private String parentId;
     
     /** 客户类型 */
     @Column(name = "userType", nullable = false)
@@ -72,7 +72,7 @@ public class CommMessage implements Serializable{
     
     /** 关联类型 */
     @Column(name = "refType", nullable = true)
-    private MsgRefTypeEnum refType;
+    private CommMessageTopicTypeEnum refType;
     
     /** 关联id */
     @Column(name = "refId", nullable = true)
@@ -191,14 +191,14 @@ public class CommMessage implements Serializable{
     /**
      * @return 返回 refType
      */
-    public MsgRefTypeEnum getRefType() {
+    public CommMessageTopicTypeEnum getRefType() {
         return refType;
     }
     
     /**
      * @param 对refType进行赋值
      */
-    public void setRefType(MsgRefTypeEnum refType) {
+    public void setRefType(CommMessageTopicTypeEnum refType) {
         this.refType = refType;
     }
     

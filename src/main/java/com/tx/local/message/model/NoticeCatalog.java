@@ -9,16 +9,18 @@ package com.tx.local.message.model;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import javax.persistence.Table;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 
+import io.swagger.annotations.ApiModel;
+
 /**
- * 通知分类<br/>
+ * 公告消息分类<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -26,8 +28,11 @@ import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@BasicDataEntity(name = "通知分类", viewType = BasicDataViewTypeEnum.LIST)
-public class NoticeMessageCatalog implements BasicData {
+@Entity
+@Table(name = "msg_notice_catalog")
+@ApiModel("公告消息分类")
+@BasicDataEntity(name = "公告消息分类", viewType = BasicDataViewTypeEnum.LIST)
+public class NoticeCatalog implements BasicData {
     
     /** 注释内容 */
     private static final long serialVersionUID = 9012816768442348568L;
@@ -38,16 +43,13 @@ public class NoticeMessageCatalog implements BasicData {
     
     /** 所属虚中心id */
     //在该类中允许虚中心为null，当虚中心为空时，则为多虚中心公用
-    @XmlAttribute
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String vcid;
     
     /** 通知消息类型编码 */
-    @XmlAttribute
     private String code;
     
     /** 消息类型名称 */
-    @XmlElement
     private String name;
     
     /** 是否有效 */

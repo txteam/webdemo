@@ -6,6 +6,7 @@
  */
 package com.tx.local.message.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -14,8 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModel;
+
 /**
- * 站内公告消息<br/>
+ * 公告(通知)消息<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -24,22 +27,31 @@ import javax.persistence.Table;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "msg_notice")
-public class NoticeMessage {
+@Table(name = "msg_notice_message")
+@ApiModel("公告消息")
+public class NoticeMessage implements Serializable{
     
+    /** 注释内容 */
+    private static final long serialVersionUID = 3841369791135814499L;
+
     /** 站内消息id */
     @Id
     private String id;
     
+    /** 所属虚中心：一版来说公告消息只能针对同一虚中心内部 */
+    //该字段经过几天思考，暂定如下：不能为空，如果一条消息需要让多个虚中心看见，最好考虑多个虚中心都发送一份。
+    //如果加入vcid is null时，则对所有都可见，未来为了兼容该设计可能会出现更多复杂的场景
+    private String vcid;
+    
     /** 站内消息类型 */
     @ManyToOne
     @JoinColumn(name = "noticeCatalogId")
-    private NoticeMessageCatalog noticeCatalog;
+    private NoticeCatalog noticeCatalog;
     
     /** 站内消息优先级 */
     private NoticePriorityEnum priority = NoticePriorityEnum.PT;
     
-    /** 客户类型 */
+    /** 客户类型：会再映射表中重复出现 */
     private MsgUserTypeEnum userType;
     
     /** 站内消息标题 */
@@ -48,7 +60,7 @@ public class NoticeMessage {
     /** 站内消息内容 */
     private String content;
     
-    /** 是否撤销 */
+    /** 是否发布 */
     private boolean published = false;
     
     /** 发布时间 */
@@ -60,177 +72,228 @@ public class NoticeMessage {
     /** 无效时间 */
     private Date invalidDate;
     
+    /** 创建用户id */
+    private Date createUserId;
+    
     /** 创建时间 */
     private Date createDate = new Date();
     
+    /** 最后更新用户id */
+    private String lastUpdateUserId;
+    
     /** 最后更新时间 */
     private Date lastUpdateDate = new Date();
-    
+
     /**
      * @return 返回 id
      */
     public String getId() {
         return id;
     }
-    
+
     /**
      * @param 对id进行赋值
      */
     public void setId(String id) {
         this.id = id;
     }
-    
+
+    /**
+     * @return 返回 vcid
+     */
+    public String getVcid() {
+        return vcid;
+    }
+
+    /**
+     * @param 对vcid进行赋值
+     */
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
+    }
+
     /**
      * @return 返回 noticeCatalog
      */
-    public NoticeMessageCatalog getNoticeCatalog() {
+    public NoticeCatalog getNoticeCatalog() {
         return noticeCatalog;
     }
-    
+
     /**
      * @param 对noticeCatalog进行赋值
      */
-    public void setNoticeCatalog(NoticeMessageCatalog noticeCatalog) {
+    public void setNoticeCatalog(NoticeCatalog noticeCatalog) {
         this.noticeCatalog = noticeCatalog;
     }
-    
+
     /**
      * @return 返回 priority
      */
     public NoticePriorityEnum getPriority() {
         return priority;
     }
-    
+
     /**
      * @param 对priority进行赋值
      */
     public void setPriority(NoticePriorityEnum priority) {
         this.priority = priority;
     }
-    
+
     /**
      * @return 返回 userType
      */
     public MsgUserTypeEnum getUserType() {
         return userType;
     }
-    
+
     /**
      * @param 对userType进行赋值
      */
     public void setUserType(MsgUserTypeEnum userType) {
         this.userType = userType;
     }
-    
+
     /**
      * @return 返回 title
      */
     public String getTitle() {
         return title;
     }
-    
+
     /**
      * @param 对title进行赋值
      */
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     /**
      * @return 返回 content
      */
     public String getContent() {
         return content;
     }
-    
+
     /**
      * @param 对content进行赋值
      */
     public void setContent(String content) {
         this.content = content;
     }
-    
+
     /**
      * @return 返回 published
      */
     public boolean isPublished() {
         return published;
     }
-    
+
     /**
      * @param 对published进行赋值
      */
     public void setPublished(boolean published) {
         this.published = published;
     }
-    
+
     /**
      * @return 返回 publishDate
      */
     public Date getPublishDate() {
         return publishDate;
     }
-    
+
     /**
      * @param 对publishDate进行赋值
      */
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
     }
-    
+
     /**
      * @return 返回 valid
      */
     public boolean isValid() {
         return valid;
     }
-    
+
     /**
      * @param 对valid进行赋值
      */
     public void setValid(boolean valid) {
         this.valid = valid;
     }
-    
+
     /**
      * @return 返回 invalidDate
      */
     public Date getInvalidDate() {
         return invalidDate;
     }
-    
+
     /**
      * @param 对invalidDate进行赋值
      */
     public void setInvalidDate(Date invalidDate) {
         this.invalidDate = invalidDate;
     }
-    
+
+    /**
+     * @return 返回 createUserId
+     */
+    public Date getCreateUserId() {
+        return createUserId;
+    }
+
+    /**
+     * @param 对createUserId进行赋值
+     */
+    public void setCreateUserId(Date createUserId) {
+        this.createUserId = createUserId;
+    }
+
     /**
      * @return 返回 createDate
      */
     public Date getCreateDate() {
         return createDate;
     }
-    
+
     /**
      * @param 对createDate进行赋值
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-    
+
+    /**
+     * @return 返回 lastUpdateUserId
+     */
+    public String getLastUpdateUserId() {
+        return lastUpdateUserId;
+    }
+
+    /**
+     * @param 对lastUpdateUserId进行赋值
+     */
+    public void setLastUpdateUserId(String lastUpdateUserId) {
+        this.lastUpdateUserId = lastUpdateUserId;
+    }
+
     /**
      * @return 返回 lastUpdateDate
      */
     public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
-    
+
     /**
      * @param 对lastUpdateDate进行赋值
      */
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
+    
+    
+    
 }

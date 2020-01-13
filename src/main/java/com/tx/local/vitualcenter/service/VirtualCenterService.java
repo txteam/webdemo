@@ -110,13 +110,18 @@ public class VirtualCenterService implements InitializingBean {
                         .get(virtualCenterKeyTemp.getCode().toUpperCase());
                 if (!vc.isValid() || vc.isModifyAble()
                         || !vc.getName().equals(virtualCenterKeyTemp.getName())
-                        || !vc.getParentId().equals(
-                                virtualCenterKeyTemp.getParent().getCode())) {
+                        || StringUtils.equals(vc.getParentId(),
+                                virtualCenterKeyTemp.getParent() == null ? null
+                                        : virtualCenterKeyTemp.getParent()
+                                                .getCode())) {
                     //如果需要更新
                     Map<String, Object> ur = new HashMap<>();
                     ur.put("id", vc.getId());
                     ur.put("name", virtualCenterKeyTemp.getName());
-                    ur.put("parentId", virtualCenterKeyTemp.getCode());
+                    ur.put("parentId",
+                            virtualCenterKeyTemp.getParent() == null ? null
+                                    : virtualCenterKeyTemp.getParent()
+                                            .getCode());
                     ur.put("valid", true);
                     ur.put("modifyAble", false);
                     ur.put("lastUpdateDate", new Date());

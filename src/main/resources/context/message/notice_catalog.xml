@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<notice_catalogs>
+<notice_catalogs vcid="PT">
 	<notice_catalog code="XTTZ">
 		<name>系统通知</name>
 		<remark>通知</remark>

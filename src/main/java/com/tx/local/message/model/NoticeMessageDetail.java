@@ -20,6 +20,9 @@ import java.util.Date;
  */
 public class NoticeMessageDetail extends NoticeMessage {
     
+    /** 注释内容 */
+    private static final long serialVersionUID = 7971270844154903539L;
+
     /** 用户id */
     private String userId;
     
