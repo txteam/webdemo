@@ -27,7 +27,7 @@ import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
  * @since  [产品/模块版本]
  */
 @BasicDataEntity(name = "通知分类", viewType = BasicDataViewTypeEnum.LIST)
-public class NoticeCatalog implements BasicData {
+public class NoticeMessageCatalog implements BasicData {
     
     /** 注释内容 */
     private static final long serialVersionUID = 9012816768442348568L;

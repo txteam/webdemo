@@ -77,6 +77,5 @@ public enum OperatorRoleEnum implements Serializable, Role, BaseEnum {
         ObjectMapper om = new ObjectMapper();
         String r = om.writeValueAsString(OperatorRoleEnum.SUPER_ADMIN);
         System.out.println(r);
-        
     }
 }

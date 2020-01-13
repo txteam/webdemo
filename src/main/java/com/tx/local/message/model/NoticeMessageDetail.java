@@ -18,7 +18,7 @@ import java.util.Date;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class Notice2UserDetail extends Notice {
+public class NoticeMessageDetail extends NoticeMessage {
     
     /** 用户id */
     private String userId;

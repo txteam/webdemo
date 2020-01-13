@@ -105,13 +105,18 @@ public class VirtualCenterService implements InitializingBean {
                 .values()) {
             if (virtualCenterMap.containsKey(
                     virtualCenterKeyTemp.getCode().toUpperCase())) {
+                //如果已经存在
                 VirtualCenter vc = virtualCenterMap
                         .get(virtualCenterKeyTemp.getCode().toUpperCase());
-                if (!vc.isValid() || vc.isModifyAble() || !vc.getName()
-                        .equals(virtualCenterKeyTemp.getName())) {
+                if (!vc.isValid() || vc.isModifyAble()
+                        || !vc.getName().equals(virtualCenterKeyTemp.getName())
+                        || !vc.getParentId().equals(
+                                virtualCenterKeyTemp.getParent().getCode())) {
+                    //如果需要更新
                     Map<String, Object> ur = new HashMap<>();
                     ur.put("id", vc.getId());
                     ur.put("name", virtualCenterKeyTemp.getName());
+                    ur.put("parentId", virtualCenterKeyTemp.getCode());
                     ur.put("valid", true);
                     ur.put("modifyAble", false);
                     ur.put("lastUpdateDate", new Date());
@@ -124,14 +129,16 @@ public class VirtualCenterService implements InitializingBean {
                     virtualCenterMap.put(
                             virtualCenterKeyTemp.getCode().toUpperCase(), vc);
                 }
-                //给枚举写入id
-                virtualCenterKeyTemp.setId(vc.getId());
                 continue;
             } else {
                 //将新的虚中心插入表中
                 VirtualCenter virtualCenter = new VirtualCenter();
-                virtualCenter.setName(virtualCenterKeyTemp.getName());
+                virtualCenter.setId(virtualCenterKeyTemp.getCode());
                 virtualCenter.setCode(virtualCenterKeyTemp.getCode());
+                virtualCenter.setParentId(
+                        virtualCenterKeyTemp.getParent() == null ? null
+                                : virtualCenterKeyTemp.getParent().getCode());
+                virtualCenter.setName(virtualCenterKeyTemp.getName());
                 virtualCenter.setModifyAble(false);
                 this.insert(virtualCenter);
                 
@@ -139,37 +146,7 @@ public class VirtualCenterService implements InitializingBean {
                 virtualCenterMap.put(
                         virtualCenterKeyTemp.getCode().toUpperCase(),
                         virtualCenter);
-                //给枚举写入id
-                virtualCenterKeyTemp.setId(virtualCenter.getId());
             }
-        }
-        
-        //更新父级虚中心id
-        for (VirtualCenterEnum virtualCenterKeyTemp : virtualCenterEnumMap
-                .values()) {
-            VirtualCenter vc = virtualCenterMap
-                    .get(virtualCenterKeyTemp.getCode().toUpperCase());
-            AssertUtils.notNull(vc,
-                    "vc is null.code:{}",
-                    virtualCenterKeyTemp.getCode());
-            if (StringUtils.equals(vc.getParentId(),
-                    virtualCenterKeyTemp.getParent() == null ? null
-                            : virtualCenterKeyTemp.getParent().getId())) {
-                continue;
-            }
-            
-            Map<String, Object> ur = new HashMap<>();
-            ur.put("id", vc.getId());
-            ur.put("parentId", virtualCenterKeyTemp.getParent().getId());
-            ur.put("lastUpdateDate", new Date());
-            
-            this.virtualCenterDao.update(ur);
-            vc.setParentId(virtualCenterKeyTemp.getParent().getId());
-            
-            //更新以后重新查询出来进行写入
-            vc = findById(vc.getId());
-            virtualCenterMap.put(virtualCenterKeyTemp.getCode().toUpperCase(),
-                    vc);
         }
     }
     

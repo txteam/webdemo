@@ -23,6 +23,5 @@ create table ORG_ORGANIZATION(
 );
 create unique index idx_org_organization_01 on ORG_ORGANIZATION(code,vcid);
 create index idx_org_organization_02 on ORG_ORGANIZATION(parentId);
-create index idx_org_organization_04 on ORG_ORGANIZATION(companyId);
-create index idx_org_organization_05 on ORG_ORGANIZATION(departmentId);
-create index idx_org_organization_06 on ORG_ORGANIZATION(districtId);
+create index idx_org_organization_03 on ORG_ORGANIZATION(companyId);
+create index idx_org_organization_04 on ORG_ORGANIZATION(districtId);

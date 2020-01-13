@@ -16,6 +16,6 @@ package com.tx.local.creditinfo;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface CreditConstants {
+public interface CreditInfoConstants {
     
 }

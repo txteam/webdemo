@@ -1,32 +1,6 @@
 -- tableInitializers: 
 -- tables
--- ----------table:OPER_LOGIN_LOG---------- 
-
--- ----------table:oper_sec_operate_log---------- 
--- alter talbe oper_sec_operate_log 
-ALTER TABLE oper_sec_operate_log 
-   ADD COLUMN operatorUsername varchar(64) not null,
-   ADD COLUMN ipAddress varchar(64) not null,
-   MODIFY COLUMN clientIpAddress varchar(64)
-;
-
-
--- initdata
-
--- tables
 -- ----------table:bd_plugin_instance---------- 
-
-
--- initdata
-
--- tables
--- ----------table:table_sec_auth_type---------- 
-
--- ----------table:sec_auth---------- 
-
--- ----------table:sec_authref---------- 
-
--- ----------table:table_sec_authref_his---------- 
 
 
 -- initdata
@@ -50,19 +24,39 @@ ALTER TABLE oper_sec_operate_log
 -- initdata
 
 -- tables
--- ----------bd_config_context---------- 
+-- ----------table:table_sec_auth_type---------- 
 
--- ----------bd_config_context_his---------- 
+-- ----------table:sec_auth---------- 
 
+-- ----------table:sec_authref---------- 
 
--- initdata
+-- ----------table:table_sec_authref_his---------- 
 
--- tables
 
 -- initdata
 
 -- tables
 -- ----------table:bd_data_dict---------- 
+
+
+-- initdata
+
+-- tables
+-- ----------table:oper_sec_operate_log---------- 
+
+-- ----------table:OPER_LOGIN_LOG---------- 
+
+
+-- initdata
+
+-- tables
+
+-- initdata
+
+-- tables
+-- ----------bd_config_context---------- 
+
+-- ----------bd_config_context_his---------- 
 
 
 -- initdata
@@ -86,37 +80,6 @@ create table bd_bankinfo(
 	primary key(id)
 );
 create index idx_bd_bankinfo_00 on bd_bankinfo(code);
-
-drop table if exists bd_district;
-create table bd_district(
-	id varchar(64) not null,
-	parentId varchar(64),
-	level integer not null default 0,
-	code varchar(64) not null,
-	type varchar(64) not null,
-	name varchar(64) not null,
-	pinyin varchar(64),
-	py varchar(64),
-	zipCode varchar(64) not null,
-	provinceId varchar(64),
-	cityId varchar(64),
-	countyId varchar(64),
-	valid bit not null default 1, 
-	modifyAble bit not null default 1,
-	fullName varchar(64),
-	remark varchar(512),
-	lastUpdateDate datetime not null default now(),
-	createDate datetime not null default now(),
-	attributes varchar(512),
-	primary key(id)
-);
-create unique index idx_bd_district_00 on bd_district(code);
-create index idx_bd_district_01 on bd_district(zipCode);
-create index idx_bd_district_02 on bd_district(provinceId);
-create index idx_bd_district_03 on bd_district(cityId);
-create index idx_bd_district_04 on bd_district(countyId);
-create index idx_bd_district_05 on bd_district(pinyin);
-create index idx_bd_district_06 on bd_district(py);
 
 /*****************************************************************************
 			表：bd_industry
@@ -380,37 +343,21 @@ create table TEST_DEMO(
 	primary key(id)
 );
 
-drop table if exists mainframe_login_log;
-CREATE TABLE mainframe_login_log(
-	id varchar(64)  NOT NULL,
-	vcid varchar(64), 								-- ������
-	createDate datetime NOT NULL DEFAULT sysdate(),	-- ����ʱ��
-	loginType TINYINT(1) NOT NULL,
-	clientIpAddress varchar(255),
-	systemId varchar(64),
-	organizationId varchar(64),
-	message varchar(255),
-	operatorId varchar(64),
-	operatorName varchar(64),
-	operatorLoginName varchar(64),
-	primary key(id)
-);
-
-
-drop table if exists mainframe_sysope_log;
-create table mainframe_sysope_log(
+/*****************************************************************************
+-- NoticeCatalog : 
+*****************************************************************************/
+drop table if exists NoticeCatalog;
+create table NoticeCatalog(
 	id varchar(64) not null,
-	clientIpAddress varchar(255),
-	systemId varchar(64),
-	function varchar(255),
-	organizationId varchar(64),
-	message varchar(255),
-	createDate default now(),
-	vcid varchar(64),
-	operatorId varchar(64),
-	operatorName varchar(64),
-	operatorLoginName varchar(64),
-	primary key(ID)
+	code varchar(64) ,
+	lastUpdateDate datetime(6) ,
+	name varchar(64) ,
+	vcid varchar(64) ,
+	valid bit ,
+	createDate datetime(6) ,
+	modifyAble bit ,
+	remark varchar(512) ,
+	primary key(id)
 );
 
 /*****************************************************************************
@@ -674,7 +621,6 @@ create table ORG_ORGANIZATION(
 create unique index idx_org_organization_01 on ORG_ORGANIZATION(code,vcid);
 create index idx_org_organization_02 on ORG_ORGANIZATION(parentId);
 create index idx_org_organization_04 on ORG_ORGANIZATION(companyId);
-create index idx_org_organization_05 on ORG_ORGANIZATION(departmentId);
 create index idx_org_organization_06 on ORG_ORGANIZATION(districtId);
 
 /*****************************************************************************
@@ -764,42 +710,42 @@ create table VC_VIRTUAL_CENTER(
 -- initdata
 
 INSERT INTO OPER_OPERATOR(id,vcid,organizationId,username,password,modifyAble,name)
-	values('123456','1000000000','1000000000','admin','E10ADC3949BA59ABBE56E057F20F883E',0,'超级管理员');
+	values('123456','JT','JT','admin','E10ADC3949BA59ABBE56E057F20F883E',0,'超级管理员');
 INSERT INTO OPER_OPERATOR(id,vcid,organizationId,username,password,modifyAble,name)
-	values(REPLACE(UUID(),"-",""),'1000000000','1000000000','pqy','E10ADC3949BA59ABBE56E057F20F883E',1,'彭清杨');
+	values(REPLACE(UUID(),"-",""),'JT','JT','pqy','E10ADC3949BA59ABBE56E057F20F883E',1,'彭清杨');
 INSERT INTO OPER_OPERATOR(id,vcid,organizationId,username,password,modifyAble,name)
-	values(REPLACE(UUID(),"-",""),'1000000000','1000000000','zlk','E10ADC3949BA59ABBE56E057F20F883E',1,'张礼科');
+	values(REPLACE(UUID(),"-",""),'JT','JT','zlk','E10ADC3949BA59ABBE56E057F20F883E',1,'张礼科');
 INSERT INTO OPER_OPERATOR(id,vcid,organizationId,username,password,modifyAble,name)
-	values(REPLACE(UUID(),"-",""),'1000000000','1000000000','zw','E10ADC3949BA59ABBE56E057F20F883E',1,'张威');
+	values(REPLACE(UUID(),"-",""),'JT','JT','zw','E10ADC3949BA59ABBE56E057F20F883E',1,'张威');
 INSERT INTO OPER_OPERATOR(id,vcid,organizationId,username,password,modifyAble,name)
-	values(REPLACE(UUID(),"-",""),'1000000000','1000000000','xrx','E10ADC3949BA59ABBE56E057F20F883E',1,'徐茹霞');
+	values(REPLACE(UUID(),"-",""),'JT','JT','xrx','E10ADC3949BA59ABBE56E057F20F883E',1,'徐茹霞');
 commit;
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('1000000000', '1000000000', 'GROUP_COMPANY', 'JT', '', '1000000000', '集团公司', '', '集团公司', NULL, NULL, NULL, '', '集团公司', '2019-11-10 22:47:34.364000', '2019-11-10 22:47:34.364000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e63121c016e6366e2570000', '1200000000', 'COMPANY', 'JTFGS2', '1000000000', '4028819d6e63121c016e6366e2570000', '集团子公司2', '', '集团子公司2', NULL, NULL, NULL, '', '', '2019-11-13 14:15:17.335000', '2019-11-13 14:15:17.335000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e63121c016e636757e70001', '1200000000', 'DEPARTMENT', 'JTFGS2_CW', '4028819d6e63121c016e6366e2570000', NULL, '财务部', '', '集团子公司2_财务部', NULL, NULL, NULL, '', '11111', '2019-11-13 14:15:47.431000', '2019-11-28 11:46:14.317000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6eb00d4d016eb01f53180002', '1000000000', 'BRANCH_DEPARTMENT', 'JT_XTYF_CPGH', '40289f596e606bdd016e607079be0000', '1000000000', '产品规划部', '', '集团公司_系统研发部_产品规划部', NULL, NULL, NULL, '', '', '2019-11-28 11:47:53.240000', '2019-11-28 12:33:25.616000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e607079be0000', '1000000000', 'DEPARTMENT', 'JT_XTYF', '1000000000', '1000000000', '系统研发部', '', '集团公司_系统研发部', NULL, NULL, NULL, '', '', '2019-11-13 00:26:54.270000', '2019-11-13 00:26:54.270000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6073ba0a0001', '1000000000', 'DEPARTMENT', 'JT_FXGL', '1000000000', '1000000000', '风险管理部', '', '集团公司_风险管理部', NULL, NULL, NULL, '', '', '2019-11-13 00:30:27.338000', '2019-11-13 00:30:27.338000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6074e1de0002', '1000000000', 'BRANCH_DEPARTMENT', 'JT_XTYF_CS', '40289f596e606bdd016e607079be0000', '1000000000', '测试部', '', '集团公司_系统研发部_测试部', NULL, NULL, NULL, '', '', '2019-11-13 00:31:43.070000', '2019-11-28 11:54:48.411000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6075e9c00003', '1000000000', 'DEPARTMENT', 'JT_CW', '1000000000', '1000000000', '财务部', '', '集团公司_财务部', NULL, NULL, NULL, '', '财务部', '2019-11-13 00:32:50.624000', '2019-11-28 01:58:25.016000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6076c0ae0004', '5000000001', 'COMPANY', 'CS1', '', '40289f596e606bdd016e6076c0ae0004', '测试公司1', '', '测试公司1', NULL, NULL, NULL, '', '', '2019-11-13 00:33:45.646000', '2019-11-13 00:33:45.646000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e607709e10005', '5000000002', 'COMPANY', 'CS2', '', '40289f596e606bdd016e607709e10005', '测试公司2', '', '测试公司2', NULL, NULL, NULL, '', '', '2019-11-13 00:34:04.385000', '2019-11-13 00:34:04.385000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6077c4af0006', '1100000000', 'COMPANY', 'JTFGS1', '1000000000', '40289f596e606bdd016e6077c4af0006', '集团子公司1', '', '集团子公司1', NULL, NULL, NULL, '', '', '2019-11-13 00:34:52.207000', '2019-11-13 00:34:52.207000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e607843220007', '1100000000', 'DEPARTMENT', 'JTFGS1_CW', '40289f596e606bdd016e6077c4af0006', '40289f596e606bdd016e6077c4af0006', '财务部', '', '集团子公司1_财务部', NULL, NULL, NULL, '', '', '2019-11-13 00:35:24.578000', '2019-11-13 00:35:24.578000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6078b7f90008', '5000000002', 'DEPARTMENT', 'CS2_CW', '40289f596e606bdd016e607709e10005', '40289f596e606bdd016e607709e10005', '财务部', '', '测试公司2_财务部', NULL, NULL, NULL, '', '', '2019-11-13 00:35:54.489000', '2019-11-13 00:35:54.489000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e607940a90009', '5000000001', 'DEPARTMENT', 'CS1_CW', '40289f596e606bdd016e6076c0ae0004', '40289f596e606bdd016e6076c0ae0004', '财务部', '', '测试公司1_财务部', NULL, NULL, NULL, '', '', '2019-11-13 00:36:29.481000', '2019-11-13 00:36:29.481000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6089f7e3000a', '1000000000', 'DEPARTMENT', 'JT_PPYY', '1000000000', '1000000000', '品牌运营部', '', '集团公司_品牌运营部', NULL, NULL, NULL, '', '', '2019-11-13 00:54:44.963000', '2019-11-13 00:54:44.963000');
-INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e608a7f86000b', '1000000000', 'DEPARTMENT', 'JT_RLZY', '1000000000', '1000000000', '人力资源管理部', '', '集团公司_人力资源管理部', NULL, NULL, NULL, '', '', '2019-11-13 00:55:19.686000', '2019-11-13 00:55:19.686000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('JT', 'JT', 'GROUP_COMPANY', 'JT', '', 'JT', '集团公司', '', '集团公司', NULL, NULL, NULL, '', '集团公司', '2019-11-10 22:47:34.364000', '2019-11-10 22:47:34.364000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e63121c016e6366e2570000', 'JTZGS2', 'COMPANY', 'JTFGS2', 'JT', '4028819d6e63121c016e6366e2570000', '集团子公司2', '', '集团子公司2', NULL, NULL, NULL, '', '', '2019-11-13 14:15:17.335000', '2019-11-13 14:15:17.335000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e63121c016e636757e70001', 'JTZGS2', 'DEPARTMENT', 'JTFGS2_CW', '4028819d6e63121c016e6366e2570000', NULL, '财务部', '', '集团子公司2_财务部', NULL, NULL, NULL, '', '11111', '2019-11-13 14:15:47.431000', '2019-11-28 11:46:14.317000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6eb00d4d016eb01f53180002', 'JT', 'BRANCH_DEPARTMENT', 'JT_XTYF_CPGH', '40289f596e606bdd016e607079be0000', 'JT', '产品规划部', '', '集团公司_系统研发部_产品规划部', NULL, NULL, NULL, '', '', '2019-11-28 11:47:53.240000', '2019-11-28 12:33:25.616000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e607079be0000', 'JT', 'DEPARTMENT', 'JT_XTYF', 'JT', 'JT', '系统研发部', '', '集团公司_系统研发部', NULL, NULL, NULL, '', '', '2019-11-13 00:26:54.270000', '2019-11-13 00:26:54.270000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6073ba0a0001', 'JT', 'DEPARTMENT', 'JT_FXGL', 'JT', 'JT', '风险管理部', '', '集团公司_风险管理部', NULL, NULL, NULL, '', '', '2019-11-13 00:30:27.338000', '2019-11-13 00:30:27.338000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6074e1de0002', 'JT', 'BRANCH_DEPARTMENT', 'JT_XTYF_CS', '40289f596e606bdd016e607079be0000', 'JT', '测试部', '', '集团公司_系统研发部_测试部', NULL, NULL, NULL, '', '', '2019-11-13 00:31:43.070000', '2019-11-28 11:54:48.411000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6075e9c00003', 'JT', 'DEPARTMENT', 'JT_CW', 'JT', 'JT', '财务部', '', '集团公司_财务部', NULL, NULL, NULL, '', '财务部', '2019-11-13 00:32:50.624000', '2019-11-28 01:58:25.016000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6076c0ae0004', 'CSGS1', 'COMPANY', 'CS1', '', '40289f596e606bdd016e6076c0ae0004', '测试公司1', '', '测试公司1', NULL, NULL, NULL, '', '', '2019-11-13 00:33:45.646000', '2019-11-13 00:33:45.646000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e607709e10005', 'CSGS2', 'COMPANY', 'CS2', '', '40289f596e606bdd016e607709e10005', '测试公司2', '', '测试公司2', NULL, NULL, NULL, '', '', '2019-11-13 00:34:04.385000', '2019-11-13 00:34:04.385000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6077c4af0006', 'JTZGS1', 'COMPANY', 'JTFGS1', 'JT', '40289f596e606bdd016e6077c4af0006', '集团子公司1', '', '集团子公司1', NULL, NULL, NULL, '', '', '2019-11-13 00:34:52.207000', '2019-11-13 00:34:52.207000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e607843220007', 'JTZGS1', 'DEPARTMENT', 'JTFGS1_CW', '40289f596e606bdd016e6077c4af0006', '40289f596e606bdd016e6077c4af0006', '财务部', '', '集团子公司1_财务部', NULL, NULL, NULL, '', '', '2019-11-13 00:35:24.578000', '2019-11-13 00:35:24.578000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6078b7f90008', 'CSGS2', 'DEPARTMENT', 'CS2_CW', '40289f596e606bdd016e607709e10005', '40289f596e606bdd016e607709e10005', '财务部', '', '测试公司2_财务部', NULL, NULL, NULL, '', '', '2019-11-13 00:35:54.489000', '2019-11-13 00:35:54.489000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e607940a90009', 'CSGS1', 'DEPARTMENT', 'CS1_CW', '40289f596e606bdd016e6076c0ae0004', '40289f596e606bdd016e6076c0ae0004', '财务部', '', '测试公司1_财务部', NULL, NULL, NULL, '', '', '2019-11-13 00:36:29.481000', '2019-11-13 00:36:29.481000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e6089f7e3000a', 'JT', 'DEPARTMENT', 'JT_PPYY', 'JT', 'JT', '品牌运营部', '', '集团公司_品牌运营部', NULL, NULL, NULL, '', '', '2019-11-13 00:54:44.963000', '2019-11-13 00:54:44.963000');
+INSERT INTO org_organization (`id`, `vcid`, `type`, `code`, `parentId`, `companyId`, `name`, `alias`, `fullName`, `districtId`, `address`, `fullAddress`, `valid`, `remark`, `createDate`, `lastUpdateDate`) VALUES ('40289f596e606bdd016e608a7f86000b', 'JT', 'DEPARTMENT', 'JT_RLZY', 'JT', 'JT', '人力资源管理部', '', '集团公司_人力资源管理部', NULL, NULL, NULL, '', '', '2019-11-13 00:55:19.686000', '2019-11-13 00:55:19.686000');
 commit;
-INSERT INTO `webdemo_new`.`org_post` (`id`, `parentId`, `code`, `vcid`, `name`, `fullName`, `valid`, `remark`, `organizationId`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e7d6029016e7d61d0e10000', '', '财务总监', '1000000000', 'JT_CWZJ', NULL, '', '', '1000000000', '0000-00-00 00:00:00.000000', '0000-00-00 00:00:00.000000');
-INSERT INTO `webdemo_new`.`org_post` (`id`, `parentId`, `code`, `vcid`, `name`, `fullName`, `valid`, `remark`, `organizationId`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e7d6029016e7d626e3c0001', '', '技术总监', '1000000000', 'JT_JSZJ', NULL, '', '', '1000000000', '0000-00-00 00:00:00.000000', '0000-00-00 00:00:00.000000');
-INSERT INTO `webdemo_new`.`org_post` (`id`, `parentId`, `code`, `vcid`, `name`, `fullName`, `valid`, `remark`, `organizationId`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e7d6029016e7d635f870002', '4028819d6e7d6029016e7d61d0e10000', '财务部经理', '1000000000', 'JT_CW_JL', NULL, '', '', '40289f596e606bdd016e6075e9c00003', '0000-00-00 00:00:00.000000', '0000-00-00 00:00:00.000000');
+INSERT INTO `webdemo_new`.`org_post` (`id`, `parentId`, `code`, `vcid`, `name`, `fullName`, `valid`, `remark`, `organizationId`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e7d6029016e7d61d0e10000', '', '财务总监', 'JT', 'JT_CWZJ', NULL, '', '', 'JT', '0000-00-00 00:00:00.000000', '0000-00-00 00:00:00.000000');
+INSERT INTO `webdemo_new`.`org_post` (`id`, `parentId`, `code`, `vcid`, `name`, `fullName`, `valid`, `remark`, `organizationId`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e7d6029016e7d626e3c0001', '', '技术总监', 'JT', 'JT_JSZJ', NULL, '', '', 'JT', '0000-00-00 00:00:00.000000', '0000-00-00 00:00:00.000000');
+INSERT INTO `webdemo_new`.`org_post` (`id`, `parentId`, `code`, `vcid`, `name`, `fullName`, `valid`, `remark`, `organizationId`, `createDate`, `lastUpdateDate`) VALUES ('4028819d6e7d6029016e7d635f870002', '4028819d6e7d6029016e7d61d0e10000', '财务部经理', 'JT', 'JT_CW_JL', NULL, '', '', '40289f596e606bdd016e6075e9c00003', '0000-00-00 00:00:00.000000', '0000-00-00 00:00:00.000000');
 commit;
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('1000000000', 'JT', '集团公司', '', '2019-11-10 11:43:42.580000', '2019-11-10 11:43:42.580000', '\0', NULL, NULL);
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('1100000000', 'JTZGS1', '集团子公司1', '', '2019-11-10 11:43:42.754000', '2019-11-10 11:43:43.111000', '\0', '1000000000', NULL);
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('1200000000', 'JTZGS2', '集团子公司2', '', '2019-11-10 11:43:42.841000', '2019-11-10 11:43:43.246000', '\0', '1000000000', NULL);
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('5000000001', 'CSGS1', '测试公司1', '', '2019-11-10 11:43:42.931000', '2019-11-10 11:43:42.931000', '\0', NULL, NULL);
-INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('5000000002', 'CSGS2', '测试公司2', '', '2019-11-10 11:43:43.021000', '2019-11-10 11:43:43.021000', '\0', NULL, NULL);
+INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('JT', 'JT', '集团公司', '', '2019-11-10 11:43:42.580000', '2019-11-10 11:43:42.580000', '\0', NULL, NULL);
+INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('JTZGS1', 'JTZGS1', '集团子公司1', '', '2019-11-10 11:43:42.754000', '2019-11-10 11:43:43.111000', '\0', 'JT', NULL);
+INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('JTZGS2', 'JTZGS2', '集团子公司2', '', '2019-11-10 11:43:42.841000', '2019-11-10 11:43:43.246000', '\0', 'JT', NULL);
+INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('CSGS1', 'CSGS1', '测试公司1', '', '2019-11-10 11:43:42.931000', '2019-11-10 11:43:42.931000', '\0', NULL, NULL);
+INSERT INTO vc_virtual_center (`id`, `code`, `name`, `valid`, `createDate`, `lastUpdateDate`, `modifyAble`, `parentId`, `remark`) VALUES ('CSGS2', 'CSGS2', '测试公司2', '', '2019-11-10 11:43:43.021000', '2019-11-10 11:43:43.021000', '\0', NULL, NULL);
 commit;
 -- foreignkey
 ALTER TABLE OPER_EMPLOYEE_INFO ADD CONSTRAINT FK_EMPLOYEE_01 FOREIGN KEY(operatorId) REFERENCES OPER_OPERATOR(id);

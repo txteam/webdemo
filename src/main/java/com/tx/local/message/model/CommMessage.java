@@ -14,8 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.tx.core.support.json.JSONAttributesSupport;
-
 import io.swagger.annotations.ApiModel;
 
 /**
@@ -38,7 +36,7 @@ import io.swagger.annotations.ApiModel;
 @Entity
 @Table(name = "msg_comm_message")
 @ApiModel("会话消息")
-public class CommMessage implements Serializable, JSONAttributesSupport {
+public class CommMessage implements Serializable{
     
     /** 注释内容 */
     private static final long serialVersionUID = 760874841288229239L;
@@ -83,10 +81,6 @@ public class CommMessage implements Serializable, JSONAttributesSupport {
     /** 建议类容 */
     @Column(name = "content", length = 4000)
     private String content;
-    
-    /** 额外的其他属性 */
-    @Column(name = "attributes", length = 4000)
-    private String attributes;
     
     /** 最后修改时间 */
     @Column(name = "lastUpdateDate", nullable = false, updatable = true)
@@ -234,20 +228,6 @@ public class CommMessage implements Serializable, JSONAttributesSupport {
      */
     public void setContent(String content) {
         this.content = content;
-    }
-    
-    /**
-     * @return 返回 attributes
-     */
-    public String getAttributes() {
-        return attributes;
-    }
-    
-    /**
-     * @param 对attributes进行赋值
-     */
-    public void setAttributes(String attributes) {
-        this.attributes = attributes;
     }
     
     /**

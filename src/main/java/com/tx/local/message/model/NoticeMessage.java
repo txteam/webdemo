@@ -25,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "msg_notice")
-public class Notice {
+public class NoticeMessage {
     
     /** 站内消息id */
     @Id
@@ -34,7 +34,7 @@ public class Notice {
     /** 站内消息类型 */
     @ManyToOne
     @JoinColumn(name = "noticeCatalogId")
-    private NoticeCatalog noticeCatalog;
+    private NoticeMessageCatalog noticeCatalog;
     
     /** 站内消息优先级 */
     private NoticePriorityEnum priority = NoticePriorityEnum.PT;
@@ -83,14 +83,14 @@ public class Notice {
     /**
      * @return 返回 noticeCatalog
      */
-    public NoticeCatalog getNoticeCatalog() {
+    public NoticeMessageCatalog getNoticeCatalog() {
         return noticeCatalog;
     }
     
     /**
      * @param 对noticeCatalog进行赋值
      */
-    public void setNoticeCatalog(NoticeCatalog noticeCatalog) {
+    public void setNoticeCatalog(NoticeMessageCatalog noticeCatalog) {
         this.noticeCatalog = noticeCatalog;
     }
     

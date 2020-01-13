@@ -35,9 +35,6 @@ public enum VirtualCenterEnum {
     /** 父级虚中心 */
     private final VirtualCenterEnum parent;
     
-    /** 虚中心对应的id,系统启动后写入 */
-    private String id;
-    
     private VirtualCenterEnum(String code, String name) {
         this.name = name;
         this.code = code;
@@ -70,19 +67,5 @@ public enum VirtualCenterEnum {
      */
     public VirtualCenterEnum getParent() {
         return parent;
-    }
-
-    /**
-     * @return 返回 id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param 对id进行赋值
-     */
-    public void setId(String id) {
-        this.id = id;
     }
 }
