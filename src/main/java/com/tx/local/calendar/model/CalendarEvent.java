@@ -8,6 +8,15 @@ package com.tx.local.calendar.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.tx.local.basicdata.model.UserTypeEnum;
+
+import io.swagger.annotations.ApiModel;
+
 /**
  * 行事历对应事件<br/>
  * <功能详细描述>
@@ -17,10 +26,19 @@ import java.util.Date;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@Entity
+@Table(name = "cal_calendar_event")
+@ApiModel("会话消息")
 public class CalendarEvent {
     
     /** 可选，事件唯一标识，重复的事件具有相同的id */
+    @Id
+    @Column(name = "id", nullable = false)
     private String id;
+    
+    private UserTypeEnum userType;
+    
+    private String userId;
     
     /** 必须，事件在日历上显示的title */
     private String title;
@@ -28,13 +46,19 @@ public class CalendarEvent {
     /** 可选，true or false，是否是全天事件 */
     private boolean allDay;
     
+    @Column(name = "start", nullable = false)
     private Date start;
     
+    @Column(name = "end", nullable = false)
     private Date end;
+    
+    private boolean editable;
+    
+    private Date createDate;
+    
+    private Date lastUpdateDate;
     
     private String url;
     
     private String className;
-    
-    private boolean editable;
 }

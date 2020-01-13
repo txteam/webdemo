@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="../skins/default/common.css" rel="stylesheet" type="text/css">
+<link rel='stylesheet' type='text/css' href='../js/calendar/examples/redmond/theme.css' />
+<link rel='stylesheet' type='text/css' href='../js/calendar/fullcalendar.css' />
+<link rel='stylesheet' type='text/css' href='../skins/default/common.css' />
+<script type='text/javascript' src='../js/calendar/jquery/jquery-1.4.2.js'></script>
+<script type='text/javascript' src='../js/calendar/jquery/ui.core.js'></script>
+<script type='text/javascript' src='../js/calendar/jquery/ui.draggable.js'></script>
+<script type='text/javascript' src='../js/calendar/jquery/ui.resizable.js'></script>
+<script type='text/javascript' src='../js/calendar/fullcalendar.min.js'></script>
+<script type="text/javascript" src="../js/framework/common.js"></script>
+<script type="text/javascript" src="../js/framework/calendar.js"></script>
+<style type='text/css'>
+body {
+	overflow:hidden;
+		padding:30px;
+		padding-top:5px;
+}
+#calendar {
+	margin-top:5px;
+}
+</style>
+</head>
+<body>
+<div>
+	<span class="floatRight">类别：
+    	<input type="checkbox" value="" checked="checked" id="ch1"/><label for="ch1">每周重复事件</label>
+        <input name="" type="checkbox" value="" checked="checked" id="ch2"/><label for="ch2">每日事件</label>
+	</span>
+	<input type="button" class="button" value="行事历管理" onClick="window.location='calendarList.html'"/>
+</div>
+<div id='calendar'></div>
+</body>
+</html>

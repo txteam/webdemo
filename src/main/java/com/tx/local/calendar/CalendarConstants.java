@@ -14,7 +14,10 @@ package com.tx.local.calendar;
  *  https://www.helloweba.net/javascript/445.html
  *  https://www.cnblogs.com/laramia/p/10731072.html
  *  https://blog.csdn.net/lk1985021/article/details/90725595
- *  https://www.cnblogs.com/huideng/p/4545483.html
+ *  https://www.cnblogs.com/huideng/p/4545483.htm
+ *  
+ *  https://blog.csdn.net/DeveloperFanyl/article/details/52226388 （二）
+ *  https://blog.csdn.net/DeveloperFanyl/article/details/52270658 （三）
  * <功能详细描述>
  * 
  * @author  Administrator
