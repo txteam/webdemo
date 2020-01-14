@@ -6,6 +6,7 @@
  */
 package com.tx.local.creditinfo.context;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ import javax.persistence.Id;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public abstract class AbstractCreditInfo implements CreditInfo {
+public abstract class AbstractCreditInfo implements Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = -715232610546809800L;

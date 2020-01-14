@@ -30,7 +30,7 @@ public class CreditInfoContext {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public <T extends CreditInfo> MultipCreditInfoService<T> getMultipService(
+    public <T extends AbstractCreditInfo> MultipCreditInfoService<T> getMultipService(
             Class<T> type) {
         return null;
     }
@@ -45,7 +45,7 @@ public class CreditInfoContext {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public <T extends CreditInfo> SingleCreditInfoService<T> getSingleService(
+    public <T extends AbstractCreditInfo> SingleCreditInfoService<T> getSingleService(
             Class<T> type) {
         return null;
     }

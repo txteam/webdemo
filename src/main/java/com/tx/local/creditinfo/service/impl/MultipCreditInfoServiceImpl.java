@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.tx.core.querier.model.Querier;
-import com.tx.local.creditinfo.context.CreditInfo;
+import com.tx.local.creditinfo.context.AbstractCreditInfo;
 import com.tx.local.creditinfo.dao.CreditInfoDao;
 import com.tx.local.creditinfo.service.MultipCreditInfoService;
 
@@ -24,7 +24,7 @@ import com.tx.local.creditinfo.service.MultipCreditInfoService;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class MultipCreditInfoServiceImpl<T extends CreditInfo>
+public class MultipCreditInfoServiceImpl<T extends AbstractCreditInfo>
         implements MultipCreditInfoService<T>, InitializingBean {
     
     private Class<T> type;

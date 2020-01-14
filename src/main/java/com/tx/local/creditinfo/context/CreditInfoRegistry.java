@@ -4,13 +4,11 @@
  * 修改时间:  2020年1月14日
  * <修改描述:>
  */
-package com.tx.local.creditinfo.dao;
+package com.tx.local.creditinfo.context;
 
-import com.tx.core.mybatis.dao.MybatisBaseDao;
-import com.tx.local.creditinfo.context.AbstractCreditInfo;
 
 /**
- * 信用信息持久层<br/>
+ * 信用信息注册表<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -18,7 +16,6 @@ import com.tx.local.creditinfo.context.AbstractCreditInfo;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface CreditInfoDao<T extends AbstractCreditInfo>
-        extends MybatisBaseDao<T, String> {
+public class CreditInfoRegistry {
     
 }

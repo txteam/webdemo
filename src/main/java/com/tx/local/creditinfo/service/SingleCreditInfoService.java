@@ -6,7 +6,7 @@
  */
 package com.tx.local.creditinfo.service;
 
-import com.tx.local.creditinfo.context.CreditInfo;
+import com.tx.local.creditinfo.context.AbstractCreditInfo;
 
 /**
  * 1:1信用信息业务层<br/>
@@ -17,7 +17,7 @@ import com.tx.local.creditinfo.context.CreditInfo;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface SingleCreditInfoService<T extends CreditInfo> {
+public interface SingleCreditInfoService<T extends AbstractCreditInfo> {
     
     /**
      * 实体业务层对应的信用信息实体类型<br/>

@@ -4,10 +4,12 @@
  * 修改时间:  2016年10月3日
  * <修改描述:>
  */
-package com.tx.local.creditinfo.context;
+package com.tx.local.creditinfo.model;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.tx.local.creditinfo.context.CreditInfoVersionTypeEnum;
 
 /**
  * 客户版本信息<br/>

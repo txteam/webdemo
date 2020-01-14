@@ -20,7 +20,7 @@ import com.tx.core.ddlutil.model.JPAEntityTableDef;
 import com.tx.core.ddlutil.model.TableDef;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.util.ClassScanUtils;
-import com.tx.local.creditinfo.context.CreditInfo;
+import com.tx.local.creditinfo.context.AbstractCreditInfo;
 import com.tx.local.creditinfo.context.CreditInfoVersionTypeEnum;
 
 /**
@@ -84,11 +84,11 @@ public class CreditInfoTableInitializer extends AbstractTableInitializer
         
         String[] basePackageArray = StringUtils
                 .splitByWholeSeparator(basePackages.trim(), ",");
-        Set<Class<? extends CreditInfo>> typeSet = ClassScanUtils
-                .scanByParentClass(CreditInfo.class, basePackageArray);
+        Set<Class<? extends AbstractCreditInfo>> typeSet = ClassScanUtils
+                .scanByParentClass(AbstractCreditInfo.class, basePackageArray);
         
         StringBuilder sb = new StringBuilder();
-        for (Class<? extends CreditInfo> type : typeSet) {
+        for (Class<? extends AbstractCreditInfo> type : typeSet) {
             JPAEntityTableDef td = (JPAEntityTableDef) JPAEntityDDLHelper
                     .analyzeToTableDefDetail(type,
                             tableDDLExecutor.getDDLDialect());
@@ -109,6 +109,7 @@ public class CreditInfoTableInitializer extends AbstractTableInitializer
                         .append(COMMENT_SUFFIX)
                         .append(LINE_SEPARATOR);
                 td.setTableName(tableName);
+                //FIXME: 需要考虑自动生成索引
                 sb.append(generateTableScriptByTableDef(td,
                         tableDDLExecutor,
                         tableAutoInitialize));
