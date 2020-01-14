@@ -54,11 +54,16 @@ public class CalendarEvent {
     
     private boolean editable;
     
+    private String linkUrl;
+    
+    private String className;
+    
     private Date createDate;
+    
+    private String createUserId;
     
     private Date lastUpdateDate;
     
-    private String url;
+    private String lastUpdateUserId;
     
-    private String className;
 }

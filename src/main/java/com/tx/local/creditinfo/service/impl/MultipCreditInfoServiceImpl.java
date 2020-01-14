@@ -31,8 +31,6 @@ public class MultipCreditInfoServiceImpl<T extends AbstractCreditInfo>
     
     private CreditInfoDao<T> trunkDao;
     
-    private CreditInfoDao<T> branchDao;
-    
     private CreditInfoDao<T> tagDao;
     
     /**
@@ -49,6 +47,19 @@ public class MultipCreditInfoServiceImpl<T extends AbstractCreditInfo>
     @Override
     public Class<T> type() {
         return this.type;
+    }
+    
+    /**
+     * 插入信息<br/>
+     * <功能详细描述>
+     * @param obj [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public void insertToTrunk(T obj){
+        
     }
     
     /**
@@ -76,6 +87,19 @@ public class MultipCreditInfoServiceImpl<T extends AbstractCreditInfo>
     
     /**
      * @param creditInfoId
+     * @param version
+     * @param querier
+     * @return
+     */
+    @Override
+    public List<T> queryFromTag(String creditInfoId, int version,
+            Querier querier) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    /**
+     * @param creditInfoId
      * @return
      */
     @Override
@@ -89,7 +113,6 @@ public class MultipCreditInfoServiceImpl<T extends AbstractCreditInfo>
      */
     public void tag(String branchVersion, String tagVersion) {
         // TODO Auto-generated method stub
-        
     }
     
     /**
@@ -102,16 +125,4 @@ public class MultipCreditInfoServiceImpl<T extends AbstractCreditInfo>
         return null;
     }
     
-    /**
-     * @param creditInfoId
-     * @param version
-     * @param querier
-     * @return
-     */
-    @Override
-    public List<T> queryFromTag(String creditInfoId, int version,
-            Querier querier) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }
