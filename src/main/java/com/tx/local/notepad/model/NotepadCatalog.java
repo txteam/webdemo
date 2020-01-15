@@ -7,6 +7,7 @@
 package com.tx.local.notepad.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,22 +38,54 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NotepadCatalog implements Serializable{
+public class NotepadCatalog implements Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = -6051543988330268097L;
-
+    
     /** 记事本分类唯一键 */
     @Id
     @Column(nullable = false, length = 64)
     private String id;
     
-    @Column(name = "parentId", nullable = false, length = 64)
+    /** 上级记事本分类ID */
+    @Column(name = "parentId", nullable = true, length = 64)
     private String parentId;
     
+    /** 记事本类型 */
+    @Column(name = "type", nullable = false, length = 64)
+    private NotepadTypeEnum type;
+    
+    /** 记事本主题类型 */
+    @Column(nullable = false, length = 64)
+    private NotepadTopicTypeEnum topicType;
+    
+    /** 记事本主题ID */
+    @Column(nullable = false, length = 64)
+    private String topicId;
+    
+    /** 记事本分类名称 */
+    @Column(nullable = false, updatable = true, length = 100)
     private String name;
     
+    /** 记事本分类备注 */
+    @Column(nullable = true, updatable = true, length = 500)
     private String remark;
     
+    /** 最后更新时间 */
+    @Column(nullable = false, updatable = true)
+    private Date lastUpdateDate;
+    
+    /** 最后更新用户 */
+    @Column(nullable = true, updatable = true)
+    private String lastUpdateUserId;
+    
+    /** 创建时间 */
+    @Column(nullable = false, updatable = false)
+    private Date createDate;
+    
+    /** 创建用户ID */
+    @Column(nullable = true, updatable = false)
+    private String createUserId;
     
 }

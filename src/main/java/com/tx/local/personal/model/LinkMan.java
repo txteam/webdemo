@@ -11,9 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.tx.local.basicdata.model.District;
+import com.tx.local.creditinfo.annotation.MultipCreditInfo;
 import com.tx.local.creditinfo.context.AbstractCreditInfo;
 import com.tx.local.creditinfo.model.LinkManRelation;
 import com.tx.local.creditinfo.model.LinkManTypeEnum;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 联系人信息<br/>
@@ -24,8 +29,12 @@ import com.tx.local.creditinfo.model.LinkManTypeEnum;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@MultipCreditInfo
 @Entity
 @Table(name = "ci_link_man")
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class LinkMan extends AbstractCreditInfo {
     
     /** 注释内容 */
@@ -68,7 +77,7 @@ public class LinkMan extends AbstractCreditInfo {
     private District county;
     
     /**详细地址*/
-    private String addressDetail;
+    private String address;
     
     /**地址全称**/
     private String fullAddress;

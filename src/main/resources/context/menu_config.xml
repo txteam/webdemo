@@ -18,7 +18,7 @@
 		<menu id="control_panel_menu" text="控制面板">
 			<menu id="personal_center_menu" text="个人中心">
 				<menu id="calandar_menu" text="行事历" href="/calendar"></menu>
-				<menu id="notepad_menu" text="记事本"></menu>
+				<menu id="notepad_menu" text="记事本" href="/notepad/operator"></menu>
 				<menu id="notice_menu" text="通知"></menu>
 				<menu id="message_menu" text="私信"></menu>
 			</menu>
@@ -28,7 +28,6 @@
 				<menu id="account_relate_menu" text="账号关联"></menu>
 				<menu id="authentication_menu" text="身份认证"></menu>
 			</menu>
-			<menu id="lock_menu" text="锁定窗口" type="event" event="lock"></menu>
 			<menu id="logout_menu" text="退出系统" type="event" event="logout"></menu>
 		</menu>
 	</catalog>

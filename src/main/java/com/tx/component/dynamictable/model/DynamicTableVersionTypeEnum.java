@@ -1,23 +1,23 @@
 /*
  * 描          述:  <描述>
  * 修  改   人:  Administrator
- * 修改时间:  2020年1月14日
+ * 修改时间:  2016年11月17日
  * <修改描述:>
  */
-package com.tx.local.notepad.model;
+package com.tx.component.dynamictable.model;
 
 /**
- * 主题类型<br/>
+ * 动态表版本类型枚举<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
- * @version  [版本号, 2020年1月14日]
+ * @version  [版本号, 2016年11月17日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public enum NotepadTopicTypeEnum {
+public enum DynamicTableVersionTypeEnum {
     
-    OPERATOR,
+    MAIN,
     
-    CLIENT;
+    BAK;
 }

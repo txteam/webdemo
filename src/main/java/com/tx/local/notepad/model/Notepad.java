@@ -14,8 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.tx.local.basicdata.model.UserTypeEnum;
-
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,20 +57,12 @@ public class Notepad implements Serializable {
     private NotepadCatalog catalog;
     
     /** 记事本主题类型 */
-    @Column(nullable = true, length = 64)
+    @Column(nullable = false, length = 64)
     private NotepadTopicTypeEnum topicType;
     
     /** 记事本主题ID */
-    @Column(nullable = true, length = 64)
+    @Column(nullable = false, length = 64)
     private String topicId;
-    
-    /** 用户类型 */
-    @Column(nullable = false, length = 64)
-    private UserTypeEnum userType;
-    
-    /** 用户ID */
-    @Column(nullable = false, length = 64)
-    private String userId;
     
     /** 标题 */
     @Column(nullable = false, updatable = true, length = 100)

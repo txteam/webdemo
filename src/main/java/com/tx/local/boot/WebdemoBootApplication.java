@@ -40,7 +40,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //@EnableJpaRepositories(basePackages = { "com.tx.local" })
 @EnableAspectJAutoProxy()
 @EnableFeignClients(basePackages = { "com.tx.local" })
-@SpringBootApplication(scanBasePackages = { "com.tx.local", "com.tx.plugin" })
+@SpringBootApplication(scanBasePackages = { "com.tx.local", "com.tx.plugin",
+        "com.tx.component.dynamictable", "com.tx.component.lock" })
 @EnableSwagger2
 public class WebdemoBootApplication {
     
@@ -106,7 +107,7 @@ public class WebdemoBootApplication {
      * @see [类、类#方法、类#成员]
      */
     @Bean("cacheManager")
-    public CacheManager cacheManager(){
+    public CacheManager cacheManager() {
         CacheManager cm = new ConcurrentMapCacheManager();
         CacheManager res = new TransactionAwareCacheManagerProxy(cm);
         return res;

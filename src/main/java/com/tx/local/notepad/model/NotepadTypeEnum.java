@@ -26,6 +26,4 @@ public enum NotepadTypeEnum implements BasicDataEnum{
     LOANBILL,
     
     LOANACCOUN;
-    
-    
 }
