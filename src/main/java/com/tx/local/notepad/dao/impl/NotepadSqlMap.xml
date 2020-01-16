@@ -16,23 +16,27 @@
 		resultMap="notepadMap">
 		SELECT 
 				N.id,
-				N.lastUpdateDate,
-				N.lastUpdateUserId,
+				N.vcid,
 				N.type,
 				N.title,
 				N.topicId,
 				N.topicType,
-				N.createDate,
-				N.createUserId,
 				N.remark,
 				N.catalogId,
 				N.content,
-				N.attributes
+				N.attributes,
+				N.lastUpdateDate,
+				N.lastUpdateUserId,
+				N.createDate,
+				N.createUserId
 		  FROM NOTE_NOTEPAD N
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND N.id = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND N.vcid = #{vcid} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND N.type = #{type} ]]>
@@ -52,18 +56,19 @@
 		resultMap="notepadMap">
 		SELECT 
 				N.id,
-				N.lastUpdateDate,
-				N.lastUpdateUserId,
+				N.vcid,
 				N.type,
 				N.title,
 				N.topicId,
 				N.topicType,
-				N.createDate,
-				N.createUserId,
 				N.remark,
 				N.catalogId,
 				N.content,
-				N.attributes
+				N.attributes,
+				N.lastUpdateDate,
+				N.lastUpdateUserId,
+				N.createDate,
+				N.createUserId
 		  FROM NOTE_NOTEPAD N
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
@@ -83,6 +88,9 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND N.id = #{id} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND N.vcid = #{vcid} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND N.lastUpdateUserId = #{lastUpdateUserId} ]]>
@@ -160,6 +168,9 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND N.id = #{id} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND N.vcid = #{vcid} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND N.lastUpdateUserId = #{lastUpdateUserId} ]]>
@@ -211,34 +222,36 @@
 		INSERT INTO NOTE_NOTEPAD
 		(
 			id,
-			lastUpdateDate,
-			lastUpdateUserId,
+			vcid,
 			type,
 			title,
 			topicId,
 			topicType,
-			createDate,
-			createUserId,
 			remark,
 			catalogId,
 			content,
-			attributes
+			attributes,
+			lastUpdateDate,
+			lastUpdateUserId,
+			createDate,
+			createUserId
 		)
 		VALUES
 		(
 			#{id},
-			#{lastUpdateDate},
-			#{lastUpdateUserId},
+			#{vcid},
 			#{type},
 			#{title},
 			#{topicId},
 			#{topicType},
-			#{createDate},
-			#{createUserId},
 			#{remark},
 			#{catalog.id},
 			#{content},
-			#{attributes}
+			#{attributes},
+			#{lastUpdateDate},
+			#{lastUpdateUserId},
+			#{createDate},
+			#{createUserId}
 		)
 	</insert>
 	
@@ -259,6 +272,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
 	            <![CDATA[ AND topicType = #{topicType} ]]>
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
+	        </if>
 		</trim>
 	</delete>
 	
@@ -267,6 +283,9 @@
 	    parameterType="java.util.Map">  
 	    UPDATE NOTE_NOTEPAD
 	    <trim prefix="SET" suffixOverrides=",">
+	    	<!-- <if test="_parameter.containsKey('vcid')"> -->
+			<!-- vcid = #{vcid,javaType=java.lang.String}, -->
+			<!-- </if> -->
 			<!-- <if test="_parameter.containsKey('type')"> -->
 			<!-- type = #{type,javaType=com.tx.local.notepad.model.NotepadTypeEnum}, -->
 			<!-- </if> -->
@@ -311,6 +330,9 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
 	            <![CDATA[ AND topicType = #{topicType} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
 	        </if>
 		</trim>
 	</update> 

@@ -4,6 +4,7 @@
 drop table if exists NOTE_NOTEPAD_CATALOG;
 create table NOTE_NOTEPAD_CATALOG(
 	id varchar(64) not null,
+	vcid varchar(64) not null,
 	type varchar(64) not null,
 	parentId varchar(64),
 	topicType varchar(64) not null,

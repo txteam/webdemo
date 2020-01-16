@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 记事本分类<br/>
+ * 记事本目录<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name = "note_notepad_catalog")
-@ApiModel("记事本分类")
+@ApiModel("记事本目录")
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -47,6 +47,10 @@ public class NotepadCatalog implements Serializable {
     @Id
     @Column(nullable = false, length = 64)
     private String id;
+    
+    /** 虚中心ID */
+    @Column(nullable = false, length = 64)
+    private String vcid;
     
     /** 上级记事本分类ID */
     @Column(name = "parentId", nullable = true, length = 64)

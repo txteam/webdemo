@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="privateMessage">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="privateMessageMap" 
+		type="com.tx.local.message.model.PrivateMessage">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.message.model.PrivateMessage"
+		resultMap="privateMessageMap">
+		SELECT 
+				PM.id,
+				PM.lastUpdateDate,
+				PM.lastUpdateUserId,
+				PM.read,
+				PM.readDate,
+				PM.type,
+				PM.userId,
+				PM.userType,
+				PM.vcid,
+				PM.title,
+				PM.createDate,
+				PM.createUserId,
+				PM.sourceId,
+				PM.catalog,
+				PM.content
+		  FROM MSG_PRIVATE_MESSAGE PM
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND PM.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="privateMessageMap">
+		SELECT 
+				PM.id,
+				PM.lastUpdateDate,
+				PM.lastUpdateUserId,
+				PM.read,
+				PM.readDate,
+				PM.type,
+				PM.userId,
+				PM.userType,
+				PM.vcid,
+				PM.title,
+				PM.createDate,
+				PM.createUserId,
+				PM.sourceId,
+				PM.catalog,
+				PM.content
+		  FROM MSG_PRIVATE_MESSAGE PM
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND PM.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
+	            <![CDATA[ AND PM.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(read)">  
+	            <![CDATA[ AND PM.read = #{read} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND PM.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userId)">  
+	            <![CDATA[ AND PM.userId = #{userId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userType)">  
+	            <![CDATA[ AND PM.userType = #{userType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND PM.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(title)">  
+	            <![CDATA[ AND PM.title = #{title} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND PM.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND PM.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
+	            <![CDATA[ AND PM.createUserId = #{createUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceId)">  
+	            <![CDATA[ AND PM.sourceId = #{sourceId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalog)">  
+	            <![CDATA[ AND PM.catalog = #{catalog} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(content)">  
+	            <![CDATA[ AND PM.content = #{content} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND PM.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM MSG_PRIVATE_MESSAGE PM
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND PM.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
+	            <![CDATA[ AND PM.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(read)">  
+	            <![CDATA[ AND PM.read = #{read} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND PM.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userId)">  
+	            <![CDATA[ AND PM.userId = #{userId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userType)">  
+	            <![CDATA[ AND PM.userType = #{userType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND PM.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(title)">  
+	            <![CDATA[ AND PM.title = #{title} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND PM.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND PM.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
+	            <![CDATA[ AND PM.createUserId = #{createUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceId)">  
+	            <![CDATA[ AND PM.sourceId = #{sourceId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalog)">  
+	            <![CDATA[ AND PM.catalog = #{catalog} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(content)">  
+	            <![CDATA[ AND PM.content = #{content} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND PM.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.message.model.PrivateMessage">
+		INSERT INTO MSG_PRIVATE_MESSAGE
+		(
+			id,
+			lastUpdateDate,
+			lastUpdateUserId,
+			read,
+			readDate,
+			type,
+			userId,
+			userType,
+			vcid,
+			title,
+			createDate,
+			createUserId,
+			sourceId,
+			catalog,
+			content
+		)
+		VALUES
+		(
+			#{id},
+			#{lastUpdateDate},
+			#{lastUpdateUserId},
+			#{read},
+			#{readDate},
+			#{type},
+			#{userId},
+			#{userType},
+			#{vcid},
+			#{title},
+			#{createDate},
+			#{createUserId},
+			#{sourceId},
+			#{catalog},
+			#{content}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.message.model.PrivateMessage">
+		DELETE FROM MSG_PRIVATE_MESSAGE  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE MSG_PRIVATE_MESSAGE
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateUserId')">
+	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('read')">
+	    		read = #{read,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('readDate')">
+	    		readDate = #{readDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('userId')">
+	    		userId = #{userId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('userType')">
+	    		userType = #{userType,javaType=com.tx.local.message.model.MsgUserTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('vcid')">
+	    		vcid = #{vcid,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('title')">
+	    		title = #{title,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('content')">
+	    		content = #{content,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

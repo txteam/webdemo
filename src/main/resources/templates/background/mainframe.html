@@ -38,6 +38,24 @@ var _contextPath = /*[[@{/}]]*/'';
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function() {
+	$('#notepad_handle').click(function(){
+		DialogUtils.openDialog(
+			"notepad",
+			"记事本",
+			/*[[@{/operator/notepad}]]*/'',
+			800,650,
+			function(){}
+		);
+	});
+	$('#calendar_handle').click(function(){
+		$.triggerge("addTab",{
+    		id: 'calandar_menu',
+            title : '行事历',
+            href : '/operator/calendar',
+            iconCls : 'icon-riqi'
+        });
+	});
+	
 	$('#notice_handle').click(function(){
 		$.triggerge("addTab",{
     		id: 'notice_page',
@@ -102,12 +120,15 @@ $(document).ready(function() {
         <div class="topright">
             <ul class="toptool">
             	<li><a id="screen_handle" href="javascript:void(0);"><i class="iconfont icon-screen-full"></i></a></li>
+            	<li><a id="notepad_handle" href="javascript:void(0);"><i class="iconfont">&#xe613;</i></a></li>
+            	<li><a id="calendar_handle" href="javascript:void(0);"><i class="iconfont">&#xe624;</i></a></li>
 	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
 	            <li><a id="notice_handle" href="javascript:void(0);"><i class="iconfont">&#xe621;</i></a><em class="gcolor">5</em></li>
 	            <li id="user_info">
 	            	<span class="userface"><i class="iconfont">&#xe60d;</i></span>
 	            	<a href="javascript:void(0);"><font><block th:text="${username}">ADMIN</block>&nbsp;&nbsp;<i class="iconfont userdown" id="user_info_icon">&#xe618;</i></font></a>
 	            </li>
+	            <li><a id="suggest_handle" href="javascript:void(0);"><i class="iconfont">&#xe685;</i></a></li>
 	            <li><a id="helper_handle" href="javascript:void(0);"><i class="iconfont">&#xe61a;</i></a></li>
             </ul>
         </div>

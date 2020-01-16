@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +41,9 @@ import com.tx.local.security.util.WebContextUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@PreAuthorize("hasRole('ROLE_OPERATOR')")
 @Controller
-@RequestMapping("/notepad/operator")
+@RequestMapping("/operator/notepad")
 public class OperatorNotepadController {
     
     /** 记事本分类业务层 */
@@ -64,7 +66,7 @@ public class OperatorNotepadController {
     @RequestMapping(value = { "", "/" })
     public String index(@RequestParam Map<String, String> request,
             ModelMap response) {
-        return "/notepad/notepadOperatorMain";
+        return "/notepad/operatorNotepadMain";
     }
     
     /**
@@ -81,7 +83,7 @@ public class OperatorNotepadController {
     public List<NotepadCatalog> queryCatalogList() {
         String operatorId = WebContextUtils.getOperatorId();
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("type", NotepadTypeEnum.OPERATOR);
+        params.put("type", NotepadTypeEnum.OPERATOR_NOTEPAD);
         params.put("topicType", NotepadTopicTypeEnum.OPERATOR);
         params.put("topicId", operatorId);
         Querier querier = QuerierBuilder.newInstance().querier();
@@ -121,7 +123,7 @@ public class OperatorNotepadController {
     public List<Notepad> queryNotepadList() {
         String operatorId = WebContextUtils.getOperatorId();
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("type", NotepadTypeEnum.OPERATOR);
+        params.put("type", NotepadTypeEnum.OPERATOR_NOTEPAD);
         params.put("topicType", NotepadTopicTypeEnum.OPERATOR);
         params.put("topicId", operatorId);
         Querier querier = QuerierBuilder.newInstance().querier();
@@ -146,7 +148,7 @@ public class OperatorNotepadController {
         //利用query代替find主要考虑到底层为通用实现逻辑，担心恶意查询，被撞库攻击的场景，或在查询中添加额外参数进行锁定也行
         String operatorId = WebContextUtils.getOperatorId();
         Notepad condition = new Notepad();
-        condition.setType(NotepadTypeEnum.OPERATOR);
+        condition.setType(NotepadTypeEnum.OPERATOR_NOTEPAD);
         condition.setTopicType(NotepadTopicTypeEnum.OPERATOR);
         condition.setTopicId(operatorId);
         condition.setId(id);
@@ -166,8 +168,10 @@ public class OperatorNotepadController {
     @ResponseBody
     @RequestMapping(value = "/notepad", method = RequestMethod.POST)
     public boolean addNotepad(Notepad notepad) {
+        String vcid = WebContextUtils.getVcid();
         String operatorId = WebContextUtils.getOperatorId();
-        notepad.setType(NotepadTypeEnum.OPERATOR);
+        notepad.setVcid(vcid);
+        notepad.setType(NotepadTypeEnum.OPERATOR_NOTEPAD);
         notepad.setTopicType(NotepadTopicTypeEnum.OPERATOR);
         notepad.setTopicId(operatorId);
         if (StringUtils.isEmpty(notepad.getTitle())) {
@@ -189,17 +193,21 @@ public class OperatorNotepadController {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping(value = "/notepad", method = RequestMethod.PUT)
-    public boolean updateNotepad(@RequestParam(name="id",required=true)String id,Notepad notepad) {
+    @RequestMapping(value = "/notepad/{id}", method = RequestMethod.PUT)
+    public boolean updateNotepad(
+            @PathVariable(name = "id", required = true) String id,
+            Notepad notepad) {
+        String vcid = WebContextUtils.getVcid();
         String operatorId = WebContextUtils.getOperatorId();
-        notepad.setType(NotepadTypeEnum.OPERATOR);
+        notepad.setType(NotepadTypeEnum.OPERATOR_NOTEPAD);
         notepad.setTopicType(NotepadTopicTypeEnum.OPERATOR);
         notepad.setTopicId(operatorId);
+        notepad.setVcid(vcid);
         if (StringUtils.isEmpty(notepad.getTitle())) {
             notepad.setTitle("记事本名称");
         }
         notepad.setLastUpdateUserId(operatorId);
-        this.notepadService.updateById(id,notepad);
+        this.notepadService.updateById(id, notepad);
         return true;
     }
 }

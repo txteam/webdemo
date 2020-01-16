@@ -63,6 +63,7 @@ public class NotepadService {
                 "notepad.topicType is empty.");
         AssertUtils.notEmpty(notepad.getTopicId(), "notepad.topicId is empty.");
         AssertUtils.notEmpty(notepad.getTitle(), "notepad.title is empty.");
+        AssertUtils.notEmpty(notepad.getVcid(), "notepad.vcid is empty.");
         
         //为添加的数据需要填入默认值的字段填入默认值
         notepad.setLastUpdateDate(new Date());
@@ -363,6 +364,7 @@ public class NotepadService {
         updateRowMap.put("type", notepad.getType());
         updateRowMap.put("topicId", notepad.getTopicId());
         updateRowMap.put("topicType", notepad.getTopicType());
+        updateRowMap.put("vcid", notepad.getVcid());
         
         updateRowMap.put("lastUpdateUserId", notepad.getLastUpdateUserId());
         updateRowMap.put("lastUpdateDate", new Date());

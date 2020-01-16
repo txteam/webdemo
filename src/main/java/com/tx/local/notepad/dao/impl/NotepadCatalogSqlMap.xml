@@ -15,6 +15,7 @@
 		resultMap="notepadCatalogMap">
 		SELECT 
 				NC.id,
+				NC.vcid,
 				NC.lastUpdateDate,
 				NC.lastUpdateUserId,
 				NC.name,
@@ -31,6 +32,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND NC.id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND NC.vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND NC.type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND NC.topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND NC.topicType = #{topicType} ]]>
+	        </if>
 		</trim>
 	</select>
 	
@@ -40,6 +53,7 @@
 		resultMap="notepadCatalogMap">
 		SELECT 
 				NC.id,
+				NC.vcid,
 				NC.lastUpdateDate,
 				NC.lastUpdateUserId,
 				NC.name,
@@ -72,7 +86,10 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND NC.id = #{id} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND NC.vcid = #{vcid} ]]>
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND NC.lastUpdateUserId = #{lastUpdateUserId} ]]>
 	        </if>			
@@ -144,7 +161,10 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND NC.id = #{id} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND NC.vcid = #{vcid} ]]>
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND NC.lastUpdateUserId = #{lastUpdateUserId} ]]>
 	        </if>			
@@ -187,30 +207,32 @@
 		INSERT INTO NOTE_NOTEPAD_CATALOG
 		(
 			id,
-			lastUpdateDate,
-			lastUpdateUserId,
+			vcid,
 			name,
 			type,
 			topicId,
 			topicType,
+			parentId,
+			remark,
 			createDate,
 			createUserId,
-			parentId,
-			remark
+			lastUpdateDate,
+			lastUpdateUserId
 		)
 		VALUES
 		(
 			#{id},
-			#{lastUpdateDate},
-			#{lastUpdateUserId},
+			#{vcid},
 			#{name},
 			#{type},
 			#{topicId},
 			#{topicType},
+			#{parentId},
+			#{remark},
 			#{createDate},
 			#{createUserId},
-			#{parentId},
-			#{remark}
+			#{lastUpdateDate},
+			#{lastUpdateUserId}
 		)
 	</insert>
 	
@@ -222,6 +244,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND topicType = #{topicType} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
+	        </if>
 		</trim>
 	</delete>
 	
@@ -230,35 +264,50 @@
 	    parameterType="java.util.Map">  
 	    UPDATE NOTE_NOTEPAD_CATALOG
 	    <trim prefix="SET" suffixOverrides=",">
-			<if test="_parameter.containsKey('lastUpdateDate')">
-	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
-	    	</if>
-			<if test="_parameter.containsKey('lastUpdateUserId')">
-	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
+			<!-- <if test="_parameter.containsKey('vcid')"> -->
+			<!-- vcid = #{vcid,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('type')"> -->
+			<!-- type = #{type,javaType=com.tx.local.notepad.model.NotepadTypeEnum}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('topicId')"> -->
+			<!-- topicId = #{topicId,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('topicType')"> -->
+			<!-- topicType = #{topicType,javaType=com.tx.local.notepad.model.NotepadTopicTypeEnum}, -->
+			<!-- </if> -->
+			<if test="_parameter.containsKey('parentId')">
+	    		parentId = #{parentId,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('name')">
 	    		name = #{name,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('type')">
-	    		type = #{type,javaType=com.tx.local.notepad.model.NotepadTypeEnum},
-	    	</if>
-			<if test="_parameter.containsKey('topicId')">
-	    		topicId = #{topicId,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('topicType')">
-	    		topicType = #{topicType,javaType=com.tx.local.notepad.model.NotepadTopicTypeEnum},
-	    	</if>
-			<if test="_parameter.containsKey('parentId')">
-	    		parentId = #{parentId,javaType=java.lang.String},
-	    	</if>
 			<if test="_parameter.containsKey('remark')">
 	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateUserId')">
+	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
 	    	</if>
 	    </trim>
 	    WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND topicType = #{topicType} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
 	        </if>
 		</trim>
 	</update> 

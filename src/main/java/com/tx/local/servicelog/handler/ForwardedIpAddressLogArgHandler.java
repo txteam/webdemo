@@ -25,7 +25,7 @@ import com.tx.core.util.WebUtils;
  * @since  [产品/模块版本]
  */
 @Component
-public class ForwardedIpAddressLogArgHandler2 implements LogArgumentHandler {
+public class ForwardedIpAddressLogArgHandler implements LogArgumentHandler {
     
     private static final String FIELD_NAME = "forwardedIpAddress";
     

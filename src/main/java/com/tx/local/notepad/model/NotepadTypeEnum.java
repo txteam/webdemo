@@ -19,11 +19,11 @@ import com.tx.component.basicdata.model.BasicDataEnum;
  */
 public enum NotepadTypeEnum implements BasicDataEnum{
     
-    OPERATOR,
+    OPERATOR_NOTEPAD,
     
-    CLIENT,
+    CLIENT_NOTEPAD,
     
-    LOANBILL,
+    LOANBILL_NOTEPAD,
     
-    LOANACCOUN;
+    LOANACCOUN_NOTEPAD;
 }

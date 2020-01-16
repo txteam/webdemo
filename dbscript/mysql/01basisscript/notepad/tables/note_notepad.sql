@@ -4,6 +4,7 @@
 drop table if exists NOTE_NOTEPAD;
 create table NOTE_NOTEPAD(
 	id varchar(64) not null,
+	vcid varchar(64) not null,
 	type varchar(64) not null,
 	topicType varchar(64) not null,
 	topicId varchar(64) not null,
@@ -18,3 +19,6 @@ create table NOTE_NOTEPAD(
 	createUserId varchar(64) ,
 	primary key(id)
 );
+create index IDX_NOTE_NOTEPAD_00 on NOTE_NOTEPAD(vcid);
+create index IDX_NOTE_NOTEPAD_01 on NOTE_NOTEPAD(topicId,topicType);
+create index IDX_NOTE_NOTEPAD_02 on NOTE_NOTEPAD(catalogId);

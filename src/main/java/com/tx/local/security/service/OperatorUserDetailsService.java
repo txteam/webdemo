@@ -149,7 +149,7 @@ public class OperatorUserDetailsService
                 null);
         isSuperAdmin = isSuperAdmin(operator, roleRefList);
         List<Role> roles = new ArrayList<>();
-        //无论是否是超级管理员，都需要将其所有角色进行加载
+        //无论是否是超级管理员，都需要将其所拥有的角色进行加载
         roleRefList.stream()
                 .map(roleRefTemp -> roleRefTemp.getRoleId())
                 .collect(Collectors.toSet())
@@ -167,6 +167,8 @@ public class OperatorUserDetailsService
             roles.add(roleRegistry
                     .findById(OperatorRoleEnum.SUPER_ADMIN.getId()));
         }
+        //所有的操作人员均拥有角色operator
+        roles.add(roleRegistry.findById(OperatorRoleEnum.OPERATOR.getId()));
         
         //查询用户的权限：根据用户的所属组织，职位，角色查询
         List<Auth> auths = new ArrayList<>();

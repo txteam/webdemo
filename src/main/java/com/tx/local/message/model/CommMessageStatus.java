@@ -8,9 +8,8 @@ package com.tx.local.message.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
@@ -41,12 +40,18 @@ public class CommMessageStatus implements BasicData {
     @Id
     private String id;
     
+    /** 所属虚中心id */
+    @Column(nullable = false)
+    private String vcid;
+    
+    /** 分类 */
+    @Column(name = "catalogId", nullable = false)
+    private CommMessageCatalog catalog;
+    
     /** 通知消息类型编码 */
-    @XmlAttribute
     private String code;
     
     /** 消息类型名称 */
-    @XmlElement
     private String name;
     
     /** 是否有效 */
@@ -58,11 +63,13 @@ public class CommMessageStatus implements BasicData {
     /** 备注 */
     private String remark;
     
-    /** 创建时间 */
-    private Date createDate;
-    
     /** 最后更新时间 */
+    @Column(nullable = false, updatable = true)
     private Date lastUpdateDate;
+    
+    /** 创建时间 */
+    @Column(nullable = false, updatable = false)
+    private Date createDate;
     
     /**
      * @return 返回 id

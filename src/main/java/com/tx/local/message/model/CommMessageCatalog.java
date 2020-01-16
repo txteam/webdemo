@@ -8,9 +8,8 @@ package com.tx.local.message.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 
 import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
@@ -35,12 +34,16 @@ public class CommMessageCatalog implements BasicData{
     @Id
     private String id;
     
+    /** 虚中心id */
+    @Column(nullable = false)
+    private String vcid;
+    
     /** 通知消息类型编码 */
-    @XmlAttribute
+    @Column(nullable = false)
     private String code;
     
     /** 消息类型名称 */
-    @XmlElement
+    @Column(nullable = false)
     private String name;
     
     /** 是否有效 */
@@ -52,11 +55,13 @@ public class CommMessageCatalog implements BasicData{
     /** 备注 */
     private String remark;
     
-    /** 创建时间 */
-    private Date createDate;
-    
     /** 最后更新时间 */
+    @Column(nullable = false, updatable = true)
     private Date lastUpdateDate;
+    
+    /** 创建时间 */
+    @Column(nullable = false, updatable = false)
+    private Date createDate;
 
     /**
      * @return 返回 id
@@ -70,6 +75,20 @@ public class CommMessageCatalog implements BasicData{
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * @return 返回 vcid
+     */
+    public String getVcid() {
+        return vcid;
+    }
+
+    /**
+     * @param 对vcid进行赋值
+     */
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
     }
 
     /**
@@ -143,20 +162,6 @@ public class CommMessageCatalog implements BasicData{
     }
 
     /**
-     * @return 返回 createDate
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * @param 对createDate进行赋值
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
      * @return 返回 lastUpdateDate
      */
     public Date getLastUpdateDate() {
@@ -168,5 +173,19 @@ public class CommMessageCatalog implements BasicData{
      */
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

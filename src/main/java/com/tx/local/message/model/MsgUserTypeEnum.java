@@ -23,13 +23,7 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum MsgUserTypeEnum implements Serializable {
     
-    ALL_CLIENT,
-    
-    OPERATOR_ALL,
-    
     CLIENT,
-    
-    CLIENT_ROLE,
     
     OPERATOR;
 }

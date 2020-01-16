@@ -72,6 +72,8 @@ public class NotepadCatalogService {
                 "notepadCatalog.topicId is empty.");
         AssertUtils.notEmpty(notepadCatalog.getTopicType(),
                 "notepadCatalog.topicType is empty.");
+        AssertUtils.notEmpty(notepadCatalog.getVcid(),
+                "notepadCatalog.vcid is empty.");
         
         //为添加的数据需要填入默认值的字段填入默认值
         notepadCatalog.setLastUpdateDate(new Date());

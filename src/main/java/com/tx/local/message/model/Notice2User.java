@@ -8,6 +8,7 @@ package com.tx.local.message.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -30,16 +31,16 @@ public class Notice2User {
     private String id;
     
     /** 站内消息id */
-    private String noticeId;
+    @Column(nullable = false, length = 64)
+    private String noticeMsgId;
     
     /** 客户类型:这里的类型可以与具体公告中的不一样，这里只有toClient,toOperator不考虑对角色等的支持 */
+    @Column(nullable = false, length = 64)
     private MsgUserTypeEnum userType;
     
     /** 用户id */
+    @Column(nullable = false, length = 64)
     private String userId;
-    
-    /** 接收消息时间 */
-    private Date receiveDate;
     
     /** 是否阅读 */
     //注: read的被动语态也是read
@@ -48,12 +49,15 @@ public class Notice2User {
     /** 阅读时间 */
     private Date readDate;
     
+    /** 接收消息时间 */
+    private Date receiveDate;
+    
     /** 删除时间 */
     //去除删除标志位的设计，考虑消息会逐步累积增多，删除就将该映射关系移除至历史表即可
-    ///** 是否已删除(已删除的消息不再进行显示) */
+    //** 是否已删除(已删除的消息不再进行显示) */
     //private boolean deleted;
     private Date deleteDate;
-
+    
     /** 是否置顶 */
-    private boolean istop;
+    private boolean top;
 }

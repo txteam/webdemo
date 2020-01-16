@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="calendarEvent">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="calendarEventMap" 
+		type="com.tx.local.calendar.model.CalendarEvent">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.calendar.model.CalendarEvent"
+		resultMap="calendarEventMap">
+		SELECT 
+				CE.id,
+				CE.allDay,
+				CE.end,
+				CE.lastUpdateDate,
+				CE.lastUpdateUserId,
+				CE.linkUrl,
+				CE.type,
+				CE.vcid,
+				CE.classValue,
+				CE.start,
+				CE.styleValue,
+				CE.title,
+				CE.topicId,
+				CE.topicType,
+				CE.createDate,
+				CE.createUserId,
+				CE.remark,
+				CE.editable,
+				CE.attributes
+		  FROM CAL_CALENDAR_EVENT CE
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND CE.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="calendarEventMap">
+		SELECT 
+				CE.id,
+				CE.allDay,
+				CE.end,
+				CE.lastUpdateDate,
+				CE.lastUpdateUserId,
+				CE.linkUrl,
+				CE.type,
+				CE.vcid,
+				CE.classValue,
+				CE.start,
+				CE.styleValue,
+				CE.title,
+				CE.topicId,
+				CE.topicType,
+				CE.createDate,
+				CE.createUserId,
+				CE.remark,
+				CE.editable,
+				CE.attributes
+		  FROM CAL_CALENDAR_EVENT CE
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND CE.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(allDay)">  
+	            <![CDATA[ AND CE.allDay = #{allDay} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
+	            <![CDATA[ AND CE.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkUrl)">  
+	            <![CDATA[ AND CE.linkUrl = #{linkUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND CE.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND CE.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(classValue)">  
+	            <![CDATA[ AND CE.classValue = #{classValue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(styleValue)">  
+	            <![CDATA[ AND CE.styleValue = #{styleValue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(title)">  
+	            <![CDATA[ AND CE.title = #{title} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND CE.topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND CE.topicType = #{topicType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CE.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CE.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
+	            <![CDATA[ AND CE.createUserId = #{createUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND CE.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(editable)">  
+	            <![CDATA[ AND CE.editable = #{editable} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(attributes)">  
+	            <![CDATA[ AND CE.attributes = #{attributes} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND CE.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM CAL_CALENDAR_EVENT CE
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND CE.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(allDay)">  
+	            <![CDATA[ AND CE.allDay = #{allDay} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
+	            <![CDATA[ AND CE.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkUrl)">  
+	            <![CDATA[ AND CE.linkUrl = #{linkUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND CE.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND CE.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(classValue)">  
+	            <![CDATA[ AND CE.classValue = #{classValue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(styleValue)">  
+	            <![CDATA[ AND CE.styleValue = #{styleValue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(title)">  
+	            <![CDATA[ AND CE.title = #{title} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND CE.topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND CE.topicType = #{topicType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CE.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CE.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
+	            <![CDATA[ AND CE.createUserId = #{createUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND CE.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(editable)">  
+	            <![CDATA[ AND CE.editable = #{editable} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(attributes)">  
+	            <![CDATA[ AND CE.attributes = #{attributes} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND CE.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.calendar.model.CalendarEvent">
+		INSERT INTO CAL_CALENDAR_EVENT
+		(
+			id,
+			allDay,
+			end,
+			lastUpdateDate,
+			lastUpdateUserId,
+			linkUrl,
+			type,
+			vcid,
+			classValue,
+			start,
+			styleValue,
+			title,
+			topicId,
+			topicType,
+			createDate,
+			createUserId,
+			remark,
+			editable,
+			attributes
+		)
+		VALUES
+		(
+			#{id},
+			#{allDay},
+			#{end},
+			#{lastUpdateDate},
+			#{lastUpdateUserId},
+			#{linkUrl},
+			#{type},
+			#{vcid},
+			#{classValue},
+			#{start},
+			#{styleValue},
+			#{title},
+			#{topicId},
+			#{topicType},
+			#{createDate},
+			#{createUserId},
+			#{remark},
+			#{editable},
+			#{attributes}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.calendar.model.CalendarEvent">
+		DELETE FROM CAL_CALENDAR_EVENT  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE CAL_CALENDAR_EVENT
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('allDay')">
+	    		allDay = #{allDay,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('end')">
+	    		end = #{end,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateUserId')">
+	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('linkUrl')">
+	    		linkUrl = #{linkUrl,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.calendar.model.CalendarEventTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('vcid')">
+	    		vcid = #{vcid,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('classValue')">
+	    		classValue = #{classValue,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('start')">
+	    		start = #{start,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('styleValue')">
+	    		styleValue = #{styleValue,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('title')">
+	    		title = #{title,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('topicId')">
+	    		topicId = #{topicId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('topicType')">
+	    		topicType = #{topicType,javaType=com.tx.local.calendar.model.CalendarEventTopicTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('remark')">
+	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('editable')">
+	    		editable = #{editable,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('attributes')">
+	    		attributes = #{attributes,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

@@ -31,6 +31,9 @@ import com.tx.local.security.model.RoleTypeEnum;
 @JsonSerialize(using = BaseEnumJsonSerializer.class)
 public enum OperatorRoleEnum implements Serializable, Role, BaseEnum {
     
+    /** 系统操作人员:所有操作人员，默认拥有该角色 */
+    OPERATOR("ROLE_OPERATOR", "系统操作人员", RoleTypeEnum.ROLE_TYPE_ADMIN.getId()),
+    
     /** 系统管理员 */
     SUPER_ADMIN("ROLE_SUPER_ADMIN", "超级管理员", RoleTypeEnum.ROLE_TYPE_ADMIN.getId());
     
@@ -71,7 +74,6 @@ public enum OperatorRoleEnum implements Serializable, Role, BaseEnum {
     public String getRoleTypeId() {
         return this.roleTypeId;
     }
-    
     
     public static void main(String[] args) throws JsonProcessingException {
         ObjectMapper om = new ObjectMapper();
