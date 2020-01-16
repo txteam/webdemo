@@ -98,7 +98,7 @@ public class OperatorCalendarController {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping(value = "/event", method = RequestMethod.POST)
+    @RequestMapping(value = "/event", method = RequestMethod.PUT)
     public boolean updateEvent(
             @PathVariable(name = "id", required = true) String id,
             CalendarEvent event) {
