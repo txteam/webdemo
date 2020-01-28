@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lADeductRecord">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="lADeductRecordMap" 
+		type="com.tx.local.loanaccount.model.LADeductRecord">
+		<result column="bankAccountId" property="bankAccount.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.LADeductRecord"
+		resultMap="lADeductRecordMap">
+		SELECT 
+				LADR.id,
+				LADR.sum,
+				LADR.bankAccountId,
+				LADR.bankAccountType,
+				LADR.failSum,
+				LADR.lastUpdateDate,
+				LADR.loanAccountId,
+				LADR.type,
+				LADR.count,
+				LADR.createDate,
+				LADR.status,
+				LADR.successSum,
+				LADR.tradingRecordId,
+				LADR.completeSum,
+				LADR.completeDate,
+				LADR.completeCount
+		  FROM LA_DEDUCT_RECORD LADR
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND LADR.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="lADeductRecordMap">
+		SELECT 
+				LADR.id,
+				LADR.sum,
+				LADR.bankAccountId,
+				LADR.bankAccountType,
+				LADR.failSum,
+				LADR.lastUpdateDate,
+				LADR.loanAccountId,
+				LADR.type,
+				LADR.count,
+				LADR.createDate,
+				LADR.status,
+				LADR.successSum,
+				LADR.tradingRecordId,
+				LADR.completeSum,
+				LADR.completeDate,
+				LADR.completeCount
+		  FROM LA_DEDUCT_RECORD LADR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LADR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sum)">  
+	            <![CDATA[ AND LADR.sum = #{sum} ]]>
+	        </if>			
+			<if test="bankAccount != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankAccount.id)">  
+		            <![CDATA[ AND LADR.bankAccountId = #{bankAccount.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankAccountType)">  
+	            <![CDATA[ AND LADR.bankAccountType = #{bankAccountType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(failSum)">  
+	            <![CDATA[ AND LADR.failSum = #{failSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND LADR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LADR.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(count)">  
+	            <![CDATA[ AND LADR.count = #{count} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LADR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LADR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(status)">  
+	            <![CDATA[ AND LADR.status = #{status} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(successSum)">  
+	            <![CDATA[ AND LADR.successSum = #{successSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecordId)">  
+	            <![CDATA[ AND LADR.tradingRecordId = #{tradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(completeSum)">  
+	            <![CDATA[ AND LADR.completeSum = #{completeSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(completeCount)">  
+	            <![CDATA[ AND LADR.completeCount = #{completeCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LADR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_DEDUCT_RECORD LADR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LADR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sum)">  
+	            <![CDATA[ AND LADR.sum = #{sum} ]]>
+	        </if>			
+			<if test="bankAccount != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankAccount.id)">  
+		            <![CDATA[ AND LADR.bankAccountId = #{bankAccount.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankAccountType)">  
+	            <![CDATA[ AND LADR.bankAccountType = #{bankAccountType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(failSum)">  
+	            <![CDATA[ AND LADR.failSum = #{failSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND LADR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LADR.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(count)">  
+	            <![CDATA[ AND LADR.count = #{count} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LADR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LADR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(status)">  
+	            <![CDATA[ AND LADR.status = #{status} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(successSum)">  
+	            <![CDATA[ AND LADR.successSum = #{successSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecordId)">  
+	            <![CDATA[ AND LADR.tradingRecordId = #{tradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(completeSum)">  
+	            <![CDATA[ AND LADR.completeSum = #{completeSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(completeCount)">  
+	            <![CDATA[ AND LADR.completeCount = #{completeCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LADR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.LADeductRecord">
+		INSERT INTO LA_DEDUCT_RECORD
+		(
+			id,
+			sum,
+			bankAccountId,
+			bankAccountType,
+			failSum,
+			lastUpdateDate,
+			loanAccountId,
+			type,
+			count,
+			createDate,
+			status,
+			successSum,
+			tradingRecordId,
+			completeSum,
+			completeDate,
+			completeCount
+		)
+		VALUES
+		(
+			#{id},
+			#{sum},
+			#{bankAccount.id},
+			#{bankAccountType},
+			#{failSum},
+			#{lastUpdateDate},
+			#{loanAccountId},
+			#{type},
+			#{count},
+			#{createDate},
+			#{status},
+			#{successSum},
+			#{tradingRecordId},
+			#{completeSum},
+			#{completeDate},
+			#{completeCount}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.LADeductRecord">
+		DELETE FROM LA_DEDUCT_RECORD  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_DEDUCT_RECORD
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('sum')">
+	    		sum = #{sum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('bankAccount')">
+	    		bankAccountId = #{bankAccount.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('bankAccountType')">
+	    		bankAccountType = #{bankAccountType,javaType=com.tx.local.loanaccount.model.LABankAccountTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('failSum')">
+	    		failSum = #{failSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('loanAccountId')">
+	    		loanAccountId = #{loanAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.loanaccount.model.LADeductRecordTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('count')">
+	    		count = #{count,javaType=java.lang.Integer},
+	    	</if>
+			<if test="_parameter.containsKey('status')">
+	    		status = #{status,javaType=com.tx.local.loanaccount.model.LADeductRecordStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('successSum')">
+	    		successSum = #{successSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('tradingRecordId')">
+	    		tradingRecordId = #{tradingRecordId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('completeSum')">
+	    		completeSum = #{completeSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('completeDate')">
+	    		completeDate = #{completeDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('completeCount')">
+	    		completeCount = #{completeCount,javaType=java.lang.Integer},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

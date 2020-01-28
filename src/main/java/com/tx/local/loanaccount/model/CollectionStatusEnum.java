@@ -19,35 +19,32 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
  * @since [产品/模块版本]
  */
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
-public enum CollectionStatusEnum implements BasicDataEnum{
+public enum CollectionStatusEnum implements BasicDataEnum {
     
     /** 空 */
-    NA("NA","","正常"),
+    NA("NA", "正常"),
     
     /** 待委外 */
-    CO("CO","CO","待委外"),
+    CO("CO", "待委外"),
     
     /** 逾期 */
-    DQ("DQ","DQ","逾期"),
+    DQ("DQ", "逾期"),
     
     /** 委外 */
-    OA("OA","OA","委外"),
+    OA("OA", "委外"),
     
     /** 委外退回 */
-    RA("RA","RA","委外退回");
+    RA("RA", "委外退回");
     
     /** 编码 */
     private final String code;
     
-    /** 关键字 */
-    private final String key;
-    
     /** 名称 */
     private final String name;
     
-    private CollectionStatusEnum(String key,String code, String name) {
+    /** 催收状态枚举 */
+    private CollectionStatusEnum(String code, String name) {
         this.code = code;
-        this.key = key;
         this.name = name;
     }
     
@@ -56,13 +53,6 @@ public enum CollectionStatusEnum implements BasicDataEnum{
      */
     public String getCode() {
         return code;
-    }
-    
-    /**
-     * @return 返回 key
-     */
-    public String getKey() {
-        return key;
     }
     
     /**

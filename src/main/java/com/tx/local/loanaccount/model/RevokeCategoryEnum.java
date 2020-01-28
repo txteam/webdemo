@@ -29,22 +29,22 @@ public enum RevokeCategoryEnum implements BasicDataEnum {
     REVOKE_REPAY_TRADING("REVOKE_REPAY_TRADING", "撤销还款交易");
     
     /** key值 */
-    private final String key;
+    private final String code;
     
     /** name值 */
     private final String name;
     
     /** <默认构造函数> */
-    private RevokeCategoryEnum(String key, String name) {
-        this.key = key;
+    private RevokeCategoryEnum(String code, String name) {
+        this.code = code;
         this.name = name;
     }
     
     /**
-     * @return 返回 key
+     * @return 返回 code
      */
-    public String getKey() {
-        return key;
+    public String getCode() {
+        return code;
     }
     
     /**

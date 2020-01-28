@@ -11,7 +11,7 @@ import com.tx.component.basicdata.model.AbstractDataDict;
 import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 
 /**
- * 预约方式
+ * 预约方式<br/>
  * <功能详细描述>
  * 
  * @author  Administrator

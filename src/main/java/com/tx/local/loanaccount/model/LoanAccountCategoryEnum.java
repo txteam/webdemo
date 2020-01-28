@@ -24,27 +24,25 @@ public enum LoanAccountCategoryEnum implements BasicDataEnum {
     
     FINANCE_LEASE_ACCOUNT("FINANCE_LEASE_ACCOUNT", "融资租赁账户"),
     
-    CREDIT_LOAN_ACCOUNT("CREDIT_LOAN_ACCOUNT", "信用贷款账户"),
-    
-    PAYABLE_ACCOUNT("PAYABLE_ACCOUNT", "应付账款账户");
+    CREDIT_LOAN_ACCOUNT("CREDIT_LOAN_ACCOUNT", "信用贷款账户");
     
     /** 关键字 */
-    private final String key;
+    private final String code;
     
     /** 名称 */
     private final String name;
     
     /** 贷款账户分类 */
-    private LoanAccountCategoryEnum(String key, String name) {
-        this.key = key;
+    private LoanAccountCategoryEnum(String code, String name) {
+        this.code = code;
         this.name = name;
     }
     
     /**
-     * @return 返回 key
+     * @return 返回 code
      */
-    public String getKey() {
-        return key;
+    public String getCode() {
+        return code;
     }
     
     /**

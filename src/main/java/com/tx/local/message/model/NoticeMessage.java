@@ -9,10 +9,9 @@ package com.tx.local.message.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import io.swagger.annotations.ApiModel;
@@ -29,11 +28,11 @@ import io.swagger.annotations.ApiModel;
 @Entity
 @Table(name = "msg_notice_message")
 @ApiModel("公告消息")
-public class NoticeMessage implements Serializable{
+public class NoticeMessage implements Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = 3841369791135814499L;
-
+    
     /** 站内消息id */
     @Id
     private String id;
@@ -41,23 +40,23 @@ public class NoticeMessage implements Serializable{
     /** 所属虚中心：一版来说公告消息只能针对同一虚中心内部 */
     //该字段经过几天思考，暂定如下：不能为空，如果一条消息需要让多个虚中心看见，最好考虑多个虚中心都发送一份。
     //如果加入vcid is null时，则对所有都可见，未来为了兼容该设计可能会出现更多复杂的场景
+    @Column(nullable = false, length = 64, updatable = false)
     private String vcid;
     
     /** 站内消息类型 */
-    @ManyToOne
-    @JoinColumn(name = "noticeCatalogId")
+    @Column(name = "catalogId", nullable = false, length = 64, updatable = false)
     private NoticeCatalog noticeCatalog;
     
     /** 站内消息优先级 */
-    private NoticePriorityEnum priority = NoticePriorityEnum.PT;
-    
-    /** 客户类型：会再映射表中重复出现 */
-    private MsgUserTypeEnum userType;
+    @Column(name = "priorityId", nullable = true, length = 64, updatable = true)
+    private NoticePriority priority;
     
     /** 站内消息标题 */
+    @Column(nullable = false, updatable = true, length = 100)
     private String title;
     
     /** 站内消息内容 */
+    @Column(length = 4000)
     private String content;
     
     /** 是否发布 */
@@ -72,17 +71,21 @@ public class NoticeMessage implements Serializable{
     /** 无效时间 */
     private Date invalidDate;
     
-    /** 创建用户id */
-    private Date createUserId;
+    /** 最后修改时间 */
+    @Column(nullable = false, updatable = true)
+    private Date lastUpdateDate;
     
-    /** 创建时间 */
-    private Date createDate = new Date();
-    
-    /** 最后更新用户id */
+    /** 最后更新用户 */
+    @Column(nullable = true, updatable = true)
     private String lastUpdateUserId;
     
-    /** 最后更新时间 */
-    private Date lastUpdateDate = new Date();
+    /** 创建时间 */
+    @Column(nullable = false, updatable = false)
+    private Date createDate;
+    
+    /** 创建用户 */
+    @Column(nullable = true, updatable = false)
+    private String createUserId;
 
     /**
      * @return 返回 id
@@ -129,29 +132,15 @@ public class NoticeMessage implements Serializable{
     /**
      * @return 返回 priority
      */
-    public NoticePriorityEnum getPriority() {
+    public NoticePriority getPriority() {
         return priority;
     }
 
     /**
      * @param 对priority进行赋值
      */
-    public void setPriority(NoticePriorityEnum priority) {
+    public void setPriority(NoticePriority priority) {
         this.priority = priority;
-    }
-
-    /**
-     * @return 返回 userType
-     */
-    public MsgUserTypeEnum getUserType() {
-        return userType;
-    }
-
-    /**
-     * @param 对userType进行赋值
-     */
-    public void setUserType(MsgUserTypeEnum userType) {
-        this.userType = userType;
     }
 
     /**
@@ -239,31 +228,17 @@ public class NoticeMessage implements Serializable{
     }
 
     /**
-     * @return 返回 createUserId
+     * @return 返回 lastUpdateDate
      */
-    public Date getCreateUserId() {
-        return createUserId;
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
     }
 
     /**
-     * @param 对createUserId进行赋值
+     * @param 对lastUpdateDate进行赋值
      */
-    public void setCreateUserId(Date createUserId) {
-        this.createUserId = createUserId;
-    }
-
-    /**
-     * @return 返回 createDate
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * @param 对createDate进行赋值
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 
     /**
@@ -281,19 +256,30 @@ public class NoticeMessage implements Serializable{
     }
 
     /**
-     * @return 返回 lastUpdateDate
+     * @return 返回 createDate
      */
-    public Date getLastUpdateDate() {
-        return lastUpdateDate;
+    public Date getCreateDate() {
+        return createDate;
     }
 
     /**
-     * @param 对lastUpdateDate进行赋值
+     * @param 对createDate进行赋值
      */
-    public void setLastUpdateDate(Date lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
-    
-    
-    
+
+    /**
+     * @return 返回 createUserId
+     */
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    /**
+     * @param 对createUserId进行赋值
+     */
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
 }

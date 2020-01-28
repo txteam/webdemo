@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lAClientBankAccount">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="lAClientBankAccountMap" 
+		type="com.tx.local.loanaccount.model.LAClientBankAccount">
+		<result column="bankInfoId" property="bankInfo.id"/>
+		<result column="loanAccountId" property="loanAccount.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.LAClientBankAccount"
+		resultMap="lAClientBankAccountMap">
+		SELECT 
+				LACBA.id,
+				LACBA.idCardType,
+				LACBA.idCardNumber,
+				LACBA.bankInfoId,
+				LACBA.bankCardType,
+				LACBA.lastUpdateDate,
+				LACBA.loanAccountId,
+				LACBA.type,
+				LACBA.valid,
+				LACBA.clientName,
+				LACBA.createDate,
+				LACBA.number,
+				LACBA.defaultAccount
+		  FROM LA_CLIENT_BANK_ACCOUNT LACBA
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND LACBA.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="lAClientBankAccountMap">
+		SELECT 
+				LACBA.id,
+				LACBA.idCardType,
+				LACBA.idCardNumber,
+				LACBA.bankInfoId,
+				LACBA.bankCardType,
+				LACBA.lastUpdateDate,
+				LACBA.loanAccountId,
+				LACBA.type,
+				LACBA.valid,
+				LACBA.clientName,
+				LACBA.createDate,
+				LACBA.number,
+				LACBA.defaultAccount
+		  FROM LA_CLIENT_BANK_ACCOUNT LACBA
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LACBA.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND LACBA.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND LACBA.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="bankInfo != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankInfo.id)">  
+		            <![CDATA[ AND LACBA.bankInfoId = #{bankInfo.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankCardType)">  
+	            <![CDATA[ AND LACBA.bankCardType = #{bankCardType} ]]>
+	        </if>			
+			<if test="loanAccount != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccount.id)">  
+		            <![CDATA[ AND LACBA.loanAccountId = #{loanAccount.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LACBA.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND LACBA.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            <![CDATA[ AND LACBA.clientName = #{clientName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LACBA.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LACBA.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(number)">  
+	            <![CDATA[ AND LACBA.number = #{number} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(defaultAccount)">  
+	            <![CDATA[ AND LACBA.defaultAccount = #{defaultAccount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LACBA.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_CLIENT_BANK_ACCOUNT LACBA
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LACBA.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND LACBA.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND LACBA.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="bankInfo != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankInfo.id)">  
+		            <![CDATA[ AND LACBA.bankInfoId = #{bankInfo.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankCardType)">  
+	            <![CDATA[ AND LACBA.bankCardType = #{bankCardType} ]]>
+	        </if>			
+			<if test="loanAccount != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccount.id)">  
+		            <![CDATA[ AND LACBA.loanAccountId = #{loanAccount.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LACBA.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND LACBA.valid = #{valid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            <![CDATA[ AND LACBA.clientName = #{clientName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LACBA.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LACBA.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(number)">  
+	            <![CDATA[ AND LACBA.number = #{number} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(defaultAccount)">  
+	            <![CDATA[ AND LACBA.defaultAccount = #{defaultAccount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LACBA.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.LAClientBankAccount">
+		INSERT INTO LA_CLIENT_BANK_ACCOUNT
+		(
+			id,
+			idCardType,
+			idCardNumber,
+			bankInfoId,
+			bankCardType,
+			lastUpdateDate,
+			loanAccountId,
+			type,
+			valid,
+			clientName,
+			createDate,
+			number,
+			defaultAccount
+		)
+		VALUES
+		(
+			#{id},
+			#{idCardType},
+			#{idCardNumber},
+			#{bankInfo.id},
+			#{bankCardType},
+			#{lastUpdateDate},
+			#{loanAccount.id},
+			#{type},
+			#{valid},
+			#{clientName},
+			#{createDate},
+			#{number},
+			#{defaultAccount}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.LAClientBankAccount">
+		DELETE FROM LA_CLIENT_BANK_ACCOUNT  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_CLIENT_BANK_ACCOUNT
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('bankCardType')">
+	    		bankCardType = #{bankCardType,javaType=com.tx.local.basicdata.model.BankCardTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.loanaccount.model.LAClientBankAccountTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('valid')">
+	    		valid = #{valid,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('defaultAccount')">
+	    		defaultAccount = #{defaultAccount,javaType=boolean},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

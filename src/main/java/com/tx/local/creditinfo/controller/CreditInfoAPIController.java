@@ -8,7 +8,7 @@ package com.tx.local.creditinfo.controller;
 
 
 /**
- * <功能简述>
+ * 信用信息控制层<br/>
  * <功能详细描述>
  * 
  * @author  Administrator

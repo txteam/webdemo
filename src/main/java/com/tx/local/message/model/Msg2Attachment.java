@@ -10,11 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * 消息附件<br/>
@@ -27,12 +22,7 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name = "msg_attachment")
-@ApiModel("会话消息")
-@Data
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@ApiModel("消息附件")
 public class Msg2Attachment {
     
     private String id;
@@ -41,4 +31,5 @@ public class Msg2Attachment {
     
     private String messageId;
     
+    private String attachmentId;
 }

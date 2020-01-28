@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="overdueInterestChargeRecord">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="overdueInterestChargeRecordMap" 
+		type="com.tx.local.loanaccount.model.OverdueInterestChargeRecord">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.OverdueInterestChargeRecord"
+		resultMap="overdueInterestChargeRecordMap">
+		SELECT 
+				OICR.id,
+				OICR.dayCount,
+				OICR.feeItem,
+				OICR.lastUpdateDate,
+				OICR.loanAccountId,
+				OICR.startDate,
+				OICR.amount,
+				OICR.createDate,
+				OICR.period,
+				OICR.recordDate,
+				OICR.recordDatePeriod,
+				OICR.remark,
+				OICR.revokeDate,
+				OICR.revokeTradingRecordId,
+				OICR.currentPeriod,
+				OICR.overdueSum,
+				OICR.overdueDate,
+				OICR.overdueAmount,
+				OICR.overdueInterestRate,
+				OICR.revoked,
+				OICR.tradingRecordId,
+				OICR.principalBalance
+		  FROM LA_OVERDUE_INTEREST_RECORD OICR
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND OICR.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="overdueInterestChargeRecordMap">
+		SELECT 
+				OICR.id,
+				OICR.dayCount,
+				OICR.feeItem,
+				OICR.lastUpdateDate,
+				OICR.loanAccountId,
+				OICR.startDate,
+				OICR.amount,
+				OICR.createDate,
+				OICR.period,
+				OICR.recordDate,
+				OICR.recordDatePeriod,
+				OICR.remark,
+				OICR.revokeDate,
+				OICR.revokeTradingRecordId,
+				OICR.currentPeriod,
+				OICR.overdueSum,
+				OICR.overdueDate,
+				OICR.overdueAmount,
+				OICR.overdueInterestRate,
+				OICR.revoked,
+				OICR.tradingRecordId,
+				OICR.principalBalance
+		  FROM LA_OVERDUE_INTEREST_RECORD OICR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND OICR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(dayCount)">  
+	            <![CDATA[ AND OICR.dayCount = #{dayCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND OICR.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND OICR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(amount)">  
+	            <![CDATA[ AND OICR.amount = #{amount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND OICR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND OICR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND OICR.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(recordDatePeriod)">  
+	            <![CDATA[ AND OICR.recordDatePeriod = #{recordDatePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND OICR.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeTradingRecordId)">  
+	            <![CDATA[ AND OICR.revokeTradingRecordId = #{revokeTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(currentPeriod)">  
+	            <![CDATA[ AND OICR.currentPeriod = #{currentPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueSum)">  
+	            <![CDATA[ AND OICR.overdueSum = #{overdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueAmount)">  
+	            <![CDATA[ AND OICR.overdueAmount = #{overdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueInterestRate)">  
+	            <![CDATA[ AND OICR.overdueInterestRate = #{overdueInterestRate} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND OICR.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecordId)">  
+	            <![CDATA[ AND OICR.tradingRecordId = #{tradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND OICR.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND OICR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_OVERDUE_INTEREST_RECORD OICR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND OICR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(dayCount)">  
+	            <![CDATA[ AND OICR.dayCount = #{dayCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND OICR.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND OICR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(amount)">  
+	            <![CDATA[ AND OICR.amount = #{amount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND OICR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND OICR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND OICR.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(recordDatePeriod)">  
+	            <![CDATA[ AND OICR.recordDatePeriod = #{recordDatePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND OICR.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeTradingRecordId)">  
+	            <![CDATA[ AND OICR.revokeTradingRecordId = #{revokeTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(currentPeriod)">  
+	            <![CDATA[ AND OICR.currentPeriod = #{currentPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueSum)">  
+	            <![CDATA[ AND OICR.overdueSum = #{overdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueAmount)">  
+	            <![CDATA[ AND OICR.overdueAmount = #{overdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueInterestRate)">  
+	            <![CDATA[ AND OICR.overdueInterestRate = #{overdueInterestRate} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND OICR.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecordId)">  
+	            <![CDATA[ AND OICR.tradingRecordId = #{tradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND OICR.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND OICR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.OverdueInterestChargeRecord">
+		INSERT INTO LA_OVERDUE_INTEREST_RECORD
+		(
+			id,
+			dayCount,
+			feeItem,
+			lastUpdateDate,
+			loanAccountId,
+			startDate,
+			amount,
+			createDate,
+			period,
+			recordDate,
+			recordDatePeriod,
+			remark,
+			revokeDate,
+			revokeTradingRecordId,
+			currentPeriod,
+			overdueSum,
+			overdueDate,
+			overdueAmount,
+			overdueInterestRate,
+			revoked,
+			tradingRecordId,
+			principalBalance
+		)
+		VALUES
+		(
+			#{id},
+			#{dayCount},
+			#{feeItem},
+			#{lastUpdateDate},
+			#{loanAccountId},
+			#{startDate},
+			#{amount},
+			#{createDate},
+			#{period},
+			#{recordDate},
+			#{recordDatePeriod},
+			#{remark},
+			#{revokeDate},
+			#{revokeTradingRecordId},
+			#{currentPeriod},
+			#{overdueSum},
+			#{overdueDate},
+			#{overdueAmount},
+			#{overdueInterestRate},
+			#{revoked},
+			#{tradingRecordId},
+			#{principalBalance}
+		)
+	</insert>
+	
+	<insert id="insertToHis" 
+		parameterType="com.tx.local.loanaccount.model.OverdueInterestChargeRecord">
+		INSERT INTO LA_OVERDUE_INTEREST_RECORD_HIS
+		(
+			id,
+			dayCount,
+			feeItem,
+			lastUpdateDate,
+			loanAccountId,
+			startDate,
+			amount,
+			createDate,
+			period,
+			recordDate,
+			recordDatePeriod,
+			remark,
+			revokeDate,
+			revokeTradingRecordId,
+			currentPeriod,
+			overdueSum,
+			overdueDate,
+			overdueAmount,
+			overdueInterestRate,
+			revoked,
+			tradingRecordId,
+			principalBalance
+		)
+		VALUES
+		(
+			#{id},
+			#{dayCount},
+			#{feeItem},
+			#{lastUpdateDate},
+			#{loanAccountId},
+			#{startDate},
+			#{amount},
+			#{createDate},
+			#{period},
+			#{recordDate},
+			#{recordDatePeriod},
+			#{remark},
+			#{revokeDate},
+			#{revokeTradingRecordId},
+			#{currentPeriod},
+			#{overdueSum},
+			#{overdueDate},
+			#{overdueAmount},
+			#{overdueInterestRate},
+			#{revoked},
+			#{tradingRecordId},
+			#{principalBalance}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.OverdueInterestChargeRecord">
+		DELETE FROM LA_OVERDUE_INTEREST_RECORD  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_OVERDUE_INTEREST_RECORD
+	    <trim prefix="SET" suffixOverrides=",">
+	    	<if test="_parameter.containsKey('loanAccountId')">
+	    		loanAccountId = #{loanAccountId,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('tradingRecordId')">
+	    		tradingRecordId = #{tradingRecordId,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('feeItem')">
+	    		feeItem = #{feeItem,javaType=com.tx.local.basicdata.model.FeeItemEnum},
+	    	</if>
+			<if test="_parameter.containsKey('dayCount')">
+	    		dayCount = #{dayCount,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('startDate')">
+	    		startDate = #{startDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('amount')">
+	    		amount = #{amount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('period')">
+	    		period = #{period,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('recordDate')">
+	    		recordDate = #{recordDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('recordDatePeriod')">
+	    		recordDatePeriod = #{recordDatePeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('remark')">
+	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('revokeDate')">
+	    		revokeDate = #{revokeDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('revokeTradingRecordId')">
+	    		revokeTradingRecordId = #{revokeTradingRecordId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('currentPeriod')">
+	    		currentPeriod = #{currentPeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('overdueSum')">
+	    		overdueSum = #{overdueSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('overdueDate')">
+	    		overdueDate = #{overdueDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('overdueAmount')">
+	    		overdueAmount = #{overdueAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('overdueInterestRate')">
+	    		overdueInterestRate = #{overdueInterestRate,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('revoked')">
+	    		revoked = #{revoked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('principalBalance')">
+	    		principalBalance = #{principalBalance,javaType=java.math.BigDecimal},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

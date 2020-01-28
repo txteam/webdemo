@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeRecordEntry">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="chargeRecordEntryMap" 
+		type="com.tx.local.loanaccount.model.ChargeRecordEntry">
+		<result column="chargeRecordId" property="chargeRecord.id"/>
+		<result column="paymentScheduleEntryId" property="paymentScheduleEntry.id"/>
+		<result column="tradingRecordId" property="tradingRecord.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.ChargeRecordEntry"
+		resultMap="chargeRecordEntryMap">
+		SELECT 
+				CRE.id,
+				CRE.feeItem,
+				CRE.lastUpdateDate,
+				CRE.loanAccountId,
+				CRE.amount,
+				CRE.chargeRecordId,
+				CRE.createDate,
+				CRE.period,
+				CRE.revokeDate,
+				CRE.sourceAmount,
+				CRE.targetAmount,
+				CRE.paymentScheduleEntryId,
+				CRE.revoked,
+				CRE.tradingRecordId,
+				CRE.scheduleType
+		  FROM LA_CHARGE_RECORD_ENTRY CRE
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND CRE.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="chargeRecordEntryMap">
+		SELECT 
+				CRE.id,
+				CRE.feeItem,
+				CRE.lastUpdateDate,
+				CRE.loanAccountId,
+				CRE.amount,
+				CRE.chargeRecordId,
+				CRE.createDate,
+				CRE.period,
+				CRE.revokeDate,
+				CRE.sourceAmount,
+				CRE.targetAmount,
+				CRE.paymentScheduleEntryId,
+				CRE.revoked,
+				CRE.tradingRecordId,
+				CRE.scheduleType
+		  FROM LA_CHARGE_RECORD_ENTRY CRE
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND CRE.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND CRE.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND CRE.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(amount)">  
+	            <![CDATA[ AND CRE.amount = #{amount} ]]>
+	        </if>			
+			<if test="chargeRecord != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chargeRecord.id)">  
+		            <![CDATA[ AND CRE.chargeRecordId = #{chargeRecord.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CRE.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CRE.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND CRE.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceAmount)">  
+	            <![CDATA[ AND CRE.sourceAmount = #{sourceAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(targetAmount)">  
+	            <![CDATA[ AND CRE.targetAmount = #{targetAmount} ]]>
+	        </if>			
+			<if test="paymentScheduleEntry != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(paymentScheduleEntry.id)">  
+		            <![CDATA[ AND CRE.paymentScheduleEntryId = #{paymentScheduleEntry.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND CRE.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="tradingRecord != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecord.id)">  
+		            <![CDATA[ AND CRE.tradingRecordId = #{tradingRecord.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(scheduleType)">  
+	            <![CDATA[ AND CRE.scheduleType = #{scheduleType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND CRE.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_CHARGE_RECORD_ENTRY CRE
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND CRE.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND CRE.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND CRE.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(amount)">  
+	            <![CDATA[ AND CRE.amount = #{amount} ]]>
+	        </if>			
+			<if test="chargeRecord != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(chargeRecord.id)">  
+		            <![CDATA[ AND CRE.chargeRecordId = #{chargeRecord.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CRE.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CRE.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND CRE.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceAmount)">  
+	            <![CDATA[ AND CRE.sourceAmount = #{sourceAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(targetAmount)">  
+	            <![CDATA[ AND CRE.targetAmount = #{targetAmount} ]]>
+	        </if>			
+			<if test="paymentScheduleEntry != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(paymentScheduleEntry.id)">  
+		            <![CDATA[ AND CRE.paymentScheduleEntryId = #{paymentScheduleEntry.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND CRE.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="tradingRecord != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecord.id)">  
+		            <![CDATA[ AND CRE.tradingRecordId = #{tradingRecord.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(scheduleType)">  
+	            <![CDATA[ AND CRE.scheduleType = #{scheduleType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND CRE.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.ChargeRecordEntry">
+		INSERT INTO LA_CHARGE_RECORD_ENTRY
+		(
+			id,
+			feeItem,
+			lastUpdateDate,
+			loanAccountId,
+			amount,
+			chargeRecordId,
+			createDate,
+			period,
+			revokeDate,
+			sourceAmount,
+			targetAmount,
+			paymentScheduleEntryId,
+			revoked,
+			tradingRecordId,
+			scheduleType
+		)
+		VALUES
+		(
+			#{id},
+			#{feeItem},
+			#{lastUpdateDate},
+			#{loanAccountId},
+			#{amount},
+			#{chargeRecord.id},
+			#{createDate},
+			#{period},
+			#{revokeDate},
+			#{sourceAmount},
+			#{targetAmount},
+			#{paymentScheduleEntry.id},
+			#{revoked},
+			#{tradingRecord.id},
+			#{scheduleType}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.ChargeRecordEntry">
+		DELETE FROM LA_CHARGE_RECORD_ENTRY  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_CHARGE_RECORD_ENTRY
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('feeItem')">
+	    		feeItem = #{feeItem,javaType=com.tx.local.basicdata.model.FeeItemEnum},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('loanAccountId')">
+	    		loanAccountId = #{loanAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('amount')">
+	    		amount = #{amount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('chargeRecord')">
+	    		chargeRecordId = #{chargeRecord.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('period')">
+	    		period = #{period,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('revokeDate')">
+	    		revokeDate = #{revokeDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('sourceAmount')">
+	    		sourceAmount = #{sourceAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('targetAmount')">
+	    		targetAmount = #{targetAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('paymentScheduleEntry')">
+	    		paymentScheduleEntryId = #{paymentScheduleEntry.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('revoked')">
+	    		revoked = #{revoked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('tradingRecord')">
+	    		tradingRecordId = #{tradingRecord.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('scheduleType')">
+	    		scheduleType = #{scheduleType,javaType=com.tx.local.loanaccount.model.ScheduleTypeEnum},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

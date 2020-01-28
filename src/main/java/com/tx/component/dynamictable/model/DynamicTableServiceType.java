@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -53,28 +54,30 @@ public class DynamicTableServiceType implements Serializable, ConfigInitAble{
     @XmlAttribute
     private String code;
     
+    /** 模板表类型，唯一键，名字不能重复 */
+    @XmlAttribute
+    private String name;
+    
+    /** 模板表类型名描述 */
+    @XmlElement
+    private String remark;
+    
+    /** 模板表类型前缀名 */
+    @XmlAttribute
+    private String tablePrefix;
+    
     /** 模板表类型是否有效 */
     private boolean valid;
     
     /** 是否可编辑 */
     private boolean modifyAble;
     
-    /** 模板表类型，唯一键，名字不能重复 */
-    @XmlAttribute
-    private String name;
-    
-    /** 模板表类型前缀名 */
-    @XmlAttribute
-    private String tablePrefix;
-    
-    /** 模板表类型名描述 */
-    @XmlElement
-    private String remark;
-    
     /** 最后更新时间 */
+    @Column(nullable = false, updatable = true)
     private Date lastUpdateDate;
     
     /** 创建时间 */
+    @Column(nullable = false, updatable = false)
     private Date createDate;
     
     /** 关联的动态表类型 */

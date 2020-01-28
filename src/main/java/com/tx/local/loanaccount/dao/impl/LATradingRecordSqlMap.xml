@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lATradingRecord">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="lATradingRecordMap" 
+		type="com.tx.local.loanaccount.model.LATradingRecord">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.LATradingRecord"
+		resultMap="lATradingRecordMap">
+		SELECT 
+				LATR.id,
+				LATR.sum,
+				LATR.bankAccountId,
+				LATR.lastUpdateDate,
+				LATR.lastUpdateOperatorId,
+				LATR.loanAccountId,
+				LATR.type,
+				LATR.vcid,
+				LATR.viewAble,
+				LATR.afterIsDie,
+				LATR.afterIsClose,
+				LATR.afterIsOverdue,
+				LATR.afterOverdueSum,
+				LATR.afterOverdueDate,
+				LATR.afterAccountStatus,
+				LATR.afterOverdueAmount,
+				LATR.afterCollectionStatus,
+				LATR.afterPrincipalBalance,
+				LATR.afterIsLegalProcedure,
+				LATR.afterPrincipalBalanceIrr,
+				LATR.afterSettleInterestStatus,
+				LATR.repaySum,
+				LATR.repayDate,
+				LATR.repayDatePeriod,
+				LATR.writeOff,
+				LATR.writeOffDate,
+				LATR.adjust,
+				LATR.beforeIsDie,
+				LATR.beforeIsClose,
+				LATR.beforeIsOverdue,
+				LATR.beforeOverdueSum,
+				LATR.beforeOverdueDate,
+				LATR.beforeAccountStatus,
+				LATR.beforeOverdueAmount,
+				LATR.beforeCollectionStatus,
+				LATR.beforePrincipalBalance,
+				LATR.beforeIsLegalProcedure,
+				LATR.beforePrincipalBalanceIrr,
+				LATR.beforeSettleInterestStatus,
+				LATR.createDate,
+				LATR.expireDate,
+				LATR.remark,
+				LATR.revokeAble,
+				LATR.revokeDate,
+				LATR.revokeResean,
+				LATR.revokeOperatorId,
+				LATR.sourceType,
+				LATR.currentPeriod,
+				LATR.receiveDate,
+				LATR.relatedTradingRecordId,
+				LATR.requestId,
+				LATR.revoked,
+				LATR.summary,
+				LATR.category,
+				LATR.operatorId,
+				LATR.received,
+				LATR.outsourceRepay,
+				LATR.outsourceAssignRecordId,
+				LATR.principalBalance,
+				LATR.principalBalanceIrr,
+				LATR.attributes,
+				LATR.organizationId
+		  FROM LA_TRADING_RECORD LATR
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND LATR.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="lATradingRecordMap">
+		SELECT 
+				LATR.id,
+				LATR.sum,
+				LATR.bankAccountId,
+				LATR.lastUpdateDate,
+				LATR.lastUpdateOperatorId,
+				LATR.loanAccountId,
+				LATR.type,
+				LATR.vcid,
+				LATR.viewAble,
+				LATR.afterIsDie,
+				LATR.afterIsClose,
+				LATR.afterIsOverdue,
+				LATR.afterOverdueSum,
+				LATR.afterOverdueDate,
+				LATR.afterAccountStatus,
+				LATR.afterOverdueAmount,
+				LATR.afterCollectionStatus,
+				LATR.afterPrincipalBalance,
+				LATR.afterIsLegalProcedure,
+				LATR.afterPrincipalBalanceIrr,
+				LATR.afterSettleInterestStatus,
+				LATR.repaySum,
+				LATR.repayDate,
+				LATR.repayDatePeriod,
+				LATR.writeOff,
+				LATR.writeOffDate,
+				LATR.adjust,
+				LATR.beforeIsDie,
+				LATR.beforeIsClose,
+				LATR.beforeIsOverdue,
+				LATR.beforeOverdueSum,
+				LATR.beforeOverdueDate,
+				LATR.beforeAccountStatus,
+				LATR.beforeOverdueAmount,
+				LATR.beforeCollectionStatus,
+				LATR.beforePrincipalBalance,
+				LATR.beforeIsLegalProcedure,
+				LATR.beforePrincipalBalanceIrr,
+				LATR.beforeSettleInterestStatus,
+				LATR.createDate,
+				LATR.expireDate,
+				LATR.remark,
+				LATR.revokeAble,
+				LATR.revokeDate,
+				LATR.revokeResean,
+				LATR.revokeOperatorId,
+				LATR.sourceType,
+				LATR.currentPeriod,
+				LATR.receiveDate,
+				LATR.relatedTradingRecordId,
+				LATR.requestId,
+				LATR.revoked,
+				LATR.summary,
+				LATR.category,
+				LATR.operatorId,
+				LATR.received,
+				LATR.outsourceRepay,
+				LATR.outsourceAssignRecordId,
+				LATR.principalBalance,
+				LATR.principalBalanceIrr,
+				LATR.attributes,
+				LATR.organizationId
+		  FROM LA_TRADING_RECORD LATR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LATR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sum)">  
+	            <![CDATA[ AND LATR.sum = #{sum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankAccountId)">  
+	            <![CDATA[ AND LATR.bankAccountId = #{bankAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
+	            <![CDATA[ AND LATR.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND LATR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LATR.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND LATR.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(viewAble)">  
+	            <![CDATA[ AND LATR.viewAble = #{viewAble} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterIsDie)">  
+	            <![CDATA[ AND LATR.afterIsDie = #{afterIsDie} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterIsClose)">  
+	            <![CDATA[ AND LATR.afterIsClose = #{afterIsClose} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterIsOverdue)">  
+	            <![CDATA[ AND LATR.afterIsOverdue = #{afterIsOverdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterOverdueSum)">  
+	            <![CDATA[ AND LATR.afterOverdueSum = #{afterOverdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterAccountStatus)">  
+	            <![CDATA[ AND LATR.afterAccountStatus = #{afterAccountStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterOverdueAmount)">  
+	            <![CDATA[ AND LATR.afterOverdueAmount = #{afterOverdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterCollectionStatus)">  
+	            <![CDATA[ AND LATR.afterCollectionStatus = #{afterCollectionStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterPrincipalBalance)">  
+	            <![CDATA[ AND LATR.afterPrincipalBalance = #{afterPrincipalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterIsLegalProcedure)">  
+	            <![CDATA[ AND LATR.afterIsLegalProcedure = #{afterIsLegalProcedure} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterPrincipalBalanceIrr)">  
+	            <![CDATA[ AND LATR.afterPrincipalBalanceIrr = #{afterPrincipalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterSettleInterestStatus)">  
+	            <![CDATA[ AND LATR.afterSettleInterestStatus = #{afterSettleInterestStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(repaySum)">  
+	            <![CDATA[ AND LATR.repaySum = #{repaySum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(repayDatePeriod)">  
+	            <![CDATA[ AND LATR.repayDatePeriod = #{repayDatePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOff)">  
+	            <![CDATA[ AND LATR.writeOff = #{writeOff} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(adjust)">  
+	            <![CDATA[ AND LATR.adjust = #{adjust} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeIsDie)">  
+	            <![CDATA[ AND LATR.beforeIsDie = #{beforeIsDie} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeIsClose)">  
+	            <![CDATA[ AND LATR.beforeIsClose = #{beforeIsClose} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeIsOverdue)">  
+	            <![CDATA[ AND LATR.beforeIsOverdue = #{beforeIsOverdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeOverdueSum)">  
+	            <![CDATA[ AND LATR.beforeOverdueSum = #{beforeOverdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeAccountStatus)">  
+	            <![CDATA[ AND LATR.beforeAccountStatus = #{beforeAccountStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeOverdueAmount)">  
+	            <![CDATA[ AND LATR.beforeOverdueAmount = #{beforeOverdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeCollectionStatus)">  
+	            <![CDATA[ AND LATR.beforeCollectionStatus = #{beforeCollectionStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforePrincipalBalance)">  
+	            <![CDATA[ AND LATR.beforePrincipalBalance = #{beforePrincipalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeIsLegalProcedure)">  
+	            <![CDATA[ AND LATR.beforeIsLegalProcedure = #{beforeIsLegalProcedure} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforePrincipalBalanceIrr)">  
+	            <![CDATA[ AND LATR.beforePrincipalBalanceIrr = #{beforePrincipalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeSettleInterestStatus)">  
+	            <![CDATA[ AND LATR.beforeSettleInterestStatus = #{beforeSettleInterestStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LATR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LATR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND LATR.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeAble)">  
+	            <![CDATA[ AND LATR.revokeAble = #{revokeAble} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeResean)">  
+	            <![CDATA[ AND LATR.revokeResean = #{revokeResean} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeOperatorId)">  
+	            <![CDATA[ AND LATR.revokeOperatorId = #{revokeOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceType)">  
+	            <![CDATA[ AND LATR.sourceType = #{sourceType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(currentPeriod)">  
+	            <![CDATA[ AND LATR.currentPeriod = #{currentPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(relatedTradingRecordId)">  
+	            <![CDATA[ AND LATR.relatedTradingRecordId = #{relatedTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(requestId)">  
+	            <![CDATA[ AND LATR.requestId = #{requestId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND LATR.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(summary)">  
+	            <![CDATA[ AND LATR.summary = #{summary} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(category)">  
+	            <![CDATA[ AND LATR.category = #{category} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            <![CDATA[ AND LATR.operatorId = #{operatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(received)">  
+	            <![CDATA[ AND LATR.received = #{received} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceRepay)">  
+	            <![CDATA[ AND LATR.outsourceRepay = #{outsourceRepay} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceAssignRecordId)">  
+	            <![CDATA[ AND LATR.outsourceAssignRecordId = #{outsourceAssignRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND LATR.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalanceIrr)">  
+	            <![CDATA[ AND LATR.principalBalanceIrr = #{principalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(attributes)">  
+	            <![CDATA[ AND LATR.attributes = #{attributes} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
+	            <![CDATA[ AND LATR.organizationId = #{organizationId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LATR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_TRADING_RECORD LATR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LATR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sum)">  
+	            <![CDATA[ AND LATR.sum = #{sum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankAccountId)">  
+	            <![CDATA[ AND LATR.bankAccountId = #{bankAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateOperatorId)">  
+	            <![CDATA[ AND LATR.lastUpdateOperatorId = #{lastUpdateOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND LATR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LATR.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND LATR.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(viewAble)">  
+	            <![CDATA[ AND LATR.viewAble = #{viewAble} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterIsDie)">  
+	            <![CDATA[ AND LATR.afterIsDie = #{afterIsDie} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterIsClose)">  
+	            <![CDATA[ AND LATR.afterIsClose = #{afterIsClose} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterIsOverdue)">  
+	            <![CDATA[ AND LATR.afterIsOverdue = #{afterIsOverdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterOverdueSum)">  
+	            <![CDATA[ AND LATR.afterOverdueSum = #{afterOverdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterAccountStatus)">  
+	            <![CDATA[ AND LATR.afterAccountStatus = #{afterAccountStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterOverdueAmount)">  
+	            <![CDATA[ AND LATR.afterOverdueAmount = #{afterOverdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterCollectionStatus)">  
+	            <![CDATA[ AND LATR.afterCollectionStatus = #{afterCollectionStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterPrincipalBalance)">  
+	            <![CDATA[ AND LATR.afterPrincipalBalance = #{afterPrincipalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterIsLegalProcedure)">  
+	            <![CDATA[ AND LATR.afterIsLegalProcedure = #{afterIsLegalProcedure} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterPrincipalBalanceIrr)">  
+	            <![CDATA[ AND LATR.afterPrincipalBalanceIrr = #{afterPrincipalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterSettleInterestStatus)">  
+	            <![CDATA[ AND LATR.afterSettleInterestStatus = #{afterSettleInterestStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(repaySum)">  
+	            <![CDATA[ AND LATR.repaySum = #{repaySum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(repayDatePeriod)">  
+	            <![CDATA[ AND LATR.repayDatePeriod = #{repayDatePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOff)">  
+	            <![CDATA[ AND LATR.writeOff = #{writeOff} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(adjust)">  
+	            <![CDATA[ AND LATR.adjust = #{adjust} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeIsDie)">  
+	            <![CDATA[ AND LATR.beforeIsDie = #{beforeIsDie} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeIsClose)">  
+	            <![CDATA[ AND LATR.beforeIsClose = #{beforeIsClose} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeIsOverdue)">  
+	            <![CDATA[ AND LATR.beforeIsOverdue = #{beforeIsOverdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeOverdueSum)">  
+	            <![CDATA[ AND LATR.beforeOverdueSum = #{beforeOverdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeAccountStatus)">  
+	            <![CDATA[ AND LATR.beforeAccountStatus = #{beforeAccountStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeOverdueAmount)">  
+	            <![CDATA[ AND LATR.beforeOverdueAmount = #{beforeOverdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeCollectionStatus)">  
+	            <![CDATA[ AND LATR.beforeCollectionStatus = #{beforeCollectionStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforePrincipalBalance)">  
+	            <![CDATA[ AND LATR.beforePrincipalBalance = #{beforePrincipalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeIsLegalProcedure)">  
+	            <![CDATA[ AND LATR.beforeIsLegalProcedure = #{beforeIsLegalProcedure} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforePrincipalBalanceIrr)">  
+	            <![CDATA[ AND LATR.beforePrincipalBalanceIrr = #{beforePrincipalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeSettleInterestStatus)">  
+	            <![CDATA[ AND LATR.beforeSettleInterestStatus = #{beforeSettleInterestStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LATR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LATR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND LATR.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeAble)">  
+	            <![CDATA[ AND LATR.revokeAble = #{revokeAble} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeResean)">  
+	            <![CDATA[ AND LATR.revokeResean = #{revokeResean} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeOperatorId)">  
+	            <![CDATA[ AND LATR.revokeOperatorId = #{revokeOperatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceType)">  
+	            <![CDATA[ AND LATR.sourceType = #{sourceType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(currentPeriod)">  
+	            <![CDATA[ AND LATR.currentPeriod = #{currentPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(relatedTradingRecordId)">  
+	            <![CDATA[ AND LATR.relatedTradingRecordId = #{relatedTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(requestId)">  
+	            <![CDATA[ AND LATR.requestId = #{requestId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND LATR.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(summary)">  
+	            <![CDATA[ AND LATR.summary = #{summary} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(category)">  
+	            <![CDATA[ AND LATR.category = #{category} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(operatorId)">  
+	            <![CDATA[ AND LATR.operatorId = #{operatorId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(received)">  
+	            <![CDATA[ AND LATR.received = #{received} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceRepay)">  
+	            <![CDATA[ AND LATR.outsourceRepay = #{outsourceRepay} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceAssignRecordId)">  
+	            <![CDATA[ AND LATR.outsourceAssignRecordId = #{outsourceAssignRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND LATR.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalanceIrr)">  
+	            <![CDATA[ AND LATR.principalBalanceIrr = #{principalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(attributes)">  
+	            <![CDATA[ AND LATR.attributes = #{attributes} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
+	            <![CDATA[ AND LATR.organizationId = #{organizationId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LATR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.LATradingRecord">
+		INSERT INTO LA_TRADING_RECORD
+		(
+			id,
+			sum,
+			bankAccountId,
+			lastUpdateDate,
+			lastUpdateOperatorId,
+			loanAccountId,
+			type,
+			vcid,
+			viewAble,
+			afterIsDie,
+			afterIsClose,
+			afterIsOverdue,
+			afterOverdueSum,
+			afterOverdueDate,
+			afterAccountStatus,
+			afterOverdueAmount,
+			afterCollectionStatus,
+			afterPrincipalBalance,
+			afterIsLegalProcedure,
+			afterPrincipalBalanceIrr,
+			afterSettleInterestStatus,
+			repaySum,
+			repayDate,
+			repayDatePeriod,
+			writeOff,
+			writeOffDate,
+			adjust,
+			beforeIsDie,
+			beforeIsClose,
+			beforeIsOverdue,
+			beforeOverdueSum,
+			beforeOverdueDate,
+			beforeAccountStatus,
+			beforeOverdueAmount,
+			beforeCollectionStatus,
+			beforePrincipalBalance,
+			beforeIsLegalProcedure,
+			beforePrincipalBalanceIrr,
+			beforeSettleInterestStatus,
+			createDate,
+			expireDate,
+			remark,
+			revokeAble,
+			revokeDate,
+			revokeResean,
+			revokeOperatorId,
+			sourceType,
+			currentPeriod,
+			receiveDate,
+			relatedTradingRecordId,
+			requestId,
+			revoked,
+			summary,
+			category,
+			operatorId,
+			received,
+			outsourceRepay,
+			outsourceAssignRecordId,
+			principalBalance,
+			principalBalanceIrr,
+			attributes,
+			organizationId
+		)
+		VALUES
+		(
+			#{id},
+			#{sum},
+			#{bankAccountId},
+			#{lastUpdateDate},
+			#{lastUpdateOperatorId},
+			#{loanAccountId},
+			#{type},
+			#{vcid},
+			#{viewAble},
+			#{afterIsDie},
+			#{afterIsClose},
+			#{afterIsOverdue},
+			#{afterOverdueSum},
+			#{afterOverdueDate},
+			#{afterAccountStatus},
+			#{afterOverdueAmount},
+			#{afterCollectionStatus},
+			#{afterPrincipalBalance},
+			#{afterIsLegalProcedure},
+			#{afterPrincipalBalanceIrr},
+			#{afterSettleInterestStatus},
+			#{repaySum},
+			#{repayDate},
+			#{repayDatePeriod},
+			#{writeOff},
+			#{writeOffDate},
+			#{adjust},
+			#{beforeIsDie},
+			#{beforeIsClose},
+			#{beforeIsOverdue},
+			#{beforeOverdueSum},
+			#{beforeOverdueDate},
+			#{beforeAccountStatus},
+			#{beforeOverdueAmount},
+			#{beforeCollectionStatus},
+			#{beforePrincipalBalance},
+			#{beforeIsLegalProcedure},
+			#{beforePrincipalBalanceIrr},
+			#{beforeSettleInterestStatus},
+			#{createDate},
+			#{expireDate},
+			#{remark},
+			#{revokeAble},
+			#{revokeDate},
+			#{revokeResean},
+			#{revokeOperatorId},
+			#{sourceType},
+			#{currentPeriod},
+			#{receiveDate},
+			#{relatedTradingRecordId},
+			#{requestId},
+			#{revoked},
+			#{summary},
+			#{category},
+			#{operatorId},
+			#{received},
+			#{outsourceRepay},
+			#{outsourceAssignRecordId},
+			#{principalBalance},
+			#{principalBalanceIrr},
+			#{attributes},
+			#{organizationId}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.LATradingRecord">
+		DELETE FROM LA_TRADING_RECORD  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_TRADING_RECORD
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('sum')">
+	    		sum = #{sum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('bankAccountId')">
+	    		bankAccountId = #{bankAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateOperatorId')">
+	    		lastUpdateOperatorId = #{lastUpdateOperatorId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('loanAccountId')">
+	    		loanAccountId = #{loanAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.loanaccount.model.LATradingRecordTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('vcid')">
+	    		vcid = #{vcid,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('viewAble')">
+	    		viewAble = #{viewAble,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('afterIsDie')">
+	    		afterIsDie = #{afterIsDie,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('afterIsClose')">
+	    		afterIsClose = #{afterIsClose,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('afterIsOverdue')">
+	    		afterIsOverdue = #{afterIsOverdue,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('afterOverdueSum')">
+	    		afterOverdueSum = #{afterOverdueSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('afterOverdueDate')">
+	    		afterOverdueDate = #{afterOverdueDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('afterAccountStatus')">
+	    		afterAccountStatus = #{afterAccountStatus,javaType=com.tx.local.loanaccount.model.AccountStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('afterOverdueAmount')">
+	    		afterOverdueAmount = #{afterOverdueAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('afterCollectionStatus')">
+	    		afterCollectionStatus = #{afterCollectionStatus,javaType=com.tx.local.loanaccount.model.CollectionStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('afterPrincipalBalance')">
+	    		afterPrincipalBalance = #{afterPrincipalBalance,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('afterIsLegalProcedure')">
+	    		afterIsLegalProcedure = #{afterIsLegalProcedure,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('afterPrincipalBalanceIrr')">
+	    		afterPrincipalBalanceIrr = #{afterPrincipalBalanceIrr,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('afterSettleInterestStatus')">
+	    		afterSettleInterestStatus = #{afterSettleInterestStatus,javaType=com.tx.local.loanaccount.model.SettleInterestStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('repaySum')">
+	    		repaySum = #{repaySum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('repayDate')">
+	    		repayDate = #{repayDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('repayDatePeriod')">
+	    		repayDatePeriod = #{repayDatePeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('writeOff')">
+	    		writeOff = #{writeOff,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('writeOffDate')">
+	    		writeOffDate = #{writeOffDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('adjust')">
+	    		adjust = #{adjust,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('beforeIsDie')">
+	    		beforeIsDie = #{beforeIsDie,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('beforeIsClose')">
+	    		beforeIsClose = #{beforeIsClose,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('beforeIsOverdue')">
+	    		beforeIsOverdue = #{beforeIsOverdue,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('beforeOverdueSum')">
+	    		beforeOverdueSum = #{beforeOverdueSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('beforeOverdueDate')">
+	    		beforeOverdueDate = #{beforeOverdueDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('beforeAccountStatus')">
+	    		beforeAccountStatus = #{beforeAccountStatus,javaType=com.tx.local.loanaccount.model.AccountStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('beforeOverdueAmount')">
+	    		beforeOverdueAmount = #{beforeOverdueAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('beforeCollectionStatus')">
+	    		beforeCollectionStatus = #{beforeCollectionStatus,javaType=com.tx.local.loanaccount.model.CollectionStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('beforePrincipalBalance')">
+	    		beforePrincipalBalance = #{beforePrincipalBalance,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('beforeIsLegalProcedure')">
+	    		beforeIsLegalProcedure = #{beforeIsLegalProcedure,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('beforePrincipalBalanceIrr')">
+	    		beforePrincipalBalanceIrr = #{beforePrincipalBalanceIrr,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('beforeSettleInterestStatus')">
+	    		beforeSettleInterestStatus = #{beforeSettleInterestStatus,javaType=com.tx.local.loanaccount.model.SettleInterestStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('expireDate')">
+	    		expireDate = #{expireDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('remark')">
+	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('revokeAble')">
+	    		revokeAble = #{revokeAble,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('revokeDate')">
+	    		revokeDate = #{revokeDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('revokeResean')">
+	    		revokeResean = #{revokeResean,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('revokeOperatorId')">
+	    		revokeOperatorId = #{revokeOperatorId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('sourceType')">
+	    		sourceType = #{sourceType,javaType=com.tx.local.loanaccount.model.RequestSourceTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('currentPeriod')">
+	    		currentPeriod = #{currentPeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('receiveDate')">
+	    		receiveDate = #{receiveDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('relatedTradingRecordId')">
+	    		relatedTradingRecordId = #{relatedTradingRecordId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('requestId')">
+	    		requestId = #{requestId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('revoked')">
+	    		revoked = #{revoked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('summary')">
+	    		summary = #{summary,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('category')">
+	    		category = #{category,javaType=com.tx.local.loanaccount.model.LATradingCategoryEnum},
+	    	</if>
+			<if test="_parameter.containsKey('operatorId')">
+	    		operatorId = #{operatorId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('received')">
+	    		received = #{received,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('outsourceRepay')">
+	    		outsourceRepay = #{outsourceRepay,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('outsourceAssignRecordId')">
+	    		outsourceAssignRecordId = #{outsourceAssignRecordId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('principalBalance')">
+	    		principalBalance = #{principalBalance,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('principalBalanceIrr')">
+	    		principalBalanceIrr = #{principalBalanceIrr,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('attributes')">
+	    		attributes = #{attributes,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('organizationId')">
+	    		organizationId = #{organizationId,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

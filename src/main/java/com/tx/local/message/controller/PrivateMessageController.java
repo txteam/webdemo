@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -35,6 +36,7 @@ import com.tx.local.message.model.PrivateMessageCatalogEnum;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
 @Controller
 @RequestMapping("/privateMessage")
 public class PrivateMessageController {

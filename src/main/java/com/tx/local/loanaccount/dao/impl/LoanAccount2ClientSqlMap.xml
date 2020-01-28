@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="loanAccount2Client">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="loanAccount2ClientMap" 
+		type="com.tx.local.loanaccount.model.LoanAccount2Client">
+		<result column="loanAccountId" property="loanAccount.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.LoanAccount2Client"
+		resultMap="loanAccount2ClientMap">
+		SELECT 
+				LAC.id,
+				LAC.idCardType,
+				LAC.idCardNumber,
+				LAC.loanAccountId,
+				LAC.type,
+				LAC.clientId,
+				LAC.clientName,
+				LAC.clientAccountId,
+				LAC.creditInfoId,
+				LAC.creditInfoVersion
+		  FROM LA_ACCOUNT_2_CLIENT LAC
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND LAC.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="loanAccount2ClientMap">
+		SELECT 
+				LAC.id,
+				LAC.idCardType,
+				LAC.idCardNumber,
+				LAC.loanAccountId,
+				LAC.type,
+				LAC.clientId,
+				LAC.clientName,
+				LAC.clientAccountId,
+				LAC.creditInfoId,
+				LAC.creditInfoVersion
+		  FROM LA_ACCOUNT_2_CLIENT LAC
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LAC.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND LAC.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND LAC.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="loanAccount != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccount.id)">  
+		            <![CDATA[ AND LAC.loanAccountId = #{loanAccount.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LAC.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND LAC.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            <![CDATA[ AND LAC.clientName = #{clientName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientAccountId)">  
+	            <![CDATA[ AND LAC.clientAccountId = #{clientAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoId)">  
+	            <![CDATA[ AND LAC.creditInfoId = #{creditInfoId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoVersion)">  
+	            <![CDATA[ AND LAC.creditInfoVersion = #{creditInfoVersion} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LAC.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY id DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_ACCOUNT_2_CLIENT LAC
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LAC.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND LAC.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND LAC.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="loanAccount != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccount.id)">  
+		            <![CDATA[ AND LAC.loanAccountId = #{loanAccount.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LAC.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND LAC.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            <![CDATA[ AND LAC.clientName = #{clientName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientAccountId)">  
+	            <![CDATA[ AND LAC.clientAccountId = #{clientAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoId)">  
+	            <![CDATA[ AND LAC.creditInfoId = #{creditInfoId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoVersion)">  
+	            <![CDATA[ AND LAC.creditInfoVersion = #{creditInfoVersion} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LAC.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.LoanAccount2Client">
+		INSERT INTO LA_ACCOUNT_2_CLIENT
+		(
+			id,
+			idCardType,
+			idCardNumber,
+			loanAccountId,
+			type,
+			clientId,
+			clientName,
+			clientAccountId,
+			creditInfoId,
+			creditInfoVersion
+		)
+		VALUES
+		(
+			#{id},
+			#{idCardType},
+			#{idCardNumber},
+			#{loanAccount.id},
+			#{type},
+			#{clientId},
+			#{clientName},
+			#{clientAccountId},
+			#{creditInfoId},
+			#{creditInfoVersion}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.LoanAccount2Client">
+		DELETE FROM LA_ACCOUNT_2_CLIENT  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_ACCOUNT_2_CLIENT
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('idCardType')">
+	    		idCardType = #{idCardType,javaType=com.tx.local.basicdata.model.IDCardTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('idCardNumber')">
+	    		idCardNumber = #{idCardNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('loanAccount')">
+	    		loanAccountId = #{loanAccount.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.loanaccount.model.LAClientTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('clientId')">
+	    		clientId = #{clientId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('clientName')">
+	    		clientName = #{clientName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('clientAccountId')">
+	    		clientAccountId = #{clientAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('creditInfoId')">
+	    		creditInfoId = #{creditInfoId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('creditInfoVersion')">
+	    		creditInfoVersion = #{creditInfoVersion,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

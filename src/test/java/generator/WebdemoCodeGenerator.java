@@ -7,7 +7,12 @@ import java.io.IOException;
 
 import com.tx.core.generator2.CodeGenerator;
 import com.tx.core.generator2.model.ViewTypeEnum;
-import com.tx.local.message.model.PrivateMessage;
+import com.tx.local.loanaccount.model.LABankAccount;
+import com.tx.local.loanaccount.model.LAClientBankAccount;
+import com.tx.local.loanaccount.model.LADeductRecord;
+import com.tx.local.loanaccount.model.LATradingRecordEntry;
+import com.tx.local.loanaccount.model.LoanAccount2Client;
+import com.tx.local.loanaccount.model.LoanAccount2LoanBill;
 
 /**
  * 基础数据生成类<br/>
@@ -21,7 +26,7 @@ public class WebdemoCodeGenerator {
     
     public static void main(String[] args) throws IOException {
         boolean toProjectPath = true;//是否生成覆盖到项目代码中，如果设置为false则会写入D盘的目录中
-        Class<?> entityType = PrivateMessage.class;
+        Class<?> entityType = LoanAccount2LoanBill.class;
         ViewTypeEnum viewType = ViewTypeEnum.LIST;
         boolean needConfirmOverwriteFile = true;//覆盖文件前是否需要提示
         
@@ -35,14 +40,14 @@ public class WebdemoCodeGenerator {
         
         //基础数据生成逻辑代码对应的数据库类型(mysql与oracle)在sqlMap中组装like条件是不一致的
         CodeGenerator.NEED_CONFIRM_WHEN_EXSITS = needConfirmOverwriteFile;
-        CodeGenerator.generateDBScript(entityType);
+        //CodeGenerator.generateDBScript(entityType);
         CodeGenerator.generateSqlMap(entityType);
         CodeGenerator.generateDao(entityType);
-        CodeGenerator.generateService(entityType);
-        CodeGenerator.generateController(entityType, viewType);
+        //CodeGenerator.generateService(entityType);
+        //CodeGenerator.generateController(entityType, viewType);
         
         //生成页面
-        CodeGenerator.generateView(entityType, viewType);
+        //CodeGenerator.generateView(entityType, viewType);
         
         System.out.println("success");
     }

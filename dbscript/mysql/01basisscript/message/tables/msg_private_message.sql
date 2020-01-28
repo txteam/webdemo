@@ -12,7 +12,7 @@ create table MSG_PRIVATE_MESSAGE(
 	sourceId varchar(64) ,
 	title varchar(100) not null,
 	content varchar(4000) ,
-	read bit not null default 0,
+	unread bit not null default 1,
 	readDate datetime(6),
 	lastUpdateDate datetime(6) not null,
 	lastUpdateUserId varchar(64) ,

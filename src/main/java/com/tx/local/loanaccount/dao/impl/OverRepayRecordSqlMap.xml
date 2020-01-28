@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="overRepayRecord">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="overRepayRecordMap" 
+		type="com.tx.local.loanaccount.model.OverRepayRecord">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.OverRepayRecord"
+		resultMap="overRepayRecordMap">
+		SELECT 
+				ORR.id,
+				ORR.feeItem,
+				ORR.loanAccountId,
+				ORR.amount,
+				ORR.createDate,
+				ORR.period,
+				ORR.revokeDate,
+				ORR.revokeTradingRecordId,
+				ORR.receiveDate,
+				ORR.revoked,
+				ORR.tradingRecordId,
+				ORR.received
+		  FROM LA_OVER_REPAY_RECORD ORR
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND ORR.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="overRepayRecordMap">
+		SELECT 
+				ORR.id,
+				ORR.feeItem,
+				ORR.loanAccountId,
+				ORR.amount,
+				ORR.createDate,
+				ORR.period,
+				ORR.revokeDate,
+				ORR.revokeTradingRecordId,
+				ORR.receiveDate,
+				ORR.revoked,
+				ORR.tradingRecordId,
+				ORR.received
+		  FROM LA_OVER_REPAY_RECORD ORR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND ORR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND ORR.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND ORR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(amount)">  
+	            <![CDATA[ AND ORR.amount = #{amount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND ORR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND ORR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND ORR.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeTradingRecordId)">  
+	            <![CDATA[ AND ORR.revokeTradingRecordId = #{revokeTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND ORR.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecordId)">  
+	            <![CDATA[ AND ORR.tradingRecordId = #{tradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(received)">  
+	            <![CDATA[ AND ORR.received = #{received} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND ORR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_OVER_REPAY_RECORD ORR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND ORR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND ORR.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND ORR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(amount)">  
+	            <![CDATA[ AND ORR.amount = #{amount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND ORR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND ORR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND ORR.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeTradingRecordId)">  
+	            <![CDATA[ AND ORR.revokeTradingRecordId = #{revokeTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND ORR.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecordId)">  
+	            <![CDATA[ AND ORR.tradingRecordId = #{tradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(received)">  
+	            <![CDATA[ AND ORR.received = #{received} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND ORR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.OverRepayRecord">
+		INSERT INTO LA_OVER_REPAY_RECORD
+		(
+			id,
+			feeItem,
+			loanAccountId,
+			amount,
+			createDate,
+			period,
+			revokeDate,
+			revokeTradingRecordId,
+			receiveDate,
+			revoked,
+			tradingRecordId,
+			received
+		)
+		VALUES
+		(
+			#{id},
+			#{feeItem},
+			#{loanAccountId},
+			#{amount},
+			#{createDate},
+			#{period},
+			#{revokeDate},
+			#{revokeTradingRecordId},
+			#{receiveDate},
+			#{revoked},
+			#{tradingRecordId},
+			#{received}
+		)
+	</insert>
+	
+	<!-- auto generate default insert -->
+    <insert id="insertToHis" 
+		parameterType="com.tx.local.loanaccount.model.OverRepayRecord">
+		INSERT INTO LA_OVER_REPAY_RECORD_HIS
+		(
+			id,
+			feeItem,
+			loanAccountId,
+			amount,
+			createDate,
+			period,
+			revokeDate,
+			revokeTradingRecordId,
+			receiveDate,
+			revoked,
+			tradingRecordId,
+			received
+		)
+		VALUES
+		(
+			#{id},
+			#{feeItem},
+			#{loanAccountId},
+			#{amount},
+			#{createDate},
+			#{period},
+			#{revokeDate},
+			#{revokeTradingRecordId},
+			#{receiveDate},
+			#{revoked},
+			#{tradingRecordId},
+			#{received}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.OverRepayRecord">
+		DELETE FROM LA_OVER_REPAY_RECORD  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_OVER_REPAY_RECORD
+	    <trim prefix="SET" suffixOverrides=",">
+			<!-- <if test="_parameter.containsKey('feeItem')"> -->
+			<!-- feeItem = #{feeItem,javaType=com.tx.local.basicdata.model.FeeItemEnum}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('loanAccountId')"> -->
+			<!-- loanAccountId = #{loanAccountId,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('amount')"> -->
+			<!-- amount = #{amount,javaType=java.math.BigDecimal}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('period')"> -->
+			<!-- period = #{period,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('tradingRecordId')"> -->
+			<!-- tradingRecordId = #{tradingRecordId,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<if test="_parameter.containsKey('revokeDate')">
+	    		revokeDate = #{revokeDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('revokeTradingRecordId')">
+	    		revokeTradingRecordId = #{revokeTradingRecordId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('revoked')">
+	    		revoked = #{revoked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('received')">
+	    		received = #{received,javaType=boolean},
+	    	</if>
+	    	<if test="_parameter.containsKey('receiveDate')">
+	    		receiveDate = #{receiveDate,javaType=java.util.Date},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

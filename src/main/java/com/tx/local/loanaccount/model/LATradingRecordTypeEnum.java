@@ -84,7 +84,7 @@ public enum LATradingRecordTypeEnum implements BasicDataEnum {
     REVOKE_AGAIN_LOAN("REVOKE_AGAIN_LOAN", "再贷退回", LATradingCategoryEnum.REVOKE_LOAN, "再贷退回"),
     
     /** 再贷 */
-    AGAIN_LOAN("RELOAN", "再贷", LATradingCategoryEnum.LOAN, "发放贷款", LATradingRecordTypeEnum.REVOKE_AGAIN_LOAN),
+    AGAIN_LOAN("AGAIN_LOAN", "再贷", LATradingCategoryEnum.LOAN, "发放贷款", LATradingRecordTypeEnum.REVOKE_AGAIN_LOAN),
     
     /** 续贷退回 */
     REVOKE_RENEW_LOAN("REVOKE_RENEW_LOAN", "续贷退回", LATradingCategoryEnum.REVOKE_LOAN, "续贷退回"),

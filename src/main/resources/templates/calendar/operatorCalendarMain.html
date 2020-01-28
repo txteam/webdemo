@@ -93,27 +93,29 @@ document.addEventListener('DOMContentLoaded', function() {
         unselectCancel: "",			//一种方法来指定元素，会忽略unselectauto选项，默认''
         selectOverlap: true,		//确定用户是否被允许选择被事件占用的时间段，默认true可占用时间段
         lazyFetching : true,        //是否启用懒加载技术--即只取当前条件下的视图数据，其它数据在切换时触发，默认true只取当前视图的，false是取全视图的
-        defaultTimedEventDuration : "02:00:00",     //在Event Object中如果没有end参数时使用，如start=7:00pm，则该日程对象时间范围就是7:00~9:00
+        defaultTimedEventDuration: "02:00:00",     //在Event Object中如果没有end参数时使用，如start=7:00pm，则该日程对象时间范围就是7:00~9:00
         editable: true,                 //支持Event日程拖动修改，默认false
-        eventStartEditable : true,      //Event日程开始时间可以改变，默认true，如果是false其实就是指日程块不能随意拖动，只能上下拉伸改变他的endTime
-        eventDurationEditable : false,  //Event日程的开始结束时间距离是否可以改变，默认true，如果是false则表示开始结束时间范围不能拉伸，只能拖拽
-        dragOpacity:0.2,                //拖拽时不透明度，0.0~1.0之间，数字越小越透明
-        dragScroll : true,              //是否在拖拽时自动移动容器，默认true
-        eventOverlap : true,            //拖拽时是否重叠
-        longPressDelay : 1000,  		//面向可touch设备（如移动设备），长按多少毫秒即可拖动,默认1000毫秒（1S）
+        eventStartEditable: true,      //Event日程开始时间可以改变，默认true，如果是false其实就是指日程块不能随意拖动，只能上下拉伸改变他的endTime
+        eventDurationEditable: false,  //Event日程的开始结束时间距离是否可以改变，默认true，如果是false则表示开始结束时间范围不能拉伸，只能拖拽
+        dragOpacity: 0.2,                //拖拽时不透明度，0.0~1.0之间，数字越小越透明
+        dragScroll: true,              //是否在拖拽时自动移动容器，默认true
+        eventOverlap: true,            //拖拽时是否重叠
+        longPressDelay: 1000,  		//面向可touch设备（如移动设备），长按多少毫秒即可拖动,默认1000毫秒（1S）
         eventOrder: "title",			//多个相同的日程数据排序方式，String / Array / Function, 默认值: "title"
-        defaultAllDayEventDuration : {  //默认1天是多长，（有的是采用工作时间模式，所以支持自定义）
+        defaultAllDayEventDuration: {  //默认1天是多长，（有的是采用工作时间模式，所以支持自定义）
         	days: 1 
         },  
-        eventConstraint : {     		//限制拖拽拖放的位置（即限制有些地方拖不进去）：an event ID, "businessHours", object
+        eventConstraint: {     		//限制拖拽拖放的位置（即限制有些地方拖不进去）：an event ID, "businessHours", object
             start: '10:00',     		// a start time (10am in this example)
             end: '18:00',       		// an end time (6pm in this example)
             dow: [ 1, 2, 3, 4 ] 		// days of week. an array of zero-based day of week integers (0=Sunday)  (Monday-Thursday in this example)
         },
-        windowResize: function(){			//浏览器窗体变化时触发
+        //height : window.innerHeight-100,
+        windowResize: function(){//浏览器窗体变化时触发
             console.log("---windowResize---");
+            //$('#calendar').fullCalendar('option', 'height', window.innerHeight-100);  
         },
-        loading : function(isLoading, view){ //视图数据加载中、加载完成触发
+        loading: function(isLoading, view){ //视图数据加载中、加载完成触发
             console.log("---loading---");
             if(isLoading == true){
                 console.log("view:"+view+",开始加载");
@@ -177,28 +179,28 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("↓↓↓unselect↓↓↓");
             console.log("view:"+view);
         },
-        eventRender : function(event, element, view) {          //当Event对象开始渲染时触发
+        eventRender: function(event, element, view) {          //当Event对象开始渲染时触发
             console.log("eventRender():"+event.title);
         },
-        eventAfterAllRender : function(view){	//当所有Event对象渲染完成时触发
+        eventAfterAllRender: function(view){	//当所有Event对象渲染完成时触发
         	console.log("eventAfterAllRender();");
         },
-        eventDragStart : function(event, jsEvent, ui, view){    			//日程开始拖拽时触发
+        eventDragStart: function(event, jsEvent, ui, view){    			//日程开始拖拽时触发
             console.log("eventDragStart():"+event.title);
         },
-        eventDragStop : function(event, jsEvent, ui, view){     			//日程拖拽停止时触发
+        eventDragStop: function(event, jsEvent, ui, view){     			//日程拖拽停止时触发
             console.log("eventDragStop():"+event.title);
         },
-        eventDrop : function(event, delta, revertFunc, jsEvent, ui, view){	//日程拖拽停止并且已经拖拽到其它位置了
+        eventDrop: function(event, delta, revertFunc, jsEvent, ui, view){	//日程拖拽停止并且已经拖拽到其它位置了
             console.log("eventDrop():"+event.title);
         },
-        eventResizeStart : function( event, jsEvent, ui, view ) {			//日程大小调整开始时触发
+        eventResizeStart: function( event, jsEvent, ui, view ) {			//日程大小调整开始时触发
             console.log("eventResizeStart():"+event.title);
         },
-        eventResizeStop : function(event, jsEvent, ui, view){				//日程大小调整停止时触发
+        eventResizeStop: function(event, jsEvent, ui, view){				//日程大小调整停止时触发
             console.log("eventResizeStop():"+event.title);
         },
-        eventResize : function(event, delta, revertFunc, jsEvent, ui, view){//日程大小调整完成并已经执行更新时触发
+        eventResize: function(event, delta, revertFunc, jsEvent, ui, view){//日程大小调整完成并已经执行更新时触发
             console.log("eventResize():"+event.title);
         },
       	events: [

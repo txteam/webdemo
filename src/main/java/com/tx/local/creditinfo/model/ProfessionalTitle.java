@@ -10,7 +10,7 @@ import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.AbstractDataDict;
 
 /**
- * <功能简述>
+ * 职称<br/>
  * <功能详细描述>
  * 
  * @author  Administrator

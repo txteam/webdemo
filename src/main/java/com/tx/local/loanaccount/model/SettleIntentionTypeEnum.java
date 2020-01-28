@@ -11,7 +11,7 @@ import com.tx.component.basicdata.model.BasicDataEnum;
 import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 
 /**
- * 还款模型类型<br/>
+ * 结清医院类型<br/>
  * 
  * @author   Tim.peng
  * @version  [版本号, 2014年7月2日]
@@ -37,22 +37,22 @@ public enum SettleIntentionTypeEnum implements BasicDataEnum {
     private final LATradingRecordTypeEnum tradingRecordType;
     
     /** 权限代码 */
-    private final String authKey;
+    private final String auth;
     
     /** 对应的交易类型 */
-    private SettleIntentionTypeEnum(String code, String name, String authKey) {
+    private SettleIntentionTypeEnum(String code, String name, String auth) {
         this.code = code;
         this.name = name;
-        this.authKey = authKey;
+        this.auth = auth;
         this.tradingRecordType = null;
     }
     
     /** 对应的交易类型 */
-    private SettleIntentionTypeEnum(String code, String name, LATradingRecordTypeEnum tradingRecordType,
-            String authKey) {
+    private SettleIntentionTypeEnum(String code, String name,
+            LATradingRecordTypeEnum tradingRecordType, String auth) {
         this.code = code;
         this.name = name;
-        this.authKey = authKey;
+        this.auth = auth;
         this.tradingRecordType = tradingRecordType;
     }
     
@@ -66,9 +66,11 @@ public enum SettleIntentionTypeEnum implements BasicDataEnum {
         return name;
     }
     
-    /** 权限代码 */
-    public String getAuthKey() {
-        return authKey;
+    /**
+     * @return 返回 auth
+     */
+    public String getAuth() {
+        return auth;
     }
     
     /**

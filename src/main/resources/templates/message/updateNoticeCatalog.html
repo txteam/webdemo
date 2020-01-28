@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>编辑NoticeCatalog[updateNoticeCatalog]</title>
+	<title>编辑公告消息分类[updateNoticeCatalog]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -57,10 +57,10 @@ $(document).ready(function(){
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
-						parent.DialogUtils.tip("修改NoticeCatalog成功.");
+						parent.DialogUtils.tip("修改公告消息分类成功.");
 						parent.DialogUtils.closeDialogById("updateNoticeCatalog");
 					}else{
-						DialogUtils.alert("错误提示","修改NoticeCatalog失败.","error");
+						DialogUtils.alert("错误提示","修改公告消息分类失败.","error");
 					}
 			    } 
 			});

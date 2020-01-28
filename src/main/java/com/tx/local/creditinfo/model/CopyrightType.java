@@ -4,7 +4,7 @@ import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.AbstractDataDict;
 
 /**
- * 著作权类型
+ * 版权类型
  * <功能详细描述>
  * 
  * @author  bobby

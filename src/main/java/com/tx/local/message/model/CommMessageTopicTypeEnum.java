@@ -18,5 +18,9 @@ package com.tx.local.message.model;
  */
 public enum CommMessageTopicTypeEnum {
     
+    SALE_PRODUCT,
     
+    SUGGEUST,
+    
+    WORK_ORDER;
 }

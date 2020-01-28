@@ -60,16 +60,16 @@ $(document).ready(function() {
 		$.triggerge("addTab",{
     		id: 'notice_page',
             title : '通知',
-            href : '/easyui/demo/icon',
-            iconCls : 'icon-duihua'
+            href : /*[[@{/operator/notice}]]*/'',
+            iconCls : 'icon-tixing'
         });
 	});
 	$('#message_handle').click(function(){
 		$.triggerge("addTab",{
     		id: 'message_page',
             title : '私信',
-            href : '/easyui/demo/icon',
-            iconCls : 'icon-tixing'
+            href : /*[[@{/operator/message}]]*/'',
+            iconCls : 'icon-duihua'
         });
 	});
 	$('#helper_handle').click(function(){
@@ -100,6 +100,41 @@ $(document).ready(function() {
         });
     	$('#user_info_icon').html('&#xe623;');
 	});
+	
+	function countUnreadMessage(){
+		$.get(/*[[@{/operator/message/count/unread}]]*/'',function(count){
+			//alert("count:" + count + " count>0:" + ( count > 0));
+			var $unreadMessageCount = $("#unreadMessageCount");
+			if(count > 0){
+				if($unreadMessageCount.size() > 0){
+					$unreadMessageCount.text(count);
+				}else{
+					$('#message_handle').append('<em id="unreadMessageCount">' + count + '</em>');
+				}
+			}else{
+				if($unreadMessageCount.size() > 0){
+					$unreadMessageCount.remove();
+				}
+			}
+		});
+		$.get(/*[[@{/operator/notice/count/unread}]]*/'',function(count){
+			var $unreadNoticeCount = $("#unreadNoticeCount");
+			if(count > 0){
+				if($unreadNoticeCount.size() > 0){
+					$unreadNoticeCount.text(count);
+				}else{
+					$('#notice_handle').append('<em id="unreadNoticeCount" class="gcolor">' + count + '</em>');
+				}
+			}else{
+				if($unreadNoticeCount.size() > 0){
+					$unreadNoticeCount.remove();
+				}
+			}
+		});
+	}
+	countUnreadMessage();
+	setInterval(countUnreadMessage, 1000 * 60 * 10);
+	
 });
 /*]]>*/
 </script>
@@ -122,14 +157,14 @@ $(document).ready(function() {
             	<li><a id="screen_handle" href="javascript:void(0);"><i class="iconfont icon-screen-full"></i></a></li>
             	<li><a id="notepad_handle" href="javascript:void(0);"><i class="iconfont">&#xe613;</i></a></li>
             	<li><a id="calendar_handle" href="javascript:void(0);"><i class="iconfont">&#xe624;</i></a></li>
-	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe6ba;</i></a><em>3</em></li>
-	            <li><a id="notice_handle" href="javascript:void(0);"><i class="iconfont">&#xe621;</i></a><em class="gcolor">5</em></li>
+	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe6ba;</i></a></li>
+	            <li><a id="notice_handle" href="javascript:void(0);"><i class="iconfont">&#xe621;</i></a></li>
 	            <li id="user_info">
 	            	<span class="userface"><i class="iconfont">&#xe60d;</i></span>
 	            	<a href="javascript:void(0);"><font><block th:text="${username}">ADMIN</block>&nbsp;&nbsp;<i class="iconfont userdown" id="user_info_icon">&#xe618;</i></font></a>
 	            </li>
-	            <li><a id="suggest_handle" href="javascript:void(0);"><i class="iconfont">&#xe685;</i></a></li>
 	            <li><a id="helper_handle" href="javascript:void(0);"><i class="iconfont">&#xe61a;</i></a></li>
+	            <li><a id="suggest_handle" href="javascript:void(0);"><i class="iconfont">&#xe685;</i></a></li>
             </ul>
         </div>
 	</div>

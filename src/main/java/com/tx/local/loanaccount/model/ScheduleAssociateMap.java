@@ -26,7 +26,8 @@ import com.tx.core.exceptions.util.AssertUtils;
   * @see  [相关类/方法]
   * @since  [产品/模块版本]
   */
-public class ScheduleAssociateMap<E extends ScheduleAssociate> extends HashMap<ScheduleTypeEnum, Map<String, E>> {
+public class ScheduleAssociateMap<E extends ScheduleAssociate>
+        extends HashMap<ScheduleTypeEnum, Map<String, E>> {
     
     /** 注释内容 */
     private static final long serialVersionUID = 5290650968841632140L;

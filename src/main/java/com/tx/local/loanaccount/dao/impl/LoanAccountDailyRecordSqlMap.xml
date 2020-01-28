@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="loanAccountDailyRecord">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="loanAccountDailyRecordMap" 
+		type="com.tx.local.loanaccount.model.LoanAccountDailyRecord">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.LoanAccountDailyRecord"
+		resultMap="loanAccountDailyRecordMap">
+		SELECT 
+				LADR.id,
+				LADR.died,
+				LADR.loanAccountId,
+				LADR.type,
+				LADR.legalProcedure,
+				LADR.clientId,
+				LADR.closed,
+				LADR.createDate,
+				LADR.recordDate,
+				LADR.settleInterestStatus,
+				LADR.accountStatus,
+				LADR.overdue,
+				LADR.overdueSum,
+				LADR.overdueDate,
+				LADR.overdueAmount,
+				LADR.principalBalance,
+				LADR.principalBalanceIrr,
+				LADR.collectionStatus
+		  FROM LA_DAILY_RECORD LADR
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND LADR.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="loanAccountDailyRecordMap">
+		SELECT 
+				LADR.id,
+				LADR.died,
+				LADR.loanAccountId,
+				LADR.type,
+				LADR.legalProcedure,
+				LADR.clientId,
+				LADR.closed,
+				LADR.createDate,
+				LADR.recordDate,
+				LADR.settleInterestStatus,
+				LADR.accountStatus,
+				LADR.overdue,
+				LADR.overdueSum,
+				LADR.overdueDate,
+				LADR.overdueAmount,
+				LADR.principalBalance,
+				LADR.principalBalanceIrr,
+				LADR.collectionStatus
+		  FROM LA_DAILY_RECORD LADR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LADR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(died)">  
+	            <![CDATA[ AND LADR.died = #{died} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND LADR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LADR.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalProcedure)">  
+	            <![CDATA[ AND LADR.legalProcedure = #{legalProcedure} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND LADR.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(closed)">  
+	            <![CDATA[ AND LADR.closed = #{closed} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LADR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LADR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleInterestStatus)">  
+	            <![CDATA[ AND LADR.settleInterestStatus = #{settleInterestStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(accountStatus)">  
+	            <![CDATA[ AND LADR.accountStatus = #{accountStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdue)">  
+	            <![CDATA[ AND LADR.overdue = #{overdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueSum)">  
+	            <![CDATA[ AND LADR.overdueSum = #{overdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueAmount)">  
+	            <![CDATA[ AND LADR.overdueAmount = #{overdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND LADR.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalanceIrr)">  
+	            <![CDATA[ AND LADR.principalBalanceIrr = #{principalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(collectionStatus)">  
+	            <![CDATA[ AND LADR.collectionStatus = #{collectionStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LADR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_DAILY_RECORD LADR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LADR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(died)">  
+	            <![CDATA[ AND LADR.died = #{died} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND LADR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND LADR.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalProcedure)">  
+	            <![CDATA[ AND LADR.legalProcedure = #{legalProcedure} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND LADR.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(closed)">  
+	            <![CDATA[ AND LADR.closed = #{closed} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LADR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LADR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleInterestStatus)">  
+	            <![CDATA[ AND LADR.settleInterestStatus = #{settleInterestStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(accountStatus)">  
+	            <![CDATA[ AND LADR.accountStatus = #{accountStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdue)">  
+	            <![CDATA[ AND LADR.overdue = #{overdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueSum)">  
+	            <![CDATA[ AND LADR.overdueSum = #{overdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueAmount)">  
+	            <![CDATA[ AND LADR.overdueAmount = #{overdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND LADR.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalanceIrr)">  
+	            <![CDATA[ AND LADR.principalBalanceIrr = #{principalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(collectionStatus)">  
+	            <![CDATA[ AND LADR.collectionStatus = #{collectionStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LADR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.LoanAccountDailyRecord">
+		INSERT INTO LA_DAILY_RECORD
+		(
+			id,
+			died,
+			loanAccountId,
+			type,
+			legalProcedure,
+			clientId,
+			closed,
+			createDate,
+			recordDate,
+			settleInterestStatus,
+			accountStatus,
+			overdue,
+			overdueSum,
+			overdueDate,
+			overdueAmount,
+			principalBalance,
+			principalBalanceIrr,
+			collectionStatus
+		)
+		VALUES
+		(
+			#{id},
+			#{died},
+			#{loanAccountId},
+			#{type},
+			#{legalProcedure},
+			#{clientId},
+			#{closed},
+			#{createDate},
+			#{recordDate},
+			#{settleInterestStatus},
+			#{accountStatus},
+			#{overdue},
+			#{overdueSum},
+			#{overdueDate},
+			#{overdueAmount},
+			#{principalBalance},
+			#{principalBalanceIrr},
+			#{collectionStatus}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.LoanAccountDailyRecord">
+		DELETE FROM LA_DAILY_RECORD  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_DAILY_RECORD
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('died')">
+	    		died = #{died,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('loanAccountId')">
+	    		loanAccountId = #{loanAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.loanaccount.model.LoanAccountDailyRecordTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('legalProcedure')">
+	    		legalProcedure = #{legalProcedure,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('clientId')">
+	    		clientId = #{clientId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('closed')">
+	    		closed = #{closed,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('recordDate')">
+	    		recordDate = #{recordDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('settleInterestStatus')">
+	    		settleInterestStatus = #{settleInterestStatus,javaType=com.tx.local.loanaccount.model.SettleInterestStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('accountStatus')">
+	    		accountStatus = #{accountStatus,javaType=com.tx.local.loanaccount.model.AccountStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('overdue')">
+	    		overdue = #{overdue,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('overdueSum')">
+	    		overdueSum = #{overdueSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('overdueDate')">
+	    		overdueDate = #{overdueDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('overdueAmount')">
+	    		overdueAmount = #{overdueAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('principalBalance')">
+	    		principalBalance = #{principalBalance,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('principalBalanceIrr')">
+	    		principalBalanceIrr = #{principalBalanceIrr,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('collectionStatus')">
+	    		collectionStatus = #{collectionStatus,javaType=com.tx.local.loanaccount.model.CollectionStatusEnum},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

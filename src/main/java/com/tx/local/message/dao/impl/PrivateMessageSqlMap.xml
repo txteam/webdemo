@@ -17,7 +17,7 @@
 				PM.id,
 				PM.lastUpdateDate,
 				PM.lastUpdateUserId,
-				PM.read,
+				PM.unread,
 				PM.readDate,
 				PM.type,
 				PM.userId,
@@ -35,6 +35,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND PM.id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND PM.vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND PM.type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userId)">  
+	            <![CDATA[ AND PM.userId = #{userId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userType)">  
+	            <![CDATA[ AND PM.userType = #{userType} ]]>
+	        </if>
 		</trim>
 	</select>
 	
@@ -46,7 +58,7 @@
 				PM.id,
 				PM.lastUpdateDate,
 				PM.lastUpdateUserId,
-				PM.read,
+				PM.unread,
 				PM.readDate,
 				PM.type,
 				PM.userId,
@@ -81,8 +93,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND PM.lastUpdateUserId = #{lastUpdateUserId} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(read)">  
-	            <![CDATA[ AND PM.read = #{read} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(unread)">  
+	            <![CDATA[ AND PM.unread = #{unread} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND PM.type = #{type} ]]>
@@ -159,8 +171,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND PM.lastUpdateUserId = #{lastUpdateUserId} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(read)">  
-	            <![CDATA[ AND PM.read = #{read} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(unread)">  
+	            <![CDATA[ AND PM.unread = #{unread} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND PM.type = #{type} ]]>
@@ -209,7 +221,7 @@
 			id,
 			lastUpdateDate,
 			lastUpdateUserId,
-			read,
+			unread,
 			readDate,
 			type,
 			userId,
@@ -227,7 +239,7 @@
 			#{id},
 			#{lastUpdateDate},
 			#{lastUpdateUserId},
-			#{read},
+			#{unread},
 			#{readDate},
 			#{type},
 			#{userId},
@@ -250,6 +262,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userId)">  
+	            <![CDATA[ AND userId = #{userId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userType)">  
+	            <![CDATA[ AND userType = #{userType} ]]>
+	        </if>
 		</trim>
 	</delete>
 	
@@ -258,26 +282,26 @@
 	    parameterType="java.util.Map">  
 	    UPDATE MSG_PRIVATE_MESSAGE
 	    <trim prefix="SET" suffixOverrides=",">
+			<!-- <if test="_parameter.containsKey('userId')"> -->
+			<!-- userId = #{userId,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('userType')"> -->
+			<!-- userType = #{userType,javaType=com.tx.local.message.model.MsgUserTypeEnum}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('vcid')"> -->
+			<!-- vcid = #{vcid,javaType=java.lang.String}, -->
+			<!-- </if> -->
 			<if test="_parameter.containsKey('lastUpdateDate')">
 	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
 			<if test="_parameter.containsKey('lastUpdateUserId')">
 	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('read')">
-	    		read = #{read,javaType=boolean},
+			<if test="_parameter.containsKey('unread')">
+	    		unread = #{unread,javaType=boolean},
 	    	</if>
 			<if test="_parameter.containsKey('readDate')">
 	    		readDate = #{readDate,javaType=java.util.Date},
-	    	</if>
-			<if test="_parameter.containsKey('userId')">
-	    		userId = #{userId,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('userType')">
-	    		userType = #{userType,javaType=com.tx.local.message.model.MsgUserTypeEnum},
-	    	</if>
-			<if test="_parameter.containsKey('vcid')">
-	    		vcid = #{vcid,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('title')">
 	    		title = #{title,javaType=java.lang.String},
@@ -290,6 +314,18 @@
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userId)">  
+	            <![CDATA[ AND userId = #{userId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userType)">  
+	            <![CDATA[ AND userType = #{userType} ]]>
 	        </if>
 		</trim>
 	</update> 

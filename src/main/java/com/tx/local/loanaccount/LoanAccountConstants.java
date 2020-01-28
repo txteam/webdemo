@@ -10,6 +10,11 @@ import java.math.BigDecimal;
 
 /**
  * 贷款账户长常量类<br/>
+ *    贷款账户：
+ *       账单分期业务
+ *       信用贷款业务
+ *       带呀贷款业务
+ *       票据贴现业务
  * <功能详细描述>
  * 
  * @author Administrator
@@ -41,10 +46,8 @@ public interface LoanAccountConstants {
     /** 贷款账户：期数[无期数] */
     String PERIOD_NA = "NA";
     
-    //
     //    /** 贷款账户：期数[注销后期数] */
     //    String PERIOD_WO = "WO";
-    //    
     //    /** 贷款账户：期数[超额还款] */
     //    String PERIOD_OR = "OR";
     

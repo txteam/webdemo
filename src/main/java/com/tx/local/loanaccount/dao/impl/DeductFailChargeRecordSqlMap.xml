@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="deductFailChargeRecord">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="deductFailChargeRecordMap" 
+		type="com.tx.local.loanaccount.model.DeductFailChargeRecord">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.DeductFailChargeRecord"
+		resultMap="deductFailChargeRecordMap">
+		SELECT 
+				DFCR.id,
+				DFCR.feeItem,
+				DFCR.bankAccountType,
+				DFCR.lastUpdateDate,
+				DFCR.loanAmount,
+				DFCR.loanAccountId,
+				DFCR.amount,
+				DFCR.createDate,
+				DFCR.deductFailAmount,
+				DFCR.duductRecordId,
+				DFCR.period,
+				DFCR.recordDate,
+				DFCR.remark,
+				DFCR.revokeDate,
+				DFCR.revokeTradingRecordId,
+				DFCR.revoked,
+				DFCR.tradingRecordId
+		  FROM LA_DEDUCT_FAIL_RECORD DFCR
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND DFCR.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="deductFailChargeRecordMap">
+		SELECT 
+				DFCR.id,
+				DFCR.feeItem,
+				DFCR.bankAccountType,
+				DFCR.lastUpdateDate,
+				DFCR.loanAmount,
+				DFCR.loanAccountId,
+				DFCR.amount,
+				DFCR.createDate,
+				DFCR.deductFailAmount,
+				DFCR.duductRecordId,
+				DFCR.period,
+				DFCR.recordDate,
+				DFCR.remark,
+				DFCR.revokeDate,
+				DFCR.revokeTradingRecordId,
+				DFCR.revoked,
+				DFCR.tradingRecordId
+		  FROM LA_DEDUCT_FAIL_RECORD DFCR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND DFCR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND DFCR.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankAccountType)">  
+	            <![CDATA[ AND DFCR.bankAccountType = #{bankAccountType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAmount)">  
+	            <![CDATA[ AND DFCR.loanAmount = #{loanAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND DFCR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(amount)">  
+	            <![CDATA[ AND DFCR.amount = #{amount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND DFCR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND DFCR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(deductFailAmount)">  
+	            <![CDATA[ AND DFCR.deductFailAmount = #{deductFailAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(duductRecordId)">  
+	            <![CDATA[ AND DFCR.duductRecordId = #{duductRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND DFCR.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND DFCR.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeTradingRecordId)">  
+	            <![CDATA[ AND DFCR.revokeTradingRecordId = #{revokeTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND DFCR.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecordId)">  
+	            <![CDATA[ AND DFCR.tradingRecordId = #{tradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND DFCR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_DEDUCT_FAIL_RECORD DFCR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND DFCR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND DFCR.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(bankAccountType)">  
+	            <![CDATA[ AND DFCR.bankAccountType = #{bankAccountType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAmount)">  
+	            <![CDATA[ AND DFCR.loanAmount = #{loanAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND DFCR.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(amount)">  
+	            <![CDATA[ AND DFCR.amount = #{amount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND DFCR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND DFCR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(deductFailAmount)">  
+	            <![CDATA[ AND DFCR.deductFailAmount = #{deductFailAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(duductRecordId)">  
+	            <![CDATA[ AND DFCR.duductRecordId = #{duductRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND DFCR.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND DFCR.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeTradingRecordId)">  
+	            <![CDATA[ AND DFCR.revokeTradingRecordId = #{revokeTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND DFCR.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(tradingRecordId)">  
+	            <![CDATA[ AND DFCR.tradingRecordId = #{tradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND DFCR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.DeductFailChargeRecord">
+		INSERT INTO LA_DEDUCT_FAIL_RECORD
+		(
+			id,
+			feeItem,
+			bankAccountType,
+			lastUpdateDate,
+			loanAmount,
+			loanAccountId,
+			amount,
+			createDate,
+			deductFailAmount,
+			duductRecordId,
+			period,
+			recordDate,
+			remark,
+			revokeDate,
+			revokeTradingRecordId,
+			revoked,
+			tradingRecordId
+		)
+		VALUES
+		(
+			#{id},
+			#{feeItem},
+			#{bankAccountType},
+			#{lastUpdateDate},
+			#{loanAmount},
+			#{loanAccountId},
+			#{amount},
+			#{createDate},
+			#{deductFailAmount},
+			#{duductRecordId},
+			#{period},
+			#{recordDate},
+			#{remark},
+			#{revokeDate},
+			#{revokeTradingRecordId},
+			#{revoked},
+			#{tradingRecordId}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.DeductFailChargeRecord">
+		DELETE FROM LA_DEDUCT_FAIL_RECORD  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_DEDUCT_FAIL_RECORD
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('feeItem')">
+	    		feeItem = #{feeItem,javaType=com.tx.local.basicdata.model.FeeItemEnum},
+	    	</if>
+			<if test="_parameter.containsKey('bankAccountType')">
+	    		bankAccountType = #{bankAccountType,javaType=com.tx.local.loanaccount.model.LABankAccountTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('loanAmount')">
+	    		loanAmount = #{loanAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('loanAccountId')">
+	    		loanAccountId = #{loanAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('amount')">
+	    		amount = #{amount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('deductFailAmount')">
+	    		deductFailAmount = #{deductFailAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('duductRecordId')">
+	    		duductRecordId = #{duductRecordId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('period')">
+	    		period = #{period,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('recordDate')">
+	    		recordDate = #{recordDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('remark')">
+	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('revokeDate')">
+	    		revokeDate = #{revokeDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('revokeTradingRecordId')">
+	    		revokeTradingRecordId = #{revokeTradingRecordId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('revoked')">
+	    		revoked = #{revoked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('tradingRecordId')">
+	    		tradingRecordId = #{tradingRecordId,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

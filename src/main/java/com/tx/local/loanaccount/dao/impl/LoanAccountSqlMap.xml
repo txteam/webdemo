@@ -1,0 +1,1083 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="loanAccount">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="loanAccountMap" 
+		type="com.tx.local.loanaccount.model.LoanAccount">
+		<result column="districtId" property="district.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.LoanAccount"
+		resultMap="loanAccountMap">
+		SELECT 
+				LA.id,
+				LA.inHisTable,
+				LA.died,
+				LA.factLoanDate,
+				LA.factOutLoanAmount,
+				LA.lastLockDate,
+				LA.lastRepayDate,
+				LA.lastUpdateDate,
+				LA.lastRepayAmount,
+				LA.loanAmount,
+				LA.loanAccountType,
+				LA.nextRepayDate,
+				LA.nextDeductDate,
+				LA.nextOverdueCheckDate,
+				LA.nextSettleInterestDate,
+				LA.overRepayAmount,
+				LA.paidPeriod,
+				LA.time,
+				LA.timeUnitType,
+				LA.vcid,
+				LA.afterDelayDays,
+				LA.firstRepayDate,
+				LA.graceDays,
+				LA.legalProcedure,
+				LA.repayWay,
+				LA.totalPeriod,
+				LA.writeOff,
+				LA.writeOffDate,
+				LA.writeOffAmount,
+				LA.writeOffReason,
+				LA.writeOffRepayAmount,
+				LA.beforeDelayDays,
+				LA.clientId,
+				LA.clientName,
+				LA.clientAccountId,
+				LA.clientIdCardType,
+				LA.clientIdCardNumber,
+				LA.closed,
+				LA.createDate,
+				LA.creditInfoId,
+				LA.creditInfoVersion,
+				LA.expiryDate,
+				LA.locked,
+				LA.revokeDate,
+				LA.revokeReason,
+				LA.settle,
+				LA.settleDate,
+				LA.settleSL,
+				LA.settleRepayDate,
+				LA.settleCurrentPeriod,
+				LA.settleInterestStatus,
+				LA.settleSLDate,
+				LA.settleRepayDatePeriod,
+				LA.settleSLRepayDate,
+				LA.settleSLRepayDatePeriod,
+				LA.sourceLoanAccountId,
+				LA.sourceLastTradingRecordId,
+				LA.accountStatus,
+				LA.currentPeriod,
+				LA.currentPeriodExpireDate,
+				LA.monthlyRepayDay,
+				LA.monthlyRepayAmount,
+				LA.overdue,
+				LA.overdueSum,
+				LA.overdueDate,
+				LA.overdueAmount,
+				LA.revoked,
+				LA.category,
+				LA.contractId,
+				LA.contractNumber,
+				LA.districtId,
+				LA.interestDate,
+				LA.effectiveDate,
+				LA.outsource,
+				LA.outsourceAmount,
+				LA.outsourceHappend,
+				LA.outsourcePercentage,
+				LA.outsourceAssignRecordId,
+				LA.principalBalance,
+				LA.principalBalanceIrr,
+				LA.collectionStatus,
+				LA.organizationId
+		  FROM LA_LOAN_ACCOUNT LA
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND LA.id = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(contractNumber)">
+				AND LA.contractNumber = #{contractNumber}
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">
+				AND LA.vcid = #{vcid}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="loanAccountMap">
+		SELECT 
+				LA.id,
+				LA.inHisTable,
+				LA.died,
+				LA.factLoanDate,
+				LA.factOutLoanAmount,
+				LA.lastLockDate,
+				LA.lastRepayDate,
+				LA.lastUpdateDate,
+				LA.lastRepayAmount,
+				LA.loanAmount,
+				LA.loanAccountType,
+				LA.nextRepayDate,
+				LA.nextDeductDate,
+				LA.nextOverdueCheckDate,
+				LA.nextSettleInterestDate,
+				LA.overRepayAmount,
+				LA.paidPeriod,
+				LA.time,
+				LA.timeUnitType,
+				LA.vcid,
+				LA.afterDelayDays,
+				LA.firstRepayDate,
+				LA.graceDays,
+				LA.legalProcedure,
+				LA.repayWay,
+				LA.totalPeriod,
+				LA.writeOff,
+				LA.writeOffDate,
+				LA.writeOffAmount,
+				LA.writeOffReason,
+				LA.writeOffRepayAmount,
+				LA.beforeDelayDays,
+				LA.clientId,
+				LA.clientName,
+				LA.clientAccountId,
+				LA.clientIdCardType,
+				LA.clientIdCardNumber,
+				LA.closed,
+				LA.createDate,
+				LA.creditInfoId,
+				LA.creditInfoVersion,
+				LA.expiryDate,
+				LA.locked,
+				LA.revokeDate,
+				LA.revokeReason,
+				LA.settle,
+				LA.settleDate,
+				LA.settleSL,
+				LA.settleRepayDate,
+				LA.settleCurrentPeriod,
+				LA.settleInterestStatus,
+				LA.settleSLDate,
+				LA.settleRepayDatePeriod,
+				LA.settleSLRepayDate,
+				LA.settleSLRepayDatePeriod,
+				LA.sourceLoanAccountId,
+				LA.sourceLastTradingRecordId,
+				LA.accountStatus,
+				LA.currentPeriod,
+				LA.currentPeriodExpireDate,
+				LA.monthlyRepayDay,
+				LA.monthlyRepayAmount,
+				LA.overdue,
+				LA.overdueSum,
+				LA.overdueDate,
+				LA.overdueAmount,
+				LA.revoked,
+				LA.category,
+				LA.contractId,
+				LA.contractNumber,
+				LA.districtId,
+				LA.interestDate,
+				LA.effectiveDate,
+				LA.outsource,
+				LA.outsourceAmount,
+				LA.outsourceHappend,
+				LA.outsourcePercentage,
+				LA.outsourceAssignRecordId,
+				LA.principalBalance,
+				LA.principalBalanceIrr,
+				LA.collectionStatus,
+				LA.organizationId
+		  FROM LA_LOAN_ACCOUNT LA
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LA.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(inHisTable)">  
+	            <![CDATA[ AND LA.inHisTable = #{inHisTable} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(died)">  
+	            <![CDATA[ AND LA.died = #{died} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(factOutLoanAmount)">  
+	            <![CDATA[ AND LA.factOutLoanAmount = #{factOutLoanAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastRepayAmount)">  
+	            <![CDATA[ AND LA.lastRepayAmount = #{lastRepayAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAmount)">  
+	            <![CDATA[ AND LA.loanAmount = #{loanAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountType)">  
+	            <![CDATA[ AND LA.loanAccountType = #{loanAccountType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overRepayAmount)">  
+	            <![CDATA[ AND LA.overRepayAmount = #{overRepayAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(paidPeriod)">  
+	            <![CDATA[ AND LA.paidPeriod = #{paidPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(time)">  
+	            <![CDATA[ AND LA.time = #{time} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(timeUnitType)">  
+	            <![CDATA[ AND LA.timeUnitType = #{timeUnitType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND LA.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterDelayDays)">  
+	            <![CDATA[ AND LA.afterDelayDays = #{afterDelayDays} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(graceDays)">  
+	            <![CDATA[ AND LA.graceDays = #{graceDays} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalProcedure)">  
+	            <![CDATA[ AND LA.legalProcedure = #{legalProcedure} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(repayWay)">  
+	            <![CDATA[ AND LA.repayWay = #{repayWay} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(totalPeriod)">  
+	            <![CDATA[ AND LA.totalPeriod = #{totalPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOff)">  
+	            <![CDATA[ AND LA.writeOff = #{writeOff} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOffAmount)">  
+	            <![CDATA[ AND LA.writeOffAmount = #{writeOffAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOffReason)">  
+	            <![CDATA[ AND LA.writeOffReason = #{writeOffReason} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOffRepayAmount)">  
+	            <![CDATA[ AND LA.writeOffRepayAmount = #{writeOffRepayAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeDelayDays)">  
+	            <![CDATA[ AND LA.beforeDelayDays = #{beforeDelayDays} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND LA.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            <![CDATA[ AND LA.clientName = #{clientName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientAccountId)">  
+	            <![CDATA[ AND LA.clientAccountId = #{clientAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientIdCardType)">  
+	            <![CDATA[ AND LA.clientIdCardType = #{clientIdCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientIdCardNumber)">  
+	            <![CDATA[ AND LA.clientIdCardNumber = #{clientIdCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(closed)">  
+	            <![CDATA[ AND LA.closed = #{closed} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LA.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LA.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoId)">  
+	            <![CDATA[ AND LA.creditInfoId = #{creditInfoId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoVersion)">  
+	            <![CDATA[ AND LA.creditInfoVersion = #{creditInfoVersion} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            <![CDATA[ AND LA.locked = #{locked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeReason)">  
+	            <![CDATA[ AND LA.revokeReason = #{revokeReason} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settle)">  
+	            <![CDATA[ AND LA.settle = #{settle} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleSL)">  
+	            <![CDATA[ AND LA.settleSL = #{settleSL} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleCurrentPeriod)">  
+	            <![CDATA[ AND LA.settleCurrentPeriod = #{settleCurrentPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleInterestStatus)">  
+	            <![CDATA[ AND LA.settleInterestStatus = #{settleInterestStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleRepayDatePeriod)">  
+	            <![CDATA[ AND LA.settleRepayDatePeriod = #{settleRepayDatePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleSLRepayDatePeriod)">  
+	            <![CDATA[ AND LA.settleSLRepayDatePeriod = #{settleSLRepayDatePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceLoanAccountId)">  
+	            <![CDATA[ AND LA.sourceLoanAccountId = #{sourceLoanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceLastTradingRecordId)">  
+	            <![CDATA[ AND LA.sourceLastTradingRecordId = #{sourceLastTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(accountStatus)">  
+	            <![CDATA[ AND LA.accountStatus = #{accountStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(currentPeriod)">  
+	            <![CDATA[ AND LA.currentPeriod = #{currentPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(monthlyRepayDay)">  
+	            <![CDATA[ AND LA.monthlyRepayDay = #{monthlyRepayDay} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(monthlyRepayAmount)">  
+	            <![CDATA[ AND LA.monthlyRepayAmount = #{monthlyRepayAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdue)">  
+	            <![CDATA[ AND LA.overdue = #{overdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueSum)">  
+	            <![CDATA[ AND LA.overdueSum = #{overdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueAmount)">  
+	            <![CDATA[ AND LA.overdueAmount = #{overdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND LA.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(category)">  
+	            <![CDATA[ AND LA.category = #{category} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(contractId)">  
+	            <![CDATA[ AND LA.contractId = #{contractId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(contractNumber)">  
+	            <![CDATA[ AND LA.contractNumber = #{contractNumber} ]]>
+	        </if>			
+			<if test="district != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(district.id)">  
+		            <![CDATA[ AND LA.districtId = #{district.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsource)">  
+	            <![CDATA[ AND LA.outsource = #{outsource} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceAmount)">  
+	            <![CDATA[ AND LA.outsourceAmount = #{outsourceAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceHappend)">  
+	            <![CDATA[ AND LA.outsourceHappend = #{outsourceHappend} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourcePercentage)">  
+	            <![CDATA[ AND LA.outsourcePercentage = #{outsourcePercentage} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceAssignRecordId)">  
+	            <![CDATA[ AND LA.outsourceAssignRecordId = #{outsourceAssignRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND LA.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalanceIrr)">  
+	            <![CDATA[ AND LA.principalBalanceIrr = #{principalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(collectionStatus)">  
+	            <![CDATA[ AND LA.collectionStatus = #{collectionStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
+	            <![CDATA[ AND LA.organizationId = #{organizationId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LA.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_LOAN_ACCOUNT LA
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND LA.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(inHisTable)">  
+	            <![CDATA[ AND LA.inHisTable = #{inHisTable} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(died)">  
+	            <![CDATA[ AND LA.died = #{died} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(factOutLoanAmount)">  
+	            <![CDATA[ AND LA.factOutLoanAmount = #{factOutLoanAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastRepayAmount)">  
+	            <![CDATA[ AND LA.lastRepayAmount = #{lastRepayAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAmount)">  
+	            <![CDATA[ AND LA.loanAmount = #{loanAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountType)">  
+	            <![CDATA[ AND LA.loanAccountType = #{loanAccountType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overRepayAmount)">  
+	            <![CDATA[ AND LA.overRepayAmount = #{overRepayAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(paidPeriod)">  
+	            <![CDATA[ AND LA.paidPeriod = #{paidPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(time)">  
+	            <![CDATA[ AND LA.time = #{time} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(timeUnitType)">  
+	            <![CDATA[ AND LA.timeUnitType = #{timeUnitType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND LA.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(afterDelayDays)">  
+	            <![CDATA[ AND LA.afterDelayDays = #{afterDelayDays} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(graceDays)">  
+	            <![CDATA[ AND LA.graceDays = #{graceDays} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalProcedure)">  
+	            <![CDATA[ AND LA.legalProcedure = #{legalProcedure} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(repayWay)">  
+	            <![CDATA[ AND LA.repayWay = #{repayWay} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(totalPeriod)">  
+	            <![CDATA[ AND LA.totalPeriod = #{totalPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOff)">  
+	            <![CDATA[ AND LA.writeOff = #{writeOff} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOffAmount)">  
+	            <![CDATA[ AND LA.writeOffAmount = #{writeOffAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOffReason)">  
+	            <![CDATA[ AND LA.writeOffReason = #{writeOffReason} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(writeOffRepayAmount)">  
+	            <![CDATA[ AND LA.writeOffRepayAmount = #{writeOffRepayAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(beforeDelayDays)">  
+	            <![CDATA[ AND LA.beforeDelayDays = #{beforeDelayDays} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND LA.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientName)">  
+	            <![CDATA[ AND LA.clientName = #{clientName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientAccountId)">  
+	            <![CDATA[ AND LA.clientAccountId = #{clientAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientIdCardType)">  
+	            <![CDATA[ AND LA.clientIdCardType = #{clientIdCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientIdCardNumber)">  
+	            <![CDATA[ AND LA.clientIdCardNumber = #{clientIdCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(closed)">  
+	            <![CDATA[ AND LA.closed = #{closed} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND LA.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND LA.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoId)">  
+	            <![CDATA[ AND LA.creditInfoId = #{creditInfoId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoVersion)">  
+	            <![CDATA[ AND LA.creditInfoVersion = #{creditInfoVersion} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            <![CDATA[ AND LA.locked = #{locked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revokeReason)">  
+	            <![CDATA[ AND LA.revokeReason = #{revokeReason} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settle)">  
+	            <![CDATA[ AND LA.settle = #{settle} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleSL)">  
+	            <![CDATA[ AND LA.settleSL = #{settleSL} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleCurrentPeriod)">  
+	            <![CDATA[ AND LA.settleCurrentPeriod = #{settleCurrentPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleInterestStatus)">  
+	            <![CDATA[ AND LA.settleInterestStatus = #{settleInterestStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleRepayDatePeriod)">  
+	            <![CDATA[ AND LA.settleRepayDatePeriod = #{settleRepayDatePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settleSLRepayDatePeriod)">  
+	            <![CDATA[ AND LA.settleSLRepayDatePeriod = #{settleSLRepayDatePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceLoanAccountId)">  
+	            <![CDATA[ AND LA.sourceLoanAccountId = #{sourceLoanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sourceLastTradingRecordId)">  
+	            <![CDATA[ AND LA.sourceLastTradingRecordId = #{sourceLastTradingRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(accountStatus)">  
+	            <![CDATA[ AND LA.accountStatus = #{accountStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(currentPeriod)">  
+	            <![CDATA[ AND LA.currentPeriod = #{currentPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(monthlyRepayDay)">  
+	            <![CDATA[ AND LA.monthlyRepayDay = #{monthlyRepayDay} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(monthlyRepayAmount)">  
+	            <![CDATA[ AND LA.monthlyRepayAmount = #{monthlyRepayAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdue)">  
+	            <![CDATA[ AND LA.overdue = #{overdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueSum)">  
+	            <![CDATA[ AND LA.overdueSum = #{overdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueAmount)">  
+	            <![CDATA[ AND LA.overdueAmount = #{overdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(revoked)">  
+	            <![CDATA[ AND LA.revoked = #{revoked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(category)">  
+	            <![CDATA[ AND LA.category = #{category} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(contractId)">  
+	            <![CDATA[ AND LA.contractId = #{contractId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(contractNumber)">  
+	            <![CDATA[ AND LA.contractNumber = #{contractNumber} ]]>
+	        </if>			
+			<if test="district != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(district.id)">  
+		            <![CDATA[ AND LA.districtId = #{district.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsource)">  
+	            <![CDATA[ AND LA.outsource = #{outsource} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceAmount)">  
+	            <![CDATA[ AND LA.outsourceAmount = #{outsourceAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceHappend)">  
+	            <![CDATA[ AND LA.outsourceHappend = #{outsourceHappend} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourcePercentage)">  
+	            <![CDATA[ AND LA.outsourcePercentage = #{outsourcePercentage} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(outsourceAssignRecordId)">  
+	            <![CDATA[ AND LA.outsourceAssignRecordId = #{outsourceAssignRecordId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND LA.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalanceIrr)">  
+	            <![CDATA[ AND LA.principalBalanceIrr = #{principalBalanceIrr} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(collectionStatus)">  
+	            <![CDATA[ AND LA.collectionStatus = #{collectionStatus} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(organizationId)">  
+	            <![CDATA[ AND LA.organizationId = #{organizationId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND LA.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.LoanAccount">
+		INSERT INTO LA_LOAN_ACCOUNT
+		(
+			id,
+			inHisTable,
+			died,
+			factLoanDate,
+			factOutLoanAmount,
+			lastLockDate,
+			lastRepayDate,
+			lastUpdateDate,
+			lastRepayAmount,
+			loanAmount,
+			loanAccountType,
+			nextRepayDate,
+			nextDeductDate,
+			nextOverdueCheckDate,
+			nextSettleInterestDate,
+			overRepayAmount,
+			paidPeriod,
+			time,
+			timeUnitType,
+			vcid,
+			afterDelayDays,
+			firstRepayDate,
+			graceDays,
+			legalProcedure,
+			repayWay,
+			totalPeriod,
+			writeOff,
+			writeOffDate,
+			writeOffAmount,
+			writeOffReason,
+			writeOffRepayAmount,
+			beforeDelayDays,
+			clientId,
+			clientName,
+			clientAccountId,
+			clientIdCardType,
+			clientIdCardNumber,
+			closed,
+			createDate,
+			creditInfoId,
+			creditInfoVersion,
+			expiryDate,
+			locked,
+			revokeDate,
+			revokeReason,
+			settle,
+			settleDate,
+			settleSL,
+			settleRepayDate,
+			settleCurrentPeriod,
+			settleInterestStatus,
+			settleSLDate,
+			settleRepayDatePeriod,
+			settleSLRepayDate,
+			settleSLRepayDatePeriod,
+			sourceLoanAccountId,
+			sourceLastTradingRecordId,
+			accountStatus,
+			currentPeriod,
+			currentPeriodExpireDate,
+			monthlyRepayDay,
+			monthlyRepayAmount,
+			overdue,
+			overdueSum,
+			overdueDate,
+			overdueAmount,
+			revoked,
+			category,
+			contractId,
+			contractNumber,
+			districtId,
+			interestDate,
+			effectiveDate,
+			outsource,
+			outsourceAmount,
+			outsourceHappend,
+			outsourcePercentage,
+			outsourceAssignRecordId,
+			principalBalance,
+			principalBalanceIrr,
+			collectionStatus,
+			organizationId
+		)
+		VALUES
+		(
+			#{id},
+			#{inHisTable},
+			#{died},
+			#{factLoanDate},
+			#{factOutLoanAmount},
+			#{lastLockDate},
+			#{lastRepayDate},
+			#{lastUpdateDate},
+			#{lastRepayAmount},
+			#{loanAmount},
+			#{loanAccountType},
+			#{nextRepayDate},
+			#{nextDeductDate},
+			#{nextOverdueCheckDate},
+			#{nextSettleInterestDate},
+			#{overRepayAmount},
+			#{paidPeriod},
+			#{time},
+			#{timeUnitType},
+			#{vcid},
+			#{afterDelayDays},
+			#{firstRepayDate},
+			#{graceDays},
+			#{legalProcedure},
+			#{repayWay},
+			#{totalPeriod},
+			#{writeOff},
+			#{writeOffDate},
+			#{writeOffAmount},
+			#{writeOffReason},
+			#{writeOffRepayAmount},
+			#{beforeDelayDays},
+			#{clientId},
+			#{clientName},
+			#{clientAccountId},
+			#{clientIdCardType},
+			#{clientIdCardNumber},
+			#{closed},
+			#{createDate},
+			#{creditInfoId},
+			#{creditInfoVersion},
+			#{expiryDate},
+			#{locked},
+			#{revokeDate},
+			#{revokeReason},
+			#{settle},
+			#{settleDate},
+			#{settleSL},
+			#{settleRepayDate},
+			#{settleCurrentPeriod},
+			#{settleInterestStatus},
+			#{settleSLDate},
+			#{settleRepayDatePeriod},
+			#{settleSLRepayDate},
+			#{settleSLRepayDatePeriod},
+			#{sourceLoanAccountId},
+			#{sourceLastTradingRecordId},
+			#{accountStatus},
+			#{currentPeriod},
+			#{currentPeriodExpireDate},
+			#{monthlyRepayDay},
+			#{monthlyRepayAmount},
+			#{overdue},
+			#{overdueSum},
+			#{overdueDate},
+			#{overdueAmount},
+			#{revoked},
+			#{category},
+			#{contractId},
+			#{contractNumber},
+			#{district.id},
+			#{interestDate},
+			#{effectiveDate},
+			#{outsource},
+			#{outsourceAmount},
+			#{outsourceHappend},
+			#{outsourcePercentage},
+			#{outsourceAssignRecordId},
+			#{principalBalance},
+			#{principalBalanceIrr},
+			#{collectionStatus},
+			#{organizationId}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.LoanAccount">
+		DELETE FROM LA_LOAN_ACCOUNT  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_LOAN_ACCOUNT
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('inHisTable')">
+	    		inHisTable = #{inHisTable,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('died')">
+	    		died = #{died,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('factLoanDate')">
+	    		factLoanDate = #{factLoanDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('factOutLoanAmount')">
+	    		factOutLoanAmount = #{factOutLoanAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('lastLockDate')">
+	    		lastLockDate = #{lastLockDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastRepayDate')">
+	    		lastRepayDate = #{lastRepayDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastRepayAmount')">
+	    		lastRepayAmount = #{lastRepayAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('loanAmount')">
+	    		loanAmount = #{loanAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('loanAccountType')">
+	    		loanAccountType = #{loanAccountType,javaType=com.tx.local.loanaccount.model.LoanAccountTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('nextRepayDate')">
+	    		nextRepayDate = #{nextRepayDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('nextDeductDate')">
+	    		nextDeductDate = #{nextDeductDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('nextOverdueCheckDate')">
+	    		nextOverdueCheckDate = #{nextOverdueCheckDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('nextSettleInterestDate')">
+	    		nextSettleInterestDate = #{nextSettleInterestDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('overRepayAmount')">
+	    		overRepayAmount = #{overRepayAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('paidPeriod')">
+	    		paidPeriod = #{paidPeriod,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('time')">
+	    		time = #{time,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('timeUnitType')">
+	    		timeUnitType = #{timeUnitType,javaType=com.tx.local.basicdata.model.TimeUnitTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('vcid')">
+	    		vcid = #{vcid,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('afterDelayDays')">
+	    		afterDelayDays = #{afterDelayDays,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('firstRepayDate')">
+	    		firstRepayDate = #{firstRepayDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('graceDays')">
+	    		graceDays = #{graceDays,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('legalProcedure')">
+	    		legalProcedure = #{legalProcedure,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('repayWay')">
+	    		repayWay = #{repayWay,javaType=com.tx.local.basicdata.model.RepayWayEnum},
+	    	</if>
+			<if test="_parameter.containsKey('totalPeriod')">
+	    		totalPeriod = #{totalPeriod,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('writeOff')">
+	    		writeOff = #{writeOff,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('writeOffDate')">
+	    		writeOffDate = #{writeOffDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('writeOffAmount')">
+	    		writeOffAmount = #{writeOffAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('writeOffReason')">
+	    		writeOffReason = #{writeOffReason,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('writeOffRepayAmount')">
+	    		writeOffRepayAmount = #{writeOffRepayAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('beforeDelayDays')">
+	    		beforeDelayDays = #{beforeDelayDays,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('clientId')">
+	    		clientId = #{clientId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('clientName')">
+	    		clientName = #{clientName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('clientAccountId')">
+	    		clientAccountId = #{clientAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('clientIdCardType')">
+	    		clientIdCardType = #{clientIdCardType,javaType=com.tx.local.basicdata.model.IDCardTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('clientIdCardNumber')">
+	    		clientIdCardNumber = #{clientIdCardNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('closed')">
+	    		closed = #{closed,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('creditInfoId')">
+	    		creditInfoId = #{creditInfoId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('creditInfoVersion')">
+	    		creditInfoVersion = #{creditInfoVersion,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('expiryDate')">
+	    		expiryDate = #{expiryDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('locked')">
+	    		locked = #{locked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('revokeDate')">
+	    		revokeDate = #{revokeDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('revokeReason')">
+	    		revokeReason = #{revokeReason,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('settle')">
+	    		settle = #{settle,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('settleDate')">
+	    		settleDate = #{settleDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('settleSL')">
+	    		settleSL = #{settleSL,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('settleRepayDate')">
+	    		settleRepayDate = #{settleRepayDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('settleCurrentPeriod')">
+	    		settleCurrentPeriod = #{settleCurrentPeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('settleInterestStatus')">
+	    		settleInterestStatus = #{settleInterestStatus,javaType=com.tx.local.loanaccount.model.SettleInterestStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('settleSLDate')">
+	    		settleSLDate = #{settleSLDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('settleRepayDatePeriod')">
+	    		settleRepayDatePeriod = #{settleRepayDatePeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('settleSLRepayDate')">
+	    		settleSLRepayDate = #{settleSLRepayDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('settleSLRepayDatePeriod')">
+	    		settleSLRepayDatePeriod = #{settleSLRepayDatePeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('sourceLoanAccountId')">
+	    		sourceLoanAccountId = #{sourceLoanAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('sourceLastTradingRecordId')">
+	    		sourceLastTradingRecordId = #{sourceLastTradingRecordId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('accountStatus')">
+	    		accountStatus = #{accountStatus,javaType=com.tx.local.loanaccount.model.AccountStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('currentPeriod')">
+	    		currentPeriod = #{currentPeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('currentPeriodExpireDate')">
+	    		currentPeriodExpireDate = #{currentPeriodExpireDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('monthlyRepayDay')">
+	    		monthlyRepayDay = #{monthlyRepayDay,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('monthlyRepayAmount')">
+	    		monthlyRepayAmount = #{monthlyRepayAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('overdue')">
+	    		overdue = #{overdue,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('overdueSum')">
+	    		overdueSum = #{overdueSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('overdueDate')">
+	    		overdueDate = #{overdueDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('overdueAmount')">
+	    		overdueAmount = #{overdueAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('revoked')">
+	    		revoked = #{revoked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('category')">
+	    		category = #{category,javaType=com.tx.local.loanaccount.model.LoanAccountCategoryEnum},
+	    	</if>
+			<if test="_parameter.containsKey('contractId')">
+	    		contractId = #{contractId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('contractNumber')">
+	    		contractNumber = #{contractNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('district')">
+	    		districtId = #{district.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('interestDate')">
+	    		interestDate = #{interestDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('effectiveDate')">
+	    		effectiveDate = #{effectiveDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('outsource')">
+	    		outsource = #{outsource,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('outsourceAmount')">
+	    		outsourceAmount = #{outsourceAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('outsourceHappend')">
+	    		outsourceHappend = #{outsourceHappend,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('outsourcePercentage')">
+	    		outsourcePercentage = #{outsourcePercentage,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('outsourceAssignRecordId')">
+	    		outsourceAssignRecordId = #{outsourceAssignRecordId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('principalBalance')">
+	    		principalBalance = #{principalBalance,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('principalBalanceIrr')">
+	    		principalBalanceIrr = #{principalBalanceIrr,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('collectionStatus')">
+	    		collectionStatus = #{collectionStatus,javaType=com.tx.local.loanaccount.model.CollectionStatusEnum},
+	    	</if>
+			<if test="_parameter.containsKey('organizationId')">
+	    		organizationId = #{organizationId,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

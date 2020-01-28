@@ -18,6 +18,7 @@ import com.tx.component.basicdata.model.BasicDataEnum;
  * @since  [产品/模块版本]
  */
 public enum FeeItemEnum implements BasicDataEnum {
+    
     /* ------------ invest account ---------------- */
     DK_GZK("DK_GZK", FeeEnum.GZK, FeeOwnershipEnum.DK, "贷款公司_购置款"),
     

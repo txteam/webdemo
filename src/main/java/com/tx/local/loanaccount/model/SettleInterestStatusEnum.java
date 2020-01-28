@@ -21,10 +21,6 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum SettleInterestStatusEnum implements BasicDataEnum {
     
-    //  
-    //    结清待结息,
-    //    
-    //    结清退出待结息,
     /** 正常:待结息 */
     WSI("WSI", "正常"),
     
@@ -37,9 +33,6 @@ public enum SettleInterestStatusEnum implements BasicDataEnum {
     /** 结息完成 */
     FSI("FSI", "完成结息");
     
-    /** key值 */
-    private final String key;
-    
     /** code值 */
     private final String code;
     
@@ -47,17 +40,9 @@ public enum SettleInterestStatusEnum implements BasicDataEnum {
     private final String name;
     
     /** <默认构造函数> */
-    private SettleInterestStatusEnum(String key, String name) {
-        this.key = key;
-        this.code = key;
+    private SettleInterestStatusEnum(String code, String name) {
+        this.code = code;
         this.name = name;
-    }
-    
-    /**
-     * @return 返回 key
-     */
-    public String getKey() {
-        return key;
     }
     
     /**

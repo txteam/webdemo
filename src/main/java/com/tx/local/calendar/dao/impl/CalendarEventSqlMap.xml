@@ -39,6 +39,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND CE.id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND CE.vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND CE.type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND CE.topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND CE.topicType = #{topicType} ]]>
+	        </if>
 		</trim>
 	</select>
 	
@@ -284,6 +296,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND topicType = #{topicType} ]]>
+	        </if>
 		</trim>
 	</delete>
 	
@@ -292,6 +316,18 @@
 	    parameterType="java.util.Map">  
 	    UPDATE CAL_CALENDAR_EVENT
 	    <trim prefix="SET" suffixOverrides=",">
+			<!-- <if test="_parameter.containsKey('type')"> -->
+			<!-- type = #{type,javaType=com.tx.local.calendar.model.CalendarEventTypeEnum}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('vcid')"> -->
+			<!-- vcid = #{vcid,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('topicId')"> -->
+			<!-- topicId = #{topicId,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('topicType')"> -->
+			<!-- topicType = #{topicType,javaType=com.tx.local.calendar.model.CalendarEventTopicTypeEnum}, -->
+			<!-- </if> -->
 			<if test="_parameter.containsKey('allDay')">
 	    		allDay = #{allDay,javaType=boolean},
 	    	</if>
@@ -307,12 +343,6 @@
 			<if test="_parameter.containsKey('linkUrl')">
 	    		linkUrl = #{linkUrl,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('type')">
-	    		type = #{type,javaType=com.tx.local.calendar.model.CalendarEventTypeEnum},
-	    	</if>
-			<if test="_parameter.containsKey('vcid')">
-	    		vcid = #{vcid,javaType=java.lang.String},
-	    	</if>
 			<if test="_parameter.containsKey('classValue')">
 	    		classValue = #{classValue,javaType=java.lang.String},
 	    	</if>
@@ -324,12 +354,6 @@
 	    	</if>
 			<if test="_parameter.containsKey('title')">
 	    		title = #{title,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('topicId')">
-	    		topicId = #{topicId,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('topicType')">
-	    		topicType = #{topicType,javaType=com.tx.local.calendar.model.CalendarEventTopicTypeEnum},
 	    	</if>
 			<if test="_parameter.containsKey('remark')">
 	    		remark = #{remark,javaType=java.lang.String},
@@ -345,6 +369,18 @@
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND topicType = #{topicType} ]]>
 	        </if>
 		</trim>
 	</update> 

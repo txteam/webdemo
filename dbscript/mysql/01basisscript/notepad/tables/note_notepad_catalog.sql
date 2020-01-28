@@ -17,3 +17,5 @@ create table NOTE_NOTEPAD_CATALOG(
 	createUserId varchar(64) ,
 	primary key(id)
 );
+create index IDX_NOTE_NOTEPAD_CATALOG_00 on NOTE_NOTEPAD_CATALOG(vcid);
+create index IDX_NOTE_NOTEPAD_CATALOG_01 on NOTE_NOTEPAD_CATALOG(topicId,topicType);

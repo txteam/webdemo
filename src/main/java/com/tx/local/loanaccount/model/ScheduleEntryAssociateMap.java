@@ -58,7 +58,8 @@ public class ScheduleEntryAssociateMap<E extends ScheduleEntryAssociate>
             if (!get(sa.getScheduleType()).containsKey(sa.getPeriod())) {
                 get(sa.getScheduleType()).put(sa.getPeriod(), new HashMap<>());
             }
-            get(sa.getScheduleType()).get(sa.getPeriod()).put(sa.getFeeItem(), sa);
+            get(sa.getScheduleType()).get(sa.getPeriod()).put(sa.getFeeItem(),
+                    sa);
         }
     }
     
@@ -77,7 +78,8 @@ public class ScheduleEntryAssociateMap<E extends ScheduleEntryAssociate>
     }
     
     /** 获取指定计划类型期数对应的计划关联项映射 */
-    public boolean contains(ScheduleTypeEnum scheduleType, String period, FeeItemEnum feeItem) {
+    public boolean contains(ScheduleTypeEnum scheduleType, String period,
+            FeeItemEnum feeItem) {
         AssertUtils.notNull(scheduleType, "scheduleType is null.");
         AssertUtils.notEmpty(period, "period is empty.");
         AssertUtils.notNull(feeItem, "feeItem is null.");
@@ -87,13 +89,16 @@ public class ScheduleEntryAssociateMap<E extends ScheduleEntryAssociate>
         } else if (!this.get(scheduleType).containsKey(period)) {
             return false;
         } else {
-            boolean flag = this.get(scheduleType).get(period).containsKey(feeItem);
+            boolean flag = this.get(scheduleType)
+                    .get(period)
+                    .containsKey(feeItem);
             return flag;
         }
     }
     
     /** 获取指定计划类型期数对应的计划关联项映射 */
-    public E get(ScheduleTypeEnum scheduleType, String period, FeeItemEnum feeItem) {
+    public E get(ScheduleTypeEnum scheduleType, String period,
+            FeeItemEnum feeItem) {
         AssertUtils.notNull(scheduleType, "scheduleType is null.");
         AssertUtils.notEmpty(period, "period is empty.");
         AssertUtils.notNull(feeItem, "feeItem is null.");
@@ -109,7 +114,8 @@ public class ScheduleEntryAssociateMap<E extends ScheduleEntryAssociate>
     }
     
     /** 获取指定计划类型期数对应的计划关联项映射 */
-    public Map<FeeItemEnum, E> get(ScheduleTypeEnum scheduleType, String period) {
+    public Map<FeeItemEnum, E> get(ScheduleTypeEnum scheduleType,
+            String period) {
         AssertUtils.notNull(scheduleType, "scheduleType is null.");
         AssertUtils.notEmpty(period, "period is empty.");
         
@@ -137,7 +143,8 @@ public class ScheduleEntryAssociateMap<E extends ScheduleEntryAssociate>
         if (!this.containsKey(scheduleType)) {
             return new ArrayList<>();
         } else {
-            List<E> resList = new ArrayList<>(TxConstants.INITIAL_CONLLECTION_SIZE);
+            List<E> resList = new ArrayList<>(
+                    TxConstants.INITIAL_CONLLECTION_SIZE);
             
             for (Map<FeeItemEnum, E> entryTemp : get(scheduleType).values()) {
                 resList.addAll(entryTemp.values());
@@ -165,7 +172,8 @@ public class ScheduleEntryAssociateMap<E extends ScheduleEntryAssociate>
         } else if (!get(scheduleType).containsKey(period)) {
             return new ArrayList<>();
         } else {
-            List<E> resList = new ArrayList<>(get(scheduleType).get(period).values());
+            List<E> resList = new ArrayList<>(
+                    get(scheduleType).get(period).values());
             return resList;
         }
     }
@@ -180,7 +188,8 @@ public class ScheduleEntryAssociateMap<E extends ScheduleEntryAssociate>
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
     */
-    public List<E> valueList(ScheduleTypeEnum scheduleType, FeeItemEnum feeItem) {
+    public List<E> valueList(ScheduleTypeEnum scheduleType,
+            FeeItemEnum feeItem) {
         AssertUtils.notNull(scheduleType, "scheduleType is null.");
         AssertUtils.notNull(feeItem, "feeItem is null.");
         

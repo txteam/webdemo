@@ -77,10 +77,22 @@ public class CommMessage implements Serializable {
     private CommMessageTopicTypeEnum topicType;
     
     /** 关联id */
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String topicId;
     
-    /** 建议类容 */
+    /** 客户类型 */
+    @Column(nullable = false)
+    private MsgUserTypeEnum userType;
+    
+    /** 用户id */
+    @Column(nullable = true)
+    private String userId;
+    
+    /** 站内消息标题 */
+    @Column(nullable = false, updatable = true, length = 100)
+    private String title;
+    
+    /** 站内消息内容 */
     @Column(length = 4000)
     private String content;
     

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>查询NoticeCatalog列表[queryNoticeCatalogList]</title>
+	<title>查询公告消息分类列表[queryNoticeCatalogList]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -45,7 +45,7 @@
 var grid = null;
 var idFieldName = 'id';
 var nameFieldName = 'name'; 
-var entityName = 'NoticeCatalog';
+var entityName = '公告消息分类';
 $(document).ready(function(){
 	var  $editALink = $("#editALink");
 	var  $deleteALink = $("#deleteALink");
@@ -196,7 +196,7 @@ function deleteFun(id,name) {
 		DialogUtils.alert("没有选中的" + entityName);
 		return false;
 	}
-	//判断是否确认删除指定的NoticeCatalog
+	//判断是否确认删除指定的公告消息分类
 	DialogUtils.confirm("确认提醒" , 
     	$.formatString("是否确认删除{0}:[{1}]?",entityName,name) , 
     	function(data){
@@ -204,7 +204,7 @@ function deleteFun(id,name) {
 	    		DialogUtils.progress({
 	    	        text : '数据提交中，请等待....'
 	    		});
-	    		//如果确认删除指定的NoticeCatalog
+	    		//如果确认删除指定的公告消息分类
 	    		$.post(
 	    			/*[[@{/noticeCatalog/deleteById}]]*/'',
 		    		{id:id},
@@ -236,7 +236,7 @@ function disableFun(id,name){
 		DialogUtils.alert("没有选中的" + entityName);
 		return false;
 	}
-	//判断是否确认禁用指定NoticeCatalog
+	//判断是否确认禁用指定公告消息分类
 	DialogUtils.confirm(
     		"确认提醒" , 
     		$.formatString("是否确认禁用{0}:[{1}]?",entityName,name), 
@@ -245,7 +245,7 @@ function disableFun(id,name){
     		DialogUtils.progress({
     	        text : '数据提交中，请等待....'
     		});
-    		//如果确认禁用指定NoticeCatalog
+    		//如果确认禁用指定公告消息分类
     		$.post(
 				/*[[@{/noticeCatalog/disableById}]]*/'',
 	    		{id:id},
@@ -277,7 +277,7 @@ function enableFun(id,name){
 		DialogUtils.alert("没有选中的" + entityName);
 		return false;
 	}
-	//判断是否确认禁用指定NoticeCatalog
+	//判断是否确认禁用指定公告消息分类
 	DialogUtils.confirm(
     		"确认提醒" , 
     		$.formatString("是否确认启用{0}:[{1}]?",entityName,name), 
@@ -286,7 +286,7 @@ function enableFun(id,name){
     		DialogUtils.progress({
     	        text : '数据提交中，请等待....'
     		});
-    		//如果确认启用指定NoticeCatalog
+    		//如果确认启用指定公告消息分类
     		$.post(
 				/*[[@{/noticeCatalog/enableById}]]*/'',
 	    		{id:id},

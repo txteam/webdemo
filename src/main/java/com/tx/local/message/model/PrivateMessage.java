@@ -70,9 +70,10 @@ public class PrivateMessage implements Serializable {
     @Column(length = 4000)
     private String content;
     
-    /** 是否阅读 */
+    /** 是否未读 */
+    //注: read的被动语态也是read,但read在创建脚本时为特殊字符需要添添加引号才能创建表成功
     @Column(updatable = true)
-    private boolean read;
+    private boolean unread;
     
     /** 阅读时间 */
     @Column(nullable = true, updatable = true)
@@ -221,17 +222,17 @@ public class PrivateMessage implements Serializable {
     }
     
     /**
-     * @return 返回 read
+     * @return 返回 unread
      */
-    public boolean isRead() {
-        return read;
+    public boolean isUnread() {
+        return unread;
     }
     
     /**
-     * @param 对read进行赋值
+     * @param 对unread进行赋值
      */
-    public void setRead(boolean read) {
-        this.read = read;
+    public void setUnread(boolean unread) {
+        this.unread = unread;
     }
     
     /**

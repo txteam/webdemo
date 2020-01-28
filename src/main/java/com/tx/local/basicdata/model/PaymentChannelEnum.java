@@ -22,38 +22,29 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum PaymentChannelEnum implements BasicDataEnum {
     
-    BOCEST("BOCEST", "中国银行E商通", BankEnum.BOC, false),
+    BOCEST("BOCEST", "中国银行E商通"),
     
-    CMB("CMB", "招商银行银企直连", BankEnum.CMB, false),
+    CMB("CMB", "招商银行银企直连"),
     
-    CNCB("CNCB", "中信银行银企直连", BankEnum.CNCB, false);
+    CNCB("CNCB", "中信银行银企直连");
     
     /** key值 */
-    private final String key;
+    private final String code;
     
     /** 名称 */
     private final String name;
     
-    /** bank */
-    private final BankEnum bank;
-    
-    /** 是否支持自动构建对应的子账户 */
-    private final boolean autoBuild;
-    
     /** <默认构造函数> */
-    private PaymentChannelEnum(String key, String name, BankEnum bank,
-            boolean autoBuild) {
-        this.key = key;
+    private PaymentChannelEnum(String code, String name) {
+        this.code = code;
         this.name = name;
-        this.bank = bank;
-        this.autoBuild = autoBuild;
     }
     
     /**
-     * @return 返回 key
+     * @return 返回 code
      */
-    public String getKey() {
-        return key;
+    public String getCode() {
+        return code;
     }
     
     /**
@@ -62,19 +53,4 @@ public enum PaymentChannelEnum implements BasicDataEnum {
     public String getName() {
         return name;
     }
-    
-    /**
-     * @return 返回 bank
-     */
-    public BankEnum getBank() {
-        return bank;
-    }
-    
-    /**
-     * @return 返回 autoBuild
-     */
-    public boolean isAutoBuild() {
-        return autoBuild;
-    }
-    
 }

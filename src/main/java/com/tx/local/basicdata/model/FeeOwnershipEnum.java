@@ -22,6 +22,8 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum FeeOwnershipEnum implements BasicDataEnum {
     
+    QD("QD", "渠道"),
+    
     PT("PT", "平台"),
     
     DK("DK", "贷款公司"),

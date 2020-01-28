@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentSchedule">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="paymentScheduleMap" 
+		type="com.tx.local.loanaccount.model.PaymentSchedule">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.PaymentSchedule"
+		resultMap="paymentScheduleMap">
+		SELECT 
+				PS.id,
+				PS.prePeriod,
+				PS.lastRepayDate,
+				PS.loanAccountId,
+				PS.nextPeriod,
+				PS.actualReceivedSum,
+				PS.exemptSum,
+				PS.period,
+				PS.settle,
+				PS.settleRepayDate,
+				PS.settleProcessDate,
+				PS.overdue,
+				PS.overdueSum,
+				PS.overdueAmount,
+				PS.overduePrincipal,
+				PS.scheduleType,
+				PS.principalBalance,
+				PS.repaymentDate,
+				PS.receivableSum
+		  FROM LA_PAYMENT_SCHEDULE PS
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND PS.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="paymentScheduleMap">
+		SELECT 
+				PS.id,
+				PS.prePeriod,
+				PS.lastRepayDate,
+				PS.loanAccountId,
+				PS.nextPeriod,
+				PS.actualReceivedSum,
+				PS.exemptSum,
+				PS.period,
+				PS.settle,
+				PS.settleRepayDate,
+				PS.settleProcessDate,
+				PS.overdue,
+				PS.overdueSum,
+				PS.overdueAmount,
+				PS.overduePrincipal,
+				PS.scheduleType,
+				PS.principalBalance,
+				PS.repaymentDate,
+				PS.receivableSum
+		  FROM LA_PAYMENT_SCHEDULE PS
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND PS.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(prePeriod)">  
+	            <![CDATA[ AND PS.prePeriod = #{prePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND PS.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nextPeriod)">  
+	            <![CDATA[ AND PS.nextPeriod = #{nextPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(actualReceivedSum)">  
+	            <![CDATA[ AND PS.actualReceivedSum = #{actualReceivedSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(exemptSum)">  
+	            <![CDATA[ AND PS.exemptSum = #{exemptSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND PS.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settle)">  
+	            <![CDATA[ AND PS.settle = #{settle} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdue)">  
+	            <![CDATA[ AND PS.overdue = #{overdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueSum)">  
+	            <![CDATA[ AND PS.overdueSum = #{overdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueAmount)">  
+	            <![CDATA[ AND PS.overdueAmount = #{overdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overduePrincipal)">  
+	            <![CDATA[ AND PS.overduePrincipal = #{overduePrincipal} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(scheduleType)">  
+	            <![CDATA[ AND PS.scheduleType = #{scheduleType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND PS.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(receivableSum)">  
+	            <![CDATA[ AND PS.receivableSum = #{receivableSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND PS.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY id DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_PAYMENT_SCHEDULE PS
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND PS.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(prePeriod)">  
+	            <![CDATA[ AND PS.prePeriod = #{prePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND PS.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nextPeriod)">  
+	            <![CDATA[ AND PS.nextPeriod = #{nextPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(actualReceivedSum)">  
+	            <![CDATA[ AND PS.actualReceivedSum = #{actualReceivedSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(exemptSum)">  
+	            <![CDATA[ AND PS.exemptSum = #{exemptSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND PS.period = #{period} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(settle)">  
+	            <![CDATA[ AND PS.settle = #{settle} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdue)">  
+	            <![CDATA[ AND PS.overdue = #{overdue} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueSum)">  
+	            <![CDATA[ AND PS.overdueSum = #{overdueSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overdueAmount)">  
+	            <![CDATA[ AND PS.overdueAmount = #{overdueAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overduePrincipal)">  
+	            <![CDATA[ AND PS.overduePrincipal = #{overduePrincipal} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(scheduleType)">  
+	            <![CDATA[ AND PS.scheduleType = #{scheduleType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(principalBalance)">  
+	            <![CDATA[ AND PS.principalBalance = #{principalBalance} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(receivableSum)">  
+	            <![CDATA[ AND PS.receivableSum = #{receivableSum} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND PS.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.PaymentSchedule">
+		INSERT INTO LA_PAYMENT_SCHEDULE
+		(
+			id,
+			prePeriod,
+			lastRepayDate,
+			loanAccountId,
+			nextPeriod,
+			actualReceivedSum,
+			exemptSum,
+			period,
+			settle,
+			settleRepayDate,
+			settleProcessDate,
+			overdue,
+			overdueSum,
+			overdueAmount,
+			overduePrincipal,
+			scheduleType,
+			principalBalance,
+			repaymentDate,
+			receivableSum
+		)
+		VALUES
+		(
+			#{id},
+			#{prePeriod},
+			#{lastRepayDate},
+			#{loanAccountId},
+			#{nextPeriod},
+			#{actualReceivedSum},
+			#{exemptSum},
+			#{period},
+			#{settle},
+			#{settleRepayDate},
+			#{settleProcessDate},
+			#{overdue},
+			#{overdueSum},
+			#{overdueAmount},
+			#{overduePrincipal},
+			#{scheduleType},
+			#{principalBalance},
+			#{repaymentDate},
+			#{receivableSum}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.PaymentSchedule">
+		DELETE FROM LA_PAYMENT_SCHEDULE  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_PAYMENT_SCHEDULE
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('prePeriod')">
+	    		prePeriod = #{prePeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('lastRepayDate')">
+	    		lastRepayDate = #{lastRepayDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('loanAccountId')">
+	    		loanAccountId = #{loanAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('nextPeriod')">
+	    		nextPeriod = #{nextPeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('actualReceivedSum')">
+	    		actualReceivedSum = #{actualReceivedSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('exemptSum')">
+	    		exemptSum = #{exemptSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('period')">
+	    		period = #{period,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('settle')">
+	    		settle = #{settle,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('settleRepayDate')">
+	    		settleRepayDate = #{settleRepayDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('settleProcessDate')">
+	    		settleProcessDate = #{settleProcessDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('overdue')">
+	    		overdue = #{overdue,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('overdueSum')">
+	    		overdueSum = #{overdueSum,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('overdueAmount')">
+	    		overdueAmount = #{overdueAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('overduePrincipal')">
+	    		overduePrincipal = #{overduePrincipal,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('scheduleType')">
+	    		scheduleType = #{scheduleType,javaType=com.tx.local.loanaccount.model.ScheduleTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('principalBalance')">
+	    		principalBalance = #{principalBalance,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('repaymentDate')">
+	    		repaymentDate = #{repaymentDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('receivableSum')">
+	    		receivableSum = #{receivableSum,javaType=java.math.BigDecimal},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

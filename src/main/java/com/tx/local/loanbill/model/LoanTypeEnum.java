@@ -11,36 +11,39 @@ import com.tx.component.basicdata.model.BasicDataEnum;
 import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 
 /**
-  * 贷款类别<br/>
-  * 
-  * @author  Bobby
-  * @version  [版本号, 2014年5月23日]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
+ * 贷款类别<br/>
+ * 
+ * @author  Bobby
+ * @version  [版本号, 2014年5月23日]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
  */
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum LoanTypeEnum implements BasicDataEnum {
     
-    新贷("NEWLOANS", "新贷"),
+    NEW_LOAN("NEW_LOAN", "新贷"),
     
-    再贷("OPERATION", "再贷"),
+    ONCE_AGAIN_LOAN("ONCE_AGAIN_LOAN", "再贷"),
     
-    续贷("STOP", "续贷");
+    RENEW_LOAN("RENEW_LOAN", "续贷");
     
-    private final String key;
+    /** 编码 */
+    private final String code;
     
+    /** 名称 */
     private final String name;
     
-    private LoanTypeEnum(String key, String name) {
-        this.key = key;
+    /** <默认构造函数> */
+    private LoanTypeEnum(String code, String name) {
+        this.code = code;
         this.name = name;
     }
     
     /**
-     * @return 返回 key
+     * @return 返回 code
      */
-    public String getKey() {
-        return key;
+    public String getCode() {
+        return code;
     }
     
     /**
@@ -49,5 +52,4 @@ public enum LoanTypeEnum implements BasicDataEnum {
     public String getName() {
         return name;
     }
-    
 }

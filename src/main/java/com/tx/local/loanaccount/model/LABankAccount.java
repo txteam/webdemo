@@ -7,27 +7,28 @@
 package com.tx.local.loanaccount.model;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.tx.component.basicdata.annotation.BasicDataEntity;
 import com.tx.component.basicdata.model.BasicData;
-import com.tx.local.basicdata.model.PaymentChannelEnum;
+import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 
 /**
-  * 贷款账户相关银行账户信息<br/>
-  * <功能详细描述>
-  * 
-  * @author  Administrator
-  * @version  [版本号, 2017年5月8日]
-  * @see  [相关类/方法]
-  * @since  [产品/模块版本]
-  */
+ * 贷款账户相关银行账户信息<br/>
+ * <功能详细描述>
+ * 
+ * @author  Administrator
+ * @version  [版本号, 2017年5月8日]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
 @Entity
-@Table(name = "la_bank_account")
+@Table(name = "LA_BANK_ACCOUNT")
+@BasicDataEntity(name = "信贷公司银行账户", viewType = BasicDataViewTypeEnum.LIST)
 public class LABankAccount implements Serializable, BasicData {
     /** 注释内容 */
     private static final long serialVersionUID = 7579843529891564794L;
@@ -57,17 +58,8 @@ public class LABankAccount implements Serializable, BasicData {
     /** 银行渠道 */
     private LABankAccountChannelEnum bankAccountChannel;
     
-    /** 支付渠道 */
-    private PaymentChannelEnum paymentChannel;
-    
     /** 账户号 */
     private String accountNumber;
-    
-    /** 财务科目编码 */
-    private String accountTitleCode;
-    
-    /** 参数配置 */
-    private String attributes;
     
     /** 优先级 */
     private int priority;
@@ -80,9 +72,6 @@ public class LABankAccount implements Serializable, BasicData {
     
     /** 最后更新时间 */
     private Date lastUpdateDate;
-    
-    /** 费用项集合 */
-    private transient Collections feeItems;
     
     /**
      * @return 返回 id
@@ -110,6 +99,20 @@ public class LABankAccount implements Serializable, BasicData {
      */
     public void setCode(String code) {
         this.code = code;
+    }
+    
+    /**
+     * @return 返回 name
+     */
+    public String getName() {
+        return name;
+    }
+    
+    /**
+     * @param 对name进行赋值
+     */
+    public void setName(String name) {
+        this.name = name;
     }
     
     /**
@@ -141,38 +144,17 @@ public class LABankAccount implements Serializable, BasicData {
     }
     
     /**
-     * @return 返回 name
+     * @return 返回 loanAccountType
      */
-    public String getName() {
-        return name;
+    public LoanAccountTypeEnum getLoanAccountType() {
+        return loanAccountType;
     }
     
     /**
-     * @param 对name进行赋值
+     * @param 对loanAccountType进行赋值
      */
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    /**
-     * @return 返回 accountNumber
-     */
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-    
-    /**
-     * @return 返回 priority
-     */
-    public int getPriority() {
-        return priority;
-    }
-    
-    /**
-     * @param 对priority进行赋值
-     */
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public void setLoanAccountType(LoanAccountTypeEnum loanAccountType) {
+        this.loanAccountType = loanAccountType;
     }
     
     /**
@@ -187,6 +169,49 @@ public class LABankAccount implements Serializable, BasicData {
      */
     public void setBankAccountType(LABankAccountTypeEnum bankAccountType) {
         this.bankAccountType = bankAccountType;
+    }
+    
+    /**
+     * @return 返回 bankAccountChannel
+     */
+    public LABankAccountChannelEnum getBankAccountChannel() {
+        return bankAccountChannel;
+    }
+    
+    /**
+     * @param 对bankAccountChannel进行赋值
+     */
+    public void setBankAccountChannel(
+            LABankAccountChannelEnum bankAccountChannel) {
+        this.bankAccountChannel = bankAccountChannel;
+    }
+    
+    /**
+     * @return 返回 accountNumber
+     */
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+    
+    /**
+     * @param 对accountNumber进行赋值
+     */
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+    
+    /**
+     * @return 返回 priority
+     */
+    public int getPriority() {
+        return priority;
+    }
+    
+    /**
+     * @param 对priority进行赋值
+     */
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
     
     /**
@@ -229,96 +254,5 @@ public class LABankAccount implements Serializable, BasicData {
      */
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
-    }
-
-    /**
-     * @return 返回 loanAccountType
-     */
-    public LoanAccountTypeEnum getLoanAccountType() {
-        return loanAccountType;
-    }
-
-    /**
-     * @param 对loanAccountType进行赋值
-     */
-    public void setLoanAccountType(LoanAccountTypeEnum loanAccountType) {
-        this.loanAccountType = loanAccountType;
-    }
-
-    /**
-     * @return 返回 paymentChannel
-     */
-    public PaymentChannelEnum getPaymentChannel() {
-        return paymentChannel;
-    }
-
-    /**
-     * @param 对paymentChannel进行赋值
-     */
-    public void setPaymentChannel(PaymentChannelEnum paymentChannel) {
-        this.paymentChannel = paymentChannel;
-    }
-
-    /**
-     * @return 返回 accountTitleCode
-     */
-    public String getAccountTitleCode() {
-        return accountTitleCode;
-    }
-
-    /**
-     * @param 对accountTitleCode进行赋值
-     */
-    public void setAccountTitleCode(String accountTitleCode) {
-        this.accountTitleCode = accountTitleCode;
-    }
-
-    /**
-     * @return 返回 attributes
-     */
-    public String getAttributes() {
-        return attributes;
-    }
-
-    /**
-     * @param 对attributes进行赋值
-     */
-    public void setAttributes(String attributes) {
-        this.attributes = attributes;
-    }
-
-    /**
-     * @param 对accountNumber进行赋值
-     */
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    /**
-     * @return 返回 feeItems
-     */
-    public Collections getFeeItems() {
-        return feeItems;
-    }
-
-    /**
-     * @param 对feeItems进行赋值
-     */
-    public void setFeeItems(Collections feeItems) {
-        this.feeItems = feeItems;
-    }
-
-    /**
-     * @return 返回 bankAccountChannel
-     */
-    public LABankAccountChannelEnum getBankAccountChannel() {
-        return bankAccountChannel;
-    }
-
-    /**
-     * @param 对bankAccountChannel进行赋值
-     */
-    public void setBankAccountChannel(LABankAccountChannelEnum bankAccountChannel) {
-        this.bankAccountChannel = bankAccountChannel;
     }
 }

@@ -43,8 +43,8 @@ public class Notice2User {
     private String userId;
     
     /** 是否阅读 */
-    //注: read的被动语态也是read
-    private boolean read;
+    //注: read的被动语态也是read,但read在创建脚本时为特殊字符需要添添加引号才能创建表成功
+    private boolean unread;
     
     /** 阅读时间 */
     private Date readDate;

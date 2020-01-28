@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentScheduleEntry">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="paymentScheduleEntryMap" 
+		type="com.tx.local.loanaccount.model.PaymentScheduleEntry">
+		<result column="paymentScheduleId" property="paymentSchedule.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.loanaccount.model.PaymentScheduleEntry"
+		resultMap="paymentScheduleEntryMap">
+		SELECT 
+				PSE.id,
+				PSE.feeItem,
+				PSE.prePeriod,
+				PSE.loanAccountId,
+				PSE.nextPeriod,
+				PSE.actualReceivedAmount,
+				PSE.exemptAmount,
+				PSE.period,
+				PSE.paymentScheduleId,
+				PSE.scheduleType,
+				PSE.receivableAmount
+		  FROM LA_PAYMENT_SCHEDULE_ENTRY PSE
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND PSE.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="paymentScheduleEntryMap">
+		SELECT 
+				PSE.id,
+				PSE.feeItem,
+				PSE.prePeriod,
+				PSE.loanAccountId,
+				PSE.nextPeriod,
+				PSE.actualReceivedAmount,
+				PSE.exemptAmount,
+				PSE.period,
+				PSE.paymentScheduleId,
+				PSE.scheduleType,
+				PSE.receivableAmount
+		  FROM LA_PAYMENT_SCHEDULE_ENTRY PSE
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND PSE.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND PSE.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(prePeriod)">  
+	            <![CDATA[ AND PSE.prePeriod = #{prePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND PSE.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nextPeriod)">  
+	            <![CDATA[ AND PSE.nextPeriod = #{nextPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(actualReceivedAmount)">  
+	            <![CDATA[ AND PSE.actualReceivedAmount = #{actualReceivedAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(exemptAmount)">  
+	            <![CDATA[ AND PSE.exemptAmount = #{exemptAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND PSE.period = #{period} ]]>
+	        </if>			
+			<if test="paymentSchedule != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(paymentSchedule.id)">  
+		            <![CDATA[ AND PSE.paymentScheduleId = #{paymentSchedule.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(scheduleType)">  
+	            <![CDATA[ AND PSE.scheduleType = #{scheduleType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(receivableAmount)">  
+	            <![CDATA[ AND PSE.receivableAmount = #{receivableAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND PSE.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY id DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM LA_PAYMENT_SCHEDULE_ENTRY PSE
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND PSE.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(feeItem)">  
+	            <![CDATA[ AND PSE.feeItem = #{feeItem} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(prePeriod)">  
+	            <![CDATA[ AND PSE.prePeriod = #{prePeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(loanAccountId)">  
+	            <![CDATA[ AND PSE.loanAccountId = #{loanAccountId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nextPeriod)">  
+	            <![CDATA[ AND PSE.nextPeriod = #{nextPeriod} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(actualReceivedAmount)">  
+	            <![CDATA[ AND PSE.actualReceivedAmount = #{actualReceivedAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(exemptAmount)">  
+	            <![CDATA[ AND PSE.exemptAmount = #{exemptAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(period)">  
+	            <![CDATA[ AND PSE.period = #{period} ]]>
+	        </if>			
+			<if test="paymentSchedule != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(paymentSchedule.id)">  
+		            <![CDATA[ AND PSE.paymentScheduleId = #{paymentSchedule.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(scheduleType)">  
+	            <![CDATA[ AND PSE.scheduleType = #{scheduleType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(receivableAmount)">  
+	            <![CDATA[ AND PSE.receivableAmount = #{receivableAmount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND PSE.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.loanaccount.model.PaymentScheduleEntry">
+		INSERT INTO LA_PAYMENT_SCHEDULE_ENTRY
+		(
+			id,
+			feeItem,
+			prePeriod,
+			loanAccountId,
+			nextPeriod,
+			actualReceivedAmount,
+			exemptAmount,
+			period,
+			paymentScheduleId,
+			scheduleType,
+			receivableAmount
+		)
+		VALUES
+		(
+			#{id},
+			#{feeItem},
+			#{prePeriod},
+			#{loanAccountId},
+			#{nextPeriod},
+			#{actualReceivedAmount},
+			#{exemptAmount},
+			#{period},
+			#{paymentSchedule.id},
+			#{scheduleType},
+			#{receivableAmount}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.loanaccount.model.PaymentScheduleEntry">
+		DELETE FROM LA_PAYMENT_SCHEDULE_ENTRY  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE LA_PAYMENT_SCHEDULE_ENTRY
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('feeItem')">
+	    		feeItem = #{feeItem,javaType=com.tx.local.basicdata.model.FeeItemEnum},
+	    	</if>
+			<if test="_parameter.containsKey('prePeriod')">
+	    		prePeriod = #{prePeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('loanAccountId')">
+	    		loanAccountId = #{loanAccountId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('nextPeriod')">
+	    		nextPeriod = #{nextPeriod,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('actualReceivedAmount')">
+	    		actualReceivedAmount = #{actualReceivedAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('exemptAmount')">
+	    		exemptAmount = #{exemptAmount,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('period')">
+	    		period = #{period,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('paymentSchedule')">
+	    		paymentScheduleId = #{paymentSchedule.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('scheduleType')">
+	    		scheduleType = #{scheduleType,javaType=com.tx.local.loanaccount.model.ScheduleTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('receivableAmount')">
+	    		receivableAmount = #{receivableAmount,javaType=java.math.BigDecimal},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>
