@@ -22,12 +22,7 @@
 				<menu id="notice_menu" text="通知" href="/operator/notice"></menu>
 				<menu id="message_menu" text="私信" href="/operator/message"></menu>
 			</menu>
-			<menu id="account_setting_menus" text="账号设置">
-				<menu id="safeinfo_menu" text="安全设置"></menu>
-				<menu id="password_menu" text="密码管理"></menu>
-				<menu id="account_relate_menu" text="账号关联"></menu>
-				<menu id="authentication_menu" text="身份认证"></menu>
-			</menu>
+			<menu id="operator_account_setting_menus" text="账号设置"></menu>
 			<menu id="logout_menu" text="退出系统" type="event" event="logout"></menu>
 		</menu>
 	</catalog>
@@ -87,6 +82,7 @@
 		<!-- 控制面板 -->
 		<menu id="test_pile_menu" text="测试桩">
 			<menu id="swagger_menu" text="swagger" href="/swagger-ui.html"></menu>
+			<menu id="privateMessage_testpile_menu" text="私信测试桩" href="/privateMessage/toQueryPagedList"></menu>
 		</menu>
 		<!-- 控制面板 -->
 		<menu id="test_code_generator" text="代码验证">

@@ -21,7 +21,7 @@ import com.tx.component.basicdata.model.BasicDataViewTypeEnum;
 import io.swagger.annotations.ApiModel;
 
 /**
- * 通知优先级<br/>
+ * 通知优先级依据(可以为new,hot;也可以为 一级，二级等)<br/>
  * <功能详细描述>
  * 
  * @author  Administrator

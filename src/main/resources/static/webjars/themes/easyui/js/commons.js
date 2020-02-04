@@ -1438,5 +1438,17 @@ var FeeValueTypes = {};
 		}
 		return text;
 	};
+	$.Formatters.substrFun = function(value, row, index,length){
+		var text = '';
+		if(!length){
+			length = 10;
+		}
+		if(value.length <= length){
+			text = value;
+		}else{
+			text = value.substr(0,length) + "...";
+		}
+		return text;
+	};
 })(jQuery); 
 

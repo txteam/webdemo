@@ -24,6 +24,8 @@
 				PM.userType,
 				PM.vcid,
 				PM.title,
+				PM.sender,
+				PM.receiver,
 				PM.createDate,
 				PM.createUserId,
 				PM.sourceId,
@@ -37,6 +39,9 @@
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
 	            <![CDATA[ AND PM.vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalog)">  
+	            <![CDATA[ AND catalog = #{catalog} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND PM.type = #{type} ]]>
@@ -65,6 +70,8 @@
 				PM.userType,
 				PM.vcid,
 				PM.title,
+				PM.sender,
+				PM.receiver,
 				PM.createDate,
 				PM.createUserId,
 				PM.sourceId,
@@ -95,7 +102,13 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(unread)">  
 	            <![CDATA[ AND PM.unread = #{unread} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sender)">  
+	            <![CDATA[ AND PM.sender = #{sender} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(receiver)">  
+	            <![CDATA[ AND PM.receiver = #{receiver} ]]>
+	        </if>	        			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND PM.type = #{type} ]]>
 	        </if>			
@@ -173,7 +186,13 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(unread)">  
 	            <![CDATA[ AND PM.unread = #{unread} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sender)">  
+	            <![CDATA[ AND PM.sender = #{sender} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(receiver)">  
+	            <![CDATA[ AND PM.receiver = #{receiver} ]]>
+	        </if>	        			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND PM.type = #{type} ]]>
 	        </if>			
@@ -228,6 +247,8 @@
 			userType,
 			vcid,
 			title,
+			sender,
+			receiver,
 			createDate,
 			createUserId,
 			sourceId,
@@ -246,6 +267,8 @@
 			#{userType},
 			#{vcid},
 			#{title},
+			#{sender},
+			#{receiver},
 			#{createDate},
 			#{createUserId},
 			#{sourceId},
@@ -264,6 +287,9 @@
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
 	            <![CDATA[ AND vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalog)">  
+	            <![CDATA[ AND catalog = #{catalog} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND type = #{type} ]]>
@@ -291,6 +317,12 @@
 			<!-- <if test="_parameter.containsKey('vcid')"> -->
 			<!-- vcid = #{vcid,javaType=java.lang.String}, -->
 			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('sender')"> -->
+			<!-- sender = #{sender,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('receiver')"> -->
+			<!-- receiver = #{receiver,javaType=java.lang.String}, -->
+			<!-- </if> -->
 			<if test="_parameter.containsKey('lastUpdateDate')">
 	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
@@ -317,6 +349,9 @@
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
 	            <![CDATA[ AND vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalog)">  
+	            <![CDATA[ AND catalog = #{catalog} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND type = #{type} ]]>

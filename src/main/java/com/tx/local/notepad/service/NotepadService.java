@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,43 @@ public class NotepadService {
     
     @Resource(name = "notepadDao")
     private NotepadDao notepadDao;
+    
+    /**
+     * 新增记事本实例<br/>
+     * 将notepad插入数据库中保存
+     * 1、如果notepad 为空时抛出参数为空异常
+     * 2、如果notepad 中部分必要参数为非法值时抛出参数不合法异常
+     * 
+     * @param notepad [参数说明]
+     * @return void [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public void save(Notepad notepad) {
+        //验证参数是否合法
+        AssertUtils.notNull(notepad, "notepad is null.");
+        AssertUtils.notEmpty(notepad.getType(), "notepad.type is empty.");
+        AssertUtils.notEmpty(notepad.getTopicType(),
+                "notepad.topicType is empty.");
+        AssertUtils.notEmpty(notepad.getTopicId(), "notepad.topicId is empty.");
+        AssertUtils.notEmpty(notepad.getTitle(), "notepad.title is empty.");
+        AssertUtils.notEmpty(notepad.getVcid(), "notepad.vcid is empty.");
+        
+        if (StringUtils.isEmpty(notepad.getId())) {
+            insert(notepad);
+        } else {
+            Notepad dbNotepad = find(notepad);
+            if (dbNotepad == null) {
+                notepad.setId(null);
+                insert(notepad);
+            } else {
+                dbNotepad.setTitle(notepad.getTitle());
+                dbNotepad.setContent(notepad.getContent());
+                updateById(dbNotepad);
+            }
+        }
+    }
     
     /**
      * 新增记事本实例<br/>

@@ -29,6 +29,7 @@ import com.tx.local.vitualcenter.model.VirtualCenter;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
 @Controller("adminController")
 @RequestMapping("/admin")
 public class AdminController {
@@ -45,7 +46,6 @@ public class AdminController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @ResponseBody
     @RequestMapping(value = "/vcid")
     public VirtualCenter vcid(
@@ -73,7 +73,6 @@ public class AdminController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @RequestMapping(value = "/vciframe")
     public String vciframe(
             @RequestParam(value = "src", required = true) String src,

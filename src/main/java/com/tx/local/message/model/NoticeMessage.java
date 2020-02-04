@@ -59,6 +59,10 @@ public class NoticeMessage implements Serializable {
     @Column(length = 4000)
     private String content;
     
+    /** 发送者 */
+    @Column(nullable = true, length = 256)
+    private String sender;
+    
     /** 是否发布 */
     private boolean published = false;
     
@@ -169,6 +173,20 @@ public class NoticeMessage implements Serializable {
      */
     public void setContent(String content) {
         this.content = content;
+    }
+
+    /**
+     * @return 返回 sender
+     */
+    public String getSender() {
+        return sender;
+    }
+
+    /**
+     * @param 对sender进行赋值
+     */
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     /**

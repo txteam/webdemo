@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.tx.core.exceptions.SILException;
+
 import io.swagger.annotations.ApiModel;
 
 /**
@@ -28,7 +30,7 @@ import io.swagger.annotations.ApiModel;
 @Entity
 @Table(name = "msg_private_message")
 @ApiModel("私信")
-public class PrivateMessage implements Serializable {
+public class PrivateMessage implements Serializable, Cloneable {
     
     /** 注释内容 */
     private static final long serialVersionUID = 3395690271963157384L;
@@ -57,6 +59,14 @@ public class PrivateMessage implements Serializable {
     /** 用户id */
     @Column(nullable = false)
     private String userId;
+    
+    /** 发送者：可以为空 */
+    @Column(nullable = true, updatable = false, length = 64)
+    private String sender;
+    
+    /** 接收者：可以为空 */
+    @Column(nullable = true, updatable = false, length = 64)
+    private String receiver;
     
     /** 发送和接收的私信会被复制一份，生成一条发送，一条接收信息，接收方的sourceId为发送方的消息id */
     @Column(nullable = true, updatable = false, length = 64)
@@ -177,6 +187,34 @@ public class PrivateMessage implements Serializable {
      */
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+    
+    /**
+     * @return 返回 sender
+     */
+    public String getSender() {
+        return sender;
+    }
+    
+    /**
+     * @param 对sender进行赋值
+     */
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+    
+    /**
+     * @return 返回 receiver
+     */
+    public String getReceiver() {
+        return receiver;
+    }
+    
+    /**
+     * @param 对receiver进行赋值
+     */
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
     
     /**
@@ -303,6 +341,21 @@ public class PrivateMessage implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+    }
+    
+    /**
+     * @return
+     * @throws CloneNotSupportedException
+     */
+    @Override
+    public Object clone() {
+        Object clone = null;
+        try {
+            clone = super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new SILException("clone exception.", e);
+        }
+        return clone;
     }
     
 }

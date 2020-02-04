@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.message.model.MsgUserTypeEnum;
 import com.tx.local.message.model.PrivateMessage;
+import com.tx.local.message.model.PrivateMessageTypeEnum;
+import com.tx.local.message.service.OperatorMessageService;
 import com.tx.local.message.service.PrivateMessageService;
 import com.tx.local.security.util.WebContextUtils;
 
@@ -38,10 +40,13 @@ import com.tx.local.security.util.WebContextUtils;
 @PreAuthorize("hasRole('ROLE_OPERATOR')")
 @Controller
 @RequestMapping("/operator/message")
-public class OperatorPrivateMessageController {
+public class OperatorMessageController {
     
     @Resource
     private PrivateMessageService privateMessageService;
+    
+    @Resource
+    private OperatorMessageService operatorMessageService;
     
     /**
      * 操作人员行事历行事历<br/>
@@ -78,6 +83,7 @@ public class OperatorPrivateMessageController {
         params.put("vcid", vcid);
         params.put("userId", operatorId);
         params.put("userType", MsgUserTypeEnum.OPERATOR);
+        params.put("type", PrivateMessageTypeEnum.RECEIVE);
         params.put("unread", true);
         
         int res = this.privateMessageService.count(params);
@@ -106,6 +112,7 @@ public class OperatorPrivateMessageController {
         String operatorId = WebContextUtils.getOperatorId();
         
         Map<String, Object> params = new HashMap<String, Object>();
+        params.put("type", PrivateMessageTypeEnum.RECEIVE);
         params.put("vcid", vcid);
         params.put("userId", operatorId);
         params.put("userType", MsgUserTypeEnum.OPERATOR);

@@ -272,8 +272,6 @@ public class PrivateMessageService {
      * @see [类、类#方法、类#成员]
      */
     public int count(Map<String, Object> params) {
-        //判断条件合法性
-        
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
         
@@ -348,6 +346,29 @@ public class PrivateMessageService {
         int res = this.privateMessageDao.count(querier, excludeId);
         
         return res > 0;
+    }
+    
+    /**
+     * 根据id更新私信实例<br/>
+     * <功能详细描述>
+     * @param privateMessage
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean updateById(String id, Map<String, Object> updateRowMap) {
+        //验证参数是否合法，必填字段是否填写
+        AssertUtils.notNull(updateRowMap, "updateRowMap is null.");
+        AssertUtils.notEmpty(id, "id is empty.");
+        
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        boolean flag = this.privateMessageDao.update(updateRowMap) > 0;
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return flag;
     }
     
     /**

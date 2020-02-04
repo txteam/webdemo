@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>vciframe</title>
+	<title>operatorNotepadMain</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -35,61 +35,157 @@
 	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	var _contextPath = /*[[@{/}]]*/'/';
 	/*]]>*/
 	</script>
 </block>
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-var vcTree = null;
+var $detailFrame = null;
+var $notes = null;
 $(document).ready(function() {
-	var $vciframe = $("#vciframe");
+	$detailFrame = $("#detailFrame");
 	
-	vcTree = $('#vcTree').tree({
-		url : /*[[@{/virtualCenter/queryList(valid=true)}]]*/_contextPath + 'virtualCenter/queryList?valid=true',
+	//<span class="floatRight"><a href="#" class="del"></a></span>
+	$notes = $('#notes').tree({
+		url : /*[[@{/operator/notepad/notepads}]]*/'',
 		idField : 'id',
 		parentField : 'parentId',
-		textField : 'name',
-		iconField : function(){
-			return 'folder_database';
+		formatter:function(node){
+			var title = node.title;
+			//title = '<span style="float: right;"><a onclick="delFun(' + node.id + ');" class="del"></a></span>' + title;
+			return title;
+		},
+		textField : function(data){
+			var title = data.title;
+			//title = '<span style="float: right;"><a href="javascript:void(0);" onclick="delFun(' + data.id + ');" class="del"></a></span>' + title;
+			return title;
 		},
 		border : false,
 		onLoadSuccess: function(node, data){
-			var selected = $('#vcTree').tree('find',/*[[${vcid}]]*/'');
-			//var node = $('#vcTree').tree('findBy', {field: 'id',value: /*[[${vcid}]]*/''});
-			if(selected){
-				$('#vcTree').tree('select', selected.target);
+			if(data.length == 0){
+				var detail_src = /*[[@{/operator/notepad/detail}]]*/'';
+				$detailFrame.attr('src',detail_src);
+			}else{
+				var node = $('#notes').tree('find', data[0].id);
+				$('#notes').tree('select',node.target);
+				
+				var detail_src = /*[[@{/operator/notepad/detail?id={0}}]]*/'';
+				detail_src = $.formatString(detail_src,data[0].id);
+				$detailFrame.attr('src',detail_src);
 			}
 		},
 		onClick : function(node){
-			$.post(/*[[@{/admin/vcid}]]*/_contextPath + 'admin/vcid',
-				{vcid:node.id},function(data,status){
-				$.triggerge('change_vc_for_vciframe',{vcid: node.id});
-			});
+			var detail_src = /*[[@{/operator/notepad/detail?id={0}}]]*/'';
+			detail_src = $.formatString(detail_src,node.id);
+			$detailFrame.attr('src',detail_src);
+			return true;
 		}
-	});
-	
-	$.bindge('change_vc_for_vciframe',function(event, options) {
-		var selected = $('#vcTree').tree('find',options.vcid);
-		if(selected){
-			$('#vcTree').tree('select', selected.target);
-		}
-		$vciframe.attr('src',$vciframe.attr('newsrc'));
-	    return true;
 	});
 });
+/*
+ * 新增
+ */
+function addFun() {
+	var detail_src = /*[[@{/operator/notepad/detail}]]*/'';
+	$detailFrame.attr('src',detail_src);
+	return false;
+}
+/*
+ * 删除
+ */
+function delFun(id,title) {
+	if (id == undefined) {
+		var node = $('#notes').tree('getSelected');
+		if(!node){
+			return false;
+		}
+		id = node.id;
+		title = node.title;
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认删除指定的DataDict
+	DialogUtils.confirm("确认提醒" , 
+    	$.formatString("是否确认删除{0}:[{1}]?",'记事本',title) , 
+    	function(data){
+	    	if(data){
+	    		DialogUtils.progress({
+	    	        text : '数据提交中，请等待....'
+	    		});
+	    		var delUrl = /*[[@{/operator/notepad/notepad/{0}}]]*/'',
+	    		delUrl = $.formatString(delUrl,id);
+	    		//如果确认删除指定的记事本
+	    		$.ajax({
+				  	type: "delete",
+				  	url: delUrl,
+				  	datatype: 'json',
+				  	success: function(args) {
+				  		refreshFun();
+				  	}
+				});
+	    	}
+    });
+    return false;
+}
+/*
+ * 刷新 
+ */
+function refreshFun(){
+	$('#notes').tree('reload');
+}
 /*]]>*/
 </script>
+<style type="text/css">
+.tree-title span a.del{
+	height:16px;
+	width:16px;
+	display:block;
+	margin-top:2px;
+	margin-left:10px;
+	background:url([[@{/images/icon/del.gif}]]) no-repeat center center;
+}
+.tree-title span a.del:link, 
+.tree-title span a.del:visited {
+	background:url([[@{/images/icon/del.gif}]]) no-repeat center center;
+}
+.tree-title span a.del:hover {
+	background:url([[@{/images/icon/del_hover.gif}]]) no-repeat center center;
+	height:16px;
+	width:16px;
+}
+</style>
 </head>
 <body>
-	<div class="easyui-layout" data-options="fit: true">
-		<div data-options="region:'west',title:'虚中心',split:true" style="width:230px;">
-			<ul id="vcTree"></ul>
+	<div class="easyui-layout" data-options="fit: true,border:true">
+		<div data-options="region:'north',border:true" style="height: 36px;overflow: hidden;">
+			<form method="post" id="queryForm" name="queryForm" class="form">
+				<table>
+					<tr>
+						<td width="228px">
+							<input id="title" name="title" class="text" type="text" value='' style="width: 100%;height: 26px;line-height: 26px;" maxlength="32"/>
+						</td>
+						<td>
+							<a id="queryBtn" onclick="queryFun()" href="#" class="easyui-linkbutton" data-options="iconCls:'search'" style="width: 85px">查询</a>
+						</td>
+					</tr>
+				</table>
+			</form>
 		</div>
 		
-		<div data-options="region:'center'" style="padding:5px;background:#eee;overflow: hidden;">
+		<div data-options="region:'west',split:false" style="width:230px;">
+			<div id="toolbar" style="padding:5px;background:#fafafa;border:1px solid #ccc;height: 40px">
+				<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+				<a onclick="delFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+			</div>
+			<ul id="notes"></ul>
+		</div>
+		
+		<div data-options="region:'center'" style="padding:0px;overflow: hidden;">
 			<div class="easyui-layout" data-options="fit : true,border : false">
-				<iframe id="vciframe" frameborder="0" style="border: 0; width: 100%; height: 100%;" src="" th:src="@{${src}}" th:newsrc="@{${src}}"></iframe>
+				<iframe id="detailFrame" frameborder="0" style="border: 0; width: 100%; height: 100%;" src=""></iframe>
 			</div>
 		</div>
 	</div>

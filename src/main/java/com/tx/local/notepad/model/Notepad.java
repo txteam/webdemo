@@ -48,7 +48,7 @@ public class Notepad implements Serializable, JSONAttributesSupport {
     @Column(nullable = false, length = 64)
     private NotepadTypeEnum type;
     
-    /** 记事本分类ID;客户为空 */
+    /** 记事本目录id */
     @Column(name = "catalogId", nullable = true, length = 64)
     private NotepadCatalog catalog;
     

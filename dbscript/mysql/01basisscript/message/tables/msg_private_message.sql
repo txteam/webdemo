@@ -9,6 +9,8 @@ create table MSG_PRIVATE_MESSAGE(
 	catalog varchar(64) not null,
 	userType varchar(64) not null,
 	userId varchar(64) not null,
+	sender varchar(256),	
+	receiver varchar(256),
 	sourceId varchar(64) ,
 	title varchar(100) not null,
 	content varchar(4000) ,

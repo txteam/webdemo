@@ -99,7 +99,7 @@
 	            <![CDATA[ AND N.type = #{type} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(title)">  
-	            <![CDATA[ AND N.title = #{title} ]]>
+	            <![CDATA[ AND N.title LIKE CONCAT('%',#{title},'%') ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
 	            <![CDATA[ AND N.topicId = #{topicId} ]]>
@@ -123,7 +123,10 @@
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalog.id)">  
 		            <![CDATA[ AND N.catalogId = #{catalog.id} ]]>
 		        </if>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalogId)">  
+	            <![CDATA[ AND N.catalogId = #{catalogId} ]]>
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(content)">  
 	            <![CDATA[ AND N.content = #{content} ]]>
 	        </if>			
@@ -179,7 +182,7 @@
 	            <![CDATA[ AND N.type = #{type} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(title)">  
-	            <![CDATA[ AND N.title = #{title} ]]>
+	            <![CDATA[ AND N.title LIKE CONCAT('%',#{title},'%') ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
 	            <![CDATA[ AND N.topicId = #{topicId} ]]>
@@ -203,7 +206,10 @@
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalog.id)">  
 		            <![CDATA[ AND N.catalogId = #{catalog.id} ]]>
 		        </if>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalogId)">  
+	            <![CDATA[ AND N.catalogId = #{catalogId} ]]>
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(content)">  
 	            <![CDATA[ AND N.content = #{content} ]]>
 	        </if>			
@@ -304,14 +310,14 @@
 			<if test="_parameter.containsKey('title')">
 	    		title = #{title,javaType=java.lang.String},
 	    	</if>
+	    	<if test="_parameter.containsKey('content')">
+	    		content = #{content,javaType=java.lang.String},
+	    	</if>
 			<if test="_parameter.containsKey('remark')">
 	    		remark = #{remark,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('catalog')">
 	    		catalogId = #{catalog.id,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('content')">
-	    		content = #{content,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('attributes')">
 	    		attributes = #{attributes,javaType=java.lang.String},
