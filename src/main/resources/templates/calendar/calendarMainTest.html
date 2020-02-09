@@ -68,8 +68,6 @@
 $(document).ready(function() {
 
 });
-var now = new Date();
-var today = now.format('yyyy-MM-dd');
 document.addEventListener('DOMContentLoaded', function() {
 	var calendarEl = document.getElementById('calendar');
 
@@ -108,12 +106,12 @@ document.addEventListener('DOMContentLoaded', function() {
         //aspectRatio:1.35,			//设置日历单元格宽度与高度的比例。
         //handleWindowResize:true,	//是否随浏览器窗口大小变化而自动变化
         //eventLimit: true,       	//数据条数太多时，限制各自里显示的数据条数（多余的以“+2more”格式显示），默认false不限制,支持输入数字设定固定的显示条数
-      	defaultDate: today,
+      	defaultDate: '2019-08-08',
       	allDayText: "全天",			//自定义全天视图的名称
       	//slotDuration: "01:00:00",	//一格时间槽代表多长时间，默认00:30:00（30分钟）
       	//slotLabelFormat: "H(:mm)a",		//日期视图左边那一列显示的每一格日期时间格式
       	//slotLabelInterval: "02:00:00",	//日期视图左边那一列多长间隔显示一条日期文字(默认跟着slotDuration走的，可自定义)
-      	//snapDuration: "05:00:00",	//其实就是动态创建一个日程时，默认创建多长的时间块
+      	snapDuration: "05:00:00",	//其实就是动态创建一个日程时，默认创建多长的时间块
       	slotEventOverlap: true,	//相同时间段的多个日程视觉上是否允许重叠，默认true允许
       	noEventsMessage: "L没数据啊",	//listview视图下，无数据时显示提示
       	nowIndicator: true,			//周/日视图中显示今天当前时间点（以红线标记），默认false不显示
@@ -238,29 +236,81 @@ document.addEventListener('DOMContentLoaded', function() {
         eventResize: function(event, delta, revertFunc, jsEvent, ui, view){//日程大小调整完成并已经执行更新时触发
             console.log("eventResize():"+event.title);
         },
-        events: function(info, successCallback, failureCallback) {
-        	var queryUrl = /*[[@{/operator/calendar/queryEventList}]]*/'';
-        	$.ajax({
-				type: "POST",
-       			url: queryUrl,
-       			data: {
-    				start: info.start.valueOf(),
-                	end: info.end.valueOf()
-              	},
-       			success: function(events){
-       				successCallback(events);
-       			},
-       			error: function (XMLHttpRequest, textStatus, errorThrown) {
-       				failureCallback(errorThrown);
-       			}
-       		});
-        }
+        /*
+        eventSources: [
+			'/feed1.php',
+			'/feed2.php'
+   	  	],
+		eventSourceSuccess: function(content, xhr) {
+			return content.eventArray;
+		},
+		*/
+		
+      	events: [
+    		{
+          		title: 'test0',
+          		start: '2019-08-01T10:00:00', //不生效
+          		end: '2019-08-21T11:00:00', //不生效
+          		rrule: {
+            		dtstart: '2019-08-09T10:00:00',
+            		byweekday: [ 'mo', 'fr' ],
+            		interval: 2,
+            		freq: 'weekly'
+          		},
+          		duration: '04:00',	//10点开始4个小时结束
+          		color: 'yellow',   	// an option!
+          		textColor: 'black' 	// an option!
+        	},
+        	{
+          		title: 'test1',
+          		start: '2019-08-08T13:00:00',
+          		end: '2019-08-08T16:00:00'
+        	},
+        	{
+          		title: 'test2',
+          		start: '2019-08-07T13:00:00',
+          		end: '2019-08-08T15:00:00'
+        	},
+        	{
+          		title: 'test3',
+          		start: '2019-08-01T17:00:00', //不生效
+          		end: '2019-08-21T18:00:00', //不生效
+          		rrule: {
+          			//dtstart: '2019-08-09T13:00:00',
+                    dtstart: '2019-08-01T17:00:00',
+                    until: '2019-08-20T20:00:00',
+                    freq: 'weekly'
+                    
+          		},
+          		duration: '00:30'
+        	},
+        	{
+          		title: 'test2',
+          		start: '2019-08-05T13:00:00',
+          		end: '2019-08-06T15:00:00',
+          		duration: '00:30'
+        	},
+        	/*
+        	{
+          		title: 'test3',
+          		start: '2019-08-06',
+          		end: '2019-08-08',
+          		startTime: '15:00:00',
+          		endTime: '16:00:00'
+        	}
+        	rrule: {
+	            freq: 'weekly',
+	            interval: 5,
+	            byweekday: [ 'mo', 'fr' ],
+	            dtstart: '2012-02-01T10:30:00',
+	            until: '2012-06-01'
+	         },
+        	*/
+      	]
+        //,events:function(start, end, timezone,callback){}
     });
     calendar.render();
 });
-function toQueryPage(){
-	window.location.href = /*[[@{/operator/calendar/toQueryPagedList}]]*/'/';
-}
 /*]]>*/
 </script>
 </head>
@@ -270,7 +320,7 @@ function toQueryPage(){
 			<table style="border: 0px;">
 				<tr style="border: 0px;">
 					<td style="border: 0px;">
-						<a id="toQueryPageBtn" onclick="toQueryPage()" href="javascript:void(0);" class="easyui-linkbutton" style="width: 85px">行事历管理</a>
+						<a id="queryBtn" onclick="queryFun()" href="#" class="easyui-linkbutton" style="width: 85px">行事历管理</a>
 					</td>
 				</tr>
 			</table>

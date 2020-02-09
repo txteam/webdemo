@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>编辑日程[updateCalendarEvent]</title>
+	<title>编辑日程分类[updateCalendarEventCatalog]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -53,14 +53,14 @@ $(document).ready(function(){
 	            text : '数据提交中，请等待....'
 	    	});
 			$('#entityForm').ajaxSubmit({
-			    url:/*[[@{/calendarEvent/update}]]*/'',
+			    url:/*[[@{/calendarEventCatalog/update}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
-						parent.DialogUtils.tip("修改日程成功.");
-						parent.DialogUtils.closeDialogById("updateCalendarEvent");
+						parent.DialogUtils.tip("修改日程分类成功.");
+						parent.DialogUtils.closeDialogById("updateCalendarEventCatalog");
 					}else{
-						DialogUtils.alert("错误提示","修改日程失败.","error");
+						DialogUtils.alert("错误提示","修改日程分类失败.","error");
 					}
 			    } 
 			});
@@ -70,7 +70,7 @@ $(document).ready(function(){
 	
 	//退出
 	$("#cancelBtn").click(function(){
-		parent.DialogUtils.closeDialogById("updateCalendarEvent");
+		parent.DialogUtils.closeDialogById("updateCalendarEventCatalog");
 	});
 	//提交
 	$("#submitBtn").click(function(){
@@ -82,40 +82,9 @@ $(document).ready(function(){
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow-x: hidden;overflow-y: auto;">
-		<form id="entityForm" method="post" class="form" th:object="${calendarEvent}">
+		<form id="entityForm" method="post" class="form" th:object="${calendarEventCatalog}">
 			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
 			<table class="table">
-				<tr>
-					<th class="narrow" width="25%">allDay:</th>
-					<td>
-						<select id="allDay" name="allDay" >
-							<option value="true" th:selected="${calendarEvent.allDay eq true}">是</form:option>
-							<option value="false" th:selected="${calendarEvent.allDay eq false}">否</form:option>
-						</select>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">end:<span class="tRed">*</span></th>
-					<td>
-						<input id="end" name="end" type="text" readonly="readonly"
-							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" data-rule="end:required;"
-							th:value="${#dates.format(calendarEvent.end,'yyyy-MM-dd HH:mm:ss')}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">url:</th>
-					<td>
-						<input id="url" name="url" type="text" data-rule="url:length[0~64];"
-							th:value="*{url}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">daysOfWeek:<span class="tRed">*</span></th>
-					<td>
-						<input id="daysOfWeek" name="daysOfWeek" type="text" data-rule="daysOfWeek:required;length[1~127];"
-							th:value="*{daysOfWeek}"/>
-					</td>
-				</tr>			
 				<tr>
 					<th class="narrow" width="25%">lastUpdateUserId:</th>
 					<td>
@@ -124,41 +93,19 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
+					<th class="narrow" width="25%">名称:<span class="tRed">*</span></th>
+					<td>
+						<input id="name" name="name" type="text" th:data-rule="'名称:required;length[1~50];remote[' + @{/calendarEventCatalog/validate} + ', name, id];'"
+							th:value="*{name}"/>
+					</td>
+				</tr>			
+				<tr>
 					<th class="narrow" width="25%">类型:<span class="tRed">*</span></th>
 					<td>
 						<select id="type" name="type" data-rule="类型:required;">
 							<option value="">--- 请选择 ---</option>
-							<option th:each="typeTemp:${types}" th:value="${typeTemp.code}" th:text="${typeTemp.name}" th:selected="${calendarEvent.type eq typeTemp}"></option>
+							<option th:each="typeTemp:${types}" th:value="${typeTemp.code}" th:text="${typeTemp.name}" th:selected="${calendarEventCatalog.type eq typeTemp}"></option>
 						</select>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">className:</th>
-					<td>
-						<input id="className" name="className" type="text" data-rule="className:length[0~32];"
-							th:value="*{className}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">rrule:</th>
-					<td>
-						<input id="rrule" name="rrule" type="text" data-rule="rrule:length[0~64];"
-							th:value="*{rrule}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">start:<span class="tRed">*</span></th>
-					<td>
-						<input id="start" name="start" type="text" readonly="readonly"
-							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" data-rule="start:required;"
-							th:value="${#dates.format(calendarEvent.start,'yyyy-MM-dd HH:mm:ss')}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">title:<span class="tRed">*</span></th>
-					<td>
-						<input id="title" name="title" type="text" data-rule="title:required;length[1~50];"
-							th:value="*{title}"/>
 					</td>
 				</tr>			
 				<tr>
@@ -173,7 +120,7 @@ $(document).ready(function(){
 					<td>
 						<select id="topicType" name="topicType" data-rule="topicType:required;">
 							<option value="">--- 请选择 ---</option>
-							<option th:each="topicTypeTemp:${topicTypes}" th:value="${topicTypeTemp.code}" th:text="${topicTypeTemp.name}" th:selected="${calendarEvent.topicType eq topicTypeTemp}"></option>
+							<option th:each="topicTypeTemp:${topicTypes}" th:value="${topicTypeTemp.code}" th:text="${topicTypeTemp.name}" th:selected="${calendarEventCatalog.topicType eq topicTypeTemp}"></option>
 						</select>
 					</td>
 				</tr>			
@@ -185,57 +132,17 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
+					<th class="narrow" width="25%">上级ID:</th>
+					<td>
+						<input id="parentId" name="parentId" type="text" 
+							th:value="*{parentId}"/>
+					</td>
+				</tr>			
+				<tr>
 					<th class="narrow" width="25%">备注:</th>
 					<td>
-						<input id="remark" name="remark" type="text" data-rule="备注:length[0~50];"
+						<input id="remark" name="remark" type="text" data-rule="备注:length[0~250];"
 							th:value="*{remark}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">分类:</th>
-					<td>
-						<!-- //TODO:修改其显示逻辑 -->
-						<input id="catalog.id" name="catalog.id" th:value="*{catalog?.id}"/>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" width="25%">creator:<span class="tRed">*</span></th>
-					<td>
-						<input id="creator" name="creator" type="text" readonly="readonly"
-							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" data-rule="creator:required;"
-							th:value="${#dates.format(calendarEvent.creator,'yyyy-MM-dd HH:mm:ss')}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">overlap:</th>
-					<td>
-						<select id="overlap" name="overlap" >
-							<option value="true" th:selected="${calendarEvent.overlap eq true}">是</form:option>
-							<option value="false" th:selected="${calendarEvent.overlap eq false}">否</form:option>
-						</select>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">duration:</th>
-					<td>
-						<input id="duration" name="duration" type="text" data-rule="duration:length[0~16];"
-							th:value="*{duration}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">editable:</th>
-					<td>
-						<select id="editable" name="editable" >
-							<option value="true" th:selected="${calendarEvent.editable eq true}">是</form:option>
-							<option value="false" th:selected="${calendarEvent.editable eq false}">否</form:option>
-						</select>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">attributes:</th>
-					<td>
-						<input id="attributes" name="attributes" type="text" data-rule="attributes:length[0~2000];"
-							th:value="*{attributes}"/>
 					</td>
 				</tr>			
 			</table>

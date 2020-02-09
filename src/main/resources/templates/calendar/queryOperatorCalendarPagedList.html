@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>查询日程列表[queryCalendarEventList]</title>
+	<title>查询日程分页列表[queryCalendarEventPagedList]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -51,11 +51,23 @@ $(document).ready(function(){
 	var  $deleteALink = $("#deleteALink");
 
 	grid = $('#grid').datagrid({
-		url :/*[[@{/calendarEvent/queryList}]]*/'',
+		url :/*[[@{/operator/calendar/queryEventPagedList}]]*/'',
 		fit : true,
-	    fitColumns : false,
+	    fitColumns : true,
 		border : false,
 		idField : 'id',
+		pagination : true,
+		pageSize : 10,
+		pageList : [10,20,30,40,50],
+		loadFilter: function(data){
+			var res = {total:0,rows:[]};
+			if(!$.ObjectUtils.isEmpty(data)
+					&& !$.ObjectUtils.isEmpty(data.list)){
+				res['total'] = data.count;
+				res['rows'] = data.list;
+			}
+			return res;
+		}, 
 		checkOnSelect : false,
 		selectOnCheck : false,
 		nowrap : true,
@@ -65,23 +77,18 @@ $(document).ready(function(){
 			{title : 'id',width : 100,hidden:true,field:'id'}
 		] ],
 		columns: [ [
-			{title:'allDay',width:80,field:'allDay',formatter:$.Formatters.booleanFun},
-			{title:'end',width:100,field:'end',formatter:$.Formatters.dateFun},
-			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
-			{title:'lastUpdateUserId',width:100,field:'lastUpdateUserId'},
-			{title:'linkUrl',width:100,field:'linkUrl'},
-			{title:'类型',width:100,field:'type'},
-			{title:'classValue',width:100,field:'classValue'},
-			{title:'start',width:100,field:'start',formatter:$.Formatters.dateFun},
-			{title:'styleValue',width:100,field:'styleValue'},
-			{title:'title',width:100,field:'title'},
-			{title:'topicId',width:100,field:'topicId'},
-			{title:'topicType',width:100,field:'topicType'},
-			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
-			{title:'createUserId',width:100,field:'createUserId'},
-			{title:'备注',width:100,field:'remark'},
-			{title:'editable',width:80,field:'editable',formatter:$.Formatters.booleanFun},
-			{title:'attributes',width:100,field:'attributes'},
+			{title:'描述',width:100,field:'title',formatter:function(value, row, index){
+				return $.Formatters.substrFun(value, row, index,5);
+			}},
+			{title:'分类',width:100,field:'catalog',hidden:true},
+			{title:'备注',width:100,field:'remark',hidden:true,formatter:function(value, row, index){
+				return $.Formatters.substrFun(value, row, index,5);
+			}},
+			{title:'类型',width:60,field:'type'},
+			{title:'开始时间',width:80,field:'start',formatter:$.Formatters.dateFun},
+			{title:'结束时间',width:80,field:'end',formatter:$.Formatters.dateFun},
+			{title:'创建人',width:60,field:'creator',formatter:$.Formatters.dateFun},
+			{title:'创建时间',width:80,field:'createDate',formatter:$.Formatters.dateFun},
 			{title:'操作',width:100,field:'_action',
 				formatter : function(value, row, index) {
 					var str = '&nbsp;';
@@ -125,13 +132,13 @@ function addFun() {
         text : '加载中，请等待....'
 	});
 	
-	var addUrl = /*[[@{/calendarEvent/toAdd}]]*/'';
+	var addUrl = /*[[@{/operator/calendar/toAddEvent}]]*/'';
 	//FIXME: 修改新增modalDialog的width,height
 	DialogUtils.openModalDialog(
 		"addCalendarEvent",
 		"新增" + entityName,
 		$.formatString(addUrl),
-		500,572,
+		600,650,
 		function(){
 			queryFun();
 		},{maximizable : true}
@@ -161,7 +168,7 @@ function editFun(id,name) {
 		"updateCalendarEvent",
 		"编辑" + entityName + ":" + name,
 		$.formatString(updateUrl,id),
-        500,572,
+        500,650,
         function(){
 			queryFun();
 		},{maximizable : true}

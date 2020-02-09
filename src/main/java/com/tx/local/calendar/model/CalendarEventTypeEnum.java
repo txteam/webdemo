@@ -17,7 +17,15 @@ package com.tx.local.calendar.model;
  */
 public enum CalendarEventTypeEnum {
     
+    /** 操作人员行事历事件 */
     OPERATOR_CALENDAR_EVENT,
     
-    CLIENT_CALENDAR_EVENT;
+    /** 操作人员行事历事件 */
+    OPERATOR_PUBLIC_CALENDAR_EVENT,
+    
+    /** 客户行事历事件 */
+    CLIENT_CALENDAR_EVENT,
+    
+    /** 客户行事历事件 */
+    CLIENT_PUBLIC_CALENDAR_EVENT;
 }

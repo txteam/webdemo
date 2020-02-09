@@ -14,13 +14,17 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.tx.core.support.json.JSONAttributesSupport;
 
 import io.swagger.annotations.ApiModel;
 
 /**
  * 行事历对应事件<br/>
- * <功能详细描述>
+ * 参考：  https://fullcalendar.io/docs/event-parsing
+ *      https://www.helloweba.net/javascript/454.html#fc-EventSourceObject
+ *      https://fullcalendar.io/docs/event-parsing
+ *      https://fullcalendar.io/docs/event-source-object
  * 
  * @author  Administrator
  * @version  [版本号, 2020年1月10日]
@@ -44,9 +48,13 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
     @Column(nullable = false, length = 64)
     private String vcid;
     
-    /** 事件类型：用于区分事件类型，可以存储多种日历事件 */
+    /** 事件类型：用于区分事件类型，可以存储多种日历事件,注意：暂利用type代替 */
     @Column(nullable = false, length = 64)
     private CalendarEventTypeEnum type;
+    
+    /** 行事历事件分类可以为空，预留扩展性 */
+    @Column(name = "catalogId", nullable = true, length = 64)
+    private CalendarEventCatalog catalog;
     
     /** 主题类型 */
     @Column(nullable = false, length = 64)
@@ -60,37 +68,72 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
     @Column(nullable = false, updatable = true, length = 100)
     private String title;
     
-    /** 备注 */
-    @Column(nullable = true, updatable = true, length = 500)
-    private String remark;
-    
     /** linkUrl */
+    @JsonAlias(value = "url")
     @Column(nullable = true, updatable = true, length = 128)
-    private String linkUrl;
+    private String url;
     
-    /** 样式值 */
-    @Column(nullable = true, updatable = true, length = 64)
-    private String classValue;
+    /** 每周的哪几天 */
+    @Column(nullable = true)
+    //Array. (For defining a simple recurring event). The days of the week this event repeats. 
+    //An array of integers representing days e.g. [0, 1] for an event that repeats on Sundays and Mondays.
+    private String daysOfWeek;
     
-    /** style值 */
-    @Column(nullable = true, updatable = true, length = 64)
-    private String styleValue;
-    
-    /** 额外的参数 */
-    @Column(nullable = true, updatable = true, length = 4000)
-    private String attributes;
-    
+    //事件开始日期/时间，必选。格式为ISO8601字符串或UNIX时间戳
+    /** 起始时间 */
     @Column(nullable = false)
     private Date start;
     
+    //事件结束日期/时间，可选。格式为ISO8601字符串或UNIX时间戳
+    /** 结束时间 */
     @Column(nullable = false)
     private Date end;
+    
+    //创建简单的重复事件将会使用到这些属性
+    //Something duration-parseable. (For defining a simple recurring event). The time of day the event starts.
+    //@Column(nullable = false)
+    //private String startTime;
+    //Something duration-parseable. (For defining a simple recurring event). The time of day the event ends.
+    //@Column(nullable = false)
+    //private String endTime;
+    
+    //tring 或者 Array 类型，可选。一个css类（或者一组），附加到事件的 DOM 元素上。
+    /** 样式值 */
+    @Column(nullable = true, updatable = true, length = 64)
+    private String className;
     
     /** 可选，true or false，是否是全天事件 */
     private boolean allDay;
     
+    //true或false，可选。只针对当前的单个事件，其他事件不受影响。
     /** 是否可编辑 */
     private boolean editable;
+    
+    //Boolean (true or false). Overrides the master eventOverlap option for this single event. 
+    //If false, prevents this event from being dragged/resized over other events.
+    //Also prevents other events from being dragged/resized over this event.
+    private boolean overlap = true;
+    
+    /** 行事历事件策略 */
+    @Column(nullable = true, updatable = true, length = 256)
+    private String rrule;
+    
+    /** 时间间隔: for specifying the end time of each instance */
+    @Column(nullable = true, updatable = false, length = 32)
+    private String duration;
+    
+    /** 备注 */
+    @Column(nullable = true, updatable = true, length = 100)
+    private String remark;
+    
+    /** 额外的参数 */
+    //extendedProps,color,backgroundColor,borderColor,textColor
+    @Column(nullable = true, updatable = true, length = 2000)
+    private String attributes;
+    
+    /** 最后更新时间 */
+    @Column(nullable = false, updatable = false)
+    private String creator;
     
     /** 最后更新时间 */
     @Column(nullable = false, updatable = true)
@@ -151,6 +194,20 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
     }
     
     /**
+     * @return 返回 catalog
+     */
+    public CalendarEventCatalog getCatalog() {
+        return catalog;
+    }
+    
+    /**
+     * @param 对catalog进行赋值
+     */
+    public void setCatalog(CalendarEventCatalog catalog) {
+        this.catalog = catalog;
+    }
+    
+    /**
      * @return 返回 topicType
      */
     public CalendarEventTopicTypeEnum getTopicType() {
@@ -193,73 +250,31 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
     }
     
     /**
-     * @return 返回 remark
+     * @return 返回 url
      */
-    public String getRemark() {
-        return remark;
+    public String getUrl() {
+        return url;
     }
     
     /**
-     * @param 对remark进行赋值
+     * @param 对url进行赋值
      */
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setUrl(String url) {
+        this.url = url;
     }
     
     /**
-     * @return 返回 linkUrl
+     * @return 返回 daysOfWeek
      */
-    public String getLinkUrl() {
-        return linkUrl;
+    public String getDaysOfWeek() {
+        return daysOfWeek;
     }
     
     /**
-     * @param 对linkUrl进行赋值
+     * @param 对daysOfWeek进行赋值
      */
-    public void setLinkUrl(String linkUrl) {
-        this.linkUrl = linkUrl;
-    }
-    
-    /**
-     * @return 返回 classValue
-     */
-    public String getClassValue() {
-        return classValue;
-    }
-    
-    /**
-     * @param 对classValue进行赋值
-     */
-    public void setClassValue(String classValue) {
-        this.classValue = classValue;
-    }
-    
-    /**
-     * @return 返回 styleValue
-     */
-    public String getStyleValue() {
-        return styleValue;
-    }
-    
-    /**
-     * @param 对styleValue进行赋值
-     */
-    public void setStyleValue(String styleValue) {
-        this.styleValue = styleValue;
-    }
-    
-    /**
-     * @return 返回 attributes
-     */
-    public String getAttributes() {
-        return attributes;
-    }
-    
-    /**
-     * @param 对attributes进行赋值
-     */
-    public void setAttributes(String attributes) {
-        this.attributes = attributes;
+    public void setDaysOfWeek(String daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
     }
     
     /**
@@ -291,6 +306,20 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
     }
     
     /**
+     * @return 返回 className
+     */
+    public String getClassName() {
+        return className;
+    }
+    
+    /**
+     * @param 对className进行赋值
+     */
+    public void setClassName(String className) {
+        this.className = className;
+    }
+    
+    /**
      * @return 返回 allDay
      */
     public boolean isAllDay() {
@@ -316,6 +345,90 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
      */
     public void setEditable(boolean editable) {
         this.editable = editable;
+    }
+    
+    /**
+     * @return 返回 overlap
+     */
+    public boolean isOverlap() {
+        return overlap;
+    }
+    
+    /**
+     * @param 对overlap进行赋值
+     */
+    public void setOverlap(boolean overlap) {
+        this.overlap = overlap;
+    }
+    
+    /**
+     * @return 返回 rrule
+     */
+    public String getRrule() {
+        return rrule;
+    }
+    
+    /**
+     * @param 对rrule进行赋值
+     */
+    public void setRrule(String rrule) {
+        this.rrule = rrule;
+    }
+    
+    /**
+     * @return 返回 duration
+     */
+    public String getDuration() {
+        return duration;
+    }
+    
+    /**
+     * @param 对duration进行赋值
+     */
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+    
+    /**
+     * @return 返回 remark
+     */
+    public String getRemark() {
+        return remark;
+    }
+    
+    /**
+     * @param 对remark进行赋值
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+    
+    /**
+     * @return 返回 attributes
+     */
+    public String getAttributes() {
+        return attributes;
+    }
+    
+    /**
+     * @param 对attributes进行赋值
+     */
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
+    }
+    
+    /**
+     * @return 返回 creator
+     */
+    public String getCreator() {
+        return creator;
+    }
+    
+    /**
+     * @param 对creator进行赋值
+     */
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
     
     /**

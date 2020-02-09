@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.local.calendar.model.CalendarEvent;
-import com.tx.local.calendar.service.CalendarEventService;
+import com.tx.local.calendar.model.CalendarEventCatalog;
+import com.tx.local.calendar.service.CalendarEventCatalogService;
 import com.tx.core.paged.model.PagedList;
 
 import com.tx.local.calendar.model.CalendarEventTypeEnum;
 import com.tx.local.calendar.model.CalendarEventTopicTypeEnum;
 
 /**
- * 日程控制层<br/>
+ * 日程分类控制层<br/>
  * 
  * @author []
  * @version [版本号]
@@ -35,15 +35,15 @@ import com.tx.local.calendar.model.CalendarEventTopicTypeEnum;
  * @since [产品/模块版本]
  */
 @Controller
-@RequestMapping("/calendarEvent")
-public class CalendarEventController {
+@RequestMapping("/calendarEventCatalog")
+public class CalendarEventCatalogController {
     
-    //日程业务层
-    @Resource(name = "calendarEventService")
-    private CalendarEventService calendarEventService;
+    //日程分类业务层
+    @Resource(name = "calendarEventCatalogService")
+    private CalendarEventCatalogService calendarEventCatalogService;
     
     /**
-     * 跳转到查询日程分页列表页面<br/>
+     * 跳转到查询日程分类分页列表页面<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -56,11 +56,11 @@ public class CalendarEventController {
         response.put("types", CalendarEventTypeEnum.values());
         response.put("topicTypes", CalendarEventTopicTypeEnum.values());
         
-        return "calendar/queryCalendarEventPagedList";
+        return "calendar/queryCalendarEventCatalogPagedList";
     }
     
     /**
-     * 跳转到新增日程页面<br/>
+     * 跳转到新增日程分类页面<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -70,16 +70,16 @@ public class CalendarEventController {
      */
     @RequestMapping("/toAdd")
     public String toAdd(ModelMap response) {
-        response.put("calendarEvent", new CalendarEvent());
+        response.put("calendarEventCatalog", new CalendarEventCatalog());
         
         response.put("types", CalendarEventTypeEnum.values());
         response.put("topicTypes", CalendarEventTopicTypeEnum.values());
         
-        return "calendar/addCalendarEvent";
+        return "calendar/addCalendarEventCatalog";
     }
     
     /**
-     * 跳转到编辑日程页面
+     * 跳转到编辑日程分类页面
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -89,64 +89,65 @@ public class CalendarEventController {
      */
     @RequestMapping("/toUpdate")
     public String toUpdate(@RequestParam("id") String id, ModelMap response) {
-        CalendarEvent calendarEvent = this.calendarEventService.findById(id);
-        response.put("calendarEvent", calendarEvent);
+        CalendarEventCatalog calendarEventCatalog = this.calendarEventCatalogService
+                .findById(id);
+        response.put("calendarEventCatalog", calendarEventCatalog);
         
         response.put("types", CalendarEventTypeEnum.values());
         response.put("topicTypes", CalendarEventTopicTypeEnum.values());
         
-        return "calendar/updateCalendarEvent";
+        return "calendar/updateCalendarEventCatalog";
     }
     
     /**
-     * 查询日程实例列表<br/>
+     * 查询日程分类实例列表<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
-     * @return List<CalendarEvent> [返回类型说明]
+     * @return List<CalendarEventCatalog> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
     @RequestMapping("/queryList")
-    public List<CalendarEvent> queryList(
+    public List<CalendarEventCatalog> queryList(
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", request.getFirst("name"));
         
-        List<CalendarEvent> resList = this.calendarEventService
+        List<CalendarEventCatalog> resList = this.calendarEventCatalogService
                 .queryList(params);
         
         return resList;
     }
     
     /**
-     * 查询日程实例分页列表<br/>
+     * 查询日程分类实例分页列表<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
-     * @return List<CalendarEvent> [返回类型说明]
+     * @return List<CalendarEventCatalog> [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
     @RequestMapping("/queryPagedList")
-    public PagedList<CalendarEvent> queryPagedList(
+    public PagedList<CalendarEventCatalog> queryPagedList(
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", request.getFirst("name"));
         
-        PagedList<CalendarEvent> resPagedList = this.calendarEventService
+        PagedList<CalendarEventCatalog> resPagedList = this.calendarEventCatalogService
                 .queryPagedList(params, pageIndex, pageSize);
         return resPagedList;
     }
     
     /**
-     * 新增日程实例
+     * 新增日程分类实例
      * <功能详细描述>
-     * @param calendarEvent [参数说明]
+     * @param calendarEventCatalog [参数说明]
      * 
      * @return void [返回类型说明]
      * @exception throws [异常类型] [异常说明]
@@ -154,15 +155,15 @@ public class CalendarEventController {
      */
     @ResponseBody
     @RequestMapping("/add")
-    public boolean add(CalendarEvent calendarEvent) {
-        this.calendarEventService.insert(calendarEvent);
+    public boolean add(CalendarEventCatalog calendarEventCatalog) {
+        this.calendarEventCatalogService.insert(calendarEventCatalog);
         return true;
     }
     
     /**
-     * 更新日程实例<br/>
+     * 更新日程分类实例<br/>
      * <功能详细描述>
-     * @param calendarEvent
+     * @param calendarEventCatalog
      * @return [参数说明]
      * 
      * @return boolean [返回类型说明]
@@ -171,13 +172,14 @@ public class CalendarEventController {
      */
     @ResponseBody
     @RequestMapping("/update")
-    public boolean update(CalendarEvent calendarEvent) {
-        boolean flag = this.calendarEventService.updateById(calendarEvent);
+    public boolean update(CalendarEventCatalog calendarEventCatalog) {
+        boolean flag = this.calendarEventCatalogService
+                .updateById(calendarEventCatalog);
         return flag;
     }
     
     /**
-     * 根据主键查询日程实例<br/> 
+     * 根据主键查询日程分类实例<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -188,13 +190,15 @@ public class CalendarEventController {
      */
     @ResponseBody
     @RequestMapping("/findById")
-    public CalendarEvent findById(@RequestParam(value = "id") String id) {
-        CalendarEvent calendarEvent = this.calendarEventService.findById(id);
-        return calendarEvent;
+    public CalendarEventCatalog findById(
+            @RequestParam(value = "id") String id) {
+        CalendarEventCatalog calendarEventCatalog = this.calendarEventCatalogService
+                .findById(id);
+        return calendarEventCatalog;
     }
     
     /**
-     * 删除日程实例<br/> 
+     * 删除日程分类实例<br/> 
      * <功能详细描述>
      * @param id
      * @return [参数说明]
@@ -206,7 +210,7 @@ public class CalendarEventController {
     @ResponseBody
     @RequestMapping("/deleteById")
     public boolean deleteById(@RequestParam(value = "id") String id) {
-        boolean flag = this.calendarEventService.deleteById(id);
+        boolean flag = this.calendarEventCatalogService.deleteById(id);
         return flag;
     }
     
@@ -226,7 +230,8 @@ public class CalendarEventController {
             @RequestParam(value = "id", required = false) String excludeId,
             @RequestParam Map<String, String> params) {
         params.remove("id");
-        boolean flag = this.calendarEventService.exists(params, excludeId);
+        boolean flag = this.calendarEventCatalogService.exists(params,
+                excludeId);
         
         Map<String, String> resMap = new HashMap<String, String>();
         if (!flag) {
@@ -235,6 +240,58 @@ public class CalendarEventController {
             resMap.put("error", "重复值");
         }
         return resMap;
+    }
+    
+    /**
+     * 根据条件查询日程分类子级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryChildren")
+    public List<CalendarEventCatalog> queryChildren(
+            @RequestParam(value = "parentId", required = true) String parentId,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", request.getFirst("name"));
+        
+        List<CalendarEventCatalog> resList = this.calendarEventCatalogService
+                .queryChildrenByParentId(parentId, params);
+        
+        return resList;
+    }
+    
+    /**
+     * 根据条件查询日程分类子、孙级列表<br/>
+     * <功能详细描述>
+     * @param parentId
+     * @param valid
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryDescendants")
+    public List<CalendarEventCatalog> queryDescendants(
+            @RequestParam(value = "parentId", required = true) String parentId,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", request.getFirst("name"));
+        
+        List<CalendarEventCatalog> resList = this.calendarEventCatalogService
+                .queryDescendantsByParentId(parentId, params);
+        
+        return resList;
     }
     
 }

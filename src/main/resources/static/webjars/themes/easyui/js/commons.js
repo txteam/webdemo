@@ -1408,14 +1408,17 @@ var FeeValueTypes = {};
 /* 预制费中费用类型与numberBox效果之间的关系 */
 (function($, undefined) {
 	$.Formatters = {};
-	$.Formatters.dateFun = function(value, row, index){
+	$.Formatters.dateFun = function(value, row, index,formatter){
 	    var text = '';
+	    if(!formatter){
+			formatter = 'yyyy-MM-dd hh:mm:ss';
+		}
 	    if(!value){
 	        text = '';
 	    }else{
 	        var date = new Date();
 	        date.setTime(value);
-	        text = date.format('yyyy-MM-dd hh:mm:ss');
+	        text = date.format(formatter);
 	    }
 	    return text;
 	};
