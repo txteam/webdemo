@@ -6,7 +6,9 @@
  */
 package com.tx.local.content.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.tx.component.basicdata.model.BasicDataEnum;
+import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 
 /**
  * 类容类型<br/>
@@ -17,13 +19,14 @@ import com.tx.component.basicdata.model.BasicDataEnum;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum ContentInfoTypeEnum implements BasicDataEnum {
     
     LINK("LINK", "链接"),
     
     IMAGE("IMAGE", "图片"),
     
-    BLOB_ARTICLE("BLOB_ARTICLE", "文章");
+    TEXT("TEXT", "文章");
     
     /** 对应枚举关键字：该字段可以为空 */
     private final String code;

@@ -86,6 +86,13 @@ $(document).ready(function(){
 			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
 			<table class="table">
 				<tr>
+					<th class="narrow" width="25%">编码:<span class="tRed">*</span></th>
+					<td>
+						<input id="code" name="code" type="text" th:data-rule="'编码:required;length[1~127];remote[' + @{/calendarEventCatalog/validate} + ', code, id];'"
+							th:value="*{code}"/>
+					</td>
+				</tr>			
+				<tr>
 					<th class="narrow" width="25%">lastUpdateUserId:</th>
 					<td>
 						<input id="lastUpdateUserId" name="lastUpdateUserId" type="text" 
@@ -109,13 +116,6 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">topicId:</th>
-					<td>
-						<input id="topicId" name="topicId" type="text" 
-							th:value="*{topicId}"/>
-					</td>
-				</tr>			
-				<tr>
 					<th class="narrow" width="25%">topicType:<span class="tRed">*</span></th>
 					<td>
 						<select id="topicType" name="topicType" data-rule="topicType:required;">
@@ -132,10 +132,12 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">上级ID:</th>
+					<th class="narrow" width="25%">是否可编辑:</th>
 					<td>
-						<input id="parentId" name="parentId" type="text" 
-							th:value="*{parentId}"/>
+						<select id="modifyAble" name="modifyAble" >
+							<option value="true" th:selected="${calendarEventCatalog.modifyAble eq true}">是</form:option>
+							<option value="false" th:selected="${calendarEventCatalog.modifyAble eq false}">否</form:option>
+						</select>
 					</td>
 				</tr>			
 				<tr>

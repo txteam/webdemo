@@ -56,7 +56,7 @@ $(document).ready(function(){
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
-						parent.refreshFun();
+						parent.refreshFun($("#id").val());
 						DialogUtils.tip("保存成功.");
 					}else{
 						DialogUtils.alert("错误提示","保存失败.","error");

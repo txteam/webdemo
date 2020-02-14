@@ -93,29 +93,11 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">read:</th>
-					<td>
-						<select id="read" name="read" >
-							<option value="true" th:selected="${privateMessage.read eq true}">是</form:option>
-							<option value="false" th:selected="${privateMessage.read eq false}">否</form:option>
-						</select>
-					</td>
-				</tr>			
-				<tr>
 					<th class="narrow" width="25%">readDate:</th>
 					<td>
 						<input id="readDate" name="readDate" type="text" readonly="readonly"
 							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
 							th:value="${#dates.format(privateMessage.readDate,'yyyy-MM-dd HH:mm:ss')}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">类型:<span class="tRed">*</span></th>
-					<td>
-						<select id="type" name="type" data-rule="类型:required;">
-							<option value="">--- 请选择 ---</option>
-							<option th:each="typeTemp:${types}" th:value="${typeTemp.code}" th:text="${typeTemp.name}" th:selected="${privateMessage.type eq typeTemp}"></option>
-						</select>
 					</td>
 				</tr>			
 				<tr>
@@ -149,26 +131,47 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">sourceId:</th>
+					<th class="narrow" width="25%">sender:</th>
 					<td>
-						<input id="sourceId" name="sourceId" type="text" 
-							th:value="*{sourceId}"/>
+						<input id="sender" name="sender" type="text" data-rule="sender:length[0~32];"
+							th:value="*{sender}"/>
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">分类:<span class="tRed">*</span></th>
+					<th class="narrow" width="25%">senderId:</th>
 					<td>
-						<select id="catalog" name="catalog" data-rule="分类:required;">
-							<option value="">--- 请选择 ---</option>
-							<option th:each="catalogTemp:${catalogs}" th:value="${catalogTemp.code}" th:text="${catalogTemp.name}" th:selected="${privateMessage.catalog eq catalogTemp}"></option>
+						<input id="senderId" name="senderId" type="text" 
+							th:value="*{senderId}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">unread:</th>
+					<td>
+						<select id="unread" name="unread" >
+							<option value="true" th:selected="${privateMessage.unread eq true}">是</form:option>
+							<option value="false" th:selected="${privateMessage.unread eq false}">否</form:option>
 						</select>
 					</td>
 				</tr>			
+				<tr>
+					<th class="narrow" width="25%">分类:</th>
+					<td>
+						<!-- //TODO:修改其显示逻辑 -->
+						<input id="catalog.id" name="catalog.id" th:value="*{catalog?.id}"/>
+					</td>
+				</tr>
 				<tr>
 					<th class="narrow" width="25%">content:</th>
 					<td>
 						<input id="content" name="content" type="text" data-rule="content:length[0~2000];"
 							th:value="*{content}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">username:</th>
+					<td>
+						<input id="username" name="username" type="text" data-rule="username:length[0~32];"
+							th:value="*{username}"/>
 					</td>
 				</tr>			
 			</table>

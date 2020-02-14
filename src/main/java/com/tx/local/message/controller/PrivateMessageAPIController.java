@@ -68,7 +68,7 @@ public class PrivateMessageAPIController implements PrivateMessageFacade {
      */
     @Override
     public boolean deleteById(
-            @PathVariable(value = "id", required = true) String id) {
+    		@PathVariable(value = "id",required=true) String id) {
         boolean flag = this.privateMessageService.deleteById(id);
         return flag;
     }
@@ -84,14 +84,13 @@ public class PrivateMessageAPIController implements PrivateMessageFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public boolean updateById(
-            @PathVariable(value = "id", required = true) String id,
-            @RequestBody PrivateMessage privateMessage) {
-        boolean flag = this.privateMessageService.updateById(id,
-                privateMessage);
+    public boolean updateById(@PathVariable(value = "id",required=true) String id,
+    		@RequestBody PrivateMessage privateMessage) {
+        boolean flag = this.privateMessageService.updateById(id,privateMessage);
         return flag;
     }
     
+
     /**
      * 根据主键查询私信<br/>
      * <功能详细描述>
@@ -108,7 +107,7 @@ public class PrivateMessageAPIController implements PrivateMessageFacade {
         
         return res;
     }
-    
+
     /**
      * 查询私信实例列表<br/>
      * <功能详细描述>
@@ -120,10 +119,13 @@ public class PrivateMessageAPIController implements PrivateMessageFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<PrivateMessage> queryList(@RequestBody Querier querier) {
-        List<PrivateMessage> resList = this.privateMessageService
-                .queryList(querier);
-        
+    public List<PrivateMessage> queryList(
+    		@RequestBody Querier querier
+    	) {
+        List<PrivateMessage> resList = this.privateMessageService.queryList(
+			querier         
+        );
+  
         return resList;
     }
     
@@ -141,15 +143,19 @@ public class PrivateMessageAPIController implements PrivateMessageFacade {
      */
     @Override
     public PagedList<PrivateMessage> queryPagedList(
-            @RequestBody Querier querier,
-            @PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize) {
-        PagedList<PrivateMessage> resPagedList = this.privateMessageService
-                .queryPagedList(querier, pageIndex, pageSize);
+			@RequestBody Querier querier,
+			@PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize
+    	) {
+        PagedList<PrivateMessage> resPagedList = this.privateMessageService.queryPagedList(
+			querier,
+			pageIndex,
+			pageSize
+        );
         return resPagedList;
     }
     
-    /**
+	/**
      * 查询私信数量<br/>
      * <功能详细描述>
      * @param querier
@@ -160,15 +166,17 @@ public class PrivateMessageAPIController implements PrivateMessageFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public int count(@RequestBody Querier querier) {
-        int count = this.privateMessageService.count(querier);
+    public int count(
+            @RequestBody Querier querier) {
+        int count = this.privateMessageService.count(
+        	querier);
         
         return count;
     }
-    
-    /**
+
+	/**
      * 查询私信是否存在<br/>
-     * @param excludeId
+	 * @param excludeId
      * @param querier
      * @return [参数说明]
      * 

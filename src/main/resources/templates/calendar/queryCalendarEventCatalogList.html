@@ -49,6 +49,8 @@ var entityName = '日程分类';
 $(document).ready(function(){
 	var  $editALink = $("#editALink");
 	var  $deleteALink = $("#deleteALink");
+	var  $enableALink = $("#enableALink");
+	var  $disableALink = $("#disableALink");
 
 	grid = $('#grid').datagrid({
 		url :/*[[@{/calendarEventCatalog/queryList}]]*/'',
@@ -65,23 +67,32 @@ $(document).ready(function(){
 			{title : 'id',width : 100,hidden:true,field:'id'}
 		] ],
 		columns: [ [
+			{title:'编码',width:100,field:'code'},
 			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
 			{title:'lastUpdateUserId',width:100,field:'lastUpdateUserId'},
 			{title:'名称',width:100,field:'name'},
 			{title:'类型',width:100,field:'type'},
-			{title:'topicId',width:100,field:'topicId'},
 			{title:'topicType',width:100,field:'topicType'},
+			{title:'是否有效',width:80,field:'valid',formatter:$.Formatters.booleanFun},
 			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
 			{title:'createUserId',width:100,field:'createUserId'},
-			{title:'上级ID',width:100,hidden:true,field:'parentId'},
+			{title:'是否可编辑',width:80,field:'modifyAble',formatter:$.Formatters.booleanFun},
 			{title:'备注',width:100,field:'remark'},
 			{title:'操作',width:100,field:'_action',
 				formatter : function(value, row, index) {
 					var str = '&nbsp;';
+					if(!row.valid){
+						str += $.formatString('<img onclick="enableFun(\'{0}\',\'{1}\');" src="{2}" title="启用"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/control/control_play_blue.png');
+						str += '&nbsp;';
+					}
 					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil.png');
 					str += '&nbsp;';
 					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil_delete.png');
 					str += '&nbsp;';
+					if(row.valid){
+						str += $.formatString('<img onclick="disableFun(\'{0}\',\'{1}\');" src="{2}" title="禁用"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/control/control_stop_blue.png');
+						str += '&nbsp;';
+					}
 					return str;
 				}
 			}
@@ -93,6 +104,17 @@ $(document).ready(function(){
 		onClickRow : function(index, row){
 			$editALink.linkbutton('enable');
 			$deleteALink.linkbutton('enable');
+			if(row.valid){
+				$enableALink.linkbutton('disable');
+				$enableALink.hide();
+				$disableALink.show();
+				$disableALink.linkbutton('enable');
+			}else{
+				$disableALink.linkbutton('disable');
+				$disableALink.hide();
+				$enableALink.show();
+				$enableALink.linkbutton('enable');
+			}
 		},
 		onLoadSuccess : function() {
 			$(this).datagrid('unselectAll');
@@ -100,6 +122,10 @@ $(document).ready(function(){
 			
 			$editALink.linkbutton('disable');
 			$deleteALink.linkbutton('disable');
+			$enableALink.show();
+			$disableALink.show();
+			$enableALink.linkbutton('disable');
+			$disableALink.linkbutton('disable');
 		}
 	});
 });
@@ -124,7 +150,7 @@ function addFun() {
 		"addCalendarEventCatalog",
 		"新增" + entityName,
 		$.formatString(addUrl),
-		500,376,
+		500,404,
 		function(){
 			queryFun();
 		},{maximizable : true}
@@ -154,7 +180,7 @@ function editFun(id,name) {
 		"updateCalendarEventCatalog",
 		"编辑" + entityName + ":" + name,
 		$.formatString(updateUrl,id),
-        500,376,
+        500,404,
         function(){
 			queryFun();
 		},{maximizable : true}
@@ -201,6 +227,88 @@ function deleteFun(id,name) {
     });
     return false;
 }
+/*
+ * 禁用
+ */
+function disableFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定日程分类
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认禁用{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认禁用指定日程分类
+    		$.post(
+				/*[[@{/calendarEventCatalog/disableById}]]*/'',
+	    		{id:id},
+	    		function(data){
+	    			DialogUtils.progress('close');
+	    			if(data){
+	    				DialogUtils.tip("禁用" + entityName + "成功.");
+	    			}else{
+	    				var errorMessage = $.formatString("禁用{0}失败.",entityName);
+	    				DialogUtils.alert("错误提示",errorMessage,"error");
+	    			}
+	    			queryFun();
+	    		}
+		    );
+    	}
+    });
+    return false;
+}
+/*
+ * 启用
+ */
+function enableFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定日程分类
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认启用{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认启用指定日程分类
+    		$.post(
+				/*[[@{/calendarEventCatalog/enableById}]]*/'',
+	    		{id:id},
+	    		function(data){
+	    			DialogUtils.progress('close');
+	    			if(data){
+	    				DialogUtils.tip("启用" + entityName + "成功.");
+	    			}else{
+	    				var errorMessage = $.formatString("启用{0}失败.",entityName);
+	    				DialogUtils.alert("错误提示",errorMessage,"error");
+	    			}
+	    			queryFun();
+		    	}
+		    );
+    	}
+    });
+    return false;
+}
 /*]]>*/
 </script>
 </head>
@@ -210,10 +318,16 @@ function deleteFun(id,name) {
 		<form id="queryForm" class="form">
 			<table class="table table-hover table-condensed">
 				<tr>
-					<th width="20%">名称:</th>
-					<td width="30%"><input id="name" name="name"/></td>
-					<th width="20%">&nbsp;</th>
-					<td width="30%">&nbsp;</td>
+					<th width="20%">编码:</th>
+					<td width="30%"><input id="code" name="code"/></td>
+					<th width="20%">是否有效</th>
+					<td width="30%">
+						<select id="valid" name="valid">
+							<option value="">--- 不限 ---</option>
+							<option value="true">是</option>
+							<option value="false">否</option>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="4" class="button operRow">
@@ -231,6 +345,8 @@ function deleteFun(id,name) {
 		<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
 		<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
 		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
+		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
 		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
 			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 	</div>

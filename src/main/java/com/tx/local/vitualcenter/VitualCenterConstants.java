@@ -8,7 +8,7 @@ package com.tx.local.vitualcenter;
 
 
 /**
- * <功能简述>
+ * 虚中心常量<br/>
  * <功能详细描述>
  * 
  * @author  Administrator

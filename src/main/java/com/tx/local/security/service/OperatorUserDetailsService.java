@@ -165,10 +165,10 @@ public class OperatorUserDetailsService
         if (isSuperAdmin) {
             //如果为超级管理员，则将超级管理员角色加入
             roles.add(roleRegistry
-                    .findById(OperatorRoleEnum.SUPER_ADMIN.getId()));
+                    .findById(OperatorRoleEnum.ROLE_SUPER_ADMIN.getId()));
         }
         //所有的操作人员均拥有角色operator
-        roles.add(roleRegistry.findById(OperatorRoleEnum.OPERATOR.getId()));
+        roles.add(roleRegistry.findById(OperatorRoleEnum.ROLE_OPERATOR.getId()));
         
         //查询用户的权限：根据用户的所属组织，职位，角色查询
         List<Auth> auths = new ArrayList<>();
@@ -214,7 +214,7 @@ public class OperatorUserDetailsService
             return true;
         }
         for (RoleRef rf : roleRefList) {
-            if (OperatorRoleEnum.SUPER_ADMIN.getId().equals(rf.getId())) {
+            if (OperatorRoleEnum.ROLE_SUPER_ADMIN.getId().equals(rf.getId())) {
                 return true;
             }
         }

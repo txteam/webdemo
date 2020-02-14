@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>新增日程[addOperatorCalendarEvent]</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	parent.DialogUtils.progress('close');
+
+	//验证器
+	$('#entityForm').validator({
+	    valid: function(){
+	        var postUrl = '';
+	        
+	        var event = {};
+	        event['title'] = $('#title').val();
+	        event['type'] = $('#type').val();
+	        event['url'] = $('#url').val();
+	        event['remark'] = $('#remark').val();
+	        
+	        var id = $('#id').val();
+	        if($.ObjectUtils.isEmpty(id)){
+	        	postUrl = /*[[@{/operator/calendar/addEvent}]]*/'';
+			}else{
+				postUrl = /*[[@{/operator/calendar/updateEvent}]]*/'';
+				event['id'] = id;
+			}
+			var loop = $(':radio[name=loop]:checked').val();
+	      	//表单验证通过，提交表单到服务器
+	        if(loop == 'true'){
+				var freq = $('#freq').val();
+	        	var dtstart = $('#dtstart').val();
+	        	var until = $('#until').val();
+	        	if($.ObjectUtils.isEmpty(freq)){
+					$("#freq").trigger("showmsg", ["error", "循环类型不能为空."]);
+					return false;
+				}
+				if($.ObjectUtils.isEmpty(dtstart) || $.ObjectUtils.isEmpty(until)){
+					$("#until").trigger("showmsg", ["error", "起始时间不能为空."]);
+					return false;
+				}
+				event['repeated'] = true;
+				event['allDay'] = false;
+				event['duration'] = $('#duration').val();
+				event['repeatRule.freq'] = freq;
+				event['repeatRule.dtstart'] = dtstart;
+		        event['repeatRule.until'] = until;
+		        
+		        var count = $('#count').val();
+		        if(!$.ObjectUtils.isEmpty(count)){
+		        	event['repeatRule.count'] = count;
+				}
+		        var interval = $('#interval').val();
+		        if(!$.ObjectUtils.isEmpty(interval)){
+		        	event['repeatRule.interval'] = interval;
+				}
+		        var byweekdays = [];
+				$.each($(':checkbox[name=byweekday]:checked'),function(index,checkbox){
+					event['repeatRule.byweekday[' + index + ']'] = $(this).val();
+	            });
+				//alert($.toJsonString(event));
+			}else{
+				var allDay = $(':radio[name=allDay]:checked').val();
+				var start = $('#start').val();
+				var end = $('#end').val();
+				if($.ObjectUtils.isEmpty(start) || $.ObjectUtils.isEmpty(end)){
+					$("#end").trigger("showmsg", ["error", "起始时间不能为空."]);
+					return false;
+				}
+				event['repeated'] = false;
+				event['allDay'] = allDay;
+				event['start'] = start;
+		        event['end'] = end;
+			}   
+	      	
+	        DialogUtils.progress({
+	        	text : '数据提交中，请等待....'
+	        });
+			$.ajax({
+				type: 'POST',
+				dataType: 'json',
+				url: postUrl,
+				data: event,
+				success: function(data){
+					DialogUtils.progress('close');
+					if(data){
+						parent.DialogUtils.tip("新增日程成功.");
+						parent.DialogUtils.closeDialogById("saveCalendarEvent");
+					}else{
+						DialogUtils.alert("错误提示","新增日程失败.","error");
+					}
+				}
+			});
+			return false;
+	    }
+	});
+	
+	function toggleLoop(){
+		var loop = $(':radio[name=loop]:checked').val();
+		if(loop == 'true'){
+			$('.none_loop').hide();
+			$('.loop').show();
+		}else{
+			$('.loop').hide();
+			$('.none_loop').show();
+		}
+	}
+	$(':radio[name=loop]').change(function(){
+		toggleLoop();
+	});
+	toggleLoop();
+	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("addCalendarEvent");
+	});
+	//提交
+	$("#submitBtn").click(function(){
+		$('#entityForm').submit();
+	});
+});
+/*]]>*/
+</script>
+</head>
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<form id="entityForm" method="post" class="form" th:object="${calendarEvent}">
+	<div data-options="region:'center',border:false" title="" style="overflow-x: hidden;overflow-y: auto;">
+		<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
+		<table class="table">
+			<tr>
+            	<th width="139px">事件标题<span class="tRed">*</span></th>
+                <td>
+                	<input id="title" name="title" type="text" style="width:290px;" th:value="*{title}"
+                		data-rule="事件标题:required;length[1~100];" maxlength="100"/>
+                </td>
+            </tr>
+            <tr>
+            	<th width="139px">是否循环<span class="tRed">*</span></th>
+                <td>
+                	<input name="loop" type="radio" value="false" th:checked="*{!repeated}"/>
+					<label for="ra0">否</label>
+                	<input name="loop" type="radio" value="true" th:checked="*{repeated}"/>
+					<label for="ra1">是</label>
+                </td>
+            </tr>
+            <tr class="none_loop">
+            	<th width="139px">是否全天<span class="tRed">*</span></th>
+                <td>
+                	<input name="allDay" type="radio" value="false" th:checked="*{!allDay}"/>
+					<label for="ra0">否</label>
+                	<input name="allDay" type="radio" value="true" th:checked="*{allDay}"/>
+					<label for="ra1">是</label>
+                </td>
+            </tr>
+            <tr class="none_loop none_allday">
+				<th>
+					事件时间<span class="tRed">*</span>
+	            </th>
+	            <td>
+	            	<input id="start" name="start" type="text" readonly="true" th:value="${#dates.format(calendarEvent.start, 'yyyy-MM-dd hh:mm')}" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm'})"/>
+	            	-
+	            	<input id="end" name="end" type="text" readonly="true" th:value="${#dates.format(calendarEvent.end, 'yyyy-MM-dd hh:mm')}" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm'})"/>
+				</td>   
+			</tr>
+			<tr class="loop none_allday" style="display: none">
+				<th>
+					事件时间<span class="tRed">*</span>
+	            </th>
+	            <td>
+	            	<input id="dtstart" name="dtstart" type="text" readonly="true" th:value="${#dates.format(calendarEvent.repeatRule?.dtstart, 'yyyy-MM-dd hh:mm')}" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm'})"/>
+	            	-
+	            	<input id="until" name="until" type="text" readonly="true" th:value="${#dates.format(calendarEvent.repeatRule?.until, 'yyyy-MM-dd hh:mm')}" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm'})"/>
+				</td>   
+			</tr>
+	      	<tr class="loop" style="display: none">
+				<th>
+					循环类型<span class="tRed">*</span>
+	            </th>
+	            <td>
+	            	<select id="freq" name="freq" style="width:290px;">
+                		<option value="weekly" selected="selected">周</option>
+                	</select>
+	            </td>   
+			</tr>
+            <tr class="loop" style="display: none">
+            	<th>
+					事件时间
+	            </th>
+		        <td>
+		        	<input name="byweekday" type="checkbox" value="mo" th:checked="${(calendarEvent.repeatRule?.byweekday!=null)?#strings.contains(calendarEvent.repeatRule.byweekday,'mo'):false}"/>
+		            <label for="checkbox1">星期一</label>
+		            <input name="byweekday" type="checkbox" value="tu" th:checked="${(calendarEvent.repeatRule?.byweekday!=null)?#strings.contains(calendarEvent.repeatRule.byweekday,'tu'):false}"/>
+		            <label for="checkbox2">星期二</label>
+		            <input name="byweekday" type="checkbox" value="we" th:checked="${(calendarEvent.repeatRule?.byweekday!=null)?#strings.contains(calendarEvent.repeatRule.byweekday,'we'):false}"/>
+		            <label for="checkbox3"/>星期三</label>
+		            <input name="byweekday" type="checkbox" value="th" th:checked="${(calendarEvent.repeatRule?.byweekday!=null)?#strings.contains(calendarEvent.repeatRule.byweekday,'th'):false}"/>
+		            <label for="checkbox4"/>星期四</label>
+		            <input name="byweekday" type="checkbox" value="fr" th:checked="${(calendarEvent.repeatRule?.byweekday!=null)?#strings.contains(calendarEvent.repeatRule.byweekday,'fr'):false}"/>
+		            <label for="checkbox5"/>星期五</label>
+		            <input name="byweekday" type="checkbox" value="sa" th:checked="${(calendarEvent.repeatRule?.byweekday!=null)?#strings.contains(calendarEvent.repeatRule.byweekday,'sa'):false}"/>
+					<label for="checkbox6"/>星期六</label>
+		            <input name="byweekday" type="checkbox" value="su" th:checked="${(calendarEvent.repeatRule?.byweekday!=null)?#strings.contains(calendarEvent.repeatRule.byweekday,'su'):false}"/>
+					<label for="checkbox7"/>星期日</label>
+				</td>
+	      	</tr>
+	      	<tr class="loop" style="display: none">
+            	<th>
+					时间间隔
+	            </th>
+		        <td>
+		        	<input id="interval" name="interval" type="text" style="width:290px;" th:value="${calendarEvent.repeatRule?.interval}"/>
+				</td>
+	      	</tr>
+	      	<tr class="loop" style="display: none">
+            	<th>
+					循环次数
+	            </th>
+		        <td>
+		       		<input id="count" name="count" type="text" th:value="${calendarEvent.repeatRule?.count}" style="width:290px;"/>
+				</td>
+	      	</tr>
+	      	<tr class="loop" style="display: none">
+            	<th>
+					事件时长
+	            </th>
+		        <td>
+		        	<input id="duration" name="duration" type="text" th:value="*{duration}" readonly="true" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'HH:mm',viewDate:'01:00'})" style="width:290px;"/>
+				</td>
+	      	</tr>
+	      	<tr>
+            	<th width="139px">事件链接</th>
+                <td>
+                	<input id="url" name="url" type="text" style="width:290px;" th:value="*{url}"/>
+                </td>
+            </tr>
+            <tr>
+            	<th width="139px">事件备注</th>
+                <td>
+                	<input id="remark" name="remark" type="text" style="width:290px;" th:value="*{remark}"/>
+                </td>
+            </tr>
+		</table>
+	</div>
+	</form>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
+	</div>
+</body>

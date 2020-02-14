@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 /**
  * 消息到用户的映射关联<br/>
+ *  //参考：https://blog.csdn.net/weixin_36910300/article/details/79104536
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -32,11 +33,11 @@ public class Notice2User {
     
     /** 站内消息id */
     @Column(nullable = false, length = 64)
-    private String noticeMsgId;
+    private String noticeId;
     
     /** 客户类型:这里的类型可以与具体公告中的不一样，这里只有toClient,toOperator不考虑对角色等的支持 */
     @Column(nullable = false, length = 64)
-    private MsgUserTypeEnum userType;
+    private MessageUserTypeEnum userType;
     
     /** 用户id */
     @Column(nullable = false, length = 64)
@@ -49,15 +50,87 @@ public class Notice2User {
     /** 阅读时间 */
     private Date readDate;
     
-    /** 接收消息时间 */
-    private Date receiveDate;
+    /**
+     * @return 返回 id
+     */
+    public String getId() {
+        return id;
+    }
     
-    /** 删除时间 */
-    //去除删除标志位的设计，考虑消息会逐步累积增多，删除就将该映射关系移除至历史表即可
-    //** 是否已删除(已删除的消息不再进行显示) */
-    //private boolean deleted;
-    private Date deleteDate;
+    /**
+     * @param 对id进行赋值
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
     
-    /** 是否置顶 */
-    private boolean top;
+    /**
+     * @return 返回 noticeId
+     */
+    public String getNoticeId() {
+        return noticeId;
+    }
+    
+    /**
+     * @param 对noticeId进行赋值
+     */
+    public void setNoticeId(String noticeId) {
+        this.noticeId = noticeId;
+    }
+    
+    /**
+     * @return 返回 userType
+     */
+    public MessageUserTypeEnum getUserType() {
+        return userType;
+    }
+    
+    /**
+     * @param 对userType进行赋值
+     */
+    public void setUserType(MessageUserTypeEnum userType) {
+        this.userType = userType;
+    }
+    
+    /**
+     * @return 返回 userId
+     */
+    public String getUserId() {
+        return userId;
+    }
+    
+    /**
+     * @param 对userId进行赋值
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    
+    /**
+     * @return 返回 unread
+     */
+    public boolean isUnread() {
+        return unread;
+    }
+    
+    /**
+     * @param 对unread进行赋值
+     */
+    public void setUnread(boolean unread) {
+        this.unread = unread;
+    }
+    
+    /**
+     * @return 返回 readDate
+     */
+    public Date getReadDate() {
+        return readDate;
+    }
+    
+    /**
+     * @param 对readDate进行赋值
+     */
+    public void setReadDate(Date readDate) {
+        this.readDate = readDate;
+    }
 }

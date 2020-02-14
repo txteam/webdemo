@@ -14,8 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.tx.core.exceptions.SILException;
-
 import io.swagger.annotations.ApiModel;
 
 /**
@@ -44,40 +42,36 @@ public class PrivateMessage implements Serializable, Cloneable {
     @Column(nullable = false)
     private String vcid;
     
-    /** 私信类型： 发送，接收 */
-    @Column(nullable = false, updatable = false)
-    private PrivateMessageTypeEnum type;
-    
     /** 分类：私信，提醒等 */
-    @Column(nullable = false, updatable = false)
-    private PrivateMessageCatalogEnum catalog;
+    @Column(name = "catalogId", nullable = true, updatable = false,length=64)
+    private MessageCatalog catalog;
     
     /** 客户类型 */
     @Column(nullable = false)
-    private MsgUserTypeEnum userType;
+    private MessageUserTypeEnum userType;
+    
+    /** 接收者：可以为空 */
+    @Column(nullable = false, updatable = false, length = 64)
+    private String userId;
+    
+    /** 接收者：可以为空 */
+    @Column(nullable = true, updatable = false, length = 64)
+    private String username;
     
     /** 用户id */
-    @Column(nullable = false)
-    private String userId;
+    @Column(nullable = true, updatable = false, length = 64)
+    private String senderId;
     
     /** 发送者：可以为空 */
     @Column(nullable = true, updatable = false, length = 64)
     private String sender;
-    
-    /** 接收者：可以为空 */
-    @Column(nullable = true, updatable = false, length = 64)
-    private String receiver;
-    
-    /** 发送和接收的私信会被复制一份，生成一条发送，一条接收信息，接收方的sourceId为发送方的消息id */
-    @Column(nullable = true, updatable = false, length = 64)
-    private String sourceId;
     
     /** 站内消息标题 */
     @Column(nullable = false, updatable = true, length = 100)
     private String title;
     
     /** 站内消息内容 */
-    @Column(length = 4000)
+    @Column(nullable = true, updatable = true, length = 4000)
     private String content;
     
     /** 是否未读 */
@@ -134,44 +128,30 @@ public class PrivateMessage implements Serializable, Cloneable {
     }
     
     /**
-     * @return 返回 type
-     */
-    public PrivateMessageTypeEnum getType() {
-        return type;
-    }
-    
-    /**
-     * @param 对type进行赋值
-     */
-    public void setType(PrivateMessageTypeEnum type) {
-        this.type = type;
-    }
-    
-    /**
      * @return 返回 catalog
      */
-    public PrivateMessageCatalogEnum getCatalog() {
+    public MessageCatalog getCatalog() {
         return catalog;
     }
     
     /**
      * @param 对catalog进行赋值
      */
-    public void setCatalog(PrivateMessageCatalogEnum catalog) {
+    public void setCatalog(MessageCatalog catalog) {
         this.catalog = catalog;
     }
     
     /**
      * @return 返回 userType
      */
-    public MsgUserTypeEnum getUserType() {
+    public MessageUserTypeEnum getUserType() {
         return userType;
     }
     
     /**
      * @param 对userType进行赋值
      */
-    public void setUserType(MsgUserTypeEnum userType) {
+    public void setUserType(MessageUserTypeEnum userType) {
         this.userType = userType;
     }
     
@@ -190,6 +170,34 @@ public class PrivateMessage implements Serializable, Cloneable {
     }
     
     /**
+     * @return 返回 username
+     */
+    public String getUsername() {
+        return username;
+    }
+    
+    /**
+     * @param 对username进行赋值
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    /**
+     * @return 返回 senderId
+     */
+    public String getSenderId() {
+        return senderId;
+    }
+    
+    /**
+     * @param 对senderId进行赋值
+     */
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+    
+    /**
      * @return 返回 sender
      */
     public String getSender() {
@@ -201,34 +209,6 @@ public class PrivateMessage implements Serializable, Cloneable {
      */
     public void setSender(String sender) {
         this.sender = sender;
-    }
-    
-    /**
-     * @return 返回 receiver
-     */
-    public String getReceiver() {
-        return receiver;
-    }
-    
-    /**
-     * @param 对receiver进行赋值
-     */
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
-    }
-    
-    /**
-     * @return 返回 sourceId
-     */
-    public String getSourceId() {
-        return sourceId;
-    }
-    
-    /**
-     * @param 对sourceId进行赋值
-     */
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
     }
     
     /**
@@ -342,20 +322,4 @@ public class PrivateMessage implements Serializable, Cloneable {
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-    
-    /**
-     * @return
-     * @throws CloneNotSupportedException
-     */
-    @Override
-    public Object clone() {
-        Object clone = null;
-        try {
-            clone = super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new SILException("clone exception.", e);
-        }
-        return clone;
-    }
-    
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tx.local.calendar.CalendarEventRepeatRuleUtils;
 import com.tx.local.calendar.model.CalendarEvent;
 import com.tx.local.calendar.service.CalendarEventService;
 import com.tx.core.paged.model.PagedList;
@@ -90,6 +91,10 @@ public class CalendarEventController {
     @RequestMapping("/toUpdate")
     public String toUpdate(@RequestParam("id") String id, ModelMap response) {
         CalendarEvent calendarEvent = this.calendarEventService.findById(id);
+        if (calendarEvent.isRepeated()) {
+            calendarEvent.setRepeatRule(CalendarEventRepeatRuleUtils
+                    .toObject(calendarEvent.getRrule()));
+        }
         response.put("calendarEvent", calendarEvent);
         
         response.put("types", CalendarEventTypeEnum.values());

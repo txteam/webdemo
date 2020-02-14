@@ -72,6 +72,23 @@ public class CalendarEventCatalogAPIController implements CalendarEventCatalogFa
         boolean flag = this.calendarEventCatalogService.deleteById(id);
         return flag;
     }
+	
+	/**
+     * 根据code删除日程分类<br/> 
+     * <功能详细描述>
+     * @param code
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Override
+    public boolean deleteByCode(
+    		@PathVariable(value = "code",required=true) String code){
+        boolean flag = this.calendarEventCatalogService.deleteByCode(code);
+        return flag;    
+    }
     
     /**
      * 更新日程分类<br/>
@@ -90,6 +107,38 @@ public class CalendarEventCatalogAPIController implements CalendarEventCatalogFa
         return flag;
     }
     
+    /**
+     * 禁用日程分类<br/>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+	@Override
+    public boolean disableById(
+    		@PathVariable(value = "id", required = true) String id) {
+        boolean flag = this.calendarEventCatalogService.disableById(id);
+        return flag;
+    }
+    
+    /**
+     * 启用日程分类<br/>
+     * <功能详细描述>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Override
+    public boolean enableById(
+    		@PathVariable(value = "id", required = true) String id) {
+        boolean flag = this.calendarEventCatalogService.enableById(id);
+        return flag;
+    }
 
     /**
      * 根据主键查询日程分类<br/>
@@ -109,8 +158,26 @@ public class CalendarEventCatalogAPIController implements CalendarEventCatalogFa
     }
 
     /**
+     * 根据编码查询日程分类<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return CalendarEventCatalog [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Override
+    public CalendarEventCatalog findByCode(
+            @PathVariable(value = "code", required = true) String code) {
+        CalendarEventCatalog res = this.calendarEventCatalogService.findByCode(code);
+        
+        return res;
+    }
+
+    /**
      * 查询日程分类实例列表<br/>
      * <功能详细描述>
+     * @param valid
      * @param querier
      * @return [参数说明]
      * 
@@ -120,9 +187,11 @@ public class CalendarEventCatalogAPIController implements CalendarEventCatalogFa
      */
     @Override
     public List<CalendarEventCatalog> queryList(
+			@RequestParam(value = "valid", required = false) Boolean valid,
     		@RequestBody Querier querier
     	) {
         List<CalendarEventCatalog> resList = this.calendarEventCatalogService.queryList(
+			valid,
 			querier         
         );
   
@@ -132,6 +201,7 @@ public class CalendarEventCatalogAPIController implements CalendarEventCatalogFa
     /**
      * 查询日程分类分页列表<br/>
      * <功能详细描述>
+     * @param valid
      * @param pageIndex
      * @param pageSize
      * @param querier
@@ -143,11 +213,13 @@ public class CalendarEventCatalogAPIController implements CalendarEventCatalogFa
      */
     @Override
     public PagedList<CalendarEventCatalog> queryPagedList(
+			@RequestParam(value = "valid", required = false) Boolean valid,
 			@RequestBody Querier querier,
 			@PathVariable(value = "pageNumber", required = true) int pageIndex,
             @PathVariable(value = "pageSize", required = true) int pageSize
     	) {
         PagedList<CalendarEventCatalog> resPagedList = this.calendarEventCatalogService.queryPagedList(
+			valid,
 			querier,
 			pageIndex,
 			pageSize
@@ -158,6 +230,7 @@ public class CalendarEventCatalogAPIController implements CalendarEventCatalogFa
 	/**
      * 查询日程分类数量<br/>
      * <功能详细描述>
+     * @param valid
      * @param querier
      * @return [参数说明]
      * 
@@ -167,8 +240,10 @@ public class CalendarEventCatalogAPIController implements CalendarEventCatalogFa
      */
     @Override
     public int count(
+			@RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier) {
         int count = this.calendarEventCatalogService.count(
+			valid,
         	querier);
         
         return count;
@@ -190,47 +265,5 @@ public class CalendarEventCatalogAPIController implements CalendarEventCatalogFa
         boolean flag = this.calendarEventCatalogService.exists(querier, excludeId);
         
         return flag;
-    }
-
-	/**
-     * 根据条件查询基础数据分页列表<br/>
-     * <功能详细描述>
-     * @param parentId
-     * @param querier
-     * @return [参数说明]
-     * 
-     * @return PagedList<T> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @Override
-    public List<CalendarEventCatalog> queryChildrenByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-            Querier querier){
-        List<CalendarEventCatalog> resList = this.calendarEventCatalogService.queryChildrenByParentId(parentId,
-			querier         
-        );
-  
-        return resList;
-    }
-
-	/**
-     * 根据条件查询基础数据分页列表<br/>
-     * <功能详细描述>
-     * @param parentId
-     * @param querier
-     * @return [参数说明]
-     * 
-     * @return PagedList<T> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @Override
-    public List<CalendarEventCatalog> queryDescendantsByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-            Querier querier){
-        List<CalendarEventCatalog> resList = this.calendarEventCatalogService.queryDescendantsByParentId(parentId,
-			querier         
-        );
-  
-        return resList;
     }
 }

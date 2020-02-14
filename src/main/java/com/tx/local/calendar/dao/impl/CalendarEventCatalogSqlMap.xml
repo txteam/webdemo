@@ -15,22 +15,26 @@
 		resultMap="calendarEventCatalogMap">
 		SELECT 
 				CEC.id,
+				CEC.code,
 				CEC.lastUpdateDate,
 				CEC.lastUpdateUserId,
 				CEC.name,
 				CEC.type,
 				CEC.vcid,
-				CEC.topicId,
 				CEC.topicType,
+				CEC.valid,
 				CEC.createDate,
 				CEC.createUserId,
-				CEC.parentId,
+				CEC.modifyAble,
 				CEC.remark
 		  FROM CAL_EVENT_CATALOG CEC
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND CEC.id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND CEC.code = #{code}
 	        </if>
 		</trim>
 	</select>
@@ -41,16 +45,17 @@
 		resultMap="calendarEventCatalogMap">
 		SELECT 
 				CEC.id,
+				CEC.code,
 				CEC.lastUpdateDate,
 				CEC.lastUpdateUserId,
 				CEC.name,
 				CEC.type,
 				CEC.vcid,
-				CEC.topicId,
 				CEC.topicType,
+				CEC.valid,
 				CEC.createDate,
 				CEC.createUserId,
-				CEC.parentId,
+				CEC.modifyAble,
 				CEC.remark
 		  FROM CAL_EVENT_CATALOG CEC
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -69,11 +74,11 @@
 			</choose>
 			</foreach>
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
-	            AND CEC.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND CEC.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND CEC.code = #{code} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND CEC.lastUpdateUserId = #{lastUpdateUserId} ]]>
@@ -87,11 +92,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
 	            <![CDATA[ AND CEC.vcid = #{vcid} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
-	            <![CDATA[ AND CEC.topicId = #{topicId} ]]>
-	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
 	            <![CDATA[ AND CEC.topicType = #{topicType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND CEC.valid = #{valid} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
 	            <![CDATA[ AND CEC.createDate >= #{minCreateDate} ]]>
@@ -102,8 +107,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
 	            <![CDATA[ AND CEC.createUserId = #{createUserId} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
-	            <![CDATA[ AND CEC.parentId = #{parentId} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND CEC.modifyAble = #{modifyAble} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
 	            <![CDATA[ AND CEC.remark = #{remark} ]]>
@@ -144,11 +149,11 @@
 			</choose>
 			</foreach>
 	        </if>
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentIds)">  
-	            AND CEC.parentId IN <foreach collection="parentIds" open="(" close=")" separator="," item="parentIdTemp">#{parentIdTemp}</foreach>
-	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND CEC.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            <![CDATA[ AND CEC.code = #{code} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND CEC.lastUpdateUserId = #{lastUpdateUserId} ]]>
@@ -162,11 +167,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
 	            <![CDATA[ AND CEC.vcid = #{vcid} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
-	            <![CDATA[ AND CEC.topicId = #{topicId} ]]>
-	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
 	            <![CDATA[ AND CEC.topicType = #{topicType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
+	            <![CDATA[ AND CEC.valid = #{valid} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
 	            <![CDATA[ AND CEC.createDate >= #{minCreateDate} ]]>
@@ -177,8 +182,8 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
 	            <![CDATA[ AND CEC.createUserId = #{createUserId} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(parentId)">  
-	            <![CDATA[ AND CEC.parentId = #{parentId} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND CEC.modifyAble = #{modifyAble} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
 	            <![CDATA[ AND CEC.remark = #{remark} ]]>
@@ -195,31 +200,33 @@
 		INSERT INTO CAL_EVENT_CATALOG
 		(
 			id,
+			code,
 			lastUpdateDate,
 			lastUpdateUserId,
 			name,
 			type,
 			vcid,
-			topicId,
 			topicType,
+			valid,
 			createDate,
 			createUserId,
-			parentId,
+			modifyAble,
 			remark
 		)
 		VALUES
 		(
 			#{id},
+			#{code},
 			#{lastUpdateDate},
 			#{lastUpdateUserId},
 			#{name},
 			#{type},
 			#{vcid},
-			#{topicId},
 			#{topicType},
+			#{valid},
 			#{createDate},
 			#{createUserId},
-			#{parentId},
+			#{modifyAble},
 			#{remark}
 		)
 	</insert>
@@ -231,6 +238,9 @@
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
 	        </if>
 		</trim>
 	</delete>
@@ -255,14 +265,14 @@
 			<if test="_parameter.containsKey('vcid')">
 	    		vcid = #{vcid,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('topicId')">
-	    		topicId = #{topicId,javaType=java.lang.String},
-	    	</if>
 			<if test="_parameter.containsKey('topicType')">
 	    		topicType = #{topicType,javaType=com.tx.local.calendar.model.CalendarEventTopicTypeEnum},
 	    	</if>
-			<if test="_parameter.containsKey('parentId')">
-	    		parentId = #{parentId,javaType=java.lang.String},
+			<if test="_parameter.containsKey('valid')">
+	    		valid = #{valid,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('modifyAble')">
+	    		modifyAble = #{modifyAble,javaType=boolean},
 	    	</if>
 			<if test="_parameter.containsKey('remark')">
 	    		remark = #{remark,javaType=java.lang.String},
@@ -272,6 +282,9 @@
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
+	            AND code = #{code}
 	        </if>
 		</trim>
 	</update> 

@@ -12,7 +12,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -20,14 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.core.paged.model.PagedList;
-import com.tx.local.message.model.MsgUserTypeEnum;
 import com.tx.local.message.model.PrivateMessage;
-import com.tx.local.message.model.PrivateMessageCatalogEnum;
-import com.tx.local.message.model.PrivateMessageTypeEnum;
-import com.tx.local.message.service.OperatorMessageService;
 import com.tx.local.message.service.PrivateMessageService;
-import com.tx.local.security.util.WebContextUtils;
+import com.tx.core.paged.model.PagedList;
+
+import com.tx.local.message.model.MessageUserTypeEnum;
 
 /**
  * 私信控制层<br/>
@@ -37,20 +33,16 @@ import com.tx.local.security.util.WebContextUtils;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
 @Controller
 @RequestMapping("/privateMessage")
 public class PrivateMessageController {
     
     //私信业务层
-    @Resource
+    @Resource(name = "privateMessageService")
     private PrivateMessageService privateMessageService;
     
-    @Resource
-    private OperatorMessageService operatorMessageService;
-    
     /**
-     * 跳转到查询私信列表页面<br/>
+     * 跳转到查询私信分页列表页面<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -60,51 +52,9 @@ public class PrivateMessageController {
      */
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
-        response.put("types", PrivateMessageTypeEnum.values());
-        response.put("userTypes", MsgUserTypeEnum.values());
-        response.put("catalogs", PrivateMessageCatalogEnum.values());
-        
+		response.put("userTypes", MessageUserTypeEnum.values());
+
         return "message/queryPrivateMessagePagedList";
-    }
-    
-    /**
-     * 跳转到新增私信页面<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/toSendToOperator")
-    public String toSendToOperator(ModelMap response) {
-        response.put("privateMessage", new PrivateMessage());
-        
-        response.put("types", PrivateMessageTypeEnum.SEND);
-        response.put("userTypes", MsgUserTypeEnum.OPERATOR);
-        response.put("catalogs", PrivateMessageCatalogEnum.MESSAGE);
-        
-        return "message/sendPrivateMessageToOperator";
-    }
-    
-    /**
-     * 跳转到新增私信页面<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/toAddOperatorRemaind")
-    public String toAddOperatorRemaind(ModelMap response) {
-        response.put("privateMessage", new PrivateMessage());
-        
-        response.put("types", PrivateMessageTypeEnum.SEND);
-        response.put("userTypes", MsgUserTypeEnum.OPERATOR);
-        response.put("catalogs", PrivateMessageCatalogEnum.MESSAGE);
-        
-        return "message/addRemaindForOperator";
     }
     
     /**
@@ -118,12 +68,10 @@ public class PrivateMessageController {
      */
     @RequestMapping("/toAdd")
     public String toAdd(ModelMap response) {
-        response.put("privateMessage", new PrivateMessage());
-        
-        response.put("types", PrivateMessageTypeEnum.values());
-        response.put("userTypes", MsgUserTypeEnum.values());
-        response.put("catalogs", PrivateMessageCatalogEnum.values());
-        
+    	response.put("privateMessage", new PrivateMessage());
+    	
+		response.put("userTypes", MessageUserTypeEnum.values());
+
         return "message/addPrivateMessage";
     }
     
@@ -137,17 +85,17 @@ public class PrivateMessageController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdate")
-    public String toUpdate(@RequestParam("id") String id, ModelMap response) {
-        PrivateMessage privateMessage = this.privateMessageService.findById(id);
+    public String toUpdate(
+    		@RequestParam("id") String id,
+            ModelMap response) {
+        PrivateMessage privateMessage = this.privateMessageService.findById(id); 
         response.put("privateMessage", privateMessage);
-        
-        response.put("types", PrivateMessageTypeEnum.values());
-        response.put("userTypes", MsgUserTypeEnum.values());
-        response.put("catalogs", PrivateMessageCatalogEnum.values());
+
+		response.put("userTypes", MessageUserTypeEnum.values());
         
         return "message/updatePrivateMessage";
     }
-    
+
     /**
      * 查询私信实例列表<br/>
      * <功能详细描述>
@@ -160,13 +108,15 @@ public class PrivateMessageController {
     @ResponseBody
     @RequestMapping("/queryList")
     public List<PrivateMessage> queryList(
-            @RequestParam MultiValueMap<String, String> request) {
+    		@RequestParam MultiValueMap<String, String> request
+    	) {
         Map<String, Object> params = new HashMap<>();
-        params.put("name", request.getFirst("name"));
-        
-        List<PrivateMessage> resList = this.privateMessageService
-                .queryList(params);
-        
+		params.put("name", request.getFirst("name"));
+    	
+        List<PrivateMessage> resList = this.privateMessageService.queryList(
+			params         
+        );
+  
         return resList;
     }
     
@@ -182,14 +132,18 @@ public class PrivateMessageController {
     @ResponseBody
     @RequestMapping("/queryPagedList")
     public PagedList<PrivateMessage> queryPagedList(
-            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
+			@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam MultiValueMap<String, String> request) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", request.getFirst("name"));
-        
-        PagedList<PrivateMessage> resPagedList = this.privateMessageService
-                .queryPagedList(params, pageIndex, pageSize);
+            @RequestParam MultiValueMap<String, String> request
+    	) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("name", request.getFirst("name"));
+
+        PagedList<PrivateMessage> resPagedList = this.privateMessageService.queryPagedList(
+			params,
+			pageIndex,
+			pageSize
+        );
         return resPagedList;
     }
     
@@ -206,31 +160,6 @@ public class PrivateMessageController {
     @RequestMapping("/add")
     public boolean add(PrivateMessage privateMessage) {
         this.privateMessageService.insert(privateMessage);
-        return true;
-    }
-    
-    /**
-     * 新增私信实例
-     * <功能详细描述>
-     * @param privateMessage [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ResponseBody
-    @RequestMapping("/sendToOperator")
-    public boolean sendToOperator(PrivateMessage privateMessage) {
-        String vcid = WebContextUtils.getVcid();
-        String operatorId = WebContextUtils.getOperatorId();
-        String sender = WebContextUtils.getOperatorUsername();
-        
-        this.operatorMessageService.insert(privateMessage.getTitle(),
-                privateMessage.getContent(),
-                vcid,
-                privateMessage.getUserId(),
-                sender,
-                operatorId);
         return true;
     }
     
@@ -267,7 +196,7 @@ public class PrivateMessageController {
         PrivateMessage privateMessage = this.privateMessageService.findById(id);
         return privateMessage;
     }
-    
+
     /**
      * 删除私信实例<br/> 
      * <功能详细描述>
@@ -285,9 +214,9 @@ public class PrivateMessageController {
         return flag;
     }
     
-    /**
+	/**
      * 校验是否重复<br/>
-     * @param excludeId
+	 * @param excludeId
      * @param params
      * @return [参数说明]
      * 

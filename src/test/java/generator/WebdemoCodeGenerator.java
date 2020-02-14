@@ -7,7 +7,8 @@ import java.io.IOException;
 
 import com.tx.core.generator2.CodeGenerator;
 import com.tx.core.generator2.model.ViewTypeEnum;
-import com.tx.local.calendar.model.CalendarEvent;
+import com.tx.local.message.model.Notice2User;
+import com.tx.local.message.model.PrivateMessage;
 
 /**
  * 基础数据生成类<br/>
@@ -21,7 +22,7 @@ public class WebdemoCodeGenerator {
     
     public static void main(String[] args) throws IOException {
         boolean toProjectPath = true;//是否生成覆盖到项目代码中，如果设置为false则会写入D盘的目录中
-        Class<?> entityType = CalendarEvent.class;
+        Class<?> entityType = Notice2User.class;
         ViewTypeEnum viewType = ViewTypeEnum.PAGEDLIST;
         boolean needConfirmOverwriteFile = true;//覆盖文件前是否需要提示
         

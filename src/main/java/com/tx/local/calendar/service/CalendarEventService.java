@@ -58,16 +58,21 @@ public class CalendarEventService {
     public void insert(CalendarEvent calendarEvent) {
         //验证参数是否合法
         AssertUtils.notNull(calendarEvent, "calendarEvent is null.");
-        AssertUtils.notEmpty(calendarEvent.getVcid(), "calendarEvent.vcid is empty.");
-        AssertUtils.notEmpty(calendarEvent.getType(), "calendarEvent.type is empty.");
-		
-		AssertUtils.notEmpty(calendarEvent.getTitle(), "calendarEvent.title is empty.");
-		AssertUtils.notEmpty(calendarEvent.getTopicType(), "calendarEvent.topicType is empty.");
-		AssertUtils.notEmpty(calendarEvent.getCreator(), "calendarEvent.creator is empty.");
-           
+        AssertUtils.notEmpty(calendarEvent.getVcid(),
+                "calendarEvent.vcid is empty.");
+        AssertUtils.notEmpty(calendarEvent.getType(),
+                "calendarEvent.type is empty.");
+        
+        AssertUtils.notEmpty(calendarEvent.getTopicType(),
+                "calendarEvent.topicType is empty.");
+        AssertUtils.notEmpty(calendarEvent.getTitle(),
+                "calendarEvent.title is empty.");
+        AssertUtils.notEmpty(calendarEvent.getCreator(),
+                "calendarEvent.creator is empty.");
+        
         //为添加的数据需要填入默认值的字段填入默认值
-		calendarEvent.setLastUpdateDate(new Date());
-		calendarEvent.setCreateDate(new Date());
+        calendarEvent.setLastUpdateDate(new Date());
+        calendarEvent.setCreateDate(new Date());
         
         //调用数据持久层对实例进行持久化操作
         this.calendarEventDao.insert(calendarEvent);
@@ -96,6 +101,26 @@ public class CalendarEventService {
     }
     
     /**
+     * 根据id删除日程实例
+     * 1、如果入参数为空，则抛出异常
+     * 2、执行删除后，将返回数据库中被影响的条数 > 0，则返回true
+     *
+     * @param id
+     * @return boolean 删除的条数>0则为true [返回类型说明]
+     * @exception throws 
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean delete(CalendarEvent condition) {
+        AssertUtils.notNull(condition, "condition is null.");
+        AssertUtils.notEmpty(condition.getId(), "condition.id is empty.");
+        
+        int resInt = this.calendarEventDao.delete(condition);
+        boolean flag = resInt > 0;
+        return flag;
+    }
+    
+    /**
      * 根据id查询日程实例
      * 1、当id为empty时抛出异常
      *
@@ -115,6 +140,23 @@ public class CalendarEventService {
     }
     
     /**
+     * 根据id查询日程实例
+     * 1、当id为empty时抛出异常
+     *
+     * @param id
+     * @return CalendarEvent [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    public CalendarEvent find(CalendarEvent condition) {
+        AssertUtils.notNull(condition, "condition is null.");
+        AssertUtils.notEmpty(condition.getId(), "condition.id is empty.");
+        
+        CalendarEvent res = this.calendarEventDao.find(condition);
+        return res;
+    }
+    
+    /**
      * 查询日程实例列表
      * <功能详细描述>
      * @param params      
@@ -124,14 +166,10 @@ public class CalendarEventService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<CalendarEvent> queryList(
-		Map<String,Object> params   
-    	) {
-        //判断条件合法性
-        
+    public List<CalendarEvent> queryList(Map<String, Object> params) {
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<CalendarEvent> resList = this.calendarEventDao.queryList(params);
         
@@ -148,15 +186,13 @@ public class CalendarEventService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<CalendarEvent> queryList(
-		Querier querier   
-    	) {
+    public List<CalendarEvent> queryList(Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<CalendarEvent> resList = this.calendarEventDao.queryList(querier);
         
@@ -177,22 +213,21 @@ public class CalendarEventService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<CalendarEvent> queryPagedList(
-		Map<String,Object> params,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<CalendarEvent> queryPagedList(Map<String, Object> params,
+            int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<CalendarEvent> resPagedList = this.calendarEventDao.queryPagedList(params, pageIndex, pageSize);
+        PagedList<CalendarEvent> resPagedList = this.calendarEventDao
+                .queryPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
     
-	/**
+    /**
      * 分页查询日程实例列表
      * <功能详细描述>
      * @param querier    
@@ -206,18 +241,17 @@ public class CalendarEventService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<CalendarEvent> queryPagedList(
-		Querier querier,
-    	int pageIndex,
-        int pageSize) {
+    public PagedList<CalendarEvent> queryPagedList(Querier querier,
+            int pageIndex, int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
- 
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<CalendarEvent> resPagedList = this.calendarEventDao.queryPagedList(querier, pageIndex, pageSize);
+        PagedList<CalendarEvent> resPagedList = this.calendarEventDao
+                .queryPagedList(querier, pageIndex, pageSize);
         
         return resPagedList;
     }
@@ -232,14 +266,12 @@ public class CalendarEventService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Map<String,Object> params   
-    	) {
+    public int count(Map<String, Object> params) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.calendarEventDao.count(params);
         
@@ -256,15 +288,13 @@ public class CalendarEventService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(
-		Querier querier   
-    	) {
+    public int count(Querier querier) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-
+        
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.calendarEventDao.count(querier);
         
@@ -282,7 +312,7 @@ public class CalendarEventService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public boolean exists(Map<String,String> key2valueMap, String excludeId) {
+    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
         AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
         
         //生成查询条件
@@ -290,7 +320,7 @@ public class CalendarEventService {
         params.putAll(key2valueMap);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.calendarEventDao.count(params,excludeId);
+        int res = this.calendarEventDao.count(params, excludeId);
         
         return res > 0;
     }
@@ -310,7 +340,7 @@ public class CalendarEventService {
         AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.calendarEventDao.count(querier,excludeId);
+        int res = this.calendarEventDao.count(querier, excludeId);
         
         return res > 0;
     }
@@ -326,42 +356,50 @@ public class CalendarEventService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(String id,CalendarEvent calendarEvent) {
+    public boolean updateById(String id, CalendarEvent calendarEvent) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(calendarEvent, "calendarEvent is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-		AssertUtils.notEmpty(calendarEvent.getEnd(), "calendarEvent.end is empty.");
-		AssertUtils.notEmpty(calendarEvent.getDaysOfWeek(), "calendarEvent.daysOfWeek is empty.");
-		AssertUtils.notEmpty(calendarEvent.getType(), "calendarEvent.type is empty.");
-		AssertUtils.notEmpty(calendarEvent.getVcid(), "calendarEvent.vcid is empty.");
-		AssertUtils.notEmpty(calendarEvent.getStart(), "calendarEvent.start is empty.");
-		AssertUtils.notEmpty(calendarEvent.getTitle(), "calendarEvent.title is empty.");
-		AssertUtils.notEmpty(calendarEvent.getTopicType(), "calendarEvent.topicType is empty.");
-
+        
+        AssertUtils.notEmpty(calendarEvent.getVcid(),
+                "calendarEvent.vcid is empty.");
+        AssertUtils.notEmpty(calendarEvent.getType(),
+                "calendarEvent.type is empty.");
+        AssertUtils.notEmpty(calendarEvent.getTitle(),
+                "calendarEvent.title is empty.");
+        AssertUtils.notEmpty(calendarEvent.getTopicType(),
+                "calendarEvent.topicType is empty.");
+        
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //FIXME:需要更新的字段
-		updateRowMap.put("allDay", calendarEvent.isAllDay());
-		updateRowMap.put("end", calendarEvent.getEnd());
-		updateRowMap.put("url", calendarEvent.getUrl());
-		updateRowMap.put("daysOfWeek", calendarEvent.getDaysOfWeek());
-		updateRowMap.put("lastUpdateUserId", calendarEvent.getLastUpdateUserId());
-		updateRowMap.put("type", calendarEvent.getType());
-		updateRowMap.put("vcid", calendarEvent.getVcid());
-		updateRowMap.put("className", calendarEvent.getClassName());
-		updateRowMap.put("rrule", calendarEvent.getRrule());
-		updateRowMap.put("start", calendarEvent.getStart());
-		updateRowMap.put("title", calendarEvent.getTitle());
-		updateRowMap.put("topicId", calendarEvent.getTopicId());
-		updateRowMap.put("topicType", calendarEvent.getTopicType());
-		updateRowMap.put("remark", calendarEvent.getRemark());
-		updateRowMap.put("catalog", calendarEvent.getCatalog());
-		updateRowMap.put("overlap", calendarEvent.isOverlap());
-		updateRowMap.put("editable", calendarEvent.isEditable());
-		updateRowMap.put("attributes", calendarEvent.getAttributes());
-		updateRowMap.put("lastUpdateDate", new Date());
-
-        boolean flag = this.calendarEventDao.update(id,updateRowMap); 
+        //更新依据条件
+        updateRowMap.put("vcid", calendarEvent.getVcid());
+        updateRowMap.put("type", calendarEvent.getType());
+        updateRowMap.put("topicId", calendarEvent.getTopicId());
+        updateRowMap.put("topicType", calendarEvent.getTopicType());
+        
+        //需要更新的字段
+        updateRowMap.put("repeated", calendarEvent.isRepeated());
+        updateRowMap.put("title", calendarEvent.getTitle());
+        updateRowMap.put("url", calendarEvent.getUrl());
+        updateRowMap.put("allDay", calendarEvent.isAllDay());
+        updateRowMap.put("start", calendarEvent.getStart());
+        updateRowMap.put("end", calendarEvent.getEnd());
+        updateRowMap.put("daysOfWeek", calendarEvent.getDaysOfWeek());
+        updateRowMap.put("overlap", calendarEvent.isOverlap());
+        updateRowMap.put("editable", calendarEvent.isEditable());
+        updateRowMap.put("rrule", calendarEvent.getRrule());
+        
+        updateRowMap.put("catalog", calendarEvent.getCatalog());
+        updateRowMap.put("attributes", calendarEvent.getAttributes());
+        updateRowMap.put("className", calendarEvent.getClassName());
+        updateRowMap.put("remark", calendarEvent.getRemark());
+        
+        updateRowMap.put("lastUpdateUserId",
+                calendarEvent.getLastUpdateUserId());
+        updateRowMap.put("lastUpdateDate", new Date());
+        
+        boolean flag = this.calendarEventDao.update(id, updateRowMap);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
@@ -380,9 +418,10 @@ public class CalendarEventService {
     public boolean updateById(CalendarEvent calendarEvent) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(calendarEvent, "calendarEvent is null.");
-        AssertUtils.notEmpty(calendarEvent.getId(), "calendarEvent.id is empty.");
-
-        boolean flag = updateById(calendarEvent.getId(),calendarEvent); 
+        AssertUtils.notEmpty(calendarEvent.getId(),
+                "calendarEvent.id is empty.");
+        
+        boolean flag = updateById(calendarEvent.getId(), calendarEvent);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }

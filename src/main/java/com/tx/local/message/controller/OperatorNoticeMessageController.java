@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.core.paged.model.PagedList;
-import com.tx.local.message.model.MsgUserTypeEnum;
+import com.tx.local.message.model.MessageUserTypeEnum;
 import com.tx.local.message.model.NoticeMessageDetail;
 import com.tx.local.security.util.WebContextUtils;
 
@@ -71,7 +71,7 @@ public class OperatorNoticeMessageController {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("vcid", vcid);
         params.put("userId", operatorId);
-        params.put("userType", MsgUserTypeEnum.OPERATOR);
+        params.put("userType", MessageUserTypeEnum.OPERATOR);
         params.put("unread", true);
         
         int res = 2;
@@ -101,7 +101,7 @@ public class OperatorNoticeMessageController {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("vcid", vcid);
         params.put("userId", operatorId);
-        params.put("userType", MsgUserTypeEnum.OPERATOR);
+        params.put("userType", MessageUserTypeEnum.OPERATOR);
         params.put("read", false);
         
         return new PagedList<>();

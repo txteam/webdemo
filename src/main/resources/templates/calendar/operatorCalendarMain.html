@@ -70,10 +70,12 @@ $(document).ready(function() {
 });
 var now = new Date();
 var today = now.format('yyyy-MM-dd');
+var calendarEl = null;
+var calendar = null;
 document.addEventListener('DOMContentLoaded', function() {
-	var calendarEl = document.getElementById('calendar');
+	calendarEl = document.getElementById('calendar');
 
-	var calendar = new FullCalendar.Calendar(calendarEl, {
+	calendar = new FullCalendar.Calendar(calendarEl, {
 		plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list', 'rrule' ],
 		/*
 		 * 设置日历头部信息，如果设置为false，则不显示头部信息。
@@ -238,28 +240,185 @@ document.addEventListener('DOMContentLoaded', function() {
         eventResize: function(event, delta, revertFunc, jsEvent, ui, view){//日程大小调整完成并已经执行更新时触发
             console.log("eventResize():"+event.title);
         },
-        events: function(info, successCallback, failureCallback) {
-        	var queryUrl = /*[[@{/operator/calendar/queryEventList}]]*/'';
-        	$.ajax({
-				type: "POST",
-       			url: queryUrl,
-       			data: {
-    				start: info.start.valueOf(),
-                	end: info.end.valueOf()
-              	},
-       			success: function(events){
-       				successCallback(events);
-       			},
-       			error: function (XMLHttpRequest, textStatus, errorThrown) {
-       				failureCallback(errorThrown);
-       			}
-       		});
-        }
+        eventSources: [
+        	{
+        		color: 'black',   		// an option!
+        		textColor: 'white', 	// an option!
+        		events: function(info, successCallback, failureCallback) {
+                	var queryUrl = /*[[@{/operator/public/calendar/queryEventList}]]*/'';
+                	var type = $("#type").val();
+                	if(!$.ObjectUtils.isEmpty(type) && type != 'OPERATOR_PUBLIC_CALENDAR_EVENT'){
+                		successCallback([]);
+                		return true;
+                	}
+                	$.ajax({
+        				type: "POST",
+               			url: queryUrl,
+               			data: {
+               				repeated: $("#repeated").val(),
+            				start: info.start.format('yyyy-MM-dd hh:mm:ss'),
+                        	end: info.end.format('yyyy-MM-dd hh:mm:ss')
+                      	},
+               			success: function(data){
+               				var events = [];
+               				$.each(data,function(index,e){
+               					var event = {
+               						'title' : e.title,
+               						'editable': e.editable,
+               						'overlap': e.overlap
+               					};
+               					if(!$.ObjectUtils.isEmpty(e.url)){
+               						event['url'] = e.url;
+               					}
+               					if(!$.ObjectUtils.isEmpty(e.daysOfWeek)){
+               						event['daysOfWeek'] = e.daysOfWeek.split(":");
+               					}
+               					if(!$.ObjectUtils.isEmpty(e.duration)){
+               						event['duration'] = e.duration;
+               					}
+               					if(e.repeated && e.repeatRule && e.repeatRule.freq){
+               						event['rrule'] = {
+               							freq : e.repeatRule.freq
+               						};
+               						if(e.repeatRule.dtstart){
+               							var dtstartDate = new Date();
+               							dtstartDate.setTime(e.repeatRule.dtstart);
+               							event.rrule['dtstart'] = dtstartDate.format('yyyy-MM-ddThh:mm:ss');
+               						}
+               						if(e.repeatRule.until){
+               							var untilDate = new Date();
+               							untilDate.setTime(e.repeatRule.until);
+               							event.rrule['until'] = untilDate.format('yyyy-MM-ddThh:mm:ss');
+               						}
+               						if(e.repeatRule.byweekday && e.repeatRule.byweekday.length > 0){
+               							event.rrule['byweekday'] = e.repeatRule.byweekday;
+               						}
+               						if(!$.ObjectUtils.isEmpty(e.repeatRule.interval)){
+                   						event.rrule['interval'] = e.repeatRule.interval;
+                   					}
+               						if(!$.ObjectUtils.isEmpty(e.repeatRule.count)){
+                   						event.rrule['count'] = e.repeatRule.count;
+                   					}
+               					}else{
+               						event['allDay'] = e.allDay;
+               						if(e.start){
+               							var startDate = new Date();
+                       					startDate.setTime(e.start);
+                       					event['start'] = startDate.format('yyyy-MM-ddThh:mm:ss');
+               						}
+               						if(e.end){
+               							var endDate = new Date();
+                       					endDate.setTime(e.end);
+                       					event['end'] = endDate.format('yyyy-MM-ddThh:mm:ss');
+               						}
+               					}
+               					events.push(event);
+               				});
+               				successCallback(events);
+               			},
+               			error: function (XMLHttpRequest, textStatus, errorThrown) {
+               				failureCallback(errorThrown);
+               			}
+               		});
+                }
+        	},
+        	{
+        		events: function(info, successCallback, failureCallback) {
+                	var queryUrl = /*[[@{/operator/calendar/queryEventList}]]*/'';
+                	//alert(info.start.valueOf());
+                	//alert(info.start.format('yyyy-MM-ddThh:mm:ss'));
+                	var type = $("#type").val();
+                	if(!$.ObjectUtils.isEmpty(type) && type != 'OPERATOR_CALENDAR_EVENT'){
+                		successCallback([]);
+                		return true;
+                	}
+                	$.ajax({
+        				type: "POST",
+               			url: queryUrl,
+               			data: {
+							repeated: $("#repeated").val(),
+            				start: info.start.format('yyyy-MM-dd hh:mm:ss'),
+                        	end: info.end.format('yyyy-MM-dd hh:mm:ss')
+                      	},
+               			success: function(data){
+               				var events = [];
+               				$.each(data,function(index,e){
+               					var event = {
+               						'title' : e.title,
+               						'editable': e.editable,
+               						'overlap': e.overlap
+               					};
+               					if(!$.ObjectUtils.isEmpty(e.url)){
+               						event['url'] = e.url;
+               					}
+               					if(!$.ObjectUtils.isEmpty(e.daysOfWeek)){
+               						event['daysOfWeek'] = e.daysOfWeek.split(":");
+               					}
+               					if(!$.ObjectUtils.isEmpty(e.duration)){
+               						event['duration'] = e.duration;
+               					}
+               					if(e.repeated && e.repeatRule && e.repeatRule.freq){
+               						event['rrule'] = {
+               							freq : e.repeatRule.freq
+               						};
+               						if(e.repeatRule.dtstart){
+               							var dtstartDate = new Date();
+               							dtstartDate.setTime(e.repeatRule.dtstart);
+               							event.rrule['dtstart'] = dtstartDate.format('yyyy-MM-ddThh:mm:ss');
+               						}
+               						if(e.repeatRule.until){
+               							var untilDate = new Date();
+               							untilDate.setTime(e.repeatRule.until);
+               							event.rrule['until'] = untilDate.format('yyyy-MM-ddThh:mm:ss');
+               						}
+               						if(e.repeatRule.byweekday && e.repeatRule.byweekday.length > 0){
+               							event.rrule['byweekday'] = e.repeatRule.byweekday;
+               						}
+               						if(!$.ObjectUtils.isEmpty(e.repeatRule.interval)){
+                   						event.rrule['interval'] = e.repeatRule.interval;
+                   					}
+               						if(!$.ObjectUtils.isEmpty(e.repeatRule.count)){
+                   						event.rrule['count'] = e.repeatRule.count;
+                   					}
+               					}else{
+               						event['allDay'] = e.allDay;
+               						if(e.start){
+               							var startDate = new Date();
+                       					startDate.setTime(e.start);
+                       					event['start'] = startDate.format('yyyy-MM-ddThh:mm:ss');
+               						}
+               						if(e.end){
+               							var endDate = new Date();
+                       					endDate.setTime(e.end);
+                       					event['end'] = endDate.format('yyyy-MM-ddThh:mm:ss');
+               						}
+               						/*
+               						if(!$.ObjectUtils.isEmpty(e.daysOfWeek)){
+                   						//alert(e.duration);
+                   						event['daysOfWeek'] = e.daysOfWeek.split(',');
+                   					}
+               						*/
+               					}
+               					events.push(event);
+               				});
+               				successCallback(events);
+               			},
+               			error: function (XMLHttpRequest, textStatus, errorThrown) {
+               				failureCallback(errorThrown);
+               			}
+               		});
+                }
+        	}
+        ]
+        
     });
     calendar.render();
 });
 function toQueryPage(){
 	window.location.href = /*[[@{/operator/calendar/toQueryPagedList}]]*/'/';
+}
+function query(){
+	calendar.refetchEvents();
 }
 /*]]>*/
 </script>
@@ -269,7 +428,26 @@ function toQueryPage(){
 		<form method="post" id="queryForm" name="queryForm" class="form">
 			<table style="border: 0px;">
 				<tr style="border: 0px;">
-					<td style="border: 0px;">
+					<th style="width:80px;border: 0px;">类型:</th>
+					<td style="width:120px;border: 0px;">
+						<select id="type" name="type" style="width:100px">
+							<option value="">--- 不限 ---</option>
+							<option value="OPERATOR_CALENDAR_EVENT">个人事件</option>
+							<option value="OPERATOR_PUBLIC_CALENDAR_EVENT">公共事件</option>
+						</select>
+					</td>
+					<th style="width:80px;border: 0px;">是否重复</th>
+					<td style="width:120px;border: 0px;">
+						<select id="repeated" name="repeated" style="width:100px">
+							<option value="">--- 不限 ---</option>
+							<option value="true">重复</option>
+							<option value="false">不重复</option>
+						</select>
+					</td>
+					<td style="width:150px;border: 0px;">
+						<a id="queryBtn" onclick="query()" href="javascript:void(0);" class="easyui-linkbutton" style="width: 65px" data-options="iconCls:'search'">查询</a>
+					</td>
+					<td style="border: 0px;text-align: right;">
 						<a id="toQueryPageBtn" onclick="toQueryPage()" href="javascript:void(0);" class="easyui-linkbutton" style="width: 85px">行事历管理</a>
 					</td>
 				</tr>

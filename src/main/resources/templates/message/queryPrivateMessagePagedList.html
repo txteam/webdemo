@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>查询私信列表[queryPrivateMessagePagedList]</title>
+	<title>查询私信分页列表[queryPrivateMessagePagedList]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -51,16 +51,11 @@ $(document).ready(function(){
 	var  $deleteALink = $("#deleteALink");
 
 	grid = $('#grid').datagrid({
-		url :/*[[@{/privateMessage/queryList}]]*/'',
+		url :/*[[@{/privateMessage/queryPagedList}]]*/'',
 		fit : true,
-        fitColumns : true,
+	    fitColumns : false,
 		border : false,
 		idField : 'id',
-		checkOnSelect : false,
-		selectOnCheck : false,
-		nowrap : true,
-		striped : true,
-		singleSelect : true,
 		pagination : true,
 		pageSize : 10,
 		pageList : [10,20,30,40,50],
@@ -72,24 +67,40 @@ $(document).ready(function(){
 				res['rows'] = data.list;
 			}
 			return res;
-		},
+		}, 
+		checkOnSelect : false,
+		selectOnCheck : false,
+		nowrap : true,
+		striped : true,
+		singleSelect : true,
 		frozenColumns: [ [ 
 			{title : 'id',width : 100,hidden:true,field:'id'}
 		] ],
 		columns: [ [
-			{title:'标题',width:100,field:'title'},
-			{title:'分类',width:100,field:'catalog'},
-			{title:'类型',width:100,field:'type'},
-			{title:'是否未读',width:80,field:'unread',formatter:$.Formatters.booleanFun},
-			{title:'阅读时间',width:100,field:'readDate',formatter:$.Formatters.dateFun},
-			{title:'内容',width:100,field:'content',formatter:$.Formatters.substrFun},
-			{title:'用户ID',width:100,field:'userId'},
-			{title:'用户类型',width:100,field:'userType'},
-			{title:'来源ID',width:100,field:'sourceId'},
-			{title:'创建用户ID',width:100,field:'createUserId'},
+			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
+			{title:'lastUpdateUserId',width:100,field:'lastUpdateUserId'},
+			{title:'readDate',width:100,field:'readDate',formatter:$.Formatters.dateFun},
+			{title:'userId',width:100,field:'userId'},
+			{title:'userType',width:100,field:'userType'},
+			{title:'title',width:100,field:'title'},
 			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
-			{title:'最后更新用户ID',width:100,field:'lastUpdateUserId'},
-			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun}
+			{title:'createUserId',width:100,field:'createUserId'},
+			{title:'sender',width:100,field:'sender'},
+			{title:'senderId',width:100,field:'senderId'},
+			{title:'unread',width:80,field:'unread',formatter:$.Formatters.booleanFun},
+			{title:'分类',width:100,field:'catalog'},
+			{title:'content',width:100,field:'content'},
+			{title:'username',width:100,field:'username'},
+			{title:'操作',width:100,field:'_action',
+				formatter : function(value, row, index) {
+					var str = '&nbsp;';
+					str += $.formatString('<img onclick="editFun(\'{0}\',\'{1}\');" src="{2}" title="编辑"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil.png');
+					str += '&nbsp;';
+					str += $.formatString('<img onclick="deleteFun(\'{0}\',\'{1}\');" src="{2}" title="删除"/>', row.id, row.name, _contextPath + 'webjars/css/images/extjs_icons/pencil_delete.png');
+					str += '&nbsp;';
+					return str;
+				}
+			}
 		] ],
 		toolbar : '#toolbar',
 		onDblClickRow : function(index, row){
@@ -115,24 +126,6 @@ function queryFun() {
 	grid.datagrid('load',$('#queryForm').serializeObject());
 	return false;
 }
-function sendToOperatorFun() {
-	DialogUtils.progress({
-        text : '加载中，请等待....'
-	});
-	
-	var addUrl = /*[[@{/privateMessage/toAdd}]]*/'';
-	//FIXME: 修改新增modalDialog的width,height
-	DialogUtils.openModalDialog(
-		"addPrivateMessage",
-		"新增" + entityName,
-		$.formatString(addUrl),
-		500,460,
-		function(){
-			queryFun();
-		},{maximizable : true}
-	);
-	return false;
-}
 /*
  * 新增
  */
@@ -147,7 +140,7 @@ function addFun() {
 		"addPrivateMessage",
 		"新增" + entityName,
 		$.formatString(addUrl),
-		500,460,
+		500,488,
 		function(){
 			queryFun();
 		},{maximizable : true}
@@ -177,7 +170,7 @@ function editFun(id,name) {
 		"updatePrivateMessage",
 		"编辑" + entityName + ":" + name,
 		$.formatString(updateUrl,id),
-        500,460,
+        500,488,
         function(){
 			queryFun();
 		},{maximizable : true}
@@ -251,10 +244,9 @@ function deleteFun(id,name) {
     </div> 
     
 	<div id="toolbar" style="display: none;">		
-		<a onclick="sendToOperatorFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">操作人员私信</a>
-		
-		<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑[测试专用]</a>
-		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除[测试专用]</a>
+		<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+		<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
 		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
 			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 	</div>

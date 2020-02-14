@@ -16,34 +16,47 @@
 		resultMap="calendarEventMap">
 		SELECT 
 				CE.id,
-				CE.allDay,
-				CE.end,
-				CE.url,
-				CE.daysOfWeek,
-				CE.lastUpdateDate,
-				CE.lastUpdateUserId,
-				CE.type,
 				CE.vcid,
-				CE.className,
-				CE.rrule,
-				CE.start,
-				CE.title,
+				CE.type,
+				CE.catalogId,
 				CE.topicId,
 				CE.topicType,
+				CE.title,
+				CE.url,
+				CE.allDay,
+				CE.start,
+				CE.end,
+				CE.duration,
+				CE.repeated,
+				CE.rrule,
+				CE.daysOfWeek,
+				CE.overlap,
+				CE.editable,
+				CE.className,
+				CE.creator,
+				CE.lastUpdateDate,
+				CE.lastUpdateUserId,
 				CE.createDate,
 				CE.createUserId,
 				CE.remark,
-				CE.catalogId,
-				CE.creator,
-				CE.overlap,
-				CE.duration,
-				CE.editable,
 				CE.attributes
 		  FROM CAL_CALENDAR_EVENT CE
 		 WHERE
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND CE.id = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND CE.topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND CE.topicType = #{topicType} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND CE.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND CE.vcid = #{vcid} ]]>
 	        </if>
 		</trim>
 	</select>
@@ -54,28 +67,29 @@
 		resultMap="calendarEventMap">
 		SELECT 
 				CE.id,
-				CE.allDay,
-				CE.end,
-				CE.url,
-				CE.daysOfWeek,
-				CE.lastUpdateDate,
-				CE.lastUpdateUserId,
-				CE.type,
 				CE.vcid,
-				CE.className,
-				CE.rrule,
-				CE.start,
-				CE.title,
+				CE.type,
+				CE.catalogId,
 				CE.topicId,
 				CE.topicType,
+				CE.title,
+				CE.url,
+				CE.allDay,
+				CE.start,
+				CE.end,
+				CE.duration,
+				CE.repeated,
+				CE.rrule,
+				CE.daysOfWeek,
+				CE.overlap,
+				CE.editable,
+				CE.className,
+				CE.creator,
+				CE.lastUpdateDate,
+				CE.lastUpdateUserId,
 				CE.createDate,
 				CE.createUserId,
 				CE.remark,
-				CE.catalogId,
-				CE.creator,
-				CE.overlap,
-				CE.duration,
-				CE.editable,
 				CE.attributes
 		  FROM CAL_CALENDAR_EVENT CE
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -94,16 +108,20 @@
 			</choose>
 			</foreach>
 	        </if>
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(betweenStart) and @com.tx.core.util.OgnlUtils@isNotEmpty(betweenEnd)">
-	        	AND (
-	        	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(betweenStart)">
-		            <![CDATA[ (CE.start <= #{betweenStart} BETWEEN AND CE.end >= #{betweenStart}) ]]>
-		        </if>
-		        	OR
-		        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(betweenEnd)">  
-		            <![CDATA[ (CE.start <= #{betweenEnd} BETWEEN AND CE.end >= #{betweenEnd}) ]]>
-		        </if>
-				)
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND CE.vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(notMaxEnd)">  
+	            <![CDATA[ AND NOT CE.end < #{notMaxEnd} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(notMinStart)">  
+	            <![CDATA[ AND NOT CE.start > #{notMinStart} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(types)">  
+	            AND CE.type IN <foreach collection="types" open="(" close=")" separator="," item="typeTemp">#{typeTemp}</foreach>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND CE.type = #{type} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minStart)">  
 	            <![CDATA[ AND CE.start >= #{minStart} ]]>
@@ -126,26 +144,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(url)">  
 	            <![CDATA[ AND CE.url = #{url} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(daysOfWeek)">  
-	            <![CDATA[ AND CE.daysOfWeek = #{daysOfWeek} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
-	            <![CDATA[ AND CE.lastUpdateUserId = #{lastUpdateUserId} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            <![CDATA[ AND CE.type = #{type} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
-	            <![CDATA[ AND CE.vcid = #{vcid} ]]>
-	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(className)">  
 	            <![CDATA[ AND CE.className = #{className} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(rrule)">  
-	            <![CDATA[ AND CE.rrule = #{rrule} ]]>
-	        </if>			
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(title)">  
-	            <![CDATA[ AND CE.title = #{title} ]]>
+	            <![CDATA[ AND CE.title LIKE CONCAT('%',#{title},'%')  ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
 	            <![CDATA[ AND CE.topicId = #{topicId} ]]>
@@ -172,7 +175,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overlap)">  
 	            <![CDATA[ AND CE.overlap = #{overlap} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(repeated)">  
+	            <![CDATA[ AND CE.repeated = #{repeated} ]]>
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(duration)">  
 	            <![CDATA[ AND CE.duration = #{duration} ]]>
 	        </if>
@@ -181,10 +187,7 @@
 	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(editable)">  
 	            <![CDATA[ AND CE.editable = #{editable} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(attributes)">  
-	            <![CDATA[ AND CE.attributes = #{attributes} ]]>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND CE.id <> #{excludeId} ]]>
 			</if>
@@ -221,16 +224,20 @@
 			</choose>
 			</foreach>
 	        </if>
-	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(betweenStart) and @com.tx.core.util.OgnlUtils@isNotEmpty(betweenEnd)">
-	        	AND (
-	        	<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(betweenStart)">
-		            <![CDATA[ (CE.start <= #{betweenStart} BETWEEN AND CE.end >= #{betweenStart}) ]]>
-		        </if>
-		        	OR
-		        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(betweenEnd)">  
-		            <![CDATA[ (CE.start <= #{betweenEnd} BETWEEN AND CE.end >= #{betweenEnd}) ]]>
-		        </if>
-				)
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND CE.vcid = #{vcid} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(notMaxEnd)">  
+	            <![CDATA[ AND NOT CE.end < #{notMaxEnd} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(notMinStart)">  
+	            <![CDATA[ AND NOT CE.start > #{notMinStart} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(types)">  
+	            AND CE.type IN <foreach collection="types" open="(" close=")" separator="," item="typeTemp">#{typeTemp}</foreach>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND CE.type = #{type} ]]>
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minStart)">  
 	            <![CDATA[ AND CE.start >= #{minStart} ]]>
@@ -253,26 +260,11 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(url)">  
 	            <![CDATA[ AND CE.url = #{url} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(daysOfWeek)">  
-	            <![CDATA[ AND CE.daysOfWeek = #{daysOfWeek} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
-	            <![CDATA[ AND CE.lastUpdateUserId = #{lastUpdateUserId} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
-	            <![CDATA[ AND CE.type = #{type} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
-	            <![CDATA[ AND CE.vcid = #{vcid} ]]>
-	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(className)">  
 	            <![CDATA[ AND CE.className = #{className} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(rrule)">  
-	            <![CDATA[ AND CE.rrule = #{rrule} ]]>
-	        </if>			
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(title)">  
-	            <![CDATA[ AND CE.title = #{title} ]]>
+	            <![CDATA[ AND CE.title LIKE CONCAT('%',#{title},'%')  ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
 	            <![CDATA[ AND CE.topicId = #{topicId} ]]>
@@ -299,7 +291,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(overlap)">  
 	            <![CDATA[ AND CE.overlap = #{overlap} ]]>
-	        </if>			
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(repeated)">  
+	            <![CDATA[ AND CE.repeated = #{repeated} ]]>
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(duration)">  
 	            <![CDATA[ AND CE.duration = #{duration} ]]>
 	        </if>
@@ -308,10 +303,7 @@
 	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(editable)">  
 	            <![CDATA[ AND CE.editable = #{editable} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(attributes)">  
-	            <![CDATA[ AND CE.attributes = #{attributes} ]]>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND CE.id <> #{excludeId} ]]>
 			</if>
@@ -324,55 +316,57 @@
 		INSERT INTO CAL_CALENDAR_EVENT
 		(
 			id,
-			allDay,
-			end,
-			url,
-			daysOfWeek,
-			lastUpdateDate,
-			lastUpdateUserId,
-			type,
 			vcid,
-			className,
-			rrule,
-			start,
-			title,
+			type,
+			catalogId,
 			topicId,
 			topicType,
+			title,
+			url,
+			allDay,
+			start,
+			end,
+			duration,
+			repeated,
+			rrule,
+			daysOfWeek,
+			overlap,
+			editable,
+			className,
+			creator,
+			lastUpdateDate,
+			lastUpdateUserId,
 			createDate,
 			createUserId,
 			remark,
-			catalogId,
-			creator,
-			overlap,
-			duration,
-			editable,
 			attributes
 		)
 		VALUES
 		(
 			#{id},
-			#{allDay},
-			#{end},
-			#{url},
-			#{daysOfWeek},
-			#{lastUpdateDate},
-			#{lastUpdateUserId},
-			#{type},
 			#{vcid},
-			#{className},
-			#{rrule},
-			#{start},
-			#{title},
+			#{type},
+			#{catalog.id},
 			#{topicId},
 			#{topicType},
+			#{title},
+			#{url},
+			#{allDay},
+			#{start},
+			#{end},
+			#{duration},
+			#{repeated},
+			#{rrule},
+			#{daysOfWeek},
+			#{overlap},
+			#{editable},
+			#{className},
+			#{creator},
+			#{lastUpdateDate},
+			#{lastUpdateUserId},
 			#{createDate},
 			#{createUserId},
 			#{remark},
-			#{catalog.id},
-			#{creator},
-			#{overlap},
-			#{duration},
-			#{editable},
 			#{attributes}
 		)
 	</insert>
@@ -385,6 +379,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND topicType = #{topicType} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
+	        </if>
 		</trim>
 	</delete>
 	
@@ -393,14 +399,35 @@
 	    parameterType="java.util.Map">  
 	    UPDATE CAL_CALENDAR_EVENT
 	    <trim prefix="SET" suffixOverrides=",">
-			<if test="_parameter.containsKey('allDay')">
-	    		allDay = #{allDay,javaType=boolean},
+	    	<!-- <if test="_parameter.containsKey('vcid')"> -->
+	    	<!-- vcid = #{vcid,javaType=java.lang.String}, -->
+	    	<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('type')"> -->
+			<!-- type = #{type,javaType=com.tx.local.calendar.model.CalendarEventTypeEnum}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('topicId')"> -->
+			<!-- topicId = #{topicId,javaType=java.lang.String}, -->
+			<!-- </if> -->
+			<!-- <if test="_parameter.containsKey('topicType')"> -->
+			<!-- topicType = #{topicType,javaType=com.tx.local.calendar.model.CalendarEventTopicTypeEnum}, -->
+			<!-- </if> -->
+			<if test="_parameter.containsKey('catalog')">
+	    		catalogId = #{catalog.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('title')">
+	    		title = #{title,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('url')">
+	    		url = #{url,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('start')">
+	    		start = #{start,javaType=java.util.Date},
 	    	</if>
 			<if test="_parameter.containsKey('end')">
 	    		end = #{end,javaType=java.util.Date},
 	    	</if>
-			<if test="_parameter.containsKey('url')">
-	    		url = #{url,javaType=java.lang.String},
+	    	<if test="_parameter.containsKey('allDay')">
+	    		allDay = #{allDay,javaType=boolean},
 	    	</if>
 			<if test="_parameter.containsKey('daysOfWeek')">
 	    		daysOfWeek = #{daysOfWeek,javaType=java.lang.String},
@@ -411,35 +438,17 @@
 			<if test="_parameter.containsKey('lastUpdateUserId')">
 	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('type')">
-	    		type = #{type,javaType=com.tx.local.calendar.model.CalendarEventTypeEnum},
-	    	</if>
-			<if test="_parameter.containsKey('vcid')">
-	    		vcid = #{vcid,javaType=java.lang.String},
-	    	</if>
 			<if test="_parameter.containsKey('className')">
 	    		className = #{className,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('rrule')">
 	    		rrule = #{rrule,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('start')">
-	    		start = #{start,javaType=java.util.Date},
-	    	</if>
-			<if test="_parameter.containsKey('title')">
-	    		title = #{title,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('topicId')">
-	    		topicId = #{topicId,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('topicType')">
-	    		topicType = #{topicType,javaType=com.tx.local.calendar.model.CalendarEventTopicTypeEnum},
-	    	</if>
 			<if test="_parameter.containsKey('remark')">
 	    		remark = #{remark,javaType=java.lang.String},
 	    	</if>
-			<if test="_parameter.containsKey('catalog')">
-	    		catalogId = #{catalog.id,javaType=java.lang.String},
+	    	<if test="_parameter.containsKey('repeated')">
+	    		repeated = #{repeated,javaType=boolean},
 	    	</if>
 			<if test="_parameter.containsKey('overlap')">
 	    		overlap = #{overlap,javaType=boolean},
@@ -455,6 +464,18 @@
 		<trim prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND id = #{id}
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicId)">  
+	            <![CDATA[ AND topicId = #{topicId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(topicType)">  
+	            <![CDATA[ AND topicType = #{topicType} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND vcid = #{vcid} ]]>
 	        </if>
 		</trim>
 	</update> 

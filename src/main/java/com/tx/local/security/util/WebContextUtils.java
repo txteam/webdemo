@@ -158,7 +158,7 @@ public class WebContextUtils {
      */
     public static boolean isSuperAdmin() {
         boolean hasSuperAdminRole = SecurityContext.getContext()
-                .hasRole(OperatorRoleEnum.SUPER_ADMIN.getId());
+                .hasRole(OperatorRoleEnum.ROLE_SUPER_ADMIN.getId());
         return hasSuperAdminRole;
     }
     

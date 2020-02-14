@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.tx.core.support.json.JSONAttributesSupport;
@@ -114,13 +115,16 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
     //Also prevents other events from being dragged/resized over this event.
     private boolean overlap = true;
     
-    /** 行事历事件策略 */
-    @Column(nullable = true, updatable = true, length = 256)
+    /** 是否为重复事件 */
+    private boolean repeated;
+    
+    /** 行事历循环规则 */
+    @Column(nullable = true, updatable = true, length = 1024)
     private String rrule;
     
     /** 时间间隔: for specifying the end time of each instance */
     @Column(nullable = true, updatable = false, length = 32)
-    private String duration;
+    private String duration = "01:00";
     
     /** 备注 */
     @Column(nullable = true, updatable = true, length = 100)
@@ -150,6 +154,10 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
     /** 创建用户ID */
     @Column(nullable = true, updatable = false)
     private String createUserId;
+    
+    /** 重复规则 */
+    @Transient
+    private CalendarEventRepeatRule repeatRule;
     
     /**
      * @return 返回 id
@@ -362,19 +370,19 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
     }
     
     /**
-     * @return 返回 rrule
+     * @return 返回 repeated
      */
-    public String getRrule() {
-        return rrule;
+    public boolean isRepeated() {
+        return repeated;
     }
-    
+
     /**
-     * @param 对rrule进行赋值
+     * @param 对repeated进行赋值
      */
-    public void setRrule(String rrule) {
-        this.rrule = rrule;
+    public void setRepeated(boolean repeated) {
+        this.repeated = repeated;
     }
-    
+
     /**
      * @return 返回 duration
      */
@@ -486,4 +494,59 @@ public class CalendarEvent implements Serializable, JSONAttributesSupport {
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
+    
+    /**
+     * @return 返回 rrule
+     */
+    public String getRrule() {
+        return rrule;
+    }
+    
+    /**
+     * @param 对rrule进行赋值
+     */
+    public void setRrule(String rrule) {
+        this.rrule = rrule;
+    }
+    
+    /**
+     * @return 返回 repeatRule
+     */
+    public CalendarEventRepeatRule getRepeatRule() {
+        return this.repeatRule;
+    }
+    
+    /**
+     * @param 对repeatRule进行赋值
+     */
+    public void setRepeatRule(CalendarEventRepeatRule repeatRule) {
+        this.repeatRule = repeatRule;
+    }
+    
+    //public static void main(String[] args) {
+    //    CalendarEventRepeatRule r = new CalendarEventRepeatRule();
+    //    r.setFreq(FrequencyEnum.weekly);
+    //    r.setByweekday(
+    //            new ByWeekdayEnum[] { ByWeekdayEnum.mo, ByWeekdayEnum.th });
+    //    r.setCount(20);
+    //    r.setDtstart(new Date());
+    //    String rjson = JsonUtils.toJson(r);
+    //    System.out.println(rjson);
+    //    System.out.println(JsonUtils
+    //            .toObject(rjson, CalendarEventRepeatRule.class).getFreq());
+    //    
+    //    //        CalendarEventRepeatRule r1 = JsonUtils.toObject(null,
+    //    //                CalendarEventRepeatRule.class);
+    //    //CalendarEventRepeatRule r2 = JsonUtils.toObject("",
+    //    //        CalendarEventRepeatRule.class);
+    //    CalendarEventRepeatRule r3 = JsonUtils.toObject("{}",
+    //            CalendarEventRepeatRule.class);
+    //    CalendarEventRepeatRule r4 = JsonUtils.toObject(
+    //            "{\"freq\":\"weekly\",\"byweekday\":[\"mo\",\"th\"]}",
+    //            CalendarEventRepeatRule.class);
+    //    //System.out.println(r1);
+    //    //System.out.println(r2);
+    //    System.out.println(r3.toString());
+    //    System.out.println(r4.getFreq());
+    //}
 }

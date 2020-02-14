@@ -43,6 +43,7 @@
 /*<![CDATA[*/
 var $detailFrame = null;
 var $notes = null;
+var selectId = null;
 $(document).ready(function() {
 	$detailFrame = $("#detailFrame");
 	
@@ -63,13 +64,23 @@ $(document).ready(function() {
 		},
 		border : false,
 		onLoadSuccess: function(node, data){
+			if(!$.ObjectUtils.isEmpty(selectId)){
+				var node = $('#notes').tree('find', selectId);
+				if(node != null){
+					$('#notes').tree('select',node.target);
+					var detail_src = /*[[@{/operator/notepad/detail?id={0}}]]*/'';
+					detail_src = $.formatString(detail_src,selectId);
+					$detailFrame.attr('src',detail_src);
+					return true;
+				}
+			}
+			
 			if(data.length == 0){
 				var detail_src = /*[[@{/operator/notepad/detail}]]*/'';
 				$detailFrame.attr('src',detail_src);
 			}else{
 				var node = $('#notes').tree('find', data[0].id);
 				$('#notes').tree('select',node.target);
-				
 				var detail_src = /*[[@{/operator/notepad/detail?id={0}}]]*/'';
 				detail_src = $.formatString(detail_src,data[0].id);
 				$detailFrame.attr('src',detail_src);
@@ -133,7 +144,8 @@ function delFun(id,title) {
 /*
  * 刷新 
  */
-function refreshFun(){
+function refreshFun(id){
+	selectId = id;
 	$('#notes').tree('reload');
 }
 /*]]>*/

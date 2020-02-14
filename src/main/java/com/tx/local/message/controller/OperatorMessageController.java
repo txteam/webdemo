@@ -21,10 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.core.paged.model.PagedList;
-import com.tx.local.message.model.MsgUserTypeEnum;
+import com.tx.local.message.model.MessageUserTypeEnum;
 import com.tx.local.message.model.PrivateMessage;
-import com.tx.local.message.model.PrivateMessageTypeEnum;
-import com.tx.local.message.service.OperatorMessageService;
 import com.tx.local.message.service.PrivateMessageService;
 import com.tx.local.security.util.WebContextUtils;
 
@@ -44,9 +42,6 @@ public class OperatorMessageController {
     
     @Resource
     private PrivateMessageService privateMessageService;
-    
-    @Resource
-    private OperatorMessageService operatorMessageService;
     
     /**
      * 操作人员行事历行事历<br/>
@@ -82,8 +77,8 @@ public class OperatorMessageController {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("vcid", vcid);
         params.put("userId", operatorId);
-        params.put("userType", MsgUserTypeEnum.OPERATOR);
-        params.put("type", PrivateMessageTypeEnum.RECEIVE);
+        params.put("userType", MessageUserTypeEnum.OPERATOR);
+        //params.put("type", PrivateMessageTypeEnum.RECEIVE);
         params.put("unread", true);
         
         int res = this.privateMessageService.count(params);
@@ -112,10 +107,10 @@ public class OperatorMessageController {
         String operatorId = WebContextUtils.getOperatorId();
         
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("type", PrivateMessageTypeEnum.RECEIVE);
+        //params.put("type", PrivateMessageTypeEnum.RECEIVE);
         params.put("vcid", vcid);
         params.put("userId", operatorId);
-        params.put("userType", MsgUserTypeEnum.OPERATOR);
+        params.put("userType", MessageUserTypeEnum.OPERATOR);
         
         PagedList<PrivateMessage> resPagedList = this.privateMessageService
                 .queryPagedList(params, pageIndex, pageSize);

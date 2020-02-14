@@ -6,17 +6,13 @@
  */
 package com.tx.local.calendar.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -63,6 +59,7 @@ public class CalendarEventCatalogService {
     public void insert(CalendarEventCatalog calendarEventCatalog) {
         //验证参数是否合法
         AssertUtils.notNull(calendarEventCatalog, "calendarEventCatalog is null.");
+		AssertUtils.notEmpty(calendarEventCatalog.getCode(), "calendarEventCatalog.code is empty.");
 		AssertUtils.notEmpty(calendarEventCatalog.getName(), "calendarEventCatalog.name is empty.");
 		AssertUtils.notEmpty(calendarEventCatalog.getType(), "calendarEventCatalog.type is empty.");
 		AssertUtils.notEmpty(calendarEventCatalog.getVcid(), "calendarEventCatalog.vcid is empty.");
@@ -70,6 +67,7 @@ public class CalendarEventCatalogService {
            
         //FIXME:为添加的数据需要填入默认值的字段填入默认值
 		calendarEventCatalog.setLastUpdateDate(new Date());
+		calendarEventCatalog.setValid(true);
 		calendarEventCatalog.setCreateDate(new Date());
         
         //调用数据持久层对实例进行持久化操作
@@ -97,6 +95,27 @@ public class CalendarEventCatalogService {
         boolean flag = resInt > 0;
         return flag;
     }
+
+    /**
+     * 根据code删除日程分类实例
+     * 1、当code为empty时抛出异常
+     * 2、执行删除后，将返回数据库中被影响的条数 > 0，则返回true
+     *
+     * @param code
+     * @return CalendarEventCatalog [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    public boolean deleteByCode(String code) {
+        AssertUtils.notEmpty(code, "code is empty.");
+        
+        CalendarEventCatalog condition = new CalendarEventCatalog();
+        condition.setCode(code);
+        
+        int resInt = this.calendarEventCatalogDao.delete(condition);
+        boolean flag = resInt > 0;
+        return flag;
+    }
     
     /**
      * 根据id查询日程分类实例
@@ -116,10 +135,30 @@ public class CalendarEventCatalogService {
         CalendarEventCatalog res = this.calendarEventCatalogDao.find(condition);
         return res;
     }
+
+    /**
+     * 根据code查询日程分类实例
+     * 1、当code为empty时抛出异常
+     *
+     * @param code
+     * @return CalendarEventCatalog [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    public CalendarEventCatalog findByCode(String code) {
+        AssertUtils.notEmpty(code, "code is empty.");
+        
+        CalendarEventCatalog condition = new CalendarEventCatalog();
+        condition.setCode(code);
+        
+        CalendarEventCatalog res = this.calendarEventCatalogDao.find(condition);
+        return res;
+    }
     
     /**
      * 查询日程分类实例列表
      * <功能详细描述>
+     * @param valid
      * @param params      
      * @return [参数说明]
      * 
@@ -128,12 +167,14 @@ public class CalendarEventCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public List<CalendarEventCatalog> queryList(
+		Boolean valid,
 		Map<String,Object> params   
     	) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
+		params.put("valid",valid);
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<CalendarEventCatalog> resList = this.calendarEventCatalogDao.queryList(params);
@@ -144,6 +185,7 @@ public class CalendarEventCatalogService {
     /**
      * 查询日程分类实例列表
      * <功能详细描述>
+     * @param valid
      * @param querier      
      * @return [参数说明]
      * 
@@ -152,6 +194,7 @@ public class CalendarEventCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public List<CalendarEventCatalog> queryList(
+		Boolean valid,
 		Querier querier   
     	) {
         //判断条件合法性
@@ -159,6 +202,9 @@ public class CalendarEventCatalogService {
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
+		if (valid != null) {
+            querier.getFilters().add(Filter.eq("valid", valid));
+        }
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<CalendarEventCatalog> resList = this.calendarEventCatalogDao.queryList(querier);
@@ -169,6 +215,7 @@ public class CalendarEventCatalogService {
     /**
      * 分页查询日程分类实例列表
      * <功能详细描述>
+     * @param valid
      * @param params    
      * @param pageIndex 当前页index从1开始计算
      * @param pageSize 每页显示行数
@@ -181,6 +228,7 @@ public class CalendarEventCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public PagedList<CalendarEventCatalog> queryPagedList(
+		Boolean valid,
 		Map<String,Object> params,
     	int pageIndex,
         int pageSize) {
@@ -188,6 +236,7 @@ public class CalendarEventCatalogService {
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
+		params.put("valid",valid);
  
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         PagedList<CalendarEventCatalog> resPagedList = this.calendarEventCatalogDao.queryPagedList(params, pageIndex, pageSize);
@@ -198,6 +247,7 @@ public class CalendarEventCatalogService {
 	/**
      * 分页查询日程分类实例列表
      * <功能详细描述>
+     * @param valid
      * @param querier    
      * @param pageIndex 当前页index从1开始计算
      * @param pageSize 每页显示行数
@@ -210,6 +260,7 @@ public class CalendarEventCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public PagedList<CalendarEventCatalog> queryPagedList(
+		Boolean valid,
 		Querier querier,
     	int pageIndex,
         int pageSize) {
@@ -218,6 +269,9 @@ public class CalendarEventCatalogService {
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
+		if (valid != null) {
+            querier.getFilters().add(Filter.eq("valid", valid));
+        }
  
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         PagedList<CalendarEventCatalog> resPagedList = this.calendarEventCatalogDao.queryPagedList(querier, pageIndex, pageSize);
@@ -228,6 +282,7 @@ public class CalendarEventCatalogService {
     /**
      * 查询日程分类实例数量<br/>
      * <功能详细描述>
+     * @param valid
      * @param params      
      * @return [参数说明]
      * 
@@ -236,12 +291,14 @@ public class CalendarEventCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public int count(
+		Boolean valid,
 		Map<String,Object> params   
     	) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
+		params.put("valid",valid);
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.calendarEventCatalogDao.count(params);
@@ -252,6 +309,7 @@ public class CalendarEventCatalogService {
     /**
      * 查询日程分类实例数量<br/>
      * <功能详细描述>
+     * @param valid
      * @param querier      
      * @return [参数说明]
      * 
@@ -260,6 +318,7 @@ public class CalendarEventCatalogService {
      * @see [类、类#方法、类#成员]
      */
     public int count(
+		Boolean valid,
 		Querier querier   
     	) {
         //判断条件合法性
@@ -267,6 +326,9 @@ public class CalendarEventCatalogService {
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
+		if (valid != null) {
+            querier.getFilters().add(Filter.eq("valid", valid));
+        }
 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.calendarEventCatalogDao.count(querier);
@@ -345,9 +407,8 @@ public class CalendarEventCatalogService {
 		updateRowMap.put("name", calendarEventCatalog.getName());
 		updateRowMap.put("type", calendarEventCatalog.getType());
 		updateRowMap.put("vcid", calendarEventCatalog.getVcid());
-		updateRowMap.put("topicId", calendarEventCatalog.getTopicId());
 		updateRowMap.put("topicType", calendarEventCatalog.getTopicType());
-		updateRowMap.put("parentId", calendarEventCatalog.getParentId());
+		updateRowMap.put("modifyAble", calendarEventCatalog.isModifyAble());
 		updateRowMap.put("remark", calendarEventCatalog.getRemark());
 		updateRowMap.put("lastUpdateDate", new Date());
 
@@ -378,185 +439,52 @@ public class CalendarEventCatalogService {
     }
 
     /**
-     * 根据parentId查询日程分类子级实例列表<br/>
+     * 根据id禁用日程分类<br/>
      * <功能详细描述>
-     * @param parentId
-     * @param valid
-     * @param params
+     * @param id
      * @return [参数说明]
      * 
-     * @return List<T> [返回类型说明]
+     * @return boolean [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<CalendarEventCatalog> queryChildrenByParentId(String parentId,
-			Map<String,Object> params) {
-        //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
+    @Transactional
+    public boolean disableById(String id) {
+        AssertUtils.notEmpty(id, "id is empty.");
+        
+        //生成条件
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("id", id);
+        params.put("valid", false);
+		params.put("lastUpdateDate", new Date());
+	        
+        boolean flag = this.calendarEventCatalogDao.update(params) > 0;
+        
+        return flag;
+    }
+    
+    /**
+     * 根据id启用日程分类<br/>
+     * <功能详细描述>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean enableById(String id) {
+        AssertUtils.notEmpty(id, "id is empty.");
         
         //生成查询条件
-        params = params == null ? new HashMap<String, Object>() : params;
-        params.put("parentId", parentId);
-
-        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<CalendarEventCatalog> resList = this.calendarEventCatalogDao.queryList(params);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("id", id);
+        params.put("valid", true);
+		params.put("lastUpdateDate", new Date());
+	
+        boolean flag = this.calendarEventCatalogDao.update(params) > 0;
         
-        return resList;
-    }
-    
-    /**
-     * 根据parentId查询日程分类子级实例列表<br/>
-     * <功能详细描述>
-     * @param parentId
-     * @param valid
-     * @param querier
-     * @return [参数说明]
-     * 
-     * @return List<T> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public List<CalendarEventCatalog> queryChildrenByParentId(String parentId,
-			Querier querier) {
-        //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
-        
-        //生成查询条件
-        querier = querier == null ? QuerierBuilder.newInstance().querier()
-                : querier;
-		querier.getFilters().add(Filter.eq("parentId", parentId));
-
-        //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<CalendarEventCatalog> resList = this.calendarEventCatalogDao.queryList(querier);
-        
-        return resList;
-    }
-    
-    /**
-     * 根据parentId查询日程分类子、孙级实例列表<br/>
-     * <功能详细描述>
-     * @param parentId
-     * @param valid
-     * @param params
-     * @return [参数说明]
-     * 
-     * @return PagedList<T> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public List<CalendarEventCatalog> queryDescendantsByParentId(String parentId,
-            Map<String, Object> params) {
-        //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
-        
-        //生成查询条件
-        params = params == null ? new HashMap<String, Object>() : params;
-        Set<String> ids = new HashSet<>();
-        Set<String> parentIds = new HashSet<>();
-        parentIds.add(parentId);
-        
-        List<CalendarEventCatalog> resList = doNestedQueryChildren(ids, parentIds, params);
-        return resList;
-    }
-    
-    /**
-     * 查询嵌套列表<br/>
-     * <功能详细描述>
-     * @param ids
-     * @param parentIds
-     * @param params
-     * @return [参数说明]
-     * 
-     * @return List<CalendarEventCatalog> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    private List<CalendarEventCatalog> doNestedQueryChildren(
-    		Set<String> ids,Set<String> parentIds,Map<String, Object> params) {
-        if (CollectionUtils.isEmpty(parentIds)) {
-            return new ArrayList<CalendarEventCatalog>();
-        }
-        
-        //ids避免数据出错时导致无限循环
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.putAll(params);
-        queryParams.put("parentIds", parentIds);
-        List<CalendarEventCatalog> resList = queryList( queryParams);
-        
-        Set<String> newParentIds = new HashSet<>();
-        for (CalendarEventCatalog bdTemp : resList) {
-            if (!ids.contains(bdTemp.getId())) {
-                newParentIds.add(bdTemp.getId());
-            }
-            ids.add(bdTemp.getId());
-        }
-        //嵌套查询下一层级
-        resList.addAll(doNestedQueryChildren( ids, newParentIds, params));
-        return resList;
-    }
-    
-    /**
-     * 根据parentId查询日程分类子、孙级实例列表<br/>
-     * <功能详细描述>
-     * @param parentId
-     * @param valid
-     * @param querier
-     * @return [参数说明]
-     * 
-     * @return PagedList<T> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public List<CalendarEventCatalog> queryDescendantsByParentId(String parentId,
-            Querier querier) {
-        //判断条件合法性
-        AssertUtils.notEmpty(parentId,"parentId is empty.");
-        
-        //生成查询条件
-        querier = querier == null ? QuerierBuilder.newInstance().querier()
-                : querier;
-        Set<String> ids = new HashSet<>();
-        Set<String> parentIds = new HashSet<>();
-        parentIds.add(parentId);
-        
-        List<CalendarEventCatalog> resList = doNestedQueryChildren(ids, parentIds, querier);
-        return resList;
-    }
-    
-    /**
-     * 嵌套查询列表<br/>
-     * <功能详细描述>
-     * @param ids
-     * @param parentIds
-     * @param querier
-     * @return [参数说明]
-     * 
-     * @return List<CalendarEventCatalog> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    private List<CalendarEventCatalog> doNestedQueryChildren(
-    		Set<String> ids,
-    		Set<String> parentIds,
-    		Querier querier) {
-        if (CollectionUtils.isEmpty(parentIds)) {
-            return new ArrayList<CalendarEventCatalog>();
-        }
-        
-        //ids避免数据出错时导致无限循环
-        Querier querierClone = (Querier)querier.clone();
-        querierClone.getFilters().add(Filter.in("parentId", parentIds));
-        List<CalendarEventCatalog> resList = queryList(querierClone);
-        
-        Set<String> newParentIds = new HashSet<>();
-        for (CalendarEventCatalog bdTemp : resList) {
-            if (!ids.contains(bdTemp.getId())) {
-                newParentIds.add(bdTemp.getId());
-            }
-            ids.add(bdTemp.getId());
-        }
-        //嵌套查询下一层级
-        resList.addAll(doNestedQueryChildren( ids, newParentIds, querier));
-        return resList;
+        return flag;
     }
 }

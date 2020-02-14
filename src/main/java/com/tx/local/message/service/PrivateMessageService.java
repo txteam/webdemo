@@ -38,8 +38,7 @@ import com.tx.core.querier.model.QuerierBuilder;
 public class PrivateMessageService {
     
     @SuppressWarnings("unused")
-    private Logger logger = LoggerFactory
-            .getLogger(PrivateMessageService.class);
+    private Logger logger = LoggerFactory.getLogger(PrivateMessageService.class);
     
     @Resource(name = "privateMessageDao")
     private PrivateMessageDao privateMessageDao;
@@ -59,45 +58,17 @@ public class PrivateMessageService {
     public void insert(PrivateMessage privateMessage) {
         //验证参数是否合法
         AssertUtils.notNull(privateMessage, "privateMessage is null.");
-        AssertUtils.notEmpty(privateMessage.getType(),
-                "privateMessage.type is empty.");
-        AssertUtils.notEmpty(privateMessage.getUserId(),
-                "privateMessage.userId is empty.");
-        AssertUtils.notEmpty(privateMessage.getUserType(),
-                "privateMessage.userType is empty.");
-        AssertUtils.notEmpty(privateMessage.getVcid(),
-                "privateMessage.vcid is empty.");
-        AssertUtils.notEmpty(privateMessage.getTitle(),
-                "privateMessage.title is empty.");
-        AssertUtils.notEmpty(privateMessage.getCatalog(),
-                "privateMessage.catalog is empty.");
-        
-        //为添加的数据需要填入默认值的字段填入默认值
-        privateMessage.setLastUpdateDate(new Date());
-        privateMessage.setCreateDate(new Date());
+		AssertUtils.notEmpty(privateMessage.getUserId(), "privateMessage.userId is empty.");
+		AssertUtils.notEmpty(privateMessage.getUserType(), "privateMessage.userType is empty.");
+		AssertUtils.notEmpty(privateMessage.getVcid(), "privateMessage.vcid is empty.");
+		AssertUtils.notEmpty(privateMessage.getTitle(), "privateMessage.title is empty.");
+           
+        //FIXME:为添加的数据需要填入默认值的字段填入默认值
+		privateMessage.setLastUpdateDate(new Date());
+		privateMessage.setCreateDate(new Date());
         
         //调用数据持久层对实例进行持久化操作
         this.privateMessageDao.insert(privateMessage);
-    }
-    
-    /**
-     * 根据id删除私信实例
-     * 1、如果入参数为空，则抛出异常
-     * 2、执行删除后，将返回数据库中被影响的条数 > 0，则返回true
-     *
-     * @param id
-     * @return boolean 删除的条数>0则为true [返回类型说明]
-     * @exception throws 
-     * @see [类、类#方法、类#成员]
-     */
-    @Transactional
-    public boolean delete(PrivateMessage condition) {
-        AssertUtils.notNull(condition, "condition is empty.");
-        AssertUtils.notEmpty(condition.getId(), "condition.id is empty.");
-        
-        int resInt = this.privateMessageDao.delete(condition);
-        boolean flag = resInt > 0;
-        return flag;
     }
     
     /**
@@ -142,23 +113,6 @@ public class PrivateMessageService {
     }
     
     /**
-     * 根据id查询私信实例
-     * 1、当id为empty时抛出异常
-     *
-     * @param id
-     * @return PrivateMessage [返回类型说明]
-     * @exception throws
-     * @see [类、类#方法、类#成员]
-     */
-    public PrivateMessage find(PrivateMessage condition) {
-        AssertUtils.notNull(condition, "condition is empty.");
-        AssertUtils.notEmpty(condition.getId(), "condition.id is empty.");
-        
-        PrivateMessage res = this.privateMessageDao.find(condition);
-        return res;
-    }
-    
-    /**
      * 查询私信实例列表
      * <功能详细描述>
      * @param params      
@@ -168,12 +122,14 @@ public class PrivateMessageService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<PrivateMessage> queryList(Map<String, Object> params) {
+    public List<PrivateMessage> queryList(
+		Map<String,Object> params   
+    	) {
         //判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-        
+
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<PrivateMessage> resList = this.privateMessageDao.queryList(params);
         
@@ -190,16 +146,17 @@ public class PrivateMessageService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public List<PrivateMessage> queryList(Querier querier) {
+    public List<PrivateMessage> queryList(
+		Querier querier   
+    	) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-        
+
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        List<PrivateMessage> resList = this.privateMessageDao
-                .queryList(querier);
+        List<PrivateMessage> resList = this.privateMessageDao.queryList(querier);
         
         return resList;
     }
@@ -218,21 +175,22 @@ public class PrivateMessageService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<PrivateMessage> queryPagedList(Map<String, Object> params,
-            int pageIndex, int pageSize) {
+    public PagedList<PrivateMessage> queryPagedList(
+		Map<String,Object> params,
+    	int pageIndex,
+        int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-        
+ 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<PrivateMessage> resPagedList = this.privateMessageDao
-                .queryPagedList(params, pageIndex, pageSize);
+        PagedList<PrivateMessage> resPagedList = this.privateMessageDao.queryPagedList(params, pageIndex, pageSize);
         
         return resPagedList;
     }
     
-    /**
+	/**
      * 分页查询私信实例列表
      * <功能详细描述>
      * @param querier    
@@ -246,17 +204,18 @@ public class PrivateMessageService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public PagedList<PrivateMessage> queryPagedList(Querier querier,
-            int pageIndex, int pageSize) {
+    public PagedList<PrivateMessage> queryPagedList(
+		Querier querier,
+    	int pageIndex,
+        int pageSize) {
         //T判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-        
+ 
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        PagedList<PrivateMessage> resPagedList = this.privateMessageDao
-                .queryPagedList(querier, pageIndex, pageSize);
+        PagedList<PrivateMessage> resPagedList = this.privateMessageDao.queryPagedList(querier, pageIndex, pageSize);
         
         return resPagedList;
     }
@@ -271,10 +230,14 @@ public class PrivateMessageService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(Map<String, Object> params) {
+    public int count(
+		Map<String,Object> params   
+    	) {
+        //判断条件合法性
+        
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
-        
+
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.privateMessageDao.count(params);
         
@@ -291,13 +254,15 @@ public class PrivateMessageService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public int count(Querier querier) {
+    public int count(
+		Querier querier   
+    	) {
         //判断条件合法性
         
         //生成查询条件
         querier = querier == null ? QuerierBuilder.newInstance().querier()
                 : querier;
-        
+
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         int res = this.privateMessageDao.count(querier);
         
@@ -315,7 +280,7 @@ public class PrivateMessageService {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public boolean exists(Map<String, String> key2valueMap, String excludeId) {
+    public boolean exists(Map<String,String> key2valueMap, String excludeId) {
         AssertUtils.notEmpty(key2valueMap, "key2valueMap is empty");
         
         //生成查询条件
@@ -323,7 +288,7 @@ public class PrivateMessageService {
         params.putAll(key2valueMap);
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.privateMessageDao.count(params, excludeId);
+        int res = this.privateMessageDao.count(params,excludeId);
         
         return res > 0;
     }
@@ -343,7 +308,7 @@ public class PrivateMessageService {
         AssertUtils.notNull(querier, "querier is null.");
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
-        int res = this.privateMessageDao.count(querier, excludeId);
+        int res = this.privateMessageDao.count(querier,excludeId);
         
         return res > 0;
     }
@@ -359,57 +324,27 @@ public class PrivateMessageService {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updateById(String id, Map<String, Object> updateRowMap) {
-        //验证参数是否合法，必填字段是否填写
-        AssertUtils.notNull(updateRowMap, "updateRowMap is null.");
-        AssertUtils.notEmpty(id, "id is empty.");
-        
-        updateRowMap.put("lastUpdateDate", new Date());
-        
-        boolean flag = this.privateMessageDao.update(updateRowMap) > 0;
-        //如果需要大于1时，抛出异常并回滚，需要在这里修改
-        return flag;
-    }
-    
-    /**
-     * 根据id更新私信实例<br/>
-     * <功能详细描述>
-     * @param privateMessage
-     * @return [参数说明]
-     * 
-     * @return boolean [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @Transactional
-    public boolean updateById(String id, PrivateMessage privateMessage) {
+    public boolean updateById(String id,PrivateMessage privateMessage) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(privateMessage, "privateMessage is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-        AssertUtils.notEmpty(privateMessage.getUserId(),
-                "privateMessage.userId is empty.");
-        AssertUtils.notEmpty(privateMessage.getUserType(),
-                "privateMessage.userType is empty.");
-        AssertUtils.notEmpty(privateMessage.getVcid(),
-                "privateMessage.vcid is empty.");
-        AssertUtils.notEmpty(privateMessage.getTitle(),
-                "privateMessage.title is empty.");
-        
+		AssertUtils.notEmpty(privateMessage.getUserType(), "privateMessage.userType is empty.");
+		AssertUtils.notEmpty(privateMessage.getVcid(), "privateMessage.vcid is empty.");
+		AssertUtils.notEmpty(privateMessage.getTitle(), "privateMessage.title is empty.");
+
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        //需要更新的字段
-        updateRowMap.put("lastUpdateUserId",
-                privateMessage.getLastUpdateUserId());
-        updateRowMap.put("unread", privateMessage.isUnread());
-        updateRowMap.put("readDate", privateMessage.getReadDate());
-        updateRowMap.put("userId", privateMessage.getUserId());
-        updateRowMap.put("userType", privateMessage.getUserType());
-        updateRowMap.put("vcid", privateMessage.getVcid());
-        updateRowMap.put("title", privateMessage.getTitle());
-        updateRowMap.put("content", privateMessage.getContent());
-        updateRowMap.put("lastUpdateDate", new Date());
-        
-        boolean flag = this.privateMessageDao.update(id, updateRowMap);
+        //FIXME:需要更新的字段
+		updateRowMap.put("lastUpdateUserId", privateMessage.getLastUpdateUserId());
+		updateRowMap.put("readDate", privateMessage.getReadDate());
+		updateRowMap.put("userType", privateMessage.getUserType());
+		updateRowMap.put("vcid", privateMessage.getVcid());
+		updateRowMap.put("title", privateMessage.getTitle());
+		updateRowMap.put("unread", privateMessage.isUnread());
+		updateRowMap.put("content", privateMessage.getContent());
+		updateRowMap.put("lastUpdateDate", new Date());
+
+        boolean flag = this.privateMessageDao.update(id,updateRowMap); 
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }
@@ -428,10 +363,9 @@ public class PrivateMessageService {
     public boolean updateById(PrivateMessage privateMessage) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(privateMessage, "privateMessage is null.");
-        AssertUtils.notEmpty(privateMessage.getId(),
-                "privateMessage.id is empty.");
-        
-        boolean flag = updateById(privateMessage.getId(), privateMessage);
+        AssertUtils.notEmpty(privateMessage.getId(), "privateMessage.id is empty.");
+
+        boolean flag = updateById(privateMessage.getId(),privateMessage); 
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
     }

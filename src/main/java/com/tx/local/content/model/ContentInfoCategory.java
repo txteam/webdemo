@@ -33,21 +33,24 @@ import io.swagger.annotations.ApiModel;
  */
 @Entity
 @Table(name = "ci_content_category")
-@BasicDataEntity(name = "内容信息分类", viewType=BasicDataViewTypeEnum.PAGEDLIST)
+@BasicDataEntity(name = "内容信息分类", viewType = BasicDataViewTypeEnum.PAGEDLIST)
 @ApiModel("内容信息分类")
-public class ContentInfoCategory implements
-        TreeAbleBasicData<ContentInfoCategory> {
+public class ContentInfoCategory implements TreeAbleBasicData<ContentInfoCategory> {
     
     /** 注释内容 */
     private static final long serialVersionUID = 4145588558934289893L;
     
     /** 主键id */
     @Id
+    @Column(nullable = false, length = 64, updatable = false)
     private String id;
     
     /** 父级分类 */
-    @Column(name = "parentId")
+    @Column(name = "parentId", nullable = true, length = 64, updatable = false)
     private ContentInfoCategory parent;
+    
+    /** 内容类型:界面根据该值加载不同的新增，编辑的界面 */
+    private ContentInfoTypeEnum type;
     
     /** 对应枚举关键字：该字段可以为空 */
     private String code;
@@ -55,15 +58,11 @@ public class ContentInfoCategory implements
     /** 内容信息类型名 */
     private String name;
     
-    /** 内容类型:界面根据该值加载不同的新增，编辑的界面 */
-    @Column(name = "typeCode")
-    private ContentInfoTypeEnum type;
-    
     /** 内容的树层级，设定方面，父级id一旦设置后则不能修改，所以下级的内容仅需要渠道其父级内容level+1即可 */
     private int level = 0;
     
     /** 类型类型排序号 */
-    private int orderIndex = 0;
+    private int priority = 0;
     
     /** 内容信息类型备注 */
     private String remark;
@@ -89,6 +88,14 @@ public class ContentInfoCategory implements
     /** 子节点 */
     @Transient
     private List<ContentInfoCategory> children;
+    
+    /**
+     * @return
+     */
+    @Override
+    public String getParentId() {
+        return this.parent == null ? null : this.parent.getId();
+    }
     
     /**
      * @return 返回 id
@@ -133,30 +140,6 @@ public class ContentInfoCategory implements
     }
     
     /**
-     * @return 返回 parentId
-     */
-    public String getParentId() {
-        if (this.parent == null) {
-            return null;
-        }
-        return this.parent.getId();
-    }
-    
-    /**
-     * @return 返回 level
-     */
-    public int getLevel() {
-        return level;
-    }
-    
-    /**
-     * @param 对level进行赋值
-     */
-    public void setLevel(int level) {
-        this.level = level;
-    }
-    
-    /**
      * @return 返回 code
      */
     public String getCode() {
@@ -185,17 +168,31 @@ public class ContentInfoCategory implements
     }
     
     /**
-     * @return 返回 orderIndex
+     * @return 返回 level
      */
-    public int getOrderIndex() {
-        return orderIndex;
+    public int getLevel() {
+        return level;
     }
     
     /**
-     * @param 对orderIndex进行赋值
+     * @param 对level进行赋值
      */
-    public void setOrderIndex(int orderIndex) {
-        this.orderIndex = orderIndex;
+    public void setLevel(int level) {
+        this.level = level;
+    }
+    
+    /**
+     * @return 返回 priority
+     */
+    public int getPriority() {
+        return priority;
+    }
+    
+    /**
+     * @param 对priority进行赋值
+     */
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
     
     /**
@@ -295,14 +292,14 @@ public class ContentInfoCategory implements
     public void setLastUpdateOperatorId(String lastUpdateOperatorId) {
         this.lastUpdateOperatorId = lastUpdateOperatorId;
     }
-
+    
     /**
      * @return 返回 children
      */
     public List<ContentInfoCategory> getChildren() {
         return children;
     }
-
+    
     /**
      * @param 对children进行赋值
      */

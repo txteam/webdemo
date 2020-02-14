@@ -57,6 +57,21 @@ public interface CalendarEventCatalogFacade {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
     public boolean deleteById(
     		@PathVariable(value = "id",required=true) String id);
+	
+	/**
+     * 根据code删除日程分类<br/> 
+     * <功能详细描述>
+     * @param code
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ApiOperation(value = "根据编码删除日程分类")
+    @RequestMapping(value = "/code/{code}", method = RequestMethod.DELETE) 
+    public boolean deleteByCode(
+    		@PathVariable(value = "code",required=true) String code);
 
     /**
      * 更新日程分类<br/>
@@ -74,6 +89,35 @@ public interface CalendarEventCatalogFacade {
     		@RequestBody CalendarEventCatalog calendarEventCatalog);
 
     /**
+     * 禁用日程分类<br/>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+	@ApiOperation(value = "禁用日程分类")
+    @RequestMapping(value = "/disable/{id}", method = RequestMethod.PATCH)
+    public boolean disableById(
+    		@PathVariable(value = "id", required = true) String id);
+    
+    /**
+     * 启用日程分类<br/>
+     * <功能详细描述>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ApiOperation(value = "启用日程分类")
+    @RequestMapping(value = "/enable/{id}", method = RequestMethod.PATCH)
+    public boolean enableById(
+    		@PathVariable(value = "id", required = true) String id);
+
+    /**
      * 根据主键查询日程分类<br/>
      * <功能详细描述>
      * @return [参数说明]
@@ -87,10 +131,24 @@ public interface CalendarEventCatalogFacade {
     public CalendarEventCatalog findById(
             @PathVariable(value = "id", required = true) String id);
     
+    /**
+     * 根据编码查询日程分类<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return CalendarEventCatalog [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ApiOperation(value = "根据编码查询日程分类")
+    @RequestMapping(value = "/code/{code}", method = RequestMethod.GET)
+    public CalendarEventCatalog findByCode(
+            @PathVariable(value = "code", required = true) String code);
 
     /**
      * 查询日程分类实例列表<br/>
      * <功能详细描述>
+     * @param valid
      * @param querier
      * @return [参数说明]
      * 
@@ -101,12 +159,14 @@ public interface CalendarEventCatalogFacade {
     @ApiOperation(value = "查询日程分类列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<CalendarEventCatalog> queryList(
+			@RequestParam(value = "valid", required = false) Boolean valid,
     		@RequestBody Querier querier
     	);
     
     /**
      * 查询日程分类分页列表<br/>
      * <功能详细描述>
+     * @param valid
      * @param pageIndex
      * @param pageSize
      * @param querier
@@ -119,6 +179,7 @@ public interface CalendarEventCatalogFacade {
     @ApiOperation(value = "查询日程分类分页列表")
     @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
     public PagedList<CalendarEventCatalog> queryPagedList(
+			@RequestParam(value = "valid", required = false) Boolean valid,
 			@RequestBody Querier querier,
 			@PathVariable(value = "pageNumber", required = true) int pageIndex,
             @PathVariable(value = "pageSize", required = true) int pageSize
@@ -127,6 +188,7 @@ public interface CalendarEventCatalogFacade {
 	/**
      * 查询日程分类数量<br/>
      * <功能详细描述>
+     * @param valid
      * @param querier
      * @return [参数说明]
      * 
@@ -137,6 +199,7 @@ public interface CalendarEventCatalogFacade {
     @ApiOperation(value = "查询日程分类数量")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int count(
+			@RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier);
 
 	/**
@@ -155,36 +218,4 @@ public interface CalendarEventCatalogFacade {
     		@RequestBody Querier querier,
             @RequestParam(value = "excludeId", required = false) String excludeId
             );
-
-	/**
-     * 根据条件查询查询日程分类子代列表<br/>
-     * <功能详细描述>
-     * @param parentId
-     * @param querier
-     * @return [参数说明]
-     * 
-     * @return PagedList<T> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ApiOperation(value = "根据条件查询查询日程分类子代列表")
-    @RequestMapping(value = "/children/{parentId}", method = RequestMethod.GET)
-    public List<CalendarEventCatalog> queryChildrenByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-            @RequestBody Querier querier);
-
-	/**
-     * 根据条件查询查询日程分类后代列表<br/>
-     * <功能详细描述>
-     * @param parentId
-     * @param querier
-     * @return [参数说明]
-     * 
-     * @return PagedList<T> [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @ApiOperation(value = "根据条件查询查询日程分类后代列表")
-    @RequestMapping(value = "/descendants/{parentId}", method = RequestMethod.GET)
-    public List<CalendarEventCatalog> queryDescendantsByParentId(@PathVariable(value = "parentId", required = true) String parentId,
-            @RequestBody Querier querier);
 }
