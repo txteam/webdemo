@@ -14,3 +14,4 @@ create table MSG_MESSAGE_ATTACHMENT(
 	primary key(id)
 );
 create index idx_attachment_01 on MSG_MESSAGE_ATTACHMENT(messageId,messageType);
+create index idx_attachment_02 on MSG_MESSAGE_ATTACHMENT(attachmentId);

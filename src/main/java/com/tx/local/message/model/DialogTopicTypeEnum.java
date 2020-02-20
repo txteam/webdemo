@@ -23,10 +23,7 @@ package com.tx.local.message.model;
  */
 public enum DialogTopicTypeEnum {
     
-    /* 系统建设建议： topicId=第一条被回复消息的id */
-    SYSTEM_SUGGEUST,
-    
     /* 销售商品评论: topicId=销售商品id */
-    SALE_PRODUCT_COMMENT;
+    SALE_PRODUCT;
     
 }

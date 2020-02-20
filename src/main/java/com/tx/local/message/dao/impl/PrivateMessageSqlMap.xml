@@ -7,7 +7,6 @@
 	<!-- auto generate default resultMap -->
 	<resultMap id="privateMessageMap" 
 		type="com.tx.local.message.model.PrivateMessage">
-		<result column="catalogId" property="catalog.id"/>
 	</resultMap>
 	
 	<!-- auto generate default find -->
@@ -19,16 +18,17 @@
 				PM.lastUpdateDate,
 				PM.lastUpdateUserId,
 				PM.readDate,
+				PM.type,
 				PM.userId,
 				PM.userType,
 				PM.vcid,
 				PM.title,
 				PM.createDate,
 				PM.createUserId,
-				PM.sender,
-				PM.senderId,
+				PM.senderUsername,
+				PM.senderUserId,
+				PM.senderUserType,
 				PM.unread,
-				PM.catalogId,
 				PM.content,
 				PM.username
 		  FROM MSG_PRIVATE_MESSAGE PM
@@ -49,16 +49,17 @@
 				PM.lastUpdateDate,
 				PM.lastUpdateUserId,
 				PM.readDate,
+				PM.type,
 				PM.userId,
 				PM.userType,
 				PM.vcid,
 				PM.title,
 				PM.createDate,
 				PM.createUserId,
-				PM.sender,
-				PM.senderId,
+				PM.senderUsername,
+				PM.senderUserId,
+				PM.senderUserType,
 				PM.unread,
-				PM.catalogId,
 				PM.content,
 				PM.username
 		  FROM MSG_PRIVATE_MESSAGE PM
@@ -84,6 +85,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND PM.lastUpdateUserId = #{lastUpdateUserId} ]]>
 	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND PM.type = #{type} ]]>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userId)">  
 	            <![CDATA[ AND PM.userId = #{userId} ]]>
 	        </if>			
@@ -105,19 +109,17 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
 	            <![CDATA[ AND PM.createUserId = #{createUserId} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sender)">  
-	            <![CDATA[ AND PM.sender = #{sender} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(senderUsername)">  
+	            <![CDATA[ AND PM.senderUsername = #{senderUsername} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(senderId)">  
-	            <![CDATA[ AND PM.senderId = #{senderId} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(senderUserId)">  
+	            <![CDATA[ AND PM.senderUserId = #{senderUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(senderUserType)">  
+	            <![CDATA[ AND PM.senderUserType = #{senderUserType} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(unread)">  
 	            <![CDATA[ AND PM.unread = #{unread} ]]>
-	        </if>			
-			<if test="catalog != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalog.id)">  
-		            <![CDATA[ AND PM.catalogId = #{catalog.id} ]]>
-		        </if>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(content)">  
 	            <![CDATA[ AND PM.content = #{content} ]]>
@@ -167,6 +169,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND PM.lastUpdateUserId = #{lastUpdateUserId} ]]>
 	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND PM.type = #{type} ]]>
+	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userId)">  
 	            <![CDATA[ AND PM.userId = #{userId} ]]>
 	        </if>			
@@ -188,19 +193,17 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
 	            <![CDATA[ AND PM.createUserId = #{createUserId} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sender)">  
-	            <![CDATA[ AND PM.sender = #{sender} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(senderUsername)">  
+	            <![CDATA[ AND PM.senderUsername = #{senderUsername} ]]>
 	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(senderId)">  
-	            <![CDATA[ AND PM.senderId = #{senderId} ]]>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(senderUserId)">  
+	            <![CDATA[ AND PM.senderUserId = #{senderUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(senderUserType)">  
+	            <![CDATA[ AND PM.senderUserType = #{senderUserType} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(unread)">  
 	            <![CDATA[ AND PM.unread = #{unread} ]]>
-	        </if>			
-			<if test="catalog != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(catalog.id)">  
-		            <![CDATA[ AND PM.catalogId = #{catalog.id} ]]>
-		        </if>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(content)">  
 	            <![CDATA[ AND PM.content = #{content} ]]>
@@ -223,16 +226,17 @@
 			lastUpdateDate,
 			lastUpdateUserId,
 			readDate,
+			type,
 			userId,
 			userType,
 			vcid,
 			title,
 			createDate,
 			createUserId,
-			sender,
-			senderId,
+			senderUsername,
+			senderUserId,
+			senderUserType,
 			unread,
-			catalogId,
 			content,
 			username
 		)
@@ -242,16 +246,17 @@
 			#{lastUpdateDate},
 			#{lastUpdateUserId},
 			#{readDate},
+			#{type},
 			#{userId},
 			#{userType},
 			#{vcid},
 			#{title},
 			#{createDate},
 			#{createUserId},
-			#{sender},
-			#{senderId},
+			#{senderUsername},
+			#{senderUserId},
+			#{senderUserType},
 			#{unread},
-			#{catalog.id},
 			#{content},
 			#{username}
 		)
@@ -282,8 +287,8 @@
 			<if test="_parameter.containsKey('readDate')">
 	    		readDate = #{readDate,javaType=java.util.Date},
 	    	</if>
-			<if test="_parameter.containsKey('userType')">
-	    		userType = #{userType,javaType=com.tx.local.message.model.MessageUserTypeEnum},
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.message.model.PrivateMessageTypeEnum},
 	    	</if>
 			<if test="_parameter.containsKey('vcid')">
 	    		vcid = #{vcid,javaType=java.lang.String},

@@ -15,11 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * 会话消息：包含请求、意见、建议、提问<br/>
@@ -40,11 +35,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "msg_dialog_message")
 @ApiModel("会话消息")
-@Data
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class DialogMessage implements Serializable {
     
     /** 注释内容 */
@@ -63,12 +53,12 @@ public class DialogMessage implements Serializable {
     @Column(nullable = false)
     private String vcid;
     
-    /** 分类 */
-    @Column(name = "catalogId", nullable = true)
-    private MessageCatalog catalog;
+    /** 会话消息类型 */
+    @Column(nullable = false)
+    private DialogMessageTypeEnum type;
     
     /** 关联类型 */
-    @Column(nullable = false)
+    @Column(nullable = true)
     private DialogTopicTypeEnum topicType;
     
     /** 关联id */
@@ -76,7 +66,7 @@ public class DialogMessage implements Serializable {
     private String topicId;
     
     /** 客户类型 */
-    @Column(nullable = false)
+    @Column(nullable = true)
     private MessageUserTypeEnum userType;
     
     /** 用户id */
@@ -106,4 +96,200 @@ public class DialogMessage implements Serializable {
     /** 创建用户 */
     @Column(nullable = true, updatable = false)
     private String createUserId;
+    
+    /**
+     * @return 返回 id
+     */
+    public String getId() {
+        return id;
+    }
+    
+    /**
+     * @param 对id进行赋值
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    /**
+     * @return 返回 parentId
+     */
+    public String getParentId() {
+        return parentId;
+    }
+    
+    /**
+     * @param 对parentId进行赋值
+     */
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+    
+    /**
+     * @return 返回 vcid
+     */
+    public String getVcid() {
+        return vcid;
+    }
+    
+    /**
+     * @param 对vcid进行赋值
+     */
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
+    }
+    
+    /**
+     * @return 返回 type
+     */
+    public DialogMessageTypeEnum getType() {
+        return type;
+    }
+    
+    /**
+     * @param 对type进行赋值
+     */
+    public void setType(DialogMessageTypeEnum type) {
+        this.type = type;
+    }
+    
+    /**
+     * @return 返回 topicType
+     */
+    public DialogTopicTypeEnum getTopicType() {
+        return topicType;
+    }
+    
+    /**
+     * @param 对topicType进行赋值
+     */
+    public void setTopicType(DialogTopicTypeEnum topicType) {
+        this.topicType = topicType;
+    }
+    
+    /**
+     * @return 返回 topicId
+     */
+    public String getTopicId() {
+        return topicId;
+    }
+    
+    /**
+     * @param 对topicId进行赋值
+     */
+    public void setTopicId(String topicId) {
+        this.topicId = topicId;
+    }
+    
+    /**
+     * @return 返回 userType
+     */
+    public MessageUserTypeEnum getUserType() {
+        return userType;
+    }
+    
+    /**
+     * @param 对userType进行赋值
+     */
+    public void setUserType(MessageUserTypeEnum userType) {
+        this.userType = userType;
+    }
+    
+    /**
+     * @return 返回 userId
+     */
+    public String getUserId() {
+        return userId;
+    }
+    
+    /**
+     * @param 对userId进行赋值
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    
+    /**
+     * @return 返回 title
+     */
+    public String getTitle() {
+        return title;
+    }
+    
+    /**
+     * @param 对title进行赋值
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    /**
+     * @return 返回 content
+     */
+    public String getContent() {
+        return content;
+    }
+    
+    /**
+     * @param 对content进行赋值
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+    
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+    
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+    
+    /**
+     * @return 返回 lastUpdateUserId
+     */
+    public String getLastUpdateUserId() {
+        return lastUpdateUserId;
+    }
+    
+    /**
+     * @param 对lastUpdateUserId进行赋值
+     */
+    public void setLastUpdateUserId(String lastUpdateUserId) {
+        this.lastUpdateUserId = lastUpdateUserId;
+    }
+    
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+    
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+    
+    /**
+     * @return 返回 createUserId
+     */
+    public String getCreateUserId() {
+        return createUserId;
+    }
+    
+    /**
+     * @param 对createUserId进行赋值
+     */
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
 }

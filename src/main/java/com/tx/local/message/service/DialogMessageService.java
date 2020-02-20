@@ -63,10 +63,9 @@ public class DialogMessageService {
     public void insert(DialogMessage dialogMessage) {
         //验证参数是否合法
         AssertUtils.notNull(dialogMessage, "dialogMessage is null.");
-		AssertUtils.notEmpty(dialogMessage.getUserType(), "dialogMessage.userType is empty.");
+		AssertUtils.notEmpty(dialogMessage.getType(), "dialogMessage.type is empty.");
 		AssertUtils.notEmpty(dialogMessage.getVcid(), "dialogMessage.vcid is empty.");
 		AssertUtils.notEmpty(dialogMessage.getTitle(), "dialogMessage.title is empty.");
-		AssertUtils.notEmpty(dialogMessage.getTopicType(), "dialogMessage.topicType is empty.");
            
         //FIXME:为添加的数据需要填入默认值的字段填入默认值
 		dialogMessage.setLastUpdateDate(new Date());
@@ -333,15 +332,15 @@ public class DialogMessageService {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(dialogMessage, "dialogMessage is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-		AssertUtils.notEmpty(dialogMessage.getUserType(), "dialogMessage.userType is empty.");
+		AssertUtils.notEmpty(dialogMessage.getType(), "dialogMessage.type is empty.");
 		AssertUtils.notEmpty(dialogMessage.getVcid(), "dialogMessage.vcid is empty.");
 		AssertUtils.notEmpty(dialogMessage.getTitle(), "dialogMessage.title is empty.");
-		AssertUtils.notEmpty(dialogMessage.getTopicType(), "dialogMessage.topicType is empty.");
 
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         //FIXME:需要更新的字段
 		updateRowMap.put("lastUpdateUserId", dialogMessage.getLastUpdateUserId());
+		updateRowMap.put("type", dialogMessage.getType());
 		updateRowMap.put("userId", dialogMessage.getUserId());
 		updateRowMap.put("userType", dialogMessage.getUserType());
 		updateRowMap.put("vcid", dialogMessage.getVcid());
@@ -349,7 +348,6 @@ public class DialogMessageService {
 		updateRowMap.put("topicId", dialogMessage.getTopicId());
 		updateRowMap.put("topicType", dialogMessage.getTopicType());
 		updateRowMap.put("parentId", dialogMessage.getParentId());
-		updateRowMap.put("catalog", dialogMessage.getCatalog());
 		updateRowMap.put("content", dialogMessage.getContent());
 		updateRowMap.put("lastUpdateDate", new Date());
 

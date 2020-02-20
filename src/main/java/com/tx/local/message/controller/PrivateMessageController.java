@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.local.message.model.PrivateMessage;
-import com.tx.local.message.service.PrivateMessageService;
 import com.tx.core.paged.model.PagedList;
-
 import com.tx.local.message.model.MessageUserTypeEnum;
+import com.tx.local.message.model.PrivateMessage;
+import com.tx.local.message.model.PrivateMessageTypeEnum;
+import com.tx.local.message.service.PrivateMessageService;
 
 /**
  * 私信控制层<br/>
@@ -52,8 +52,10 @@ public class PrivateMessageController {
      */
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
-		response.put("userTypes", MessageUserTypeEnum.values());
-
+        response.put("types", PrivateMessageTypeEnum.values());
+        response.put("userTypes", MessageUserTypeEnum.values());
+        response.put("senderUserTypes", MessageUserTypeEnum.values());
+        
         return "message/queryPrivateMessagePagedList";
     }
     
@@ -68,10 +70,12 @@ public class PrivateMessageController {
      */
     @RequestMapping("/toAdd")
     public String toAdd(ModelMap response) {
-    	response.put("privateMessage", new PrivateMessage());
-    	
-		response.put("userTypes", MessageUserTypeEnum.values());
-
+        response.put("privateMessage", new PrivateMessage());
+        
+        response.put("types", PrivateMessageTypeEnum.values());
+        response.put("userTypes", MessageUserTypeEnum.values());
+        response.put("senderUserTypes", MessageUserTypeEnum.values());
+        
         return "message/addPrivateMessage";
     }
     
@@ -85,17 +89,17 @@ public class PrivateMessageController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdate")
-    public String toUpdate(
-    		@RequestParam("id") String id,
-            ModelMap response) {
-        PrivateMessage privateMessage = this.privateMessageService.findById(id); 
+    public String toUpdate(@RequestParam("id") String id, ModelMap response) {
+        PrivateMessage privateMessage = this.privateMessageService.findById(id);
         response.put("privateMessage", privateMessage);
-
-		response.put("userTypes", MessageUserTypeEnum.values());
+        
+        response.put("types", PrivateMessageTypeEnum.values());
+        response.put("userTypes", MessageUserTypeEnum.values());
+        response.put("senderUserTypes", MessageUserTypeEnum.values());
         
         return "message/updatePrivateMessage";
     }
-
+    
     /**
      * 查询私信实例列表<br/>
      * <功能详细描述>
@@ -108,15 +112,13 @@ public class PrivateMessageController {
     @ResponseBody
     @RequestMapping("/queryList")
     public List<PrivateMessage> queryList(
-    		@RequestParam MultiValueMap<String, String> request
-    	) {
+            @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-    	
-        List<PrivateMessage> resList = this.privateMessageService.queryList(
-			params         
-        );
-  
+        params.put("name", request.getFirst("name"));
+        
+        List<PrivateMessage> resList = this.privateMessageService
+                .queryList(params);
+        
         return resList;
     }
     
@@ -132,18 +134,14 @@ public class PrivateMessageController {
     @ResponseBody
     @RequestMapping("/queryPagedList")
     public PagedList<PrivateMessage> queryPagedList(
-			@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam MultiValueMap<String, String> request
-    	) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-
-        PagedList<PrivateMessage> resPagedList = this.privateMessageService.queryPagedList(
-			params,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", request.getFirst("name"));
+        
+        PagedList<PrivateMessage> resPagedList = this.privateMessageService
+                .queryPagedList(params, pageIndex, pageSize);
         return resPagedList;
     }
     
@@ -196,7 +194,7 @@ public class PrivateMessageController {
         PrivateMessage privateMessage = this.privateMessageService.findById(id);
         return privateMessage;
     }
-
+    
     /**
      * 删除私信实例<br/> 
      * <功能详细描述>
@@ -214,9 +212,9 @@ public class PrivateMessageController {
         return flag;
     }
     
-	/**
+    /**
      * 校验是否重复<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param params
      * @return [参数说明]
      * 

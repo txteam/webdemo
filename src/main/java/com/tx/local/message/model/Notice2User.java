@@ -47,86 +47,103 @@ public class Notice2User {
     //注: read的被动语态也是read,但read在创建脚本时为特殊字符需要添添加引号才能创建表成功
     private boolean unread;
     
+    /** 是否置顶 */
+    private boolean top;
+    
     /** 阅读时间 */
     private Date readDate;
-    
+
     /**
      * @return 返回 id
      */
     public String getId() {
         return id;
     }
-    
+
     /**
      * @param 对id进行赋值
      */
     public void setId(String id) {
         this.id = id;
     }
-    
+
     /**
      * @return 返回 noticeId
      */
     public String getNoticeId() {
         return noticeId;
     }
-    
+
     /**
      * @param 对noticeId进行赋值
      */
     public void setNoticeId(String noticeId) {
         this.noticeId = noticeId;
     }
-    
+
     /**
      * @return 返回 userType
      */
     public MessageUserTypeEnum getUserType() {
         return userType;
     }
-    
+
     /**
      * @param 对userType进行赋值
      */
     public void setUserType(MessageUserTypeEnum userType) {
         this.userType = userType;
     }
-    
+
     /**
      * @return 返回 userId
      */
     public String getUserId() {
         return userId;
     }
-    
+
     /**
      * @param 对userId进行赋值
      */
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    
+
     /**
      * @return 返回 unread
      */
     public boolean isUnread() {
         return unread;
     }
-    
+
     /**
      * @param 对unread进行赋值
      */
     public void setUnread(boolean unread) {
         this.unread = unread;
     }
-    
+
+    /**
+     * @return 返回 top
+     */
+    public boolean isTop() {
+        return top;
+    }
+
+    /**
+     * @param 对top进行赋值
+     */
+    public void setTop(boolean top) {
+        this.top = top;
+    }
+
     /**
      * @return 返回 readDate
      */
     public Date getReadDate() {
         return readDate;
     }
-    
+
     /**
      * @param 对readDate进行赋值
      */

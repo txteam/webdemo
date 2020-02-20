@@ -93,6 +93,15 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
+					<th class="narrow" width="25%">类型:<span class="tRed">*</span></th>
+					<td>
+						<select id="type" name="type" data-rule="类型:required;">
+							<option value="">--- 请选择 ---</option>
+							<option th:each="typeTemp:${types}" th:value="${typeTemp.code}" th:text="${typeTemp.name}" th:selected="${dialogMessage.type eq typeTemp}"></option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
 					<th class="narrow" width="25%">userId:</th>
 					<td>
 						<input id="userId" name="userId" type="text" 
@@ -100,9 +109,9 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">userType:<span class="tRed">*</span></th>
+					<th class="narrow" width="25%">userType:</th>
 					<td>
-						<select id="userType" name="userType" data-rule="userType:required;">
+						<select id="userType" name="userType" >
 							<option value="">--- 请选择 ---</option>
 							<option th:each="userTypeTemp:${userTypes}" th:value="${userTypeTemp.code}" th:text="${userTypeTemp.name}" th:selected="${dialogMessage.userType eq userTypeTemp}"></option>
 						</select>
@@ -123,9 +132,9 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">topicType:<span class="tRed">*</span></th>
+					<th class="narrow" width="25%">topicType:</th>
 					<td>
-						<select id="topicType" name="topicType" data-rule="topicType:required;">
+						<select id="topicType" name="topicType" >
 							<option value="">--- 请选择 ---</option>
 							<option th:each="topicTypeTemp:${topicTypes}" th:value="${topicTypeTemp.code}" th:text="${topicTypeTemp.name}" th:selected="${dialogMessage.topicType eq topicTypeTemp}"></option>
 						</select>
@@ -145,13 +154,6 @@ $(document).ready(function(){
 							th:value="*{parentId}"/>
 					</td>
 				</tr>			
-				<tr>
-					<th class="narrow" width="25%">分类:</th>
-					<td>
-						<!-- //TODO:修改其显示逻辑 -->
-						<input id="catalog.id" name="catalog.id" th:value="*{catalog?.id}"/>
-					</td>
-				</tr>
 				<tr>
 					<th class="narrow" width="25%">content:</th>
 					<td>

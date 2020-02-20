@@ -29,10 +29,10 @@ import io.swagger.annotations.ApiModel;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "msg_message_catalog")
+@Table(name = "msg_notice_catalog")
 @ApiModel("信息分类")
 @BasicDataEntity(name = "信息分类", viewType = BasicDataViewTypeEnum.TREELIST)
-public class MessageCatalog implements BasicData {
+public class NoticeCatalog implements BasicData {
     
     /** 注释内容 */
     private static final long serialVersionUID = 5958516811815635739L;
@@ -48,10 +48,6 @@ public class MessageCatalog implements BasicData {
     /** 虚中心id */
     @Column(nullable = false, updatable = false)
     private String vcid;
-    
-    /** 消息类型 */
-    @Column(nullable = false, updatable = false)
-    private MessageTypeEnum messageType;
     
     /** 通知消息类型编码 */
     @Column(nullable = false, updatable = false)
@@ -118,20 +114,6 @@ public class MessageCatalog implements BasicData {
      */
     public void setVcid(String vcid) {
         this.vcid = vcid;
-    }
-    
-    /**
-     * @return 返回 messageType
-     */
-    public MessageTypeEnum getMessageType() {
-        return messageType;
-    }
-    
-    /**
-     * @param 对messageType进行赋值
-     */
-    public void setMessageType(MessageTypeEnum messageType) {
-        this.messageType = messageType;
     }
     
     /**

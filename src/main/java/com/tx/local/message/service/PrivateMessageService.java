@@ -58,10 +58,13 @@ public class PrivateMessageService {
     public void insert(PrivateMessage privateMessage) {
         //验证参数是否合法
         AssertUtils.notNull(privateMessage, "privateMessage is null.");
+		AssertUtils.notEmpty(privateMessage.getType(), "privateMessage.type is empty.");
 		AssertUtils.notEmpty(privateMessage.getUserId(), "privateMessage.userId is empty.");
 		AssertUtils.notEmpty(privateMessage.getUserType(), "privateMessage.userType is empty.");
 		AssertUtils.notEmpty(privateMessage.getVcid(), "privateMessage.vcid is empty.");
 		AssertUtils.notEmpty(privateMessage.getTitle(), "privateMessage.title is empty.");
+		AssertUtils.notEmpty(privateMessage.getSenderUserId(), "privateMessage.senderUserId is empty.");
+		AssertUtils.notEmpty(privateMessage.getSenderUserType(), "privateMessage.senderUserType is empty.");
            
         //FIXME:为添加的数据需要填入默认值的字段填入默认值
 		privateMessage.setLastUpdateDate(new Date());
@@ -328,7 +331,7 @@ public class PrivateMessageService {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notNull(privateMessage, "privateMessage is null.");
         AssertUtils.notEmpty(id, "id is empty.");
-		AssertUtils.notEmpty(privateMessage.getUserType(), "privateMessage.userType is empty.");
+		AssertUtils.notEmpty(privateMessage.getType(), "privateMessage.type is empty.");
 		AssertUtils.notEmpty(privateMessage.getVcid(), "privateMessage.vcid is empty.");
 		AssertUtils.notEmpty(privateMessage.getTitle(), "privateMessage.title is empty.");
 
@@ -337,7 +340,7 @@ public class PrivateMessageService {
         //FIXME:需要更新的字段
 		updateRowMap.put("lastUpdateUserId", privateMessage.getLastUpdateUserId());
 		updateRowMap.put("readDate", privateMessage.getReadDate());
-		updateRowMap.put("userType", privateMessage.getUserType());
+		updateRowMap.put("type", privateMessage.getType());
 		updateRowMap.put("vcid", privateMessage.getVcid());
 		updateRowMap.put("title", privateMessage.getTitle());
 		updateRowMap.put("unread", privateMessage.isUnread());

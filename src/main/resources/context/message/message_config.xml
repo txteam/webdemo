@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogs>
+	<dialog_message_catalog>
+
+	</dialog_message_catalog>
+	<notice_message_catalog>
+		<catalog code="XTTZ">
+			<name>系统通知</name>
+		</catalog>
+		<catalog code="XTGG">
+			<name>系统公告</name>
+		</catalog>
+		<catalog code="SQXX">
+			<name>社区消息</name>
+		</catalog>
+	</notice_message_catalog>
+	<private_message_catalog>
+		<private_message_catalog code="YHJ">
+			<name>优惠券</name>
+		</private_message_catalog>
+		<notice_catalog code="YS">
+			<name>预售</name>
+			<remark>预售</remark>
+		</notice_catalog>
+		<notice_catalog code="RJ">
+			<name>入金</name>
+			<remark>入金</remark>
+		</notice_catalog>
+		<notice_catalog code="CJ">
+			<name>出金</name>
+			<remark>出金</remark>
+		</notice_catalog>
+		<notice_catalog code="SK">
+			<name>收款</name>
+			<remark>SK</remark>
+		</notice_catalog>
+	</private_message_catalog>
+</catalogs>

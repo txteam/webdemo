@@ -65,14 +65,14 @@ public class NoticeMessage implements Serializable, JSONAttributesSupport {
     
     /** 站内消息类型 */
     @Column(name = "catalogId", nullable = true, length = 64, updatable = false)
-    private MessageCatalog catalog;
+    private NoticeCatalog catalog;
     
     /** 站内消息标题 */
     @Column(nullable = false, updatable = true, length = 100)
     private String title;
     
     /** 站内消息内容 */
-    @Column(nullable = true, updatable = true)
+    @Column(nullable = true, updatable = true, length = 4000)
     private String content;
     
     /** 额外的参数 */
@@ -146,14 +146,14 @@ public class NoticeMessage implements Serializable, JSONAttributesSupport {
     /**
      * @return 返回 catalog
      */
-    public MessageCatalog getCatalog() {
+    public NoticeCatalog getCatalog() {
         return catalog;
     }
     
     /**
      * @param 对catalog进行赋值
      */
-    public void setCatalog(MessageCatalog catalog) {
+    public void setCatalog(NoticeCatalog catalog) {
         this.catalog = catalog;
     }
     

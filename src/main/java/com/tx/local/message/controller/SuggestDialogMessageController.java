@@ -36,8 +36,8 @@ import com.tx.local.message.model.DialogTopicTypeEnum;
  * @since [产品/模块版本]
  */
 @Controller
-@RequestMapping("/dialogMessage")
-public class DialogMessageController {
+@RequestMapping("/dialog/suggest")
+public class SuggestDialogMessageController {
     
     //会话消息业务层
     @Resource(name = "dialogMessageService")
@@ -54,11 +54,11 @@ public class DialogMessageController {
      */
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
-		response.put("types", DialogMessageTypeEnum.values());
-		response.put("userTypes", MessageUserTypeEnum.values());
-		response.put("topicTypes", DialogTopicTypeEnum.values());
-
-        return "message/queryDialogMessagePagedList";
+        response.put("types", DialogMessageTypeEnum.values());
+        response.put("userTypes", MessageUserTypeEnum.values());
+        response.put("topicTypes", DialogTopicTypeEnum.values());
+        
+        return "message/querySuggestDialogMessagePagedList";
     }
     
     /**
@@ -72,38 +72,15 @@ public class DialogMessageController {
      */
     @RequestMapping("/toAdd")
     public String toAdd(ModelMap response) {
-    	response.put("dialogMessage", new DialogMessage());
-    	
-		response.put("types", DialogMessageTypeEnum.values());
-		response.put("userTypes", MessageUserTypeEnum.values());
-		response.put("topicTypes", DialogTopicTypeEnum.values());
-
+        response.put("dialogMessage", new DialogMessage());
+        
+        response.put("types", DialogMessageTypeEnum.values());
+        response.put("userTypes", MessageUserTypeEnum.values());
+        response.put("topicTypes", DialogTopicTypeEnum.values());
+        
         return "message/addDialogMessage";
     }
     
-    /**
-     * 跳转到编辑会话消息页面
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @RequestMapping("/toUpdate")
-    public String toUpdate(
-    		@RequestParam("id") String id,
-            ModelMap response) {
-        DialogMessage dialogMessage = this.dialogMessageService.findById(id); 
-        response.put("dialogMessage", dialogMessage);
-
-		response.put("types", DialogMessageTypeEnum.values());
-		response.put("userTypes", MessageUserTypeEnum.values());
-		response.put("topicTypes", DialogTopicTypeEnum.values());
-        
-        return "message/updateDialogMessage";
-    }
-
     /**
      * 查询会话消息实例列表<br/>
      * <功能详细描述>
@@ -116,15 +93,13 @@ public class DialogMessageController {
     @ResponseBody
     @RequestMapping("/queryList")
     public List<DialogMessage> queryList(
-    		@RequestParam MultiValueMap<String, String> request
-    	) {
+            @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-    	
-        List<DialogMessage> resList = this.dialogMessageService.queryList(
-			params         
-        );
-  
+        params.put("name", request.getFirst("name"));
+        
+        List<DialogMessage> resList = this.dialogMessageService
+                .queryList(params);
+        
         return resList;
     }
     
@@ -140,18 +115,14 @@ public class DialogMessageController {
     @ResponseBody
     @RequestMapping("/queryPagedList")
     public PagedList<DialogMessage> queryPagedList(
-			@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam MultiValueMap<String, String> request
-    	) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-
-        PagedList<DialogMessage> resPagedList = this.dialogMessageService.queryPagedList(
-			params,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", request.getFirst("name"));
+        
+        PagedList<DialogMessage> resPagedList = this.dialogMessageService
+                .queryPagedList(params, pageIndex, pageSize);
         return resPagedList;
     }
     
@@ -204,7 +175,7 @@ public class DialogMessageController {
         DialogMessage dialogMessage = this.dialogMessageService.findById(id);
         return dialogMessage;
     }
-
+    
     /**
      * 删除会话消息实例<br/> 
      * <功能详细描述>
@@ -222,9 +193,9 @@ public class DialogMessageController {
         return flag;
     }
     
-	/**
+    /**
      * 校验是否重复<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param params
      * @return [参数说明]
      * 
@@ -267,8 +238,7 @@ public class DialogMessageController {
             @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-	
+        params.put("name", request.getFirst("name"));
         
         List<DialogMessage> resList = this.dialogMessageService
                 .queryChildrenByParentId(parentId, params);
@@ -294,7 +264,7 @@ public class DialogMessageController {
             @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
+        params.put("name", request.getFirst("name"));
         
         List<DialogMessage> resList = this.dialogMessageService
                 .queryDescendantsByParentId(parentId, params);

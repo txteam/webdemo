@@ -80,15 +80,16 @@ $(document).ready(function(){
 			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
 			{title:'lastUpdateUserId',width:100,field:'lastUpdateUserId'},
 			{title:'readDate',width:100,field:'readDate',formatter:$.Formatters.dateFun},
+			{title:'类型',width:100,field:'type'},
 			{title:'userId',width:100,field:'userId'},
 			{title:'userType',width:100,field:'userType'},
 			{title:'title',width:100,field:'title'},
 			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
 			{title:'createUserId',width:100,field:'createUserId'},
-			{title:'sender',width:100,field:'sender'},
-			{title:'senderId',width:100,field:'senderId'},
+			{title:'senderUsername',width:100,field:'senderUsername'},
+			{title:'senderUserId',width:100,field:'senderUserId'},
+			{title:'senderUserType',width:100,field:'senderUserType'},
 			{title:'unread',width:80,field:'unread',formatter:$.Formatters.booleanFun},
-			{title:'分类',width:100,field:'catalog'},
 			{title:'content',width:100,field:'content'},
 			{title:'username',width:100,field:'username'},
 			{title:'操作',width:100,field:'_action',
@@ -140,7 +141,7 @@ function addFun() {
 		"addPrivateMessage",
 		"新增" + entityName,
 		$.formatString(addUrl),
-		500,488,
+		500,516,
 		function(){
 			queryFun();
 		},{maximizable : true}
@@ -170,7 +171,7 @@ function editFun(id,name) {
 		"updatePrivateMessage",
 		"编辑" + entityName + ":" + name,
 		$.formatString(updateUrl,id),
-        500,488,
+        500,516,
         function(){
 			queryFun();
 		},{maximizable : true}

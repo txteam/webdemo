@@ -79,6 +79,7 @@ $(document).ready(function(){
 		columns: [ [
 			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
 			{title:'lastUpdateUserId',width:100,field:'lastUpdateUserId'},
+			{title:'类型',width:100,field:'type'},
 			{title:'userId',width:100,field:'userId'},
 			{title:'userType',width:100,field:'userType'},
 			{title:'title',width:100,field:'title'},
@@ -87,7 +88,6 @@ $(document).ready(function(){
 			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
 			{title:'createUserId',width:100,field:'createUserId'},
 			{title:'上级ID',width:100,hidden:true,field:'parentId'},
-			{title:'分类',width:100,field:'catalog'},
 			{title:'content',width:100,field:'content'},
 			{title:'操作',width:100,field:'_action',
 				formatter : function(value, row, index) {

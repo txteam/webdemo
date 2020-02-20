@@ -101,6 +101,15 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
+					<th class="narrow" width="25%">类型:<span class="tRed">*</span></th>
+					<td>
+						<select id="type" name="type" data-rule="类型:required;">
+							<option value="">--- 请选择 ---</option>
+							<option th:each="typeTemp:${types}" th:value="${typeTemp.code}" th:text="${typeTemp.name}" th:selected="${privateMessage.type eq typeTemp}"></option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
 					<th class="narrow" width="25%">userId:<span class="tRed">*</span></th>
 					<td>
 						<input id="userId" name="userId" type="text" 
@@ -131,17 +140,26 @@ $(document).ready(function(){
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">sender:</th>
+					<th class="narrow" width="25%">senderUsername:</th>
 					<td>
-						<input id="sender" name="sender" type="text" data-rule="sender:length[0~32];"
-							th:value="*{sender}"/>
+						<input id="senderUsername" name="senderUsername" type="text" data-rule="senderUsername:length[0~32];"
+							th:value="*{senderUsername}"/>
 					</td>
 				</tr>			
 				<tr>
-					<th class="narrow" width="25%">senderId:</th>
+					<th class="narrow" width="25%">senderUserId:<span class="tRed">*</span></th>
 					<td>
-						<input id="senderId" name="senderId" type="text" 
-							th:value="*{senderId}"/>
+						<input id="senderUserId" name="senderUserId" type="text" 
+							th:value="*{senderUserId}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">senderUserType:<span class="tRed">*</span></th>
+					<td>
+						<select id="senderUserType" name="senderUserType" data-rule="senderUserType:required;">
+							<option value="">--- 请选择 ---</option>
+							<option th:each="senderUserTypeTemp:${senderUserTypes}" th:value="${senderUserTypeTemp.code}" th:text="${senderUserTypeTemp.name}" th:selected="${privateMessage.senderUserType eq senderUserTypeTemp}"></option>
+						</select>
 					</td>
 				</tr>			
 				<tr>
@@ -153,13 +171,6 @@ $(document).ready(function(){
 						</select>
 					</td>
 				</tr>			
-				<tr>
-					<th class="narrow" width="25%">分类:</th>
-					<td>
-						<!-- //TODO:修改其显示逻辑 -->
-						<input id="catalog.id" name="catalog.id" th:value="*{catalog?.id}"/>
-					</td>
-				</tr>
 				<tr>
 					<th class="narrow" width="25%">content:</th>
 					<td>
