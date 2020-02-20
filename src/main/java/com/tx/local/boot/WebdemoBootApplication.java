@@ -113,22 +113,4 @@ public class WebdemoBootApplication {
         CacheManager res = new TransactionAwareCacheManagerProxy(cm);
         return res;
     }
-    
-    ///**
-    // * mybatis的标自动执行器<br/>
-    // * <功能详细描述>
-    // * @param dataSource
-    // * @return [参数说明]
-    // * 
-    // * @return TableDDLExecutorFactory [返回类型说明]
-    // * @exception throws [异常类型] [异常说明]
-    // * @see [类、类#方法、类#成员]
-    // */
-    //@Bean
-    //public TableDDLExecutorFactory TableDDLExecutor(DataSource dataSource) {
-    //    TableDDLExecutorFactory executor = new TableDDLExecutorFactory(
-    //            dataSource);
-    //    executor.setDataSourceType(DataSourceTypeEnum.MYSQL);
-    //    return executor;
-    //}
 }

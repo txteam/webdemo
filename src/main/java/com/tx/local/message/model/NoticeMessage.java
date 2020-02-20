@@ -75,6 +75,9 @@ public class NoticeMessage implements Serializable, JSONAttributesSupport {
     @Column(nullable = true, updatable = true, length = 4000)
     private String content;
     
+    
+    private String linkUrl;
+    
     /** 额外的参数 */
     @Column(nullable = true, updatable = true, length = 4000)
     private String attributes;

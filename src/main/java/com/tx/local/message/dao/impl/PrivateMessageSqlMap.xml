@@ -37,6 +37,15 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND PM.id = #{id}
 	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND PM.vcid = #{vcid} ]]>
+	        </if>	
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND PM.type = #{type} ]]>
+	        </if>
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userType)">  
+	            <![CDATA[ AND PM.userType = #{userType} ]]>
+	        </if>	
 		</trim>
 	</select>
 	

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.message.model.MessageUserTypeEnum;
 import com.tx.local.message.model.PrivateMessage;
+import com.tx.local.message.model.PrivateMessageTypeEnum;
 import com.tx.local.message.service.PrivateMessageService;
 import com.tx.local.security.util.WebContextUtils;
 
@@ -56,6 +57,33 @@ public class OperatorMessageController {
     public String index(@RequestParam Map<String, String> request,
             ModelMap response) {
         return "/message/operatorMessageMain";
+    }
+    
+    /**
+     * 获取私信的详情<br/>
+     * <功能详细描述>
+     * @param request
+     * @return [参数说明]
+     * 
+     * @return int [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    public PrivateMessage detail(@PathVariable(name = "id", required = true) String id) {
+        String vcid = WebContextUtils.getVcid();
+        String operatorId = WebContextUtils.getOperatorId();
+        
+        PrivateMessage condition = new PrivateMessage();
+        condition.setId(id);
+        condition.setVcid(vcid);
+        condition.setType(PrivateMessageTypeEnum.MESSAGE);
+        condition.setUserType(MessageUserTypeEnum.OPERATOR);
+        condition.setUserId(operatorId);
+        
+        PrivateMessage pm = this.privateMessageService.find(condition);
+        return pm;
     }
     
     /**
