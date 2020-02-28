@@ -22,8 +22,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.core.support.initable.model.ConfigInitAble;
 
 /**
@@ -40,18 +38,20 @@ import com.tx.core.support.initable.model.ConfigInitAble;
 @XmlRootElement(name = "service_type")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "dt_table_service_type")
-public class DynamicTableServiceType implements Serializable, ConfigInitAble{
+@Table(name = "dt_service_type")
+public class DynamicTableServiceType implements Serializable, ConfigInitAble {
     
     /** 注释内容 */
     private static final long serialVersionUID = -3950355297040789703L;
     
     /** 模板表类型唯一键 */
     @Id
+    @Column(nullable = false, length = 64)
     private String id;
     
     /** 模板表类型编码 */
     @XmlAttribute
+    @Column(nullable = false, length = 64)
     private String code;
     
     /** 模板表类型，唯一键，名字不能重复 */
@@ -64,7 +64,7 @@ public class DynamicTableServiceType implements Serializable, ConfigInitAble{
     
     /** 模板表类型前缀名 */
     @XmlAttribute
-    private String tablePrefix;
+    private String prefix;
     
     /** 模板表类型是否有效 */
     private boolean valid;
@@ -157,17 +157,17 @@ public class DynamicTableServiceType implements Serializable, ConfigInitAble{
     }
     
     /**
-     * @return 返回 tablePrefix
+     * @return 返回 prefix
      */
-    public String getTablePrefix() {
-        return tablePrefix;
+    public String getPrefix() {
+        return prefix;
     }
     
     /**
-     * @param 对tablePrefix进行赋值
+     * @param 对prefix进行赋值
      */
-    public void setTablePrefix(String tablePrefix) {
-        this.tablePrefix = tablePrefix;
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
     
     /**

@@ -19,8 +19,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.tx.core.jdbc.sqlsource.annotation.QueryConditionEqual;
-import com.tx.core.jdbc.sqlsource.annotation.UpdateAble;
 import com.tx.core.support.initable.model.ConfigInitAble;
 
 /**
@@ -43,36 +41,44 @@ public class DynamicTableType implements ConfigInitAble, Serializable {
     
     /** 模板表类型唯一键 */
     @Id
+    @Column(nullable = false, length = 64)
     private String id;
     
+    /** 编码 */
+    @Column(nullable = false, length = 64)
     private String code;
     
     /** 模板表类型：所属业务类型 */
-    @Column(name = "serviceTypeCode")
+    @Column(nullable = false, name = "serviceTypeId")
     private DynamicTableServiceType serviceType;
-    
-    /** 模板表类型是否有效 */
-    private boolean valid;
-    
-    /** 是否可编辑 */
-    private boolean modifyAble;
     
     /** 模板表类型，唯一键，名字不能重复 */
     @XmlAttribute
+    @Column(nullable = false)
     private String name;
+    
+    /** 模板表类型是否有效 */
+    @Column(nullable = false)
+    private boolean valid;
+    
+    /** 是否可编辑 */
+    @Column(nullable = false)
+    private boolean modifyAble;
     
     /** 模板表类型后缀名 */
     @XmlAttribute
-    private String tableSuffix;
+    private String suffix;
     
     /** 模板表类型名描述 */
     @XmlElement
     private String remark;
     
     /** 最后更新时间 */
+    @Column(nullable = false, updatable = true)
     private Date lastUpdateDate;
     
     /** 创建时间 */
+    @Column(nullable = false, updatable = true)
     private Date createDate;
     
     /**
@@ -160,17 +166,17 @@ public class DynamicTableType implements ConfigInitAble, Serializable {
     }
     
     /**
-     * @return 返回 tableSuffix
+     * @return 返回 suffix
      */
-    public String getTableSuffix() {
-        return tableSuffix;
+    public String getSuffix() {
+        return suffix;
     }
     
     /**
-     * @param 对tableSuffix进行赋值
+     * @param 对suffix进行赋值
      */
-    public void setTableSuffix(String tableSuffix) {
-        this.tableSuffix = tableSuffix;
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
     
     /**
