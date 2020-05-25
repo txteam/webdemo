@@ -1,23 +1,21 @@
 /*
  * 描          述:  <描述>
  * 修  改   人:  Administrator
- * 修改时间:  2016年11月17日
+ * 修改时间:  2020年3月19日
  * <修改描述:>
  */
-package com.tx.component.dynamictable.model;
+package com.tx.component.servicelock;
+
 
 /**
- * 动态表版本类型枚举<br/>
+ * 业务锁常量类<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
- * @version  [版本号, 2016年11月17日]
+ * @version  [版本号, 2020年3月19日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public enum DynamicTableVersionTypeEnum {
+public interface ServiceLockConstants {
     
-    MAIN,
-    
-    BAK;
 }

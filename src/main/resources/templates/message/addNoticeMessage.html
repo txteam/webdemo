@@ -86,33 +86,12 @@ $(document).ready(function(){
 			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
 			<table class="table">
 				<tr>
-					<th class="narrow" width="25%">lastUpdateUserId:</th>
-					<td>
-						<input id="lastUpdateUserId" name="lastUpdateUserId" type="text" 
-							th:value="*{lastUpdateUserId}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">title:<span class="tRed">*</span></th>
-					<td>
-						<input id="title" name="title" type="text" data-rule="title:required;length[1~50];"
-							th:value="*{title}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">createUserId:</th>
-					<td>
-						<input id="createUserId" name="createUserId" type="text" 
-							th:value="*{createUserId}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">sender:</th>
+					<th class="narrow" width="25%">发送者:</th>
 					<td>
 						<input id="sender" name="sender" type="text" data-rule="sender:length[0~128];"
-							th:value="*{sender}"/>
+							   th:value="*{sender}"/>
 					</td>
-				</tr>			
+				</tr>
 				<tr>
 					<th class="narrow" width="25%">分类:</th>
 					<td>
@@ -121,38 +100,30 @@ $(document).ready(function(){
 					</td>
 				</tr>
 				<tr>
-					<th class="narrow" width="25%">content:</th>
-					<td>
-						<input id="content" name="content" type="text" data-rule="content:length[0~127];"
-							th:value="*{content}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">invalidDate:</th>
-					<td>
-						<input id="invalidDate" name="invalidDate" type="text" readonly="readonly"
-							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
-							th:value="${#dates.format(noticeMessage.invalidDate,'yyyy-MM-dd HH:mm:ss')}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">publishDate:</th>
-					<td>
-						<input id="publishDate" name="publishDate" type="text" readonly="readonly"
-							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
-							th:value="${#dates.format(noticeMessage.publishDate,'yyyy-MM-dd HH:mm:ss')}"/>
-					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">priority:</th>
+					<th class="narrow" width="25%">优先级:</th>
 					<td>
 						<select id="priority" name="priority" >
 							<option value="">--- 请选择 ---</option>
 							<option th:each="priorityTemp:${prioritys}" th:value="${priorityTemp.code}" th:text="${priorityTemp.name}" th:selected="${noticeMessage.priority eq priorityTemp}"></option>
 						</select>
 					</td>
-				</tr>			
+				</tr>
 				<tr>
+					<th class="narrow" width="25%">标题:<span class="tRed">*</span></th>
+					<td>
+						<input id="title" name="title" type="text" data-rule="title:required;length[1~50];"
+							   th:value="*{title}"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" width="25%">内容:</th>
+					<td>
+						<!--<input id="content" name="content" type="text" data-rule="content:length[0~2000];"
+							   th:value="*{content}"/>-->
+						<textarea name="content" id="content" th:text="*{content}" cols="40" rows="20" data-rule="content:length[0~2000];"></textarea>
+					</td>
+				</tr>
+				<!--<tr>
 					<th class="narrow" width="25%">published:</th>
 					<td>
 						<select id="published" name="published" >
@@ -160,14 +131,7 @@ $(document).ready(function(){
 							<option value="false" th:selected="${noticeMessage.published eq false}">否</form:option>
 						</select>
 					</td>
-				</tr>			
-				<tr>
-					<th class="narrow" width="25%">attributes:</th>
-					<td>
-						<input id="attributes" name="attributes" type="text" data-rule="attributes:length[0~2000];"
-							th:value="*{attributes}"/>
-					</td>
-				</tr>			
+				</tr>-->
 			</table>
 		</form>
 	</div>

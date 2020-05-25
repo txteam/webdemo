@@ -9,12 +9,15 @@ package com.tx.component.dynamictable.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.tx.core.ddlutil.model.TableColumnDef;
 import com.tx.core.ddlutil.model.TableDef;
@@ -49,29 +52,29 @@ public class DynamicTable implements Serializable, TableDef {
     @Column(nullable = false, length = 64)
     private String code;
     
-    /** 模板表业务类型：填报表、记录信息、商品等情况... */
-    @Column(name = "serviceTypeId", nullable = false, length = 64)
-    private DynamicTableServiceType serviceType;
-    
-    /** 模板表类型：主表，备份表，历史表... */
-    @Column(name = "typeId", nullable = false, length = 64)
-    private DynamicTableType type;
-    
-    /** 实体类: 数据输入以后存储数据的对象：可以为具体bean，也可以为dynaBean，也可以为map */
-    @Column(nullable = true, length = 128)
-    private Class<?> entityType;
-    
     /** 与id一起同为模板表的唯一键 */
-    @Column(nullable = false, updatable = false, length = 64)
+    @Column(nullable = false, updatable = false, length = 64, unique = true)
     private String tableName;
-    
-    /** 是否可编辑 */
-    @Column(nullable = false, updatable = true)
-    private boolean modifyAble = true;
     
     /** 模板表状态 */
     @Column(nullable = false, updatable = true, length = 64)
     private DynamicTableStatusEnum status = DynamicTableStatusEnum.WAIT_CREATE;
+    
+    /** 模板表业务类型：填报表、记录信息、商品等情况... */
+    @Column(name = "serviceTypeCode", nullable = false, length = 64)
+    private DynamicTableServiceTypeEnum serviceType;
+    
+    /** 模板表类型：主表，备份表，历史表... */
+    @Column(name = "typeCode", nullable = false, length = 64)
+    private DynamicTableTypeEnum type;
+    
+    /** 实体类: 数据输入以后存储数据的对象：可以为具体bean，也可以为dynaBean，也可以为map */
+    @Column(nullable = true, length = 128)
+    private Class<?> entityType = HashMap.class;
+    
+    /** 是否可编辑 */
+    @Column(nullable = false, updatable = true)
+    private boolean modifyAble = true;
     
     /** 表注释内容 */
     @Column(nullable = true, updatable = true, length = 100)
@@ -88,6 +91,10 @@ public class DynamicTable implements Serializable, TableDef {
     /** 创建时间 */
     @Column(nullable = false, updatable = false)
     private Date createDate;
+    
+    /** 动态表字段 */
+    @Transient
+    private List<DynamicTableColumn> columns;
     
     /**
      * @return 返回 id
@@ -134,28 +141,28 @@ public class DynamicTable implements Serializable, TableDef {
     /**
      * @return 返回 serviceType
      */
-    public DynamicTableServiceType getServiceType() {
+    public DynamicTableServiceTypeEnum getServiceType() {
         return serviceType;
     }
     
     /**
      * @param 对serviceType进行赋值
      */
-    public void setServiceType(DynamicTableServiceType serviceType) {
+    public void setServiceType(DynamicTableServiceTypeEnum serviceType) {
         this.serviceType = serviceType;
     }
     
     /**
      * @return 返回 type
      */
-    public DynamicTableType getType() {
+    public DynamicTableTypeEnum getType() {
         return type;
     }
     
     /**
      * @param 对type进行赋值
      */
-    public void setType(DynamicTableType type) {
+    public void setType(DynamicTableTypeEnum type) {
         this.type = type;
     }
     
@@ -272,12 +279,18 @@ public class DynamicTable implements Serializable, TableDef {
     }
     
     /**
+     * @param 对columns进行赋值
+     */
+    public void setColumns(List<DynamicTableColumn> columns) {
+        this.columns = columns;
+    }
+    
+    /**
      * @return
      */
     @Override
     public List<? extends TableColumnDef> getColumns() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.columns;
     }
     
     /**
@@ -285,7 +298,11 @@ public class DynamicTable implements Serializable, TableDef {
      */
     @Override
     public List<? extends TableIndexDef> getIndexes() {
-        // TODO Auto-generated method stub
-        return null;
+        List<? extends TableIndexDef> indexs = this.columns.stream()
+                .filter(c -> {
+                    return c.isIndexColumn();
+                })
+                .collect(Collectors.toList());
+        return indexs;
     }
 }

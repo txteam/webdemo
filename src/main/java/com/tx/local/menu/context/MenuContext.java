@@ -47,7 +47,7 @@ public class MenuContext extends MenuContextBuilder {
      * @return BasicDataContext [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
-    */
+     */
     public static MenuContext getContext() {
         if (MenuContext.context != null) {
             return MenuContext.context;
@@ -68,7 +68,7 @@ public class MenuContext extends MenuContextBuilder {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public void reload(){
+    public void reload() {
         doParseMenuConfig();
     }
     
@@ -125,14 +125,24 @@ public class MenuContext extends MenuContextBuilder {
         //根据权限及菜单配置生成最终权限列表
         List<MenuNode> menuNodeList = new ArrayList<>();//(menuType);
         if (this.catalog2nodesMap.containsKey(catalog.toUpperCase())) {
-            menuNodeList.addAll(this.catalog2nodesMap.get(catalog.toUpperCase()));
+            menuNodeList
+                    .addAll(this.catalog2nodesMap.get(catalog.toUpperCase()));
         }
         
         return menuNodeList;
     }
-
-    public Map<String, List<MenuNode>>  getMenuNodeMap(){
+    
+    /**
+     * 
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return Map<String,List<MenuNode>> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public Map<String, List<MenuNode>> getMenuNodeMap() {
         return this.catalog2nodesMap;
     }
-
+    
 }

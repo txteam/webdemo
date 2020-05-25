@@ -43,9 +43,9 @@ public class Notice2User {
     @Column(nullable = false, length = 64)
     private String userId;
     
-    /** 是否阅读 */
+    /** 是否未读 */
     //注: read的被动语态也是read,但read在创建脚本时为特殊字符需要添添加引号才能创建表成功
-    private boolean unread;
+    private boolean unread = true;
     
     /** 是否置顶 */
     private boolean top;

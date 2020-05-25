@@ -28,8 +28,8 @@ import com.tx.core.exceptions.util.AssertUtils;
  * @since  [产品/模块版本]
  */
 @Table(name = "dt_table_column")
-public class DynamicTableColumn implements Serializable, TableColumnDef,
-        TableIndexDef {
+public class DynamicTableColumn
+        implements Serializable, TableColumnDef, TableIndexDef {
     
     /** 注释内容 */
     private static final long serialVersionUID = -3031694155181561970L;
@@ -39,24 +39,36 @@ public class DynamicTableColumn implements Serializable, TableColumnDef,
     private String id;
     
     /** 动态表id */
-    @Column(name = "dynamicTableId")
+    @Column(name = "dynamicTableId", nullable = false, length = 64)
     private DynamicTable dynamicTable;
     
-    /** java类型 */
-    private Class<?> javaType;
+    /** 字段标签（用于显示，一般为中文） */
+    @Column(nullable = false, length = 64)
+    private String label;
     
     /** 对应的属性名称 */
+    @Column(nullable = false, length = 64)
     private String propertyName;
+    
+    /** 字段对应的实际字段名：实际的数据库字段名 */
+    @Column(nullable = false, length = 64)
+    private String columnName;
+    
+    /** 字段注释 */
+    private String comment;
+    
+    /** java类型 */
+    @Column(nullable = false, length = 64)
+    private Class<?> javaType;
     
     /** 数据库类型 */
     private JdbcTypeEnum jdbcType;
     
-    /** 字段类型字符串 */
-    private String columnType;
+    /** 字段长度 */
+    private int size = 32;
     
-    private int size;
-    
-    private int scale;
+    /** 字段精度 */
+    private int scale = 0;
     
     /** 默认值 */
     private String defaultValue;
@@ -67,19 +79,8 @@ public class DynamicTableColumn implements Serializable, TableColumnDef,
     /** 是否唯一：默认非唯一*/
     private boolean primaryKey = false;
     
-    /** 字段对应的实际字段名：实际的数据库字段名 */
-    private String columnName;
-    
-    /* ---- 可修改属性start ---- */
-    
     /** 排序优先级 */
-    private int orderPriority;
-    
-    /** 字段标签（用于显示，一般为中文） */
-    private String label;
-    
-    /** 字段注释 */
-    private String comment;
+    private int priority;
     
     /** 是否是唯一键 */
     private boolean uniqueKey = false;
@@ -96,45 +97,21 @@ public class DynamicTableColumn implements Serializable, TableColumnDef,
     
     /** <默认构造函数> */
     public DynamicTableColumn(Class<?> javaType, String propertyName,
-            String columnName, JdbcTypeEnum jdbcType, String columnType,
-            int size, int scale) {
+            String columnName, JdbcTypeEnum jdbcType, int size, int scale) {
         super();
         AssertUtils.notNull(javaType, "jdbcType is null.");
         AssertUtils.notEmpty(propertyName, "propertyName is empty.");
         AssertUtils.notEmpty(columnName, "columnName is empty.");
         AssertUtils.notNull(jdbcType, "jdbcType is null.");
-        AssertUtils.notEmpty(columnType, "columnType is empty.");
         
         this.jdbcType = jdbcType;
         this.propertyName = propertyName;
         this.javaType = javaType;
         this.columnName = columnName;
-        this.columnType = columnType;
         this.size = size;
         this.scale = scale;
     }
     
-    
-    
-    /**
-     * @return
-     */
-    @Override
-    public String getColumnNames() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * @param ddlDialect
-     * @return
-     */
-    @Override
-    public String getColumnType(Dialect4DDL ddlDialect) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     /**
      * @return 返回 id
      */
@@ -178,20 +155,6 @@ public class DynamicTableColumn implements Serializable, TableColumnDef,
     }
     
     /**
-     * @return 返回 jdbcType
-     */
-    public JdbcTypeEnum getJdbcType() {
-        return jdbcType;
-    }
-    
-    /**
-     * @param 对jdbcType进行赋值
-     */
-    public void setJdbcType(JdbcTypeEnum jdbcType) {
-        this.jdbcType = jdbcType;
-    }
-    
-    /**
      * @return 返回 propertyName
      */
     public String getPropertyName() {
@@ -206,59 +169,17 @@ public class DynamicTableColumn implements Serializable, TableColumnDef,
     }
     
     /**
-     * @return 返回 columnName
+     * @return 返回 jdbcType
      */
-    public String getColumnName() {
-        return columnName;
+    public JdbcTypeEnum getJdbcType() {
+        return jdbcType;
     }
     
     /**
-     * @param 对columnName进行赋值
+     * @param 对jdbcType进行赋值
      */
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
-    
-    /**
-     * @return 返回 label
-     */
-    public String getLabel() {
-        return label;
-    }
-    
-    /**
-     * @param 对label进行赋值
-     */
-    public void setLabel(String label) {
-        this.label = label;
-    }
-    
-    /**
-     * @return 返回 comment
-     */
-    public String getComment() {
-        return comment;
-    }
-    
-    /**
-     * @param 对comment进行赋值
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-    
-    /**
-     * @return 返回 columnType
-     */
-    public String getColumnType() {
-        return columnType;
-    }
-    
-    /**
-     * @param 对columnType进行赋值
-     */
-    public void setColumnType(String columnType) {
-        this.columnType = columnType;
+    public void setJdbcType(JdbcTypeEnum jdbcType) {
+        this.jdbcType = jdbcType;
     }
     
     /**
@@ -290,6 +211,20 @@ public class DynamicTableColumn implements Serializable, TableColumnDef,
     }
     
     /**
+     * @return 返回 defaultValue
+     */
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+    
+    /**
+     * @param 对defaultValue进行赋值
+     */
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+    
+    /**
      * @return 返回 required
      */
     public boolean isRequired() {
@@ -318,6 +253,62 @@ public class DynamicTableColumn implements Serializable, TableColumnDef,
     }
     
     /**
+     * @return 返回 columnName
+     */
+    public String getColumnName() {
+        return columnName;
+    }
+    
+    /**
+     * @param 对columnName进行赋值
+     */
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+    
+    /**
+     * @return 返回 priority
+     */
+    public int getPriority() {
+        return priority;
+    }
+    
+    /**
+     * @param 对priority进行赋值
+     */
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+    
+    /**
+     * @return 返回 label
+     */
+    public String getLabel() {
+        return label;
+    }
+    
+    /**
+     * @param 对label进行赋值
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
+    /**
+     * @return 返回 comment
+     */
+    public String getComment() {
+        return comment;
+    }
+    
+    /**
+     * @param 对comment进行赋值
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+    
+    /**
      * @return 返回 uniqueKey
      */
     public boolean isUniqueKey() {
@@ -329,20 +320,6 @@ public class DynamicTableColumn implements Serializable, TableColumnDef,
      */
     public void setUniqueKey(boolean uniqueKey) {
         this.uniqueKey = uniqueKey;
-    }
-    
-    /**
-     * @return 返回 defaultValue
-     */
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-    
-    /**
-     * @param 对defaultValue进行赋值
-     */
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
     }
     
     /**
@@ -374,16 +351,20 @@ public class DynamicTableColumn implements Serializable, TableColumnDef,
     }
     
     /**
-     * @return 返回 orderPriority
+     * @return
      */
-    public int getOrderPriority() {
-        return orderPriority;
+    @Override
+    public String getColumnNames() {
+        return this.columnName;
     }
     
     /**
-     * @param 对orderPriority进行赋值
+     * @param ddlDialect
+     * @return
      */
-    public void setOrderPriority(int orderPriority) {
-        this.orderPriority = orderPriority;
+    @Override
+    public String getColumnType(Dialect4DDL ddlDialect) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

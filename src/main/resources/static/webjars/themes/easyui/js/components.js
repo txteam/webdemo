@@ -63,6 +63,71 @@ $.widget("txcomponent.selectVirtualCenter",{
     	$.Widget.prototype.destroy.call(this);
     }
 });
+//控件：选择私信接收人
+$.widget("txcomponent.selectReceivedOperator",{
+	options: {
+		contextPath : "",
+		width : 600,
+		height : 500,
+		title : "请选择接收人",
+		eventName : "selectReceivedOperator",
+		openDialogHandler : window.parent.DialogUtils,
+		clearHandler: null,
+		selectHandler: null,
+		handler : null
+	},
+	_create: function(){
+		var _this = this;
+		var _element = _this.element;
+		var _option = _this.options;
+		var action = _option.contextPath + 'operator/message/toSelectReceivedOperator?eventName=' + _option.eventName;
+		if(_option.clearHandler && $.isFunction(_option.clearHandler)){
+			var $clear = $('<span class="icon_span clear"></span>')
+			$(_element).after($clear);
+			$clear.click(function(){
+				_option.clearHandler();
+			});
+		}
+		$(_element).click(function(){
+			var dialog_ = _option.openDialogHandler.openModalDialog("selectReceivedOperator",
+				_option.title,
+				action,
+				_option.width,
+				_option.height,
+				function(){
+					//onClose doNothing
+				},
+				{},
+				[{
+					text : '确认',
+					handler : function() {
+						if(_option.handler){
+							_option.handler.call(_option.handler,_option._data);
+						}
+						_option.openDialogHandler.closeDialogById("selectReceivedOperator");
+					}
+				}]);
+			return false;
+		});
+		//绑定响应选中事件
+		$.bindge("select_receivedOperator_" + _option.eventName,function(event,virtualCenter){
+			_option._data = virtualCenter;
+			if (_option.selectHandler) {
+				_option.selectHandler.call(_option.selectHandler, virtualCenter);
+			}
+		});
+	},
+	destroy : function(){
+		var _this = this;
+		var _element = _this.element;
+		var _option = _this.options;
+
+		$(_element).unbind("click");
+		$.unbindge("select_receivedOperator_" + _option.eventName);
+
+		$.Widget.prototype.destroy.call(this);
+	}
+});
 //控件选择组织
 $.widget("txcomponent.selectOrganization",{
 	options: {

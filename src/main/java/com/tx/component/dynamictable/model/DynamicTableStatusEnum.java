@@ -30,7 +30,7 @@ public enum DynamicTableStatusEnum implements BasicDataEnum {
     OPERATION("OPERATION", "运营态"),
     
     /** 待升级态：运营态的表：一旦发生更新，则进入待升级态 */
-    WAIT_UPDATE("WAIT_UPDATE", "待升级态"),
+    SETTING("SETTING", "配置态"),
     
     /** 停止态：表升级后备份表 */
     STOP("STOP", "停止态");
@@ -46,14 +46,14 @@ public enum DynamicTableStatusEnum implements BasicDataEnum {
         this.code = code;
         this.name = name;
     }
-
+    
     /**
      * @return 返回 code
      */
     public String getCode() {
         return code;
     }
-
+    
     /**
      * @return 返回 name
      */

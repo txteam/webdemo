@@ -44,13 +44,14 @@
 /*<![CDATA[*/
 var grid = null;
 var idFieldName = 'id';
-var nameFieldName = 'id'; 
+var nameFieldName = 'title';
 var entityName = '公告消息';
 $(document).ready(function(){
 	var  $editALink = $("#editALink");
 	var  $deleteALink = $("#deleteALink");
 	var  $enableALink = $("#enableALink");
 	var  $disableALink = $("#disableALink");
+	var  $publishALink = $("#publishALink");
 
 	grid = $('#grid').datagrid({
 		url :/*[[@{/noticeMessage/queryPagedList}]]*/'',
@@ -79,20 +80,11 @@ $(document).ready(function(){
 			{title : 'id',width : 100,hidden:true,field:'id'}
 		] ],
 		columns: [ [
-			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
-			{title:'lastUpdateUserId',width:100,field:'lastUpdateUserId'},
-			{title:'title',width:100,field:'title'},
-			{title:'是否有效',width:80,field:'valid',formatter:$.Formatters.booleanFun},
-			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
-			{title:'createUserId',width:100,field:'createUserId'},
-			{title:'sender',width:100,field:'sender'},
-			{title:'分类',width:100,field:'catalog'},
-			{title:'content',width:100,field:'content'},
-			{title:'invalidDate',width:100,field:'invalidDate',formatter:$.Formatters.dateFun},
-			{title:'publishDate',width:100,field:'publishDate',formatter:$.Formatters.dateFun},
-			{title:'priority',width:100,field:'priority'},
-			{title:'published',width:80,field:'published',formatter:$.Formatters.booleanFun},
-			{title:'attributes',width:100,field:'attributes'},
+			{title:'标题',width:200,field:'title'},
+			{title:'发送者',width:100,field:'sender'},
+			{title:'是否发布',width:80,field:'published',formatter:$.Formatters.booleanFun},
+			{title:'发布时间',width:150,field:'publishDate',formatter:$.Formatters.dateFun},
+			{title:'创建时间',width:150,field:'createDate',formatter:$.Formatters.dateFun},
 			{title:'操作',width:100,field:'_action',
 				formatter : function(value, row, index) {
 					var str = '&nbsp;';
@@ -130,6 +122,11 @@ $(document).ready(function(){
 				$enableALink.show();
 				$enableALink.linkbutton('enable');
 			}
+			if(row.published){
+				$publishALink.linkbutton('disable');
+			}else{
+				$publishALink.linkbutton('enable');
+			}
 		},
 		onLoadSuccess : function() {
 			$(this).datagrid('unselectAll');
@@ -141,6 +138,7 @@ $(document).ready(function(){
 			$disableALink.show();
 			$enableALink.linkbutton('disable');
 			$disableALink.linkbutton('disable');
+			$publishALink.linkbutton('disable');
 		}
 	});
 });
@@ -324,6 +322,47 @@ function enableFun(id,name){
     });
     return false;
 }
+/*
+ * 发布
+ */
+function publishFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定公告消息
+	DialogUtils.confirm(
+			"确认提醒" ,
+			$.formatString("是否确认发布{0}:[{1}]?",entityName,name),
+			function(data){
+				if(data){
+					DialogUtils.progress({
+						text : '数据提交中，请等待....'
+					});
+					//如果确认启用指定公告消息
+					$.post(
+							/*[[@{/noticeMessage/publishById}]]*/'',
+							{id:id},
+							function(data){
+								DialogUtils.progress('close');
+								if(data){
+									DialogUtils.tip("发布" + entityName + "成功.");
+								}else{
+									var errorMessage = $.formatString("发布{0}失败.",entityName);
+									DialogUtils.alert("错误提示",errorMessage,"error");
+								}
+								queryFun();
+							}
+					);
+				}
+			});
+	return false;
+}
 /*]]>*/
 </script>
 </head>
@@ -333,9 +372,9 @@ function enableFun(id,name){
 		<form id="queryForm" class="form">
 			<table class="table table-hover table-condensed">
 				<tr>
-					<th width="20%">名称:</th>
+					<th width="20%">标题:</th>
 					<td width="30%"><input id="name" name="name"/></td>
-					<th width="20%">是否有效</th>
+					<th width="20%">是否发布</th>
 					<td width="30%">
 						<select id="valid" name="valid">
 							<option value="">--- 不限 ---</option>
@@ -362,7 +401,8 @@ function enableFun(id,name){
 		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
 		<a id="enableALink" onclick="enableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">启用</a>
 		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
-		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
+		<a id="publishALink" onclick="publishFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon'">发布</a>
+		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);"
 			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 	</div>
 </body>

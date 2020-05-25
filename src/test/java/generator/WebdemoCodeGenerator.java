@@ -8,7 +8,6 @@ import java.io.IOException;
 import com.tx.core.generator2.CodeGenerator;
 import com.tx.core.generator2.model.ViewTypeEnum;
 import com.tx.local.message.model.DialogMessage;
-import com.tx.local.message.model.PrivateMessage;
 
 /**
  * 基础数据生成类<br/>

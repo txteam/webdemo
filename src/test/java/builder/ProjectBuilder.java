@@ -24,6 +24,7 @@ public class ProjectBuilder {
     
     public static void main(String[] args) throws IOException {
         String projectName = "newwebdemo";
+        boolean overwrite = true;
         String workspace = "D:/develop/txworkspace";
         
         //原项目路径
@@ -34,17 +35,30 @@ public class ProjectBuilder {
         ///D:/develop/txworkspace/webdemo
         
         File targetProjectFolder = new File(workspace + "/" + projectName);
-        if (targetProjectFolder.exists()) {
+        if (targetProjectFolder.exists() && !overwrite) {
             System.out
                     .println("项目文件已经存在.path:" + targetProjectFolder.getPath());
             return;
         }
-        File sourceProjectFolder = new File(sourceProjectPath);
         
-        //创建项目文件夹
-        FileUtils.forceMkdir(targetProjectFolder);
-        
+        if (!targetProjectFolder.exists()){
+            File sourceProjectFolder = new File(sourceProjectPath);
+            //创建项目文件夹
+            FileUtils.forceMkdir(targetProjectFolder);
+        }
         //拷贝文件夹
+        //pom文件，替换项目名写入
+        
+        //写入src/main/java目录内容
+        
+        //写入src/main/resources目录内容
+        
+        //写入src/test/java目录内容
+        
+        //写入src/test/resources目录内容
+        
+        
+        
         
         //根据项目名覆盖相关文件
     }

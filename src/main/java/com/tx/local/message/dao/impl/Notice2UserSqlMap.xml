@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notice2User">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="notice2UserMap" 
+		type="com.tx.local.message.model.Notice2User">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.message.model.Notice2User"
+		resultMap="notice2UserMap">
+		SELECT 
+				NU.id,
+				NU.top,
+				NU.readDate,
+				NU.userId,
+				NU.userType,
+				NU.noticeId,
+				NU.unread
+		  FROM MSG_NOTICE_2_USER NU
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND NU.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="notice2UserMap">
+		SELECT 
+				NU.id,
+				NU.top,
+				NU.readDate,
+				NU.userId,
+				NU.userType,
+				NU.noticeId,
+				NU.unread
+		  FROM MSG_NOTICE_2_USER NU
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND NU.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(top)">  
+	            <![CDATA[ AND NU.top = #{top} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userId)">  
+	            <![CDATA[ AND NU.userId = #{userId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userType)">  
+	            <![CDATA[ AND NU.userType = #{userType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(noticeId)">  
+	            <![CDATA[ AND NU.noticeId = #{noticeId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(unread)">  
+	            <![CDATA[ AND NU.unread = #{unread} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND NU.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY id DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM MSG_NOTICE_2_USER NU
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND NU.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(top)">  
+	            <![CDATA[ AND NU.top = #{top} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userId)">  
+	            <![CDATA[ AND NU.userId = #{userId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(userType)">  
+	            <![CDATA[ AND NU.userType = #{userType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(noticeId)">  
+	            <![CDATA[ AND NU.noticeId = #{noticeId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(unread)">  
+	            <![CDATA[ AND NU.unread = #{unread} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND NU.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.message.model.Notice2User">
+		INSERT INTO MSG_NOTICE_2_USER
+		(
+			id,
+			top,
+			readDate,
+			userId,
+			userType,
+			noticeId,
+			unread
+		)
+		VALUES
+		(
+			#{id},
+			#{top},
+			#{readDate},
+			#{userId},
+			#{userType},
+			#{noticeId},
+			#{unread}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.message.model.Notice2User">
+		DELETE FROM MSG_NOTICE_2_USER  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE MSG_NOTICE_2_USER
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('top')">
+	    		top = #{top,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('readDate')">
+	    		readDate = #{readDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('userId')">
+	    		userId = #{userId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('userType')">
+	    		userType = #{userType,javaType=com.tx.local.message.model.MessageUserTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('noticeId')">
+	    		noticeId = #{noticeId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('unread')">
+	    		unread = #{unread,javaType=boolean},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

@@ -4,31 +4,42 @@
  * 修改时间:
  * <修改描述:>
  */
-package com.tx.local.message.facade;
+package com.tx.local.message.controller;
 
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
+import com.tx.local.message.facade.NoticeMessageFacade;
 import com.tx.local.message.model.NoticeMessage;
+import com.tx.local.message.service.NoticeMessageService;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Api;
 
 /**
- * 公告消息接口门面层[NoticeMessageFacade]<br/>
+ * 公告消息API控制层[NoticeMessageAPIController]<br/>
  * 
  * @author []
  * @version [版本号]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface NoticeMessageFacade {
+@RestController
+@Api(tags = "公告消息API")
+@RequestMapping("/api/noticeMessage")
+public class NoticeMessageAPIController implements NoticeMessageFacade {
+    
+    //公告消息业务层
+    @Resource(name = "noticeMessageService")
+    private NoticeMessageService noticeMessageService;
     
     /**
      * 新增公告消息<br/>
@@ -39,9 +50,11 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "新增公告消息")
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public NoticeMessage insert(@RequestBody NoticeMessage noticeMessage);
+    @Override
+    public NoticeMessage insert(@RequestBody NoticeMessage noticeMessage) {
+        this.noticeMessageService.insert(noticeMessage);
+        return noticeMessage;
+    }
     
     /**
      * 根据id删除公告消息<br/> 
@@ -53,11 +66,13 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据ID删除公告消息")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
+    @Override
     public boolean deleteById(
-            @PathVariable(value = "id", required = true) String id);
-
+    		@PathVariable(value = "id",required=true) String id) {
+        boolean flag = this.noticeMessageService.deleteById(id);
+        return flag;
+    }
+    
     /**
      * 更新公告消息<br/>
      * <功能详细描述>
@@ -68,11 +83,13 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "修改公告消息")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public boolean updateById(@PathVariable(value = "id", required = true) String id,
-                              @RequestBody NoticeMessage noticeMessage);
-
+    @Override
+    public boolean updateById(@PathVariable(value = "id",required=true) String id,
+    		@RequestBody NoticeMessage noticeMessage) {
+        boolean flag = this.noticeMessageService.updateById(id,noticeMessage);
+        return flag;
+    }
+    
     /**
      * 禁用公告消息<br/>
      * @param id
@@ -82,10 +99,12 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-	@ApiOperation(value = "禁用公告消息")
-    @RequestMapping(value = "/disable/{id}", method = RequestMethod.PATCH)
+	@Override
     public boolean disableById(
-            @PathVariable(value = "id", required = true) String id);
+    		@PathVariable(value = "id", required = true) String id) {
+        boolean flag = this.noticeMessageService.disableById(id);
+        return flag;
+    }
     
     /**
      * 启用公告消息<br/>
@@ -97,10 +116,12 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "启用公告消息")
-    @RequestMapping(value = "/enable/{id}", method = RequestMethod.PATCH)
+    @Override
     public boolean enableById(
-            @PathVariable(value = "id", required = true) String id);
+    		@PathVariable(value = "id", required = true) String id) {
+        boolean flag = this.noticeMessageService.enableById(id);
+        return flag;
+    }
 
     /**
      * 根据主键查询公告消息<br/>
@@ -111,11 +132,13 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据主键查询公告消息")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @Override
     public NoticeMessage findById(
-            @PathVariable(value = "id", required = true) String id);
-    
+            @PathVariable(value = "id", required = true) String id) {
+        NoticeMessage res = this.noticeMessageService.findById(id);
+        
+        return res;
+    }
 
     /**
      * 查询公告消息实例列表<br/>
@@ -128,12 +151,18 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询公告消息列表")
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @Override
     public List<NoticeMessage> queryList(
-            @RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier
-    );
+			@RequestParam(value = "valid", required = false) Boolean valid,
+    		@RequestBody Querier querier
+    	) {
+        List<NoticeMessage> resList = this.noticeMessageService.queryList(
+			valid,
+			querier         
+        );
+  
+        return resList;
+    }
     
     /**
      * 查询公告消息分页列表<br/>
@@ -148,14 +177,21 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询公告消息分页列表")
-    @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
+    @Override
     public PagedList<NoticeMessage> queryPagedList(
-            @RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier,
-            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+			@RequestParam(value = "valid", required = false) Boolean valid,
+			@RequestBody Querier querier,
+			@PathVariable(value = "pageNumber", required = true) int pageIndex,
             @PathVariable(value = "pageSize", required = true) int pageSize
-    );
+    	) {
+        PagedList<NoticeMessage> resPagedList = this.noticeMessageService.queryPagedList(
+			valid,
+			querier,
+			pageIndex,
+			pageSize
+        );
+        return resPagedList;
+    }
     
 	/**
      * 查询公告消息数量<br/>
@@ -168,11 +204,16 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询公告消息数量")
-    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    @Override
     public int count(
-            @RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier);
+			@RequestParam(value = "valid", required = false) Boolean valid,
+            @RequestBody Querier querier) {
+        int count = this.noticeMessageService.count(
+			valid,
+        	querier);
+        
+        return count;
+    }
 
 	/**
      * 查询公告消息是否存在<br/>
@@ -184,10 +225,11 @@ public interface NoticeMessageFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询公告消息是否存在")
-    @RequestMapping(value = "/exists", method = RequestMethod.GET)
-    public boolean exists(
-            @RequestBody Querier querier,
-            @RequestParam(value = "excludeId", required = false) String excludeId
-    );
+    @Override
+    public boolean exists(@RequestBody Querier querier,
+            @RequestParam(value = "excludeId", required = false) String excludeId) {
+        boolean flag = this.noticeMessageService.exists(querier, excludeId);
+        
+        return flag;
+    }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>编辑公告消息[updateNoticeMessage]</title>
+	<title>新增私信[addPrivateMessage]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -44,37 +44,22 @@
 /*<![CDATA[*/
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
-	
-	//验证器
-	$('#entityForm').validator({
-	    valid: function(){
-	        //表单验证通过，提交表单到服务器
-	        DialogUtils.progress({
-	            text : '数据提交中，请等待....'
-	    	});
-			$('#entityForm').ajaxSubmit({
-			    url:/*[[@{/noticeMessage/update}]]*/'',
-			    success: function(data) {
-			    	DialogUtils.progress('close');
-					if(data){
-						parent.DialogUtils.tip("修改公告消息成功.");
-						parent.DialogUtils.closeDialogById("updateNoticeMessage");
-					}else{
-						DialogUtils.alert("错误提示","修改公告消息失败.","error");
-					}
-			    } 
-			});
-			return false;
-	    }
-	});
-	
+	var unread = [[${unread}]];
+	if(unread){
+		var id = [[${id}]];
+		$.ajax({
+			type: "GET",
+			url: _contextPath+"operator/message/readById",
+			data: {id:id},
+			dataType: "json",
+			success: function(data){
+
+			}
+		});
+	}
 	//退出
 	$("#cancelBtn").click(function(){
-		parent.DialogUtils.closeDialogById("updateNoticeMessage");
-	});
-	//提交
-	$("#submitBtn").click(function(){
-		$('#entityForm').submit();
+		parent.DialogUtils.closeDialogById("showPrivateMessageContent");
 	});
 });
 /*]]>*/
@@ -82,61 +67,15 @@ $(document).ready(function(){
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow-x: hidden;overflow-y: auto;">
-		<form id="entityForm" method="post" class="form" th:object="${noticeMessage}">
-			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
+		<form id="entityForm" method="post" class="form">
 			<table class="table">
-				<tr>
-					<th class="narrow" width="25%">发送者:</th>
-					<td>
-						<input id="sender" name="sender" type="text" data-rule="sender:length[0~128];"
-							   th:value="*{sender}"/>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" width="25%">分类:</th>
-					<td>
-						<!-- //TODO:修改其显示逻辑 -->
-						<input id="catalog.id" name="catalog.id" th:value="*{catalog?.id}"/>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" width="25%">优先级:</th>
-					<td>
-						<select id="priority" name="priority" >
-							<option value="">--- 请选择 ---</option>
-							<option th:each="priorityTemp:${prioritys}" th:value="${priorityTemp.code}" th:text="${priorityTemp.name}" th:selected="${noticeMessage.priority eq priorityTemp}"></option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th class="narrow" width="25%">标题:<span class="tRed">*</span></th>
-					<td>
-						<input id="title" name="title" type="text" data-rule="title:required;length[1~50];"
-							   th:value="*{title}"/>
-					</td>
-				</tr>
 				<tr>
 					<th class="narrow" width="25%">内容:</th>
 					<td>
-						<!--<input id="content" name="content" type="text" data-rule="content:length[0~2000];"
-							   th:value="*{content}"/>-->
-						<textarea name="content" id="content" th:text="*{content}" cols="30" rows="10" data-rule="content:length[0~2000];"></textarea>
+						<textarea name="content" id="content" th:text="*{content}" readonly="readonly" cols="40" rows="20"></textarea>
 					</td>
 				</tr>
-				<!--<tr>
-					<th class="narrow" width="25%">published:</th>
-					<td>
-						<select id="published" name="published" >
-							<option value="true" th:selected="${noticeMessage.published eq true}">是</form:option>
-							<option value="false" th:selected="${noticeMessage.published eq false}">否</form:option>
-						</select>
-					</td>
-				</tr>-->
 			</table>
 		</form>
-	</div>
-	
-	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
-		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
 	</div>
 </body>

@@ -6,13 +6,13 @@
  */
 package com.tx.local.message.service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 
+import com.tx.local.message.model.Notice2User;
+import com.tx.local.security.util.WebContextUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -210,6 +210,12 @@ public class PrivateMessageService {
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         PagedList<PrivateMessage> resPagedList = this.privateMessageDao
                 .queryPagedList(params, pageIndex, pageSize);
+        if(CollectionUtils.isNotEmpty(resPagedList.getList())){
+            for (PrivateMessage privateMessage : resPagedList.getList()) {
+                privateMessage.setSenderUserType(null);
+                privateMessage.setUserType(null);
+            }
+        }
         
         return resPagedList;
     }
@@ -391,6 +397,43 @@ public class PrivateMessageService {
         
         boolean flag = updateById(privateMessage.getId(), privateMessage);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return flag;
+    }
+
+    @Transactional
+    public boolean readAll() {
+
+        Map<String, Object> queryParams = new HashMap<String, Object>();
+        queryParams.put("userId", WebContextUtils.getOperatorId());
+        queryParams.put("unread",true);
+        List<PrivateMessage> privateMessages = this.privateMessageDao.queryList(queryParams);
+
+        List<Map<String, Object>> list = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(privateMessages)){
+            for (PrivateMessage privateMessage : privateMessages) {
+                Map<String, Object> params = new HashMap<String, Object>();
+                params.put("id",privateMessage.getId());
+                params.put("unread", false);
+                params.put("readDate",new Date());
+                list.add(params);
+            }
+            this.privateMessageDao.batchUpdate(list);
+        }
+
+        return true;
+    }
+
+    /**
+     * 根据id标记私信为已读
+     * @return
+     */
+    @Transactional
+    public boolean readById(String id) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("id",id);
+        params.put("unread", false);
+        params.put("readDate",new Date());
+        boolean flag = this.privateMessageDao.update(params) > 0;
         return flag;
     }
 }

@@ -8,9 +8,9 @@
 	</parent>
 
 	<version>9.0.x-SNAPSHOT</version>
-	<artifactId>webdemo</artifactId>
-	<name>webdemo</name>
-	<description>webdemo</description>
+	<artifactId>${project_name}</artifactId>
+	<name>${project_name}</name>
+	<description>${project_description}</description>
 	<packaging>jar</packaging>
 
 	<properties>
