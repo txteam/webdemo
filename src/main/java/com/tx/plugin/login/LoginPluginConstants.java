@@ -34,4 +34,7 @@ public interface LoginPluginConstants {
     
     /** targetName:  */
     public static final String TARGET_NAME_LOGIN_4_CLIENT = "LOGIN_4_CLIENT";
+    
+    /** targetName:  */
+    public static final String TARGET_NAME_LOGIN_4_PERSONAL = "LOGIN_4_PERSONAL";
 }

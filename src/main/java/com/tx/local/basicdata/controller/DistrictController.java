@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -306,16 +305,14 @@ public class DistrictController {
     @ResponseBody
     @RequestMapping("/queryChildren")
     public List<District> queryChildren(
-            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam(value = "type", required = false) DistrictTypeEnum type,
             @RequestParam(value = "level", required = false) Integer level,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         
-        if (StringUtils.isEmpty(request.getFirst("parentIdLike"))) {
-            params.put("parentId", request.getFirst("parentId"));
-        } else {
+        if (!StringUtils.isEmpty(request.getFirst("parentIdLike"))) {
             String parentIdLike = request.getFirst("parentIdLike");
             parentIdLike = parentIdLike.substring(0,
                     parentIdLike.indexOf("0000"));
@@ -355,16 +352,14 @@ public class DistrictController {
     @ResponseBody
     @RequestMapping("/queryDescendants")
     public List<District> queryDescendants(
-            @PathVariable(value = "parentId", required = true) String parentId,
+            @RequestParam(value = "parentId", required = true) String parentId,
             @RequestParam(value = "valid", required = false) Boolean valid,
             @RequestParam(value = "type", required = false) DistrictTypeEnum type,
             @RequestParam(value = "level", required = false) Integer level,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         
-        if (StringUtils.isEmpty(request.getFirst("parentIdLike"))) {
-            params.put("parentId", request.getFirst("parentId"));
-        } else {
+        if (!StringUtils.isEmpty(request.getFirst("parentIdLike"))) {
             String parentIdLike = request.getFirst("parentIdLike");
             parentIdLike = parentIdLike.substring(0,
                     parentIdLike.indexOf("0000"));

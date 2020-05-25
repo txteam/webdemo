@@ -66,6 +66,9 @@ public class LoginPluginController {
         String targetName = LoginPluginUtils.popTargetName();
         //根据targetName(目标名)决定后续逻辑
         switch (targetName) {
+            case LoginPluginConstants.TARGET_NAME_LOGIN_4_PERSONAL: {
+                return "redirect:/wap/personal/social/prelogin/" + plugin + "?code=" + code + "&state=" + state;
+            }
             case LoginPluginConstants.TARGET_NAME_BIND_4_OPERATOR: {
                 return "forward:/operator/social/bind/" + plugin;
             }

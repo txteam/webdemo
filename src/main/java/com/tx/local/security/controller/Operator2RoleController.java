@@ -33,7 +33,8 @@ import com.tx.component.role.model.Role;
 import com.tx.component.role.service.RoleRefService;
 import com.tx.component.security.context.SecurityContext;
 import com.tx.core.querier.model.QuerierBuilder;
-import com.tx.local.operator.facade.OperatorFacade;
+import com.tx.local.operator.model.OperatorRoleEnum;
+import com.tx.local.operator.service.OperatorService;
 import com.tx.local.organization.facade.OrganizationFacade;
 import com.tx.local.organization.facade.PostFacade;
 import com.tx.local.security.model.CheckAbleRole;
@@ -54,7 +55,7 @@ import com.tx.local.security.util.WebContextUtils;
 public class Operator2RoleController implements InitializingBean {
     
     @Resource
-    private OperatorFacade operatorFacade;
+    private OperatorService operatorService;
     
     @Resource
     private OrganizationFacade organizationFacade;
@@ -279,7 +280,7 @@ public class Operator2RoleController implements InitializingBean {
      * @return boolean [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
-    */
+     */
     @ResponseBody
     @RequestMapping("/saveRole2Operator")
     public boolean saveRole2Operator(@RequestParam("roleId") String roleId,
@@ -294,6 +295,62 @@ public class Operator2RoleController implements InitializingBean {
                 RoleConstants.ROLEREFTYPE_OPERATOR,
                 refIds,
                 filterRefIds);
+        return true;
+    }
+    
+    /**
+     * 设置为系统管理员<br/>
+     * <功能详细描述>
+     * @param roleTypeId
+     * @param operatorId
+     * @param roleIds
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/setToAdmin")
+    public boolean setToAdmin(
+            @RequestParam(value = "operatorId", required = false) String operatorId,
+            @RequestParam() MultiValueMap<String, String> request) {
+        List<String> roleIdList = Arrays.asList(OperatorRoleEnum.ADMIN.getId());
+        List<String> filterRoleIds = Arrays
+                .asList(OperatorRoleEnum.ADMIN.getId());
+        this.roleRefService.saveForRoleIds(RoleConstants.ROLEREFTYPE_OPERATOR,
+                operatorId,
+                roleIdList,
+                filterRoleIds);
+        this.operatorService.updateIsAdminById(operatorId, true);
+        return true;
+    }
+    
+    /**
+     * 设置为非系统管理员<br/>
+     * <功能详细描述>
+     * @param roleTypeId
+     * @param operatorId
+     * @param roleIds
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/setToNotAdmin")
+    public boolean setToNotAdmin(
+            @RequestParam(value = "operatorId", required = false) String operatorId,
+            @RequestParam() MultiValueMap<String, String> request) {
+        List<String> roleIdList = new ArrayList<>();
+        List<String> filterRoleIds = Arrays
+                .asList(OperatorRoleEnum.ADMIN.getId());
+        this.roleRefService.saveForRoleIds(RoleConstants.ROLEREFTYPE_OPERATOR,
+                operatorId,
+                roleIdList,
+                filterRoleIds);
+        this.operatorService.updateIsAdminById(operatorId, false);
         return true;
     }
 }

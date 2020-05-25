@@ -7,10 +7,10 @@
 	<!-- auto generate default resultMap -->
 	<resultMap id="districtMap" 
 		type="com.tx.local.basicdata.model.District">
-		<result column="parent_id" property="parent.id"/>
-		<result column="city_id" property="city.id"/>
-		<result column="county_id" property="county.id"/>
-		<result column="province_id" property="province.id"/>
+		<result column="parentId" property="parent.id"/>
+		<result column="cityId" property="city.id"/>
+		<result column="countyId" property="county.id"/>
+		<result column="provinceId" property="province.id"/>
 	</resultMap>
 	
 	<!-- auto generate default find -->

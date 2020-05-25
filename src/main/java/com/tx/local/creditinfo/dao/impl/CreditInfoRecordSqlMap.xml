@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="creditInfoRecord">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="creditInfoRecordMap" 
+		type="com.tx.local.creditinfo.model.CreditInfoRecord">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.creditinfo.model.CreditInfoRecord"
+		resultMap="creditInfoRecordMap">
+		SELECT 
+				CIR.id,
+				CIR.idCardType,
+				CIR.idCardNumber,
+				CIR.baseVersion,
+				CIR.lastUpdateDate,
+				CIR.lastUpdateUserId,
+				CIR.type,
+				CIR.createDate,
+				CIR.createUserId,
+				CIR.locked,
+				CIR.version
+		  FROM CLI_CREDIT_INFO CIR
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND CIR.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="creditInfoRecordMap">
+		SELECT 
+				CIR.id,
+				CIR.idCardType,
+				CIR.idCardNumber,
+				CIR.baseVersion,
+				CIR.lastUpdateDate,
+				CIR.lastUpdateUserId,
+				CIR.type,
+				CIR.createDate,
+				CIR.createUserId,
+				CIR.locked,
+				CIR.version
+		  FROM CLI_CREDIT_INFO CIR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND CIR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND CIR.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND CIR.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(baseVersion)">  
+	            <![CDATA[ AND CIR.baseVersion = #{baseVersion} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
+	            <![CDATA[ AND CIR.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND CIR.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CIR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CIR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
+	            <![CDATA[ AND CIR.createUserId = #{createUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            <![CDATA[ AND CIR.locked = #{locked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(version)">  
+	            <![CDATA[ AND CIR.version = #{version} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND CIR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM CLI_CREDIT_INFO CIR
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND CIR.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
+	            <![CDATA[ AND CIR.idCardType = #{idCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND CIR.idCardNumber = #{idCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(baseVersion)">  
+	            <![CDATA[ AND CIR.baseVersion = #{baseVersion} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
+	            <![CDATA[ AND CIR.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND CIR.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND CIR.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND CIR.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
+	            <![CDATA[ AND CIR.createUserId = #{createUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(locked)">  
+	            <![CDATA[ AND CIR.locked = #{locked} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(version)">  
+	            <![CDATA[ AND CIR.version = #{version} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND CIR.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.creditinfo.model.CreditInfoRecord">
+		INSERT INTO CLI_CREDIT_INFO
+		(
+			id,
+			idCardType,
+			idCardNumber,
+			baseVersion,
+			lastUpdateDate,
+			lastUpdateUserId,
+			type,
+			createDate,
+			createUserId,
+			locked,
+			version
+		)
+		VALUES
+		(
+			#{id},
+			#{idCardType},
+			#{idCardNumber},
+			#{baseVersion},
+			#{lastUpdateDate},
+			#{lastUpdateUserId},
+			#{type},
+			#{createDate},
+			#{createUserId},
+			#{locked},
+			#{version}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.creditinfo.model.CreditInfoRecord">
+		DELETE FROM CLI_CREDIT_INFO  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE CLI_CREDIT_INFO
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('baseVersion')">
+	    		baseVersion = #{baseVersion,javaType=int},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateUserId')">
+	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('locked')">
+	    		locked = #{locked,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('version')">
+	    		version = #{version,javaType=int},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

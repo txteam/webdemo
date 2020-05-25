@@ -55,7 +55,7 @@ public class OperatorSocialAuthenticationProcessingFilter
     
     /** <默认构造函数> */
     public OperatorSocialAuthenticationProcessingFilter() {
-        super(new AntPathRequestMatcher("/operator/social/login/**", "GET"));
+        super(new AntPathRequestMatcher("/operator/social/sign/**", "GET"));
     }
     
     /**
@@ -96,7 +96,7 @@ public class OperatorSocialAuthenticationProcessingFilter
         }
         
         OperSocialAccountTypeEnum type = LoginPluginUtils
-                .getTypeByPlugin(plugin);
+                .getOperSocialTypeByPlugin(plugin);
         if (type == null) {
             throw new SocialUserLoginException("关联类型解析异常.plugin:" + plugin);
         }

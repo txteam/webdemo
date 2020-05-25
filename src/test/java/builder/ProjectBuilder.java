@@ -8,8 +8,14 @@ package builder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+
+import com.tx.core.util.FreeMarkerUtils;
 
 /**
  * 项目构建器<br/>
@@ -27,6 +33,10 @@ public class ProjectBuilder {
         boolean overwrite = true;
         String workspace = "D:/develop/txworkspace";
         
+        //项目强依赖模块
+        Set<String> moduleSet = new HashSet<>();
+        moduleSet.add("");
+        
         //原项目路径
         String sourceProjectPath = org.springframework.util.StringUtils
                 .cleanPath(ProjectBuilder.class.getResource("/").getPath()
@@ -41,13 +51,20 @@ public class ProjectBuilder {
             return;
         }
         
-        if (!targetProjectFolder.exists()){
+        if (!targetProjectFolder.exists()) {
             File sourceProjectFolder = new File(sourceProjectPath);
             //创建项目文件夹
             FileUtils.forceMkdir(targetProjectFolder);
         }
         //拷贝文件夹
         //pom文件，替换项目名写入
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("project_name", projectName);
+        params.put("project_description", projectName);
+        FreeMarkerUtils.fprint(ProjectBuilder.class,
+                "builder/pom.ftl",
+                params,
+                targetProjectFolder + "/pom.xml");
         
         //写入src/main/java目录内容
         
@@ -56,9 +73,6 @@ public class ProjectBuilder {
         //写入src/test/java目录内容
         
         //写入src/test/resources目录内容
-        
-        
-        
         
         //根据项目名覆盖相关文件
     }

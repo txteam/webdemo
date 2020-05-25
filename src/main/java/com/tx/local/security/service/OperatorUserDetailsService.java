@@ -141,6 +141,7 @@ public class OperatorUserDetailsService
             refMap.add(AuthConstants.AUTHREFTYPE_POST,
                     operator.getMainPostId());
         }
+        
         //角色权限
         boolean isSuperAdmin = false;
         List<RoleRef> roleRefList = this.roleRefService.queryListByRef(true,
@@ -148,6 +149,7 @@ public class OperatorUserDetailsService
                 operator.getId(),
                 null);
         isSuperAdmin = isSuperAdmin(operator, roleRefList);
+        boolean isAdmin = isAdmin(operator, roleRefList);
         List<Role> roles = new ArrayList<>();
         //无论是否是超级管理员，都需要将其所拥有的角色进行加载
         roleRefList.stream()
@@ -165,14 +167,15 @@ public class OperatorUserDetailsService
         if (isSuperAdmin) {
             //如果为超级管理员，则将超级管理员角色加入
             roles.add(roleRegistry
-                    .findById(OperatorRoleEnum.ROLE_SUPER_ADMIN.getId()));
+                    .findById(OperatorRoleEnum.SUPER_ADMIN.getId()));
         }
         //所有的操作人员均拥有角色operator
-        roles.add(roleRegistry.findById(OperatorRoleEnum.ROLE_OPERATOR.getId()));
+        roles.add(roleRegistry.findById(OperatorRoleEnum.OPERATOR.getId()));
         
         //查询用户的权限：根据用户的所属组织，职位，角色查询
         List<Auth> auths = new ArrayList<>();
-        if (isSuperAdmin) {
+        if (isSuperAdmin || isAdmin) {
+            //查询系统所有可授予的操作人员操作权限以及数据权限，当人员为超级管理员或系统管理员时，不再读取实际配置了哪些权限
             String[] authTypeIds = Arrays
                     .asList(AuthTypeEnum.AUTH_TYPE_OPERATOR_OPERATE.getId(),
                             AuthTypeEnum.AUTH_TYPE_OPERATOR_DATA.getId())
@@ -214,7 +217,29 @@ public class OperatorUserDetailsService
             return true;
         }
         for (RoleRef rf : roleRefList) {
-            if (OperatorRoleEnum.ROLE_SUPER_ADMIN.getId().equals(rf.getId())) {
+            if (OperatorRoleEnum.SUPER_ADMIN.getId().equals(rf.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /** 
+     * 判断当前用户是否为超级管理员<br/>
+     * <功能详细描述>
+     * @param operator
+     * @param isSuperAdmin
+     * @param roleRefList
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    protected boolean isAdmin(Operator operator,
+            List<RoleRef> roleRefList) {
+        for (RoleRef rf : roleRefList) {
+            if (OperatorRoleEnum.ADMIN.getId().equals(rf.getRoleId())) {
                 return true;
             }
         }

@@ -16,7 +16,7 @@ import com.tx.local.basicdata.model.BankCardTypeEnum;
 import com.tx.local.basicdata.model.BankInfo;
 
 /**
- * <功能简述>
+ * 客户银行卡信息<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -26,18 +26,28 @@ import com.tx.local.basicdata.model.BankInfo;
  */
 public class ClientBankCard {
     
+    /** 客户银行卡id */
+    private String id;
+    
+    /** 客户id */
+    @Column(name = "bankInfoId", length = 64, nullable = false, updatable = false)
+    private String clientId;
+    
     /**银行名称*/
-    @Column(name = "bankInfoId")
+    @Column(name = "bankInfoId", length = 64, nullable = false, updatable = false)
     private BankInfo bankInfo;
     
     /** 卡类型借记卡=DE；信用卡=CR */
-    private BankCardTypeEnum bankCardType;
+    private BankCardTypeEnum type;
     
     /** 银行卡号 */
-    private String bankCardNumber;
+    private String number;
     
-    /** 是否绑定银行卡 */
-    private boolean bankCardBinding;
+    /** 是否是默认的银行卡 */
+    private boolean defaults;
+    
+    /** 状态： */
+    private String state;
     
     /** 银行卡绑定错误时间 */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

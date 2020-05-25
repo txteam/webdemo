@@ -83,6 +83,9 @@ public class Operator implements Serializable {
     /** 是否可用 */
     private boolean valid = true;
     
+    /** 是否为系统管理员：系统管理员不仅这个值为true，也需要拥有角色，这里仅仅服务于显示 */
+    private boolean admin = false;
+    
     /** 失效时间 */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date invalidDate;
@@ -315,6 +318,20 @@ public class Operator implements Serializable {
      */
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+    
+    /**
+     * @return 返回 admin
+     */
+    public boolean isAdmin() {
+        return admin;
+    }
+    
+    /**
+     * @param 对admin进行赋值
+     */
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
     
     /**

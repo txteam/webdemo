@@ -52,7 +52,7 @@ public class ClientAuthenticationProcessingFilter
     /** <默认构造函数> */
     public ClientAuthenticationProcessingFilter() {
         super();
-        setFilterProcessesUrl("/client/login");
+        setFilterProcessesUrl("/client/sign");
     }
     
     /**
@@ -85,7 +85,6 @@ public class ClientAuthenticationProcessingFilter
         
         ClientLoginFormAuthenticationToken authRequest = new ClientLoginFormAuthenticationToken(
                 username, password);
-        
         // Allow subclasses to set the "details" property
         setDetails(request, authRequest);
         

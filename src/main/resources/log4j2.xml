@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration monitorInterval="300">
 	<Properties>
-		<property name="content_name" value="webdemo" />
+		<property name="content_name" value="${app.server.name}" />
 		<property name="log_path" value="${log4j2.log.path}/${content_name}" />
 
 		<property name="common_pattern" value="[%d{yyyy-MM-dd HH:mm:ss,SSS}] [%-5p] %l -%msg%xEx%n" />

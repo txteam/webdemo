@@ -44,31 +44,18 @@
 /*<![CDATA[*/
 var grid = null;
 var idFieldName = 'id';
-var nameFieldName = 'title';
-var contentFieldName = 'content';
+var nameFieldName = 'id'; 
 var entityName = '私信';
 $(document).ready(function(){
 	var  $editALink = $("#editALink");
 	var  $deleteALink = $("#deleteALink");
 
 	grid = $('#grid').datagrid({
-		url :/*[[@{/operator/message/queryPagedList}]]*/'',
+		url :/*[[@{/privateMessage/queryList}]]*/'',
 		fit : true,
         fitColumns : true,
 		border : false,
 		idField : 'id',
-        pagination : true,
-        pageSize : 10,
-        pageList : [10,20,30,40,50],
-        loadFilter: function(data){
-            var res = {total:0,rows:[]};
-            if(!$.ObjectUtils.isEmpty(data)
-                && !$.ObjectUtils.isEmpty(data.list)){
-                res['total'] = data.count;
-                res['rows'] = data.list;
-            }
-            return res;
-        },
 		checkOnSelect : false,
 		selectOnCheck : false,
 		nowrap : true,
@@ -79,14 +66,15 @@ $(document).ready(function(){
 		] ],
 		columns: [ [
 			{title:'标题',width:100,field:'title'},
+			{title:'类型',width:100,field:'type'},
 			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
-			{title:'发送者',width:100,field:'senderUsername'},
+			{title:'内容',width:100,field:'content'},
 			{title:'是否未读',width:80,field:'unread',formatter:$.Formatters.booleanFun},
 			{title:'阅读时间',width:100,field:'readDate',formatter:$.Formatters.dateFun}
 		] ],
 		toolbar : '#toolbar',
 		onDblClickRow : function(index, row){
-			showContent(row[idFieldName], row[nameFieldName],row[contentFieldName],row["unread"]);
+			editFun(row[idFieldName], row[nameFieldName]);
 		},
 		onClickRow : function(index, row){
 			$editALink.linkbutton('enable');
@@ -107,60 +95,6 @@ $(document).ready(function(){
 function queryFun() {
 	grid.datagrid('load',$('#queryForm').serializeObject());
 	return false;
-}
-/*
- * 编辑发送私信
- */
-function sendFun() {
-	DialogUtils.progress({
-		text : '加载中，请等待....'
-	});
-
-	var addUrl = /*[[@{/operator/message/toSend}]]*/'';
-	//FIXME: 修改新增modalDialog的width,height
-	DialogUtils.openModalDialog(
-			"sendPrivateMessage",
-			"新增" + entityName,
-			$.formatString(addUrl),
-			500,420,
-			function(){
-				queryFun();
-			},{maximizable : true}
-	);
-	return false;
-}
-/**
- * 查看内容
- */
-function showContent(id,name,content,unread) {
-    if (id == undefined) {
-        var rows = grid.datagrid('getSelections');
-        id = rows[0][idFieldName];
-        name = rows[0][nameFieldName];
-        content = rows[0][contentFieldName];
-		unread = rows[0]["unread"];
-    }
-    if($.ObjectUtils.isEmpty(id)){
-        DialogUtils.alert("没有选中的" + entityName);
-        return ;
-    }
-    DialogUtils.progress({
-        text : '加载中，请等待....'
-    });
-
-    //var updateUrl = /*[[@{/operator/message/toUpdate?id={0}}]]*/'';
-    var url = _contextPath+"operator/message/toShowContent?id="+id+"&content="+content+"&unread="+unread;
-    //FIXME: 修改编辑modalDialog的width,height
-    DialogUtils.openModalDialog(
-        "showPrivateMessageContent",
-        entityName + ":" + name,
-        $.formatString(url,id),
-        450,328,
-        function(){
-            queryFun();
-        },{maximizable : true}
-    );
-    return false;
 }
 /*
  * 删除
@@ -202,33 +136,6 @@ function deleteFun(id,name) {
     });
     return false;
 }
-function readFun() {
-	//判断是否确认删除指定的私信
-	DialogUtils.confirm("确认提醒" ,
-			$.formatString("是否确认全部标记为已读?") ,
-			function(data){
-				if(data){
-					DialogUtils.progress({
-						text : '数据提交中，请等待....'
-					});
-					//如果确认删除指定的私信
-					$.post(
-							/*[[@{/operator/message/readAll}]]*/'',
-							function(data){
-								DialogUtils.progress('close');
-								if(data){
-									DialogUtils.tip("操作成功");
-								}else{
-									var errorMessage = $.formatString("操作失败");
-									DialogUtils.alert("错误提示",errorMessage,"error");
-								}
-								queryFun();
-							}
-					);
-				}
-			});
-	return false;
-}
 /*]]>*/
 </script>
 </head>
@@ -269,11 +176,9 @@ function readFun() {
 		<table id="grid"></table>
     </div> 
     
-	<div id="toolbar" style="display: none;">
-		<a onclick="sendFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">发私信</a>
-		<a id="readALink" onclick="readFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">全部标记为已读</a>
+	<div id="toolbar" style="display: none;">		
 		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
-		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);"
+		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
 			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
 	</div>
 </body>

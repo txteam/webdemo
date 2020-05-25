@@ -239,7 +239,7 @@ public class BasicDataController implements InitializingBean,
         BasicDataService<?> service = BasicDataContext.getContext()
                 .getBasicDataService(entityClass);
         BasicData bd = service.findById(id);
-        response.put("entity", bd);
+        response.put("model", bd);
         //跳转到查询页
         pageName = getPageName(info, defaultPageType);
         
@@ -651,7 +651,7 @@ public class BasicDataController implements InitializingBean,
      */
     public static enum PageTypeEnum {
         //增加基础数据
-        ADD("add", "/basicdata/addBasicData"),
+        ADD("add", "basicdata/addBasicData"),
         
         //更新基础数据
         UPDATE("update", "basicdata/updateBasicData"),

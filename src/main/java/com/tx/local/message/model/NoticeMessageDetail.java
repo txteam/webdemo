@@ -25,16 +25,13 @@ public class NoticeMessageDetail extends NoticeMessage {
 
     /** 用户id */
     private String userId;
-
-    /** 用户公告映射id */
-    private String unId;
     
     /** 接收消息时间 */
     private Date receiveDate;
     
     /** 是否阅读 */
     //注: read的被动语态也是read
-    private boolean unread;
+    private boolean read;
     
     /** 阅读时间 */
     private Date readDate;
@@ -72,15 +69,21 @@ public class NoticeMessageDetail extends NoticeMessage {
     public void setReceiveDate(Date receiveDate) {
         this.receiveDate = receiveDate;
     }
-
-    public boolean isUnread() {
-        return unread;
+    
+    /**
+     * @return 返回 read
+     */
+    public boolean isRead() {
+        return read;
     }
-
-    public void setUnread(boolean unread) {
-        this.unread = unread;
+    
+    /**
+     * @param 对read进行赋值
+     */
+    public void setRead(boolean read) {
+        this.read = read;
     }
-
+    
     /**
      * @return 返回 readDate
      */
@@ -121,13 +124,5 @@ public class NoticeMessageDetail extends NoticeMessage {
      */
     public void setDeleteDate(Date deleteDate) {
         this.deleteDate = deleteDate;
-    }
-
-    public String getUnId() {
-        return unId;
-    }
-
-    public void setUnId(String unId) {
-        this.unId = unId;
     }
 }

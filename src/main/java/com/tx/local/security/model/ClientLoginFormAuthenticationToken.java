@@ -24,8 +24,8 @@ public class ClientLoginFormAuthenticationToken
         extends UsernamePasswordAuthenticationToken {
     
     /** 注释内容 */
-    private static final long serialVersionUID = 4853117312273393037L;
-
+    private static final long serialVersionUID = -4630883586191093344L;
+    
     /** <默认构造函数> */
     public ClientLoginFormAuthenticationToken(Object principal,
             Object credentials,

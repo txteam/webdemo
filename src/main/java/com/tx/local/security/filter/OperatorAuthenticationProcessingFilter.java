@@ -52,7 +52,7 @@ public class OperatorAuthenticationProcessingFilter
     /** <默认构造函数> */
     public OperatorAuthenticationProcessingFilter() {
         super();
-        setFilterProcessesUrl("/operator/login");
+        setFilterProcessesUrl("/operator/sign");
     }
     
     /**

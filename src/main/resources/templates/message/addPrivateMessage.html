@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>发送私信[sendPrivateMessage]</title>
+	<title>新增私信[addPrivateMessage]</title>
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -44,24 +44,7 @@
 /*<![CDATA[*/
 $(document).ready(function(){
 	parent.DialogUtils.progress('close');
-
-	$("#parentName").selectReceivedOperator({
-		eventName : "forAddVirtualCenter",
-		contextPath : _contextPath,
-		title : "请选择接收人",
-		width : 260,
-		height : 400,
-		handler : function(vc){
-			if(vc != null){
-				$("input[name='username']").val(vc.name);
-				$("input[name='userId']").val(vc.id);
-			}
-		},
-		clearHandler: function(){
-			$("input[name='username']").val("");
-			$("input[name='userId']").val("");
-		}
-	});
+	
 	//验证器
 	$('#entityForm').validator({
 	    valid: function(){
@@ -70,12 +53,12 @@ $(document).ready(function(){
 	        	text : '数据提交中，请等待....'
 	        });
 			$('#entityForm').ajaxSubmit({
-				url:/*[[@{/operator/message/send}]]*/'',
+				url:/*[[@{/privateMessage/add}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.progress('close');
 					if(data){
 						parent.DialogUtils.tip("新增私信成功.");
-						parent.DialogUtils.closeDialogById("sendPrivateMessage");
+						parent.DialogUtils.closeDialogById("addPrivateMessage");
 					}else{
 						DialogUtils.alert("错误提示","新增私信失败.","error");
 					}
@@ -87,7 +70,7 @@ $(document).ready(function(){
 	
 	//退出
 	$("#cancelBtn").click(function(){
-		parent.DialogUtils.closeDialogById("sendPrivateMessage");
+		parent.DialogUtils.closeDialogById("addPrivateMessage");
 	});
 	//提交
 	$("#submitBtn").click(function(){
@@ -102,58 +85,111 @@ $(document).ready(function(){
 		<form id="entityForm" method="post" class="form" th:object="${privateMessage}">
 			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
 			<table class="table">
-				<!--<tr>
+				<tr>
+					<th class="narrow" width="25%">lastUpdateUserId:</th>
+					<td>
+						<input id="lastUpdateUserId" name="lastUpdateUserId" type="text" 
+							th:value="*{lastUpdateUserId}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">readDate:</th>
+					<td>
+						<input id="readDate" name="readDate" type="text" readonly="readonly"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
+							th:value="${#dates.format(privateMessage.readDate,'yyyy-MM-dd HH:mm:ss')}"/>
+					</td>
+				</tr>			
+				<tr>
 					<th class="narrow" width="25%">类型:<span class="tRed">*</span></th>
 					<td>
 						<select id="type" name="type" data-rule="类型:required;">
-							<option value="">-&#45;&#45; 请选择 -&#45;&#45;</option>
+							<option value="">--- 请选择 ---</option>
 							<option th:each="typeTemp:${types}" th:value="${typeTemp.code}" th:text="${typeTemp.name}" th:selected="${privateMessage.type eq typeTemp}"></option>
 						</select>
 					</td>
-				</tr>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">userId:<span class="tRed">*</span></th>
+					<td>
+						<input id="userId" name="userId" type="text" 
+							th:value="*{userId}"/>
+					</td>
+				</tr>			
 				<tr>
 					<th class="narrow" width="25%">userType:<span class="tRed">*</span></th>
 					<td>
 						<select id="userType" name="userType" data-rule="userType:required;">
-							<option value="">-&#45;&#45; 请选择 -&#45;&#45;</option>
+							<option value="">--- 请选择 ---</option>
 							<option th:each="userTypeTemp:${userTypes}" th:value="${userTypeTemp.code}" th:text="${userTypeTemp.name}" th:selected="${privateMessage.userType eq userTypeTemp}"></option>
 						</select>
 					</td>
-				</tr>-->
-				<!--<tr>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">title:<span class="tRed">*</span></th>
+					<td>
+						<input id="title" name="title" type="text" data-rule="title:required;length[1~50];"
+							th:value="*{title}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">createUserId:</th>
+					<td>
+						<input id="createUserId" name="createUserId" type="text" 
+							th:value="*{createUserId}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">senderUsername:</th>
+					<td>
+						<input id="senderUsername" name="senderUsername" type="text" data-rule="senderUsername:length[0~32];"
+							th:value="*{senderUsername}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">senderUserId:<span class="tRed">*</span></th>
+					<td>
+						<input id="senderUserId" name="senderUserId" type="text" 
+							th:value="*{senderUserId}"/>
+					</td>
+				</tr>			
+				<tr>
 					<th class="narrow" width="25%">senderUserType:<span class="tRed">*</span></th>
 					<td>
 						<select id="senderUserType" name="senderUserType" data-rule="senderUserType:required;">
-							<option value="">-&#45;&#45; 请选择 -&#45;&#45;</option>
+							<option value="">--- 请选择 ---</option>
 							<option th:each="senderUserTypeTemp:${senderUserTypes}" th:value="${senderUserTypeTemp.code}" th:text="${senderUserTypeTemp.name}" th:selected="${privateMessage.senderUserType eq senderUserTypeTemp}"></option>
 						</select>
 					</td>
-				</tr>-->
+				</tr>			
 				<tr>
-					<th class="narrow" width="25%">接收人：</th>
+					<th class="narrow" width="25%">unread:</th>
 					<td>
-						<input id="parentId" name="userId" type="hidden" readonly="readonly" style="width: 60%"/>
-						<input id="parentName" name="username" class="selectInput" readonly="readonly" style="width: 60%"/>
+						<select id="unread" name="unread" >
+							<option value="true" th:selected="${privateMessage.unread eq true}">是</form:option>
+							<option value="false" th:selected="${privateMessage.unread eq false}">否</form:option>
+						</select>
 					</td>
-				</tr>
+				</tr>			
 				<tr>
-					<th class="narrow" width="25%">标题:<span class="tRed">*</span></th>
+					<th class="narrow" width="25%">content:</th>
 					<td>
-						<input id="title" name="title" type="text" data-rule="title:required;length[1~50];"
-							   th:value="*{title}" style="width: 60%"/>
+						<input id="content" name="content" type="text" data-rule="content:length[0~2000];"
+							th:value="*{content}"/>
 					</td>
-				</tr>
+				</tr>			
 				<tr>
-					<th class="narrow" width="25%">内容:</th>
+					<th class="narrow" width="25%">username:</th>
 					<td>
-						<textarea name="content" id="content" th:text="*{content}" cols="40" rows="20" data-rule="content:length[0~2000];"></textarea>
+						<input id="username" name="username" type="text" data-rule="username:length[0~32];"
+							th:value="*{username}"/>
 					</td>
-				</tr>
+				</tr>			
 			</table>
 		</form>
 	</div>
 	
 	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
-		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">发送</a>
+		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
 	</div>
 </body>

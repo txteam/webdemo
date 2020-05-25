@@ -474,11 +474,9 @@ public class OperatorService {
         //updateRowMap.put("username", operator.getUsername());
         updateRowMap.put("uernameChangeAble", operator.isUsernameChangeAble());
         //updateRowMap.put("usernameChangeCount", operator.getUsernameChangeCount());
-        
         updateRowMap.put("name", operator.getName());
         updateRowMap.put("organizationId", operator.getOrganizationId());
         updateRowMap.put("mainPostId", operator.getMainPostId());
-        
         //updateRowMap.put("modifyAble", operator.isModifyAble());
         
         updateRowMap.put("lastUpdateDate", new Date());
@@ -599,9 +597,9 @@ public class OperatorService {
         if (oper == null) {
             return false;
         }
-        String rawHisPwd = this.operatorPasswordEncoder.encode(newPassword);
-        if (StringUtils.equalsIgnoreCase(rawHisPwd, oper.getPassword())) {
-            
+        String rawHisPwd = this.operatorPasswordEncoder.encode(hisPassword);
+        if (!StringUtils.equalsIgnoreCase(rawHisPwd, oper.getPassword())) {
+            return false;
         }
         
         //生成需要更新字段的hashMap
@@ -706,6 +704,41 @@ public class OperatorService {
         ServiceLoggerUtils.log(OperSecOperateLog.builder()
                 .message(MessageUtils.format("操作人员[{}]修改用户名.", id))
                 .build());
+        
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return updateRowCount >= 1;
+    }
+    
+    /**
+     * 更新用户名<br/>
+     * <功能详细描述>
+     * @param id
+     * @param username
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean updateIsAdminById(String id, boolean isAdmin) {
+        //验证参数是否合法，必填字段是否填写
+        AssertUtils.notEmpty(id, "id is empty.");
+        
+        Operator oper = findById(id);
+        if (oper == null) {
+            return false;
+        }
+        //生成需要更新字段的hashMap
+        Map<String, Object> updateRowMap = new HashMap<String, Object>();
+        updateRowMap.put("id", id);
+        
+        //需要更新的字段
+        Date now = new Date();
+        updateRowMap.put("admin", isAdmin);
+        updateRowMap.put("lastUpdateDate", now);
+        
+        int updateRowCount = this.operatorDao.update(updateRowMap);
         
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return updateRowCount >= 1;

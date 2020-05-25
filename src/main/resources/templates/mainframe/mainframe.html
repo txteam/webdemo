@@ -1,248 +1,214 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>WD4CLIENT后台管理系统</title>	
-	<meta charset="utf-8"/>
-	<meta name="renderer" content="webkit">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<block th:replace="fragments/layui_header::common_replace">
-	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
-	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
-	<!-- layui -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
-	<script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'';
-	/*]]>*/
-	</script>
-</block>
-</head>
-<body class="layui-layout-body">
-	<div id="LAY_app">
-		<div class="layui-layout layui-layout-admin">
-			<div class="layui-header">
-				<!-- 头部区域 -->
-				<ul id="layui-layout-left" class="layui-nav layui-layout-left">
-					<li class="layui-nav-item layui-hide-xs layadmin-flexible left-menu-fixed" lay-unselect>
-						<a href="javascript:;" layadmin-event="flexible" title="侧边伸缩"> 
-							<i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item  layui-hide-xs" lay-unselect th:remove="all">
-						<a href="javascript:;">
-							<i class="layui-icon layui-icon-website">工作台</i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect th:remove="all">
-						<a href="http://www.cqtianxin.com" target="_blank">
-							<i class="layui-icon layui-icon-website">范例</i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect th:remove="all">
-						<a href="http://www.cqtianxin.com" target="_blank" title="前台">
-							<i class="layui-icon layui-icon-website"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs left-menu-fixed" lay-unselect>
-						<a href="javascript:;" layadmin-event="refresh" title="刷新">
-							<i class="layui-icon layui-icon-refresh-3"></i>
-						</a>
-					</li>
-				</ul>
+<meta charset="utf-8"/>
+<title>丰都三社融合综合服务系统</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- css -->
+<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
 
-				<ul class="layui-nav layui-layout-right"
-					lay-filter="layadmin-layout-right">
-					<li class="layui-nav-item" lay-unselect>
-						<a layadmin-event="message" lay-text="消息中心" 
-							lay-href="app/message/index.html" th:lay-href="@{/layui/demo/app/message/index.html}"> 
-							<i class="layui-icon layui-icon-notice"></i>
-							<!-- 如果有新消息，则显示小圆点 -->
-							<span class="layui-badge-dot"></span>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect>
-						<a href="javascript:;" layadmin-event="theme"> 
-							<i class="layui-icon layui-icon-theme"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect>
-						<a href="javascript:;" layadmin-event="note">
-							<i class="layui-icon layui-icon-note"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect><a
-						href="javascript:;" layadmin-event="fullscreen"> <i
-							class="layui-icon layui-icon-screen-full"></i>
-					</a></li>
+<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+<link rel="stylesheet" type="text/css" href="../../css/background/mainframe.css" th:href="@{/css/background/mainframe.css}"/>
 
-					<li class="layui-nav-item" lay-unselect><a href="javascript:;">
-						<cite>贤心</cite></a>
-						<dl class="layui-nav-child">
-							<dd>
-								<a lay-href="set/user/info.html"
-									th:lay-href="@{/layui/demo/set/user/info.html}">基本资料</a>
-							</dd>
-							<dd>
-								<a lay-href="set/user/password.html"
-									th:lay-href="@{/layui/demo/set/user/password.html}">修改密码</a>
-							</dd>
-							<hr>
-							<dd layadmin-event="logout" style="text-align: center;">
-								<a>退出</a>
-							</dd>
-						</dl>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect>
-						<a href="javascript:;" layadmin-event="about">
-							<i class="layui-icon layui-icon-more-vertical"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
-						<a href="javascript:;" layadmin-event="more">
-							<i class="layui-icon layui-icon-more-vertical"></i>
-						</a>
-					</li>
-				</ul>
-			</div>
+<!-- jquery -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+<!-- jqueryui -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+<!-- easyui -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+<!-- other -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+<!-- customize -->
+<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
 
-			<!-- 侧边菜单 -->
-			<div class="layui-side layui-side-menu">
-				<div class="layui-side-scroll">
-					<div class="layui-logo" lay-href="home/console.html">
-						<span>Client Workbench</span>
-					</div>
-					<ul id="LAY-system-side-menu" class="layui-nav layui-nav-tree" lay-shrink="all" lay-filter="layadmin-system-side-menu" th:remove="all">
-						<li data-name="user" class="layui-nav-item">
-							<a href="javascript:;" lay-tips="用户" lay-direction="2"> <i class="layui-icon layui-icon-user"></i> <cite>用户</cite></a>
-							<dl class="layui-nav-child">
-								<dd>
-									<a lay-href="user/user/list.html">网站用户</a>
-								</dd>
-								<dd>
-									<a lay-href="user/administrators/list.html">后台管理员</a>
-								</dd>
-								<dd>
-									<a lay-href="user/administrators/role.html">角色管理</a>
-								</dd>
-							</dl>
-						</li>
-						<li data-name="set" class="layui-nav-item">
-							<a href="javascript:;" lay-tips="设置" lay-direction="2"> 
-								<i class="layui-icon layui-icon-set"></i> <cite>设置</cite>
-							</a>
-							<dl class="layui-nav-child">
-								<dd class="layui-nav-itemed">
-									<a href="javascript:;">系统设置</a>
-									<dl class="layui-nav-child">
-										<dd>
-											<a lay-href="set/system/website.html">网站设置</a>
-										</dd>
-										<dd>
-											<a lay-href="set/system/email.html">邮件服务</a>
-										</dd>
-									</dl>
-								</dd>
-								<dd class="layui-nav-itemed">
-									<a href="javascript:;">我的设置</a>
-									<dl class="layui-nav-child">
-										<dd>
-											<a lay-href="set/user/info.html">基本资料</a>
-										</dd>
-										<dd>
-											<a lay-href="set/user/password.html">修改密码</a>
-										</dd>
-									</dl>
-								</dd>
-							</dl>
-						</li>
-					</ul>
-				</div>
-			</div>
-
-			<!-- 页面标签 -->
-			<div class="layadmin-pagetabs" id="LAY_app_tabs">
-				<div class="layui-icon layadmin-tabs-control layui-icon-prev"
-					layadmin-event="leftPage"></div>
-				<div class="layui-icon layadmin-tabs-control layui-icon-next"
-					layadmin-event="rightPage"></div>
-				
-				<div class="layui-icon layadmin-tabs-control layui-icon-down">
-					<ul class="layui-nav layadmin-tabs-select"
-						lay-filter="layadmin-pagetabs-nav">
-						<li class="layui-nav-item" lay-unselect><a
-							href="javascript:;"></a>
-							<dl class="layui-nav-child layui-anim-fadein">
-								<dd layadmin-event="closeThisTabs">
-									<a href="javascript:;">关闭当前标签页</a>
-								</dd>
-								<dd layadmin-event="closeOtherTabs">
-									<a href="javascript:;">关闭其它标签页</a>
-								</dd>
-								<dd layadmin-event="closeAllTabs">
-									<a href="javascript:;">关闭全部标签页</a>
-								</dd>
-							</dl></li>
-					</ul>
-				</div>
-				
-				<div class="layui-tab" lay-unauto lay-allowClose="true"
-					lay-filter="layadmin-layout-tabs">
-					<ul class="layui-tab-title" id="LAY_app_tabsheader">
-						<li lay-id="home/console.html" class="layui-this"
-							lay-attr="@{/home/console.html}" th:lay-attr="@{/home/console.html}">
-							<i class="layui-icon layui-icon-home"></i>
-						</li>
-					</ul>
-				</div>
-			</div>
-
-			<!-- 主体内容 -->
-			<div class="layui-body" id="LAY_app_body">
-				<div class="layadmin-tabsbody-item layui-show">
-					<iframe src="home/console.html"
-						th:src="@{/layui/demo/home/console}" frameborder="0"
-						class="layadmin-iframe"></iframe>
-				</div>
-			</div>
-
-			<!-- 辅助元素，一般用于移动设备下遮罩 -->
-			<div class="layadmin-body-shade" layadmin-event="shade"></div>
-		</div>
-	</div>
-</body>
-<script>
+<script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-layui.config({
-	//静态资源所在路径 //静态资源所在路径
-	base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/' 
-}).extend({
-	//主入口模块
-	index: 'lib/index' 
-}).use(['index','common','mainframe'],function(){
-	var $ = layui.jquery
-		,setter = layui.setter
-		,element = layui.element
-		,admin = layui.admin
-		,tabsPage = admin.tabsPage
-		,view = layui.view
-		,mainframe = layui.mainframe;
+var _contextPath = /*[[@{/}]]*/'';
+/*]]>*/
+</script>
+<script type="text/javascript" charset="utf-8" src="../../js/background/mainframe.js" th:src="@{/js/background/mainframe.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+	$('#notepad_handle').click(function(){
+		DialogUtils.openDialog(
+			"notepad",
+			"记事本",
+			/*[[@{/operator/notepad}]]*/'',
+			800,650,
+			function(){}
+		);
+	});
+	$('#calendar_handle').click(function(){
+		$.triggerge("addTab",{
+    		id: 'calandar_menu',
+            title : '行事历',
+            href : '/operator/calendar',
+            iconCls : 'icon-riqi'
+        });
+	});
+	$.bindge('logout',function(event,menu){
+		window.location.href = /*[[@{/operator/logout}]]*/'/';
+	});
+	$('#user_menu_logout').click(function(){
+		$.triggerge("logout");
+	});
+	$('#notice_handle').click(function(){
+		$.triggerge("addTab",{
+    		id: 'notice_page',
+            title : '公告',
+            href : /*[[@{/operator/notice}]]*/'',
+            iconCls : 'icon-tixing'
+        });
+	});
+	$('#message_handle').click(function(){
+		$.triggerge("addTab",{
+    		id: 'message_page',
+            title : '私信',
+            href : /*[[@{/operator/message}]]*/'',
+            iconCls : 'icon-duihua'
+        });
+	});
+	$('#helper_handle').click(function(){
+		$.triggerge("addTab",{
+    		id: 'helper_page',
+            title : '帮助',
+            href : '/easyui/demo/icon',
+            iconCls : 'icon-shuoming'
+        });
+	});
+	var $user_menu = $('#user_menu');
+    var user_euimenu = $user_menu.menu({
+    	onClose: function(){
+    		alert('1111');
+    	}
+    });
+	$('#user_info').mouseover(function(e){
+	});
+	$('#user_info').click(function(e){
+		e.preventDefault();
+		var _$this = $(this);
+    	var x = _$this.offset().left + _$this.width() - 50;
+    	var y = _$this.offset().top + _$this.height();
+    	
+    	$user_menu.menu('show', {
+            left : x,
+            top : y
+        });
+    	$('#user_info_icon').html('&#xe623;');
+	});
 	
-	mainframe.init(_contextPath);
+	function countUnreadMessage(){
+		$.get(/*[[@{/operator/message/count/unread}]]*/'',function(count){
+			//alert("count:" + count + " count>0:" + ( count > 0));
+			var $unreadMessageCount = $("#unreadMessageCount");
+			if(count > 0){
+				if($unreadMessageCount.size() > 0){
+					$unreadMessageCount.text(count);
+				}else{
+					$('#message_handle').append('<em id="unreadMessageCount">' + count + '</em>');
+				}
+			}else{
+				if($unreadMessageCount.size() > 0){
+					$unreadMessageCount.remove();
+				}
+			}
+		});
+		$.get(/*[[@{/operator/notice/count/unread}]]*/'',function(count){
+			var $unreadNoticeCount = $("#unreadNoticeCount");
+			if(count > 0){
+				if($unreadNoticeCount.size() > 0){
+					$unreadNoticeCount.text(count);
+				}else{
+					$('#notice_handle').append('<em id="unreadNoticeCount" class="gcolor">' + count + '</em>');
+				}
+			}else{
+				if($unreadNoticeCount.size() > 0){
+					$unreadNoticeCount.remove();
+				}
+			}
+		});
+	}
+	countUnreadMessage();
+	setInterval(countUnreadMessage, 1000 * 60 * 10);
+	
 });
 /*]]>*/
 </script>
-<!-- 百度统计 -->
-<script>
-var _hmt = _hmt || [];
-(function() {
-	var hm = document.createElement("script");
-	hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
-	var s = document.getElementsByTagName("script")[0]; 
-	s.parentNode.insertBefore(hm, s);
-})();
-</script>
+<style type="text/css">
+.index_tabs .tabs-tool {position: absolute;bottom: 0;padding: 1px;overflow: hidden;border-width: 0px;border-style: solid;}
+.index_tabs .panel-body {overflow:hidden;padding-left: 8px;padding-top: 8px;padding-right: 4px;padding-bottom: 6px;}
+</style>
+</head>
+
+<body>
+<div id="index_layout">
+	<div id="pf-hd" data-options="region:'north',border:false" class="header">
+		<div class="logo"><img src="../../images/logo.png" th:src="@{/images/logo.png}"></div>
+		
+        <ul class="nav">
+        </ul>
+        
+        <div class="topright">
+            <ul class="toptool">
+            	<li><a id="screen_handle" href="javascript:void(0);"><i class="iconfont icon-screen-full"></i></a></li>
+            	<li><a id="notepad_handle" href="javascript:void(0);"><i class="iconfont">&#xe613;</i></a></li>
+            	<li><a id="calendar_handle" href="javascript:void(0);"><i class="iconfont">&#xe624;</i></a></li>
+	            <li><a id="message_handle" href="javascript:void(0);"><i class="iconfont">&#xe6ba;</i></a></li>
+	            <li><a id="notice_handle" href="javascript:void(0);"><i class="iconfont">&#xe621;</i></a></li>
+	            <li id="user_info">
+	            	<span class="userface"><i class="iconfont">&#xe60d;</i></span>
+	            	<a href="javascript:void(0);"><font><block th:text="${username}">ADMIN</block>&nbsp;&nbsp;<i class="iconfont userdown" id="user_info_icon">&#xe618;</i></font></a>
+	            </li>
+	            <!-- <li><a id="helper_handle" href="javascript:void(0);"><i class="iconfont">&#xe61a;</i></a></li>  -->
+	            <li><a id="suggest_handle" href="javascript:void(0);"><i class="iconfont">&#xe685;</i></a></li>
+            </ul>
+        </div>
+	</div>
+	
+	<div data-options="region:'west',split:true,border:false,title:'系统菜单',iconCls:'icon-yingyong-copy'" class="left">
+    </div>
+	
+	<div data-options="region:'center',border:false" class="center">
+    	<div id="index_tabs" class="index_tabs">
+			<div title="首页">
+				<iframe id="default" name="right" src="default.html" th:src="@{/admin/workbench/}"  width="100%" height="100%" frameborder="0" scrolling="auto" style="border:0;width:100%;height:100%;" class="mainframe_tab"></iframe>
+			</div>
+       	</div>    
+	</div>
+	
+	<div data-options="region:'south',border:false"  class="footer">
+    	<span class="fleft"><i class="iconfont">&#xe622;</i>webdemo模板</span>
+        <span class="fright">cqtianxin版权所有<i class="iconfont">&#xe620;</i></span>
+    </div>
+</div>
+
+<div id="tabs-tool" style="display: none;">
+	<!-- transmit icon-down -->
+	<a href="javascript:void(0);" id="tabs_tool_refresh" class="easyui-linkbutton" plain="true" iconCls="transmit"></a>
+	<a href="javascript:void(0);" id="tabs_tool_menu" class="easyui-linkbutton" plain="true" iconCls="cog"></a>
+</div>
+<div id="index_tabs_menu" style="width: 120px; display: none;">
+	<div id="refresh" data-options="iconCls:'transmit'">刷新</div>
+	<div class="menu-sep"></div>
+	<div id="close_current" data-options="iconCls:'delete'">关闭当前标签页</div>
+	<div id="close_other" data-options="iconCls:'delete'">关闭其他标签页</div>
+	<div id="close_all" data-options="iconCls:'delete'">关闭所有标签页</div>
+</div>
+<div id="user_menu" style="width: 140px; display: none;">
+	<div id="user_menu_modify_user_info" data-options="iconCls:'delete'">基本资料</div>
+	<div id="user_menu_modify_password" data-options="iconCls:'transmit'">修改密码</div>
+	<div class="menu-sep"></div>
+	<div id="user_menu_logout" data-options="iconCls:'delete'">退出</div>
+</div>
+</body>
 </html>
 

@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.Configuration;
 
 import com.tx.core.mybatis.assistant.BaseDaoMapperBuilderAssistant;
-import com.tx.local.creditinfo.context.CreditInfoVersionTypeEnum;
+import com.tx.local.creditinfo.context.CreditInfoTypeEnum;
 
 /**
  * Mapper构建助手扩展类<br/>
@@ -26,20 +26,20 @@ public class CreditInfoMapperBuilderAssistant
         extends BaseDaoMapperBuilderAssistant {
     
     /** 注解信息 */
-    protected CreditInfoVersionTypeEnum versionType;
+    protected CreditInfoTypeEnum versionType;
     
     /** <默认构造函数> */
     public CreditInfoMapperBuilderAssistant(Configuration configuration,
-            Class<?> beanType, CreditInfoVersionTypeEnum versionType) {
+            Class<?> beanType, CreditInfoTypeEnum versionType) {
         super(configuration, beanType);
         
         this.versionType = versionType;
         this.tableName = this.tableName.toUpperCase();
         String tableNameTemp = this.tableName;
         if (tableNameTemp
-                .startsWith(CreditInfoVersionTypeEnum.TRUNK.getPrefix())) {
+                .startsWith(CreditInfoTypeEnum.TRUNK.getPrefix())) {
             tableNameTemp = tableNameTemp.substring(
-                    CreditInfoVersionTypeEnum.TRUNK.getPrefix().length());
+                    CreditInfoTypeEnum.TRUNK.getPrefix().length());
         }
         this.tableName = versionType.getPrefix() + tableNameTemp;
         

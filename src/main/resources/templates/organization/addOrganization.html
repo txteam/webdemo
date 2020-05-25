@@ -68,16 +68,16 @@ $(document).ready(function(){
 	    valid: function(){
 	    	var flag = false;
 	    	if($.ObjectUtils.isEmpty($('#parentId').val())){
-            	if($('#type').val() == 'GROUP_COMPANY' || $('#type').val() == 'COMPANY' || $('#type').val() == 'BRANCH_COMPANY'){
-            		flag = true;
-            	}else{
+            	if($('#type').val() == 'DEPARTMENT' || $('#type').val() == 'BRANCH_DEPARTMENT' || $('#type').val() == 'GROUP'){
             		flag = false;
+            	}else{
+            		flag = true;
             	}
             }else{
             	flag = true;
             }
 	    	if(!flag){
-	    		DialogUtils.alert('警告',"非分公司类型组织上级组织不允许为空.",'warning');
+	    		DialogUtils.alert('警告',"上级组织不允许为空.",'warning');
 	    		return false;
 	    	}
 	    

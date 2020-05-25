@@ -18,7 +18,7 @@ javamelody:
   init-parameters:
     url-exclude-pattern: '(/webjars/.*|/css/.*|/images/.*|/fonts/.*|/js/.*)'
     # authorized-users: admin:pwd
-    storage-directory: 'd:/logs/webdemo/javamelody'
+    storage-directory: 'd:/logs/${app.server.name}/javamelody'
     # to change the default "/monitoring" path:
     # monitoring-path: /admin/performance
   
@@ -28,7 +28,7 @@ spring:
 #      enabled: true
 #      additional-paths: src/main/java
   application:
-    name: webdemo
+    name: ${app.server.name}
   #http配置
   http:
     #替代：CharacterEncodingFilter
@@ -150,7 +150,9 @@ spring:
     date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZ
     serialization:
       write-dates-as-timestamps: true
-  # mvc:
+  mvc:
+    favicon:
+      enabled: true
   #  static-path-pattern: 
   # resources:
   #  static-locations:
@@ -174,22 +176,6 @@ spring:
     #content-type: text/html
     #Thymeleaf模板解析器在解析器链中的顺序。默认情况下，它排第一位。顺序从1开始，只有在定义了额外的TemplateResolver Bean时才需要设置这个属性
     #template-resolver-order: 1
-  freemarker:
-    allow-request-override: false
-    allow-session-override: false
-    cache: false
-    charset: UTF-8
-    check-template-location: true
-    content-type: text/html; charset=utf-8
-    expose-request-attributes: false
-    expose-session-attributes: false
-    expose-spring-macro-helpers: false
-    settings:
-      template_update_delay: 0
-    prefix: classpath:/ftltemplates/
-    suffix: .ftl
-    #template-loader-path: classpath:/templates/
-    enabled: true
   redis:
     database: 0
     host: 120.24.75.25
@@ -222,8 +208,8 @@ spring:
 
 feign:
   local:
-    url: http://localhost:8090/webdemo
-    module: WEBDEMO
+    url: http://127.0.0.1:${app.server.port}/${app.server.contextPath}
+    module: ${app.server.name}
   compression:
     request:
       enabled: true
@@ -275,5 +261,3 @@ tx:
       # enable: false
     # strategy:
       # enable: false
-    
-    

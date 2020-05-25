@@ -3,14 +3,14 @@ package com.tx.local.security.config;
 import java.util.Arrays;
 import java.util.Collections;
 
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -28,11 +28,14 @@ import org.springframework.web.accept.ContentNegotiationStrategy;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 
 import com.tx.component.security.filter.SecurityThreadLocalResourceSupportFilter;
-import com.tx.local.security.entrypoint.SecurityLoginAuthenticationEntryPoint;
-import com.tx.local.security.filter.ClientAuthenticationProcessingFilter;
+import com.tx.local.operator.model.OperatorRoleEnum;
+import com.tx.local.security.entrypoint.OperatorSecurityAccessDeniedHandler;
+import com.tx.local.security.entrypoint.OperatorSecurityLoginAuthenticationEntryPoint;
 import com.tx.local.security.filter.OperatorAuthenticationProcessingFilter;
 import com.tx.local.security.filter.OperatorSocialAuthenticationProcessingFilter;
-import com.tx.local.security.strategy.UserSessionAuthenticationStrategy;
+import com.tx.local.security.handler.OperatorSecurityAuthenticationFailureHandler;
+import com.tx.local.security.handler.OperatorSecurityAuthenticationSuccessHandler;
+import com.tx.local.security.strategy.OperatorSessionAuthenticationStrategy;
 
 /**
  * SpringSecurity本地权限定制<br/>
@@ -46,7 +49,7 @@ import com.tx.local.security.strategy.UserSessionAuthenticationStrategy;
 @Import(value = { WebSecurityConfigurationImporter.class })
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity
+@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     /** 日志记录句柄 */
@@ -54,19 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .getLogger(WebSecurityConfiguration.class);
     
     @Autowired
-    private UserSessionAuthenticationStrategy userSessionAuthenticationStrategy;
-    
-    @Autowired
-    private OperatorSocialAuthenticationProcessingFilter operatorSocialAuthenticationProcessingFilter;
-    
-    @Autowired
-    private OperatorAuthenticationProcessingFilter operatorAuthenticationProcessingFilter;
-    
-    @Autowired
-    private ClientAuthenticationProcessingFilter clientAuthenticationProcessingFilter;
-    
-    @Resource(name = "loginAuthenticationEntryPoint")
-    private SecurityLoginAuthenticationEntryPoint loginAuthenticationEntryPoint;
+    private AuthenticationManager authenticationManager;
     
     /**
      * webSecurity配置
@@ -75,13 +66,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
+        //静态资源文件
+        web.ignoring().antMatchers("/*.txt");//微信的认证文件
         web.ignoring().antMatchers("/webjars/**");
         web.ignoring().antMatchers("css/**", "images/**", "js/**");
         web.ignoring().antMatchers("/**/*.js",
                 "/**/*.css",
+                "/**/*.woff2",
                 "/**/*.jpg",
                 "/**/*.png",
-                "/**/*.woff2",
                 "/**/*.svg",
                 "/**/*.ico");
         
@@ -102,23 +95,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //filterChainDefinitionMap.put("/v2/**", "anon");
     }
     
-    ///**
-    // * 用户验证
-    // * @param auth
-    // * @throws Exception
-    // */
-    //@Override
-    //protected void configure(AuthenticationManagerBuilder builder)
-    //        throws Exception {
-    //    //AuthenticationProvider upProvider = usernamePasswordAuthenticationProvider();
-    //    //注入usernamePasswordAuthenticationProvider
-    //    //auth.authenticationProvider(upProvider);
-    //    //auth.userDetailsService(userDetailsService)
-    //}
-    
     /**
      * httpSecurity配置
-     * @param httpSecurity
+     * @param http
      * @throws Exception
      */
     @Override
@@ -137,63 +116,57 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .sessionAuthenticationStrategy(
-                        userSessionAuthenticationStrategy);
+                        operatorSessionAuthenticationStrategy());
+        
+        //添加登录过滤器
+        //login配置，disable后利用filter实现替代
+        http.formLogin().disable();
+        http.addFilterBefore(operatorSocialAuthenticationProcessingFilter(),
+                UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(operatorAuthenticationProcessingFilter(),
+                UsernamePasswordAuthenticationFilter.class);
         
         //logout配置
         //http.logout().disable();
-        http.logout().logoutUrl("/logout").logoutSuccessUrl("/background/login");
-        
-        //login配置，disable后利用filter实现替代
-        http.formLogin().disable();
-        //http.formLogin().loginPage(loginPage)
+        http.logout()
+                .logoutUrl("/operator/logout")
+                .logoutSuccessUrl("/admin/login");
         
         //注册登录入口
         registerAuthenticationEntryPoint(http);
+        //注册认证用户，无权限的处理
+        registerAccessDeniedHandler(http);
         
-        //添加登录过滤器
-        http.addFilterBefore(this.operatorSocialAuthenticationProcessingFilter,
-                UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(this.operatorAuthenticationProcessingFilter,
-                UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(this.clientAuthenticationProcessingFilter,
-                UsernamePasswordAuthenticationFilter.class);
         //必须条件该过滤器，不然权限容器中线程变量逻辑会存在问题
         http.addFilterAfter(new SecurityThreadLocalResourceSupportFilter(),
                 SwitchUserFilter.class);
         
-        //.usernameParameter("username").passwordParameter("password").loginPage("/login")
-        //.loginProcessingUrl(this.loginProcessingUrl).permitAll().successHandler(successHandler).failureHandler(failureHandler);
-        //http.authorizeRequests().antMatchers("")
-        //.hasIpAddress(ipaddressExpression)
-        //.hasRole(role)
-        //.hasAuthority(authority)
-        //.hasAnyRole(roles)
-        //.hasAnyAuthority(authorities)
+        //允许兼容呈现
+        http.authorizeRequests().antMatchers("/", "/index").permitAll();
+        http.authorizeRequests()
+                .antMatchers("/background/", "/background/index")
+                .permitAll();
+        http.authorizeRequests()
+                .antMatchers("/admin/", "/admin/index")
+                .permitAll();
+        
+        //第三方用户登陆
+        http.authorizeRequests().antMatchers("/operator/social/**").permitAll();
+        //后台登陆页
+        http.authorizeRequests()
+                .antMatchers("/login", "/background/login", "/admin/login")
+                .permitAll();
+        http.authorizeRequests().antMatchers("/operator/sign").permitAll();
+        
+        //验证码
+        http.authorizeRequests().antMatchers("/captcha/**").permitAll();
+        
         //所有请求都允许访问
         //允许直接访问的链接
         //接口不验证权限:后续可添加对指定ip地址不进行鉴权的控制
         http.authorizeRequests().antMatchers("/api/**").permitAll();
-        
         //允许进入登陆页面
         http.authorizeRequests().antMatchers("/error/**").permitAll();
-        http.authorizeRequests()
-                .antMatchers("/", "/index", "/login", "/client/login")
-                .permitAll();
-        
-        //第三方用户登陆
-        http.authorizeRequests()
-                .antMatchers("/operator/social/**", "/loginplugin/**")
-                .permitAll();
-        //后台登陆页
-        http.authorizeRequests()
-                .antMatchers("/background",
-                        "/background/",
-                        "/background/index",
-                        "/background/login",
-                        "/operator/login")
-                .permitAll();
-        //验证码
-        http.authorizeRequests().antMatchers("/captcha/**").permitAll();
         
         //其他
         http.authorizeRequests()
@@ -202,14 +175,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/test/authentication/**")
                 .authenticated()
                 .antMatchers("/oauth/authorize")
-                .permitAll()
-                .anyRequest()
-                .authenticated();//其他请求需要鉴权
+                .permitAll();
         
-        //用户名密码验证前先验证  验证码
-        //http.addFilterBefore(captchaValidateAuthenticationFilter(),
-        //                UsernamePasswordAuthenticationFilter.class);
-        //http.addFilterAt(filter, atFilter)
+        //其他请求需要鉴权
+        http.authorizeRequests()
+                .anyRequest()
+                .hasRole(OperatorRoleEnum.OPERATOR.getId());//需要操作人员角色
+        //http.authorizeRequests().anyRequest().authenticated();//其他请求需要鉴权
     }
     
     /**
@@ -242,7 +214,118 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 Arrays.asList(notXRequestedWith, mediaMatcher));
         
         //注入默认的认证入口，异常拦截器
+        //已认证用户的无权限控制
+        //未认证用户的无权限控制
         http.exceptionHandling().defaultAuthenticationEntryPointFor(
-                this.loginAuthenticationEntryPoint, preferredMatcher);
+                new OperatorSecurityLoginAuthenticationEntryPoint(
+                        "/admin/login"), preferredMatcher);
     }
+    
+    /**
+     * 注册登录入口<br/>
+     * <功能详细描述>
+     * @param http
+     * @throws Exception [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private void registerAccessDeniedHandler(HttpSecurity http)
+            throws Exception {
+        http.exceptionHandling().accessDeniedHandler(new OperatorSecurityAccessDeniedHandler("/error/403.html"));
+    }
+    
+    /**
+     * 认证成功处理句柄<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return AuthenticationSuccessHandler [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("operator.securityAuthenticationSuccessHandler")
+    public OperatorSecurityAuthenticationSuccessHandler operatorSecurityAuthenticationSuccessHandler() {
+        OperatorSecurityAuthenticationSuccessHandler handler = new OperatorSecurityAuthenticationSuccessHandler();
+        return handler;
+    }
+    
+    /**
+     * 认证失败处理句柄<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return AuthenticationFailureHandler [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("operator.securityAuthenticationFailureHandler")
+    public OperatorSecurityAuthenticationFailureHandler operatorSecurityAuthenticationFailureHandler() {
+        OperatorSecurityAuthenticationFailureHandler handler = new OperatorSecurityAuthenticationFailureHandler();
+        return handler;
+    }
+    
+    /**
+     * 操作人员认证处理过滤器<br/>
+     * <功能详细描述>
+     * @param authenticationManager
+     * @param successHandler
+     * @param failureHandler
+     * @return [参数说明]
+     * 
+     * @return OperatorAuthenticationProcessingFilter [返回类型说明]
+     * @throws Exception 
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("operator.authenticationProcessingFilter")
+    public OperatorAuthenticationProcessingFilter operatorAuthenticationProcessingFilter()
+            throws Exception {
+        OperatorAuthenticationProcessingFilter filter = new OperatorAuthenticationProcessingFilter();
+        filter.setAuthenticationSuccessHandler(
+                operatorSecurityAuthenticationSuccessHandler());
+        filter.setAuthenticationFailureHandler(
+                operatorSecurityAuthenticationFailureHandler());
+        filter.setAuthenticationManager(this.authenticationManager);
+        return filter;
+    }
+    
+    /**
+     * 第三方用户登陆拦截器<br/>
+     * <功能详细描述>
+     * @param authenticationManager
+     * @return [参数说明]
+     * 
+     * @return OperatorSocialAuthenticationProcessingFilter [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("operator.socialAuthenticationProcessingFilter")
+    public OperatorSocialAuthenticationProcessingFilter operatorSocialAuthenticationProcessingFilter()
+            throws Exception {
+        OperatorSocialAuthenticationProcessingFilter filter = new OperatorSocialAuthenticationProcessingFilter();
+        filter.setAuthenticationSuccessHandler(
+                operatorSecurityAuthenticationSuccessHandler());
+        filter.setAuthenticationFailureHandler(
+                operatorSecurityAuthenticationFailureHandler());
+        filter.setAuthenticationManager(this.authenticationManager);
+        return filter;
+    }
+    
+    /**
+     * 操作人员会话处理过滤器<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return OperatorSessionAuthenticationStrategy [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("operator.sessionAuthenticationStrategy")
+    public OperatorSessionAuthenticationStrategy operatorSessionAuthenticationStrategy() {
+        OperatorSessionAuthenticationStrategy strategy = new OperatorSessionAuthenticationStrategy();
+        return strategy;
+    }
+    
 }

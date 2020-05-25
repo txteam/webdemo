@@ -94,7 +94,7 @@ public class NoticeMessage implements Serializable, JSONAttributesSupport {
     private boolean published = false;
     
     /** 发布时间 */
-    private Date publishDate;
+    private Date publishDate = new Date();
     
     /** 是否有效 */
     private boolean valid;

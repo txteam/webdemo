@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="institutionInfo">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="institutionInfoMap" 
+		type="com.tx.local.institution.model.InstitutionInfo">
+		<result column="cityId" property="city.id"/>
+		<result column="countyId" property="county.id"/>
+		<result column="districtId" property="district.id"/>
+		<result column="provinceId" property="province.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.institution.model.InstitutionInfo"
+		resultMap="institutionInfoMap">
+		SELECT 
+				II.id,
+				II.cityId,
+				II.fullAddress,
+				II.lastUpdateDate,
+				II.lastUpdateUserId,
+				II.linkName,
+				II.linkMobileNumber,
+				II.name,
+				II.type,
+				II.vcid,
+				II.clientId,
+				II.countyId,
+				II.createDate,
+				II.createUserId,
+				II.modifyAble,
+				II.remark,
+				II.address,
+				II.districtId,
+				II.postcode,
+				II.provinceId
+		  FROM INS_INSTITUTION II
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND II.id = #{id}
+	        </if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="institutionInfoMap">
+		SELECT 
+				II.id,
+				II.cityId,
+				II.fullAddress,
+				II.lastUpdateDate,
+				II.lastUpdateUserId,
+				II.linkName,
+				II.linkMobileNumber,
+				II.name,
+				II.type,
+				II.vcid,
+				II.clientId,
+				II.countyId,
+				II.createDate,
+				II.createUserId,
+				II.modifyAble,
+				II.remark,
+				II.address,
+				II.districtId,
+				II.postcode,
+				II.provinceId
+		  FROM INS_INSTITUTION II
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND II.id = #{id} ]]>
+	        </if>			
+			<if test="city != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(city.id)">  
+		            <![CDATA[ AND II.cityId = #{city.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
+	            <![CDATA[ AND II.fullAddress = #{fullAddress} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
+	            <![CDATA[ AND II.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkName)">  
+	            <![CDATA[ AND II.linkName = #{linkName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkMobileNumber)">  
+	            <![CDATA[ AND II.linkMobileNumber = #{linkMobileNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND II.name = #{name} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND II.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND II.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND II.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="county != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(county.id)">  
+		            <![CDATA[ AND II.countyId = #{county.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND II.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND II.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
+	            <![CDATA[ AND II.createUserId = #{createUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND II.modifyAble = #{modifyAble} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND II.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(address)">  
+	            <![CDATA[ AND II.address = #{address} ]]>
+	        </if>			
+			<if test="district != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(district.id)">  
+		            <![CDATA[ AND II.districtId = #{district.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(postcode)">  
+	            <![CDATA[ AND II.postcode = #{postcode} ]]>
+	        </if>			
+			<if test="province != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(province.id)">  
+		            <![CDATA[ AND II.provinceId = #{province.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND II.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM INS_INSTITUTION II
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND II.id = #{id} ]]>
+	        </if>			
+			<if test="city != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(city.id)">  
+		            <![CDATA[ AND II.cityId = #{city.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fullAddress)">  
+	            <![CDATA[ AND II.fullAddress = #{fullAddress} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
+	            <![CDATA[ AND II.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkName)">  
+	            <![CDATA[ AND II.linkName = #{linkName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkMobileNumber)">  
+	            <![CDATA[ AND II.linkMobileNumber = #{linkMobileNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
+	            <![CDATA[ AND II.name = #{name} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
+	            <![CDATA[ AND II.type = #{type} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND II.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND II.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="county != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(county.id)">  
+		            <![CDATA[ AND II.countyId = #{county.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND II.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND II.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(createUserId)">  
+	            <![CDATA[ AND II.createUserId = #{createUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(modifyAble)">  
+	            <![CDATA[ AND II.modifyAble = #{modifyAble} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(remark)">  
+	            <![CDATA[ AND II.remark = #{remark} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(address)">  
+	            <![CDATA[ AND II.address = #{address} ]]>
+	        </if>			
+			<if test="district != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(district.id)">  
+		            <![CDATA[ AND II.districtId = #{district.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(postcode)">  
+	            <![CDATA[ AND II.postcode = #{postcode} ]]>
+	        </if>			
+			<if test="province != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(province.id)">  
+		            <![CDATA[ AND II.provinceId = #{province.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND II.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.institution.model.InstitutionInfo">
+		INSERT INTO INS_INSTITUTION
+		(
+			id,
+			cityId,
+			fullAddress,
+			lastUpdateDate,
+			lastUpdateUserId,
+			linkName,
+			linkMobileNumber,
+			name,
+			type,
+			vcid,
+			clientId,
+			countyId,
+			createDate,
+			createUserId,
+			modifyAble,
+			remark,
+			address,
+			districtId,
+			postcode,
+			provinceId
+		)
+		VALUES
+		(
+			#{id},
+			#{city.id},
+			#{fullAddress},
+			#{lastUpdateDate},
+			#{lastUpdateUserId},
+			#{linkName},
+			#{linkMobileNumber},
+			#{name},
+			#{type},
+			#{vcid},
+			#{clientId},
+			#{county.id},
+			#{createDate},
+			#{createUserId},
+			#{modifyAble},
+			#{remark},
+			#{address},
+			#{district.id},
+			#{postcode},
+			#{province.id}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.institution.model.InstitutionInfo">
+		DELETE FROM INS_INSTITUTION  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE INS_INSTITUTION
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('city')">
+	    		cityId = #{city.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('fullAddress')">
+	    		fullAddress = #{fullAddress,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateUserId')">
+	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('linkName')">
+	    		linkName = #{linkName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('linkMobileNumber')">
+	    		linkMobileNumber = #{linkMobileNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('name')">
+	    		name = #{name,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('type')">
+	    		type = #{type,javaType=com.tx.local.institution.model.InstitutionTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('clientId')">
+	    		clientId = #{clientId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('county')">
+	    		countyId = #{county.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('modifyAble')">
+	    		modifyAble = #{modifyAble,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('remark')">
+	    		remark = #{remark,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('address')">
+	    		address = #{address,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('district')">
+	    		districtId = #{district.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('postcode')">
+	    		postcode = #{postcode,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('province')">
+	    		provinceId = #{province.id,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

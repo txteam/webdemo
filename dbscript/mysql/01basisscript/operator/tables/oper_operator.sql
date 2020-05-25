@@ -16,6 +16,7 @@ create table OPER_OPERATOR(
 	pwdErrCount integer not null default 0,
 	pwdUpdateDate datetime(6),
 	examinePwd varchar(64),
+	admin bit not null default 0,
 	locked bit not null default 0,
 	modifyAble bit not null default 1,
 	valid bit not null default 1,

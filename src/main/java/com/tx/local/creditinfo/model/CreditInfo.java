@@ -7,9 +7,9 @@
 package com.tx.local.creditinfo.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import com.tx.local.creditinfo.context.CreditInfoVersionTypeEnum;
+import com.tx.local.basicdata.model.IDCardTypeEnum;
+import com.tx.local.creditinfo.context.CreditInfoTypeEnum;
 
 /**
  * 客户版本信息<br/>
@@ -34,18 +34,18 @@ public interface CreditInfo extends Serializable {
     String getId();
     
     /**
-     * 设置信用信息唯一键<br/>
+     * 获取证件类型<br/>
      * <功能详细描述>
-     * @param creditInfoId [参数说明]
+     * @return [参数说明]
      * 
-     * @return void [返回类型说明]
+     * @return IDCardTypeEnum [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    void setId(String id);
+    public IDCardTypeEnum getIdCardType();
     
     /**
-     * 获取客户id
+     * 获取证件号码<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -53,18 +53,18 @@ public interface CreditInfo extends Serializable {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    String getCreditInfoId();
+    public String getIdCardNumber();
     
     /**
-     * 设置客户信用信息<br/>
+     * 基线版本<br/>
      * <功能详细描述>
-     * @param creditInfoId [参数说明]
+     * @return [参数说明]
      * 
-     * @return void [返回类型说明]
+     * @return int [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    void setCreditInfoId(String creditInfoId);
+    int getBaseVersion();
     
     /**
      * 获取版本类型<br/>
@@ -75,18 +75,7 @@ public interface CreditInfo extends Serializable {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    CreditInfoVersionTypeEnum getVersionType();
-    
-    /**
-     * 设置信息版本类型<br/>
-     * <功能详细描述>
-     * @param versionType [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    void setVersionType(CreditInfoVersionTypeEnum versionType);
+    CreditInfoTypeEnum getType();
     
     /**
      * 获取版本号<br/>
@@ -98,103 +87,4 @@ public interface CreditInfo extends Serializable {
      * @see [类、类#方法、类#成员]
      */
     int getVersion();
-    
-    /**
-     * 设置版本号<br/>
-     * <功能详细描述>
-     * @param version [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    void setVersion(int version);
-    
-    /**
-     * 获取创建时间
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return Date [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    Date getCreateDate();
-    
-    /**
-     * 设置创建时间<br/>
-     * <功能详细描述>
-     * @param createDate [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    void setCreateDate(Date createDate);
-    
-    /**
-     * 获取最后更新时间<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return Date [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    Date getLastUpdateDate();
-    
-    /**
-     * 设置最后更新时间<br/>
-     * <功能详细描述>
-     * @param lastUpdateDate [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    void setLastUpdateDate(Date lastUpdateDate);
-    
-    /**
-     * 获取创建人id<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    String getCreateUserId();
-    
-    /**
-     * 设置最后更新时间<br/>
-     * <功能详细描述>
-     * @param createUserId [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    void setCreateUserId(String createUserId);
-    
-    /**
-     * 获取最后更新人id<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    String getLastUpdateUserId();
-    
-    /**
-     * 设置最后更新人id<br/>
-     * <功能详细描述>
-     * @param lastUpdateUserId [参数说明]
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    void setLastUpdateUserId(String lastUpdateUserId);
 }

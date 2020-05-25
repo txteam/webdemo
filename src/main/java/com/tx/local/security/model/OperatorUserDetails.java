@@ -14,7 +14,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.tx.component.auth.model.Auth;
+import com.tx.component.auth.model.AuthAuthorityImpl;
 import com.tx.component.role.model.Role;
+import com.tx.component.role.model.RoleAuthorityImpl;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.organization.model.Organization;
 import com.tx.local.organization.model.Post;
@@ -85,10 +87,10 @@ public class OperatorUserDetails implements UserDetails {
     private void initAuthority() {
         List<GrantedAuthority> newAuthorites = new ArrayList<>();
         for (Role roleTemp : this.roles) {
-            newAuthorites.add(new OperatorRoleAuthority(roleTemp));
+            newAuthorites.add(new RoleAuthorityImpl(roleTemp));
         }
         for (Auth authTemp : this.auths) {
-            newAuthorites.add(new OperatorAuthAuthority(authTemp));
+            newAuthorites.add(new AuthAuthorityImpl(authTemp));
         }
         this.authorities = newAuthorites;
     }

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configs>
 	<catalog code="system.config" name="系统配置">
-		<config modifyAble="true">
-			<name>默认密码</name>
-			<code>system.config.password.default</code>
+		<config>
+			<name>操作人员默认密码</name>
+			<code>system.config.operator.default.password</code>
 			<value>123456</value>
 			<remark>系统新建操作人员的默认密码|重置密码</remark>
-			<validateExpression>超时时间:required;length[6~12]</validateExpression>
+		</config>
+		<config>
+			<name>客户默认密码</name>
+			<code>system.config.client.default.password</code>
+			<value>123456</value>
+			<remark>客户默认密码|重置密码</remark>
 		</config>
 	</catalog>
 </configs>

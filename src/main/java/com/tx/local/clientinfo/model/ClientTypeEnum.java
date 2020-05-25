@@ -18,11 +18,17 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum ClientTypeEnum implements BasicDataEnum {
     
-    /** 机构用户 */
-    EMPLOYEE("EMPLOYEE", "雇员"),
+    /** 行政机构 */
+    ADM_INS("ADM_INS", "行政机构"),
     
-    /** 机构用户 */
-    ENTERPRISE("ENTERPRISE", "企业"),
+    /** 社属机构 */
+    COO_INS("COO_INS", "社属机构"),
+    
+    /** 机构 */
+    INSTITUTION("INSTITUTION", "机构"),
+    
+    /** 机构成员 */
+    INSTITUTION_MEMBER("INSTITUTION_MEMBER", "机构成员"),
     
     /** 个体工商户(个体户) */
     SELF_EMPLOYED("SELF_EMPLOYED", "个体工商户"),

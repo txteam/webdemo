@@ -22,6 +22,36 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
 public enum OrganizationTypeEnum implements BasicDataEnum {
     
+    /** 机关　*/
+    PTYY("PTYY", "平台运营"),
+    
+    /** 机构分组*/
+    JG_GROUP("JG_GROUP", "机构分组"),
+    
+    /** 机关　*/
+    JG("JG", "机关"),
+    
+    /** 企业　*/
+    QY("QY", "企业"),
+    
+    /** 事业单位　*/
+    SYDW("SYDW", "事业单位"),
+    
+    /** 社团组织　*/
+    STZZ("STZZ", "社团组织"),
+    
+    /** JCS　*/
+    JCS("JCS", "基层社"),
+    
+    /** JCSDW　*/
+    JCSDW("JCSDW", "基层社单位"),
+    
+    /** ZYHZS　*/
+    ZYHZS("ZYHZS", "专业合作社"),
+    
+    /** ZHFWS*/
+    ZHFWS("ZHFWS", "综合服务社"),
+    
     /** 集团公司 */
     GROUP_COMPANY("GROUP_COMPANY", "集团公司"),
     
@@ -32,7 +62,7 @@ public enum OrganizationTypeEnum implements BasicDataEnum {
     BRANCH_COMPANY("BRANCH_COMPANY", "分公司"),
     
     /** 部门(科室) */
-    DEPARTMENT("DEPARTMENT", "部门"),
+    DEPARTMENT("DEPARTMENT", "部门(科室)"),
     
     /** 分部 */
     BRANCH_DEPARTMENT("BRANCH_DEPARTMENT", "分部"),

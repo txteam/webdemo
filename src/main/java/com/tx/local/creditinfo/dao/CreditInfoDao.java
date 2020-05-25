@@ -7,7 +7,7 @@
 package com.tx.local.creditinfo.dao;
 
 import com.tx.core.mybatis.dao.MybatisBaseDao;
-import com.tx.local.creditinfo.context.AbstractCreditInfo;
+import com.tx.local.creditinfo.context.CreditInfo;
 
 /**
  * 信用信息持久层<br/>
@@ -18,7 +18,7 @@ import com.tx.local.creditinfo.context.AbstractCreditInfo;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface CreditInfoDao<T extends AbstractCreditInfo>
+public interface CreditInfoDao<T extends CreditInfo>
         extends MybatisBaseDao<T, String> {
     
 }

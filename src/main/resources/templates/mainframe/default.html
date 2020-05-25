@@ -1,44 +1,46 @@
 ﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>default</title>
-<meta charset="utf-8"/>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>default</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <block th:replace="fragments/easyui_header::common_replace">
-<!-- css -->
-<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/js/jquery-easyui/themes/bootstrap/easyui.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
-<!-- customize -->
-<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
-<link rel="stylesheet" type="text/css" href="../../webjars/css/commons.css" th:href="@{/webjars/css/commons.css}"/>
-
-<!-- jquery -->
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
-<!-- jqueryui -->
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
-<!-- easyui -->
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/js/jquery-easyui/jquery.easyui.min.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/ext.easyui.js" th:src="@{/webjars/js/ext.easyui.js}"></script>
-<!-- other -->
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
-<!-- customize -->
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/commons.js" th:src="@{/webjars/js/commons.js}"></script>
-<script type="text/javascript" charset="utf-8" src="../../webjars/js/components.js" th:src="@{/webjars/js/components.js}"></script>
-<script type="text/javascript" th:inline="javascript">
-/*<![CDATA[*/
-var _contextPath = /*[[@{/}]]*/'';
-/*]]>*/
-</script>
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/webdemo/';
+	/*]]>*/
+	</script>
 </block>
+<!-- customize -->
+<link rel="stylesheet" type="text/css" href="../../css/background/mainframe.css" th:href="@{/css/background/mainframe.css}"/> 	
 <!-- echarts -->
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/echarts.min.js" th:src="@{/webjars/js/echarts/echarts.min.js}"></script>
 <script type="text/javascript" charset="utf-8" src="../../webjars/js/echarts/ext.echarts.js" th:src="@{/webjars/js/echarts/ext.echarts.js}"></script>
@@ -52,7 +54,7 @@ function resizeFresh(){
 }
 </script>
 <style type="text/css">
-.toollist{overflow:hidden;padding-top:8px; padding-left:8px;}
+.toollist{overflow:hidden;padding-top:4px; padding-left:8px;}
 .toollist li{float:left; width:16.66%;}
 .toollist li:hover{opacity:0.9; cursor:pointer;}
 .toollist li span i{display:block;float:left; width:62px; height:75px; line-height:75px; text-align:center; font-size:35px;background:url(../images/spanbg.png); margin-right:12px; color:#fff;}
@@ -95,15 +97,13 @@ function resizeFresh(){
 .panelmore i{font-size:12px; color:#0594f7;-webkit-transform-origin-x: 0;-webkit-transform: scale(0.80);}
 </style>
 </head>
-
 <body style="background:#fff;overflow-x:hidden; overflow-y:auto;"  onResize="resizeFresh()">
-
 	<!--toollist start-->
     <ul class="toollist">
-    	<li><div class="listbox boxcolor1"><span><i class="iconfont listfont">&#xe6da;</i></span><cite><a href="javascript:;">25<p>待办事项</p></a></cite></div></li>
-        <li><div class="listbox boxcolor2"><span><i class="iconfont">&#xe647;</i></span><cite><a href="javascript:;">16<p>档案管理</p></a></cite></div></li>
-        <li><div class="listbox boxcolor3"><span><i class="iconfont">&#xe619;</i></span><cite><a href="javascript:;">198<p>大数据统计</p></a></cite></div></li>
-        <li><div class="listbox boxcolor4"><span><i class="iconfont">&#xe6c9;</i></span><cite><a href="javascript:;">10<p>项目信息</p></a></cite></div></li>
+    	<li><div class="listbox boxcolor1"><span><i class="iconfont listfont">&#xe6da;</i></span><cite><a href="javascript:;">25<p>入社企业</p></a></cite></div></li>
+        <li><div class="listbox boxcolor2"><span><i class="iconfont">&#xe647;</i></span><cite><a href="javascript:;">168<p>社员统计</p></a></cite></div></li>
+        <li><div class="listbox boxcolor3"><span><i class="iconfont">&#xe619;</i></span><cite><a href="javascript:;">198<p>入社农户</p></a></cite></div></li>
+        <li><div class="listbox boxcolor4"><span><i class="iconfont">&#xe6c9;</i></span><cite><a href="javascript:;">103,032<p>交易金额</p></a></cite></div></li>
         <li><div class="listbox boxcolor5"><span><i class="iconfont">&#xe624;</i></span><cite><a href="javascript:;">15<p>日程管理</p></a></cite></div></li>
         <li><div class="listbox boxcolor6"><span><i class="iconfont">&#xe6bf;</i></span><cite><a href="javascript:;">7<p>云计算</p></a></cite></div></li>
     </ul>
@@ -117,7 +117,7 @@ function resizeFresh(){
             
             <div class="panelmore"><a href="#">更多</a><i class="iconfont">&#xe620;</i></div>
                         
-            <div class="easyui-panel" data-options="fit:true,border:true" title="趋势图" >            
+            <div class="easyui-panel" data-options="fit:true,border:true" title="生产组织趋势" >            
             
                         
             <div id="chart1" class="chartbox">
@@ -133,7 +133,7 @@ function resizeFresh(){
 					{
 						type : 'category',
 						boundaryGap : false,
-						data : ['周一','周二','周三','周四','周五','周六','周日']
+						data : ['一月','二月','三月','四月','五月','六月','七月']
 					}
 				],
 								
@@ -197,7 +197,7 @@ function resizeFresh(){
             
             <div class="panelmore"><a href="#">更多</a><i class="iconfont">&#xe620;</i></div>
             
-            <div class="easyui-panel" data-options="fit:true,border:true" title="环形图" >
+            <div class="easyui-panel" data-options="fit:true,border:true" title="生产类型统计" >
             
             <div id="chart2" class="chartbox" >
             
@@ -216,7 +216,7 @@ function resizeFresh(){
 				orient:'vertical',
 				x2:'30',
 				y:'center',
-				data:['百度','腾讯','淘宝','华为']
+				data:['种植','养殖','贸易','工业']
 				},
 			title:{
 				text:'20180',
@@ -258,10 +258,10 @@ function resizeFresh(){
 						}
 					},
             data:[
-                {value:335, name:'百度'},
-                {value:310, name:'腾讯'},
-                {value:234, name:'淘宝'},
-                {value:135, name:'华为'},
+                {value:335, name:'种植'},
+                {value:310, name:'养殖'},
+                {value:234, name:'贸易'},
+                {value:135, name:'工业'},
 						]
 					}
 				]
@@ -286,7 +286,7 @@ function resizeFresh(){
             
             <div class="panelmore"><a href="#">更多</a><i class="iconfont">&#xe620;</i></div>
             
-            <div class="easyui-panel" data-options="fit:true,border:true" title="柱状图" >
+            <div class="easyui-panel" data-options="fit:true,border:true" title="生产环比" >
             
             <div id="chart3" class="chartbox" >
             <script type="text/javascript">
@@ -388,7 +388,7 @@ function resizeFresh(){
             
             	<div class="panelmore"><a href="#">更多</a><i class="iconfont">&#xe620;</i></div>
             
-            	<div class="easyui-panel" data-options="fit:true,border:true" title="订单管理" >
+            	<div class="easyui-panel" data-options="fit:true,border:true" title="贸易信息" >
                 
                 <div class="tablebox">                
                 
@@ -443,16 +443,16 @@ function resizeFresh(){
             	<div class="easyui-panel" data-options="fit:true,border:true," title="通知公告" >                	
                     
                     <ul class="textlist">
-                    <li><span></span><a href="#">easyui最新蓝色主题皮肤html模板即将上线！</a><em class="emcolor1 smallfont">hot</em><i>11-10</i></li>
-                    <li><span></span><a href="#">2018年度公司现金个人表彰大会即将召开</a><em class="emcolor2 smallfont">new</em><i>11-09</i></li>
-                    <li><span></span><a href="#">订单管理系统功能升级效率大幅提升</a><em class="emcolor3 smallfont">rec</em><i>11-08</i></li>
-                    <li><span></span><a href="#">精美后台管理系统模板html免费下载-uimaker</a><i>11-07</i></li>
-                    <li><span></span><a href="#">大学生职场新人产品经理晋级课堂</a><i>11-06</i></li>
-                    <li><span></span><a href="#">卡通头像设计ui教程-您身边最好的在线课堂</a><i>11-05</i></li>
-                    <li><span></span><a href="#">uimaker分享-最全面最基础的ui设计知识</a><i>11-04</i></li>
-                    <li><span></span><a href="#">漂亮大数据可视化大屏展示ui设计</a><i>11-03</i></li>
-                    <li><span></span><a href="#">严厉鄙视一切倒卖模板的行为-强烈谴责！</a><i>11-02</i></li>
-                    <li><span></span><a href="#">uimaker网站最新office2016风格模板上线</a><i>11-01</i></li>
+                    <li><span></span><a href="#">关于疫情后组织恢复生产通知...</a><em class="emcolor1 smallfont">hot</em><i>11-10</i></li>
+                    <li><span></span><a href="#">组织学习...................</a><em class="emcolor2 smallfont">new</em><i>11-09</i></li>
+                    <li><span></span><a href="#">有关商品品牌建设...........</a><em class="emcolor3 smallfont">rec</em><i>11-08</i></li>
+                    <li><span></span><a href="#">测试测试测试测试测试测试测试测试测试测试测试测试...</a><i>11-07</i></li>
+                    <li><span></span><a href="#">测试测试测试测试测试测试测试测试测试测试测试测试...</a><i>11-06</i></li>
+                    <li><span></span><a href="#">测试测试测试测试测试测试测试测试测试测试测试测试...</a><i>11-05</i></li>
+                    <li><span></span><a href="#">测试测试测试测试测试测试测试测试测试测试测试测试...</a><i>11-04</i></li>
+                    <li><span></span><a href="#">测试测试测试测试测试测试测试测试测试测试测试测试...</a><i>11-03</i></li>
+                    <li><span></span><a href="#">测试测试测试测试测试测试测试测试测试测试测试测试...</a><i>11-02</i></li>
+                    <li><span></span><a href="#">测试测试测试测试测试测试测试测试测试测试测试测试...</a><i>11-01</i></li>
                     </ul>
                 
                 </div>  	

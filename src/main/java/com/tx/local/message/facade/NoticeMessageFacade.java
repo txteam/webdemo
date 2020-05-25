@@ -56,7 +56,7 @@ public interface NoticeMessageFacade {
     @ApiOperation(value = "根据ID删除公告消息")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
     public boolean deleteById(
-            @PathVariable(value = "id", required = true) String id);
+    		@PathVariable(value = "id",required=true) String id);
 
     /**
      * 更新公告消息<br/>
@@ -70,8 +70,8 @@ public interface NoticeMessageFacade {
      */
     @ApiOperation(value = "修改公告消息")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public boolean updateById(@PathVariable(value = "id", required = true) String id,
-                              @RequestBody NoticeMessage noticeMessage);
+    public boolean updateById(@PathVariable(value = "id",required=true) String id,
+    		@RequestBody NoticeMessage noticeMessage);
 
     /**
      * 禁用公告消息<br/>
@@ -85,7 +85,7 @@ public interface NoticeMessageFacade {
 	@ApiOperation(value = "禁用公告消息")
     @RequestMapping(value = "/disable/{id}", method = RequestMethod.PATCH)
     public boolean disableById(
-            @PathVariable(value = "id", required = true) String id);
+    		@PathVariable(value = "id", required = true) String id);
     
     /**
      * 启用公告消息<br/>
@@ -100,7 +100,7 @@ public interface NoticeMessageFacade {
     @ApiOperation(value = "启用公告消息")
     @RequestMapping(value = "/enable/{id}", method = RequestMethod.PATCH)
     public boolean enableById(
-            @PathVariable(value = "id", required = true) String id);
+    		@PathVariable(value = "id", required = true) String id);
 
     /**
      * 根据主键查询公告消息<br/>
@@ -131,9 +131,9 @@ public interface NoticeMessageFacade {
     @ApiOperation(value = "查询公告消息列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<NoticeMessage> queryList(
-            @RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier
-    );
+			@RequestParam(value = "valid", required = false) Boolean valid,
+    		@RequestBody Querier querier
+    	);
     
     /**
      * 查询公告消息分页列表<br/>
@@ -151,11 +151,11 @@ public interface NoticeMessageFacade {
     @ApiOperation(value = "查询公告消息分页列表")
     @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
     public PagedList<NoticeMessage> queryPagedList(
-            @RequestParam(value = "valid", required = false) Boolean valid,
-            @RequestBody Querier querier,
-            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+			@RequestParam(value = "valid", required = false) Boolean valid,
+			@RequestBody Querier querier,
+			@PathVariable(value = "pageNumber", required = true) int pageIndex,
             @PathVariable(value = "pageSize", required = true) int pageSize
-    );
+    	);
     
 	/**
      * 查询公告消息数量<br/>
@@ -171,7 +171,7 @@ public interface NoticeMessageFacade {
     @ApiOperation(value = "查询公告消息数量")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int count(
-            @RequestParam(value = "valid", required = false) Boolean valid,
+			@RequestParam(value = "valid", required = false) Boolean valid,
             @RequestBody Querier querier);
 
 	/**
@@ -187,7 +187,7 @@ public interface NoticeMessageFacade {
     @ApiOperation(value = "查询公告消息是否存在")
     @RequestMapping(value = "/exists", method = RequestMethod.GET)
     public boolean exists(
-            @RequestBody Querier querier,
+    		@RequestBody Querier querier,
             @RequestParam(value = "excludeId", required = false) String excludeId
-    );
+            );
 }

@@ -14,20 +14,53 @@ public enum VirtualCenterEnum {
     /** 平台:前端显示系统，当内容是服务前端显示系统时需要通过该虚中心进行配置　*/
     PT("PT", "平台"),
     
-    /** 集团公司　*/
-    JT("JT", "集团公司"),
+    /** 城口　*/
+    CK("CK", "城口"),
     
-    /** 集团子公司1　*/
-    JTZGS1("JTZGS1", "集团子公司1", JT),
+    /** 梁平　*/
+    LP("LP", "梁平"),
     
-    /** 集团子公司2　*/
-    JTZGS2("JTZGS2", "集团子公司2", JT),
+    /** 丰都　*/
+    FD("FD", "丰都"),
     
-    /** 测试公司1 */
-    CSGS1("CSGS1", "测试公司1"),
-    
-    /** 测试公司2 */
-    CSGS2("CSGS2", "测试公司2");
+    /** 潼南 */
+    TN("TN", "潼南"),
+    //    /** 平台:前端显示系统，当内容是服务前端显示系统时需要通过该虚中心进行配置　*/
+    //    PT_CK("PT_CK", "城口平台"),
+    //    
+    //    /** 社属机构　*/
+    //    SSJG_CK("SSJG_CK", "社属机构",PT_CK),
+    //    
+    //    /** 机关　*/
+    //    JG_SSJG_CK("JG_SSJG_CK", "机关", SSJG_CK),
+    //    
+    //    /** 机关　*/
+    //    QY_SSJG_CK("QY_SSJG_CK", "企业", SSJG_CK),
+    //    
+    //    /** 事业单位　*/
+    //    SYDW_SSJG_CK("SYDW_SSJG_CK", "事业单位", SSJG_CK),
+    //    
+    //    /** 社团组织　*/
+    //    STZZ_SSJG_CK("STZZ_SSJG_CK", "社团组织", SSJG_CK),
+    //    
+    //    /** JCS　*/
+    //    JCS_SSJG_CK("JCS_SSJG_CK", "基层社", SSJG_CK),
+    //    
+    //    /** JCSDW_SSJG_CK　*/
+    //    JCSDW_SSJG_CK("JCSDW_SSJG_CK", "基层社单位", SSJG_CK),
+    //    
+    //    /** ZYHZS_SSJG_CK　*/
+    //    ZYHZS_SSJG_CK("ZYHZS_SSJG_CK", "专业合作社", SSJG_CK),
+    //    
+    //    /** ZHFWS_SSJG_CK　*/
+    //    ZHFWS_SSJG_CK("ZHFWS_SSJG_CK", "综合服务社", SSJG_CK),
+    //    
+    //    /** 城口行政机构　*/
+    //    XZJG_CK("XZJG_CK", "行政机构",PT_CK),
+    //    
+    //    /** 驻村办　*/
+    //    ZCB_XZJG_CK("ZCB_XZJG_CK", "驻村办",XZJG_CK)
+    ;
     
     /** 名称 */
     private final String name;

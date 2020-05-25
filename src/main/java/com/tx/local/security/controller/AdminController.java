@@ -29,7 +29,7 @@ import com.tx.local.vitualcenter.model.VirtualCenter;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+@PreAuthorize("hasRole('SUPER_ADMIN')")
 @Controller("adminController")
 @RequestMapping("/admin")
 public class AdminController {

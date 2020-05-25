@@ -36,6 +36,7 @@ public class EmployeeInfo implements Serializable {
     /** 注释内容 */
     private static final long serialVersionUID = 8805323377968943458L;
     
+    /** 主键 */
     @Id
     private String id;
     

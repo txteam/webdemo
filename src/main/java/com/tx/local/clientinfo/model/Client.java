@@ -15,10 +15,10 @@ package com.tx.local.clientinfo.model;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface Client {
+public interface Client extends ClientSecurityAccount {
     
     /**
-     * 获取客户id<br/>
+     * 获取客户所在虚中心<br/>
      * <功能详细描述>
      * @return [参数说明]
      * 
@@ -26,18 +26,7 @@ public interface Client {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public String getId();
-    
-    /**
-     * 获取客户类型<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return ClientInfoTypeEnum [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public ClientTypeEnum getType();
+    public String getVcid();
     
     /**
      * 获取用户姓名<br/>
@@ -48,5 +37,27 @@ public interface Client {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public String getUsername();
+    public String getName();
+    
+    /**
+     * 是否绑定机构信用信息<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    boolean isCreditInfoBinding();
+    
+    /**
+     * 机构信用信息ID<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    String getCreditInfoId();
 }

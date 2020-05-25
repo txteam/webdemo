@@ -24,7 +24,10 @@ public enum AuthTypeEnum implements AuthType, BaseEnum {
     AUTH_TYPE_OPERATOR_DATA("AUTH_TYPE_OPERATOR_DATA", "系统操作员数据权限"),
     
     /** 系统管理员 */
-    AUTH_TYPE_CLIENT_OPERATE("AUTH_TYPE_CLIENT_OPERATE", "客户操作权限");
+    AUTH_TYPE_CLIENT_OPERATE("AUTH_TYPE_CLIENT_OPERATE", "客户操作权限"),
+    
+    /** 系统管理员 */
+    AUTH_TYPE_CLIENT_DATA("AUTH_TYPE_CLIENT_DATA", "客户数据权限");
     
     /** KEY值 */
     private final String id;

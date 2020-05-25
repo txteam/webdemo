@@ -9,15 +9,27 @@ package com.tx.local.institution.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.tx.local.basicdata.model.District;
+import com.tx.local.clientinfo.model.Client;
+import com.tx.local.creditinfo.model.CreditInfo;
 
 /**
  * 组织机构<br/>
  *    包含：个体户，企业等机构信息
+ *    Client <- 1 : 1 -> InstitutionInfo
+ *    Client <- n : 1 -> InstitutionCreditInfo <- 1 : 1 1 : n -> CreditDetail...
+ *    InstitutionCreditInfo在客户完成实名认证后进行绑定
+ *    完成绑定后，客户可以维护其相关信用信息
+ *    与信用无关的信息，都与clientId进行关联
+ *    与信用有关（实名以后进行录入的），都与creditId进行关联
+ *    CreditInfo <- 1 : 1 1 : n -> CreditDetail...
+ *    InstitutionInfo与
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -26,93 +38,103 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "cl_institution")
-public class InstitutionInfo implements Serializable {
+@Table(name = "ins_institution")
+public class InstitutionInfo implements Serializable, Institution {
     
     /** 注释内容 */
     private static final long serialVersionUID = 3297464751315326650L;
     
     /** 主键:唯一键 */
     @Id
+    @Column(length = 64, updatable = false, nullable = false)
     private String id;
     
-    /** 机构类型 */
-    private InstitutionTypeEnum type;
+    /** 虚中心id： 将会使用社属机构id当做vcid进行插入数据 */
+    @Column(length = 64, updatable = false, nullable = false)
+    private String vcid;
     
     /** 客户id */
+    @Column(length = 64, updatable = true, nullable = true)
     private String clientId;
     
-    /** 机构名 */
+    /** 机构类型 */
+    @Column(length = 64, updatable = true, nullable = false)
+    private InstitutionTypeEnum type;
+    
+    /** 合作社名 */
+    @Column(length = 64, updatable = true, nullable = true)
     private String name;
     
-    /** 法人 */
-    private String legalName;
+    /** 省_ID */
+    @Column(name = "provinceId", length = 64, nullable = true)
+    private District province;
     
-    /** 法人身份证号 */
-    private String legalIdCardNumber;
+    /** 市_ID */
+    @Column(name = "cityId", length = 64, nullable = true)
+    private District city;
     
-    /** 代理人 */
-    private String agentName;
+    /** 区/县_ID */
+    @Column(name = "countyId", length = 64, nullable = true)
+    private District county;
     
-    /** 代理人身份证号 */
-    private String agentIdCardNumber;
+    /** 区/县_ID */
+    @Column(name = "districtId", length = 64, nullable = true)
+    private District district;
     
-    /** 组织机构代码 */
-    private String institutionNumber;
-    
-    /** 税务号 */
-    private String taxNumber;
-    
-    /** 营业执照号 */
-    private String businessLicenseNumber;
-    
-    /** 机构号段范围 */
-    private String sectionNoStart;
-    
-    /** 机构号段范围 */
-    private String sectionNoEnd;
-    
-    /** 营业执照省 */
-    private String districtId;
-    
-    /** 地址 */
+    /** 行政区域:详细地址 */
+    @Column(length = 256, nullable = true)
     private String address;
     
+    /** 地址全称 */
+    @Column(length = 256, nullable = true)
+    private String fullAddress;
+    
     /** 邮政编码 */
+    @Column(length = 64, nullable = true)
     private String postcode;
     
-    /** 公司联系电话(座机) */
-    private String phoneNumber;
-    
-    /** 经营期限 */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date expiryDate;
-    
-    /** 开户许可证附件 */
-    private String openAccountLicenseFileId;
-    
-    /** 营业执照文件id */
-    private String businessLicenseFileId;
-    
-    /** 带公章营业执照 */
-    private String businessLicenseWithSealFileId;
-    
-    /** 企业经办人授权委托书 */
-    private String letterOfAttorneyFileId;
-    
     /**备注*/
+    @Column(length = 500, nullable = true)
     public String remark;
     
-    /** 创建日期 */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createDate;
+    /** 联系人 */
+    @Column(length = 64, nullable = true)
+    private String linkName;
+    
+    /** 联系电话(默认将使用该联系电话去创建该机构的管理员) */
+    @Column(length = 64, nullable = true)
+    private String linkMobileNumber;
+    
+    /** 是否可编辑，部分数据可能是关联到具体的其他数据一并进行维护的，可能被设置为不可编辑 */
+    @Column(nullable = false, updatable = true)
+    private boolean modifyAble;
     
     /** 最后更新时间 */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = false, updatable = true)
     private Date lastUpdateDate;
     
+    /** 最后更新用户 */
+    @Column(nullable = true, updatable = true)
+    private String lastUpdateUserId;
+    
+    /** 创建时间 */
+    @Column(nullable = false, updatable = false)
+    private Date createDate;
+    
+    /** 创建用户ID */
+    @Column(nullable = true, updatable = false)
+    private String createUserId;
+    
+    /** 客户信息 */
+    @Transient
+    private Client client;
+    
+    /** 信用信息 */
+    @Transient
+    private CreditInfo creditInfo;
+    
     /**
-     * @return 返回 id
+     * @return
      */
     public String getId() {
         return id;
@@ -126,21 +148,21 @@ public class InstitutionInfo implements Serializable {
     }
     
     /**
-     * @return 返回 type
+     * @return
      */
-    public InstitutionTypeEnum getType() {
-        return type;
+    public String getVcid() {
+        return vcid;
     }
     
     /**
-     * @param 对type进行赋值
+     * @param 对vcid进行赋值
      */
-    public void setType(InstitutionTypeEnum type) {
-        this.type = type;
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
     }
     
     /**
-     * @return 返回 clientId
+     * @return
      */
     public String getClientId() {
         return clientId;
@@ -154,7 +176,21 @@ public class InstitutionInfo implements Serializable {
     }
     
     /**
-     * @return 返回 name
+     * @return
+     */
+    public InstitutionTypeEnum getType() {
+        return type;
+    }
+    
+    /**
+     * @param 对type进行赋值
+     */
+    public void setType(InstitutionTypeEnum type) {
+        this.type = type;
+    }
+    
+    /**
+     * @return
      */
     public String getName() {
         return name;
@@ -168,147 +204,63 @@ public class InstitutionInfo implements Serializable {
     }
     
     /**
-     * @return 返回 legalName
+     * @return
      */
-    public String getLegalName() {
-        return legalName;
+    public District getProvince() {
+        return province;
     }
     
     /**
-     * @param 对legalName进行赋值
+     * @param 对province进行赋值
      */
-    public void setLegalName(String legalName) {
-        this.legalName = legalName;
+    public void setProvince(District province) {
+        this.province = province;
     }
     
     /**
-     * @return 返回 legalIdCardNumber
+     * @return
      */
-    public String getLegalIdCardNumber() {
-        return legalIdCardNumber;
+    public District getCity() {
+        return city;
     }
     
     /**
-     * @param 对legalIdCardNumber进行赋值
+     * @param 对city进行赋值
      */
-    public void setLegalIdCardNumber(String legalIdCardNumber) {
-        this.legalIdCardNumber = legalIdCardNumber;
+    public void setCity(District city) {
+        this.city = city;
     }
     
     /**
-     * @return 返回 agentName
+     * @return
      */
-    public String getAgentName() {
-        return agentName;
+    public District getCounty() {
+        return county;
     }
     
     /**
-     * @param 对agentName进行赋值
+     * @param 对county进行赋值
      */
-    public void setAgentName(String agentName) {
-        this.agentName = agentName;
+    public void setCounty(District county) {
+        this.county = county;
     }
     
     /**
-     * @return 返回 agentIdCardNumber
+     * @return
      */
-    public String getAgentIdCardNumber() {
-        return agentIdCardNumber;
+    public District getDistrict() {
+        return district;
     }
     
     /**
-     * @param 对agentIdCardNumber进行赋值
+     * @param 对district进行赋值
      */
-    public void setAgentIdCardNumber(String agentIdCardNumber) {
-        this.agentIdCardNumber = agentIdCardNumber;
+    public void setDistrict(District district) {
+        this.district = district;
     }
     
     /**
-     * @return 返回 institutionNumber
-     */
-    public String getInstitutionNumber() {
-        return institutionNumber;
-    }
-    
-    /**
-     * @param 对institutionNumber进行赋值
-     */
-    public void setInstitutionNumber(String institutionNumber) {
-        this.institutionNumber = institutionNumber;
-    }
-    
-    /**
-     * @return 返回 taxNumber
-     */
-    public String getTaxNumber() {
-        return taxNumber;
-    }
-    
-    /**
-     * @param 对taxNumber进行赋值
-     */
-    public void setTaxNumber(String taxNumber) {
-        this.taxNumber = taxNumber;
-    }
-    
-    /**
-     * @return 返回 businessLicenseNumber
-     */
-    public String getBusinessLicenseNumber() {
-        return businessLicenseNumber;
-    }
-    
-    /**
-     * @param 对businessLicenseNumber进行赋值
-     */
-    public void setBusinessLicenseNumber(String businessLicenseNumber) {
-        this.businessLicenseNumber = businessLicenseNumber;
-    }
-    
-    /**
-     * @return 返回 sectionNoStart
-     */
-    public String getSectionNoStart() {
-        return sectionNoStart;
-    }
-    
-    /**
-     * @param 对sectionNoStart进行赋值
-     */
-    public void setSectionNoStart(String sectionNoStart) {
-        this.sectionNoStart = sectionNoStart;
-    }
-    
-    /**
-     * @return 返回 sectionNoEnd
-     */
-    public String getSectionNoEnd() {
-        return sectionNoEnd;
-    }
-    
-    /**
-     * @param 对sectionNoEnd进行赋值
-     */
-    public void setSectionNoEnd(String sectionNoEnd) {
-        this.sectionNoEnd = sectionNoEnd;
-    }
-    
-    /**
-     * @return 返回 districtId
-     */
-    public String getDistrictId() {
-        return districtId;
-    }
-    
-    /**
-     * @param 对districtId进行赋值
-     */
-    public void setDistrictId(String districtId) {
-        this.districtId = districtId;
-    }
-    
-    /**
-     * @return 返回 address
+     * @return
      */
     public String getAddress() {
         return address;
@@ -322,7 +274,21 @@ public class InstitutionInfo implements Serializable {
     }
     
     /**
-     * @return 返回 postcode
+     * @return
+     */
+    public String getFullAddress() {
+        return fullAddress;
+    }
+    
+    /**
+     * @param 对fullAddress进行赋值
+     */
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
+    }
+    
+    /**
+     * @return
      */
     public String getPostcode() {
         return postcode;
@@ -336,92 +302,7 @@ public class InstitutionInfo implements Serializable {
     }
     
     /**
-     * @return 返回 phoneNumber
-     */
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    
-    /**
-     * @param 对phoneNumber进行赋值
-     */
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-    
-    /**
-     * @return 返回 expiryDate
-     */
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
-    
-    /**
-     * @param 对expiryDate进行赋值
-     */
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-    
-    /**
-     * @return 返回 openAccountLicenseFileId
-     */
-    public String getOpenAccountLicenseFileId() {
-        return openAccountLicenseFileId;
-    }
-    
-    /**
-     * @param 对openAccountLicenseFileId进行赋值
-     */
-    public void setOpenAccountLicenseFileId(String openAccountLicenseFileId) {
-        this.openAccountLicenseFileId = openAccountLicenseFileId;
-    }
-    
-    /**
-     * @return 返回 businessLicenseFileId
-     */
-    public String getBusinessLicenseFileId() {
-        return businessLicenseFileId;
-    }
-    
-    /**
-     * @param 对businessLicenseFileId进行赋值
-     */
-    public void setBusinessLicenseFileId(String businessLicenseFileId) {
-        this.businessLicenseFileId = businessLicenseFileId;
-    }
-    
-    /**
-     * @return 返回 businessLicenseWithSealFileId
-     */
-    public String getBusinessLicenseWithSealFileId() {
-        return businessLicenseWithSealFileId;
-    }
-    
-    /**
-     * @param 对businessLicenseWithSealFileId进行赋值
-     */
-    public void setBusinessLicenseWithSealFileId(
-            String businessLicenseWithSealFileId) {
-        this.businessLicenseWithSealFileId = businessLicenseWithSealFileId;
-    }
-    
-    /**
-     * @return 返回 letterOfAttorneyFileId
-     */
-    public String getLetterOfAttorneyFileId() {
-        return letterOfAttorneyFileId;
-    }
-    
-    /**
-     * @param 对letterOfAttorneyFileId进行赋值
-     */
-    public void setLetterOfAttorneyFileId(String letterOfAttorneyFileId) {
-        this.letterOfAttorneyFileId = letterOfAttorneyFileId;
-    }
-    
-    /**
-     * @return 返回 remark
+     * @return
      */
     public String getRemark() {
         return remark;
@@ -432,6 +313,76 @@ public class InstitutionInfo implements Serializable {
      */
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+    
+    /**
+     * @return
+     */
+    public String getLinkName() {
+        return linkName;
+    }
+    
+    /**
+     * @param 对linkName进行赋值
+     */
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
+    }
+    
+    /**
+     * @return
+     */
+    public String getLinkMobileNumber() {
+        return linkMobileNumber;
+    }
+    
+    /**
+     * @param 对linkMobileNumber进行赋值
+     */
+    public void setLinkMobileNumber(String linkMobileNumber) {
+        this.linkMobileNumber = linkMobileNumber;
+    }
+    
+    /**
+     * @return
+     */
+    public boolean isModifyAble() {
+        return modifyAble;
+    }
+    
+    /**
+     * @param 对modifyAble进行赋值
+     */
+    public void setModifyAble(boolean modifyAble) {
+        this.modifyAble = modifyAble;
+    }
+    
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+    
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+    
+    /**
+     * @return 返回 lastUpdateUserId
+     */
+    public String getLastUpdateUserId() {
+        return lastUpdateUserId;
+    }
+    
+    /**
+     * @param 对lastUpdateUserId进行赋值
+     */
+    public void setLastUpdateUserId(String lastUpdateUserId) {
+        this.lastUpdateUserId = lastUpdateUserId;
     }
     
     /**
@@ -449,16 +400,44 @@ public class InstitutionInfo implements Serializable {
     }
     
     /**
-     * @return 返回 lastUpdateDate
+     * @return 返回 createUserId
      */
-    public Date getLastUpdateDate() {
-        return lastUpdateDate;
+    public String getCreateUserId() {
+        return createUserId;
     }
     
     /**
-     * @param 对lastUpdateDate进行赋值
+     * @param 对createUserId进行赋值
      */
-    public void setLastUpdateDate(Date lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+    
+    /**
+     * @return 返回 client
+     */
+    public Client getClient() {
+        return client;
+    }
+    
+    /**
+     * @param 对client进行赋值
+     */
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    /**
+     * @return 返回 creditInfo
+     */
+    public CreditInfo getCreditInfo() {
+        return creditInfo;
+    }
+
+    /**
+     * @param 对creditInfo进行赋值
+     */
+    public void setCreditInfo(CreditInfo creditInfo) {
+        this.creditInfo = creditInfo;
     }
 }

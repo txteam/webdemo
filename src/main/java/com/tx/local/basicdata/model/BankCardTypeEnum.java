@@ -7,6 +7,7 @@
 package com.tx.local.basicdata.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tx.component.basicdata.model.BasicDataEnum;
 import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
 
 /**
@@ -21,7 +22,7 @@ import com.tx.component.basicdata.model.BasicDataEnumJsonSerializer;
  * @since  [产品/模块版本]
  */
 @JsonSerialize(using = BasicDataEnumJsonSerializer.class)
-public enum BankCardTypeEnum {
+public enum BankCardTypeEnum implements BasicDataEnum {
     
     /** 虚拟卡(非储蓄卡或信用卡) */
     VIRTUAL_CARD("VIRTUAL_CARD", "虚拟卡"),
@@ -32,41 +33,29 @@ public enum BankCardTypeEnum {
     /** 储蓄卡 */
     DEBIT_CARD("DEBIT_CARD", "储蓄卡");
     
-    private String chinapayCode;
+    /** 银行卡类型编码 */
+    private final String code;
     
-    private String chinapayName;
+    /** 银行卡名称 */
+    private final String name;
     
     /** <默认构造函数> */
-    private BankCardTypeEnum(String chinapayCode, String chinapayName) {
-        this.chinapayCode = chinapayCode;
-        this.chinapayName = chinapayName;
+    private BankCardTypeEnum(String code, String name) {
+        this.code = code;
+        this.name = name;
     }
     
     /**
-     * @return 返回 chinapayCode
+     * @return 返回 code
      */
-    public String getChinapayCode() {
-        return chinapayCode;
+    public String getCode() {
+        return code;
     }
     
     /**
-     * @param 对chinapayCode进行赋值
+     * @return 返回 name
      */
-    public void setChinapayCode(String chinapayCode) {
-        this.chinapayCode = chinapayCode;
-    }
-    
-    /**
-     * @return 返回 chinapayName
-     */
-    public String getChinapayName() {
-        return chinapayName;
-    }
-    
-    /**
-     * @param 对chinapayName进行赋值
-     */
-    public void setChinapayName(String chinapayName) {
-        this.chinapayName = chinapayName;
+    public String getName() {
+        return name;
     }
 }

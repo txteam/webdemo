@@ -19,13 +19,22 @@ import com.tx.core.support.json.BaseEnumJsonSerializer;
 public enum RoleTypeEnum implements RoleType, BaseEnum {
     
     /** 系统管理员 */
-    ROLE_TYPE_ADMIN("ROLE_TYPE_ADMIN", "超级管理员"),
+    ROLE_TYPE_OPERATOR_ENUM("ROLE_TYPE_OPERATOR_ENUM", "预定义操作人员角色"),
     
     /** 系统管理员 */
-    ROLE_TYPE_OPERATOR("ROLE_TYPE_OPERATOR", "系统管理员"),
+    ROLE_TYPE_OPERATOR("ROLE_TYPE_OPERATOR", "操作人员角色"),
     
     /** 系统管理员 */
-    ROLE_TYPE_CLIENT("ROLE_TYPE_CLIENT", "客户");
+    ROLE_TYPE_CLIENT_ENUM("ROLE_TYPE_CLIENT_ENUM", "预定义客户角色"),
+    
+    /** 系统管理员 */
+    ROLE_TYPE_CLIENT("ROLE_TYPE_CLIENT", "客户角色"),
+    
+    /** 系统管理员 */
+    ROLE_TYPE_WAP_CLIENT_ENUM("ROLE_TYPE_WAP_CLIENT_ENUM", "预定义WAP端客户角色"),
+    
+    /** 系统管理员 */
+    ROLE_TYPE_WAP_CLIENT("ROLE_TYPE_WAP_CLIENT", "WAP端客户角色");
     
     /** KEY值 */
     private final String id;
@@ -40,7 +49,7 @@ public enum RoleTypeEnum implements RoleType, BaseEnum {
     private RoleTypeEnum(String id, String name) {
         this.id = id;
         this.name = name;
-        this.remark = "";
+        this.remark = name;
     }
     
     /**

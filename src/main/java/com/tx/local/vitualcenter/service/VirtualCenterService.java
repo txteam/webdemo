@@ -101,8 +101,12 @@ public class VirtualCenterService implements InitializingBean {
         //处理自动新增以及自动更新逻辑（不包括树形结构写入）
         Map<String, VirtualCenterEnum> virtualCenterEnumMap = EnumUtils
                 .<VirtualCenterEnum> getEnumMap(VirtualCenterEnum.class);
+        Map<String, VirtualCenterEnum> virtualCenterEnumUpperCaseMap = new HashMap<>();
         for (VirtualCenterEnum virtualCenterKeyTemp : virtualCenterEnumMap
                 .values()) {
+            virtualCenterEnumUpperCaseMap.put(
+                    virtualCenterKeyTemp.getCode().toUpperCase(),
+                    virtualCenterKeyTemp);
             if (virtualCenterMap.containsKey(
                     virtualCenterKeyTemp.getCode().toUpperCase())) {
                 //如果已经存在
@@ -151,6 +155,19 @@ public class VirtualCenterService implements InitializingBean {
                 virtualCenterMap.put(
                         virtualCenterKeyTemp.getCode().toUpperCase(),
                         virtualCenter);
+            }
+        }
+        
+        //循环设置枚举中不存在的为可修改
+        for (VirtualCenter virtualCenter : virtualCenterList) {
+            if (StringUtils.isEmpty(virtualCenter.getCode())) {
+                continue;
+            }
+            if (!virtualCenterEnumUpperCaseMap
+                    .containsKey(virtualCenter.getCode())
+                    && !virtualCenter.isModifyAble()) {
+                virtualCenter.setModifyAble(true);
+                updateById(virtualCenter);
             }
         }
     }

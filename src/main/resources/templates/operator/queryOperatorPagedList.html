@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
 	<title>查询操作人员分页列表[queryOperatorPagedList]</title>
 	<meta charset="utf-8"/>
@@ -56,6 +56,9 @@ $(document).ready(function(){
 	var $lockALink = $("#lockALink");
 	var $unlockALink = $("#unlockALink");
 	var $resetPwdALink = $("#resetPwdALink");
+	var $setToAdminALink = $("#setToAdminALink");
+	var $setToNotAdminALink = $("#setToNotAdminALink");
+	
 	var $configOperatorAuthALink = $("#configOperatorAuthALink");
 	var $configOperatorPostALink = $("#configOperatorPostALink");
 	var $configOperatorRoleALink = $("#configOperatorRoleALink");
@@ -253,6 +256,18 @@ $(document).ready(function(){
 					$lockALink.linkbutton('enable');
 				}
 				
+				if(row.admin){
+					$setToAdminALink.linkbutton('disable');
+					$setToAdminALink.hide();
+					$setToNotAdminALink.show();
+					$setToNotAdminALink.linkbutton('enable');
+				}else{
+					$setToNotAdminALink.linkbutton('disable');
+					$setToNotAdminALink.hide();
+					$setToAdminALink.show();
+					$setToAdminALink.linkbutton('enable');
+				}
+				
 				$resetPwdALink.linkbutton('enable');
 				$configOperatorAuthALink.linkbutton('enable');
 				$configOperatorPostALink.linkbutton('enable');
@@ -270,6 +285,11 @@ $(document).ready(function(){
 				$lockALink.linkbutton('disable');
 				$unlockALink.hide();
 				$lockALink.show();
+				
+				$setToNotAdminALink.linkbutton('disable');
+				$setToAdminALink.linkbutton('disable');
+				$setToNotAdminALink.hide();
+				$setToAdminALink.show();
 				
 				$resetPwdALink.linkbutton('disable');
 				$configOperatorAuthALink.linkbutton('disable');
@@ -293,6 +313,11 @@ $(document).ready(function(){
 			$unlockALink.linkbutton('disable');
 			$lockALink.hide();
 			$unlockALink.show();
+			
+			$setToNotAdminALink.linkbutton('disable');
+			$setToAdminALink.linkbutton('disable');
+			$setToNotAdminALink.hide();
+			$setToAdminALink.show();
 			
 			$resetPwdALink.linkbutton('disable');
 			$configOperatorAuthALink.linkbutton('disable');
@@ -681,6 +706,86 @@ function configOperatorRole(id,name){
 		}
 	);
 }
+/*
+ * 禁用
+ */
+function setToNotAdminFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定操作人员
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认设置为非系统管理员.{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认禁用指定操作人员
+    		$.post(/*[[@{/operator/role/setToNotAdmin}]]*/'',
+	    		{operatorId:id},
+	    		function(data){
+	    			DialogUtils.progress('close');
+	    			if(data){
+	    				DialogUtils.tip("禁用" + entityName + "成功.");
+	    			}else{
+	    				var errorMessage = $.formatString("禁用{0}失败.",entityName);
+	    				DialogUtils.alert("错误提示",errorMessage,"error");
+	    			}
+	    			queryFun();
+	    		}
+		    );
+    	}
+    });
+    return false;
+}
+/*
+ * 启用
+ */
+function setToAdminFun(id,name){
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return false;
+	}
+	//判断是否确认禁用指定操作人员
+	DialogUtils.confirm(
+    		"确认提醒" , 
+    		$.formatString("是否确认设置为系统管理员.{0}:[{1}]?",entityName,name), 
+    function(data){
+    	if(data){
+    		DialogUtils.progress({
+    	        text : '数据提交中，请等待....'
+    		});
+    		//如果确认启用指定操作人员
+    		$.post(/*[[@{/operator/role/setToAdmin}]]*/'',
+	    		{operatorId:id},
+	    		function(data){
+	    			DialogUtils.progress('close');
+	    			if(data){
+	    				DialogUtils.tip("设置" + entityName + "为系统管理员成功.");
+	    			}else{
+	    				var errorMessage = $.formatString("启用{0}失败.",entityName);
+	    				DialogUtils.alert("错误提示",errorMessage,"error");
+	    			}
+	    			queryFun();
+		    	}
+		    );
+    	}
+    });
+    return false;
+}
 /*]]>*/
 </script>
 </head>
@@ -764,7 +869,10 @@ function configOperatorRole(id,name){
 		<a id="disableALink" onclick="disableFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">禁用</a>
 		<a id="lockALink" onclick="lockFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'lock'">锁定</a>
 		<a id="unlockALink" onclick="unlockFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'lock_open'">解锁</a>
-		
+		<block sec:authorize="hasRole('ROLE_SUPER_ADMIN')">
+			<a id="setToAdminALink" onclick="setToAdminFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_play_blue'">设置为管理员</a>
+			<a id="setToNotAdminALink" onclick="setToNotAdminFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'control_stop_blue'">设置不为管理员</a>
+		</block>
 		<a id="resetPwdALink" onclick="resetPwdFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">重置密码</a>
 		<a id="configOperatorPostALink" onclick="configOperatorPost();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'group_group'">配置职位</a>
 		<a id="configOperatorAuthALink" onclick="configOperatorAuth();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'database_key'">配置权限</a>

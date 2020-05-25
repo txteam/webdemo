@@ -6,7 +6,6 @@
  */
 package com.tx.local.springmvc;
 
-
 /**
  * SpringMVC常量<br/>
  * <功能详细描述>
@@ -18,4 +17,5 @@ package com.tx.local.springmvc;
  */
 public interface SpringMVCConstants {
     
+    String SWITCH_CONTEXT_PATH_KEY = "switchContextPath";
 }

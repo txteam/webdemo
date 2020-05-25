@@ -12,7 +12,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.tx.local.security.util.WebContextUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -140,7 +139,7 @@ public class PrivateMessageController {
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", request.getFirst("name"));
-
+        
         PagedList<PrivateMessage> resPagedList = this.privateMessageService
                 .queryPagedList(params, pageIndex, pageSize);
         return resPagedList;

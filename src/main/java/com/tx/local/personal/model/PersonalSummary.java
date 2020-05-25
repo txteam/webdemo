@@ -6,30 +6,25 @@
  */
 package com.tx.local.personal.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.tx.local.basicdata.model.District;
-import com.tx.local.basicdata.model.SexEnum;
-import com.tx.local.creditinfo.annotation.SingleCreditInfo;
-import com.tx.local.creditinfo.context.AbstractCreditInfo;
 import com.tx.local.creditinfo.model.Education;
 import com.tx.local.creditinfo.model.IdCardDeadline;
 import com.tx.local.creditinfo.model.IdentityState;
 import com.tx.local.creditinfo.model.LiveStatus;
 import com.tx.local.creditinfo.model.MaritalStatus;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 /**
- * 客户概要信息<br/>
+ * 个人概要信息<br/>
  *    证件类型和证件号码为唯一键<br/>
  * <功能详细描述>
  * 
@@ -38,54 +33,31 @@ import lombok.NoArgsConstructor;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@SingleCreditInfo
 @Entity
-@Table(name = "ci_personal_summary")
-@Data
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-public class PersonalSummary extends AbstractCreditInfo {
+@Table(name = "per_personal_summary")
+public class PersonalSummary implements Serializable {
     
     /** 注释内容 */
-    private static final long serialVersionUID = -7016793184048963410L;
+    private static final long serialVersionUID = 7167290592273943800L;
+
+    /** 主键:唯一键 */
+    @Id
+    @Column(length = 64, updatable = false, nullable = false)
+    private String id;
     
-    /** 姓 */
-    private String fristName;
-    
-    /** 名 */
-    private String lastName;
-    
-    /** 详细地址 */
-    private String addressDetial;
-    
-    /** 出生日期 */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date birthday;
-    
-    /** 性别 */
-    private SexEnum sex;
-    
-    /** 身份证正面文件id */
-    private String frontOfIDCardFileId;
-    
-    /**身份证正面地址*/
-    private String frontOfIDCardUrl;
-    
-    /** 身份证反面id */
-    private String reverseOfIDCardFileId;
-    
-    /** 身份证反面url */
-    private String reverseOfIDCardUrl;
+    /** 客户id */
+    @Column(length = 64, updatable = true, nullable = true)
+    private String personalId;
     
     /** 学历ID */
     @Column(name = "educationId")
     private Education education;
     
-    /*** 身份状态 **/
+    /** 身份状态 **/
     @Column(name = "identityStateId")
     private IdentityState identityState;
     
-    /*** 居住状况 **/
+    /** 居住状况 **/
     @Column(name = "liveStatusId")
     private LiveStatus liveStatus;
     
@@ -105,68 +77,273 @@ public class PersonalSummary extends AbstractCreditInfo {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date idCardExpiredDate;
     
-    /** 身份证地址_省_ID */
-    @Column(name = "idCardProvinceId")
-    private District idCardProvince;
-    
-    /** 身份证地址_市_ID */
-    @Column(name = "idCardCityId")
-    private District idCardCity;
-    
     /** 身份证地址_区/县_ID */
-    @Column(name = "idCardCountyId")
-    private District idCardCounty;
+    @Column(name = "idCardDistrictId")
+    private District idCardDistrict;
+    
+    /** 籍贯 */
+    @Column(name = "nativePlaceId")
+    private District nativePlace;
     
     /** 父亲姓名 */
-    private String fathName;
+    private String fatherName;
     
-    /** 父亲是否过父亲是否过世 */
-    private Boolean fathStatus = Boolean.FALSE;
+    /** 父亲是否健在 */
+    private Boolean fatherAlive = Boolean.TRUE;
+    
+    /** 父亲移动电话号码 */
+    private String fatherMobileNumber;
     
     /** 母亲姓名 */
-    private String mothName;
+    private String motherName;
     
-    /** 母亲是否过世 */
-    private Boolean mothStatus = Boolean.FALSE;
+    /** 母亲是否健在 */
+    private Boolean motherAlive = Boolean.TRUE;
     
-    /** 家庭是否知悉此项贷款 */
-    private Boolean famKno = Boolean.FALSE;
+    /** 父亲移动电话号码 */
+    private String motherMobileNumber;
     
-    /** 家庭是否知悉此项贷款_姓名 */
-    private String famName;
+    /**身份证正面地址*/
+    private String frontOfIDCardUrl;
     
-    /** 家庭是否知悉此项贷款_关系 */
-    private String famReal;
-    
-    /** 是否与本公司员有亲属关系_姓名 */
-    private String compName;
-    
-    /** 是否与本公司员工有亲属关系 */
-    private Boolean compRelation = Boolean.FALSE;
-    
-    /** 阻止推广信息 */
-    private String exteninfo;
-    
-    /** 通讯地址类型ID */
-    private String addressTypeId;
-    
-    /** 通讯地址类型id */
-    private String addressTypeHiiden;
-    
-    /** 电子邮件地址 */
-    private String email;
-    
-    /** 通讯地址 */
-    private String messAddr;
-    
-    /** 籍贯ID */
-    private String nativeId;
-    
-    /*** 居住开始时间 **/
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date liveStartDate;
-    
-    /*** 居住结束时间 **/
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date liveEndDate;
+    /** 身份证反面url */
+    private String reverseOfIDCardUrl;
+
+    /**
+     * @return 返回 id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param 对id进行赋值
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @return 返回 personalId
+     */
+    public String getPersonalId() {
+        return personalId;
+    }
+
+    /**
+     * @param 对personalId进行赋值
+     */
+    public void setPersonalId(String personalId) {
+        this.personalId = personalId;
+    }
+
+    /**
+     * @return 返回 education
+     */
+    public Education getEducation() {
+        return education;
+    }
+
+    /**
+     * @param 对education进行赋值
+     */
+    public void setEducation(Education education) {
+        this.education = education;
+    }
+
+    /**
+     * @return 返回 identityState
+     */
+    public IdentityState getIdentityState() {
+        return identityState;
+    }
+
+    /**
+     * @param 对identityState进行赋值
+     */
+    public void setIdentityState(IdentityState identityState) {
+        this.identityState = identityState;
+    }
+
+    /**
+     * @return 返回 liveStatus
+     */
+    public LiveStatus getLiveStatus() {
+        return liveStatus;
+    }
+
+    /**
+     * @param 对liveStatus进行赋值
+     */
+    public void setLiveStatus(LiveStatus liveStatus) {
+        this.liveStatus = liveStatus;
+    }
+
+    /**
+     * @return 返回 maritalStatus
+     */
+    public MaritalStatus getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    /**
+     * @param 对maritalStatus进行赋值
+     */
+    public void setMaritalStatus(MaritalStatus maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    /**
+     * @return 返回 marriageDate
+     */
+    public Date getMarriageDate() {
+        return marriageDate;
+    }
+
+    /**
+     * @param 对marriageDate进行赋值
+     */
+    public void setMarriageDate(Date marriageDate) {
+        this.marriageDate = marriageDate;
+    }
+
+    /**
+     * @return 返回 idCardDeadline
+     */
+    public IdCardDeadline getIdCardDeadline() {
+        return idCardDeadline;
+    }
+
+    /**
+     * @param 对idCardDeadline进行赋值
+     */
+    public void setIdCardDeadline(IdCardDeadline idCardDeadline) {
+        this.idCardDeadline = idCardDeadline;
+    }
+
+    /**
+     * @return 返回 idCardExpiredDate
+     */
+    public Date getIdCardExpiredDate() {
+        return idCardExpiredDate;
+    }
+
+    /**
+     * @param 对idCardExpiredDate进行赋值
+     */
+    public void setIdCardExpiredDate(Date idCardExpiredDate) {
+        this.idCardExpiredDate = idCardExpiredDate;
+    }
+
+    /**
+     * @return 返回 idCardDistrict
+     */
+    public District getIdCardDistrict() {
+        return idCardDistrict;
+    }
+
+    /**
+     * @param 对idCardDistrict进行赋值
+     */
+    public void setIdCardDistrict(District idCardDistrict) {
+        this.idCardDistrict = idCardDistrict;
+    }
+
+    /**
+     * @return 返回 nativePlace
+     */
+    public District getNativePlace() {
+        return nativePlace;
+    }
+
+    /**
+     * @param 对nativePlace进行赋值
+     */
+    public void setNativePlace(District nativePlace) {
+        this.nativePlace = nativePlace;
+    }
+
+    /**
+     * @return 返回 fatherName
+     */
+    public String getFatherName() {
+        return fatherName;
+    }
+
+    /**
+     * @param 对fatherName进行赋值
+     */
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    /**
+     * @return 返回 fatherAlive
+     */
+    public Boolean getFatherAlive() {
+        return fatherAlive;
+    }
+
+    /**
+     * @param 对fatherAlive进行赋值
+     */
+    public void setFatherAlive(Boolean fatherAlive) {
+        this.fatherAlive = fatherAlive;
+    }
+
+    /**
+     * @return 返回 fatherMobileNumber
+     */
+    public String getFatherMobileNumber() {
+        return fatherMobileNumber;
+    }
+
+    /**
+     * @param 对fatherMobileNumber进行赋值
+     */
+    public void setFatherMobileNumber(String fatherMobileNumber) {
+        this.fatherMobileNumber = fatherMobileNumber;
+    }
+
+    /**
+     * @return 返回 motherName
+     */
+    public String getMotherName() {
+        return motherName;
+    }
+
+    /**
+     * @param 对motherName进行赋值
+     */
+    public void setMotherName(String motherName) {
+        this.motherName = motherName;
+    }
+
+    /**
+     * @return 返回 motherAlive
+     */
+    public Boolean getMotherAlive() {
+        return motherAlive;
+    }
+
+    /**
+     * @param 对motherAlive进行赋值
+     */
+    public void setMotherAlive(Boolean motherAlive) {
+        this.motherAlive = motherAlive;
+    }
+
+    /**
+     * @return 返回 motherMobileNumber
+     */
+    public String getMotherMobileNumber() {
+        return motherMobileNumber;
+    }
+
+    /**
+     * @param 对motherMobileNumber进行赋值
+     */
+    public void setMotherMobileNumber(String motherMobileNumber) {
+        this.motherMobileNumber = motherMobileNumber;
+    }
 }

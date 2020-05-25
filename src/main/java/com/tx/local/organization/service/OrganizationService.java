@@ -149,12 +149,10 @@ public class OrganizationService {
                 organization.getName()));
         
         switch (organization.getType()) {
-            case GROUP_COMPANY:
-            case COMPANY:
-            case BRANCH_COMPANY:
-                organization.setCompany(organization);
-                break;
-            default:
+            case DEPARTMENT:
+            case BRANCH_DEPARTMENT:
+            case GROUP:
+                //部门，科室，分组所属公司不能为空
                 AssertUtils.notEmpty(organization.getParentId(),
                         "[组织新增:]上级组织不能为空!");
                 
@@ -163,6 +161,9 @@ public class OrganizationService {
                 if (parent != null) {
                     organization.setCompany(parent.getCompany());
                 }
+                break;
+            default:
+                organization.setCompany(organization);
                 break;
         }
         

@@ -8,8 +8,13 @@ package com.tx.local.creditinfo.service;
 
 import java.util.List;
 
+import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.core.paged.model.PagedList;
+import com.tx.core.querier.model.Filter;
 import com.tx.core.querier.model.Querier;
-import com.tx.local.creditinfo.context.AbstractCreditInfo;
+import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.local.creditinfo.context.CreditInfo;
+import com.tx.local.creditinfo.model.CreditMultipLinked;
 
 /**
  * 1:n的信用信息业务层<br/>
@@ -20,7 +25,7 @@ import com.tx.local.creditinfo.context.AbstractCreditInfo;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public interface MultipCreditInfoService<T extends AbstractCreditInfo> {
+public interface MultipCreditInfoService<T extends CreditMultipLinked> {
     
     /**
      * 实体业务层对应的信用信息实体类型<br/>
@@ -34,10 +39,9 @@ public interface MultipCreditInfoService<T extends AbstractCreditInfo> {
     Class<T> type();
     
     /**
-     * 查询信用信息<br/>
+     * 根据信用信息ID查询信息<br/>
      * <功能详细描述>
      * @param creditInfoId
-     * @param version
      * @param querier
      * @return [参数说明]
      * 
@@ -45,48 +49,68 @@ public interface MultipCreditInfoService<T extends AbstractCreditInfo> {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    List<T> queryFromBranch(String creditInfoId, int version, Querier querier);
+    default List<T> queryByCreditInfoId(String creditInfoId, Querier querier) {
+        AssertUtils.notEmpty(creditInfoId, "creditInfoId is empty.");
+        
+        querier = querier == null ? QuerierBuilder.newInstance().querier()
+                : querier;
+        querier.getFilters().add(Filter.eq("creditInfoId", creditInfoId));
+        
+        List<T> resList = queryList(querier);
+        return resList;
+    }
     
     /**
-     * 查询所有版本<br/>
+     * 新增信用信息<br/>
      * <功能详细描述>
-     * @param creditInfoId
-     * @return [参数说明]
+     * @param creditInfoRecord [参数说明]
      * 
-     * @return List<Integer> [返回类型说明]
+     * @return void [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    List<Integer> listVersionsFromBranch(String creditInfoId);
-    
-//    /**
-//     * 保存信用信息<br/>
-//     * <功能详细描述>
-//     * @param infos [参数说明]
-//     * 
-//     * @return void [返回类型说明]
-//     * @exception throws [异常类型] [异常说明]
-//     * @see [类、类#方法、类#成员]
-//     */
-//    void tag(List<T> infos);
+    public T insert(T entity);
     
     /**
-     * 查询所有版本<br/>
+     * 根据id删除对应实体<br/>
      * <功能详细描述>
-     * @param creditInfoId
+     * @param id
      * @return [参数说明]
      * 
-     * @return List<Integer> [返回类型说明]
+     * @return boolean [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    List<Integer> listVersionsFromTag(String creditInfoId);
+    public boolean deleteById(String id);
     
     /**
-     * 查询信用信息<br/>
+     * 更新实体<br/>
      * <功能详细描述>
-     * @param creditInfoId
-     * @param version
+     * @param id
+     * @param creditInfoRecord
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public boolean updateById(String id, T creditInfoRecord);
+    
+    /**
+     * 根据id查询实体实例<br/>
+     * <功能详细描述>
+     * @param id
+     * @return [参数说明]
+     * 
+     * @return T [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public T findById(String id);
+    
+    /**
+     * 根据查询条件查询实体<br/>
+     * <功能详细描述>
      * @param querier
      * @return [参数说明]
      * 
@@ -94,5 +118,45 @@ public interface MultipCreditInfoService<T extends AbstractCreditInfo> {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    List<T> queryFromTag(String creditInfoId, int version, Querier querier);
+    public List<T> queryList(Querier querier);
+    
+    /**
+     * 分页查询实体<br/>
+     * <功能详细描述>
+     * @param querier
+     * @param pageIndex
+     * @param pageSize
+     * @return [参数说明]
+     * 
+     * @return PagedList<T> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public PagedList<T> queryPagedList(Querier querier, int pageIndex,
+            int pageSize);
+    
+    /**
+     * 根据条件统计对象数量<br/>
+     * <功能详细描述>
+     * @param querier
+     * @return [参数说明]
+     * 
+     * @return int [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public int count(Querier querier);
+    
+    /**
+     * 判断对象是否存在<br/>
+     * <功能详细描述>
+     * @param querier
+     * @param excludeId
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public boolean exists(Querier querier, String excludeId);
 }

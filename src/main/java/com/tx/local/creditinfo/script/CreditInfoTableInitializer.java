@@ -20,8 +20,8 @@ import com.tx.core.ddlutil.model.JPAEntityTableDef;
 import com.tx.core.ddlutil.model.TableDef;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.util.ClassScanUtils;
-import com.tx.local.creditinfo.context.AbstractCreditInfo;
-import com.tx.local.creditinfo.context.CreditInfoVersionTypeEnum;
+import com.tx.local.creditinfo.context.CreditInfo;
+import com.tx.local.creditinfo.context.CreditInfoTypeEnum;
 
 /**
  * 自动持久化实体表初始化实现<br/>
@@ -84,22 +84,22 @@ public class CreditInfoTableInitializer extends AbstractTableInitializer
         
         String[] basePackageArray = StringUtils
                 .splitByWholeSeparator(basePackages.trim(), ",");
-        Set<Class<? extends AbstractCreditInfo>> typeSet = ClassScanUtils
-                .scanByParentClass(AbstractCreditInfo.class, basePackageArray);
+        Set<Class<? extends CreditInfo>> typeSet = ClassScanUtils
+                .scanByParentClass(CreditInfo.class, basePackageArray);
         
         StringBuilder sb = new StringBuilder();
-        for (Class<? extends AbstractCreditInfo> type : typeSet) {
+        for (Class<? extends CreditInfo> type : typeSet) {
             JPAEntityTableDef td = (JPAEntityTableDef) JPAEntityDDLHelper
                     .analyzeToTableDefDetail(type,
                             tableDDLExecutor.getDDLDialect());
             String tableNameTemp = td.getTableName();
             if (tableNameTemp
-                    .startsWith(CreditInfoVersionTypeEnum.TRUNK.getPrefix())) {
+                    .startsWith(CreditInfoTypeEnum.TRUNK.getPrefix())) {
                 tableNameTemp = tableNameTemp.substring(
-                        CreditInfoVersionTypeEnum.TRUNK.getPrefix().length());
+                        CreditInfoTypeEnum.TRUNK.getPrefix().length());
             }
             //版本类型
-            for (CreditInfoVersionTypeEnum versionType : CreditInfoVersionTypeEnum
+            for (CreditInfoTypeEnum versionType : CreditInfoTypeEnum
                     .values()) {
                 String tableName = versionType.getPrefix() + tableNameTemp;
                 sb.append(COMMENT_PREFIX)

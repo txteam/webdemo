@@ -135,7 +135,7 @@ public class WXLoginPlugin extends LoginPlugin<WXLoginPluginConfig> {
         String scope = "snsapi_userinfo";
         //redirectUri
         String redirectUri = WebUtils.getBaseUrl(request)
-                + "loginplugin/callback/WB";
+                + "loginplugin/callback/WX";
         ModelAndView mv = getCodeHandle("loginplugin/signIn",
                 redirectUri,
                 state,
@@ -154,10 +154,10 @@ public class WXLoginPlugin extends LoginPlugin<WXLoginPluginConfig> {
         String state = Base64Utils.encodeToString(
                 RandomStringUtils.randomAlphabetic(30).getBytes());
         //scope信息
-        String scope = "snsapi_userinfo";
+        String scope = "snsapi_base";//"snsapi_userinfo";
         //redirectUri
         String redirectUri = WebUtils.getBaseUrl(request)
-                + "loginplugin/callback/WB";
+                + "loginplugin/callback/WX";
         ModelAndView mv = getCodeHandle("loginplugin/signIn",
                 redirectUri,
                 state,
@@ -202,8 +202,9 @@ public class WXLoginPlugin extends LoginPlugin<WXLoginPluginConfig> {
         } else {
             parameterMap.put("scope", scope);
         }
+        parameterMap.put("state", state);
         
-        mview.addObject("requestUrl", QR_CODE_REQUEST_QR_URL);
+        mview.addObject("requestUrl", WAP_CODE_REQUEST_URL);
         mview.addObject("parameterMap", parameterMap);
         mview.setViewName(viewName);
         return mview;

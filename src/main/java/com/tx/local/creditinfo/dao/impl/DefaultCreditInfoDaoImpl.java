@@ -9,8 +9,8 @@ package com.tx.local.creditinfo.dao.impl;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.mybatis.dao.impl.MybatisBaseDaoImpl;
 import com.tx.core.mybatis.support.MyBatisDaoSupport;
-import com.tx.local.creditinfo.context.AbstractCreditInfo;
-import com.tx.local.creditinfo.context.CreditInfoVersionTypeEnum;
+import com.tx.local.creditinfo.context.CreditInfo;
+import com.tx.local.creditinfo.context.CreditInfoTypeEnum;
 import com.tx.local.creditinfo.dao.CreditInfoDao;
 
 /**
@@ -22,18 +22,18 @@ import com.tx.local.creditinfo.dao.CreditInfoDao;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class DefaultCreditInfoDaoImpl<T extends AbstractCreditInfo>
+public class DefaultCreditInfoDaoImpl<T extends CreditInfo>
         extends MybatisBaseDaoImpl<T, String> implements CreditInfoDao<T> {
     
     /** mybatis持久层句柄 */
     private MyBatisDaoSupport myBatisDaoSupport;
     
     /** 版本类型 */
-    private CreditInfoVersionTypeEnum versionType;
+    private CreditInfoTypeEnum versionType;
     
     /** <默认构造函数> */
     public DefaultCreditInfoDaoImpl(Class<T> entityType,
-            CreditInfoVersionTypeEnum versionType,
+            CreditInfoTypeEnum versionType,
             MyBatisDaoSupport myBatisDaoSupport) {
         super(entityType, String.class);
         

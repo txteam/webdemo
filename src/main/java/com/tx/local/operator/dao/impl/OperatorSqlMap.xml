@@ -26,6 +26,7 @@
 				O.examinePwd,
 				O.historyPwd,
 				O.modifyAble,
+				O.admin,
 				O.locked,
 				O.valid,
 				O.invalidDate,
@@ -62,6 +63,7 @@
 				O.examinePwd,
 				O.historyPwd,
 				O.modifyAble,
+				O.admin,
 				O.locked,
 				O.valid,
 				O.invalidDate,
@@ -103,7 +105,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND O.valid = #{valid} ]]>
-	        </if>			
+	        </if>	
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(admin)">  
+	            <![CDATA[ AND O.admin = #{admin} ]]>
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
 	            <![CDATA[ AND O.createDate >= #{minCreateDate} ]]>
 	        </if>
@@ -187,7 +192,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND O.valid = #{valid} ]]>
-	        </if>			
+	        </if>		
+	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(admin)">  
+	            <![CDATA[ AND O.admin = #{admin} ]]>
+	        </if>		
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
 	            <![CDATA[ AND O.createDate >= #{minCreateDate} ]]>
 	        </if>
@@ -238,6 +246,7 @@
 			password,
 			pwdErrCount,
 			pwdUpdateDate,
+			admin,
 			valid,
 			locked,
 			modifyAble,
@@ -260,6 +269,7 @@
 			#{password},
 			#{pwdErrCount},
 			#{pwdUpdateDate},
+			#{admin},
 			#{valid},
 			#{locked},
 			#{modifyAble},
@@ -287,6 +297,7 @@
 			password,
 			pwdErrCount,
 			pwdUpdateDate,
+			admin,
 			valid,
 			locked,
 			modifyAble,
@@ -309,6 +320,7 @@
 			#{password},
 			#{pwdErrCount},
 			#{pwdUpdateDate},
+			#{admin},
 			#{valid},
 			#{locked},
 			#{modifyAble},
@@ -349,6 +361,9 @@
 	    	</if>
 			<if test="_parameter.containsKey('name')">
 	    		name = #{name,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('admin')">
+	    		admin = #{admin,javaType=boolean},
 	    	</if>
 			<if test="_parameter.containsKey('valid')">
 	    		valid = #{valid,javaType=boolean},
