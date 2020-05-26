@@ -72,85 +72,70 @@ public class ProjectBuilder {
         Set copySet = new HashSet();
         copySet.add("login");
         copySet.add("payment");
+        copySet.add("mainframe");
+        copySet.add("adminstitution");
+        copySet.add("agricultural");
+        copySet.add("auditrecord");
+        copySet.add("basicdata");
+        copySet.add("boot");
+        copySet.add("calendar");
+        copySet.add("captcha");
+        copySet.add("clientinfo");
+        copySet.add("content");
+        copySet.add("cooinstitution");
+        copySet.add("creditinfo");
+        copySet.add("debug");
+        copySet.add("demo");
+        copySet.add("documentation");
+        copySet.add("filltask");
+        copySet.add("institution");
+        copySet.add("loginaccount");
+        copySet.add("mainframe");
+        copySet.add("menu");
+        copySet.add("message");
+        copySet.add("notepad");
+        copySet.add("operator");
+        copySet.add("organization");
+        copySet.add("personal");
+        copySet.add("produceinfo");
+        copySet.add("qxb");
+        copySet.add("security");
+        copySet.add("servicelog");
+        copySet.add("springmvc");
+        copySet.add("supplymarketingcooperative");
+        copySet.add("vitualcenter");
         //拷贝项目文件
         copyProjectFile(sourceJavaFolder, targetJavaFolder, copySet);
 
         //写入src/main/resources目录内容
         copySet = new HashSet();
+        copySet.add("META-INF");
+        copySet.add("static");
+        copySet.add("templates");
+        copySet.add("templates4client");
+        copySet.add("templates4wapclient");
         sourceJavaFolder = new File(sourceProjectPath, "src/main/resources/");
         targetJavaFolder = new File(targetProjectFolder, "src/main/resources/");
-        copyProjectFile(sourceJavaFolder, targetJavaFolder);
+        copyProjectFile1(sourceJavaFolder, targetJavaFolder,copySet);
 
         //写入src/test/java目录内容
         copySet = new HashSet();
+        copySet.add("generator");
         sourceJavaFolder = new File(sourceProjectPath, "src/test/java/");
         targetJavaFolder = new File(targetProjectFolder, "src/test/java/");
-        copyProjectFile(sourceJavaFolder, targetJavaFolder);
+        copyProjectFile1(sourceJavaFolder, targetJavaFolder,copySet);
 
         //写入src/test/resources目录内容
-        copySet = new HashSet();
         sourceJavaFolder = new File(sourceProjectPath, "src/test/resources/");
         targetJavaFolder = new File(targetProjectFolder, "src/test/resources/");
-        copyProjectFile(sourceJavaFolder, targetJavaFolder);
+        copyProjectFile1(sourceJavaFolder, targetJavaFolder,copySet);
 
         //拷贝dbscript、deploy、doc
         FileUtils.copyDirectory(new File(sourceProjectPath, "dbscript"), new File(targetProjectFolder, "dbscript"));
         FileUtils.copyDirectory(new File(sourceProjectPath, "deploy"), new File(targetProjectFolder, "deploy"));
-        FileUtils.copyDirectory(new File(sourceProjectPath, "doc"), new File(targetProjectFolder, "doc"));
+
         //根据项目名覆盖相关文件
 
-
-        /*if (!targetJavaFolder.exists()) {
-            FileUtils.forceMkdir(targetJavaFolder);
-        }
-        File[] sourceJavaFile = sourceJavaFolder.listFiles();
-        File sourceFile = null;
-        File targetFile = null;
-        HashMap<File, File> sourceFileMap = new HashMap();
-        for (File file : sourceJavaFile) {
-            String fileName = file.getName();
-            sourceFile = new File(sourceJavaFolder, fileName);
-            targetFile = new File(targetJavaFolder, fileName);
-            if (file.isFile()) {
-                FileUtils.copyFile(sourceFile, targetFile);
-            } else {
-                sourceFileMap.put(sourceFile, targetFile);
-            }
-        }
-        int res = 1;
-        File[] sourceFiles = null;
-        Set copySet = new HashSet();
-        for (File file : sourceFileMap.keySet()) {
-            targetFile = sourceFileMap.get(file);
-            if (!targetFile.exists()) {
-                FileUtils.forceMkdir(targetFile);
-            }
-            if (file.isFile()) {
-                FileUtils.copyFile(file, targetFile);
-            } else {
-                sourceFiles = file.listFiles();
-                File targetFile1 = null;
-                for (File sourceFile1 : sourceFiles) {
-                    targetFile1 = new File(targetFile, sourceFile1.getName());
-                    if (targetFile1.isFile()) {
-                        FileUtils.copyFile(sourceFile1, targetFile1);
-                    } else {
-                        if (sourceFile1.isFile()) {
-                            FileUtils.copyFile(sourceFile1, targetFile1);
-                        } else {
-                            if (copySet.contains(sourceFile1.getName())) {
-                                FileUtils.copyDirectory(sourceFile1, targetFile1);
-                            } else {
-                                res = JOptionPane.showConfirmDialog(null, "是否拷贝" + sourceFile1.getName(), "是否拷贝", JOptionPane.YES_NO_OPTION);
-                                if (res == JOptionPane.YES_OPTION) {
-                                    FileUtils.copyDirectory(sourceFile1, targetFile1);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
 
     }
 
@@ -207,44 +192,24 @@ public class ProjectBuilder {
         }
     }
 
-    private static void copyProjectFile(File sourceJavaFolder, File targetJavaFolder) throws IOException {
-        if (!targetJavaFolder.exists()) {
-            FileUtils.forceMkdir(targetJavaFolder);
-        }
-        File[] sourceJavaFile = sourceJavaFolder.listFiles();
-        File sourceFile = null;
-        File targetFile = null;
-        HashMap<File, File> sourceFileMap = new HashMap();
-        for (File file : sourceJavaFile) {
-            String fileName = file.getName();
-            sourceFile = new File(sourceJavaFolder, fileName);
-            targetFile = new File(targetJavaFolder, fileName);
-            if (file.isFile()) {
-                FileUtils.copyFile(sourceFile, targetFile);
+
+    private static void copyProjectFile1(File sourceFile, File targetFile, Set copySet) throws IOException {
+        int res=1;
+        File[] sourceFiles = sourceFile.listFiles();
+        File targetFile1 = null;
+        for (File sourceFile1 : sourceFiles) {
+            targetFile1 = new File(targetFile, sourceFile1.getName());
+            if (targetFile1.isFile()) {
+                FileUtils.copyFile(sourceFile1, targetFile1);
             } else {
-                sourceFileMap.put(sourceFile, targetFile);
-            }
-        }
-        int res = 1;
-        File[] sourceFiles = null;
-        for (File file : sourceFileMap.keySet()) {
-            targetFile = sourceFileMap.get(file);
-            if (!targetFile.exists()) {
-                FileUtils.forceMkdir(targetFile);
-            }
-            if (file.isFile()) {
-                FileUtils.copyFile(file, targetFile);
-            } else {
-                sourceFiles = file.listFiles();
-                File targetFile1 = null;
-                for (File sourceFile1 : sourceFiles) {
-                    targetFile1 = new File(targetFile, sourceFile1.getName());
-                    if (targetFile1.isFile()) {
-                        FileUtils.copyFile(sourceFile1, targetFile1);
+                if (sourceFile1.isFile()) {
+                    FileUtils.copyFile(sourceFile1, targetFile1);
+                } else {
+                    if (copySet.contains(sourceFile1.getName())) {
+                        FileUtils.copyDirectory(sourceFile1, targetFile1);
                     } else {
-                        if (sourceFile1.isFile()) {
-                            FileUtils.copyFile(sourceFile1, targetFile1);
-                        } else {
+                        res = JOptionPane.showConfirmDialog(null, "是否拷贝" + sourceFile1.getName(), "是否拷贝", JOptionPane.YES_NO_OPTION);
+                        if (res == JOptionPane.YES_OPTION) {
                             FileUtils.copyDirectory(sourceFile1, targetFile1);
                         }
                     }
