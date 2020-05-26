@@ -28,7 +28,7 @@ import javax.swing.*;
 public class ProjectBuilder {
 
     public static void main(String[] args) throws IOException {
-        String projectName = "report_support";
+        String projectName = "report";
         boolean overwrite = true;
         String workspace = "D:/ideaproject";
         String packageName = "com/tx";
@@ -126,6 +126,7 @@ public class ProjectBuilder {
         copyProjectFile1(sourceJavaFolder, targetJavaFolder,copySet);
 
         //写入src/test/resources目录内容
+        copySet = new HashSet();
         sourceJavaFolder = new File(sourceProjectPath, "src/test/resources/");
         targetJavaFolder = new File(targetProjectFolder, "src/test/resources/");
         copyProjectFile1(sourceJavaFolder, targetJavaFolder,copySet);

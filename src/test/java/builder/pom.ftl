@@ -26,6 +26,13 @@
 	</properties>
 
 	<dependencies>
+		<!-- lombok支持 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 		<!--启动时启动内置tomcat -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -55,6 +62,12 @@
 			<artifactId>feign-httpclient</artifactId>
 		</dependency>
 
+		<!-- oauth2 client -->
+		<dependency>
+			<groupId>org.apache.oltu.oauth2</groupId>
+			<artifactId>org.apache.oltu.oauth2.client</artifactId>
+			<version>1.0.2</version>
+		</dependency>
 
 		<!-- spring -->
 		<dependency>
@@ -94,6 +107,16 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>io.lettuce</groupId>
+					<artifactId>lettuce-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
 		</dependency>
 
 		<!-- jpa -->
@@ -125,6 +148,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.thymeleaf.extras</groupId> -->
+		<!-- <artifactId>thymeleaf-extras-springsecurity5</artifactId> -->
+		<!-- <version>3.0.4.RELEASE</version> -->
+		<!-- </dependency> -->
 		<!-- <dependency> -->
 		<!-- <groupId>org.springframework.security</groupId> -->
 		<!-- <artifactId>spring-security-jwt</artifactId> -->
@@ -172,10 +204,10 @@
 			<groupId>com.tx</groupId>
 			<artifactId>tx-component-starter-security</artifactId>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>com.tx</groupId> -->
-		<!-- <artifactId>tx-component-servicelog</artifactId> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>com.tx</groupId>
+			<artifactId>tx-component-starter-servicelogger</artifactId>
+		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>com.tx</groupId> -->
 		<!-- <artifactId>tx-component-configuration</artifactId> -->
@@ -327,12 +359,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
