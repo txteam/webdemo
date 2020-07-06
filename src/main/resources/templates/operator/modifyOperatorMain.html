@@ -178,20 +178,6 @@ $(document).ready(function(){
 							<option value="false" th:selected="${operator.modifyAble eq false}">否</form:option>
 						</select>
 					</td>
-					<th class="narrow">是否有效:</th>
-					<td>
-						<select id="valid" name="valid" style="width: 60%" disabled="disabled">
-							<option value="true" th:selected="${operator.valid eq true}">是</form:option>
-							<option value="false" th:selected="${operator.valid eq false}">否</form:option>
-						</select>
-					</td>
-					<th class="narrow">禁用时间:</th>
-					<td>
-						<input id="invalidDate" name="invalidDate" type="text" readonly="readonly"
-							th:value="${#dates.format(operator.invalidDate,'yyyy-MM-dd HH:mm:ss')}" style="width: 60%"/>
-					</td>
-				</tr>
-				<tr>
 					<th class="narrow" width="25%">是否锁定:</th>
 					<td>
 						<select id="locked" name="locked" style="width: 60%" disabled="disabled">
@@ -199,6 +185,15 @@ $(document).ready(function(){
 							<option value="false" th:selected="${operator.locked eq false}">否</form:option>
 						</select>
 					</td>
+					<th class="narrow">是否有效:</th>
+					<td>
+						<select id="valid" name="valid" style="width: 60%" disabled="disabled">
+							<option value="true" th:selected="${operator.valid eq true}">是</form:option>
+							<option value="false" th:selected="${operator.valid eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<th class="narrow">最后更新时间:</th>
 					<td>
 						<input id="lastUpdateDate" name="lastUpdateDate" type="text" readonly="readonly"
@@ -210,6 +205,11 @@ $(document).ready(function(){
 						<input id="createDate" name="createDate" type="text" readonly="readonly"
 							th:value="${#dates.format(operator.createDate,'yyyy-MM-dd HH:mm:ss')}"
 							style="width: 60%"/>
+					</td>
+					<th class="narrow">禁用时间:</th>
+					<td>
+						<input id="invalidDate" name="invalidDate" type="text" readonly="readonly"
+							th:value="${#dates.format(operator.invalidDate,'yyyy-MM-dd HH:mm:ss')}" style="width: 60%"/>
 					</td>
 				</tr>
 				<tr>

@@ -141,6 +141,17 @@ public interface ClientSecurityAccount {
     public String getMobileNumber();
     
     /**
+     * 是否支持电话号码登录<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public boolean isMobileLoginEnable();
+    
+    /**
      * 是否绑定电子邮件<br/>
      * <功能详细描述>
      * @return [参数说明]

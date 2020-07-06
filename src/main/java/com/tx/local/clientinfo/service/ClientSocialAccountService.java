@@ -73,7 +73,31 @@ public class ClientSocialAccountService {
         //调用数据持久层对实例进行持久化操作
         this.clientSocialAccountDao.insert(clientSocialAccount);
     }
-    
+
+    @Transactional
+    public  Map<String,Object> insertClient(String clientId,String uniqueId) {
+        //验证参数是否合法
+        AssertUtils.notEmpty(clientId,"clientId is empty.");
+        AssertUtils.notEmpty(uniqueId,"uniqueId is empty.");
+        Map<String,Object> responseMap = new HashMap<>();
+
+        Map<String,String> params = new HashMap<>();
+        params.put("uniqueId",uniqueId);
+        boolean exists = exists(params, null);
+        if(exists){
+            responseMap.put("success",false);
+            responseMap.put("msg","该微信用户已经注册!");
+            return responseMap;
+        }
+
+        ClientSocialAccount clientSocialAccount = new ClientSocialAccount();
+        clientSocialAccount.setClientId(clientId);
+        clientSocialAccount.setUniqueId(uniqueId);
+        clientSocialAccount.setType(ClientSocialAccountTypeEnum.valueOf("WX"));
+        insert(clientSocialAccount);
+        return responseMap;
+    }
+
     /**
      * 根据id删除客户第三方账户实例
      * 1、如果入参数为空，则抛出异常

@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.local.creditinfo.model.CreditInfoRecord;
-import com.tx.local.creditinfo.service.CreditInfoRecordService;
 import com.tx.core.paged.model.PagedList;
-
 import com.tx.local.basicdata.model.IDCardTypeEnum;
 import com.tx.local.creditinfo.context.CreditInfoTypeEnum;
+import com.tx.local.creditinfo.model.CreditInfoRecord;
+import com.tx.local.creditinfo.service.CreditInfoRecordService;
 
 /**
  * CreditInfoRecord控制层<br/>
@@ -51,11 +50,28 @@ public class CreditInfoRecordController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
+    @RequestMapping("/toQueryList4ModifyClient")
+    public String toQueryList4ModifyClient(
+            @RequestParam Map<String, String> request, ModelMap response) {
+        response.put("clientId", request.get("clientId"));
+        
+        return "creditinfo/queryCreditInfoRecordList4ModifyClient";
+    }
+    
+    /**
+     * 跳转到查询CreditInfoRecord分页列表页面<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
-		response.put("idCardTypes", IDCardTypeEnum.values());
-		response.put("types", CreditInfoTypeEnum.values());
-
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        response.put("types", CreditInfoTypeEnum.values());
+        
         return "creditinfo/queryCreditInfoRecordPagedList";
     }
     
@@ -70,11 +86,13 @@ public class CreditInfoRecordController {
      */
     @RequestMapping("/toAdd")
     public String toAdd(ModelMap response) {
-    	response.put("creditInfoRecord", new CreditInfoRecord());
-    	
-		response.put("idCardTypes", IDCardTypeEnum.values());
-		response.put("types", CreditInfoTypeEnum.values());
-
+        CreditInfoRecord cir = new CreditInfoRecord();
+        //cir.
+        response.put("creditInfoRecord", cir);
+        
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        response.put("types", CreditInfoTypeEnum.values());
+        
         return "creditinfo/addCreditInfoRecord";
     }
     
@@ -88,18 +106,17 @@ public class CreditInfoRecordController {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toUpdate")
-    public String toUpdate(
-    		@RequestParam("id") String id,
-            ModelMap response) {
-        CreditInfoRecord creditInfoRecord = this.creditInfoRecordService.findById(id); 
+    public String toUpdate(@RequestParam("id") String id, ModelMap response) {
+        CreditInfoRecord creditInfoRecord = this.creditInfoRecordService
+                .findById(id);
         response.put("creditInfoRecord", creditInfoRecord);
-
-		response.put("idCardTypes", IDCardTypeEnum.values());
-		response.put("types", CreditInfoTypeEnum.values());
+        
+        response.put("idCardTypes", IDCardTypeEnum.values());
+        response.put("types", CreditInfoTypeEnum.values());
         
         return "creditinfo/updateCreditInfoRecord";
     }
-
+    
     /**
      * 查询CreditInfoRecord实例列表<br/>
      * <功能详细描述>
@@ -110,17 +127,43 @@ public class CreditInfoRecordController {
      * @see [类、类#方法、类#成员]
      */
     @ResponseBody
-    @RequestMapping("/queryList")
-    public List<CreditInfoRecord> queryList(
-    		@RequestParam MultiValueMap<String, String> request
-    	) {
+    @RequestMapping("/queryListByClientId")
+    public List<CreditInfoRecord> queryListByClientId(
+            @RequestParam(value = "clientId", required = true) String clientId,
+            @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-    	
-        List<CreditInfoRecord> resList = this.creditInfoRecordService.queryList(
-			params         
-        );
-  
+        params.put("name", request.getFirst("name"));
+        params.put("clientId", clientId);
+        
+        List<CreditInfoRecord> resList = this.creditInfoRecordService
+                .queryList(params);
+        
+        return resList;
+    }
+    
+    /**
+     * 查询CreditInfoRecord实例列表<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return List<CreditInfoRecord> [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ResponseBody
+    @RequestMapping("/queryListByIdCardNumber")
+    public List<CreditInfoRecord> queryListByIdCardNumber(
+            @RequestParam(value = "idCardNumber", required = true) String idCardNumber,
+            @RequestParam(value = "idCardType", required = true) IDCardTypeEnum idCardType,
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", request.getFirst("name"));
+        params.put("idCardType", idCardType);
+        params.put("idCardNumber", idCardNumber);
+        
+        List<CreditInfoRecord> resList = this.creditInfoRecordService
+                .queryList(params);
+        
         return resList;
     }
     
@@ -136,18 +179,14 @@ public class CreditInfoRecordController {
     @ResponseBody
     @RequestMapping("/queryPagedList")
     public PagedList<CreditInfoRecord> queryPagedList(
-			@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageIndex,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam MultiValueMap<String, String> request
-    	) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("name", request.getFirst("name"));
-
-        PagedList<CreditInfoRecord> resPagedList = this.creditInfoRecordService.queryPagedList(
-			params,
-			pageIndex,
-			pageSize
-        );
+            @RequestParam MultiValueMap<String, String> request) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", request.getFirst("name"));
+        
+        PagedList<CreditInfoRecord> resPagedList = this.creditInfoRecordService
+                .queryPagedList(params, pageIndex, pageSize);
         return resPagedList;
     }
     
@@ -180,7 +219,8 @@ public class CreditInfoRecordController {
     @ResponseBody
     @RequestMapping("/update")
     public boolean update(CreditInfoRecord creditInfoRecord) {
-        boolean flag = this.creditInfoRecordService.updateById(creditInfoRecord);
+        boolean flag = this.creditInfoRecordService
+                .updateById(creditInfoRecord);
         return flag;
     }
     
@@ -197,10 +237,11 @@ public class CreditInfoRecordController {
     @ResponseBody
     @RequestMapping("/findById")
     public CreditInfoRecord findById(@RequestParam(value = "id") String id) {
-        CreditInfoRecord creditInfoRecord = this.creditInfoRecordService.findById(id);
+        CreditInfoRecord creditInfoRecord = this.creditInfoRecordService
+                .findById(id);
         return creditInfoRecord;
     }
-
+    
     /**
      * 删除CreditInfoRecord实例<br/> 
      * <功能详细描述>
@@ -218,9 +259,9 @@ public class CreditInfoRecordController {
         return flag;
     }
     
-	/**
+    /**
      * 校验是否重复<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param params
      * @return [参数说明]
      * 

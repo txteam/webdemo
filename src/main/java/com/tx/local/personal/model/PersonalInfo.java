@@ -15,6 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.tx.local.clientinfo.model.ClientInfo;
+import com.tx.local.institution.model.Institution;
+import com.tx.local.institution.model.InstitutionInfo;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.tx.local.basicdata.model.District;
@@ -75,6 +78,13 @@ public class PersonalInfo implements Serializable {
     /** 名 */
     @Column(length = 32, updatable = false, nullable = false)
     private String lastName;
+
+    /** 联系电话(默认将使用该联系电话去创建该机构的管理员) */
+    @Column(length = 64, nullable = true)
+    private String linkMobileNumber;
+
+    /** 身份证号码 */
+    private String idCardNumber;
     
     /** 省_ID */
     @Column(name = "provinceId", length = 64, nullable = true)
@@ -132,362 +142,268 @@ public class PersonalInfo implements Serializable {
     /** 创建用户ID */
     @Column(nullable = true, updatable = false)
     private String createUserId;
-    
+
     /** 客户信息 */
     @Transient
     private Client client;
-    
+
+    /** 客户信息 */
+    @Transient
+    private ClientInfo clientInfo;
+
+    /** 机构信息 */
+    @Transient
+    private InstitutionInfo institutionInfo;
+
     /** 信用信息 */
     @Transient
     private CreditInfo creditInfo;
-    
+
+    /** 客户详情信息 */
+    @Transient
+    private PersonalSummary personalSummary;
     /**
-     * @return 返回 id
+     * 封装
+     * @return
      */
     public String getId() {
         return id;
     }
-    
-    /**
-     * @param 对id进行赋值
-     */
+
     public void setId(String id) {
         this.id = id;
     }
-    
-    /**
-     * @return 返回 vcid
-     */
+
     public String getVcid() {
         return vcid;
     }
-    
-    /**
-     * @param 对vcid进行赋值
-     */
+
     public void setVcid(String vcid) {
         this.vcid = vcid;
     }
-    
-    /**
-     * @return 返回 clientId
-     */
+
     public String getClientId() {
         return clientId;
     }
-    
-    /**
-     * @param 对clientId进行赋值
-     */
+
     public void setClientId(String clientId) {
         this.clientId = clientId;
     }
-    
-    /**
-     * @return 返回 creditInfoBinding
-     */
+
     public boolean isCreditInfoBinding() {
         return creditInfoBinding;
     }
-    
-    /**
-     * @param 对creditInfoBinding进行赋值
-     */
+
     public void setCreditInfoBinding(boolean creditInfoBinding) {
         this.creditInfoBinding = creditInfoBinding;
     }
-    
-    /**
-     * @return 返回 creditInfoId
-     */
+
     public String getCreditInfoId() {
         return creditInfoId;
     }
-    
-    /**
-     * @param 对creditInfoId进行赋值
-     */
+
     public void setCreditInfoId(String creditInfoId) {
         this.creditInfoId = creditInfoId;
     }
-    
-    /**
-     * @return 返回 type
-     */
+
     public PersonalTypeEnum getType() {
         return type;
     }
-    
-    /**
-     * @param 对type进行赋值
-     */
+
     public void setType(PersonalTypeEnum type) {
         this.type = type;
     }
-    
-    /**
-     * @return 返回 name
-     */
+
     public String getName() {
         return name;
     }
-    
-    /**
-     * @param 对name进行赋值
-     */
+
     public void setName(String name) {
         this.name = name;
     }
-    
-    /**
-     * @return 返回 fristName
-     */
+
     public String getFristName() {
         return fristName;
     }
-    
-    /**
-     * @param 对fristName进行赋值
-     */
+
     public void setFristName(String fristName) {
         this.fristName = fristName;
     }
-    
-    /**
-     * @return 返回 lastName
-     */
+
     public String getLastName() {
         return lastName;
     }
-    
-    /**
-     * @param 对lastName进行赋值
-     */
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
-    /**
-     * @return 返回 province
-     */
+
+    public String getLinkMobileNumber() {
+        return linkMobileNumber;
+    }
+
+    public void setLinkMobileNumber(String linkMobileNumber) {
+        this.linkMobileNumber = linkMobileNumber;
+    }
+
+    public String getIdCardNumber() {
+        return idCardNumber;
+    }
+
+    public void setIdCardNumber(String idCardNumber) {
+        this.idCardNumber = idCardNumber;
+    }
+
     public District getProvince() {
         return province;
     }
-    
-    /**
-     * @param 对province进行赋值
-     */
+
     public void setProvince(District province) {
         this.province = province;
     }
-    
-    /**
-     * @return 返回 city
-     */
+
     public District getCity() {
         return city;
     }
-    
-    /**
-     * @param 对city进行赋值
-     */
+
     public void setCity(District city) {
         this.city = city;
     }
-    
-    /**
-     * @return 返回 county
-     */
+
     public District getCounty() {
         return county;
     }
-    
-    /**
-     * @param 对county进行赋值
-     */
+
     public void setCounty(District county) {
         this.county = county;
     }
-    
-    /**
-     * @return 返回 district
-     */
+
     public District getDistrict() {
         return district;
     }
-    
-    /**
-     * @param 对district进行赋值
-     */
+
     public void setDistrict(District district) {
         this.district = district;
     }
-    
-    /**
-     * @return 返回 address
-     */
+
     public String getAddress() {
         return address;
     }
-    
-    /**
-     * @param 对address进行赋值
-     */
+
     public void setAddress(String address) {
         this.address = address;
     }
-    
-    /**
-     * @return 返回 fullAddress
-     */
+
     public String getFullAddress() {
         return fullAddress;
     }
-    
-    /**
-     * @param 对fullAddress进行赋值
-     */
+
     public void setFullAddress(String fullAddress) {
         this.fullAddress = fullAddress;
     }
-    
-    /**
-     * @return 返回 birthday
-     */
+
     public Date getBirthday() {
         return birthday;
     }
-    
-    /**
-     * @param 对birthday进行赋值
-     */
+
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
-    
-    /**
-     * @return 返回 sex
-     */
+
     public SexEnum getSex() {
         return sex;
     }
-    
-    /**
-     * @param 对sex进行赋值
-     */
+
     public void setSex(SexEnum sex) {
         this.sex = sex;
     }
-    
-    /**
-     * @return 返回 modifyAble
-     */
+
     public boolean isModifyAble() {
         return modifyAble;
     }
-    
-    /**
-     * @param 对modifyAble进行赋值
-     */
+
     public void setModifyAble(boolean modifyAble) {
         this.modifyAble = modifyAble;
     }
-    
-    /**
-     * @return 返回 remark
-     */
+
     public String getRemark() {
         return remark;
     }
-    
-    /**
-     * @param 对remark进行赋值
-     */
+
     public void setRemark(String remark) {
         this.remark = remark;
     }
-    
-    /**
-     * @return 返回 lastUpdateDate
-     */
+
     public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
-    
-    /**
-     * @param 对lastUpdateDate进行赋值
-     */
+
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
-    
-    /**
-     * @return 返回 lastUpdateUserId
-     */
+
     public String getLastUpdateUserId() {
         return lastUpdateUserId;
     }
-    
-    /**
-     * @param 对lastUpdateUserId进行赋值
-     */
+
     public void setLastUpdateUserId(String lastUpdateUserId) {
         this.lastUpdateUserId = lastUpdateUserId;
     }
-    
-    /**
-     * @return 返回 createDate
-     */
+
     public Date getCreateDate() {
         return createDate;
     }
-    
-    /**
-     * @param 对createDate进行赋值
-     */
+
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-    
-    /**
-     * @return 返回 createUserId
-     */
+
     public String getCreateUserId() {
         return createUserId;
     }
-    
-    /**
-     * @param 对createUserId进行赋值
-     */
+
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-    
-    /**
-     * @return 返回 client
-     */
+
     public Client getClient() {
         return client;
     }
-    
-    /**
-     * @param 对client进行赋值
-     */
+
     public void setClient(Client client) {
         this.client = client;
     }
-    
-    /**
-     * @return 返回 creditInfo
-     */
+
+    public ClientInfo getClientInfo() {
+        return clientInfo;
+    }
+
+    public void setClientInfo(ClientInfo clientInfo) {
+        this.clientInfo = clientInfo;
+    }
+
+    public InstitutionInfo getInstitutionInfo() {
+        return institutionInfo;
+    }
+
+    public void setInstitutionInfo(InstitutionInfo institutionInfo) {
+        this.institutionInfo = institutionInfo;
+    }
+
     public CreditInfo getCreditInfo() {
         return creditInfo;
     }
-    
-    /**
-     * @param 对creditInfo进行赋值
-     */
+
     public void setCreditInfo(CreditInfo creditInfo) {
         this.creditInfo = creditInfo;
     }
+
+    public PersonalSummary getPersonalSummary() {
+        return personalSummary;
+    }
+
+    public void setPersonalSummary(PersonalSummary personalSummary) {
+        this.personalSummary = personalSummary;
+    }
 }
+

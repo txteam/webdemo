@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="personalSummary">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="personalSummaryMap" 
+		type="com.tx.local.personal.model.PersonalSummary">
+		<result column="idCardDeadlineId" property="idCardDeadline.id"/>
+		<result column="idCardDistrictId" property="idCardDistrict.id"/>
+		<result column="liveStatusId" property="liveStatus.id"/>
+		<result column="nativePlaceId" property="nativePlace.id"/>
+		<result column="maritalStatusId" property="maritalStatus.id"/>
+		<result column="identityStateId" property="identityState.id"/>
+		<result column="educationId" property="education.id"/>
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.personal.model.PersonalSummary"
+		resultMap="personalSummaryMap">
+		SELECT 
+				PS.id,
+				PS.idCardDeadlineId,
+				PS.idCardDistrictId,
+				PS.idCardExpiredDate,
+				PS.landArea,
+				PS.liveStatusId,
+				PS.vcid,
+				PS.frontOfIDCardUrl,
+				PS.laborCount,
+				PS.familyCount,
+				PS.fatherName,
+				PS.fatherAlive,
+				PS.fatherMobileNumber,
+				PS.motherName,
+				PS.motherAlive,
+				PS.motherMobileNumber,
+				PS.nativePlaceId,
+				PS.maritalStatusId,
+				PS.reverseOfIDCardUrl,
+				PS.identityStateId,
+				PS.marriageDate,
+				PS.personalId,
+				PS.educationId
+		  FROM PER_PERSONAL_SUMMARY PS
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND PS.id = #{id}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(personalId)">
+				AND PS.personalId = #{personalId}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="personalSummaryMap">
+		SELECT 
+				PS.id,
+				PS.idCardDeadlineId,
+				PS.idCardDistrictId,
+				PS.idCardExpiredDate,
+				PS.landArea,
+				PS.liveStatusId,
+				PS.vcid,
+				PS.frontOfIDCardUrl,
+				PS.laborCount,
+				PS.familyCount,
+				PS.fatherName,
+				PS.fatherAlive,
+				PS.fatherMobileNumber,
+				PS.motherName,
+				PS.motherAlive,
+				PS.motherMobileNumber,
+				PS.nativePlaceId,
+				PS.maritalStatusId,
+				PS.reverseOfIDCardUrl,
+				PS.identityStateId,
+				PS.marriageDate,
+				PS.personalId,
+				PS.educationId
+		  FROM PER_PERSONAL_SUMMARY PS
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND PS.id = #{id} ]]>
+	        </if>			
+			<if test="idCardDeadline != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardDeadline.id)">  
+		            <![CDATA[ AND PS.idCardDeadlineId = #{idCardDeadline.id} ]]>
+		        </if>
+	        </if>			
+			<if test="idCardDistrict != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardDistrict.id)">  
+		            <![CDATA[ AND PS.idCardDistrictId = #{idCardDistrict.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(landArea)">  
+	            <![CDATA[ AND PS.landArea = #{landArea} ]]>
+	        </if>			
+			<if test="liveStatus != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(liveStatus.id)">  
+		            <![CDATA[ AND PS.liveStatusId = #{liveStatus.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND PS.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(frontOfIDCardUrl)">  
+	            <![CDATA[ AND PS.frontOfIDCardUrl = #{frontOfIDCardUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(laborCount)">  
+	            <![CDATA[ AND PS.laborCount = #{laborCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(familyCount)">  
+	            <![CDATA[ AND PS.familyCount = #{familyCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fatherName)">  
+	            <![CDATA[ AND PS.fatherName = #{fatherName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fatherAlive)">  
+	            <![CDATA[ AND PS.fatherAlive = #{fatherAlive} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fatherMobileNumber)">  
+	            <![CDATA[ AND PS.fatherMobileNumber = #{fatherMobileNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(motherName)">  
+	            <![CDATA[ AND PS.motherName = #{motherName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(motherAlive)">  
+	            <![CDATA[ AND PS.motherAlive = #{motherAlive} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(motherMobileNumber)">  
+	            <![CDATA[ AND PS.motherMobileNumber = #{motherMobileNumber} ]]>
+	        </if>			
+			<if test="nativePlace != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nativePlace.id)">  
+		            <![CDATA[ AND PS.nativePlaceId = #{nativePlace.id} ]]>
+		        </if>
+	        </if>			
+			<if test="maritalStatus != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maritalStatus.id)">  
+		            <![CDATA[ AND PS.maritalStatusId = #{maritalStatus.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(reverseOfIDCardUrl)">  
+	            <![CDATA[ AND PS.reverseOfIDCardUrl = #{reverseOfIDCardUrl} ]]>
+	        </if>			
+			<if test="identityState != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(identityState.id)">  
+		            <![CDATA[ AND PS.identityStateId = #{identityState.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(personalId)">  
+	            <![CDATA[ AND PS.personalId = #{personalId} ]]>
+	        </if>			
+			<if test="education != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(education.id)">  
+		            <![CDATA[ AND PS.educationId = #{education.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND PS.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY id DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM PER_PERSONAL_SUMMARY PS
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND PS.id = #{id} ]]>
+	        </if>			
+			<if test="idCardDeadline != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardDeadline.id)">  
+		            <![CDATA[ AND PS.idCardDeadlineId = #{idCardDeadline.id} ]]>
+		        </if>
+	        </if>			
+			<if test="idCardDistrict != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardDistrict.id)">  
+		            <![CDATA[ AND PS.idCardDistrictId = #{idCardDistrict.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(landArea)">  
+	            <![CDATA[ AND PS.landArea = #{landArea} ]]>
+	        </if>			
+			<if test="liveStatus != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(liveStatus.id)">  
+		            <![CDATA[ AND PS.liveStatusId = #{liveStatus.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
+	            <![CDATA[ AND PS.vcid = #{vcid} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(frontOfIDCardUrl)">  
+	            <![CDATA[ AND PS.frontOfIDCardUrl = #{frontOfIDCardUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(laborCount)">  
+	            <![CDATA[ AND PS.laborCount = #{laborCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(familyCount)">  
+	            <![CDATA[ AND PS.familyCount = #{familyCount} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fatherName)">  
+	            <![CDATA[ AND PS.fatherName = #{fatherName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fatherAlive)">  
+	            <![CDATA[ AND PS.fatherAlive = #{fatherAlive} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(fatherMobileNumber)">  
+	            <![CDATA[ AND PS.fatherMobileNumber = #{fatherMobileNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(motherName)">  
+	            <![CDATA[ AND PS.motherName = #{motherName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(motherAlive)">  
+	            <![CDATA[ AND PS.motherAlive = #{motherAlive} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(motherMobileNumber)">  
+	            <![CDATA[ AND PS.motherMobileNumber = #{motherMobileNumber} ]]>
+	        </if>			
+			<if test="nativePlace != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(nativePlace.id)">  
+		            <![CDATA[ AND PS.nativePlaceId = #{nativePlace.id} ]]>
+		        </if>
+	        </if>			
+			<if test="maritalStatus != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maritalStatus.id)">  
+		            <![CDATA[ AND PS.maritalStatusId = #{maritalStatus.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(reverseOfIDCardUrl)">  
+	            <![CDATA[ AND PS.reverseOfIDCardUrl = #{reverseOfIDCardUrl} ]]>
+	        </if>			
+			<if test="identityState != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(identityState.id)">  
+		            <![CDATA[ AND PS.identityStateId = #{identityState.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(personalId)">  
+	            <![CDATA[ AND PS.personalId = #{personalId} ]]>
+	        </if>			
+			<if test="education != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(education.id)">  
+		            <![CDATA[ AND PS.educationId = #{education.id} ]]>
+		        </if>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND PS.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.personal.model.PersonalSummary">
+		INSERT INTO PER_PERSONAL_SUMMARY
+		(
+			id,
+			idCardDeadlineId,
+			idCardDistrictId,
+			idCardExpiredDate,
+			landArea,
+			liveStatusId,
+			vcid,
+			frontOfIDCardUrl,
+			laborCount,
+			familyCount,
+			fatherName,
+			fatherAlive,
+			fatherMobileNumber,
+			motherName,
+			motherAlive,
+			motherMobileNumber,
+			nativePlaceId,
+			maritalStatusId,
+			reverseOfIDCardUrl,
+			identityStateId,
+			marriageDate,
+			personalId,
+			educationId
+		)
+		VALUES
+		(
+			#{id},
+			#{idCardDeadline.id},
+			#{idCardDistrict.id},
+			#{idCardExpiredDate},
+			#{landArea},
+			#{liveStatus.id},
+			#{vcid},
+			#{frontOfIDCardUrl},
+			#{laborCount},
+			#{familyCount},
+			#{fatherName},
+			#{fatherAlive},
+			#{fatherMobileNumber},
+			#{motherName},
+			#{motherAlive},
+			#{motherMobileNumber},
+			#{nativePlace.id},
+			#{maritalStatus.id},
+			#{reverseOfIDCardUrl},
+			#{identityState.id},
+			#{marriageDate},
+			#{personalId},
+			#{education.id}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.personal.model.PersonalSummary">
+		DELETE FROM PER_PERSONAL_SUMMARY  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE PER_PERSONAL_SUMMARY
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('idCardDeadline')">
+	    		idCardDeadlineId = #{idCardDeadline.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('idCardDistrict')">
+	    		idCardDistrictId = #{idCardDistrict.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('idCardExpiredDate')">
+	    		idCardExpiredDate = #{idCardExpiredDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('landArea')">
+	    		landArea = #{landArea,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('liveStatus')">
+	    		liveStatusId = #{liveStatus.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('frontOfIDCardUrl')">
+	    		frontOfIDCardUrl = #{frontOfIDCardUrl,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('laborCount')">
+	    		laborCount = #{laborCount,javaType=java.lang.Integer},
+	    	</if>
+			<if test="_parameter.containsKey('familyCount')">
+	    		familyCount = #{familyCount,javaType=java.lang.Integer},
+	    	</if>
+			<if test="_parameter.containsKey('fatherName')">
+	    		fatherName = #{fatherName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('fatherAlive')">
+	    		fatherAlive = #{fatherAlive,javaType=java.lang.Boolean},
+	    	</if>
+			<if test="_parameter.containsKey('fatherMobileNumber')">
+	    		fatherMobileNumber = #{fatherMobileNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('motherName')">
+	    		motherName = #{motherName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('motherAlive')">
+	    		motherAlive = #{motherAlive,javaType=java.lang.Boolean},
+	    	</if>
+			<if test="_parameter.containsKey('motherMobileNumber')">
+	    		motherMobileNumber = #{motherMobileNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('nativePlace')">
+	    		nativePlaceId = #{nativePlace.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('maritalStatus')">
+	    		maritalStatusId = #{maritalStatus.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('reverseOfIDCardUrl')">
+	    		reverseOfIDCardUrl = #{reverseOfIDCardUrl,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('identityState')">
+	    		identityStateId = #{identityState.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('marriageDate')">
+	    		marriageDate = #{marriageDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('personalId')">
+	    		personalId = #{personalId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('education')">
+	    		educationId = #{education.id,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

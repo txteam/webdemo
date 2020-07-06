@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>echart/bar</title>
+	<meta charset="utf-8"/>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<block th:replace="fragments/layui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+	<!-- layui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
+</head>
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md6">
+        <div class="layui-card">
+          <div class="layui-card-header">标准柱状图</div>
+          <div class="layui-card-body">
+
+            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-normcol">
+              <div carousel-item id="LAY-index-normcol">
+                <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">堆积柱状图</div>
+          <div class="layui-card-body">
+            
+            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-heapcol">
+              <div carousel-item id="LAY-index-heapcol">
+                <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">不等距柱形图</div>
+          <div class="layui-card-body">
+            
+            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-diffcol">
+              <div carousel-item id="LAY-index-diffcol">
+                <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">彩虹柱形图</div>
+          <div class="layui-card-body">
+            
+            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-colorline">
+              <div carousel-item id="LAY-index-colorline">
+                <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md6">
+        <div class="layui-card">
+          <div class="layui-card-header">标准条形图</div>
+          <div class="layui-card-body">
+            
+            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-normbar">
+              <div carousel-item id="LAY-index-normbar">
+                <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">堆积条形图</div>
+          <div class="layui-card-body">
+           
+            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-heapbar">
+              <div carousel-item id="LAY-index-heapbar">
+                <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">旋风条形图</div>
+          <div class="layui-card-body">
+           
+            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-windline">
+              <div carousel-item id="LAY-index-windline">
+                <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+<script>
+/*<![CDATA[*/
+layui.config({
+	//静态资源所在路径 //静态资源所在路径
+	base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/' 
+}).extend({
+	//主入口模块
+	index: 'lib/index' 
+}).use(['index', 'senior'],function(){
+	  
+});
+/*]]>*/
+</script>
+</body>
+</html>
+
+

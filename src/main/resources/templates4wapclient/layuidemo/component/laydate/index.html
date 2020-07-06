@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>laydate/index</title>
+	<meta charset="utf-8"/>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<block th:replace="fragments/layui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+	<!-- layui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'';
+	/*]]>*/
+	</script>
+</block>
+</head>
+<body>
+
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>组件</cite></a>
+    <a><cite>日期时间</cite></a>
+  </div>
+</div>
+
+<style>
+/* 这段样式只是用于演示 */
+.layadmin-trailer{position: absolute; left: 0; top: 0; height: 100%; width: 100%; padding: 15px; display: flex; justify-content: center; flex-direction: column; text-align: center; box-sizing: border-box; font-size: 20px; font-weight: 300; color: #ccc;}
+</style>
+
+<div class="layadmin-trailer">
+  <div style="width: 280px; margin: 0 auto;">
+    <a href="http://www.layui.com/demo/laydate.html" target="_blank" class="layui-btn">
+      正在整理，你可以先官网查看示例
+    </a>
+  </a>
+</div>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+layui.config({
+	//静态资源所在路径 //静态资源所在路径
+	base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/' 
+}).extend({
+	//主入口模块
+	index: 'lib/index' 
+}).use(['index'],function(){
+	
+});
+/*]]>*/
+</script>
+</body>
+</html>

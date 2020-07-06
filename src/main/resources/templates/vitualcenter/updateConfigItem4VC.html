@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>编辑ConfigItem4VC[updateConfigItem4VC]</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	parent.DialogUtils.progress('close');
+	
+	//验证器
+	$('#entityForm').validator({
+	    valid: function(){
+	        //表单验证通过，提交表单到服务器
+	        DialogUtils.progress({
+	            text : '数据提交中，请等待....'
+	    	});
+			$('#entityForm').ajaxSubmit({
+			    url:/*[[@{/configItem4VC/update}]]*/'',
+			    success: function(data) {
+			    	DialogUtils.progress('close');
+					if(data){
+						parent.DialogUtils.tip("修改ConfigItem4VC成功.");
+						parent.DialogUtils.closeDialogById("updateConfigItem4VC");
+					}else{
+						DialogUtils.alert("错误提示","修改ConfigItem4VC失败.","error");
+					}
+			    } 
+			});
+			return false;
+	    }
+	});
+	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("updateConfigItem4VC");
+	});
+	//提交
+	$("#submitBtn").click(function(){
+		$('#entityForm').submit();
+	});
+});
+/*]]>*/
+</script>
+</head>
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" title="" style="overflow-x: hidden;overflow-y: auto;">
+		<form id="entityForm" method="post" class="form" th:object="${configItem4VC}">
+			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
+			<table class="table">
+				<tr>
+					<th class="narrow" width="25%">编码:<span class="tRed">*</span></th>
+					<td>
+						<input id="code" name="code" type="text" th:data-rule="'编码:required;length[1~32];remote[' + @{/configItem4VC/validate} + ', code, id];'"
+							th:value="*{code}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">leaf:</th>
+					<td>
+						<select id="leaf" name="leaf" >
+							<option value="true" th:selected="${configItem4VC.leaf eq true}">是</form:option>
+							<option value="false" th:selected="${configItem4VC.leaf eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">名称:<span class="tRed">*</span></th>
+					<td>
+						<input id="name" name="name" type="text" th:data-rule="'名称:required;length[1~32];remote[' + @{/configItem4VC/validate} + ', name, id];'"
+							th:value="*{name}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">值:<span class="tRed">*</span></th>
+					<td>
+						<input id="value" name="value" type="text" data-rule="值:required;length[1~32];"
+							th:value="*{value}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">是否可编辑:</th>
+					<td>
+						<select id="modifyAble" name="modifyAble" >
+							<option value="true" th:selected="${configItem4VC.modifyAble eq true}">是</form:option>
+							<option value="false" th:selected="${configItem4VC.modifyAble eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">上级ID:</th>
+					<td>
+						<input id="parentId" name="parentId" type="text" 
+							th:value="*{parentId}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">备注:</th>
+					<td>
+						<input id="remark" name="remark" type="text" data-rule="备注:length[0~250];"
+							th:value="*{remark}"/>
+					</td>
+				</tr>			
+			</table>
+		</form>
+	</div>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
+	</div>
+</body>

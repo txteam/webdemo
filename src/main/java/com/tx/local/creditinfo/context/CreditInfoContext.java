@@ -8,8 +8,8 @@ package com.tx.local.creditinfo.context;
 
 import com.tx.local.creditinfo.model.CreditMultipLinked;
 import com.tx.local.creditinfo.model.CreditSingleLinked;
-import com.tx.local.creditinfo.service.MultipCreditInfoService;
-import com.tx.local.creditinfo.service.SingleCreditInfoService;
+import com.tx.local.creditinfo.service.CreditMultipLinkedService;
+import com.tx.local.creditinfo.service.CreditSingleLinkedService;
 
 /**
  * 信用信息容器<br/>
@@ -32,7 +32,7 @@ public class CreditInfoContext {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public <T extends CreditMultipLinked> MultipCreditInfoService<T> getMultipService(
+    public <T extends CreditMultipLinked> CreditMultipLinkedService<T> getMultipService(
             Class<T> type) {
         return null;
     }
@@ -47,7 +47,7 @@ public class CreditInfoContext {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public <T extends CreditSingleLinked> SingleCreditInfoService<T> getSingleService(
+    public <T extends CreditSingleLinked> CreditSingleLinkedService<T> getSingleService(
             Class<T> type) {
         return null;
     }

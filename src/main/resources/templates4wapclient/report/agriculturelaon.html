@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>我要贷</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <block th:replace="fragments/bootstrap_header::common_replace">
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+        <!-- js -->
+        <script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var _contextPath = /*[[@{/}]]*/'';
+            /*]]>*/
+        </script>
+    </block>
+</head>
+<body>
+<div class="nav_view">
+    <a id="toIndex">
+        <div class="nav_img">
+            <span class="glyphicon glyphicon-menu-left"></span>
+        </div>
+    </a>
+    <div class="nav_title">我要贷</div>
+</div>
+<div class="container layui-form">
+    <form id="form" lay-filter="form" class="form-horizontal div-bg view_top">
+        <input id="id" name="id" class="layui-hide"/><!--reportPersonal.id reportId-->
+        <div class="row">
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="purpose" class="col-sm-4 col-xs-4 column_control control-label">贷款用途<span class="text-xq">*</span></label>
+                <div class="col-sm-8 col-xs-8">
+                    <input type="text" class="layui-input" id="purpose" name="purpose" placeholder="请输入贷款用途"
+                           autocomplete="off"  lay-verify="required">
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="quantity" class="col-sm-4 col-xs-4 column_control control-label">贷款金额(万元)<span class="text-xq">*</span></label>
+                <div class="col-sm-8 col-xs-8">
+                    <input type="number" class="layui-input" id="quantity" name="quantity" placeholder="请输入贷款金额"
+                           autocomplete="off"  lay-verify="required|digital">
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="dateStart" class="col-sm-4 col-xs-4 column_control control-label">贷款开始时间<span class="text-xq">*</span></label>
+                <div class="col-sm-8 col-xs-8">
+                    <input type="text" id="dateStart" name="dateStart" lay-verify="date"
+                           placeholder="yyyy-MM" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="dateEnd" class="col-sm-4 col-xs-4 column_control control-label">贷款结束时间<span class="text-xq">*</span></label>
+                <div class="col-sm-8 col-xs-8">
+                    <input type="text" id="dateEnd" name="dateEnd"  lay-verify="date|endDate"
+                           placeholder="yyyy-MM" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="remark" class="col-sm-4 col-xs-4 column_control control-label">描述</label>
+                <div class="col-sm-8 col-xs-8 ">
+                    <textarea id="remark" name="remark" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 form-group">
+                <div class="col-sm-offset-2 col-xs-offset-4 submit_control">
+                    <button id="submitBtn" lay-submit=""  lay-filter="submitBtn" class="btn btn-success btn-sm">保存信息</button>
+                    <a id="deleteBtn" class="col-sm-offset-1 col-xs-offset-2 btn btn-success btn-sm">清除信息</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="row">
+        <div class="col-sm-12 col-xs-12">
+            <h3>历史填报信息</h3>
+        </div>
+        <div id="list"></div>
+        <div id='isQuery_msg' class="col-sm-12 col-xs-12 isQuery_msg">----点击或滑动加载----</div>
+    </div>
+
+</div>
+<script  type="text/javascript" th:inline="javascript">
+    var isQuery = 0;//是否已经是最后一条
+    var pageNumber = 1;//当前页
+    var pageSize = 1000;//每次查询条数
+
+    layui.config({
+        base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/'
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'layer', 'laydate', 'jquery'], function(){
+        var $ = layui.jquery
+            ,form = layui.form
+            ,laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#dateStart'
+            ,format: 'yyyy-MM-dd',
+            min: 0
+        });
+
+        laydate.render({
+            elem: '#dateEnd'
+            ,format: 'yyyy-MM-dd'
+            ,min: 0
+        });
+
+        form.verify({
+            endDate: function(value){
+                var startDateTime = 0;
+                var endDateTime = 0;
+                var startDate = $('#dateStart').val();
+                if(startDate != ''){
+                    startDateTime = new Date(Date.parse(startDate.replace(/-/g,"/")));
+                }
+                if(value != ''){
+                    endDateTime= new Date(Date.parse(value.replace(/-/g,"/")));
+                }
+                if(startDateTime > endDateTime){
+                    return '结束日期不能大于开始日期';
+                }
+            },
+            digital: [
+                /^(\d?)+(\.\d{0,2})?$/
+                ,'请输入正数'
+            ]
+        });
+
+        /*===================表单信息=====================*/
+        form.on('submit(submitBtn)', function(data){
+            var ids = $("#id").val();
+            var _url = '';
+            if(ids != "" && ids != null && $.trim(ids) != ''){
+                _url = /*[[@{/wap/client/agricultureLaon/update}]]*/'';
+            }else{
+                _url = /*[[@{/wap/client/agricultureLaon/add}]]*/'';
+            }
+            $.ajax({
+                url: _url,
+                dataType: "json",
+                type: "POST",
+                data: data.field,
+                success: function (res) {
+                    layer.msg('保存成功', {icon: 1});
+                    getButton();
+                },
+                error: function (data) {
+                    layer.msg('保存失败', {icon: 5});
+                }
+            });
+            return false;
+        });
+        $("#deleteBtn").on('click', function(){
+            getInfoSetFromNull();//清空表单
+        });
+        /*=================其他信息==================*/
+        $("#isQuery_msg").on('click', function(){
+            getListInfo();//点击加载列表数据
+        });
+
+        $("#toIndex").on('click', function(){
+            window.location.href = /*[[@{/wap/client/index}]]*/'';//返回到选择填报页面
+        });
+    });
+
+
+    /*=============================列表操作=========================*/
+    /*首次查询*/
+    function getButton() {
+        $('#list').html(' ');//清空列表
+        getInfoSetFromNull();//清空表单
+        pageNumber = 1;
+        isQuery = 0;
+        getListInfo();
+    }
+    //获取列表数据
+    function getListInfo() {
+        if(isQuery == 1){
+            return false;//阻止查询
+        }
+        if (isQuery == 0) {
+            setMsgInfo(2);
+        }
+        var date = {
+            "pageNumber": pageNumber,
+            "pageSize": pageSize,
+        };//分页查询参数
+        $.ajax({
+            url: /*[[@{/wap/client/agricultureLaon/queryPagedList}]]*/'',
+            dataType: "json",
+            type: "GET",
+            data: date,
+            success: function (res) {
+                if (res.list.length > 0){
+                    pageNumber = res.pageIndex + 1;
+                    for (var i = 0; i < res.list.length; i++) {
+                        $('#list').append(addHtml(res.list[i]));
+                    }
+                    if(res.count > (res.list.length + (pageNumber - 1) * pageSize)){
+                        setMsgInfo(0);//可以加载
+                    }else{
+                        setMsgInfo(1);//不准加载
+                    }
+                } else {
+                    setMsgInfo(1);//不准加载
+                }
+            },
+            error: function (data) {
+                setMsgInfo(1);//不准加载
+            }
+        });
+    }
+    /*列表赋值*/
+    function addHtml(date) {
+        var _html ='<div class="col-sm-6 col-xs-12" onclick="getInfoSetFrom('+JSON.stringify(date).replace(/"/g, '&quot;')+ ')">'
+            +'<div class="view_list">'
+
+            +'<div class="list_item">'
+            +'   <div class="item_view">'
+            +'      <div class="item_lable">贷款用途</div>'
+            +'      <div class="item_text">'+date.purpose +'</div>'
+            +'  </div>'
+            +'  <div class="item_view">'
+            +'      <div class="item_lable">贷款金额</div>'
+            +'      <div class="item_text">'+ date.quantity  +'万元</div>'
+            +'  </div>'
+            +'</div>'
+            +'<div class="list_item">'
+            +'   <div class="item_view">'
+            +'      <div class="item_lable">开始时间</div>'
+            +'      <div class="item_text">'+ createTime(date.dateStart,false) +'</div>'
+            +'  </div>'
+            +'  <div class="item_view">'
+            +'      <div class="item_lable">结束时间</div>'
+            +'      <div class="item_text">'+ createTime(date.dateEnd,false)  +'</div>'
+            +'  </div>'
+            +'</div>'
+            +'<div class="list_item">'
+            +'  <div class="item_lable">备注</div>'
+            +'  <div class="item_text">'+ date.remark +'</div>'
+            +'</div>'
+            +'</div>'
+            +'</div>';
+        return _html;
+    }
+    /*点击列表给表单赋值*/
+    function getInfoSetFrom(info) {
+        var datefindById = {id: info.id};
+        $.ajax({
+            url: /*[[@{/wap/client/agricultureLaon/findById}]]*/'',
+            dataType: "json",
+            type: "GET",
+            data: datefindById,
+            success: function (date) {
+                getInfoSetFromNull();
+                $("#id").val(date.id);
+                $("#dateStart").val(createTime(date.dateStart,false));
+                $("#dateEnd").val(createTime(date.dateEnd,false));
+                $("#quantity").val(date.quantity);
+                $("#purpose").val(date.purpose);
+                $("#remark").val(date.remark);
+            },
+            error: function (data) {
+            }
+        });
+    }
+    /*点击清空赋值*/
+    function getInfoSetFromNull() {
+        $("#id").val('');
+        $("#dateStart").val("");
+        $("#dateEnd").val("");
+        $("#quantity").val('');
+        $("#purpose").val('');
+        $("#remark").val('');
+        layui.form.render('select');
+    }
+    //--------------上拉加载更多---------------
+    //获取滚动条当前的位置
+    function getScrollTop() {
+        var scrollTop = 0;
+        if (document.documentElement && document.documentElement.scrollTop) {
+            scrollTop = document.documentElement.scrollTop;
+        } else if (document.body) {
+            scrollTop = document.body.scrollTop;
+        }
+        return scrollTop;
+    }
+
+    //获取当前可视范围的高度
+    function getClientHeight() {
+        var clientHeight = 0;
+        if (document.body.clientHeight && document.documentElement.clientHeight) {
+            clientHeight = Math.min(document.body.clientHeight, document.documentElement.clientHeight);
+        } else {
+            clientHeight = Math.max(document.body.clientHeight, document.documentElement.clientHeight);
+        }
+        return clientHeight;
+    }
+
+    //获取文档完整的高度
+    function getScrollHeight() {
+        return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    }
+    //滚动事件触发
+    window.onscroll = function () {
+        if (getScrollTop() + getClientHeight() === getScrollHeight()) {
+            if (isQuery == 1) {
+                setMsgInfo(1);
+            } else {
+                getListInfo();
+            }
+        }
+    };
+    function setMsgInfo(type) {
+        if(type == 0){
+            isQuery = 0;
+            $('#isQuery_msg').text('----点击或滑动加载----');
+        }
+        if(type == 1){
+            isQuery = 1;
+            $('#isQuery_msg').text('----已经没有更多了----');
+        }
+        if(type == 2){
+            isQuery = 1;//阻止查询
+            $('#isQuery_msg').text('----正在加载中----');
+        }
+    }
+
+    function createTime(v,s){
+        var date = new Date(v);
+        var y = date.getFullYear();
+        var m = date.getMonth()+1;
+        m = m<10?'0'+m:m;
+        var d = date.getDate();
+        d = d<10?("0"+d):d;
+        var h = date.getHours();
+        h = h<10?("0"+h):h;
+        var M = date.getMinutes();
+        M = M<10?("0"+M):M;
+        var str = y+"-"+m+"-"+d;
+        if(s){
+            str = str +" "+h+":"+M;
+        }
+        if(s == 3){
+            str = y+"-"+m;
+        }
+        return str;
+    }
+
+    getButton();/*默认执行一次查询*/
+</script>
+</body>

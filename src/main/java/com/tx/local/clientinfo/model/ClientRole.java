@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.tx.component.role.model.Role;
+import com.tx.component.role.model.RoleType;
 import com.tx.core.support.initable.model.ConfigInitAble;
 
 import io.swagger.annotations.ApiModel;
@@ -30,7 +32,7 @@ import io.swagger.annotations.ApiModel;
 @Entity
 @Table(name = "cli_client_role")
 @ApiModel("客户角色")
-public class ClientRole implements ConfigInitAble, Serializable {
+public class ClientRole implements ConfigInitAble,Role ,  Serializable {
     
     /** 注释内容 */
     private static final long serialVersionUID = -4686404756099827980L;
@@ -169,7 +171,27 @@ public class ClientRole implements ConfigInitAble, Serializable {
     public String getRemark() {
         return remark;
     }
-    
+
+    @Override
+    public String getRoleTypeId() {
+        return null;
+    }
+
+    @Override
+    public String getParentId() {
+        return null;
+    }
+
+    @Override
+    public RoleType getParent() {
+        return null;
+    }
+
+    @Override
+    public RoleType getRoleType() {
+        return null;
+    }
+
     /**
      * @param 对remark进行赋值
      */

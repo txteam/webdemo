@@ -42,6 +42,28 @@ public interface CreditLinked extends Serializable {
     void setId(String id);
     
     /**
+     * 获取客户ID<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    String getClientId();
+    
+    /**
+     * 设置客户信用ID<br/>
+     * <功能详细描述>
+     * @param clientId [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    void setClientId(String clientId);
+    
+    /**
      * 获取客户信用id
      * <功能详细描述>
      * @return [参数说明]

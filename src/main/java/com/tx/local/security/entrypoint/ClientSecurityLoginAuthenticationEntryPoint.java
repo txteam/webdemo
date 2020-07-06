@@ -61,6 +61,42 @@ public class ClientSecurityLoginAuthenticationEntryPoint
             super.commence(request, response, authException);
         }
     }
+
+    /**
+     * @param request
+     * @param response
+     * @param exception
+     * @return
+     */
+    @Override
+    protected String determineUrlToUseForThisRequest(HttpServletRequest request,
+                                                     HttpServletResponse response, AuthenticationException exception) {
+        String loginUrl = getLoginUrlForRequest(request);
+        return loginUrl;
+    }
+
+    /**
+     * 根据请求获取登陆Url<br/>
+     * <功能详细描述>
+     * @param request
+     * @return [参数说明]
+     *
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public String getLoginUrlForRequest(HttpServletRequest request) {
+        String requestURI = request.getRequestURI()
+                .replace(request.getContextPath(), "");
+        for (String url : this.authEntryPointMap.keySet()) {
+            if (this.pathMatcher.match(url, requestURI)) {
+                return this.authEntryPointMap.get(url);
+            }
+        }
+
+        String loginUrl = getLoginFormUrl();
+        return loginUrl;
+    }
     
     /**
      * @return 返回 authEntryPointMap

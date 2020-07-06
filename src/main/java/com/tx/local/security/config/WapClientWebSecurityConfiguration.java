@@ -28,11 +28,13 @@ import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 
 import com.tx.component.security.filter.SecurityThreadLocalResourceSupportFilter;
 import com.tx.local.clientinfo.model.WapClientRoleEnum;
-import com.tx.local.security.entrypoint.OperatorSecurityLoginAuthenticationEntryPoint;
-import com.tx.local.security.filter.ClientAuthenticationProcessingFilter;
+import com.tx.local.security.entrypoint.WapClientSecurityAccessDeniedHandler;
+import com.tx.local.security.entrypoint.WapSecurityLoginAuthenticationEntryPoint;
+import com.tx.local.security.filter.WapClientAuthenticationProcessingFilter;
+import com.tx.local.security.filter.WapClientWXAuthenticationProcessingFilter;
+import com.tx.local.security.handler.WapClientSecurityAuthenticationFailureHandler;
+import com.tx.local.security.handler.WapClientSecurityAuthenticationSuccessHandler;
 import com.tx.local.security.strategy.ClientSessionAuthenticationStrategy;
-import com.tx.local.servicelog.handler.ClientSecurityAuthenticationFailureHandler;
-import com.tx.local.servicelog.handler.ClientSecurityAuthenticationSuccessHandler;
 
 /**
  * SpringSecurity本地权限定制<br/>
@@ -56,6 +58,9 @@ public class WapClientWebSecurityConfiguration
     
     @Autowired
     private AuthenticationManager authenticationManager;
+    
+    @Autowired
+    private WapClientWXAuthenticationProcessingFilter wapClientWXAuthenticationProcessingFilter;
     
     /**
      * httpSecurity配置
@@ -83,27 +88,35 @@ public class WapClientWebSecurityConfiguration
         
         //login配置，disable后利用filter实现替代
         http.formLogin().disable();
+        
         //添加登录过滤器
-        http.addFilterBefore(clientAuthenticationProcessingFilter(),
+        http.addFilterBefore(wapClientAuthenticationProcessingFilter(),
+                UsernamePasswordAuthenticationFilter.class);
+        //添加微信第三方登录过滤器
+        http.addFilterBefore(this.wapClientWXAuthenticationProcessingFilter,
                 UsernamePasswordAuthenticationFilter.class);
         
         //logout配置
         //http.logout().disable();
-        http.logout().logoutUrl("/wap/client/logout").logoutSuccessUrl(
-                "/wap/client/login");
+        http.logout()
+                .logoutUrl("/wap/client/logout")
+                .logoutSuccessUrl("/wap/client/login");
         
         //注册登录入口
         registerAuthenticationEntryPoint(http);
+        
+        registerAccessDeniedHandler(http);
         
         //必须条件该过滤器，不然权限容器中线程变量逻辑会存在问题
         http.addFilterAfter(new SecurityThreadLocalResourceSupportFilter(),
                 SwitchUserFilter.class);
         
         //所有请求都允许访问
+        //http.authorizeRequests().anyRequest().fullyAuthenticated();
         //首页允许
-        http.authorizeRequests()
-                .antMatchers("/wap/client/", "/wap/client/index")
-                .permitAll();
+        /*http.authorizeRequests()
+                .antMatchers("/wap/client/**", "/wap/client/index")
+                .permitAll();*/
         //第三方用户登陆
         http.authorizeRequests()
                 .antMatchers("/wap/client/social/**")
@@ -121,7 +134,7 @@ public class WapClientWebSecurityConfiguration
         http.authorizeRequests()
                 .anyRequest()
                 .hasRole(WapClientRoleEnum.WAP_CLIENT.getId());//需要操作人员角色
-        http.authorizeRequests().anyRequest().authenticated();//其他请求需要鉴权
+        //http.authorizeRequests().anyRequest().authenticated();//其他请求需要鉴权
     }
     
     /**
@@ -154,8 +167,27 @@ public class WapClientWebSecurityConfiguration
                 Arrays.asList(notXRequestedWith, mediaMatcher));
         
         //注入默认的认证入口，异常拦截器
-        http.exceptionHandling().defaultAuthenticationEntryPointFor(
-                entryPoint(), preferredMatcher);
+        http.exceptionHandling().accessDeniedPage("/wap/client/login");
+        http.exceptionHandling()
+                .defaultAuthenticationEntryPointFor(entryPoint(),
+                        preferredMatcher);
+    }
+    
+    /**
+     * 注册登录入口<br/>
+     * <功能详细描述>
+     * @param http
+     * @throws Exception [参数说明]
+     *
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private void registerAccessDeniedHandler(HttpSecurity http)
+            throws Exception {
+        http.exceptionHandling()
+                .accessDeniedHandler(new WapClientSecurityAccessDeniedHandler(
+                        "/error/403.html"));
     }
     
     /**
@@ -168,9 +200,10 @@ public class WapClientWebSecurityConfiguration
      * @see [类、类#方法、类#成员]
      */
     @Bean("wap.client.entryPoint")
-    public OperatorSecurityLoginAuthenticationEntryPoint entryPoint() {
-        OperatorSecurityLoginAuthenticationEntryPoint point = new OperatorSecurityLoginAuthenticationEntryPoint(
-                "/client/login");
+    public WapSecurityLoginAuthenticationEntryPoint entryPoint() {
+        WapSecurityLoginAuthenticationEntryPoint point = new WapSecurityLoginAuthenticationEntryPoint(
+                "/wap/client/login");
+        point.setUseForward(true);
         return point;
     }
     
@@ -184,8 +217,8 @@ public class WapClientWebSecurityConfiguration
      * @see [类、类#方法、类#成员]
      */
     @Bean("wap.client.securityAuthenticationSuccessHandler")
-    public ClientSecurityAuthenticationSuccessHandler successHandler() {
-        ClientSecurityAuthenticationSuccessHandler handler = new ClientSecurityAuthenticationSuccessHandler();
+    public WapClientSecurityAuthenticationSuccessHandler successHandler() {
+        WapClientSecurityAuthenticationSuccessHandler handler = new WapClientSecurityAuthenticationSuccessHandler();
         return handler;
     }
     
@@ -199,17 +232,14 @@ public class WapClientWebSecurityConfiguration
      * @see [类、类#方法、类#成员]
      */
     @Bean("wap.client.securityAuthenticationFailureHandler")
-    public ClientSecurityAuthenticationFailureHandler failureHandler() {
-        ClientSecurityAuthenticationFailureHandler handler = new ClientSecurityAuthenticationFailureHandler();
+    public WapClientSecurityAuthenticationFailureHandler failureHandler() {
+        WapClientSecurityAuthenticationFailureHandler handler = new WapClientSecurityAuthenticationFailureHandler();
         return handler;
     }
     
     /**
      * 客户认证处理过滤器<br/>
      * <功能详细描述>
-     * @param authenticationManager
-     * @param successHandler
-     * @param failureHandler
      * @return [参数说明]
      * 
      * @return ClientAuthenticationProcessingFilter [返回类型说明]
@@ -218,9 +248,9 @@ public class WapClientWebSecurityConfiguration
      * @see [类、类#方法、类#成员]
      */
     @Bean("wap.client.authenticationProcessingFilter")
-    public ClientAuthenticationProcessingFilter clientAuthenticationProcessingFilter()
+    public WapClientAuthenticationProcessingFilter wapClientAuthenticationProcessingFilter()
             throws Exception {
-        ClientAuthenticationProcessingFilter filter = new ClientAuthenticationProcessingFilter();
+        WapClientAuthenticationProcessingFilter filter = new WapClientAuthenticationProcessingFilter();
         filter.setAuthenticationSuccessHandler(successHandler());
         filter.setAuthenticationFailureHandler(failureHandler());
         
@@ -242,4 +272,5 @@ public class WapClientWebSecurityConfiguration
         ClientSessionAuthenticationStrategy strategy = new ClientSessionAuthenticationStrategy();
         return strategy;
     }
+    
 }

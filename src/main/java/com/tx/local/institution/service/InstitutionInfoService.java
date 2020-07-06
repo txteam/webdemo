@@ -6,6 +6,7 @@
  */
 package com.tx.local.institution.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,22 +18,30 @@ import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.component.configuration.util.ConfigContextUtils;
+import com.tx.component.configuration.context.ConfigContext;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.local.adminstitution.model.AdmInstitutionInfo;
+import com.tx.local.clientinfo.dao.ClientInfoDao;
 import com.tx.local.clientinfo.facade.ClientInfoFacade;
-import com.tx.local.clientinfo.model.Client;
+import com.tx.local.clientinfo.model.ClientExtendInfo;
 import com.tx.local.clientinfo.model.ClientInfo;
 import com.tx.local.clientinfo.model.ClientStatusEnum;
 import com.tx.local.clientinfo.model.ClientTypeEnum;
+import com.tx.local.clientinfo.service.ClientInfoService;
+import com.tx.local.clientinfo.utils.ClientContextUtils;
+import com.tx.local.cooinstitution.model.CooInstitutionInfo;
 import com.tx.local.institution.dao.InstitutionInfoDao;
 import com.tx.local.institution.model.InstitutionInfo;
+import com.tx.local.institution.model.InstitutionSummaryInfo;
+import com.tx.local.security.service.ClientUserDetailsService;
+import com.tx.local.security.util.ClientWebContextUtils;
+import com.tx.local.security.util.WebContextUtils;
 
 /**
  * InstitutionInfo的业务层[InstitutionInfoService]
@@ -44,7 +53,7 @@ import com.tx.local.institution.model.InstitutionInfo;
  * @since [产品/模块版本]
  */
 @Component("institutionInfoService")
-public class InstitutionInfoService implements InitializingBean {
+public class InstitutionInfoService {
     
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory
@@ -53,20 +62,100 @@ public class InstitutionInfoService implements InitializingBean {
     @Resource(name = "institutionInfoDao")
     private InstitutionInfoDao institutionInfoDao;
     
+    @Resource(name = "institutionSummaryInfoService")
+    private InstitutionSummaryInfoService institutionSummaryInfoService;
+    
+    @Resource(name = "clientInfoDao")
+    private ClientInfoDao clientInfoDao;
+    
     @Resource
     private ClientInfoFacade clientInfoFacade;
     
-    private String defaultClientPassword;
+    @Resource(name = "clientInfoService")
+    private ClientInfoService clientInfoService;
     
-    /**
-     * @throws Exception
-     */
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        this.defaultClientPassword = ConfigContextUtils
-                .getValue("system.config.client.default.password");
-        AssertUtils.notEmpty(this.defaultClientPassword,
-                "default client password is empty.");
+    @Resource(name = "clientUserDetailsService")
+    private ClientUserDetailsService clientUserDetailsService;
+    
+    @Resource
+    private ConfigContext configContext;
+    
+    @Transactional
+    public Map<String, Object> transClientAndInstitution(
+            InstitutionInfo institutionInfo) {
+        //验证参数是否合法
+        AssertUtils.notNull(institutionInfo, "institutionInfo is null.");
+        AssertUtils.notEmpty(institutionInfo.getVcid(),
+                "institutionInfo.vcid is empty.");
+        AssertUtils.notNull(institutionInfo.getType(),
+                "institutionInfo.type is empty.");
+        AssertUtils.notEmpty(institutionInfo.getName(),
+                "institutionInfo.name is empty.");
+        
+        //客户扩展信息
+        ClientExtendInfo clientExtendInfo = clientExtendInfoService
+                .findByClientId(institutionInfo.getClientId());
+        
+        //返回数据
+        Map<String, Object> responseMap = new HashMap<>();
+        
+        //手机号验证
+        Map<String, String> params = new HashMap<>();
+        params.put("linkMobileNumber", institutionInfo.getLinkMobileNumber());
+        boolean exists = exists(params, null);
+        if (exists) {
+            responseMap.put("success", false);
+            responseMap.put("msg", "该手机号码已注册!");
+            return responseMap;
+        }
+        exists = clientExtendInfoService.exists(params,
+                clientExtendInfo.getId());
+        if (exists) {
+            responseMap.put("success", false);
+            responseMap.put("msg", "该手机号码已注册!");
+            return responseMap;
+        }
+        //企业统一信用码
+        if (StringUtils.isNotBlank(institutionInfo.getIdCardNumber())) {
+            params = new HashMap<>();
+            params.put("idCardNumber", institutionInfo.getIdCardNumber());
+            exists = exists(params, null);
+            if (exists) {
+                responseMap.put("success", false);
+                responseMap.put("msg", "该企业统一信用码已注册!");
+                return responseMap;
+            }
+        }
+        
+        ClientInfo clientInfo = clientInfoService
+                .findById(institutionInfo.getClientId());
+        clientInfo.setName(institutionInfo.getName());
+        if ("个体工商户".equals(institutionInfo.getType().getName())) {
+            clientInfo.setType(ClientTypeEnum.SELF_EMPLOYED);
+        }
+        if ("社属机构".equals(institutionInfo.getType().getName())) {
+            clientInfo.setType(ClientTypeEnum.COO_INS);
+        }
+        if ("行政机构".equals(institutionInfo.getType().getName())) {
+            clientInfo.setType(ClientTypeEnum.ADM_INS);
+        }
+        if ("企业".equals(institutionInfo.getType().getName())) {
+            clientInfo.setType(ClientTypeEnum.ENTERPRISE);
+        }
+        clientInfoService.updateById(clientInfo);
+        
+        clientExtendInfo.setClientType(clientInfo.getType());
+        clientExtendInfo.setLinkName(institutionInfo.getName());
+        clientExtendInfo
+                .setLinkMobileNumber(institutionInfo.getLinkMobileNumber());
+        clientExtendInfo
+                .setInstitutionId(institutionInfo.getInstitutionInfo().getId());
+        clientExtendInfoService.updateById(clientExtendInfo);
+        
+        //验证参数是否合法
+        insert(institutionInfo);
+        
+        return responseMap;
     }
     
     /**
@@ -81,7 +170,124 @@ public class InstitutionInfoService implements InitializingBean {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public void insertClientAndInstitution(InstitutionInfo institutionInfo) {
+    public Map<String, Object> insertClientAndInstitution(
+            InstitutionInfo institutionInfo) {
+        //验证参数是否合法
+        AssertUtils.notNull(institutionInfo, "institutionInfo is null.");
+        AssertUtils.notEmpty(institutionInfo.getVcid(),
+                "institutionInfo.vcid is empty.");
+        AssertUtils.notNull(institutionInfo.getType(),
+                "institutionInfo.type is empty.");
+        AssertUtils.notEmpty(institutionInfo.getName(),
+                "institutionInfo.name is empty.");
+        //返回数据
+        Map<String, Object> responseMap = new HashMap<>();
+        
+        //手机号验证
+        Map<String, String> params = new HashMap<>();
+        params.put("linkMobileNumber", institutionInfo.getLinkMobileNumber());
+        boolean exists = exists(params, null);
+        if (exists) {
+            responseMap.put("success", false);
+            responseMap.put("msg", "该手机号码已注册!");
+            return responseMap;
+        }
+        exists = clientExtendInfoService.exists(params, null);
+        if (exists) {
+            responseMap.put("success", false);
+            responseMap.put("msg", "该手机号码已注册!");
+            return responseMap;
+        }
+        //企业统一信用码
+        if (StringUtils.isNotBlank(institutionInfo.getIdCardNumber())) {
+            params = new HashMap<>();
+            params.put("idCardNumber", institutionInfo.getIdCardNumber());
+            exists = exists(params, null);
+            if (exists) {
+                responseMap.put("success", false);
+                responseMap.put("msg", "该企业统一信用码已注册!");
+                return responseMap;
+            }
+        }
+        
+        ClientInfo clientInfo = new ClientInfo();
+        clientInfo.setStatus(ClientStatusEnum.WAIT_ACTIVATE);
+        
+        if ("个体工商户".equals(institutionInfo.getType().getName())) {
+            clientInfo.setType(ClientTypeEnum.SELF_EMPLOYED);
+        }
+        if ("社属机构".equals(institutionInfo.getType().getName())) {
+            clientInfo.setType(ClientTypeEnum.COO_INS);
+        }
+        if ("行政机构".equals(institutionInfo.getType().getName())) {
+            clientInfo.setType(ClientTypeEnum.ADM_INS);
+        }
+        if ("企业".equals(institutionInfo.getType().getName())) {
+            clientInfo.setType(ClientTypeEnum.ENTERPRISE);
+        }
+        clientInfo.setVcid(institutionInfo.getVcid());
+        clientInfo.setValid(true);
+        
+        if (StringUtils.isEmpty(clientInfo.getName())) {
+            clientInfo.setName(institutionInfo.getName());
+        }
+        
+        clientInfo.setUsernameChangeAble(true);//允许用户名修改
+        //如果用户名为空，则在用户自动插入期间，会生成一个随机的用户名
+        this.clientInfoFacade.insert(clientInfo);
+        //激活该客户
+        this.clientInfoFacade.enableById(clientInfo.getId());
+        //根据不同的客户类型 默认给该客户插入不同的角色权限
+        clientUserDetailsService.setClientUserRole(clientInfo.getId(),
+                clientInfo.getType());
+        
+        //给前端用户返回的登录账号
+        responseMap.put("msg", clientInfo.getCode());
+        
+        institutionInfo.setClientId(clientInfo.getId());
+        
+        String parentId = ""; //企业与个体工商户绑定的机构ID
+        if (institutionInfo.getInstitutionInfo() != null) {
+            parentId = institutionInfo.getInstitutionInfo().getId();
+        }
+        //验证参数是否合法
+        insert(institutionInfo);
+        
+        //客户绑定机构信息
+        InstitutionInfo insItem = new InstitutionInfo();
+        if (StringUtils.isNotBlank(parentId)) {
+            insItem = findById(parentId);//绑定指定机构
+        } else {
+            insItem = institutionInfo;//如果为空则绑定本身
+        }
+        
+        //客户扩展信息
+        ClientExtendInfo clientExtendInfo = new ClientExtendInfo();
+        clientExtendInfo.setVcid(institutionInfo.getVcid());
+        clientExtendInfo.setClientId(clientInfo.getId());
+        clientExtendInfo.setClientType(clientInfo.getType());
+        clientExtendInfo.setInstitutionId(insItem.getId());//绑定机构
+        clientExtendInfo.setLinkName(institutionInfo.getName());
+        clientExtendInfo
+                .setLinkMobileNumber(institutionInfo.getLinkMobileNumber());
+        clientExtendInfoService.insert(clientExtendInfo);
+        
+        return responseMap;
+    }
+    
+    /**
+     * 修改InstitutionInfo实例<br/>
+     * 将institutionInfo数据库中保存
+     * 1、如果institutionInfo 为空时抛出参数为空异常
+     * 2、如果institutionInfo 中部分必要参数为非法值时抛出参数不合法异常
+     *
+     * @param institutionInfo [参数说明]
+     * @return void [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    @Transactional
+    public boolean updateClientAndInstitution(InstitutionInfo institutionInfo) {
         //验证参数是否合法
         AssertUtils.notNull(institutionInfo, "institutionInfo is null.");
         AssertUtils.notEmpty(institutionInfo.getVcid(),
@@ -91,27 +297,85 @@ public class InstitutionInfoService implements InitializingBean {
         AssertUtils.notEmpty(institutionInfo.getName(),
                 "institutionInfo.name is empty.");
         
-        ClientInfo clientInfo = new ClientInfo();
-        clientInfo.setStatus(ClientStatusEnum.WAIT_ACTIVATE);
-        clientInfo.setType(ClientTypeEnum.INSTITUTION);
-        clientInfo.setPassword(this.defaultClientPassword);
-        if (StringUtils.isEmpty(clientInfo.getName())) {
-            clientInfo.setName(institutionInfo.getName());
-        }
-        
-        //if (clientInfoFacade.exists(QuerierBuilder.newInstance()
-        //        .addFilter("username", OperatorEnum.eq, clientInfo.getName())
-        //    .querier(), null)) {
-        ////允许用中文名作为用户名
-        //    clientInfo.setUsername(clientInfo.getName());
-        //}
-        clientInfo.setUsernameChangeAble(true);//允许用户名修改
-        //如果用户名为空，则在用户自动插入期间，会生成一个随机的用户名
-        this.clientInfoFacade.insert(clientInfo);
-        
-        institutionInfo.setClientId(clientInfo.getId());
         //验证参数是否合法
-        insert(institutionInfo);
+        updateById(institutionInfo);
+        
+        //客户扩展信息
+        ClientExtendInfo clientExtendInfo = clientExtendInfoService
+                .findByClientId(institutionInfo.getClientId());
+        clientExtendInfo.setInstitutionId(institutionInfo.getId());
+        clientExtendInfo.setLinkName(institutionInfo.getName());
+        clientExtendInfo
+                .setLinkMobileNumber(institutionInfo.getLinkMobileNumber());
+        boolean flag = clientExtendInfoService.updateById(clientExtendInfo);
+        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        return flag;
+    }
+    
+    /**
+     * 修改企业信息
+     * @param institutionInfo
+     * @param institutionSummaryInfo
+     * @return
+     */
+    @Transactional
+    public Map<String, Object> updatePersonalAndSummaryById(
+            InstitutionInfo institutionInfo,
+            InstitutionSummaryInfo institutionSummaryInfo) {
+        AssertUtils.notNull(institutionInfo, "institutionInfo is null.");
+        AssertUtils.notEmpty(institutionInfo.getId(),
+                "institutionInfo.id is empty.");
+        //返回数据
+        Map<String, Object> responseMap = new HashMap<>();
+        
+        ClientExtendInfo clientExtendInfo = clientExtendInfoService
+                .findByClientId(institutionInfo.getClientId());
+        
+        //手机号验证
+        Map<String, String> params = new HashMap<>();
+        params.put("linkMobileNumber", institutionInfo.getLinkMobileNumber());
+        boolean exists = exists(params, institutionInfo.getId());
+        if (exists) {
+            responseMap.put("success", false);
+            responseMap.put("msg", "该手机号码已注册!");
+            return responseMap;
+        }
+        exists = clientExtendInfoService.exists(params,
+                clientExtendInfo.getId());
+        if (exists) {
+            responseMap.put("success", false);
+            responseMap.put("msg", "该手机号码已注册!");
+            return responseMap;
+        }
+        //身份证验证
+        params = new HashMap<>();
+        params.put("idCardNumber", institutionInfo.getIdCardNumber());
+        exists = exists(params, institutionInfo.getId());
+        if (exists) {
+            responseMap.put("success", false);
+            responseMap.put("msg", "该企业统一信用码已注册!");
+            return responseMap;
+        }
+        //客户扩展信息
+        clientExtendInfo.setLinkName(institutionInfo.getName());
+        clientExtendInfo
+                .setLinkMobileNumber(institutionInfo.getLinkMobileNumber());
+        clientExtendInfoService.updateById(clientExtendInfo);
+        
+        InstitutionSummaryInfo iisItem = institutionSummaryInfoService
+                .findByInstitutionNumber(institutionInfo.getId());
+        institutionSummaryInfo.setId(iisItem.getId());
+        institutionSummaryInfo.setInstitutionNumber(institutionInfo.getId());
+        institutionSummaryInfo
+                .setLandArea(institutionSummaryInfo.getLandArea());
+        institutionSummaryInfoService.updateById(institutionSummaryInfo);
+        
+        //调用数据持久层对实例进行持久化操作
+        updateById(institutionInfo);
+        
+        responseMap.put("success", true);
+        return responseMap;
+        
     }
     
     /**
@@ -190,6 +454,35 @@ public class InstitutionInfoService implements InitializingBean {
     }
     
     /**
+     * 根据id查询InstitutionInfo实例
+     * 1、当id为empty时抛出异常
+     *
+     * @param clientId
+     * @return InstitutionInfo [返回类型说明]
+     * @exception throws
+     * @see [类、类#方法、类#成员]
+     */
+    public InstitutionInfo findByClientId(String clientId) {
+        AssertUtils.notEmpty(clientId, "clientId is empty.");
+        
+        InstitutionInfo condition = new InstitutionInfo();
+        condition.setClientId(clientId);
+        
+        InstitutionInfo res = this.institutionInfoDao.find(condition);
+        
+        if (res != null) {
+            InstitutionSummaryInfo institutionSummaryInfo = institutionSummaryInfoService
+                    .findByInstitutionNumber(res.getId());
+            if (institutionSummaryInfo == null) {
+                institutionSummaryInfo = new InstitutionSummaryInfo();
+            }
+            res.setInstitutionSummaryInfo(institutionSummaryInfo);
+        }
+        
+        return res;
+    }
+    
+    /**
      * 查询InstitutionInfo实例列表
      * <功能详细描述>
      * @param params      
@@ -204,10 +497,37 @@ public class InstitutionInfoService implements InitializingBean {
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
+        params.put("isClient", "true");//查询没有被锁定的用户
+        
+        String _vcid = "";
+        if (StringUtils.isNotBlank(WebContextUtils.getVcid())) {
+            _vcid = WebContextUtils.getVcid();
+        }
+        if (ClientWebContextUtils.getClient() != null) {
+            _vcid = ClientWebContextUtils.getClient().getVcid();
+        }
+        if (!"PT".equals(_vcid)) {
+            params.put("vcid", _vcid);
+        }
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         List<InstitutionInfo> resList = this.institutionInfoDao
                 .queryList(params);
+        
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (!"PT".equals(_vcid)) {
+            map.put("vcid", _vcid);
+        }
+        List<InstitutionSummaryInfo> summarys = institutionSummaryInfoService
+                .queryList(map);
+        Map<String, InstitutionSummaryInfo> mappedSummary = summarys.stream()
+                .collect(Collectors.toMap(
+                        InstitutionSummaryInfo::getInstitutionNumber,
+                        (p) -> p));
+        
+        for (InstitutionInfo item : resList) {
+            item.setInstitutionSummaryInfo(mappedSummary.get(item.getId()));
+        }
         
         return resList;
     }
@@ -256,10 +576,47 @@ public class InstitutionInfoService implements InitializingBean {
         
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
+        params.put("isClient", "true");//查询没有被锁定的用户
+        
+        String _vcid = "";
+        if (StringUtils.isNotBlank(WebContextUtils.getVcid())) {
+            _vcid = WebContextUtils.getVcid();
+        }
+        if (ClientWebContextUtils.getClient() != null) {
+            _vcid = ClientWebContextUtils.getClient().getVcid();
+        }
+        if (!"PT".equals(_vcid)) {
+            params.put("vcid", _vcid);
+        }
         
         //根据实际情况，填入排序字段等条件，根据是否需要排序，选择调用dao内方法
         PagedList<InstitutionInfo> resPagedList = this.institutionInfoDao
                 .queryPagedList(params, pageIndex, pageSize);
+        
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (!"PT".equals(_vcid)) {
+            map.put("vcid", _vcid);
+        }
+        
+        List<InstitutionSummaryInfo> summarys = institutionSummaryInfoService
+                .queryList(map);
+        Map<String, InstitutionSummaryInfo> mappedSummary = summarys.stream()
+                .collect(Collectors.toMap(
+                        InstitutionSummaryInfo::getInstitutionNumber,
+                        (p) -> p));
+        
+        List<ClientInfo> clientInfos = clientInfoService.queryList(true, map);
+        Map<String, ClientInfo> mappedClient = clientInfos.stream()
+                .collect(Collectors.toMap(ClientInfo::getId, (p) -> p));
+        
+        List<InstitutionInfo> resList = resPagedList.getList();
+        
+        for (InstitutionInfo item : resList) {
+            item.setInstitutionSummaryInfo(mappedSummary.get(item.getId()));
+            item.setClientInfo(mappedClient.get(item.getClientId()));
+        }
+        
+        resPagedList.setList(resList);
         
         return resPagedList;
     }
@@ -289,21 +646,8 @@ public class InstitutionInfoService implements InitializingBean {
         PagedList<InstitutionInfo> resPagedList = this.institutionInfoDao
                 .queryPagedList(params, pageIndex, pageSize);
         
-        Querier clientQuerier = QuerierBuilder.newInstance().querier();
-        List<String> clientIds = resPagedList.getList().stream().map(ins -> {
-            return ins.getClientId();
-        }).collect(Collectors.toList());
-        clientQuerier.getParams().put("ids", clientIds);
-        List<ClientInfo> clientInfo = this.clientInfoFacade.queryList(null, clientQuerier);
-        Map<String, Client> clientMap = new HashMap<>();
-        clientInfo.forEach(ci -> {
-            clientMap.put(ci.getId(), ci);
-        });
-        resPagedList.getList().forEach(ins -> {
-            ins.setClient(clientMap.get(ins.getClientId()));
-        });
+        ClientContextUtils.setup(this.clientInfoFacade, resPagedList);
         
-         
         return resPagedList;
     }
     
@@ -408,7 +752,7 @@ public class InstitutionInfoService implements InitializingBean {
     /**
      * 判断InstitutionInfo实例是否已经存在<br/>
      * <功能详细描述>
-     * @param key2valueMap
+     * @param querier
      * @param excludeId
      * @return
      * 
@@ -453,6 +797,7 @@ public class InstitutionInfoService implements InitializingBean {
         updateRowMap.put("lastUpdateUserId",
                 institutionInfo.getLastUpdateUserId());
         updateRowMap.put("linkName", institutionInfo.getLinkName());
+        updateRowMap.put("idCardNumber", institutionInfo.getIdCardNumber());
         updateRowMap.put("linkMobileNumber",
                 institutionInfo.getLinkMobileNumber());
         updateRowMap.put("name", institutionInfo.getName());
@@ -492,5 +837,84 @@ public class InstitutionInfoService implements InitializingBean {
         boolean flag = updateById(institutionInfo.getId(), institutionInfo);
         //如果需要大于1时，抛出异常并回滚，需要在这里修改
         return flag;
+    }
+    
+    /**
+     * 删除掉该企业所有信息
+     * @param id
+     * @return
+     */
+    @Transactional
+    public boolean deleteLogicById(String id) {
+        AssertUtils.notEmpty(id, "id is empty.");
+        
+        HashMap map = new HashMap<String, Object>();
+        map.put("operationStatus", false);
+        
+        //根据ID查询 企业信息
+        InstitutionInfo institutionInfo = findById(id);
+        //删除掉该企业的所有信息
+        clientExtendInfoService.deleteLogicById(institutionInfo.getClientId());
+        
+        return true;
+    }
+    
+    /**
+     * 根据机构ID查询机构下的所有节点的机构ID
+     * <功能详细描述>
+     * @param id
+     * @param isMe
+     * @return [参数说明]
+     *
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public List<InstitutionInfo> getInstitutionInfoListById(String id,
+            boolean isMe) {
+        //验证参数是否合法，必填字段是否填写
+        AssertUtils.notNull(id, "id is null.");
+        List<InstitutionInfo> idList = new ArrayList<InstitutionInfo>();
+        InstitutionInfo item = new InstitutionInfo();
+        Map<String, Object> params = new HashMap<>();
+        //是否包含本身ID
+        if (isMe) {
+            item = findById(id);
+            idList.add(item);
+        }
+        
+        InstitutionInfo institutionInfo = findById(id);
+        
+        ClientInfo clientInfo = clientInfoService
+                .findById(institutionInfo.getClientId());
+        
+        if (clientInfo.getType() == ClientTypeEnum.ADM_INS) {
+            AdmInstitutionInfo admInstitutionInfo = admInstitutionInfoService
+                    .findByClientId(clientInfo.getId());
+            List<AdmInstitutionInfo> adiList = admInstitutionInfoService
+                    .queryDescendantsByParentId(admInstitutionInfo.getId(),
+                            params);
+            for (AdmInstitutionInfo aItem : adiList) {
+                item = new InstitutionInfo();
+                item.setId(aItem.getInstitutionId());
+                item.setName(aItem.getName());
+                idList.add(item);
+            }
+        }
+        if (clientInfo.getType() == ClientTypeEnum.COO_INS) {
+            CooInstitutionInfo cooInstitutionInfo = cooInstitutionInfoService
+                    .findByClientId(clientInfo.getId());
+            List<CooInstitutionInfo> adiList = cooInstitutionInfoService
+                    .queryDescendantsByParentId(cooInstitutionInfo.getId(),
+                            params);
+            for (CooInstitutionInfo cItem : adiList) {
+                item = new InstitutionInfo();
+                item.setId(cItem.getInstitutionId());
+                item.setName(cItem.getName());
+                idList.add(item);
+            }
+        }
+        
+        return idList;
     }
 }

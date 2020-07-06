@@ -7,6 +7,7 @@
 package com.tx.local.personal.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -44,6 +45,10 @@ public class PersonalSummary implements Serializable {
     @Id
     @Column(length = 64, updatable = false, nullable = false)
     private String id;
+
+    /** 虚中心id： 将会使用社属机构id当做vcid进行插入数据 */
+    @Column(length = 64, updatable = false, nullable = false)
+    private String vcid;
     
     /** 客户id */
     @Column(length = 64, updatable = true, nullable = true)
@@ -80,6 +85,15 @@ public class PersonalSummary implements Serializable {
     /** 身份证地址_区/县_ID */
     @Column(name = "idCardDistrictId")
     private District idCardDistrict;
+
+    /** 家庭人口 */
+    private Integer familyCount;
+
+    /** 劳动力人口 */
+    private Integer laborCount;
+
+    /** 土地面积 */
+    private BigDecimal landArea;
     
     /** 籍贯 */
     @Column(name = "nativePlaceId")
@@ -345,5 +359,53 @@ public class PersonalSummary implements Serializable {
      */
     public void setMotherMobileNumber(String motherMobileNumber) {
         this.motherMobileNumber = motherMobileNumber;
+    }
+
+    public Integer getFamilyCount() {
+        return familyCount;
+    }
+
+    public void setFamilyCount(Integer familyCount) {
+        this.familyCount = familyCount;
+    }
+
+    public Integer getLaborCount() {
+        return laborCount;
+    }
+
+    public void setLaborCount(Integer laborCount) {
+        this.laborCount = laborCount;
+    }
+
+    public BigDecimal getLandArea() {
+        return landArea;
+    }
+
+    public void setLandArea(BigDecimal landArea) {
+        this.landArea = landArea;
+    }
+
+    public String getFrontOfIDCardUrl() {
+        return frontOfIDCardUrl;
+    }
+
+    public void setFrontOfIDCardUrl(String frontOfIDCardUrl) {
+        this.frontOfIDCardUrl = frontOfIDCardUrl;
+    }
+
+    public String getReverseOfIDCardUrl() {
+        return reverseOfIDCardUrl;
+    }
+
+    public void setReverseOfIDCardUrl(String reverseOfIDCardUrl) {
+        this.reverseOfIDCardUrl = reverseOfIDCardUrl;
+    }
+
+    public String getVcid() {
+        return vcid;
+    }
+
+    public void setVcid(String vcid) {
+        this.vcid = vcid;
     }
 }

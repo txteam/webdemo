@@ -38,7 +38,7 @@ import com.tx.local.menu.model.MenuNode;
  * @since  [产品/模块版本]
  */
 @Controller
-@RequestMapping("/menu")
+@RequestMapping({ "/menu", "/client/menu" })
 public class MenuController {
     
     @Resource(name = "menuContext")

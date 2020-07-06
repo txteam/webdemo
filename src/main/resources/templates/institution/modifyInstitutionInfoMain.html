@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>institutionInfoMain</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	parent.DialogUtils.progress('close');
+});
+/*]]>*/
+</script>
+</head>
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<div id="institutionInfo" data-options="region:'north',border:false" title="基本信息" style="overflow: hidden;height: 200px">
+		<form id="entityForm" method="post" class="form">
+			<input id="id" name="id" type="hidden" value=""/>
+			<table class="table">
+				<tr>
+					<th class="narrow" width="10%">法定代表人：<span class="tRed">*</span></th>
+					<td width="23%">
+						<input id="fddbr" name="fddbr" style="width: 60%" readonly="readonly" value="XXX1"/>
+					</td>
+					<th class="narrow" width="10%">经营状态：</th>
+					<td width="24%">
+						<select id="jyzt" name="jyzt" style="width: 60%">
+							<option value="cx">存续(在营、开业、在册)</option>
+						</select>
+					</td>
+					<th class="narrow" width="10%">成立日期：</th>
+					<td width="23%">
+						<input id="clrq" name="clrq" type="text" readonly="readonly" value="2010-09-01" style="width: 60%"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" width="10%">注册资本：<span class="tRed">*</span></th>
+					<td width="23%">
+						<input id="zczb" name="zczb" style="width: 60%" readonly="readonly" value="8000万元人民币"/>
+					</td>
+					<th class="narrow" width="10%">实缴资本：</th>
+					<td width="24%">
+						<input id="zczb" name="zczb" style="width: 60%" readonly="readonly" value="8000万元人民币"/>
+					</td>
+					<th class="narrow" width="10%">核准日期：</th>
+					<td width="23%">
+						<input id="hzrq" name="hzrq" type="text" readonly="readonly" value="2019-05-01" style="width: 60%"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" width="10%">统一社会信用代码：<span class="tRed">*</span></th>
+					<td width="23%">
+						<input id="code" name="code" style="width: 60%" readonly="readonly" value="91500000MM5U7HFF64"/>
+					</td>
+					<th class="narrow" width="10%">组织机构代码：</th>
+					<td width="24%">
+						<input id="zzjgdm" name="zzjgdm" style="width: 60%" readonly="readonly" value="MA5U7HFF-X"/>
+					</td>
+					<th class="narrow" width="10%">工商注册号：</th>
+					<td width="23%">
+						<input id="gszch" name="gszch" type="text" readonly="readonly" value="50010400900XXXX" style="width: 60%"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" width="10%">纳税人识别号：<span class="tRed">*</span></th>
+					<td width="23%">
+						<input id="nsrsbh" name="nsrsbh" style="width: 60%" readonly="readonly" value="91500000MM5U7HFF64"/>
+					</td>
+					<th class="narrow" width="10%">进出口企业代码：</th>
+					<td width="24%">
+						<input id="jckqydm" name="jckqydm" style="width: 60%" readonly="readonly" value="-"/>
+					</td>
+					<th class="narrow" width="10%">所属行业：</th>
+					<td width="23%">
+						<input id="hy" name="hy" type="text" readonly="readonly" value="信息传输、软件和信息技术服务业" style="width: 60%"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" width="10%">企业类型：<span class="tRed">*</span></th>
+					<td width="23%">
+						<select id="qylx" name="qylx" style="width: 60%">
+							<option>股份有限公司</option>
+						</select>
+					</td>
+					<th class="narrow" width="10%">营业期限：</th>
+					<td width="24%">
+						<input id="yyqx" name="yyqx" style="width: 60%" readonly="readonly" value="1999-06-03 至 -"/>
+					</td>
+					<th class="narrow" width="10%">登记机关：</th>
+					<td width="23%">
+						<input type="text" readonly="readonly" value="重庆市九龙坡区市场监督管理局" style="width: 60%"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" width="10%">人员规模：</th>
+					<td width="23%">
+						<input style="width: 60%" readonly="readonly" value="100-199人"/>
+					</td>
+					<th class="narrow" width="10%">参保人数：</th>
+					<td width="24%">
+						<input style="width: 60%" readonly="readonly" value="378"/>
+					</td>
+					<th class="narrow" width="10%">所属地区：</th>
+					<td width="23%">
+						<input type="text" readonly="readonly" value="重庆市" style="width: 60%"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<div data-options="region:'center',border:false" style="overflow-x: hidden;overflow-y: auto;">
+		<div id="tabs" class="easyui-tabs" data-options="fit:true,border:false" style="overflow: hidden;">
+			<div title="经营状况" data-options="border:false" style="overflow: hidden;">
+				<table class="easyui-datagrid" title="行政许可 [工商局]"
+				data-options="fit:true,fitColumns:true,nowrap:true,striped:true,singleSelect:true">
+					<thead>
+						<tr>
+							<th data-options="field:'itemid',width:30">序号</th>
+							<th data-options="field:'productid',width:100">许可文件编号</th>
+							<th data-options="field:'listprice',width:100">许可文件名称</th>
+							<th data-options="field:'unitcost',width:60">有效期自</th>
+							<th data-options="field:'attr1',width:60">有效期至</th>
+							<th data-options="field:'status',width:80">许可机关</th>
+							<th data-options="field:'status',width:100">许可内容</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>九人社工时审字[2016]XXX号	</td>
+							<td>企业特殊工时制度审批</td>
+							<td>2000-12-26</td>
+							<td>-</td>
+							<td>九龙坡区人力资源和社会保障局</td>
+							<td>公司部分岗位实行不定时工作制和综合计算工时工作制</td>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>九人社工时审字[2000]XXX号	</td>
+							<td>劳务派遣许可证</td>
+							<td>2008-10-26</td>
+							<td>-</td>
+							<td>重庆市九龙坡区人力资源和社会保障局</td>
+							<td>重庆市九龙坡区人力社保局对于重庆亚德科技股份有限公司部分岗位实行不定时工作制和综合计算工时工作制的审批</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div title="核心团队" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="核心能力" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="工商信息" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="股东信息" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="主要人员" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="经营风险" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="法律诉讼" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="企业发展" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="知识产权" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="新闻公告" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+			<div title="历史信息" data-options="border:false" style="overflow: hidden;">
+				<iframe 
+					frameborder="0" style="border: 0; width: 100%; height: 98%;"></iframe>
+			</div>
+		</div>
+	</div>
+</body>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
+import com.tx.local.basicdata.model.IDCardTypeEnum;
 import com.tx.local.clientinfo.facade.ClientInfoFacade;
 import com.tx.local.clientinfo.model.ClientInfo;
 import com.tx.local.clientinfo.service.ClientInfoService;
@@ -88,6 +89,24 @@ public class ClientInfoAPIController implements ClientInfoFacade {
             @PathVariable(value = "id", required = true) String id,
             @RequestBody ClientInfo clientInfo) {
         boolean flag = this.clientInfoService.updateById(id, clientInfo);
+        return flag;
+    }
+    
+    /**
+     * @param id
+     * @param creditInfoId
+     * @param idCardType
+     * @param idCardNumber
+     * @return
+     */
+    @Override
+    public boolean updateCreditInfo(
+            @PathVariable(value = "id", required = true) String id,
+            @PathVariable(value = "creditInfoId", required = true) String creditInfoId,
+            @RequestParam(value = "idCardType", required = false) IDCardTypeEnum idCardType,
+            @RequestParam(value = "idCardNumber", required = false) String idCardNumber) {
+        boolean flag = this.clientInfoService
+                .creditInfoBinding(id, creditInfoId, idCardType, idCardNumber);
         return flag;
     }
     

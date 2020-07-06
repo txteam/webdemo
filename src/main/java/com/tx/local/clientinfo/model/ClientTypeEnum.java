@@ -29,6 +29,9 @@ public enum ClientTypeEnum implements BasicDataEnum {
     
     /** 机构成员 */
     INSTITUTION_MEMBER("INSTITUTION_MEMBER", "机构成员"),
+
+    /** 企业 */
+    ENTERPRISE("ENTERPRISE", "企业"),
     
     /** 个体工商户(个体户) */
     SELF_EMPLOYED("SELF_EMPLOYED", "个体工商户"),

@@ -18,12 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tx.local.creditinfo.dao.CreditInfoRecordDao;
-import com.tx.local.creditinfo.model.CreditInfoRecord;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.local.creditinfo.dao.CreditInfoRecordDao;
+import com.tx.local.creditinfo.model.CreditInfoRecord;
 
 /**
  * CreditInfoRecord的业务层[CreditInfoRecordService]
@@ -61,10 +61,8 @@ public class CreditInfoRecordService {
         AssertUtils.notNull(creditInfoRecord, "creditInfoRecord is null.");
         AssertUtils.notEmpty(creditInfoRecord.getType(),
                 "creditInfoRecord.type is empty.");
-        AssertUtils.notEmpty(creditInfoRecord.getIdCardType(),
-                "creditInfoRecord.idCardType is empty.");
-        AssertUtils.notEmpty(creditInfoRecord.getIdCardNumber(),
-                "creditInfoRecord.idCardNumber is empty.");
+        AssertUtils.notEmpty(creditInfoRecord.getClientId(),
+                "creditInfoRecord.clientId is empty.");
         
         //为添加的数据需要填入默认值的字段填入默认值
         creditInfoRecord.setLastUpdateDate(new Date());
@@ -332,13 +330,16 @@ public class CreditInfoRecordService {
         
         //生成需要更新字段的hashMap
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
-        
         //需要更新的字段
-        updateRowMap.put("baseVersion", creditInfoRecord.getBaseVersion());
-        updateRowMap.put("lastUpdateUserId",
-                creditInfoRecord.getLastUpdateUserId());
+        updateRowMap.put("idCardType", creditInfoRecord.getIdCardType());
+        updateRowMap.put("idCardNumber", creditInfoRecord.getIdCardNumber());
+        //updateRowMap.put("baseVersion", creditInfoRecord.getBaseVersion());
+        
         updateRowMap.put("locked", creditInfoRecord.isLocked());
         updateRowMap.put("version", creditInfoRecord.getVersion());
+        
+        updateRowMap.put("lastUpdateUserId",
+                creditInfoRecord.getLastUpdateUserId());
         updateRowMap.put("lastUpdateDate", new Date());
         
         boolean flag = this.creditInfoRecordDao.update(id, updateRowMap);

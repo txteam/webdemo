@@ -2,6 +2,8 @@ package com.tx.local.security.config;
 
 import java.util.List;
 
+import com.tx.local.security.filter.WapClientWXAuthenticationProcessingFilter;
+import com.tx.local.security.provider.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,9 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.tx.local.security.model.ClientPasswordEncoder;
 import com.tx.local.security.model.OperatorPasswordEncoder;
-import com.tx.local.security.provider.ClientAuthenticationProvider;
-import com.tx.local.security.provider.OperatorLoginFormAuthenticationProvider;
-import com.tx.local.security.provider.OperatorSocialAuthenticationProvider;
 import com.tx.local.security.service.ClientUserDetailsService;
 import com.tx.local.security.service.OperatorUserDetailsService;
 
@@ -133,7 +132,6 @@ public class WebSecurityConfigurationImporter {
     /**
      * 客户认证处理器<br/>
      * <功能详细描述>
-     * @param clientUserDetailsService
      * @return [参数说明]
      * 
      * @return ClientAuthenticationProvider [返回类型说明]
@@ -151,7 +149,86 @@ public class WebSecurityConfigurationImporter {
         provider.setPasswordEncoder(clientPasswordEncoder());
         return provider;
     }
-    
+
+    /**
+     *
+     * <功能详细描述>
+     * @return [参数说明]
+     *
+     * @return ClientSocialAuthenticationProvider [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("clientSocialAuthenticationProvider")
+    public ClientSocialAuthenticationProvider clientSocialAuthenticationProvider() {
+        ClientSocialAuthenticationProvider provider = new ClientSocialAuthenticationProvider();
+        // 设置userDetailsService
+        provider.setUserDetailsService(clientUserDetailsService());
+        // 禁止隐藏用户未找到异常
+        provider.setHideUserNotFoundExceptions(false);
+        return provider;
+    }
+
+
+    /**
+     * Wap客户认证处理器<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     *
+     * @return ClientAuthenticationProvider [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("wapClientAuthenticationProvider")
+    public WapClientAuthenticationProvider wapClientAuthenticationProvider() {
+        WapClientAuthenticationProvider provider = new WapClientAuthenticationProvider();
+        // 设置userDetailsService
+        provider.setUserDetailsService(clientUserDetailsService());
+        // 禁止隐藏用户未找到异常
+        provider.setHideUserNotFoundExceptions(false);
+        // 使用BCrypt进行密码的hash
+        provider.setPasswordEncoder(clientPasswordEncoder());
+        return provider;
+    }
+
+    /**
+     *
+     * <功能详细描述>
+     * @return [参数说明]
+     *
+     * @return ClientSocialAuthenticationProvider [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("wapClientSocialAuthenticationProvider")
+    public WapClientSocialAuthenticationProvider wapClientSocialAuthenticationProvider() {
+        WapClientSocialAuthenticationProvider provider = new WapClientSocialAuthenticationProvider();
+        // 设置userDetailsService
+        provider.setUserDetailsService(clientUserDetailsService());
+        // 禁止隐藏用户未找到异常
+        provider.setHideUserNotFoundExceptions(false);
+        return provider;
+    }
+
+    /**
+     * WX客户认证处理过滤器<br/>
+     * <功能详细描述>
+     * @param authenticationManager
+     * @return [参数说明]
+     *
+     * @return ClientAuthenticationProcessingFilter [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean(name = "wapClientWXAuthenticationProcessingFilter")
+    public WapClientWXAuthenticationProcessingFilter wapClientWXAuthenticationProcessingFilter(
+            AuthenticationManager authenticationManager) {
+        WapClientWXAuthenticationProcessingFilter filter = new WapClientWXAuthenticationProcessingFilter();
+
+        filter.setAuthenticationManager(authenticationManager);
+        return filter;
+    }
+
     /**
      * AuthenticationManager实例化<br/>
      * <功能详细描述>

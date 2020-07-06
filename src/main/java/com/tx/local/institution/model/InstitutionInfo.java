@@ -17,6 +17,8 @@ import javax.persistence.Transient;
 
 import com.tx.local.basicdata.model.District;
 import com.tx.local.clientinfo.model.Client;
+import com.tx.local.clientinfo.model.ClientAware;
+import com.tx.local.clientinfo.model.ClientInfo;
 import com.tx.local.creditinfo.model.CreditInfo;
 
 /**
@@ -39,7 +41,7 @@ import com.tx.local.creditinfo.model.CreditInfo;
  */
 @Entity
 @Table(name = "ins_institution")
-public class InstitutionInfo implements Serializable, Institution {
+public class InstitutionInfo implements Serializable, Institution, ClientAware {
     
     /** 注释内容 */
     private static final long serialVersionUID = 3297464751315326650L;
@@ -100,6 +102,9 @@ public class InstitutionInfo implements Serializable, Institution {
     /** 联系人 */
     @Column(length = 64, nullable = true)
     private String linkName;
+
+    /** 企业统一信用码 */
+    private String idCardNumber;
     
     /** 联系电话(默认将使用该联系电话去创建该机构的管理员) */
     @Column(length = 64, nullable = true)
@@ -128,10 +133,22 @@ public class InstitutionInfo implements Serializable, Institution {
     /** 客户信息 */
     @Transient
     private Client client;
+
+    /** 信用信息 */
+    @Transient
+    private ClientInfo clientInfo;
     
     /** 信用信息 */
     @Transient
     private CreditInfo creditInfo;
+
+    /** 机构信息 */
+    @Transient
+    private InstitutionInfo institutionInfo;
+
+    /*机构扩展信息*/
+    @Transient
+    private InstitutionSummaryInfo institutionSummaryInfo;
     
     /**
      * @return
@@ -426,18 +443,50 @@ public class InstitutionInfo implements Serializable, Institution {
     public void setClient(Client client) {
         this.client = client;
     }
-
+    
     /**
      * @return 返回 creditInfo
      */
     public CreditInfo getCreditInfo() {
         return creditInfo;
     }
-
+    
     /**
      * @param 对creditInfo进行赋值
      */
     public void setCreditInfo(CreditInfo creditInfo) {
         this.creditInfo = creditInfo;
+    }
+
+    public InstitutionInfo getInstitutionInfo() {
+        return institutionInfo;
+    }
+
+    public void setInstitutionInfo(InstitutionInfo institutionInfo) {
+        this.institutionInfo = institutionInfo;
+    }
+
+    public String getIdCardNumber() {
+        return idCardNumber;
+    }
+
+    public void setIdCardNumber(String idCardNumber) {
+        this.idCardNumber = idCardNumber;
+    }
+
+    public InstitutionSummaryInfo getInstitutionSummaryInfo() {
+        return institutionSummaryInfo;
+    }
+
+    public void setInstitutionSummaryInfo(InstitutionSummaryInfo institutionSummaryInfo) {
+        this.institutionSummaryInfo = institutionSummaryInfo;
+    }
+
+    public ClientInfo getClientInfo() {
+        return clientInfo;
+    }
+
+    public void setClientInfo(ClientInfo clientInfo) {
+        this.clientInfo = clientInfo;
     }
 }

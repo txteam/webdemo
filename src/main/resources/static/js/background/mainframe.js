@@ -23,6 +23,8 @@ $(function(){
 				var $iframe = $(selectedTab).find("iframe.mainframe_tab");
 				if($iframe.attr('refresh') && $iframe.attr('refresh') === 'true'){
 					$iframe.attr('src',$iframe.attr('newsrc'));
+				}else if($iframe.attr('newsrc') && !$.ObjectUtils.isEmpty($iframe.attr('newsrc')) && ($iframe.attr('newsrc') != $iframe.attr('src'))){
+					$iframe.attr('src',$iframe.attr('newsrc'));
 				}
 			},
 	        onContextMenu:function(e,title,index) {
@@ -531,10 +533,12 @@ $(document).ready(function() {
 		$(".left").left_menu('createAccordion',menu.attributes.link);
 	}
 	function onEventMenuClick(menu){
-		if($.ObjectUtils.isEmpty(menu.event)){
+		//alert('menu event click.');
+		if(!menu.attributes || $.ObjectUtils.isEmpty(menu.attributes['event'])){
+			//alert('menu.event is null.');
             return false;
         }
-		$.triggerge(menu.event,menu);
+		$.triggerge(menu.attributes['event'], menu);
 	}
 	function onDefaultMenuClick(menu){
 		if($.ObjectUtils.isEmpty(menu.href)){

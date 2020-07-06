@@ -8,7 +8,9 @@ package com.tx.wapclient.mainframe.controller;
 
 import javax.servlet.http.HttpSession;
 
+import com.tx.local.personal.model.PersonalTypeEnum;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tx.local.security.SecurityConstants;
@@ -41,7 +43,7 @@ public class IndexController {
         WebContextUtils.getSession().setAttribute(
                 SecurityConstants.ACCESS_DOMAIN_KEY,
                 SecurityConstants.ACCESS_DOMAIN_DEFAULT);
-        return "redirect:/client/mainframe";
+        return "redirect:/wap/client/mainframe";
     }
     
     /**
@@ -57,4 +59,5 @@ public class IndexController {
     public String toLogin() {
         return "mainframe/login";
     }
+
 }

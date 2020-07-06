@@ -7,15 +7,26 @@
 package com.tx.local.security.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tx.component.role.RoleConstants;
+import com.tx.component.role.model.Role;
+import com.tx.component.role.model.RoleRef;
+import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.local.security.model.ClientUserDetails;
+import com.tx.plugin.login.exception.UserIdNotFoundException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -30,6 +41,7 @@ import com.tx.local.security.service.ClientUserDetailsService;
 import com.tx.plugin.login.LoginPlugin;
 import com.tx.plugin.login.LoginPluginUtils;
 import com.tx.plugin.login.model.LoginAccessToken;
+import org.springframework.util.Assert;
 
 /**
  * 操作权认证处理过滤器<br/>
@@ -51,9 +63,9 @@ public class WapClientWXAuthenticationProcessingFilter
     
     /** <默认构造函数> */
     public WapClientWXAuthenticationProcessingFilter() {
-        super(new AntPathRequestMatcher("/wap/personal/fillreport/**", "GET"));
+        super(new AntPathRequestMatcher("/wap/client/fillreport/**", "GET"));
         SimpleUrlAuthenticationFailureHandler failureHanlder = new SimpleUrlAuthenticationFailureHandler(
-                "/wap/personal/social/wxlogin");
+                "/wap/client/social/register");
         failureHanlder.setUseForward(true);
         setAuthenticationFailureHandler(failureHanlder);
     }
@@ -113,6 +125,9 @@ public class WapClientWXAuthenticationProcessingFilter
         }
         
         String userId = csa.getClientId();
+
+
+
         String accessToken = token.getAccessToken();
         ClientSocialAuthenticationToken authenticationToken = new ClientSocialAuthenticationToken(
                 userId, accessToken);
@@ -134,8 +149,8 @@ public class WapClientWXAuthenticationProcessingFilter
      */
     protected void setDetails(HttpServletRequest request,
             ClientSocialAuthenticationToken authRequest) {
-        authRequest
-                .setDetails(authenticationDetailsSource.buildDetails(request));
+        authRequest.setDetails(clientUserDetailsService.loadUserByUserId(authRequest.getUserId()));
+
     }
     
 }

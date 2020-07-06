@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <block th:replace="fragments/layui_header::common_replace">
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+    <!-- layui -->
+    <script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+      /*<![CDATA[*/
+      var _contextPath = /*[[@{/}]]*/'';
+      /*]]>*/
+    </script>
+  </block>
+</head>
+<body>
+
+  <div class="layui-form" lay-filter="form-enterpriseInfo" id="form-enterpriseInfo" style="padding: 20px 0 0 0;" th:object="${institutionInfo}">
+    <div class="layui-form-item">
+      <label class="layui-form-label">机构类型</label>
+      <div class="layui-input-inline">
+        <input type="text" name="type" th:value="*{type.name}" readonly="readonly" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">名称</label>
+      <div class="layui-input-inline">
+        <input type="text" name="name" th:value="*{name}" readonly="readonly" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">联系人</label>
+      <div class="layui-input-inline">
+        <input type="text" th:value="*{linkName}" readonly="readonly" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">联系电话</label>
+      <div class="layui-input-inline">
+        <input type="text" name="linkMobileNumber" th:value="*{linkMobileNumber}" readonly="readonly" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">统一社会信用代码</label>
+      <div class="layui-input-inline">
+        <input type="text" name="idCardNumber" th:value="*{idCardNumber}" readonly="readonly" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">生产(经营)面积(亩)</label>
+      <div class="layui-input-inline">
+        <input type="text" name="landArea" th:value="*{institutionSummaryInfo.landArea}" readonly="readonly" class="layui-input">
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript" th:inline="javascript">
+  layui.config({
+    base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/'
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form'], function(){
+    var $ = layui.$
+    ,form = layui.form;
+
+    var capacities = [[${institutionCapacities}]];;
+    if(capacities != null && capacities.length > 0){
+      for(var i = 0; i < capacities.length; i++) {
+        $("#form-enterpriseInfo").append("<div class='layui-form-item'>" +
+                "<label class='layui-form-label'>"+capacities[i].type.name+"</label>" +
+                "<div class='layui-input-inline'>" +
+                "<input type='text' value='"+capacities[i].remark+"' readonly='readonly' class='layui-input'/>" +
+                "</div>" +
+                "</div>");
+      }
+    }else{
+      $("#form-enterpriseInfo").append("<span style='width:100%;text-align:center;display:block;'>暂无产能信息</span>");
+    }
+
+  })
+</script>
+</body>
+</html>

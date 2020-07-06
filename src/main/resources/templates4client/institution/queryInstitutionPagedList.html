@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>user/list</title>
+    <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <block th:replace="fragments/layui_header::common_replace">
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+        <!-- layui -->
+        <script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var _contextPath = /*[[@{/}]]*/'';
+            /*]]>*/
+        </script>
+    </block>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <input id="institutionId"  name="institutionId"  class="layui-hide"/>
+                    <div   id="institutionIdView"  class="layui-inline layui-hide">
+                        <label class="layui-form-label">所属区域</label>
+                        <div id="institutionIdViewinstitutionIdOne"  class="layui-input-inline">
+                            <select  class="layui-select" name="institutionIdOne" lay-filter="institutionIdOne" id="institutionIdOne" >
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">联系电话</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="phoneNumber" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-enterpriseList" lay-submit lay-filter="LAY-enterpriseList-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-admin" data-type="add">添加</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span id="count"></span>
+                <span id= "mj"></span>
+            </div>
+
+            <table id="LAY-enterpriseList-manage" lay-filter="LAY-enterpriseList-manage"></table>
+            <script type="text/html" id="table-useradmin-webuser">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="query"><i class="layui-icon layui-icon-search"></i>查看产能</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <!--<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="toUser"><i class="layui-icon layui-icon-refresh"></i>转换为个人</a>-->
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    var $_institutionId = "";
+    var $_shangId = "";
+    var $_name = "";
+    /*<![CDATA[*/
+    /**
+     * 时间戳转换
+     * */
+    function createTime(v){
+        var date = new Date(v);
+        var y = date.getFullYear();
+        var m = date.getMonth()+1;
+        m = m<10?'0'+m:m;
+        var d = date.getDate();
+        d = d<10?("0"+d):d;
+        var h = date.getHours();
+        h = h<10?("0"+h):h;
+        var M = date.getMinutes();
+        M = M<10?("0"+M):M;
+        var str = y+"-"+m+"-"+d+" "+h+":"+M;
+        return str;
+    }
+
+    layui.config({
+        //静态资源所在路径 //静态资源所在路径
+        base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/'
+    }).extend({
+        //主入口模块
+        index: 'lib/index'
+    }).use(['index', 'table', 'form'], function(){
+        var $ = layui.$,form = layui.form,table = layui.table;
+
+        var vList = /*[[${list}]]*/ [];
+
+        var clientParentId = /*[[${clientParentId}]]*/ '';
+        var isView = false;
+
+        $('#institutionIdOne').empty();
+        $('#institutionIdOne').append("<option value=''>所有</option>");
+        $.each(vList, function (index, arg) {
+            if(arg.institutionId &&  clientParentId == arg.parentId){
+                $('#institutionIdOne').append("<option value='" + arg.institutionId + "'>" + arg.name + "</option>");
+                isView = true;
+            }
+        });
+        if(isView){
+            $('#institutionIdView').removeClass('layui-hide');
+        }
+        layui.form.render('select');
+        //区域选择自动添加子节点
+        form.on('select(institutionIdOne)', function(data){
+            $('#institutionId').val('');
+            $_name = data.elem[data.elem.selectedIndex].text;
+            $_institutionId = "";
+            //删除所有兄弟节点
+            $("#institutionIdView"+data.elem.id).nextAll().remove();
+            layui.form.render('select');
+            if(data.value != ''){
+                $_institutionId = data.value;
+                $('#institutionId').val(data.value);
+                setinstitutionIdList(data.value);
+            }else {
+                $_shangId = "";
+            }
+        });
+
+        function setinstitutionIdList(vid) {
+            var iv = true;
+            var shangId = vid;
+            $.each(vList, function (index, arg) {
+                if(arg.institutionId == vid){
+                    vid = arg.id;
+                }
+            });
+            $.each(vList, function (index, arg) {
+                (vid == arg.parentId) && (iv = false);
+
+            });
+            if(iv || ($_shangId == shangId && $_name =="所有")){
+                layui.form.render('select');
+                return false;
+            }
+            $_shangId = shangId;
+            //添加新的选择
+            var html = '<div id="institutionIdViewinstitutionIdOne'+ vid+'" class="layui-input-inline" >';
+            html +=' <select name="institutionIdOne'+vid+'"  id="institutionIdOne'+vid+'" ';
+            html +=' lay-filter="institutionIdOne" >';//class="layui-select"
+            html +=' </select> </div>';
+            $("#institutionIdView").append(html);
+            //给新的选择赋值
+            $('#institutionIdOne' + vid).empty();
+            $('#institutionIdOne' + vid).append("<option value='"+$_shangId+"'>所有</option>");
+            $.each(vList, function (index, arg) {
+                if(arg.parentId && arg.parentId != null && arg.parentId != '' && vid == arg.parentId
+                    &&  arg.institutionId != null &&  arg.institutionId != ''){
+                    $('#institutionIdOne'+vid).append("<option value='" + arg.institutionId + "'>" + arg.name + "</option>");
+                }
+            });
+            layui.form.render('select');
+        }
+
+        table.render({
+            elem: '#LAY-enterpriseList-manage',
+            url: /*[[@{/client/institutionInfo/queryPagedList}]]*/'',
+            request: {
+                pageName: 'pageNumber',
+                limitName : 'pageSize'
+            },
+            parseData:function(res){
+                return {
+                    'code': 0,
+                    'msg':'成功',
+                    'count':res.count,
+                    'data':res.list
+                }
+            },
+            title: '企业用户管理',
+            cols: [[
+                /*{type: 'checkbox', fixed: 'left'},*/
+                {field: 'id', title: 'ID', hide: true },
+                {field: 'tissueName', title: '所在区域',
+                    templet:function (row){
+                        var str = '&nbsp;';
+                        if(row.institutionInfo && row.institutionInfo.name){
+                            str = row.institutionInfo.name;
+                        }
+                        return str;
+                    }
+                },
+                {field: 'type', title: '企业类型',
+                    templet:function (row){
+                        var str = '&nbsp;';
+                        if(row.type){
+                            str = row.type.name;
+                        }
+                        return str;
+                    }
+                },
+                {field: 'name', title: '名称'},
+                {field: 'linkName', title: '联系人'},
+                {field: 'linkMobileNumber', title: '联系电话'},
+                {field: 'idCardNumber', title: '统一社会信用代码'},
+                {field: 'client_username', title: '客户账号',
+                    templet:function (row){
+                        var str = '&nbsp;';
+                        if(row.clientInfo && row.clientInfo.username){
+                            str = row.clientInfo.username;
+                        }
+                        return str;
+                    }
+                },
+                {field: 'landArea', title: '生产面积(亩)',
+                    templet:function (row){
+                        var str = '&nbsp;';
+                        if(row.institutionSummaryInfo && row.institutionSummaryInfo.landArea){
+                            str = row.institutionSummaryInfo.landArea;
+                        }
+                        return str;
+                    }
+                },
+                {field: 'createDate', title: '注册时间', sort: true,
+                    templet:function (row){
+                        return createTime(row.createDate);
+                    }
+                },
+                {field: 'modifyAble', title: '是否可编辑',
+                    templet:function (row){
+                        if(row.modifyAble){
+                            return "是";
+                        }else{
+                            return "否";
+                        }
+                    }
+                },
+                {title: '操作', width: 260, align:'center', fixed: 'right', toolbar: '#table-useradmin-webuser'}
+                /*{field: 'check', title:'审核状态', templet: '#buttonTpl', minWidth: 80, align: 'center'},*/
+            ]],
+            text: {none:'暂无数据'},
+            page: true,
+            limit: 10,  //默认分页条数
+            limits: [10, 30, 50], //自定义分页数据选项
+            //height: 'full-220',
+            loading: true
+        });
+
+        //监听搜索
+        form.on('submit(LAY-enterpriseList-search)', function(data){
+            var field = data.field;
+
+            //执行重载
+            table.reload('LAY-enterpriseList-manage', {
+                where: field
+            });
+            getInfo();
+        });
+
+        //监听工具条
+        table.on('tool(LAY-enterpriseList-manage)', function(obj){
+            var data = obj.data;
+            console.log(data);
+            if(obj.event === 'del'){
+                layer.confirm("确认要删除["+data.name+"]吗，删除后不能恢复", { title: "删除确认" },  function(index){
+                    console.log(data.id);
+                    $.ajax({
+                        url: /*[[@{/client/institutionInfo/deleteLogicById}]]*/ '',
+                        dataType: "json",
+                        type: "GET",
+                        data: {'id': data.id},
+                        success: function (res) {
+                            console.log(res);
+                            layer.msg('删除成功', {icon: 1});
+                            table.reload('LAY-enterpriseList-manage'); //数据刷新
+                            layer.close(index); //关闭弹层
+                        },
+                        error: function (data) {
+                            layer.close(index); //关闭弹层
+                        }
+                    });
+                });
+            } else if(obj.event === 'query'){
+                var _contentUrl = /*[[@{/client/institutionInfo/toQueryInstitutionCapacityList?institutionId=}]]*/ '';
+                layer.open({
+                    type: 2
+                    ,title: '产能列表'
+                    ,content:  _contentUrl + data.id
+                    ,area: ['480px', '600px']
+                    ,maxmin: true
+                    ,btn: ['确定', '取消']
+                })
+            }else if(obj.event === 'edit'){
+                //layer.alert('编辑行：<br>'+ JSON.stringify(data));
+                console.log( data.clientId);
+                var _contentUrl = /*[[@{/client/institutionInfo/toUpdate?clientId=}]]*/ '';
+                layer.open({
+                    type: 2
+                    ,title: '修改企业'
+                    ,content:  _contentUrl + data.clientId
+                    ,area: ['800px', '420px']
+                    ,maxmin: true
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'form-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field; //获取提交的字段
+                            console.log(field);
+                            $.ajax({
+                                url: /*[[@{/client/institutionInfo/update}]]*/ '',
+                                dataType: "json",
+                                type: "GET",
+                                data: data.field,
+                                success: function (res) {
+                                    if(res.success){
+                                        layer.msg('修改成功', {icon: 1});
+                                        table.reload('LAY-enterpriseList-manage'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                    }else{
+                                        layer.msg(res.msg, {icon: 5});
+                                    }
+                                },
+                                error: function (data) {
+                                    console.log(res);
+                                    layer.close(index); //关闭弹层
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }else if(obj.event === 'toUser'){
+                //layer.alert('编辑行：<br>'+ JSON.stringify(data));
+                console.log( data.clientId);
+                var _contentUrl = /*[[@{/client/personalInfo/transUpdate?clientInfoId=}]]*/ '';
+                layer.open({
+                    type: 2
+                    ,title: '转换为个人用户'
+                    ,content: _contentUrl + data.clientId
+                    ,area: ['650px', '420px']
+                    ,maxmin: true
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'form-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field; //获取提交的字段
+                            console.log(field);
+                            $.ajax({
+                                url: /*[[@{/client/personalInfo/transToUser}]]*/'',
+                                dataType: "json",
+                                type: "GET",
+                                data: data.field,
+                                success: function (res) {
+                                    console.log(res);
+                                    if(res.success){
+                                        layer.msg('转换到个人用户成功', {icon: 1});
+                                        table.reload('LAY-enterpriseList-manage'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                    }else{
+                                        layer.msg(res.msg, {icon: 5});
+                                    }
+                                },
+                                error: function (data) {
+                                    console.log(res);
+                                    layer.close(index); //关闭弹层
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+        });
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '新增填报企业用户'
+                    ,content:  /*[[@{/client/institutionInfo/toAdd}]]*/''
+                    ,area: ['650px', '420px']
+                    ,maxmin: true
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'form-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field; //获取提交的字段
+                            console.log(field);
+                            if(field.capacitys == ''){
+                                layer.msg('产能不能为空', {icon: 5});
+                                return false;
+                            }
+                            $.ajax({
+                                url: /*[[@{/client/institutionInfo/add}]]*/'',
+                                dataType: "json",
+                                type: "GET",
+                                data: data.field,
+                                success: function (res) {
+                                    console.log(res);
+                                    if(res.success){
+                                        layer.msg('添加成功', {icon: 1});
+                                        table.reload('LAY-enterpriseList-manage'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                    }else{
+                                        layer.msg(res.msg, {icon: 5});
+                                    }
+                                },
+                                error: function (data) {
+                                    console.log(res);
+                                    layer.close(index); //关闭弹层
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+        $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        function getInfo() {
+            $.ajax({//统计
+                async: false,
+                type : "get",
+                url : /*[[@{/client/institutionInfo/statisticData}]]*/ '',
+                data: { institutionIds : $_institutionId},
+                datatype : 'json',
+                success : function(args) {
+                    $("#count").html('总企业数(家):'+ args.count + '&nbsp;&nbsp;&nbsp;&nbsp;');
+                    $("#mj").html('总生产面积(亩):'+ args.mj + '');
+                }
+            });
+        }
+        getInfo();
+    });
+
+
+    /*]]>*/
+</script>
+</body>
+</html>

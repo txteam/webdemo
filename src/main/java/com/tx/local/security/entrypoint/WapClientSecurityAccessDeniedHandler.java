@@ -48,10 +48,7 @@ public class WapClientSecurityAccessDeniedHandler
     /** <默认构造函数> */
     public WapClientSecurityAccessDeniedHandler(String errorPage) {
         super();
-        
-        errorPageMap.put("/mainframe/**", "/admin/login");
-        errorPageMap.put("/admin/mainframe/**", "/admin/login");
-        errorPageMap.put("/background/mainframe/**", "/admin/login");
+        errorPageMap.put("/wap/client/mainframe/**", "/wap/client/login");
     }
     
     /**

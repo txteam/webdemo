@@ -1,248 +1,127 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>丰都三社融合综合服务系统</title>	
+	<title>wap填报首页</title>
 	<meta charset="utf-8"/>
-	<meta name="renderer" content="webkit">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<block th:replace="fragments/layui_header::common_replace">
-	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
-	<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
-	<!-- layui -->
-	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
-	<script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
-	var _contextPath = /*[[@{/}]]*/'';
-	/*]]>*/
-	</script>
-</block>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+	<block th:replace="fragments/bootstrap_header::common_replace">
+		<!-- css -->
+		<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+		<link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+		<!-- js -->
+		<script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+		<script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var _contextPath = /*[[@{/}]]*/'';
+            /*]]>*/
+		</script>
+	</block>
 </head>
-<body class="layui-layout-body">
-	<div id="LAY_app">
-		<div class="layui-layout layui-layout-admin">
-			<div class="layui-header">
-				<!-- 头部区域 -->
-				<ul id="layui-layout-left" class="layui-nav layui-layout-left">
-					<li class="layui-nav-item layui-hide-xs layadmin-flexible left-menu-fixed" lay-unselect>
-						<a href="javascript:;" layadmin-event="flexible" title="侧边伸缩"> 
-							<i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item  layui-hide-xs" lay-unselect th:remove="all">
-						<a href="javascript:;">
-							<i class="layui-icon layui-icon-website">工作台</i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect th:remove="all">
-						<a href="http://www.cqtianxin.com" target="_blank">
-							<i class="layui-icon layui-icon-website">范例</i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect th:remove="all">
-						<a href="http://www.cqtianxin.com" target="_blank" title="前台">
-							<i class="layui-icon layui-icon-website"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs left-menu-fixed" lay-unselect>
-						<a href="javascript:;" layadmin-event="refresh" title="刷新">
-							<i class="layui-icon layui-icon-refresh-3"></i>
-						</a>
-					</li>
-				</ul>
-
-				<ul class="layui-nav layui-layout-right"
-					lay-filter="layadmin-layout-right">
-					<li class="layui-nav-item" lay-unselect>
-						<a layadmin-event="message" lay-text="消息中心" 
-							lay-href="app/message/index.html" th:lay-href="@{/layui/demo/app/message/index.html}"> 
-							<i class="layui-icon layui-icon-notice"></i>
-							<!-- 如果有新消息，则显示小圆点 -->
-							<span class="layui-badge-dot"></span>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect>
-						<a href="javascript:;" layadmin-event="theme"> 
-							<i class="layui-icon layui-icon-theme"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect>
-						<a href="javascript:;" layadmin-event="note">
-							<i class="layui-icon layui-icon-note"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect><a
-						href="javascript:;" layadmin-event="fullscreen"> <i
-							class="layui-icon layui-icon-screen-full"></i>
-					</a></li>
-
-					<li class="layui-nav-item" lay-unselect><a href="javascript:;">
-						<cite>贤心</cite></a>
-						<dl class="layui-nav-child">
-							<dd>
-								<a lay-href="set/user/info.html"
-									th:lay-href="@{/layui/demo/set/user/info.html}">基本资料</a>
-							</dd>
-							<dd>
-								<a lay-href="set/user/password.html"
-									th:lay-href="@{/layui/demo/set/user/password.html}">修改密码</a>
-							</dd>
-							<hr>
-							<dd layadmin-event="logout" style="text-align: center;">
-								<a>退出</a>
-							</dd>
-						</dl>
-					</li>
-					<li class="layui-nav-item layui-hide-xs" lay-unselect>
-						<a href="javascript:;" layadmin-event="about">
-							<i class="layui-icon layui-icon-more-vertical"></i>
-						</a>
-					</li>
-					<li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
-						<a href="javascript:;" layadmin-event="more">
-							<i class="layui-icon layui-icon-more-vertical"></i>
-						</a>
-					</li>
-				</ul>
+<body>
+<div class="nav_view">
+	<a id="toIndex">
+		<div class="nav_img">
+		</div>
+	</a>
+	<div class="nav_title">wap填报首页</div>
+</div>
+<div class="container">
+	<div class="row view_top">
+		<div class="col-sm-12 col-xs-12">
+			<div class="list-group">
+				<a id="toRegisterPersonal" class="list-group-item div-box">
+					<h5 class="list-group-item-heading text-nol">绑定机构:</h5>
+					<h5 class="list-group-item-text text-set" th:text="${dizi}"></h5>
+				</a>
 			</div>
-
-			<!-- 侧边菜单 -->
-			<div class="layui-side layui-side-menu">
-				<div class="layui-side-scroll">
-					<div class="layui-logo" lay-href="home/console.html">
-						<span>丰都三社融合综合管理</span>
+			<div class="list-group">
+				<a id="toClientInfoPage"  class="list-group-item div-box">
+					<h5 class="list-group-item-heading text-nol">用户名:</h5>
+					<h5 class="list-group-item-text text-all" th:text="${username}"></h5>
+				</a>
+			</div>
+			<div class="list-group">
+				<div class="list-group-item div-box">
+					<h5 class="list-group-item-heading text-nol">登录账号:</h5>
+					<h5 class="list-group-item-text text-get" th:text="${number}"></h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3 col-xs-6">
+			<div class="list-group">
+				<a id="toAgriculturalDemand" class="list-group-item div-box">
+					<div class="div-center">
+						<img th:src="@{/images/wap/buy.jpg}" alt="" class="img-circle">
+						<h4 class="list-group-item-heading text-nol text-c">我要买</h4>
 					</div>
-					<ul id="LAY-system-side-menu" class="layui-nav layui-nav-tree" lay-shrink="all" lay-filter="layadmin-system-side-menu" th:remove="all">
-						<li data-name="user" class="layui-nav-item">
-							<a href="javascript:;" lay-tips="用户" lay-direction="2"> <i class="layui-icon layui-icon-user"></i> <cite>用户</cite></a>
-							<dl class="layui-nav-child">
-								<dd>
-									<a lay-href="user/user/list.html">网站用户</a>
-								</dd>
-								<dd>
-									<a lay-href="user/administrators/list.html">后台管理员</a>
-								</dd>
-								<dd>
-									<a lay-href="user/administrators/role.html">角色管理</a>
-								</dd>
-							</dl>
-						</li>
-						<li data-name="set" class="layui-nav-item">
-							<a href="javascript:;" lay-tips="设置" lay-direction="2"> 
-								<i class="layui-icon layui-icon-set"></i> <cite>设置</cite>
-							</a>
-							<dl class="layui-nav-child">
-								<dd class="layui-nav-itemed">
-									<a href="javascript:;">系统设置</a>
-									<dl class="layui-nav-child">
-										<dd>
-											<a lay-href="set/system/website.html">网站设置</a>
-										</dd>
-										<dd>
-											<a lay-href="set/system/email.html">邮件服务</a>
-										</dd>
-									</dl>
-								</dd>
-								<dd class="layui-nav-itemed">
-									<a href="javascript:;">我的设置</a>
-									<dl class="layui-nav-child">
-										<dd>
-											<a lay-href="set/user/info.html">基本资料</a>
-										</dd>
-										<dd>
-											<a lay-href="set/user/password.html">修改密码</a>
-										</dd>
-									</dl>
-								</dd>
-							</dl>
-						</li>
-					</ul>
-				</div>
+				</a>
 			</div>
-
-			<!-- 页面标签 -->
-			<div class="layadmin-pagetabs" id="LAY_app_tabs">
-				<div class="layui-icon layadmin-tabs-control layui-icon-prev"
-					layadmin-event="leftPage"></div>
-				<div class="layui-icon layadmin-tabs-control layui-icon-next"
-					layadmin-event="rightPage"></div>
-				
-				<div class="layui-icon layadmin-tabs-control layui-icon-down">
-					<ul class="layui-nav layadmin-tabs-select"
-						lay-filter="layadmin-pagetabs-nav">
-						<li class="layui-nav-item" lay-unselect><a
-							href="javascript:;"></a>
-							<dl class="layui-nav-child layui-anim-fadein">
-								<dd layadmin-event="closeThisTabs">
-									<a href="javascript:;">关闭当前标签页</a>
-								</dd>
-								<dd layadmin-event="closeOtherTabs">
-									<a href="javascript:;">关闭其它标签页</a>
-								</dd>
-								<dd layadmin-event="closeAllTabs">
-									<a href="javascript:;">关闭全部标签页</a>
-								</dd>
-							</dl></li>
-					</ul>
-				</div>
-				
-				<div class="layui-tab" lay-unauto lay-allowClose="true"
-					lay-filter="layadmin-layout-tabs">
-					<ul class="layui-tab-title" id="LAY_app_tabsheader">
-						<li lay-id="home/console.html" class="layui-this"
-							lay-attr="@{/home/console.html}" th:lay-attr="@{/home/console.html}">
-							<i class="layui-icon layui-icon-home"></i>
-						</li>
-					</ul>
-				</div>
+		</div>
+		<div class="col-sm-3 col-xs-6">
+			<div class="list-group">
+				<a id="toAgricultureProducts"  class="list-group-item div-box">
+					<div class="div-center">
+						<img th:src="@{/images/wap/mai.jpg}" alt="" class="img-circle">
+						<h4 class="list-group-item-heading text-all text-c">我要卖</h4>
+					</div>
+				</a>
 			</div>
-
-			<!-- 主体内容 -->
-			<div class="layui-body" id="LAY_app_body">
-				<div class="layadmin-tabsbody-item layui-show">
-					<iframe src="home/console.html"
-						th:src="@{/layui/demo/home/console}" frameborder="0"
-						class="layadmin-iframe"></iframe>
-				</div>
+		</div>
+		<div class="col-sm-3 col-xs-6">
+			<div class="list-group">
+				<a id="toAgriculturalLaon" class="list-group-item div-box">
+					<div class="div-center">
+						<img th:src="@{/images/wap/dai.jpg}" alt="" class="img-circle">
+						<h4 class="list-group-item-heading text-get text-c">我要贷</h4>
+					</div>
+				</a>
 			</div>
-
-			<!-- 辅助元素，一般用于移动设备下遮罩 -->
-			<div class="layadmin-body-shade" layadmin-event="shade"></div>
+		</div>
+		<div class="col-sm-3 col-xs-6">
+			<div class="list-group">
+				<a id="toAgricultureQuestions" class="list-group-item div-box">
+					<div class="div-center">
+						<img th:src="@{/images/wap/wen.jpg}" alt="" class="img-circle">
+						<h4 class="list-group-item-heading text-set text-c">我要问</h4>
+					</div>
+				</a>
+			</div>
 		</div>
 	</div>
-</body>
-<script>
-/*<![CDATA[*/
-layui.config({
-	//静态资源所在路径 //静态资源所在路径
-	base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/' 
-}).extend({
-	//主入口模块
-	index: 'lib/index' 
-}).use(['index','common','mainframe'],function(){
-	var $ = layui.jquery
-		,setter = layui.setter
-		,element = layui.element
-		,admin = layui.admin
-		,tabsPage = admin.tabsPage
-		,view = layui.view
-		,mainframe = layui.mainframe;
-	
-	mainframe.init(_contextPath);
-});
-/*]]>*/
-</script>
-<!-- 百度统计 -->
-<script>
-var _hmt = _hmt || [];
-(function() {
-	var hm = document.createElement("script");
-	hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
-	var s = document.getElementsByTagName("script")[0]; 
-	s.parentNode.insertBefore(hm, s);
-})();
-</script>
-</html>
+</div>
 
+<script type="text/javascript" th:inline="javascript">
+    layui.config({
+        base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/'
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index',  'jquery'], function(){
+        var $ = layui.jquery;
+        //跳转到我要买页面
+        $('#toAgriculturalDemand').on('click', function(){
+            window.location.href=/*[[@{/wap/client/agriculturalDemand/toQueryPageList}]]*/ '';
+        });
+        //跳转到我要卖页面
+        $('#toAgricultureProducts').on('click', function(){
+            window.location.href=/*[[@{/wap/client/agricultureProducts/toQueryPageList}]]*/ '';
+        });
+        //跳转到我要贷页面
+        $('#toAgriculturalLaon').on('click', function(){
+            window.location.href=/*[[@{/wap/client/agricultureLaon/toQueryPageList}]]*/ '';
+        });
+		//跳转到我要问页面
+        $('#toAgricultureQuestions').on('click', function(){
+            window.location.href=/*[[@{/wap/client/agricultureQuestions/toQueryPageList}]]*/ '';
+        });
+        //跳转到修改页面
+        $('#toClientInfoPage').on('click', function(){
+            window.location.href=/*[[@{/wap/client/info/toClientInfoPage}]]*/ '';
+        });
+
+
+    })
+</script>
+</body>

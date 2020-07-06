@@ -6,12 +6,20 @@
  */
 package com.tx.local.institution.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.tx.local.clientinfo.model.ClientExtendInfo;
+import com.tx.local.clientinfo.service.ClientExtendInfoService;
+import com.tx.local.institution.model.CapacityTypeEnum;
+import com.tx.local.institution.model.InstitutionCapacity;
+import com.tx.local.institution.service.InstitutionCapacityService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -40,6 +48,29 @@ public class InstitutionInfoController {
     //InstitutionInfo业务层
     @Resource(name = "institutionInfoService")
     private InstitutionInfoService institutionInfoService;
+
+    @Resource(name = "clientExtendInfoService")
+    private ClientExtendInfoService clientExtendInfoService;
+
+    @Resource(name = "institutionCapacityService")
+    private InstitutionCapacityService institutionCapacityService;
+
+
+    /**
+     * 跳转到查询InstitutionInfo分页列表页面<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     *
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toQueryList")
+    public String toQueryList(ModelMap response) {
+        response.put("types", InstitutionTypeEnum.values());
+
+        return "institution/queryInstitutionPagedList";
+    }
     
     /**
      * 跳转到查询InstitutionInfo分页列表页面<br/>
@@ -53,10 +84,37 @@ public class InstitutionInfoController {
     @RequestMapping("/toQueryPagedList")
     public String toQueryPagedList(ModelMap response) {
         response.put("types", InstitutionTypeEnum.values());
-        
+
         return "institution/queryInstitutionInfoPagedList";
     }
-    
+
+    @RequestMapping("/toQueryInstitutionCapacityList")
+    public String toQueryInstitutionCapacityList(@RequestParam("id") String id,
+                                                 ModelMap response) {
+        InstitutionInfo institutionInfo = institutionInfoService.findById(id);
+        response.put("institutionInfo",institutionInfo);
+        Map<String, Object> params = new HashMap<>();
+        params.put("institutionId",institutionInfo.getId());
+        List<InstitutionCapacity>  institutionCapacities =    institutionCapacityService.queryList(params);
+        response.put("institutionCapacities",institutionCapacities);
+        return "institution/queryInstitutionCapacityPagedList";
+    }
+
+
+
+
+    @RequestMapping("/toQueryClientPage")
+    public String toQueryClientPage( @RequestParam("id") String id,
+                                     ModelMap response) {
+       InstitutionInfo institutionInfo = institutionInfoService.findByClientId(id);
+       response.put("institutionInfo",institutionInfo);
+        Map<String, Object> params = new HashMap<>();
+        params.put("institutionId",institutionInfo.getId());
+        List<InstitutionCapacity>  institutionCapacities =    institutionCapacityService.queryList(params);
+        response.put("institutionCapacities",institutionCapacities);
+        return "institution/toQueryClientPage";
+    }
+
     /**
      * 跳转到新增InstitutionInfo页面<br/>
      * <功能详细描述>
@@ -94,7 +152,54 @@ public class InstitutionInfoController {
         
         return "institution/updateInstitutionInfo";
     }
-    
+
+    /**
+     * 跳转到编辑机构信息主页面<br/>
+     *   可编辑机构信息
+     *   可在其中编辑机构信息的产能信息
+     * <功能详细描述>
+     * @return [参数说明]
+     *
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toModifyMain")
+    public String toModifyMain(@RequestParam("id") String id,
+                               ModelMap response) {
+
+        InstitutionInfo institutionInfo = this.institutionInfoService.findById(id);
+        response.put("institutionInfo", institutionInfo);
+
+        response.put("types", InstitutionTypeEnum.values());
+
+        return "institution/toQueryPagedList";
+    }
+
+    /**
+     * 跳转到编辑机构信息主页面<br/>
+     *   可编辑社属机构信息
+     *   可在其中编辑机构信息的产能信息
+     * <功能详细描述>
+     * @return [参数说明]
+     *
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("/toModify")
+    public String toModify(@RequestParam("id") String id,
+                               ModelMap response) {
+
+        InstitutionInfo institutionInfo = this.institutionInfoService.findById(id);
+        response.put("institutionInfo", institutionInfo);
+
+        response.put("types", CapacityTypeEnum.values());
+
+        return "institution/modifyInstitutionInfo";
+    }
+
+
     /**
      * 查询InstitutionInfo实例列表<br/>
      * <功能详细描述>
@@ -136,7 +241,7 @@ public class InstitutionInfoController {
         params.put("name", request.getFirst("name"));
         
         PagedList<InstitutionInfo> resPagedList = this.institutionInfoService
-                .queryDetailPagedList(params, pageIndex, pageSize);
+                .queryPagedList(params, pageIndex, pageSize);
         return resPagedList;
     }
     
@@ -156,10 +261,43 @@ public class InstitutionInfoController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam MultiValueMap<String, String> request) {
         Map<String, Object> params = new HashMap<>();
-        params.put("name", request.getFirst("name"));
-        
+        params.put("searchValue", request.getFirst("searchValue"));
+        params.put("linkMobileNumber", request.getFirst("linkMobileNumber"));
+        params.put("clientId", request.getFirst("clientId"));
+        params.put("isClientType", "isClientType");
+        /*
+        String institutionId = request.getFirst("institutionId");
+        if(StringUtils.isNotBlank(institutionId)){
+            params.put("institutionId", institutionId);
+        }
+        */
+
+        String institutionId = request.getFirst("institutionId");
+        if (StringUtils.isNotBlank(institutionId)) {
+            List<ClientExtendInfo> clientList =
+                    clientExtendInfoService.getClientExtendListById(institutionId);
+            params.put("clients", clientList);
+        }
+
         PagedList<InstitutionInfo> resPagedList = this.institutionInfoService
                 .queryPagedList(params, pageIndex, pageSize);
+
+        List<InstitutionInfo> addsList = this.institutionInfoService.queryList(new HashMap<>());
+        Map<String, InstitutionInfo> mappedAdds = addsList.stream().collect(Collectors.toMap(InstitutionInfo::getId, (p) -> p));
+
+        List<ClientExtendInfo> clisList = this.clientExtendInfoService.queryList(new HashMap<>());
+        Map<String, ClientExtendInfo> mappedClis = clisList.stream().collect(Collectors.toMap(ClientExtendInfo::getClientId, (p) -> p));
+
+        List<InstitutionInfo>  resList = resPagedList.getList();
+        for (InstitutionInfo item: resList) {
+            if(mappedClis.containsKey(item.getClientId())){
+                if(mappedAdds.containsKey(mappedClis.get(item.getClientId()).getInstitutionId())){
+                    item.setInstitutionInfo(mappedAdds.get(mappedClis.get(item.getClientId()).getInstitutionId()));
+                }
+            }
+        }
+        resPagedList.setList(resList);
+
         return resPagedList;
     }
     
@@ -174,12 +312,12 @@ public class InstitutionInfoController {
      */
     @ResponseBody
     @RequestMapping("/add")
-    public boolean add(InstitutionInfo institutionInfo) {
+    public InstitutionInfo add(InstitutionInfo institutionInfo) {
         String vcid = WebContextUtils.getVcid();
         institutionInfo.setVcid(vcid);
         
         this.institutionInfoService.insertClientAndInstitution(institutionInfo);
-        return true;
+        return institutionInfo;
     }
     
     /**
@@ -195,7 +333,7 @@ public class InstitutionInfoController {
     @ResponseBody
     @RequestMapping("/update")
     public boolean update(InstitutionInfo institutionInfo) {
-        boolean flag = this.institutionInfoService.updateById(institutionInfo);
+        boolean flag = this.institutionInfoService.updateClientAndInstitution(institutionInfo);
         return flag;
     }
     
@@ -233,6 +371,13 @@ public class InstitutionInfoController {
         boolean flag = this.institutionInfoService.deleteById(id);
         return flag;
     }
+
+    @ResponseBody
+    @RequestMapping("/deleteLogicById")
+    public boolean deleteLogicById(@RequestParam(value = "id") String id) {
+        boolean flag = this.institutionInfoService.deleteLogicById(id);
+        return flag;
+    }
     
     /**
      * 校验是否重复<br/>
@@ -259,6 +404,39 @@ public class InstitutionInfoController {
             resMap.put("error", "重复值");
         }
         return resMap;
+    }
+
+    @ResponseBody
+    @RequestMapping("/statisticData")
+    public Map<String,Object> statisticData(@RequestParam Map<String, Object> params) {
+        Map<String,Object> result = new HashMap<>();
+        Integer count = 0;
+        BigDecimal mj = new BigDecimal(0);
+
+        Map<String, Object> paramx = new HashMap<>();
+         /*
+        String institutionId = (String) params.get("institutionId");
+        if(StringUtils.isNotBlank(institutionId)){
+            params.put("institutionId", institutionId);
+        }
+       */
+        String institutionId = (String) params.get("institutionId");
+        if (StringUtils.isNotBlank(institutionId)) {
+            List<ClientExtendInfo> clientList =
+                    clientExtendInfoService.getClientExtendListById(institutionId);
+            paramx.put("clients", clientList);
+        }
+        paramx.put("isClientType", "isClientType");
+        List<InstitutionInfo> list = this.institutionInfoService.queryList(paramx);
+        for(InstitutionInfo item: list){
+            count ++ ;
+            if(item.getInstitutionSummaryInfo() != null){
+                mj = mj.add(item.getInstitutionSummaryInfo().getLandArea());
+            }
+        }
+        result.put("mj", mj);
+        result.put("count", count);
+        return result;
     }
     
 }

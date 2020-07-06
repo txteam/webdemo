@@ -6,6 +6,7 @@
  */
 package com.tx.local.institution.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -29,15 +30,17 @@ import com.tx.local.creditinfo.model.CreditSingleLinked;
  */
 @Entity
 @Table(name = "ins_summary_info")
-public class InstitutionSummaryInfo implements CreditSingleLinked{
+public class InstitutionSummaryInfo implements CreditSingleLinked {
     
     /** 注释内容 */
     private static final long serialVersionUID = -7050744330670846633L;
-
+    
     /** 企业信息摘要id */
     @Id
     @Column(length = 64, updatable = false, nullable = false)
     private String id;
+    
+    private String clientId;
     
     /** 信用信息id */
     @Column(length = 64, updatable = false, nullable = false)
@@ -46,6 +49,9 @@ public class InstitutionSummaryInfo implements CreditSingleLinked{
     /** 法人 */
     @Column(length = 32, updatable = true, nullable = true)
     private String legalName;
+
+    /** 土地面积 */
+    private BigDecimal landArea;
     
     /** 法人身份证号 */
     @Column(length = 32, updatable = true, nullable = true)
@@ -99,242 +105,308 @@ public class InstitutionSummaryInfo implements CreditSingleLinked{
     
     /** 企业经办人授权委托书 */
     private String authorizationUrl;
-
+    
+    /** 最后更新时间 */
+    @Column(nullable = false, updatable = true)
+    private Date lastUpdateDate;
+    
+    /** 创建时间 */
+    @Column(nullable = false, updatable = false)
+    private Date createDate;
+    
     /**
      * @return 返回 id
      */
+    @Override
     public String getId() {
         return id;
     }
-
+    
     /**
      * @param 对id进行赋值
      */
+    @Override
     public void setId(String id) {
         this.id = id;
     }
-
+    
+    /**
+     * @return 返回 clientId
+     */
+    @Override
+    public String getClientId() {
+        return clientId;
+    }
+    
+    /**
+     * @param 对clientId进行赋值
+     */
+    @Override
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+    
     /**
      * @return 返回 creditInfoId
      */
+    @Override
     public String getCreditInfoId() {
         return creditInfoId;
     }
-
+    
     /**
      * @param 对creditInfoId进行赋值
      */
+    @Override
     public void setCreditInfoId(String creditInfoId) {
         this.creditInfoId = creditInfoId;
     }
-
+    
     /**
      * @return 返回 legalName
      */
     public String getLegalName() {
         return legalName;
     }
-
+    
     /**
      * @param 对legalName进行赋值
      */
     public void setLegalName(String legalName) {
         this.legalName = legalName;
     }
-
+    
     /**
      * @return 返回 legalIdCardType
      */
     public IDCardTypeEnum getLegalIdCardType() {
         return legalIdCardType;
     }
-
+    
     /**
      * @param 对legalIdCardType进行赋值
      */
     public void setLegalIdCardType(IDCardTypeEnum legalIdCardType) {
         this.legalIdCardType = legalIdCardType;
     }
-
+    
     /**
      * @return 返回 legalIdCardNumber
      */
     public String getLegalIdCardNumber() {
         return legalIdCardNumber;
     }
-
+    
     /**
      * @param 对legalIdCardNumber进行赋值
      */
     public void setLegalIdCardNumber(String legalIdCardNumber) {
         this.legalIdCardNumber = legalIdCardNumber;
     }
-
+    
     /**
      * @return 返回 agentName
      */
     public String getAgentName() {
         return agentName;
     }
-
+    
     /**
      * @param 对agentName进行赋值
      */
     public void setAgentName(String agentName) {
         this.agentName = agentName;
     }
-
+    
     /**
      * @return 返回 agentIdCardType
      */
     public IDCardTypeEnum getAgentIdCardType() {
         return agentIdCardType;
     }
-
+    
     /**
      * @param 对agentIdCardType进行赋值
      */
     public void setAgentIdCardType(IDCardTypeEnum agentIdCardType) {
         this.agentIdCardType = agentIdCardType;
     }
-
+    
     /**
      * @return 返回 agentIdCardNumber
      */
     public String getAgentIdCardNumber() {
         return agentIdCardNumber;
     }
-
+    
     /**
      * @param 对agentIdCardNumber进行赋值
      */
     public void setAgentIdCardNumber(String agentIdCardNumber) {
         this.agentIdCardNumber = agentIdCardNumber;
     }
-
+    
     /**
      * @return 返回 institutionNumber
      */
     public String getInstitutionNumber() {
         return institutionNumber;
     }
-
+    
     /**
      * @param 对institutionNumber进行赋值
      */
     public void setInstitutionNumber(String institutionNumber) {
         this.institutionNumber = institutionNumber;
     }
-
+    
     /**
      * @return 返回 taxNumber
      */
     public String getTaxNumber() {
         return taxNumber;
     }
-
+    
     /**
      * @param 对taxNumber进行赋值
      */
     public void setTaxNumber(String taxNumber) {
         this.taxNumber = taxNumber;
     }
-
+    
     /**
      * @return 返回 businessLicenseNumber
      */
     public String getBusinessLicenseNumber() {
         return businessLicenseNumber;
     }
-
+    
     /**
      * @param 对businessLicenseNumber进行赋值
      */
     public void setBusinessLicenseNumber(String businessLicenseNumber) {
         this.businessLicenseNumber = businessLicenseNumber;
     }
-
+    
     /**
      * @return 返回 phoneNumber
      */
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
+    
     /**
      * @param 对phoneNumber进行赋值
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
+    
     /**
      * @return 返回 expiryDate
      */
     public Date getExpiryDate() {
         return expiryDate;
     }
-
+    
     /**
      * @param 对expiryDate进行赋值
      */
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
-
+    
     /**
      * @return 返回 openAccountLicenseUrl
      */
     public String getOpenAccountLicenseUrl() {
         return openAccountLicenseUrl;
     }
-
+    
     /**
      * @param 对openAccountLicenseUrl进行赋值
      */
     public void setOpenAccountLicenseUrl(String openAccountLicenseUrl) {
         this.openAccountLicenseUrl = openAccountLicenseUrl;
     }
-
+    
     /**
      * @return 返回 businessLicenseUrl
      */
     public String getBusinessLicenseUrl() {
         return businessLicenseUrl;
     }
-
+    
     /**
      * @param 对businessLicenseUrl进行赋值
      */
     public void setBusinessLicenseUrl(String businessLicenseUrl) {
         this.businessLicenseUrl = businessLicenseUrl;
     }
-
+    
     /**
      * @return 返回 businessLicenseWithSealUrl
      */
     public String getBusinessLicenseWithSealUrl() {
         return businessLicenseWithSealUrl;
     }
-
+    
     /**
      * @param 对businessLicenseWithSealUrl进行赋值
      */
-    public void setBusinessLicenseWithSealUrl(String businessLicenseWithSealUrl) {
+    public void setBusinessLicenseWithSealUrl(
+            String businessLicenseWithSealUrl) {
         this.businessLicenseWithSealUrl = businessLicenseWithSealUrl;
     }
-
+    
     /**
      * @return 返回 authorizationUrl
      */
     public String getAuthorizationUrl() {
         return authorizationUrl;
     }
-
+    
     /**
      * @param 对authorizationUrl进行赋值
      */
     public void setAuthorizationUrl(String authorizationUrl) {
         this.authorizationUrl = authorizationUrl;
+    }
+    
+    /**
+     * @return 返回 lastUpdateDate
+     */
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+    
+    /**
+     * @param 对lastUpdateDate进行赋值
+     */
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+    
+    /**
+     * @return 返回 createDate
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+    
+    /**
+     * @param 对createDate进行赋值
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+
+    public BigDecimal getLandArea() {
+        return landArea;
+    }
+
+    public void setLandArea(BigDecimal landArea) {
+        this.landArea = landArea;
     }
 }

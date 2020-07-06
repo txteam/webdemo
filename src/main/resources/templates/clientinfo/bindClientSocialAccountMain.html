@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>绑定客户账户第三方账户[bindClientSocialAccountMain]</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+var grid = null;
+var idFieldName = 'id';
+var nameFieldName = 'id'; 
+var entityName = '第三方账户';
+$(document).ready(function(){
+	var  $bindALink = $("#bindALink");
+	var  $unbindALink = $("#unbindALink");
+
+	grid = $('#grid').datagrid({
+		url :/*[[@{/clientSocialAccount/list(clientId=${clientId})}]]*/'',
+		fit : true,
+        fitColumns : true,
+		border : false,
+		idField : 'id',
+		checkOnSelect : false,
+		selectOnCheck : false,
+		nowrap : true,
+		striped : true,
+		singleSelect : true,
+		frozenColumns: [ [ 
+			{title:'clientId',width:100,hidden:true,field:'clientId'},
+			{title:'id',width : 100,hidden:true,field:'id'},
+			{title:'plugin',width : 100,hidden:true,field:'plugin',
+				formatter : function(value, row, index) {
+					var str = row.type.code;
+					return str;
+				}
+			},
+			{title:'pluginName',width : 100,hidden:true,field:'pluginName',
+				formatter : function(value, row, index) {
+					var str = row.type.name;
+					return str;
+				}
+			}
+		] ],
+		columns: [ [
+			{title:'关联类型',width:100,field:'type',
+				formatter : function(value, row, index) {
+					var str = value.name + "[" + value.code + "]";
+					return str;
+				}
+			},
+			{title:'是否关联',width:100,field:'bind',
+				formatter : function(value, row, index) {
+					var str = row.uniqueId ? '是' : '否';
+					return str;
+				}
+			},
+			{title:'关联ID',width:100,field:'uniqueId'},
+			{title:'用户名',width:100,field:'username'},
+			{title:'其他属性',width:200,field:'attributes'},
+			{title:'绑定时间',width:100,field:'createDate',formatter:$.Formatters.dateFun},
+			{title:'最后更新时间',width:100,hidden:true,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
+			{title:'操作',width:100,field:'_action',
+				formatter : function(value, row, index) {
+					var str = '&nbsp;';
+					if(row.uniqueId){
+						str += $.formatString('<img onclick="unbindFun();" src="{0}" title="编辑"/>', _contextPath + 'webjars/css/images/extjs_icons/link_break.png');
+						str += '&nbsp;';
+					}else{
+						str += $.formatString('<img onclick="bindFun();" src="{0}" title="删除"/>', _contextPath + 'webjars/css/images/extjs_icons/link.png');
+						str += '&nbsp;';
+					}
+					return str;
+				}
+			}
+		] ],
+		toolbar : '#toolbar',
+		onDblClickRow : function(index, row){
+			if(!row.uniqueId){
+				bindFun();
+			}
+		},
+		onClickRow : function(index, row){
+			if(!row.uniqueId){
+				$bindALink.show();
+				$bindALink.linkbutton('enable');
+				$unbindALink.linkbutton('disable');
+				$unbindALink.hide();
+			}else{
+				$unbindALink.show();
+				$unbindALink.linkbutton('enable');
+				$bindALink.linkbutton('disable');
+				$bindALink.hide();
+			}
+		},
+		onLoadSuccess : function() {
+			$(this).datagrid('unselectAll');
+			$(this).datagrid('tooltip');
+			
+			$bindALink.linkbutton('disable');
+			$unbindALink.linkbutton('disable');
+		}
+	});
+});
+function bindFun(id,plugin,pluginName){
+	if (plugin == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0]['id'];
+		plugin = rows[0].type.code;
+		pluginName = rows[0].type.name;
+	}
+	if($.ObjectUtils.isEmpty(plugin)){
+		DialogUtils.alert("没有选中的关联项.");
+		return ;
+	}
+	var bindUrl = /*[[@{/operator/social/toBind/{0}(operatorId=${operatorId})}]]*/'';
+	bindUrl = $.formatString(bindUrl,plugin);
+	//修改新增modalDialog的width,height
+	var width = 680;  //弹出窗口的宽度;
+	var height = 500; //弹出窗口的高度;
+	var top = (window.screen.availHeight-height)/2; //窗口的垂直位置;
+	var left = (window.screen.availWidth-width)/2;  //窗口的水平位置;
+	//window.open(bindUrl)
+	//window.open(bindUrl,'bind_window','height='+height+',width='+width+',top='+top+',left='+left+',toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+	DialogUtils.openModalDialog(
+		"bind",
+		"绑定" + pluginName +"账号",
+		bindUrl,
+		680,500,
+		function(){
+			queryFun();
+		},{maximizable : true}
+	);
+}
+function unbindFun(id,plugin,pluginName){
+	if (plugin == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0]['id'];
+		plugin = rows[0].type.code;
+		pluginName = rows[0].type.name;
+	}
+	if($.ObjectUtils.isEmpty(plugin)){
+		DialogUtils.alert("没有选中的关联项.");
+		return ;
+	}
+	DialogUtils.confirm("确认提醒" , 
+    	$.formatString("是否确认删除解除关联[{0}]?",pluginName), 
+    	function(data){
+	    	if(data){
+	    		DialogUtils.progress({
+	    	        text : '数据提交中，请等待....'
+	    		});
+	    		//如果确认删除指定的操作人员第三方账户
+	    		$.post(/*[[@{/operSocialAccount/unbindById}]]*/'',
+		    		{id:id},
+		    		function(data){
+		    			DialogUtils.progress('close');
+		    			if(data){
+		    				DialogUtils.tip("解除关联成功.");
+		    				queryFun();
+		    				//window.location.href = window.location.href;
+		    			}else{
+		    				var errorMessage = $.formatString("解除关联{0}失败.可能已被解除.如有疑问,请联系管理员.",pluginName);
+		    				DialogUtils.alert("错误提示",errorMessage,"error");
+		    			}
+			    	}
+			    );
+	    	}
+    });
+}
+function queryFun() {
+	grid.datagrid('load',$('#queryForm').serializeObject());
+	return false;
+}
+/*]]>*/
+</script>
+</head>
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<form id="queryForm" class="form"></form>
+	<div data-options="region:'center',border:false" title="" style="overflow-x: hidden;overflow-y: auto;">
+		<table id="grid"></table>
+		
+		<div id="toolbar" style="display: none;">		
+			<a id="bindALink" onclick="bindFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'link'">绑定</a>
+			<a id="unbindALink" onclick="unbindFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'link_break'">解绑</a>
+		</div>
+	</div>
+</body>

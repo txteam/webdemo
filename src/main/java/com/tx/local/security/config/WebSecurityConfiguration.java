@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -46,6 +47,7 @@ import com.tx.local.security.strategy.OperatorSessionAuthenticationStrategy;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
+@Order(value = 100)
 @Import(value = { WebSecurityConfigurationImporter.class })
 @Configuration
 @EnableWebSecurity

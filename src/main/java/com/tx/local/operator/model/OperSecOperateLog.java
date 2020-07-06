@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
 public class OperSecOperateLog extends AbstractServiceLogger {
     
     //:操作人员id
-    @ApiModelProperty(value = "操作人员id", hidden = true, position = 0)
+    @ApiModelProperty(value = "操作人员ID", hidden = true, position = 0)
     @Column(nullable = false, length = 64)
     private String operatorId;
     

@@ -1,0 +1,157 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	width: 100%;
+	height: 100%;
+	background-color: #F6F6F6;
+}
+/*=================登录加载=================*/
+.div-center{
+	border: none;
+	text-align: center;
+}
+.text-c{
+	padding-top: 5px;
+}
+/*========================================*/
+.div-box{
+	border: none;
+	box-shadow: -1px 1px #dddee1 ! important;
+}
+.text-xq{
+	color: #FE3300 ! important;
+}
+.text-ncp{
+	color: #BFBDBE ! important;
+}
+.text-set{
+	color: #D9D919 ! important;
+}
+.text-get{
+	color:#32CD32 ! important;
+}
+.text-put{
+	color: #DBDB70 ! important;
+}
+.text-all{
+	color: #007FFF ! important;
+}
+.text-nol{
+	color: #000000 ! important;
+}
+.div-bg{
+	border-radius: 5px;
+	padding-top: 20px;
+	background-color: #FFFFFF;
+}
+.view_top{
+	margin-top: 70px ! important;
+}
+.column_control{
+	padding: 6px 16px;
+	padding-left: 25px ! important;
+}
+.submit_control{
+	padding-left: 16px ! important;
+}
+/*====================头部====================*/
+.nav_view{
+	position: fixed;
+	height: 50px;
+	width: 100%;
+	background-color: #FFFFFF;
+	z-index: 1000;
+}
+.nav_img{
+	position: relative;
+	float: left;
+	height: 50px;
+	padding: 4px 0px 0px 5px;
+	width: 50px;
+	font-size: 30px;
+	line-height:50px;
+	color: #171717;
+	z-index: 1100;
+}
+.nav_title{
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	font-size: 20px;
+	line-height: 50px;
+	color: #171717;
+	z-index: 1000;
+}
+.nav_user{
+	position: relative;
+	float: right;
+	height: 50px;
+	margin-right: 10px;
+	padding: 5px 0px 0px 5px;
+	color: #171717;
+	z-index: 1100;
+}
+.nav_user_icon{
+	display: inline-block;
+	font-size: 25px;
+	line-height:40px;
+}
+.nav_user_txt{
+	display: inline-block;
+	font-size: 15px;
+}
+.nav_user_dz{
+	position: relative;
+	float: left;
+	height: 50px;
+	margin-right: 10px;
+	padding: 5px 0px 0px 5px;
+	color: #171717;
+	z-index: 1100;
+}
+/*====================列表===================*/
+.view_list{
+	cursor: pointer;
+	margin-bottom: 10px;
+	padding: 10px 10px 10px 10px;
+	border-radius: 5px;
+	background-color: #FFFFFF;
+	box-shadow: 0px 1px #dddee1;
+}
+.list_item{
+	display: flex;
+	width: 100%;
+	line-height: 20px;
+	font-size: 12px;
+}
+.item_view{
+	float: left;
+	width: 50%;
+	display: flex;
+}
+.item_lable{
+	width: 60px;
+	text-align: left;
+	color: #C3C1C2;
+}
+.item_text{
+	flex: 1;
+	color: #000000;
+}
+/*======查询条=======*/
+.isQuery_msg{
+	padding-top: 10px;
+	padding-bottom: 20px;
+	line-height: 15px;
+	font-size: 12px;
+	text-align: center;
+	color: #000000;
+}
+label.error{
+	display: block;
+}
+input.error{
+	display: block;
+}

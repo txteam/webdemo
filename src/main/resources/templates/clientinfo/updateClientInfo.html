@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>编辑ClientInfo[updateClientInfo]</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	parent.DialogUtils.progress('close');
+	
+	//验证器
+	$('#entityForm').validator({
+	    valid: function(){
+	        //表单验证通过，提交表单到服务器
+	        DialogUtils.progress({
+	            text : '数据提交中，请等待....'
+	    	});
+			$('#entityForm').ajaxSubmit({
+			    url:/*[[@{/clientInfo/update}]]*/'',
+			    success: function(data) {
+			    	DialogUtils.progress('close');
+					if(data){
+						parent.DialogUtils.tip("修改ClientInfo成功.");
+						parent.DialogUtils.closeDialogById("updateClientInfo");
+					}else{
+						DialogUtils.alert("错误提示","修改ClientInfo失败.","error");
+					}
+			    } 
+			});
+			return false;
+	    }
+	});
+	
+	//退出
+	$("#cancelBtn").click(function(){
+		parent.DialogUtils.closeDialogById("updateClientInfo");
+	});
+	//提交
+	$("#submitBtn").click(function(){
+		$('#entityForm').submit();
+	});
+});
+/*]]>*/
+</script>
+</head>
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false" title="" style="overflow-x: hidden;overflow-y: auto;">
+		<form id="entityForm" method="post" class="form" th:object="${clientInfo}">
+			<input id="id" name="id" type="hidden" value="" th:value="*{id}"/>
+			<table class="table">
+				<tr>
+					<th class="narrow" width="25%">idCardType:</th>
+					<td>
+						<select id="idCardType" name="idCardType" >
+							<option value="">--- 请选择 ---</option>
+							<option th:each="idCardTypeTemp:${idCardTypes}" th:value="${idCardTypeTemp.code}" th:text="${idCardTypeTemp.name}" th:selected="${clientInfo.idCardType eq idCardTypeTemp}"></option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">idCardNumber:</th>
+					<td>
+						<input id="idCardNumber" name="idCardNumber" type="text" data-rule="idCardNumber:length[0~127];"
+							th:value="*{idCardNumber}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">idCardExpiryDate:</th>
+					<td>
+						<input id="idCardExpiryDate" name="idCardExpiryDate" type="text" readonly="readonly"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
+							th:value="${#dates.format(clientInfo.idCardExpiryDate,'yyyy-MM-dd HH:mm:ss')}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">hisPwd:</th>
+					<td>
+						<input id="hisPwd" name="hisPwd" type="text" data-rule="hisPwd:length[0~127];"
+							th:value="*{hisPwd}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">hisPayPwd:</th>
+					<td>
+						<input id="hisPayPwd" name="hisPayPwd" type="text" data-rule="hisPayPwd:length[0~127];"
+							th:value="*{hisPayPwd}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">payPassword:</th>
+					<td>
+						<input id="payPassword" name="payPassword" type="text" data-rule="payPassword:length[0~127];"
+							th:value="*{payPassword}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">payPwdErrCount:</th>
+					<td>
+						<input id="payPwdErrCount" name="payPwdErrCount" type="text" 
+							th:value="*{payPwdErrCount}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">payPwdUpdateDate:</th>
+					<td>
+						<input id="payPwdUpdateDate" name="payPwdUpdateDate" type="text" readonly="readonly"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
+							th:value="${#dates.format(clientInfo.payPwdUpdateDate,'yyyy-MM-dd HH:mm:ss')}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">payPwdLastErrDate:</th>
+					<td>
+						<input id="payPwdLastErrDate" name="payPwdLastErrDate" type="text" readonly="readonly"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
+							th:value="${#dates.format(clientInfo.payPwdLastErrDate,'yyyy-MM-dd HH:mm:ss')}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">pwdErrCount:</th>
+					<td>
+						<input id="pwdErrCount" name="pwdErrCount" type="text" 
+							th:value="*{pwdErrCount}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">pwdUpdateDate:</th>
+					<td>
+						<input id="pwdUpdateDate" name="pwdUpdateDate" type="text" readonly="readonly"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
+							th:value="${#dates.format(clientInfo.pwdUpdateDate,'yyyy-MM-dd HH:mm:ss')}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">pwdLastErrDate:</th>
+					<td>
+						<input id="pwdLastErrDate" name="pwdLastErrDate" type="text" readonly="readonly"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
+							th:value="${#dates.format(clientInfo.pwdLastErrDate,'yyyy-MM-dd HH:mm:ss')}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">名称:</th>
+					<td>
+						<input id="name" name="name" type="text" th:data-rule="'名称:required;length[1~127];remote[' + @{/clientInfo/validate} + ', name, id];'"
+							th:value="*{name}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">realNameAuthenticated:</th>
+					<td>
+						<select id="realNameAuthenticated" name="realNameAuthenticated" >
+							<option value="true" th:selected="${clientInfo.realNameAuthenticated eq true}">是</form:option>
+							<option value="false" th:selected="${clientInfo.realNameAuthenticated eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">realNameErrCount:</th>
+					<td>
+						<input id="realNameErrCount" name="realNameErrCount" type="text" 
+							th:value="*{realNameErrCount}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">realNameLastErrDate:</th>
+					<td>
+						<input id="realNameLastErrDate" name="realNameLastErrDate" type="text" readonly="readonly"
+							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',startDate:'%y-{%M-1}-%d'})" 
+							th:value="${#dates.format(clientInfo.realNameLastErrDate,'yyyy-MM-dd HH:mm:ss')}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">类型:</th>
+					<td>
+						<select id="type" name="type" >
+							<option value="">--- 请选择 ---</option>
+							<option th:each="typeTemp:${types}" th:value="${typeTemp.code}" th:text="${typeTemp.name}" th:selected="${clientInfo.type eq typeTemp}"></option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">email:</th>
+					<td>
+						<input id="email" name="email" type="text" data-rule="email:length[0~127];"
+							th:value="*{email}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">emailBinding:</th>
+					<td>
+						<select id="emailBinding" name="emailBinding" >
+							<option value="true" th:selected="${clientInfo.emailBinding eq true}">是</form:option>
+							<option value="false" th:selected="${clientInfo.emailBinding eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">clientSource:</th>
+					<td>
+						<!-- //TODO:修改其显示逻辑 -->
+						<input id="clientSource.id" name="clientSource.id" th:value="*{clientSource?.id}"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="narrow" width="25%">locked:</th>
+					<td>
+						<select id="locked" name="locked" >
+							<option value="true" th:selected="${clientInfo.locked eq true}">是</form:option>
+							<option value="false" th:selected="${clientInfo.locked eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">mobileNumber:</th>
+					<td>
+						<input id="mobileNumber" name="mobileNumber" type="text" data-rule="mobileNumber:length[0~127];"
+							th:value="*{mobileNumber}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">mobileBinding:</th>
+					<td>
+						<select id="mobileBinding" name="mobileBinding" >
+							<option value="true" th:selected="${clientInfo.mobileBinding eq true}">是</form:option>
+							<option value="false" th:selected="${clientInfo.mobileBinding eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">number:</th>
+					<td>
+						<input id="number" name="number" type="text" data-rule="number:length[0~127];"
+							th:value="*{number}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">status:</th>
+					<td>
+						<select id="status" name="status" >
+							<option value="">--- 请选择 ---</option>
+							<option th:each="statusTemp:${statuss}" th:value="${statusTemp.code}" th:text="${statusTemp.name}" th:selected="${clientInfo.status eq statusTemp}"></option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">password:</th>
+					<td>
+						<input id="password" name="password" type="text" data-rule="password:length[0~127];"
+							th:value="*{password}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">referralCode:</th>
+					<td>
+						<input id="referralCode" name="referralCode" type="text" 
+							th:value="*{referralCode}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">username:</th>
+					<td>
+						<input id="username" name="username" type="text" data-rule="username:length[0~127];"
+							th:value="*{username}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">usernameChangeAble:</th>
+					<td>
+						<select id="usernameChangeAble" name="usernameChangeAble" >
+							<option value="true" th:selected="${clientInfo.usernameChangeAble eq true}">是</form:option>
+							<option value="false" th:selected="${clientInfo.usernameChangeAble eq false}">否</form:option>
+						</select>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">usernameChangeCount:</th>
+					<td>
+						<input id="usernameChangeCount" name="usernameChangeCount" type="text" 
+							th:value="*{usernameChangeCount}"/>
+					</td>
+				</tr>			
+				<tr>
+					<th class="narrow" width="25%">promotionChannel:</th>
+					<td>
+						<!-- //TODO:修改其显示逻辑 -->
+						<input id="promotionChannel.id" name="promotionChannel.id" th:value="*{promotionChannel?.id}"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<div data-options="region:'south',border:false" title="" style="height: 40px; overflow: hidden;padding-right: 50px;" class="dialog-button">
+		<a id="submitBtn" href="javascript:void(0);" style="width: 65px;" class="easyui-linkbutton">提交</a>
+	</div>
+</body>

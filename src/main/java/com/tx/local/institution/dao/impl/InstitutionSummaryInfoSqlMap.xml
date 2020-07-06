@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="institutionSummaryInfo">
+
+	<!-- auto generate default resultMap -->
+	<resultMap id="institutionSummaryInfoMap" 
+		type="com.tx.local.institution.model.InstitutionSummaryInfo">
+	</resultMap>
+	
+	<!-- auto generate default find -->
+	<select id="find" 
+		parameterType="com.tx.local.institution.model.InstitutionSummaryInfo"
+		resultMap="institutionSummaryInfoMap">
+		SELECT 
+				ISI.id,
+				ISI.taxNumber,
+				ISI.landArea,
+				ISI.lastUpdateDate,
+				ISI.openAccountLicenseUrl,
+				ISI.agentName,
+				ISI.agentIdCardType,
+				ISI.agentIdCardNumber,
+				ISI.legalName,
+				ISI.legalIdCardType,
+				ISI.legalIdCardNumber,
+				ISI.phoneNumber,
+				ISI.clientId,
+				ISI.createDate,
+				ISI.creditInfoId,
+				ISI.expiryDate,
+				ISI.businessLicenseUrl,
+				ISI.businessLicenseNumber,
+				ISI.businessLicenseWithSealUrl,
+				ISI.institutionNumber,
+				ISI.authorizationUrl
+		  FROM INS_SUMMARY_INFO ISI
+		 WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionNumber)">
+	            AND ISI.institutionNumber = #{institutionNumber}
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">
+				AND ISI.id = #{id}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default query -->
+	<select id="query" 
+		parameterType="java.util.Map"
+		resultMap="institutionSummaryInfoMap">
+		SELECT 
+				ISI.id,
+				ISI.taxNumber,
+				ISI.landArea,
+				ISI.lastUpdateDate,
+				ISI.openAccountLicenseUrl,
+				ISI.agentName,
+				ISI.agentIdCardType,
+				ISI.agentIdCardNumber,
+				ISI.legalName,
+				ISI.legalIdCardType,
+				ISI.legalIdCardNumber,
+				ISI.phoneNumber,
+				ISI.clientId,
+				ISI.createDate,
+				ISI.creditInfoId,
+				ISI.expiryDate,
+				ISI.businessLicenseUrl,
+				ISI.businessLicenseNumber,
+				ISI.businessLicenseWithSealUrl,
+				ISI.institutionNumber,
+				ISI.authorizationUrl
+		  FROM INS_SUMMARY_INFO ISI
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND ISI.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(taxNumber)">  
+	            <![CDATA[ AND ISI.taxNumber = #{taxNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(landArea)">  
+	            <![CDATA[ AND ISI.landArea = #{landArea} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(openAccountLicenseUrl)">  
+	            <![CDATA[ AND ISI.openAccountLicenseUrl = #{openAccountLicenseUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(agentName)">  
+	            <![CDATA[ AND ISI.agentName = #{agentName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(agentIdCardType)">  
+	            <![CDATA[ AND ISI.agentIdCardType = #{agentIdCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(agentIdCardNumber)">  
+	            <![CDATA[ AND ISI.agentIdCardNumber = #{agentIdCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalName)">  
+	            <![CDATA[ AND ISI.legalName = #{legalName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalIdCardType)">  
+	            <![CDATA[ AND ISI.legalIdCardType = #{legalIdCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalIdCardNumber)">  
+	            <![CDATA[ AND ISI.legalIdCardNumber = #{legalIdCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phoneNumber)">  
+	            <![CDATA[ AND ISI.phoneNumber = #{phoneNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND ISI.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND ISI.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND ISI.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoId)">  
+	            <![CDATA[ AND ISI.creditInfoId = #{creditInfoId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(businessLicenseUrl)">  
+	            <![CDATA[ AND ISI.businessLicenseUrl = #{businessLicenseUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(businessLicenseNumber)">  
+	            <![CDATA[ AND ISI.businessLicenseNumber = #{businessLicenseNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(businessLicenseWithSealUrl)">  
+	            <![CDATA[ AND ISI.businessLicenseWithSealUrl = #{businessLicenseWithSealUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionNumber)">  
+	            <![CDATA[ AND ISI.institutionNumber = #{institutionNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(authorizationUrl)">  
+	            <![CDATA[ AND ISI.authorizationUrl = #{authorizationUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND ISI.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+		<choose>  
+	        <when test="@com.tx.core.util.OgnlUtils@isNotEmpty(orders)">  
+	            ORDER BY <foreach collection="orders" item="orderTemp" separator=",">${orderTemp.column} ${orderTemp.direction}</foreach>
+	        </when>
+	        <otherwise>  
+	            ORDER BY createDate DESC
+	        </otherwise>  
+	    </choose>
+	</select>
+
+	<!-- auto generate default count -->
+	<select id="queryCount" 
+		parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		  FROM INS_SUMMARY_INFO ISI
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
+			<foreach collection="conditions" item="conditionTemp">
+			<choose>  
+		        <when test="conditionTemp.withoutValue">
+		        	AND ${conditionTemp.column} ${conditionTemp.operator}
+		        </when>
+		        <when test="conditionTemp.foreach">  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} <foreach collection="conditionTemp.value" item="valueTemp" open="(" close=")" separator=",">#{valueTemp}</foreach>
+		        </when>
+		        <otherwise>  
+		            AND ${conditionTemp.column} ${conditionTemp.operator} #{conditionTemp.value}
+		        </otherwise>
+			</choose>
+			</foreach>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            <![CDATA[ AND ISI.id = #{id} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(taxNumber)">  
+	            <![CDATA[ AND ISI.taxNumber = #{taxNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(landArea)">  
+	            <![CDATA[ AND ISI.landArea = #{landArea} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(openAccountLicenseUrl)">  
+	            <![CDATA[ AND ISI.openAccountLicenseUrl = #{openAccountLicenseUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(agentName)">  
+	            <![CDATA[ AND ISI.agentName = #{agentName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(agentIdCardType)">  
+	            <![CDATA[ AND ISI.agentIdCardType = #{agentIdCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(agentIdCardNumber)">  
+	            <![CDATA[ AND ISI.agentIdCardNumber = #{agentIdCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalName)">  
+	            <![CDATA[ AND ISI.legalName = #{legalName} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalIdCardType)">  
+	            <![CDATA[ AND ISI.legalIdCardType = #{legalIdCardType} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(legalIdCardNumber)">  
+	            <![CDATA[ AND ISI.legalIdCardNumber = #{legalIdCardNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(phoneNumber)">  
+	            <![CDATA[ AND ISI.phoneNumber = #{phoneNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">  
+	            <![CDATA[ AND ISI.clientId = #{clientId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
+	            <![CDATA[ AND ISI.createDate >= #{minCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(maxCreateDate)">  
+	            <![CDATA[ AND ISI.createDate < #{maxCreateDate} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(creditInfoId)">  
+	            <![CDATA[ AND ISI.creditInfoId = #{creditInfoId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(businessLicenseUrl)">  
+	            <![CDATA[ AND ISI.businessLicenseUrl = #{businessLicenseUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(businessLicenseNumber)">  
+	            <![CDATA[ AND ISI.businessLicenseNumber = #{businessLicenseNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(businessLicenseWithSealUrl)">  
+	            <![CDATA[ AND ISI.businessLicenseWithSealUrl = #{businessLicenseWithSealUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionNumber)">  
+	            <![CDATA[ AND ISI.institutionNumber = #{institutionNumber} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(authorizationUrl)">  
+	            <![CDATA[ AND ISI.authorizationUrl = #{authorizationUrl} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
+				<![CDATA[ AND ISI.id <> #{excludeId} ]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- auto generate default insert -->
+    <insert id="insert" 
+		parameterType="com.tx.local.institution.model.InstitutionSummaryInfo">
+		INSERT INTO INS_SUMMARY_INFO
+		(
+			id,
+			taxNumber,
+			landArea,
+			lastUpdateDate,
+			openAccountLicenseUrl,
+			agentName,
+			agentIdCardType,
+			agentIdCardNumber,
+			legalName,
+			legalIdCardType,
+			legalIdCardNumber,
+			phoneNumber,
+			clientId,
+			createDate,
+			creditInfoId,
+			expiryDate,
+			businessLicenseUrl,
+			businessLicenseNumber,
+			businessLicenseWithSealUrl,
+			institutionNumber,
+			authorizationUrl
+		)
+		VALUES
+		(
+			#{id},
+			#{taxNumber},
+			#{landArea},
+			#{lastUpdateDate},
+			#{openAccountLicenseUrl},
+			#{agentName},
+			#{agentIdCardType},
+			#{agentIdCardNumber},
+			#{legalName},
+			#{legalIdCardType},
+			#{legalIdCardNumber},
+			#{phoneNumber},
+			#{clientId},
+			#{createDate},
+			#{creditInfoId},
+			#{expiryDate},
+			#{businessLicenseUrl},
+			#{businessLicenseNumber},
+			#{businessLicenseWithSealUrl},
+			#{institutionNumber},
+			#{authorizationUrl}
+		)
+	</insert>
+	
+	<!-- auto generate default delete -->
+	<delete id="delete" 
+		parameterType="com.tx.local.institution.model.InstitutionSummaryInfo">
+		DELETE FROM INS_SUMMARY_INFO  WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</delete>
+	
+	<!-- auto generate default update -->
+	<update id="update"
+	    parameterType="java.util.Map">  
+	    UPDATE INS_SUMMARY_INFO
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('taxNumber')">
+	    		taxNumber = #{taxNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('landArea')">
+	    		landArea = #{landArea,javaType=java.math.BigDecimal},
+	    	</if>
+			<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('openAccountLicenseUrl')">
+	    		openAccountLicenseUrl = #{openAccountLicenseUrl,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('agentName')">
+	    		agentName = #{agentName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('agentIdCardType')">
+	    		agentIdCardType = #{agentIdCardType,javaType=com.tx.local.basicdata.model.IDCardTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('agentIdCardNumber')">
+	    		agentIdCardNumber = #{agentIdCardNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('legalName')">
+	    		legalName = #{legalName,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('legalIdCardType')">
+	    		legalIdCardType = #{legalIdCardType,javaType=com.tx.local.basicdata.model.IDCardTypeEnum},
+	    	</if>
+			<if test="_parameter.containsKey('legalIdCardNumber')">
+	    		legalIdCardNumber = #{legalIdCardNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('phoneNumber')">
+	    		phoneNumber = #{phoneNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('clientId')">
+	    		clientId = #{clientId,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('expiryDate')">
+	    		expiryDate = #{expiryDate,javaType=java.util.Date},
+	    	</if>
+			<if test="_parameter.containsKey('businessLicenseUrl')">
+	    		businessLicenseUrl = #{businessLicenseUrl,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('businessLicenseNumber')">
+	    		businessLicenseNumber = #{businessLicenseNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('businessLicenseWithSealUrl')">
+	    		businessLicenseWithSealUrl = #{businessLicenseWithSealUrl,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('institutionNumber')">
+	    		institutionNumber = #{institutionNumber,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('authorizationUrl')">
+	    		authorizationUrl = #{authorizationUrl,javaType=java.lang.String},
+	    	</if>
+	    </trim>
+	    WHERE
+		<trim prefixOverrides="AND | OR">
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
+	            AND id = #{id}
+	        </if>
+		</trim>
+	</update> 
+
+</mapper>

@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -210,10 +212,6 @@
 		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>com.tx</groupId> -->
-		<!-- <artifactId>tx-component-configuration</artifactId> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>com.tx</groupId> -->
 		<!-- <artifactId>tx-component-file</artifactId> -->
 		<!-- </dependency> -->
 		<!-- <dependency> -->
@@ -328,13 +326,6 @@
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
 
-		<!--<dependency> -->
-		<!--<groupId>com.gitee.sunchenbin.mybatis.actable</groupId> -->
-		<!--<artifactId>mybatis-enhance-actable</artifactId> -->
-		<!--<version>1.0.3</version> -->
-		<!--</dependency> -->
-
-
 		<!-- actuator是监控系统健康情况的工具,zuul上可以不进行配置 -->
 		<!-- <dependency> -->
 		<!-- <groupId>org.springframework.boot</groupId> -->
@@ -343,17 +334,14 @@
 		<!-- devtools -->
 		<!--<dependency> -->
 		<!--<groupId>org.springframework.boot</groupId> -->
-		<!--<artifactId>spring-boot-devtools</artifactId> -->
-		<!--<optional>true</optional> -->
-		<!--&lt;!&ndash;<scope>true</scope>&ndash;&gt; -->
-		<!--</dependency> -->
-
-		<!--<dependency> -->
-		<!--<groupId>org.springframework.boot</groupId> -->
 		<!--<artifactId>spring-boot-loader</artifactId> -->
 		<!--</dependency> -->
-
-
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework.boot</groupId> -->
+		<!-- <artifactId>spring-boot-devtools</artifactId> -->
+		<!-- <optional>true</optional> -->
+		<!-- <scope>true</scope> -->
+		<!-- </dependency> -->
 
 		<!-- test -->
 		<dependency>
@@ -366,12 +354,6 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 		</dependency>
-		<!--<dependency> -->
-		<!--<groupId>freemarker</groupId> -->
-		<!--<artifactId>freemarker</artifactId> -->
-		<!--<version>2.3.8</version> -->
-		<!--<scope>test</scope> -->
-		<!--</dependency> -->
 	</dependencies>
 
 	<profiles>

@@ -24,23 +24,16 @@ public enum ClientStatusEnum implements BasicDataEnum {
     /** 禁用: 禁用的账户不能在前端系统进行登录 */
     DISABLED("DISABLED", "禁用");
     
+    /** 编码 */
+    private final String code;
+    
+    /** 名称 */
     private final String name;
     
-    private final String key;
-    
-    private ClientStatusEnum(String key, String name) {
+    /** <默认构造函数> */
+    private ClientStatusEnum(String code, String name) {
         this.name = name;
-        this.key = key;
-    }
-    
-    public static ClientStatusEnum getProcessStatus(String key) {
-        for (ClientStatusEnum clientInfoStatusEnum : ClientStatusEnum
-                .values()) {
-            if (clientInfoStatusEnum.getKey().equals(key)) {
-                return clientInfoStatusEnum;
-            }
-        }
-        return null;
+        this.code = code;
     }
     
     /**
@@ -51,10 +44,9 @@ public enum ClientStatusEnum implements BasicDataEnum {
     }
     
     /**
-     * @return 返回 key
+     * @return 返回 code
      */
-    public String getKey() {
-        return key;
+    public String getCode() {
+        return code;
     }
-    
 }

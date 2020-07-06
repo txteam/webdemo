@@ -358,13 +358,13 @@ layui.define(function(exports){
 			//定义顶部左侧菜单
 			mainframe.tlMenu = new TopLeftMenu({
 				contextPath: contextPath,
-		  		url : contextPath + 'menu/queryMenuListBySecurity?catalog=client_nav_catalog',
+		  		url : contextPath + 'client/menu/queryMenuListBySecurity?catalog=client_nav_catalog',
 		  		element : $(".layui-layout-left"),
 				onClick : onMenuSelect
 		  	});
 			mainframe.lMenu = new LeftMenu({
 				contextPath: contextPath,
-		  		url : contextPath + 'menu/queryMenuMapListBySecurity',
+		  		url : contextPath + 'client/menu/queryMenuMapListBySecurity',
 		  		element : $(".layui-side-scroll"),
 				onClick : onMenuSelect
 			});

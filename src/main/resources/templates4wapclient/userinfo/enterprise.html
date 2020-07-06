@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>企业信息</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <block th:replace="fragments/bootstrap_header::common_replace">
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+        <!-- js -->
+        <script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var _contextPath = /*[[@{/}]]*/'';
+            /*]]>*/
+        </script>
+    </block>
+</head>
+<body>
+<div class="nav_view">
+    <a id="toIndex">
+        <div class="nav_img">
+            <span class="glyphicon glyphicon-menu-left"></span>
+        </div>
+    </a>
+    <div class="nav_title">企业信息</div>
+</div>
+<div class="container layui-form">
+    <form id="form" lay-filter="form"  th:object="${institutionInfo}" class="form-horizontal div-bg view_top">
+        <input id="id"  name="id"   th:value="*{id}" class="layui-hide"/>
+        <input id="vcid"  name="vcid"  th:value="*{vcid}"  class="layui-hide"/>
+        <input id="type"  name="type"  th:value="*{type}"  class="layui-hide"/>
+        <input id="clientId"  name="clientId" th:value="*{clientId}"  class="layui-hide"/>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="name" class="col-sm-4 col-xs-4 column_control control-label">企业名称<span class="text-xq">*</span></label>
+                <div class="col-sm-8  col-xs-8">
+                    <input type="text" class="layui-input" id="name" name="name"
+                           th:value="*{name}" placeholder="请输入企业名称" autocomplete="off"  lay-verify="required|name">
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="idCardNumber" class="col-sm-4 col-xs-4 column_control control-label">企业统一信用码<span class="text-xq">*</span></label>
+                <div class="col-sm-8 col-xs-8">
+                    <input type="text" class="layui-input" id="idCardNumber" name="idCardNumber"
+                           th:value="*{idCardNumber}" placeholder="请输入企业统一信用码" autocomplete="off" lay-verify="required">
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="name" class="col-sm-4 col-xs-4 column_control control-label">企业联系人<span class="text-xq">*</span></label>
+                <div class="col-sm-8  col-xs-8">
+                    <input type="text" class="layui-input" id="linkName" name="linkName"
+                           th:value="*{linkName}"  placeholder="请输入企业联系人" autocomplete="off"  lay-verify="required|name">
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="LinkMobileNumber" class="col-sm-4 col-xs-4 column_control control-label">企业联系手机号码<span class="text-xq">*</span></label>
+                <div class="col-sm-8 col-xs-8">
+                    <input type="text" class="layui-input" id="LinkMobileNumber" name="LinkMobileNumber"
+                           th:value="*{LinkMobileNumber}" placeholder="请输入企业联系手机号码" autocomplete="off"  lay-verify="required|phone">
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                <label for="landArea" class="col-sm-4 col-xs-4 column_control control-label">企业(经营)生产面积(亩)<span
+                        class="text-xq">*</span></label>
+                <div class="col-sm-8 col-xs-8">
+                    <input type="number" class="layui-input" id="landArea" name="landArea" autocomplete="off"
+                           th:value="*{institutionSummaryInfo.landArea}" lay-verify="required|digital" placeholder="请输入企业(经营)生产面积">
+                </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 form-group">
+                <div class="col-sm-offset-4 col-xs-offset-4 submit_control">
+                    <button id="submitBtn" lay-submit  lay-filter="submitBtn" class="btn btn-success btn-sm">确认修改</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="view_list" style="margin-top: 15px;">
+        <div class="row">
+            <label class="col-sm-12 col-xs-24 column_control control-label">企业产能<span class="text-xq">*</span></label>
+            <p class="col-sm-6 col-xs-12" style="padding-left: 25px ! important;">
+                示例1：年产大白菜100吨
+            </p>
+            <p class="col-sm-6 col-xs-12" style="padding-left: 25px ! important;">
+                示例2：农家乐-接待床位100张
+            </p>
+            <div class="col-sm-12 col-xs-24 form-group">
+                <div class="col-sm-8 col-xs-16 column_control">
+                    <input type="text" class="layui-input" id="capacity" name="capacity"
+                           placeholder="请输入企业产能" autocomplete="off"  lay-verify="capacity">
+                </div>
+                <div class="col-sm-4 col-xs-8 column_control">
+                    <button id="addCapacity" class="layui-btn ">添加产能</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="view_list" style="margin-top: 15px;">
+        <div class="row">
+            <label class="col-sm-12 col-xs-24 column_control control-label">主营业务<span class="text-xq">*</span></label>
+            <p class="col-sm-6 col-xs-12" style="padding-left: 25px ! important;">
+                示例1：商品零售
+            </p>
+            <p class="col-sm-6 col-xs-12" style="padding-left: 25px ! important;">
+                示例2：生猪养殖
+            </p>
+            <div class="col-sm-12 col-xs-24 form-group">
+                <div class="col-sm-8 col-xs-16 column_control">
+                    <input type="text" class="layui-input" id="jycapacity" name="jycapacity"
+                           placeholder="请输入主营业务" autocomplete="off"  lay-verify="jycapacity">
+                </div>
+                <div class="col-sm-4 col-xs-8 column_control">
+                    <button id="addjyCapacity" class="layui-btn">添加主营业务</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-xs-12">
+            <h3>企业产能</h3>
+        </div>
+        <div id="list"></div>
+        <div class="col-sm-12 col-xs-12">
+            <h3>主营业务</h3>
+        </div>
+        <div id="jylist"></div>
+        <div class="col-sm-12 col-xs-12 isQuery_msg"></div>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    var itemscount = 0;//产能添加标识
+    var countMap = [];//产能数据
+
+    var itemsjycount = 0;//主营业务添加标识
+    var countjyMap = [];//主营业务数据
+
+    var infoId = /*[[${institutionInfo.id}]]*/ '';
+
+    layui.config({
+        base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/'
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','jquery'], function(){
+        var $ = layui.jquery
+            ,form = layui.form;
+
+        form.verify({
+            name: function(value, item){
+                if(value.length < 2){
+                    return '名字至少2个字符';
+                }
+                if(value.length > 20){
+                    return '名字超出长度';
+                }
+            },
+            digital: [
+                /^(\d?)+(\.\d{0,2})?$/
+                ,'请输入正数'
+            ]
+        });
+
+        //提交
+        form.on('submit(submitBtn)', function(data){
+            var loading = layer.load(0, {
+                shade: false,
+                time: 2*1000
+            });
+            $.ajax({
+                url: /*[[@{/wap/client/info/updateInstitution}]]*/ '',
+                dataType: "json",
+                type: "POST",
+                data: data.field,
+                success: function (res) {
+                    layer.close(loading);
+                    if(res.success){
+                        layer.msg("修改成功", {icon: 1});
+                        getInfoSetFrom();
+                    }else{
+                        layer.msg(res.msg, {icon: 5});
+                    }
+                },
+                error: function (data) {
+                    layer.close(loading);
+                    layer.msg('修改失败', {icon: 5});
+                }
+            });
+            return false;
+        });
+
+        //返回注册页面
+        $("#toIndex").on('click', function(){
+            window.location.href = /*[[@{/wap/client/index}]]*/ '';
+        });
+
+        $("#addCapacity").on('click', function(){
+            var  date = $('#capacity').val();
+            if($.trim(date) == ''){
+                layer.msg('产能不能为空', {icon: 5});
+                return false;
+            }
+            var dateinfo = { institutionId : infoId, remark: date, type: "ZYCN"};
+            $.ajax({
+                url: /*[[@{/wap/client/info/addCapacity}]]*/'',
+                dataType: "json",
+                type: "GET",
+                data: dateinfo,
+                success: function (date) {
+                    layer.msg('添加成功', {icon: 1});
+                    getInfoCapacitysFrom();
+                    $('#capacity').val('');
+                },
+                error: function (data) {
+                    $('#capacity').val('');
+                    layer.msg('添加失败', {icon: 5});
+                }
+            });
+        });
+
+        $("#addjyCapacity").on('click', function(){
+            var  date = $('#jycapacity').val();
+            if($.trim(date) == ''){
+                layer.msg('经营业务不能为空', {icon: 5});
+                return false;
+            }
+            var dateinfo = { institutionId : infoId, remark: date, type: "ZYYW"};
+            $.ajax({
+                url: /*[[@{/wap/client/info/addCapacity}]]*/'',
+                dataType: "json",
+                type: "GET",
+                data: dateinfo,
+                success: function (date) {
+                    layer.msg('添加成功', {icon: 1});
+                    getInfojyCapacitysFrom();
+                    $('#jycapacity').val('');
+                },
+                error: function (data) {
+                    $('#jycapacity').val('');
+                    layer.msg('添加失败', {icon: 5});
+                }
+            });
+        });
+
+    });
+
+    /*点击列表给表单赋值*/
+    function getInfoCapacitysFrom() {
+        var datefindById = { institutionId : infoId, type: "ZYCN"};
+        $.ajax({
+            url: /*[[@{/wap/client/info/queryCapacityByTypeId}]]*/'',
+            dataType: "json",
+            type: "GET",
+            data: datefindById,
+            success: function (date) {
+                $('#list').html(' ');
+                $.each(date, function (index, arg) {
+                    addHtml(arg);
+                });
+            },
+            error: function (data) {
+            }
+        });
+    }
+
+    /*点击列表给表单赋值*/
+    function getInfojyCapacitysFrom() {
+        var datefindById = { institutionId : infoId, type: "ZYYW"};
+        $.ajax({
+            url: /*[[@{/wap/client/info/queryCapacityByTypeId}]]*/'',
+            dataType: "json",
+            type: "GET",
+            data: datefindById,
+            success: function (date) {
+                $('#jylist').html(' ');
+                $.each(date, function (index, arg) {
+                    addjyHtml(arg);
+                });
+            },
+            error: function (data) {
+            }
+        });
+    }
+
+    /*列表赋值*/
+    function addjyHtml(date) {
+        var _html ='<div class="col-sm-6 col-xs-12"  onclick="deletejyHtml('+JSON.stringify(date).replace(/"/g, '&quot;')+')">'
+            +'<div class="view_list">'
+            +'<div class="list_item">'
+            +'<div class="item_lable">主营业务</div>'
+            +'<div class="item_text">'+ date.remark +'</div>'
+            +'</div>'
+            +'</div>'
+            +'</div>';
+        $('#jylist').append(_html);
+    }
+
+    /*列表赋值*/
+    function addHtml(date) {
+        var _html ='<div class="col-sm-6 col-xs-12"  onclick="deleteHtml('+JSON.stringify(date).replace(/"/g, '&quot;')+')">'
+            +'<div class="view_list">'
+            +'<div class="list_item">'
+            +'<div class="item_lable">产能</div>'
+            +'<div class="item_text">'+ date.remark +'</div>'
+            +'</div>'
+            +'</div>'
+            +'</div>';
+        $('#list').append(_html);
+    }
+
+
+    /*删除产能*/
+    function deleteHtml(val){
+        if($("#list").children().length && $("#list").children().length <= 1){
+            layer.msg('至少保留一个产能', {icon: 5});
+            return false;
+        }
+        layer.confirm("确认要删除吗，删除后不能恢复", { title: "删除确认" },  function(index){
+            var datefindById = { id : val.id};
+            $.ajax({
+                url: /*[[@{/wap/client/info/deleteCapacityById}]]*/'',
+                dataType: "json",
+                type: "GET",
+                data: datefindById,
+                success: function (date) {
+                    layer.msg('删除成功', {icon: 1});
+                    getInfoCapacitysFrom();
+                    layer.close(index); //关闭弹层
+                },
+                error: function (data) {
+                    layer.msg('删除失败', {icon: 5});
+                    layer.close(index); //关闭弹层
+                }
+            });
+        });
+    }
+
+
+    /*删除产能*/
+    function deletejyHtml(val){
+        if($("#jylist").children().length && $("#jylist").children().length <= 1){
+            layer.msg('至少保留一个主营业务', {icon: 5});
+            return false;
+        }
+        layer.confirm("确认要删除吗，删除后不能恢复", { title: "删除确认" },  function(index){
+            var datefindById = { id : val.id};
+            $.ajax({
+                url: /*[[@{/wap/client/info/deleteCapacityById}]]*/'',
+                dataType: "json",
+                type: "GET",
+                data: datefindById,
+                success: function (date) {
+                    layer.msg('删除成功', {icon: 1});
+                    getInfojyCapacitysFrom();
+                    layer.close(index); //关闭弹层
+                },
+                error: function (data) {
+                    layer.msg('删除失败', {icon: 5});
+                    layer.close(index); //关闭弹层
+                }
+            });
+        });
+    }
+
+    getInfojyCapacitysFrom();
+    getInfoCapacitysFrom();
+</script>
+</body>

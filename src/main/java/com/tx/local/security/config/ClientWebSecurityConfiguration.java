@@ -32,8 +32,8 @@ import com.tx.local.security.entrypoint.ClientSecurityAccessDeniedHandler;
 import com.tx.local.security.entrypoint.ClientSecurityLoginAuthenticationEntryPoint;
 import com.tx.local.security.filter.ClientAuthenticationProcessingFilter;
 import com.tx.local.security.strategy.ClientSessionAuthenticationStrategy;
-import com.tx.local.servicelog.handler.ClientSecurityAuthenticationFailureHandler;
-import com.tx.local.servicelog.handler.ClientSecurityAuthenticationSuccessHandler;
+import com.tx.local.security.handler.ClientSecurityAuthenticationFailureHandler;
+import com.tx.local.security.handler.ClientSecurityAuthenticationSuccessHandler;
 
 /**
  * SpringSecurity本地权限定制<br/>
@@ -96,16 +96,19 @@ public class ClientWebSecurityConfiguration
         
         //注册登录入口
         registerAuthenticationEntryPoint(http);
+
+        registerAccessDeniedHandler(http);
         
         //必须条件该过滤器，不然权限容器中线程变量逻辑会存在问题
         http.addFilterAfter(new SecurityThreadLocalResourceSupportFilter(),
                 SwitchUserFilter.class);
         
         //所有请求都允许访问
+        //http.authorizeRequests().anyRequest().fullyAuthenticated();
         //首页允许
-        http.authorizeRequests()
-                .antMatchers("/client/", "/client/index")
-                .permitAll();
+        /*http.authorizeRequests()
+                .antMatchers("/client/**", "/client/index")
+                .permitAll();*/
         //第三方用户登陆
         http.authorizeRequests().antMatchers("/client/social/**").permitAll();
         //后台登陆页
@@ -153,9 +156,7 @@ public class ClientWebSecurityConfiguration
         //注入默认的认证入口，异常拦截器
         http.exceptionHandling().accessDeniedPage("/client/login");
         http.exceptionHandling().defaultAuthenticationEntryPointFor(
-                new ClientSecurityLoginAuthenticationEntryPoint(
-                        "/client/login"),
-                preferredMatcher);
+                entryPoint(), preferredMatcher);
     }
     
     /**
@@ -170,9 +171,27 @@ public class ClientWebSecurityConfiguration
      */
     private void registerAccessDeniedHandler(HttpSecurity http)
             throws Exception {
-        http.exceptionHandling().accessDeniedHandler(new ClientSecurityAccessDeniedHandler("/error/403.html"));
+        http.exceptionHandling().accessDeniedHandler(
+                new ClientSecurityAccessDeniedHandler("/error/403.html"));
     }
-    
+
+
+    /**
+     * 访问入口<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     *
+     * @return SecurityLoginAuthenticationEntryPoint [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("client.entryPoint")
+    public ClientSecurityLoginAuthenticationEntryPoint entryPoint() {
+        ClientSecurityLoginAuthenticationEntryPoint point = new ClientSecurityLoginAuthenticationEntryPoint(
+                "/client/login");
+        point.setUseForward(true);
+        return point;
+    }
     /**
      * 认证成功处理句柄<br/>
      * <功能详细描述>

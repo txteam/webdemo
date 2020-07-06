@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>根据客户ID查询信用信息记录分页列表[queryCreditInfoRecordList4ModifyClient]</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<block th:replace="fragments/easyui_header::common_replace">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css" th:href="@{/webjars/js/jquery-ui/css/no-theme/jquery-ui.custom.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/nice-validator/jquery.validator.css" th:href="@{/webjars/js/nice-validator/jquery.validator.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/js/viewer/css/viewer.min.css" th:href="@{/webjars/js/viewer/css/viewer.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/css/icons.css" th:href="@{/webjars/css/icons.css}"/>
+	<!-- customize -->
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/js/jquery-easyui/themes/bootstrap/easyui.css" th:href="@{/webjars/themes/easyui/css/easyui.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../webjars/themes/easyui/css/commons.css" th:href="@{/webjars/themes/easyui/css/commons.css}"/>
+	
+	<!-- jquery -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.min.js" th:src="@{/webjars/js/jquery.min.js}"></script>
+	<!-- jqueryui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery-ui/js/jquery-ui.custom.js" th:src="@{/webjars/js/jquery-ui/js/jquery-ui.custom.js}"></script>
+	<!-- easyui -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js" th:src="@{/webjars/themes/easyui/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/ext.easyui.js" th:src="@{/webjars/themes/easyui/js/ext.easyui.js}"></script>
+	<!-- other -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/datepicker/WdatePicker.js" th:src="@{/webjars/js/datepicker/WdatePicker.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/jquery.form.js" th:src="@{/webjars/js/jquery.form.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/jquery.validator.js" th:src="@{/webjars/js/nice-validator/jquery.validator.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/nice-validator/local/zh-CN.js" th:src="@{/webjars/js/nice-validator/local/zh-CN.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/js/viewer/js/viewer-jquery.min.js" th:src="@{/webjars/js/viewer/js/viewer-jquery.min.js}"></script><!-- viewer -->
+	<!-- customize -->
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/commons.js" th:src="@{/webjars/themes/easyui/js/commons.js}"></script>
+	<script type="text/javascript" charset="utf-8" src="../../webjars/themes/easyui/js/components.js" th:src="@{/webjars/themes/easyui/js/components.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var _contextPath = /*[[@{/}]]*/'/';
+	/*]]>*/
+	</script>
+</block>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+var grid = null;
+var idFieldName = 'id';
+var nameFieldName = 'idCardNumber'; 
+var entityName = '信用信息';
+$(document).ready(function(){
+	var  $editALink = $("#editALink");
+	var  $deleteALink = $("#deleteALink");
+
+	grid = $('#grid').datagrid({
+		url :/*[[@{/creditInfoRecord/queryListByClientId(clientId=${clientId})}]]*/'',
+		fit : true,
+        fitColumns : true,
+		border : false,
+		idField : 'id',
+		checkOnSelect : false,
+		selectOnCheck : false,
+		nowrap : true,
+		striped : true,
+		singleSelect : true,
+		frozenColumns: [ [ 
+			{title : 'id',width : 100,hidden:true,field:'id'}
+		] ],
+		columns: [ [
+			{title:'证件类型',width:100,field:'idCardType'},
+			{title:'证件号码',width:100,field:'idCardNumber'},
+			{title:'版本类型',width:100,field:'type'},
+			{title:'版本号',width:100,field:'version'},
+			{title:'是否锁定',width:80,field:'locked',formatter:$.Formatters.booleanFun},
+			{title:'基线号',width:100,field:'baseVersion'},
+			{title:'创建时间',width:100,field:'createDate',formatter:$.Formatters.dateFun,hidden:true},
+			{title:'创建人',width:100,field:'createUserId',hidden:true},
+			{title:'最后更新时间',width:100,field:'lastUpdateDate',formatter:$.Formatters.dateFun},
+			{title:'最后更新人',width:100,field:'lastUpdateUserId',hidden:true}
+		] ],
+		toolbar : '#toolbar',
+		onDblClickRow : function(index, row){
+			editFun(row[idFieldName], row[nameFieldName]);
+		},
+		onClickRow : function(index, row){
+			$editALink.linkbutton('enable');
+			$deleteALink.linkbutton('enable');
+		},
+		onLoadSuccess : function() {
+			$(this).datagrid('unselectAll');
+			$(this).datagrid('tooltip');
+			
+			$editALink.linkbutton('disable');
+			$deleteALink.linkbutton('disable');
+		}
+	});
+});
+/*
+ * 查询
+ */
+function queryFun() {
+	grid.datagrid('load',$('#queryForm').serializeObject());
+	return false;
+}
+/*
+ * 新增
+ */
+function addFun() {
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	
+	var addUrl = /*[[@{/creditInfoRecord/toAdd}]]*/'';
+	//FIXME: 修改新增modalDialog的width,height
+	DialogUtils.openModalDialog(
+		"addCreditInfoRecord",
+		"新增" + entityName,
+		$.formatString(addUrl),
+		500,168,
+		function(){
+			queryFun();
+		},{maximizable : true}
+	);
+	return false;
+}
+/**
+ * 编辑
+ */
+function editFun(id,name) {
+	if (id == undefined) {
+		var rows = grid.datagrid('getSelections');
+		id = rows[0][idFieldName];
+		name = rows[0][nameFieldName];
+	}
+	if($.ObjectUtils.isEmpty(id)){
+		DialogUtils.alert("没有选中的" + entityName);
+		return ;
+	}
+	DialogUtils.progress({
+        text : '加载中，请等待....'
+	});
+	
+	var updateUrl = /*[[@{/creditInfoRecord/toUpdate?id={0}}]]*/'';
+	//FIXME: 修改编辑modalDialog的width,height
+	DialogUtils.openModalDialog(
+		"updateCreditInfoRecord",
+		"编辑" + entityName + ":" + name,
+		$.formatString(updateUrl,id),
+        500,348,
+        function(){
+			queryFun();
+		},{maximizable : true}
+	);
+	return false;
+}
+/*]]>*/
+</script>
+</head>
+<body class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'center',border:false">
+		<table id="grid"></table>
+    </div> 
+    
+	<div id="toolbar" style="display: none;">		
+		<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_add'">新增</a>
+		<a id="editALink" onclick="editFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil'">编辑</a>
+		<a id="deleteALink" onclick="deleteFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'pencil_delete'">删除</a>
+		<a onclick="grid.datagrid('reload');return false;" href="javascript:void(0);" 
+			class="easyui-linkbutton" data-options="plain:true,iconCls:'transmit'">刷新</a>
+	</div>
+</body>

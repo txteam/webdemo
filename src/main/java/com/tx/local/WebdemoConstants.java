@@ -30,8 +30,10 @@ public interface WebdemoConstants {
     
     /* ********************* 系统配置 start******************************** */
     /** 系统配置的默认密码关键字 */
-    String CONFIG_DEFAULT_PASSWORD = "system.config.password.default";
+    String CONFIG_DEFAULT_OPERATOR_PASSWORD_CODE = "system.config.operator.default.password";
     
+    /** 系统配置的默认密码关键字 */
+    String CONFIG_DEFAULT_CLIENT_PASSWORD_CODE = "system.config.client.default.password";
     
     /* ********************* 系统配置 end ***************************** */
 }

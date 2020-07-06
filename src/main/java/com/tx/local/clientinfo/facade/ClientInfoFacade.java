@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
+import com.tx.local.basicdata.model.IDCardTypeEnum;
 import com.tx.local.clientinfo.model.ClientInfo;
 
 import io.swagger.annotations.ApiOperation;
@@ -73,6 +74,24 @@ public interface ClientInfoFacade {
     public boolean updateById(
             @PathVariable(value = "id", required = true) String id,
             @RequestBody ClientInfo clientInfo);
+    
+    /**
+     * 更新ClientInfo<br/>
+     * <功能详细描述>
+     * @param clientInfo
+     * @return [参数说明]
+     * 
+     * @return boolean [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @ApiOperation(value = "修改客户信用信息")
+    @RequestMapping(value = "/creditinfo/{id}/{creditInfoId}", method = RequestMethod.PUT)
+    public boolean updateCreditInfo(
+            @PathVariable(value = "id", required = true) String id,
+            @PathVariable(value = "creditInfoId", required = true) String creditInfoId,
+            @RequestParam(value = "idCardType", required = false) IDCardTypeEnum idCardType,
+            @RequestParam(value = "idCardNumber", required = false) String idCardNumber);
     
     /**
      * 禁用ClientInfo<br/>

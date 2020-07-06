@@ -39,6 +39,8 @@ import com.tx.local.security.util.WebContextUtils;
 
 /**
  * 人员对角色控制层<br/>
+ *    注：在后台系统中由于/client已经被工作台鉴权拦截器拦截，如果使用/client/role则会在后台系统中造成accessDie的异常。
+ *    //TODO: 需要利用该异常，定位ClientSecurity拦截器没有跳转到客户登陆页面的异常。后续解决。
  * <功能详细描述>
  * 
  * @author  Administrator
@@ -47,7 +49,7 @@ import com.tx.local.security.util.WebContextUtils;
  * @since  [产品/模块版本]
  */
 @Controller("client2RoleController")
-@RequestMapping({ "/client/role" })
+@RequestMapping({ "/client/role", "/client2role" })
 public class Client2RoleController implements InitializingBean {
     
     @Resource
@@ -104,8 +106,10 @@ public class Client2RoleController implements InitializingBean {
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("/toConfigClientRole")
-    public String toConfigClientRole(@RequestParam("clientId") String clientId,
-            ModelMap modelMap) {
+    public String toConfigClientRole(
+            @RequestParam(value = "roleTypeId", required = false) String roleTypeId,
+            @RequestParam("clientId") String clientId, ModelMap modelMap) {
+        modelMap.put("roleTypeId", roleTypeId);
         modelMap.put("clientId", clientId);
         
         return "security/configClientRole";
@@ -123,24 +127,26 @@ public class Client2RoleController implements InitializingBean {
     @ResponseBody
     @RequestMapping("/queryClient2RoleList")
     public List<CheckAbleRole> queryClient2RoleList(
-            @RequestParam("operatorId") String operatorId,
+            @RequestParam(value = "roleTypeId", required = false) String roleTypeId,
+            @RequestParam("clientId") String clientId,
             @RequestParam() MultiValueMap<String, String> request) {
         List<CheckAbleRole> resList = roleRegistry
-                .queryList(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId())
+                .queryList(RoleTypeEnum.ROLE_TYPE_CLIENT_ENUM.getId())
                 .stream()
                 .map(role -> new CheckAbleRole(role))
                 .collect(Collectors.toList());
         //让拥有的权限被选中
         Set<String> hasRoleIdSet = this.roleRefService
                 .queryListByRef(true,
-                        RoleConstants.ROLEREFTYPE_OPERATOR,
-                        operatorId,
+                        RoleConstants.ROLEREFTYPE_CLIENT,
+                        clientId,
                         null)
                 .stream()
                 .map(roleRef -> roleRef.getRoleId())
                 .collect(Collectors.toSet());
-        resList.stream().forEach(caRole -> caRole
-                .setChecked(hasRoleIdSet.contains(caRole.getId())));
+        resList.stream()
+                .forEach(caRole -> caRole
+                        .setChecked(hasRoleIdSet.contains(caRole.getId())));
         return resList;
     }
     
@@ -160,7 +166,7 @@ public class Client2RoleController implements InitializingBean {
     @RequestMapping("/saveClient2Role")
     public boolean saveClient2Role(
             @RequestParam("roleTypeId") String roleTypeId,
-            @RequestParam("operatorId") String operatorId,
+            @RequestParam("clientId") String clientId,
             @RequestParam(value = "roleId[]", required = false) String[] roleIds,
             @RequestParam() MultiValueMap<String, String> request) {
         List<String> roleIdList = null;
@@ -171,8 +177,8 @@ public class Client2RoleController implements InitializingBean {
         }
         
         List<String> filterRoleIds = getAssignableRoleIds(roleTypeId);
-        this.roleRefService.saveForRoleIds(RoleConstants.ROLEREFTYPE_OPERATOR,
-                operatorId,
+        this.roleRefService.saveForRoleIds(RoleConstants.ROLEREFTYPE_CLIENT,
+                clientId,
                 roleIdList,
                 filterRoleIds);
         return true;
@@ -267,10 +273,11 @@ public class Client2RoleController implements InitializingBean {
             @RequestParam(value = "clientId[]", required = false) String[] clientIds,
             @RequestParam(value = "filterOperatorId[]", required = false) String[] filterOperatorIds,
             @RequestParam() MultiValueMap<String, String> request) {
-        List<String> refIds = ArrayUtils.isEmpty(clientIds)
-                ? new ArrayList<>() : Arrays.asList(clientIds);
+        List<String> refIds = ArrayUtils.isEmpty(clientIds) ? new ArrayList<>()
+                : Arrays.asList(clientIds);
         List<String> filterRefIds = ArrayUtils.isEmpty(filterOperatorIds)
-                ? new ArrayList<>() : Arrays.asList(filterOperatorIds);
+                ? new ArrayList<>()
+                : Arrays.asList(filterOperatorIds);
         this.roleRefService.saveForRefIds(roleId,
                 RoleConstants.ROLEREFTYPE_OPERATOR,
                 refIds,

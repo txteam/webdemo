@@ -10,6 +10,7 @@ import javax.persistence.Column;
 
 import com.tx.component.servicelogger.annotation.ServiceLog;
 import com.tx.component.servicelogger.model.AbstractServiceLogger;
+import com.tx.local.basicdata.model.UserTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -36,22 +37,32 @@ import lombok.NoArgsConstructor;
 public class ClientSecOperateLog extends AbstractServiceLogger {
     
     //:操作人员id
-    @ApiModelProperty(value = "客户ID", hidden = true, position = 0)
+    @ApiModelProperty(value = "操作用户ID", hidden = true, position = 0)
+    @Column(nullable = false, length = 64)
+    private String userId;
+    
+    //:操作人员id
+    @ApiModelProperty(value = "操作用户类型", position = 1)
+    @Column(nullable = false, length = 64)
+    private UserTypeEnum userType;
+    
+    //:操作人员id
+    @ApiModelProperty(value = "操作用户用户名", position = 1)
+    @Column(nullable = false, length = 64)
+    private String username;
+    
+    //:操作人员id
+    @ApiModelProperty(value = "客户ID", hidden = true, position = 2)
     @Column(nullable = false, length = 64)
     private String clientId;
     
-    //:操作人员id
-    @ApiModelProperty(value = "用户名", position = 1)
-    @Column(nullable = false, length = 64)
-    private String clientUsername;
-    
     //:操作记录
-    @ApiModelProperty(value = "操作记录", position = 2)
-    @Column(nullable = false, length = 64)
+    @ApiModelProperty(value = "操作记录", position = 3)
+    @Column(nullable = false, length = 256)
     private String message;
     
     //:客户端ip地址
-    @ApiModelProperty(value = "IP地址", position = 3)
+    @ApiModelProperty(value = "IP地址", position = 4)
     @Column(nullable = false, length = 64)
     private String ipAddress;
 }

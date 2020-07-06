@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>注册类型选择</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <block th:replace="fragments/bootstrap_header::common_replace">
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+        <!-- js -->
+        <script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var _contextPath = /*[[@{/}]]*/'';
+            /*]]>*/
+        </script>
+    </block>
+</head>
+<body>
+<div class="nav_view">
+    <a id="toIndex">
+        <div class="nav_img">
+            <span class="glyphicon glyphicon-menu-left"></span>
+        </div>
+    </a>
+    <div class="nav_title">注册类型选择</div>
+</div>
+<div class="container">
+    <div class="row view_top">
+        <div class="col-xs-12 col-xs-12 layui-form form-group">
+            <label  class="col-sm-4 col-xs-4 column_control control-label">所属虚中心<span class="text-xq">*</span></label>
+            <div class="col-sm-8  col-xs-8">
+                <select name="vicd" class="layui-select" lay-filter="personalType">
+                    <!--<option value="">-&#45;&#45; 请选择 -&#45;&#45;</option>-->
+                    <option value="ZX">忠县</option>
+                   <!-- <option value="PT">平台</option>
+                    <option value="LP">梁平</option>
+                    <option value="TN">潼南</option>
+                    <option value="CK">城口</option>
+                    <option value="FD">丰都</option>-->
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4 col-xs-12">
+            <div class="list-group">
+                <a id="toRegisterPersonal" class="list-group-item div-box">
+                    <h4 class="list-group-item-heading text-set">个人</h4>
+                    <p class="list-group-item-text text-ncp">个人信息注册入口</p>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-4 col-xs-12">
+            <div class="list-group">
+                <a id="toRegisterEnterprise"  class="list-group-item div-box">
+                    <h4 class="list-group-item-heading text-get">企业</h4>
+                    <p class="list-group-item-text text-ncp">企业机构注册入口</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+    layui.config({
+        base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/'
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','jquery'], function(){
+        var $ = layui.jquery
+            ,form = layui.form;
+        var vcid ='';
+
+        //机构类型选择监听
+        form.on('select(personalType)', function(data){
+            //单位规格赋值
+            if(data.value != ''){
+                vcid = data.value;
+            }
+        });
+        //跳转到个人信息页面
+        $('#toRegisterPersonal').on('click', function(){
+            if(vcid == ""){
+                layer.msg('请选择虚中心', {icon: 5});
+                return false;
+            }
+            var url =/*[[@{/wap/client/social/toPersonal?vcid={0}}]]*/ '';
+            window.location.href= $.formatString(url,vcid);
+        });
+        //跳转到企业信息页面
+        $('#toRegisterEnterprise').on('click', function(){
+            if(vcid == ""){
+                layer.msg('请选择虚中心', {icon: 5});
+                return false;
+            }
+            var url = /*[[@{/wap/client/social/toEnterprise?vcid={0}}]]*/ '';
+            window.location.href= $.formatString(url,vcid);
+        });
+        //返回登录页面
+        $("#toIndex").on('click', function(){
+            window.location.href = /*[[@{/wap/client/login}]]*/ '';
+        });
+    })
+</script>
+</body>

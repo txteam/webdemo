@@ -23,6 +23,7 @@
 				II.fullAddress,
 				II.lastUpdateDate,
 				II.lastUpdateUserId,
+				II.idCardNumber,
 				II.linkName,
 				II.linkMobileNumber,
 				II.name,
@@ -44,6 +45,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND II.id = #{id}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">
+				AND II.clientId = #{clientId}
+			</if>
 		</trim>
 	</select>
 	
@@ -57,6 +61,7 @@
 				II.fullAddress,
 				II.lastUpdateDate,
 				II.lastUpdateUserId,
+				II.idCardNumber,
 				II.linkName,
 				II.linkMobileNumber,
 				II.name,
@@ -73,6 +78,12 @@
 				II.postcode,
 				II.provinceId
 		  FROM INS_INSTITUTION II
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClient)">
+			LEFT JOIN CL_CLIENT_INFO CL ON CL.id = II.ClientId
+		</if>
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+			LEFT JOIN CL_CLIENT_EXTEND_INFO CEI ON CEI.ClientId = II.ClientId
+		</if>
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -91,7 +102,13 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND II.id = #{id} ]]>
-	        </if>			
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClient)">
+				<![CDATA[ AND CL.valid = true]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+				<![CDATA[ AND CEI.institutionId =  #{institutionId} ]]>
+			</if>
 			<if test="city != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(city.id)">  
 		            <![CDATA[ AND II.cityId = #{city.id} ]]>
@@ -102,7 +119,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND II.lastUpdateUserId = #{lastUpdateUserId} ]]>
-	        </if>			
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">
+				<![CDATA[ AND II.idCardNumber = #{idCardNumber} ]]>
+			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkName)">  
 	            <![CDATA[ AND II.linkName = #{linkName} ]]>
 	        </if>			
@@ -159,6 +179,18 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND II.id <> #{excludeId} ]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(searchValue)">
+				<![CDATA[ AND II.name LIKE CONCAT('%', #{searchValue},'%')]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clients)">
+				AND II.clientId in
+				<foreach collection="clients" item="clientvalue" open="(" close=")" separator=",">
+					#{clientvalue.clientId}
+				</foreach>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClientType)">
+				<![CDATA[ AND (II.type = 'ENTERPRISE' OR  II.type = 'SELF_EMPLOYED') ]]>
 			</if>
 		</trim>
 		<choose>  
@@ -177,6 +209,12 @@
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
 		  FROM INS_INSTITUTION II
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClient)">
+			LEFT JOIN CL_CLIENT_INFO CL ON CL.id = II.ClientId
+		</if>
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+			LEFT JOIN CL_CLIENT_EXTEND_INFO CEI ON CEI.ClientId = II.ClientId
+		</if>
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -195,7 +233,13 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND II.id = #{id} ]]>
-	        </if>			
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClient)">
+				<![CDATA[ AND CL.valid = true]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+				<![CDATA[ AND CEI.institutionId =  #{institutionId} ]]>
+			</if>
 			<if test="city != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(city.id)">  
 		            <![CDATA[ AND II.cityId = #{city.id} ]]>
@@ -206,7 +250,10 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND II.lastUpdateUserId = #{lastUpdateUserId} ]]>
-	        </if>			
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">
+				<![CDATA[ AND II.idCardNumber = #{idCardNumber} ]]>
+			</if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkName)">  
 	            <![CDATA[ AND II.linkName = #{linkName} ]]>
 	        </if>			
@@ -264,6 +311,18 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND II.id <> #{excludeId} ]]>
 			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(searchValue)">
+				<![CDATA[ AND II.name LIKE CONCAT('%', #{searchValue},'%')]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clients)">
+				AND II.clientId in
+				<foreach collection="clients" item="clientvalue" open="(" close=")" separator=",">
+					#{clientvalue.clientId}
+				</foreach>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClientType)">
+				<![CDATA[ AND (II.type = 'ENTERPRISE' OR  II.type = 'SELF_EMPLOYED') ]]>
+			</if>
 		</trim>
 	</select>
 	
@@ -277,6 +336,7 @@
 			fullAddress,
 			lastUpdateDate,
 			lastUpdateUserId,
+			idCardNumber,
 			linkName,
 			linkMobileNumber,
 			name,
@@ -300,6 +360,7 @@
 			#{fullAddress},
 			#{lastUpdateDate},
 			#{lastUpdateUserId},
+			#{idCardNumber},
 			#{linkName},
 			#{linkMobileNumber},
 			#{name},
@@ -346,6 +407,9 @@
 			<if test="_parameter.containsKey('lastUpdateUserId')">
 	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
 	    	</if>
+			<if test="_parameter.containsKey('idCardNumber')">
+				idCardNumber = #{idCardNumber,javaType=java.lang.String},
+			</if>
 			<if test="_parameter.containsKey('linkName')">
 	    		linkName = #{linkName,javaType=java.lang.String},
 	    	</if>

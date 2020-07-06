@@ -19,12 +19,14 @@
 		resultMap="personalInfoMap">
 		SELECT 
 				PI.id,
+				PI.idCardNumber,
 				PI.sex,
 				PI.cityId,
 				PI.fullAddress,
 				PI.lastName,
 				PI.lastUpdateDate,
 				PI.lastUpdateUserId,
+				PI.linkMobileNumber,
 				PI.name,
 				PI.type,
 				PI.vcid,
@@ -47,6 +49,9 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            AND PI.id = #{id}
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientId)">
+				AND PI.clientId = #{clientId}
+			</if>
 		</trim>
 	</select>
 	
@@ -56,12 +61,14 @@
 		resultMap="personalInfoMap">
 		SELECT 
 				PI.id,
+				PI.idCardNumber,
 				PI.sex,
 				PI.cityId,
 				PI.fullAddress,
 				PI.lastName,
 				PI.lastUpdateDate,
 				PI.lastUpdateUserId,
+				PI.linkMobileNumber,
 				PI.name,
 				PI.type,
 				PI.vcid,
@@ -79,6 +86,12 @@
 				PI.districtId,
 				PI.provinceId
 		  FROM PER_PERSONAL_INFO PI
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClient)">
+			LEFT JOIN CL_CLIENT_INFO CL ON CL.id = PI.clientId
+		</if>
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+			LEFT JOIN CL_CLIENT_EXTEND_INFO CEI ON CEI.clientId = PI.clientId
+		</if>
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -97,6 +110,15 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND PI.id = #{id} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClient)">
+				<![CDATA[ AND CL.valid = true]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+				<![CDATA[ AND CEI.institutionId =  #{institutionId} ]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND PI.idCardNumber = #{idCardNumber} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
 	            <![CDATA[ AND PI.sex = #{sex} ]]>
@@ -114,6 +136,9 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND PI.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkMobileNumber)">  
+	            <![CDATA[ AND PI.linkMobileNumber = #{linkMobileNumber} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND PI.name = #{name} ]]>
@@ -171,6 +196,15 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND PI.id <> #{excludeId} ]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(searchValue)">
+				<![CDATA[ AND PI.name LIKE CONCAT('%', #{searchValue},'%')]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clients)">
+				AND PI.clientId in
+				<foreach collection="clients" item="clientvalue" open="(" close=")" separator=",">
+					#{clientvalue.clientId}
+				</foreach>
 			</if>
 		</trim>
 		<choose>  
@@ -189,6 +223,12 @@
 		resultType="java.lang.Integer">
 		SELECT COUNT(1)
 		  FROM PER_PERSONAL_INFO PI
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClient)">
+			LEFT JOIN CL_CLIENT_INFO CL ON CL.id = PI.clientId
+		</if>
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+			LEFT JOIN CL_CLIENT_EXTEND_INFO CEI ON CEI.clientId = PI.clientId
+		</if>
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -207,6 +247,15 @@
 	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND PI.id = #{id} ]]>
+	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(isClient)">
+				<![CDATA[ AND CL.valid = true]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+				<![CDATA[ AND CEI.institutionId =  #{institutionId} ]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
+	            <![CDATA[ AND PI.idCardNumber = #{idCardNumber} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(sex)">  
 	            <![CDATA[ AND PI.sex = #{sex} ]]>
@@ -224,6 +273,9 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(lastUpdateUserId)">  
 	            <![CDATA[ AND PI.lastUpdateUserId = #{lastUpdateUserId} ]]>
+	        </if>			
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(linkMobileNumber)">  
+	            <![CDATA[ AND PI.linkMobileNumber = #{linkMobileNumber} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND PI.name = #{name} ]]>
@@ -282,6 +334,15 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND PI.id <> #{excludeId} ]]>
 			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(searchValue)">
+				<![CDATA[ AND PI.name LIKE CONCAT('%', #{searchValue},'%')]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clients)">
+				AND PI.clientId in
+				<foreach collection="clients" item="clientvalue" open="(" close=")" separator=",">
+					#{clientvalue.clientId}
+				</foreach>
+			</if>
 		</trim>
 	</select>
 	
@@ -291,12 +352,14 @@
 		INSERT INTO PER_PERSONAL_INFO
 		(
 			id,
+			idCardNumber,
 			sex,
 			cityId,
 			fullAddress,
 			lastName,
 			lastUpdateDate,
 			lastUpdateUserId,
+			linkMobileNumber,
 			name,
 			type,
 			vcid,
@@ -317,12 +380,14 @@
 		VALUES
 		(
 			#{id},
+			#{idCardNumber},
 			#{sex},
 			#{city.id},
 			#{fullAddress},
 			#{lastName},
 			#{lastUpdateDate},
 			#{lastUpdateUserId},
+			#{linkMobileNumber},
 			#{name},
 			#{type},
 			#{vcid},
@@ -358,6 +423,9 @@
 	    parameterType="java.util.Map">  
 	    UPDATE PER_PERSONAL_INFO
 	    <trim prefix="SET" suffixOverrides=",">
+			<if test="_parameter.containsKey('idCardNumber')">
+	    		idCardNumber = #{idCardNumber,javaType=java.lang.String},
+	    	</if>
 			<if test="_parameter.containsKey('sex')">
 	    		sex = #{sex,javaType=com.tx.local.basicdata.model.SexEnum},
 	    	</if>
@@ -373,14 +441,23 @@
 			<if test="_parameter.containsKey('lastUpdateUserId')">
 	    		lastUpdateUserId = #{lastUpdateUserId,javaType=java.lang.String},
 	    	</if>
+			<if test="_parameter.containsKey('linkMobileNumber')">
+	    		linkMobileNumber = #{linkMobileNumber,javaType=java.lang.String},
+	    	</if>
 			<if test="_parameter.containsKey('name')">
 	    		name = #{name,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('type')">
 	    		type = #{type,javaType=com.tx.local.personal.model.PersonalTypeEnum},
 	    	</if>
+			<if test="_parameter.containsKey('clientId')">
+	    		clientId = #{clientId,javaType=java.lang.String},
+	    	</if>
 			<if test="_parameter.containsKey('county')">
 	    		countyId = #{county.id,javaType=java.lang.String},
+	    	</if>
+			<if test="_parameter.containsKey('creditInfoId')">
+	    		creditInfoId = #{creditInfoId,javaType=java.lang.String},
 	    	</if>
 			<if test="_parameter.containsKey('creditInfoBinding')">
 	    		creditInfoBinding = #{creditInfoBinding,javaType=boolean},

@@ -87,7 +87,7 @@ public class Operator implements Serializable {
     private boolean admin = false;
     
     /** 失效时间 */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date invalidDate;
     
     /** 创建时间  */

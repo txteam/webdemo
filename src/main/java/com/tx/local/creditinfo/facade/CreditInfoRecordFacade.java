@@ -39,9 +39,10 @@ public interface CreditInfoRecordFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "新增CreditInfoRecord")
+    @ApiOperation(value = "新增信用信息版本")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public CreditInfoRecord insert(@RequestBody CreditInfoRecord creditInfoRecord);
+    public CreditInfoRecord insert(
+            @RequestBody CreditInfoRecord creditInfoRecord);
     
     /**
      * 根据id删除CreditInfoRecord<br/> 
@@ -53,11 +54,11 @@ public interface CreditInfoRecordFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据ID删除CreditInfoRecord")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) 
+    @ApiOperation(value = "根据ID删除信用信息")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id);
-
+            @PathVariable(value = "id", required = true) String id);
+    
     /**
      * 更新CreditInfoRecord<br/>
      * <功能详细描述>
@@ -68,11 +69,12 @@ public interface CreditInfoRecordFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "修改CreditInfoRecord")
+    @ApiOperation(value = "修改信用信息记录")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody CreditInfoRecord creditInfoRecord);
-
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody CreditInfoRecord creditInfoRecord);
+    
     /**
      * 根据主键查询CreditInfoRecord<br/>
      * <功能详细描述>
@@ -82,12 +84,11 @@ public interface CreditInfoRecordFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "根据主键查询CreditInfoRecord")
+    @ApiOperation(value = "根据主键查询信用信息")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public CreditInfoRecord findById(
             @PathVariable(value = "id", required = true) String id);
     
-
     /**
      * 查询CreditInfoRecord实例列表<br/>
      * <功能详细描述>
@@ -98,11 +99,9 @@ public interface CreditInfoRecordFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询CreditInfoRecord列表")
+    @ApiOperation(value = "查询信用信息列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<CreditInfoRecord> queryList(
-    		@RequestBody Querier querier
-    	);
+    public List<CreditInfoRecord> queryList(@RequestBody Querier querier);
     
     /**
      * 查询CreditInfoRecord分页列表<br/>
@@ -116,15 +115,14 @@ public interface CreditInfoRecordFacade {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @ApiOperation(value = "查询CreditInfoRecord分页列表")
+    @ApiOperation(value = "查询信用信息分页列表")
     @RequestMapping(value = "/pagedlist/{pageSize}/{pageNumber}", method = RequestMethod.GET)
     public PagedList<CreditInfoRecord> queryPagedList(
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	);
+            @RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize);
     
-	/**
+    /**
      * 查询CreditInfoRecord数量<br/>
      * <功能详细描述>
      * @param querier
@@ -136,12 +134,11 @@ public interface CreditInfoRecordFacade {
      */
     @ApiOperation(value = "查询CreditInfoRecord数量")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
-    public int count(
-            @RequestBody Querier querier);
-
-	/**
+    public int count(@RequestBody Querier querier);
+    
+    /**
      * 查询CreditInfoRecord是否存在<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 
@@ -151,8 +148,6 @@ public interface CreditInfoRecordFacade {
      */
     @ApiOperation(value = "查询CreditInfoRecord是否存在")
     @RequestMapping(value = "/exists", method = RequestMethod.GET)
-    public boolean exists(
-    		@RequestBody Querier querier,
-            @RequestParam(value = "excludeId", required = false) String excludeId
-            );
+    public boolean exists(@RequestBody Querier querier,
+            @RequestParam(value = "excludeId", required = false) String excludeId);
 }

@@ -8,13 +8,16 @@ package builder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 
 import com.tx.core.util.FreeMarkerUtils;
-
-import javax.swing.*;
 
 /**
  * 项目构建器<br/>
@@ -26,30 +29,42 @@ import javax.swing.*;
  * @since [产品/模块版本]
  */
 public class ProjectBuilder {
-
+    
+    /**
+     * 项目构建类<br/>
+     * <功能详细描述>
+     * @param args
+     * @throws IOException [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
     public static void main(String[] args) throws IOException {
-        String projectName = "report";
-        boolean overwrite = true;
-        String workspace = "D:/ideaproject";
+        String projectName = "cunshop";
+        
+        boolean overwrite = true;//如果存在是否抛出异常，需重构
+        String workspace = "D:/develop/txworkspace";//目标项目目录
         String packageName = "com/tx";
-
+        
         //项目强依赖模块
         Set<String> moduleSet = new HashSet<>();
         moduleSet.add("");
-
+        
         //原项目路径
         String sourceProjectPath = org.springframework.util.StringUtils
                 .cleanPath(ProjectBuilder.class.getResource("/").getPath()
                         + "../..");
         //System.out.println(sourceProjectPath);
         ///D:/develop/txworkspace/webdemo
-
+        
         File targetProjectFolder = new File(workspace + "/" + projectName);
         if (targetProjectFolder.exists() && !overwrite) {
-            System.out.println("项目文件已经存在.path:" + targetProjectFolder.getPath());
+            System.out
+                    .println("项目文件已经存在.path:" + targetProjectFolder.getPath());
             return;
         }
-
+        
         if (!targetProjectFolder.exists()) {
             File sourceProjectFolder = new File(sourceProjectPath);
             //创建项目文件夹
@@ -64,49 +79,41 @@ public class ProjectBuilder {
                 "builder/pom.ftl",
                 params,
                 targetProjectFolder + "/pom.xml");
-
-        //写入src/main/java目录内容
-        File targetJavaFolder = new File(targetProjectFolder, "src/main/java/" + packageName);
-        File sourceJavaFolder = new File(sourceProjectPath, "src/main/java/" + packageName);
+        
         //必须拷贝目录的set
         Set copySet = new HashSet();
-        copySet.add("login");
-        copySet.add("payment");
-        copySet.add("mainframe");
-        copySet.add("adminstitution");
-        copySet.add("agricultural");
-        copySet.add("auditrecord");
-        copySet.add("basicdata");
-        copySet.add("boot");
-        copySet.add("calendar");
-        copySet.add("captcha");
-        copySet.add("clientinfo");
-        copySet.add("content");
-        copySet.add("cooinstitution");
-        copySet.add("creditinfo");
-        copySet.add("debug");
-        copySet.add("demo");
-        copySet.add("documentation");
-        copySet.add("filltask");
-        copySet.add("institution");
-        copySet.add("loginaccount");
-        copySet.add("mainframe");
-        copySet.add("menu");
-        copySet.add("message");
-        copySet.add("notepad");
-        copySet.add("operator");
-        copySet.add("organization");
-        copySet.add("personal");
-        copySet.add("produceinfo");
-        copySet.add("qxb");
+        copySet.add("boot");//主框架中启动模块
         copySet.add("security");
         copySet.add("servicelog");
         copySet.add("springmvc");
-        copySet.add("supplymarketingcooperative");
-        copySet.add("vitualcenter");
+        copySet.add("mainframe");//主框架主目录，及登陆所在模块
+        copySet.add("menu");//主框架中菜单相关模块
+        
+        copySet.add("vitualcenter");//主框架虚中心模块
+        copySet.add("organization");
+        copySet.add("operator");
+        
+        copySet.add("clientinfo");
+        copySet.add("personal");
+        copySet.add("institution");
+        copySet.add("creditinfo");
+        
+        //可选（建议选取模块）
+        copySet.add("basicdata");//主框架中基础数据必须的内容
+        copySet.add("calendar");//主框架中行事历模块
+        copySet.add("message");
+        copySet.add("notepad");
+        copySet.add("captcha");
+        copySet.add("documentation");
+        
         //拷贝项目文件
-        copyProjectFile(sourceJavaFolder, targetJavaFolder, copySet);
-
+        //写入src/main/java目录内容
+        File targetJavaFolder = new File(targetProjectFolder,
+                "src/main/java/" + packageName);
+        File sourceJavaFolder = new File(sourceProjectPath,
+                "src/main/java/" + packageName);
+        copySrcMainJava(sourceJavaFolder, targetJavaFolder, copySet);
+        
         //写入src/main/resources目录内容
         copySet = new HashSet();
         copySet.add("META-INF");
@@ -116,34 +123,49 @@ public class ProjectBuilder {
         copySet.add("templates4wapclient");
         sourceJavaFolder = new File(sourceProjectPath, "src/main/resources/");
         targetJavaFolder = new File(targetProjectFolder, "src/main/resources/");
-        copyProjectFile1(sourceJavaFolder, targetJavaFolder,copySet);
-
+        copyProjectFile1(sourceJavaFolder, targetJavaFolder, copySet);
+        
         //写入src/test/java目录内容
         copySet = new HashSet();
         copySet.add("generator");
         sourceJavaFolder = new File(sourceProjectPath, "src/test/java/");
         targetJavaFolder = new File(targetProjectFolder, "src/test/java/");
-        copyProjectFile1(sourceJavaFolder, targetJavaFolder,copySet);
-
+        copyProjectFile1(sourceJavaFolder, targetJavaFolder, copySet);
+        
         //写入src/test/resources目录内容
         copySet = new HashSet();
         sourceJavaFolder = new File(sourceProjectPath, "src/test/resources/");
         targetJavaFolder = new File(targetProjectFolder, "src/test/resources/");
-        copyProjectFile1(sourceJavaFolder, targetJavaFolder,copySet);
-
+        copyProjectFile1(sourceJavaFolder, targetJavaFolder, copySet);
+        
         //拷贝dbscript、deploy、doc
-        FileUtils.copyDirectory(new File(sourceProjectPath, "dbscript"), new File(targetProjectFolder, "dbscript"));
-        FileUtils.copyDirectory(new File(sourceProjectPath, "deploy"), new File(targetProjectFolder, "deploy"));
-
+        FileUtils.copyDirectory(new File(sourceProjectPath, "dbscript"),
+                new File(targetProjectFolder, "dbscript"));
+        FileUtils.copyDirectory(new File(sourceProjectPath, "deploy"),
+                new File(targetProjectFolder, "deploy"));
+        
         //根据项目名覆盖相关文件
-
-
+        
     }
-
-    private static void copyProjectFile(File sourceJavaFolder, File targetJavaFolder, Set copySet) throws IOException {
+    
+    /**
+     * 拷贝：copySrcMainJava
+     * <功能详细描述>
+     * @param sourceJavaFolder
+     * @param targetJavaFolder
+     * @param copySet
+     * @throws IOException [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    private static void copySrcMainJava(File sourceJavaFolder,
+            File targetJavaFolder, Set copySet) throws IOException {
         if (!targetJavaFolder.exists()) {
             FileUtils.forceMkdir(targetJavaFolder);
         }
+        
         File[] sourceJavaFile = sourceJavaFolder.listFiles();
         File sourceFile = null;
         File targetFile = null;
@@ -179,11 +201,16 @@ public class ProjectBuilder {
                             FileUtils.copyFile(sourceFile1, targetFile1);
                         } else {
                             if (copySet.contains(sourceFile1.getName())) {
-                                FileUtils.copyDirectory(sourceFile1, targetFile1);
+                                FileUtils.copyDirectory(sourceFile1,
+                                        targetFile1);
                             } else {
-                                res = JOptionPane.showConfirmDialog(null, "是否拷贝" + sourceFile1.getName(), "是否拷贝", JOptionPane.YES_NO_OPTION);
+                                res = JOptionPane.showConfirmDialog(null,
+                                        "是否拷贝" + sourceFile1.getName(),
+                                        "是否拷贝",
+                                        JOptionPane.YES_NO_OPTION);
                                 if (res == JOptionPane.YES_OPTION) {
-                                    FileUtils.copyDirectory(sourceFile1, targetFile1);
+                                    FileUtils.copyDirectory(sourceFile1,
+                                            targetFile1);
                                 }
                             }
                         }
@@ -192,10 +219,10 @@ public class ProjectBuilder {
             }
         }
     }
-
-
-    private static void copyProjectFile1(File sourceFile, File targetFile, Set copySet) throws IOException {
-        int res=1;
+    
+    private static void copyProjectFile1(File sourceFile, File targetFile,
+            Set copySet) throws IOException {
+        int res = 1;
         File[] sourceFiles = sourceFile.listFiles();
         File targetFile1 = null;
         for (File sourceFile1 : sourceFiles) {
@@ -209,7 +236,10 @@ public class ProjectBuilder {
                     if (copySet.contains(sourceFile1.getName())) {
                         FileUtils.copyDirectory(sourceFile1, targetFile1);
                     } else {
-                        res = JOptionPane.showConfirmDialog(null, "是否拷贝" + sourceFile1.getName(), "是否拷贝", JOptionPane.YES_NO_OPTION);
+                        res = JOptionPane.showConfirmDialog(null,
+                                "是否拷贝" + sourceFile1.getName(),
+                                "是否拷贝",
+                                JOptionPane.YES_NO_OPTION);
                         if (res == JOptionPane.YES_OPTION) {
                             FileUtils.copyDirectory(sourceFile1, targetFile1);
                         }

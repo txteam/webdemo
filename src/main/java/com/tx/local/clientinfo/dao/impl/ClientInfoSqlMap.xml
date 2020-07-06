@@ -40,6 +40,7 @@
 				CI.email,
 				CI.emailBinding,
 				CI.valid,
+				CI.invalidDate,
 				CI.clientSourceId,
 				CI.createDate,
 				CI.creditInfoId,
@@ -47,6 +48,7 @@
 				CI.locked,
 				CI.mobileNumber,
 				CI.mobileBinding,
+				CI.mobileLoginEnable,
 				CI.status,
 				CI.password,
 				CI.referralCode,
@@ -101,6 +103,7 @@
 				CI.email,
 				CI.emailBinding,
 				CI.valid,
+				CI.invalidDate,
 				CI.clientSourceId,
 				CI.createDate,
 				CI.creditInfoId,
@@ -108,6 +111,7 @@
 				CI.locked,
 				CI.mobileNumber,
 				CI.mobileBinding,
+				CI.mobileLoginEnable,
 				CI.status,
 				CI.password,
 				CI.referralCode,
@@ -116,6 +120,9 @@
 				CI.usernameChangeCount,
 				CI.promotionChannelId
 		  FROM CL_CLIENT_INFO CI
+		<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+			LEFT JOIN CL_CLIENT_EXTEND_INFO CEI ON  CEI.clientId = CI.id
+		</if>
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(conditions)">
 			<foreach collection="conditions" item="conditionTemp">
@@ -135,6 +142,12 @@
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(id)">  
 	            <![CDATA[ AND CI.id = #{id} ]]>
 	        </if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(institutionId)">
+				<![CDATA[ AND CEI.institutionId = #{institutionId} ]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clintPersonal)">
+				<![CDATA[ AND CI.type = 'PERSONAL' ]]>
+			</if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(vcid)">  
 	            <![CDATA[ AND CI.vcid = #{vcid} ]]>
 	        </if>
@@ -146,31 +159,16 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
 	            <![CDATA[ AND CI.idCardNumber = #{idCardNumber} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(hisPwd)">  
-	            <![CDATA[ AND CI.hisPwd = #{hisPwd} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(hisPayPwd)">  
-	            <![CDATA[ AND CI.hisPayPwd = #{hisPayPwd} ]]>
-	        </if>			
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(payPassword)">  
 	            <![CDATA[ AND CI.payPassword = #{payPassword} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(payPwdErrCount)">  
-	            <![CDATA[ AND CI.payPwdErrCount = #{payPwdErrCount} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
-	            <![CDATA[ AND CI.pwdErrCount = #{pwdErrCount} ]]>
-	        </if>			
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND CI.name = #{name} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realNameAuthenticated)">  
 	            <![CDATA[ AND CI.realNameAuthenticated = #{realNameAuthenticated} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realNameErrCount)">  
-	            <![CDATA[ AND CI.realNameErrCount = #{realNameErrCount} ]]>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND CI.type = #{type} ]]>
 	        </if>			
@@ -182,12 +180,7 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND CI.valid = #{valid} ]]>
-	        </if>			
-			<if test="clientSource != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientSource.id)">  
-		            <![CDATA[ AND CI.clientSourceId = #{clientSource.id} ]]>
-		        </if>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
 	            <![CDATA[ AND CI.createDate >= #{minCreateDate} ]]>
 	        </if>
@@ -226,6 +219,11 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(usernameChangeCount)">  
 	            <![CDATA[ AND CI.usernameChangeCount = #{usernameChangeCount} ]]>
+	        </if>
+	        <if test="clientSource != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientSource.id)">  
+		            <![CDATA[ AND CI.clientSourceId = #{clientSource.id} ]]>
+		        </if>
 	        </if>			
 			<if test="promotionChannel != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(promotionChannel.id)">  
@@ -237,6 +235,9 @@
 			</if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND CI.id <> #{excludeId} ]]>
+			</if>
+			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clintEnterprise)">
+				<![CDATA[ AND (CI.type = 'ENTERPRISE' OR  CI.type = 'SELF_EMPLOYED') ]]>
 			</if>
 		</trim>
 		<choose>  
@@ -279,37 +280,22 @@
 	        </if>
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(code)">  
 	            <![CDATA[ AND CI.code = #{code} ]]>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardType)">  
 	            <![CDATA[ AND CI.idCardType = #{idCardType} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(idCardNumber)">  
 	            <![CDATA[ AND CI.idCardNumber = #{idCardNumber} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(hisPwd)">  
-	            <![CDATA[ AND CI.hisPwd = #{hisPwd} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(hisPayPwd)">  
-	            <![CDATA[ AND CI.hisPayPwd = #{hisPayPwd} ]]>
-	        </if>			
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(payPassword)">  
 	            <![CDATA[ AND CI.payPassword = #{payPassword} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(payPwdErrCount)">  
-	            <![CDATA[ AND CI.payPwdErrCount = #{payPwdErrCount} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(pwdErrCount)">  
-	            <![CDATA[ AND CI.pwdErrCount = #{pwdErrCount} ]]>
-	        </if>			
+	        </if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(name)">  
 	            <![CDATA[ AND CI.name = #{name} ]]>
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realNameAuthenticated)">  
 	            <![CDATA[ AND CI.realNameAuthenticated = #{realNameAuthenticated} ]]>
-	        </if>			
-			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(realNameErrCount)">  
-	            <![CDATA[ AND CI.realNameErrCount = #{realNameErrCount} ]]>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(type)">  
 	            <![CDATA[ AND CI.type = #{type} ]]>
 	        </if>			
@@ -321,12 +307,7 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(valid)">  
 	            <![CDATA[ AND CI.valid = #{valid} ]]>
-	        </if>			
-			<if test="clientSource != null">
-				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientSource.id)">  
-		            <![CDATA[ AND CI.clientSourceId = #{clientSource.id} ]]>
-		        </if>
-	        </if>			
+	        </if>
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(minCreateDate)">  
 	            <![CDATA[ AND CI.createDate >= #{minCreateDate} ]]>
 	        </if>
@@ -365,15 +346,20 @@
 	        </if>			
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(usernameChangeCount)">  
 	            <![CDATA[ AND CI.usernameChangeCount = #{usernameChangeCount} ]]>
+	        </if>
+	        <if test="clientSource != null">
+				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(clientSource.id)">  
+		            <![CDATA[ AND CI.clientSourceId = #{clientSource.id} ]]>
+		        </if>
 	        </if>			
 			<if test="promotionChannel != null">
 				<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(promotionChannel.id)">  
 		            <![CDATA[ AND CI.promotionChannelId = #{promotionChannel.id} ]]>
 		        </if>
-	        </if>
+	        </if>		
 	        <if test="@com.tx.core.util.OgnlUtils@isNotEmpty(ids)">
 				AND CI.id IN <foreach collection="ids" item="idTemp" separator="," open="(" close=")">#{idTemp}</foreach>
-			</if>			
+			</if>	
 			<if test="@com.tx.core.util.OgnlUtils@isNotEmpty(excludeId)">
 				<![CDATA[ AND CI.id <> #{excludeId} ]]>
 			</if>
@@ -409,6 +395,7 @@
 			email,
 			emailBinding,
 			valid,
+			invalidDate,
 			clientSourceId,
 			createDate,
 			creditInfoId,
@@ -416,6 +403,7 @@
 			locked,
 			mobileNumber,
 			mobileBinding,
+			mobileLoginEnable,
 			status,
 			password,
 			referralCode,
@@ -450,6 +438,7 @@
 			#{email},
 			#{emailBinding},
 			#{valid},
+			#{invalidDate},
 			#{clientSource.id},
 			#{createDate},
 			#{creditInfoId},
@@ -457,6 +446,7 @@
 			#{locked},
 			#{mobileNumber},
 			#{mobileBinding},
+			#{mobileLoginEnable},
 			#{status},
 			#{password},
 			#{referralCode},
@@ -486,6 +476,12 @@
 	    parameterType="java.util.Map">  
 	    UPDATE CL_CLIENT_INFO
 	    <trim prefix="SET" suffixOverrides=",">
+	    	<if test="_parameter.containsKey('realNameAuthenticated')">
+	    		realNameAuthenticated = #{realNameAuthenticated,javaType=boolean},
+	    	</if>
+			<if test="_parameter.containsKey('realNameErrCount')">
+	    		realNameErrCount = #{realNameErrCount,javaType=int},
+	    	</if>
 			<if test="_parameter.containsKey('idCardType')">
 	    		idCardType = #{idCardType,javaType=com.tx.local.basicdata.model.IDCardTypeEnum},
 	    	</if>
@@ -522,17 +518,9 @@
 			<if test="_parameter.containsKey('pwdLastErrDate')">
 	    		pwdLastErrDate = #{pwdLastErrDate,javaType=java.util.Date},
 	    	</if>
-			<if test="_parameter.containsKey('lastUpdateDate')">
-	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
-	    	</if>
+			
 			<if test="_parameter.containsKey('name')">
 	    		name = #{name,javaType=java.lang.String},
-	    	</if>
-			<if test="_parameter.containsKey('realNameAuthenticated')">
-	    		realNameAuthenticated = #{realNameAuthenticated,javaType=boolean},
-	    	</if>
-			<if test="_parameter.containsKey('realNameErrCount')">
-	    		realNameErrCount = #{realNameErrCount,javaType=int},
 	    	</if>
 			<if test="_parameter.containsKey('realNameLastErrDate')">
 	    		realNameLastErrDate = #{realNameLastErrDate,javaType=java.util.Date},
@@ -546,11 +534,14 @@
 			<if test="_parameter.containsKey('emailBinding')">
 	    		emailBinding = #{emailBinding,javaType=boolean},
 	    	</if>
+	    	<if test="_parameter.containsKey('status')">
+	    		status = #{status,javaType=com.tx.local.clientinfo.model.ClientStatusEnum},
+	    	</if>
 			<if test="_parameter.containsKey('valid')">
 	    		valid = #{valid,javaType=boolean},
 	    	</if>
-			<if test="_parameter.containsKey('clientSource')">
-	    		clientSourceId = #{clientSource.id,javaType=java.lang.String},
+	    	<if test="_parameter.containsKey('invalidDate')">
+	    		invalidDate = #{invalidDate,javaType=java.util.Date},
 	    	</if>
 			<if test="_parameter.containsKey('creditInfoId')">
 	    		creditInfoId = #{creditInfoId,javaType=java.lang.String},
@@ -567,9 +558,7 @@
 			<if test="_parameter.containsKey('mobileBinding')">
 	    		mobileBinding = #{mobileBinding,javaType=boolean},
 	    	</if>
-			<if test="_parameter.containsKey('status')">
-	    		status = #{status,javaType=com.tx.local.clientinfo.model.ClientStatusEnum},
-	    	</if>
+			
 			<if test="_parameter.containsKey('password')">
 	    		password = #{password,javaType=java.lang.String},
 	    	</if>
@@ -585,8 +574,14 @@
 			<if test="_parameter.containsKey('usernameChangeCount')">
 	    		usernameChangeCount = #{usernameChangeCount,javaType=int},
 	    	</if>
+	    	<if test="_parameter.containsKey('clientSource')">
+	    		clientSourceId = #{clientSource.id,javaType=java.lang.String},
+	    	</if>
 			<if test="_parameter.containsKey('promotionChannel')">
 	    		promotionChannelId = #{promotionChannel.id,javaType=java.lang.String},
+	    	</if>
+	    	<if test="_parameter.containsKey('lastUpdateDate')">
+	    		lastUpdateDate = #{lastUpdateDate,javaType=java.util.Date},
 	    	</if>
 	    </trim>
 	    WHERE

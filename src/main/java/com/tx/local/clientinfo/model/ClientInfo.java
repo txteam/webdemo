@@ -80,6 +80,9 @@ public class ClientInfo implements Client, Serializable {
     /** 是否绑定电话号码 */
     private boolean mobileBinding = false;
     
+    /** 是否可以手机登陆：特指手机接收短信验证码实现登陆 */
+    private boolean mobileLoginEnable = false;
+    
     /** 电子邮件 */
     private String email;
     
@@ -147,6 +150,10 @@ public class ClientInfo implements Client, Serializable {
     /** 是否有效 */
     private boolean valid = true;
     
+    /** 失效时间 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date invalidDate;
+    
     /** 创建日期 */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
@@ -181,6 +188,48 @@ public class ClientInfo implements Client, Serializable {
      */
     public void setVcid(String vcid) {
         this.vcid = vcid;
+    }
+    
+    /**
+     * @return 返回 code
+     */
+    public String getCode() {
+        return code;
+    }
+    
+    /**
+     * @param 对code进行赋值
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+    
+    /**
+     * @return 返回 creditInfoBinding
+     */
+    public boolean isCreditInfoBinding() {
+        return creditInfoBinding;
+    }
+    
+    /**
+     * @param 对creditInfoBinding进行赋值
+     */
+    public void setCreditInfoBinding(boolean creditInfoBinding) {
+        this.creditInfoBinding = creditInfoBinding;
+    }
+    
+    /**
+     * @return 返回 creditInfoId
+     */
+    public String getCreditInfoId() {
+        return creditInfoId;
+    }
+    
+    /**
+     * @param 对creditInfoId进行赋值
+     */
+    public void setCreditInfoId(String creditInfoId) {
+        this.creditInfoId = creditInfoId;
     }
     
     /**
@@ -321,6 +370,20 @@ public class ClientInfo implements Client, Serializable {
      */
     public void setMobileBinding(boolean mobileBinding) {
         this.mobileBinding = mobileBinding;
+    }
+    
+    /**
+     * @return 返回 mobileLoginEnable
+     */
+    public boolean isMobileLoginEnable() {
+        return mobileLoginEnable;
+    }
+    
+    /**
+     * @param 对mobileLoginEnable进行赋值
+     */
+    public void setMobileLoginEnable(boolean mobileLoginEnable) {
+        this.mobileLoginEnable = mobileLoginEnable;
     }
     
     /**
@@ -618,6 +681,20 @@ public class ClientInfo implements Client, Serializable {
     }
     
     /**
+     * @return 返回 invalidDate
+     */
+    public Date getInvalidDate() {
+        return invalidDate;
+    }
+    
+    /**
+     * @param 对invalidDate进行赋值
+     */
+    public void setInvalidDate(Date invalidDate) {
+        this.invalidDate = invalidDate;
+    }
+    
+    /**
      * @return 返回 createDate
      */
     public Date getCreateDate() {
@@ -643,47 +720,5 @@ public class ClientInfo implements Client, Serializable {
      */
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
-    }
-    
-    /**
-     * @return 返回 code
-     */
-    public String getCode() {
-        return code;
-    }
-    
-    /**
-     * @param 对code进行赋值
-     */
-    public void setCode(String code) {
-        this.code = code;
-    }
-    
-    /**
-     * @return 返回 creditInfoBinding
-     */
-    public boolean isCreditInfoBinding() {
-        return creditInfoBinding;
-    }
-    
-    /**
-     * @param 对creditInfoBinding进行赋值
-     */
-    public void setCreditInfoBinding(boolean creditInfoBinding) {
-        this.creditInfoBinding = creditInfoBinding;
-    }
-    
-    /**
-     * @return 返回 creditInfoId
-     */
-    public String getCreditInfoId() {
-        return creditInfoId;
-    }
-    
-    /**
-     * @param 对creditInfoId进行赋值
-     */
-    public void setCreditInfoId(String creditInfoId) {
-        this.creditInfoId = creditInfoId;
     }
 }

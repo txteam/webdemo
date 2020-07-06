@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>转换为企业用户</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <block th:replace="fragments/layui_header::common_replace">
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/layui/css/layui.css" th:href="@{/webjars/themes/layui/layui/css/layui.css}" media="all">
+        <link rel="stylesheet" type="text/css" href="../../webjars/themes/layui/style/admin.css" th:href="@{/webjars/themes/layui/style/admin.css}" media="all">
+        <!-- layui -->
+        <script type="text/javascript" charset="utf-8" src="../../webjars/themes/layui/layui/layui.js" th:src="@{/webjars/themes/layui/layui/layui.js}"></script>
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var _contextPath = /*[[@{/}]]*/'';
+            /*]]>*/
+        </script>
+    </block>
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form" lay-filter="form" id="form" style="padding: 20px 30px 20px 30px;">
+            <input id="capacitys" name="capacitys" class="layui-hide"/>
+            <input id="business" name="business" class="layui-hide"/>
+            <input id="clientInfoId"  name="clientInfoId" th:value="${clientInfoId}"  class="layui-hide"/>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <input id="institutionId"  name="institutionInfo.id"  class="layui-hide"/>
+                    <div   id="institutionIdView"  class="layui-inline layui-hide">
+                        <label class="layui-form-label">所属区域</label>
+                        <div id="institutionIdViewinstitutionIdOne"  class="layui-input-inline">
+                            <select  class="layui-select" name="institutionIdOne"
+                                     lay-filter="institutionIdOne" id="institutionIdOne" lay-verify="required">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div  class="layui-form-item">
+                <div class="layui-inline" >
+                    <label class="layui-form-label">机构类型<span style="color: red">*</span></label>
+                    <div class="layui-input-block">
+                        <select  class="layui-select" id="type" name="type" lay-filter="personalType"  lay-verify="required" >
+                            <option value="">--- 请选择 ---</option>
+                            <option value="ENTERPRISE">企业</option>
+                            <option value="SELF_EMPLOYED">个体工商户</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline" >
+                    <label class="layui-form-label">企业名称<span style="color: red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" id="name" name="name"
+                               placeholder="请输入姓名" autocomplete="off"  lay-verify="required|name">
+                    </div>
+                </div>
+            </div>
+            <div  class="layui-form-item">
+                <div class="layui-inline" >
+                    <label class="layui-form-label">企业联系人<span style="color: red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" id="linkName" name="linkName"
+                               placeholder="请输入企业联系人" autocomplete="off"  lay-verify="required|name">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">企业统一信用码<span style="color: red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" id="idCardNumber" name="idCardNumber"
+                               placeholder="请输入企业统一信用码" autocomplete="off" lay-verify="required">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline" >
+                    <label class="layui-form-label">联系手机号<span style="color: red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" id="linkMobileNumber" name="linkMobileNumber"
+                               placeholder="请输入联系手机号" autocomplete="off"  lay-verify="required|phone">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">生产(经营)面积(亩)<span style="color: red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="number" class="layui-input" id="landArea" name="landArea" autocomplete="off"
+                               lay-verify="required|digital" placeholder="请输入生产(经营)面积">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-hide">
+                <input type="button" lay-submit lay-filter="form-submit" id="form-submit" value="确认">
+            </div>
+        </div>
+        <fieldset class="layui-elem-field">
+            <legend>主营业务</legend>
+            <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <div class="layui-input-inline">
+                        示例1:商品零售</br>
+                        示例2:生猪养殖</br>
+                    </div>
+                    <label class="layui-form-label">主营业务<span style="color: red">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="jycapacity" name="jycapacity"
+                               placeholder="请输入主营业务" autocomplete="off"  lay-verify="jycapacity">
+                    </div>
+                    <div class="layui-input-inline">
+                        <button id="addjyCapacity" class="layui-btn ">添加主营业务</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <div style="padding: 20px 20px 40px 20px ">
+            <div id="jylist" class="layui-row"></div>
+        </div>
+        <fieldset class="layui-elem-field">
+            <legend>企业产能</legend>
+            <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <div class="layui-input-inline">
+                        示例1:年产大白菜100吨</br>
+                        示例2:农家乐-接待床位100张</br>
+                    </div>
+                    <label class="layui-form-label">企业产能<span style="color: red">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="capacity" name="capacity"
+                               placeholder="请输入企业产能" autocomplete="off"  lay-verify="capacity">
+                    </div>
+                    <div class="layui-input-inline">
+                        <button id="addCapacity" class="layui-btn ">添加产能</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div style="padding: 20px 20px 40px 20px ">
+            <div id="list" class="layui-row"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    var $_shangId = "";
+    var $_name = "";
+
+    var itemscount = 0;//产能添加标识
+    var countMap = [];//产能数据
+    var itemsjycount = 0;//主营业务添加标识
+    var countjyMap = [];//主营业务数据
+
+    layui.config({
+        base: /*[[@{/webjars/themes/layui/}]]*/_contextPath + 'webjars/themes/layui/'
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate', 'jquery'], function(){
+        var $ = layui.jquery
+            ,form = layui.form
+            ,laydate = layui.laydate;
+
+        var vList = /*[[${list}]]*/ [];
+        var clientParentId = /*[[${clientParentId}]]*/ '';
+
+        var isView = false;
+
+        $('#institutionIdOne').empty();
+        $('#institutionIdOne').append("<option value=''>请选择</option>");
+        $.each(vList, function (index, arg) {
+            if(arg.institutionId &&  clientParentId == arg.parentId){
+                $('#institutionIdOne').append("<option value='" + arg.institutionId + "'>" + arg.name + "</option>");
+                isView = true;
+            }
+        });
+
+        if(isView){
+            $('#institutionIdView').removeClass('layui-hide');
+        }else{
+            $('#institutionId').val(clientParentId);
+        }
+
+        layui.form.render('select');
+        //区域选择自动添加子节点
+        form.on('select(institutionIdOne)', function(data){
+            $('#institutionId').val('');
+            $_name = data.elem[data.elem.selectedIndex].text;
+            //删除所有兄弟节点
+            $("#institutionIdView"+data.elem.id).nextAll().remove();
+            layui.form.render('select');
+            if(data.value != ''){
+                $('#institutionId').val(data.value);
+                setinstitutionIdList(data.value);
+            }else {
+                $_shangId = "";
+            }
+        });
+
+        function setinstitutionIdList(vid) {
+            var iv = true;
+            var shangId = vid;
+            $.each(vList, function (index, arg) {
+                if(arg.institutionId == vid){
+                    vid = arg.id;
+                }
+            });
+            $.each(vList, function (index, arg) {
+                (vid == arg.parentId) && (iv = false);
+
+            });
+            if(iv || ($_shangId == shangId && $_name =="请选择")){
+                layui.form.render('select');
+                return false;
+            }
+            $_shangId = shangId;
+            //添加新的选择
+            var html = '<div id="institutionIdViewinstitutionIdOne'+ vid+'" class="layui-input-inline" >';
+            html +=' <select name="institutionIdOne'+vid+'"  id="institutionIdOne'+vid+'" ';
+            html +=' lay-filter="institutionIdOne" class="layui-select"  lay-verify="required">';
+            html +=' </select> </div>';
+            $("#institutionIdView").append(html);
+            //给新的选择赋值
+            $('#institutionIdOne' + vid).empty();
+            $('#institutionIdOne' + vid).append("<option value='"+$_shangId+"'>请选择</option>");
+            $.each(vList, function (index, arg) {
+                if(arg.parentId && arg.parentId != null && arg.parentId != '' && vid == arg.parentId){
+                    $('#institutionIdOne'+vid).append("<option value='" + arg.institutionId + "'>" + arg.name + "</option>");
+                }
+            });
+            layui.form.render('select');
+        }
+
+        form.verify({
+            name: function(value){
+                if(value.length < 1){
+                    return '名字至少得1个字符';
+                }
+                if(value.length > 20){
+                    return '名字超出长度';
+                }
+            },
+            capacity: function(value, item){
+                if(value.length > 100){
+                    return '产能超出长度';
+                }
+            },
+            digital: [
+                /^(\d?)+(\.\d{0,2})?$/
+                ,'请输入正数'
+            ]
+        });
+
+        $("#addCapacity").on('click', function(){
+            var  date = $('#capacity').val();
+            if($.trim(date) == ''){
+                layer.msg('产能不能为空', {icon: 5});
+                return false;
+            }
+            addHtml(date);
+            $('#capacitys').val(JSON.stringify(countMap));
+            $('#capacity').val('');
+        });
+
+        $("#addjyCapacity").on('click', function(){
+            var  date = $('#jycapacity').val();
+            if($.trim(date) == ''){
+                layer.msg('主营业务不能为空', {icon: 5});
+                return false;
+            }
+            addjyHtml(date);
+            $('#business').val(JSON.stringify(countjyMap));
+            $('#jycapacity').val('');
+        });
+
+
+        /*列表赋值*/
+        function addHtml(date) {
+            itemscount ++;
+            var _html ='<div class="layui-col-xs12 layui-col-sm12 layui-col-md12" id="deleteHtml'+itemscount+
+                '" onclick="deleteHtml('+itemscount+')">'
+                    +'<div style="cursor: pointer;margin-bottom: 10px;padding: 10px 10px 10px 10px;border-radius: 5px;background-color: #F2F2F2;box-shadow: 0px 1px #dddee1;">'
+                        +'<div style="display: flex;line-height: 35px;">'
+                            +'<div style="width: 60px;text-align: left;">产能:</div>'
+                            +'<div style="flex: 1;">'+ date +'</div>'
+                        +'</div>';
+                    +'</div>';
+                +'</div>';
+            $('#list').append(_html);
+            countMap.push({'index':itemscount, 'name': date, type:"ZYCN"});
+        }
+        /*列表赋值*/
+        function addjyHtml(date) {
+            itemsjycount ++;
+            var _html ='<div class="layui-col-xs12 layui-col-sm12 layui-col-md12" id="deletejyHtml'+itemsjycount+
+                '" onclick="deletejyHtml('+itemsjycount+')">'
+                +'<div style="cursor: pointer;margin-bottom: 10px;padding: 10px 10px 10px 10px;border-radius: 5px;background-color: #F2F2F2;box-shadow: 0px 1px #dddee1;">'
+                +'<div style="display: flex;line-height: 35px;">'
+                +'<div style="width: 60px;text-align: left;">主营业务:</div>'
+                +'<div style="flex: 1;">'+ date +'</div>'
+                +'</div>';
+            +'</div>';
+            +'</div>';
+            $('#jylist').append(_html);
+            countjyMap.push({'index':itemsjycount, 'name': date, type:"ZYYW"});
+        }
+
+    })
+    /*删除产能*/
+    function deleteHtml(val){
+        layer.confirm("确认要删除吗，删除后不能恢复", { title: "删除确认" },  function(index){
+            $("#deleteHtml"+val).remove();
+            $.each(countMap, function (idx, arg) {
+                if(arg.index == val){
+                    countMap.splice(idx, 1);
+                    return false;
+                }
+            });
+            layer.close(index); //关闭弹层
+        });
+    }
+
+    function deletejyHtml(val){
+        layer.confirm("确认要删除吗，删除后不能恢复", { title: "删除确认" },  function(index){
+            $("#deletejyHtml"+val).remove();
+            $.each(countjyMap, function (idx, arg) {
+                if(arg.index == val){
+                    countjyMap.splice(idx, 1);
+                    return false;
+                }
+            });
+            layer.close(index); //关闭弹层
+        });
+    }
+
+</script>
+</body>
+</html>

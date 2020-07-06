@@ -18,6 +18,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +32,6 @@ import com.tx.core.querier.model.Filter;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.core.util.MessageUtils;
-import com.tx.local.WebdemoConstants;
 import com.tx.local.operator.dao.OperatorDao;
 import com.tx.local.operator.model.OperSecOperateLog;
 import com.tx.local.operator.model.Operator;
@@ -48,8 +49,9 @@ import com.tx.local.organization.model.Post;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@DependsOn("configContext")
 @Component("operatorService")
-public class OperatorService {
+public class OperatorService implements InitializingBean {
     
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(OperatorService.class);
@@ -65,6 +67,19 @@ public class OperatorService {
     
     @Resource
     private PostFacade postFacade;
+    
+    private String defaultOperatorPassword;
+    
+    /**
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.defaultOperatorPassword = ConfigContextUtils
+                .getValue("system.config.operator.default.password");
+        AssertUtils.notEmpty(this.defaultOperatorPassword,
+                "default client password is empty.");
+    }
     
     /**
      * 新增操作人员实例<br/>
@@ -112,9 +127,8 @@ public class OperatorService {
         //获取配置的默认密码并设值
         String rawPwd = "";
         if (StringUtils.isEmpty(operator.getPassword())) {
-            String defaultPwd = ConfigContextUtils
-                    .getValue(WebdemoConstants.CONFIG_DEFAULT_PASSWORD);
-            rawPwd = this.operatorPasswordEncoder.encode(defaultPwd);
+            rawPwd = this.operatorPasswordEncoder
+                    .encode(this.defaultOperatorPassword);
         } else {
             rawPwd = this.operatorPasswordEncoder
                     .encode(operator.getPassword());
@@ -647,9 +661,8 @@ public class OperatorService {
         updateRowMap.put("pwdUpdateDate", null);
         updateRowMap.put("historyPwd", oper.getPassword());
         
-        String defaultPwd = ConfigContextUtils
-                .getValue(WebdemoConstants.CONFIG_DEFAULT_PASSWORD);
-        String rawPwd = this.operatorPasswordEncoder.encode(defaultPwd);
+        String rawPwd = this.operatorPasswordEncoder
+                .encode(this.defaultOperatorPassword);
         updateRowMap.put("password", rawPwd);
         updateRowMap.put("lastUpdateDate", now);
         

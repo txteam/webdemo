@@ -9,6 +9,7 @@ package com.tx.local.creditinfo.model;
 import java.io.Serializable;
 
 import com.tx.local.basicdata.model.IDCardTypeEnum;
+import com.tx.local.clientinfo.model.Client;
 import com.tx.local.creditinfo.context.CreditInfoTypeEnum;
 
 /**
@@ -34,6 +35,17 @@ public interface CreditInfo extends Serializable {
     String getId();
     
     /**
+     * 获取客户ID
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return String [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    String getClientId();
+    
+    /**
      * 获取证件类型<br/>
      * <功能详细描述>
      * @return [参数说明]
@@ -42,7 +54,7 @@ public interface CreditInfo extends Serializable {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public IDCardTypeEnum getIdCardType();
+    IDCardTypeEnum getIdCardType();
     
     /**
      * 获取证件号码<br/>
@@ -53,7 +65,7 @@ public interface CreditInfo extends Serializable {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public String getIdCardNumber();
+    String getIdCardNumber();
     
     /**
      * 基线版本<br/>
@@ -87,4 +99,15 @@ public interface CreditInfo extends Serializable {
      * @see [类、类#方法、类#成员]
      */
     int getVersion();
+    
+    /**
+     * 获取信用信息对应的客户<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return Client [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public Client getClient();
 }
