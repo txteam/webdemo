@@ -26,16 +26,13 @@ import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
-import com.tx.local.adminstitution.model.AdmInstitutionInfo;
 import com.tx.local.clientinfo.dao.ClientInfoDao;
 import com.tx.local.clientinfo.facade.ClientInfoFacade;
-import com.tx.local.clientinfo.model.ClientExtendInfo;
 import com.tx.local.clientinfo.model.ClientInfo;
 import com.tx.local.clientinfo.model.ClientStatusEnum;
 import com.tx.local.clientinfo.model.ClientTypeEnum;
 import com.tx.local.clientinfo.service.ClientInfoService;
 import com.tx.local.clientinfo.utils.ClientContextUtils;
-import com.tx.local.cooinstitution.model.CooInstitutionInfo;
 import com.tx.local.institution.dao.InstitutionInfoDao;
 import com.tx.local.institution.model.InstitutionInfo;
 import com.tx.local.institution.model.InstitutionSummaryInfo;
@@ -59,7 +56,7 @@ public class InstitutionInfoService {
     private Logger logger = LoggerFactory
             .getLogger(InstitutionInfoService.class);
     
-    @Resource(name = "institutionInfoDao")
+    @Resource(name = "institutionInfoD++ao")
     private InstitutionInfoDao institutionInfoDao;
     
     @Resource(name = "institutionSummaryInfoService")
@@ -92,10 +89,6 @@ public class InstitutionInfoService {
         AssertUtils.notEmpty(institutionInfo.getName(),
                 "institutionInfo.name is empty.");
         
-        //客户扩展信息
-        ClientExtendInfo clientExtendInfo = clientExtendInfoService
-                .findByClientId(institutionInfo.getClientId());
-        
         //返回数据
         Map<String, Object> responseMap = new HashMap<>();
         
@@ -108,13 +101,7 @@ public class InstitutionInfoService {
             responseMap.put("msg", "该手机号码已注册!");
             return responseMap;
         }
-        exists = clientExtendInfoService.exists(params,
-                clientExtendInfo.getId());
-        if (exists) {
-            responseMap.put("success", false);
-            responseMap.put("msg", "该手机号码已注册!");
-            return responseMap;
-        }
+        
         //企业统一信用码
         if (StringUtils.isNotBlank(institutionInfo.getIdCardNumber())) {
             params = new HashMap<>();
@@ -143,14 +130,6 @@ public class InstitutionInfoService {
             clientInfo.setType(ClientTypeEnum.ENTERPRISE);
         }
         clientInfoService.updateById(clientInfo);
-        
-        clientExtendInfo.setClientType(clientInfo.getType());
-        clientExtendInfo.setLinkName(institutionInfo.getName());
-        clientExtendInfo
-                .setLinkMobileNumber(institutionInfo.getLinkMobileNumber());
-        clientExtendInfo
-                .setInstitutionId(institutionInfo.getInstitutionInfo().getId());
-        clientExtendInfoService.updateById(clientExtendInfo);
         
         //验证参数是否合法
         insert(institutionInfo);
@@ -187,12 +166,6 @@ public class InstitutionInfoService {
         Map<String, String> params = new HashMap<>();
         params.put("linkMobileNumber", institutionInfo.getLinkMobileNumber());
         boolean exists = exists(params, null);
-        if (exists) {
-            responseMap.put("success", false);
-            responseMap.put("msg", "该手机号码已注册!");
-            return responseMap;
-        }
-        exists = clientExtendInfoService.exists(params, null);
         if (exists) {
             responseMap.put("success", false);
             responseMap.put("msg", "该手机号码已注册!");
@@ -261,17 +234,6 @@ public class InstitutionInfoService {
             insItem = institutionInfo;//如果为空则绑定本身
         }
         
-        //客户扩展信息
-        ClientExtendInfo clientExtendInfo = new ClientExtendInfo();
-        clientExtendInfo.setVcid(institutionInfo.getVcid());
-        clientExtendInfo.setClientId(clientInfo.getId());
-        clientExtendInfo.setClientType(clientInfo.getType());
-        clientExtendInfo.setInstitutionId(insItem.getId());//绑定机构
-        clientExtendInfo.setLinkName(institutionInfo.getName());
-        clientExtendInfo
-                .setLinkMobileNumber(institutionInfo.getLinkMobileNumber());
-        clientExtendInfoService.insert(clientExtendInfo);
-        
         return responseMap;
     }
     
@@ -298,17 +260,7 @@ public class InstitutionInfoService {
                 "institutionInfo.name is empty.");
         
         //验证参数是否合法
-        updateById(institutionInfo);
-        
-        //客户扩展信息
-        ClientExtendInfo clientExtendInfo = clientExtendInfoService
-                .findByClientId(institutionInfo.getClientId());
-        clientExtendInfo.setInstitutionId(institutionInfo.getId());
-        clientExtendInfo.setLinkName(institutionInfo.getName());
-        clientExtendInfo
-                .setLinkMobileNumber(institutionInfo.getLinkMobileNumber());
-        boolean flag = clientExtendInfoService.updateById(clientExtendInfo);
-        //如果需要大于1时，抛出异常并回滚，需要在这里修改
+        boolean flag = updateById(institutionInfo);
         return flag;
     }
     
@@ -328,9 +280,6 @@ public class InstitutionInfoService {
         //返回数据
         Map<String, Object> responseMap = new HashMap<>();
         
-        ClientExtendInfo clientExtendInfo = clientExtendInfoService
-                .findByClientId(institutionInfo.getClientId());
-        
         //手机号验证
         Map<String, String> params = new HashMap<>();
         params.put("linkMobileNumber", institutionInfo.getLinkMobileNumber());
@@ -340,8 +289,6 @@ public class InstitutionInfoService {
             responseMap.put("msg", "该手机号码已注册!");
             return responseMap;
         }
-        exists = clientExtendInfoService.exists(params,
-                clientExtendInfo.getId());
         if (exists) {
             responseMap.put("success", false);
             responseMap.put("msg", "该手机号码已注册!");
@@ -356,11 +303,6 @@ public class InstitutionInfoService {
             responseMap.put("msg", "该企业统一信用码已注册!");
             return responseMap;
         }
-        //客户扩展信息
-        clientExtendInfo.setLinkName(institutionInfo.getName());
-        clientExtendInfo
-                .setLinkMobileNumber(institutionInfo.getLinkMobileNumber());
-        clientExtendInfoService.updateById(clientExtendInfo);
         
         InstitutionSummaryInfo iisItem = institutionSummaryInfoService
                 .findByInstitutionNumber(institutionInfo.getId());
@@ -853,8 +795,6 @@ public class InstitutionInfoService {
         
         //根据ID查询 企业信息
         InstitutionInfo institutionInfo = findById(id);
-        //删除掉该企业的所有信息
-        clientExtendInfoService.deleteLogicById(institutionInfo.getClientId());
         
         return true;
     }
@@ -887,33 +827,6 @@ public class InstitutionInfoService {
         
         ClientInfo clientInfo = clientInfoService
                 .findById(institutionInfo.getClientId());
-        
-        if (clientInfo.getType() == ClientTypeEnum.ADM_INS) {
-            AdmInstitutionInfo admInstitutionInfo = admInstitutionInfoService
-                    .findByClientId(clientInfo.getId());
-            List<AdmInstitutionInfo> adiList = admInstitutionInfoService
-                    .queryDescendantsByParentId(admInstitutionInfo.getId(),
-                            params);
-            for (AdmInstitutionInfo aItem : adiList) {
-                item = new InstitutionInfo();
-                item.setId(aItem.getInstitutionId());
-                item.setName(aItem.getName());
-                idList.add(item);
-            }
-        }
-        if (clientInfo.getType() == ClientTypeEnum.COO_INS) {
-            CooInstitutionInfo cooInstitutionInfo = cooInstitutionInfoService
-                    .findByClientId(clientInfo.getId());
-            List<CooInstitutionInfo> adiList = cooInstitutionInfoService
-                    .queryDescendantsByParentId(cooInstitutionInfo.getId(),
-                            params);
-            for (CooInstitutionInfo cItem : adiList) {
-                item = new InstitutionInfo();
-                item.setId(cItem.getInstitutionId());
-                item.setName(cItem.getName());
-                idList.add(item);
-            }
-        }
         
         return idList;
     }

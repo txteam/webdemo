@@ -68,7 +68,7 @@ public class PersonalInfoAPIController implements PersonalInfoFacade {
      */
     @Override
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.personalInfoService.deleteById(id);
         return flag;
     }
@@ -84,13 +84,13 @@ public class PersonalInfoAPIController implements PersonalInfoFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody PersonalInfo personalInfo) {
-        boolean flag = this.personalInfoService.updateById(id,personalInfo);
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody PersonalInfo personalInfo) {
+        boolean flag = this.personalInfoService.updateById(id, personalInfo);
         return flag;
     }
     
-
     /**
      * 根据主键查询PersonalInfo<br/>
      * <功能详细描述>
@@ -107,7 +107,7 @@ public class PersonalInfoAPIController implements PersonalInfoFacade {
         
         return res;
     }
-
+    
     /**
      * 查询PersonalInfo实例列表<br/>
      * <功能详细描述>
@@ -119,13 +119,10 @@ public class PersonalInfoAPIController implements PersonalInfoFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<PersonalInfo> queryList(
-    		@RequestBody Querier querier
-    	) {
-        List<PersonalInfo> resList = this.personalInfoService.queryList(
-			querier         
-        );
-  
+    public List<PersonalInfo> queryList(@RequestBody Querier querier) {
+        List<PersonalInfo> resList = this.personalInfoService
+                .queryList(querier);
+        
         return resList;
     }
     
@@ -142,20 +139,15 @@ public class PersonalInfoAPIController implements PersonalInfoFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public PagedList<PersonalInfo> queryPagedList(
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	) {
-        PagedList<PersonalInfo> resPagedList = this.personalInfoService.queryPagedList(
-			querier,
-			pageIndex,
-			pageSize
-        );
+    public PagedList<PersonalInfo> queryPagedList(@RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize) {
+        PagedList<PersonalInfo> resPagedList = this.personalInfoService
+                .queryPagedList(querier, pageIndex, pageSize);
         return resPagedList;
     }
     
-	/**
+    /**
      * 查询PersonalInfo数量<br/>
      * <功能详细描述>
      * @param querier
@@ -166,17 +158,15 @@ public class PersonalInfoAPIController implements PersonalInfoFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public int count(
-            @RequestBody Querier querier) {
-        int count = this.personalInfoService.count(
-        	querier);
+    public int count(@RequestBody Querier querier) {
+        int count = this.personalInfoService.count(querier);
         
         return count;
     }
-
-	/**
+    
+    /**
      * 查询PersonalInfo是否存在<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 

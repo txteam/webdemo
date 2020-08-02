@@ -108,12 +108,7 @@ public class PersonalInfoService {
             responseMap.put("msg", "该手机号码已注册!");
             return responseMap;
         }
-        exists = clientExtendInfoService.exists(params, null);
-        if (exists) {
-            responseMap.put("success", false);
-            responseMap.put("msg", "该手机号码已注册!");
-            return responseMap;
-        }
+        
         //身份证验证
         params = new HashMap<>();
         params.put("idCardNumber", personalInfo.getIdCardNumber());
