@@ -17,7 +17,7 @@ import com.tx.local.message.model.DialogMessage;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class XXXXCodeGenerator {
+public class WebdemoCodeGenerator {
     
     public static void main(String[] args) throws IOException {
         boolean toProjectPath = true;//是否生成覆盖到项目代码中，如果设置为false则会写入D盘的目录中
