@@ -25,7 +25,6 @@ import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.local.clientinfo.facade.ClientInfoFacade;
-import com.tx.local.clientinfo.model.ClientExtendInfo;
 import com.tx.local.clientinfo.model.ClientInfo;
 import com.tx.local.clientinfo.model.ClientStatusEnum;
 import com.tx.local.clientinfo.model.ClientTypeEnum;
@@ -143,18 +142,6 @@ public class PersonalInfoService {
         //验证参数是否合法
         insert(personalInfo);
         
-        //客户扩展信息
-        ClientExtendInfo clientExtendInfo = new ClientExtendInfo();
-        clientExtendInfo.setVcid(personalInfo.getVcid());
-        clientExtendInfo.setClientId(clientInfo.getId());
-        clientExtendInfo.setClientType(clientInfo.getType());
-        clientExtendInfo
-                .setInstitutionId(personalInfo.getInstitutionInfo().getId());
-        clientExtendInfo.setLinkName(personalInfo.getName());
-        clientExtendInfo
-                .setLinkMobileNumber(personalInfo.getLinkMobileNumber());
-        clientExtendInfoService.insert(clientExtendInfo);
-        
         return responseMap;
     }
     
@@ -174,14 +161,6 @@ public class PersonalInfoService {
         personalInfo.setName(
                 personalInfo.getFristName() + personalInfo.getLastName());
         
-        ClientExtendInfo clientExtendInfo = clientExtendInfoService
-                .findByClientId(personalInfo.getClientId());
-        //客户扩展信息
-        clientExtendInfo.setLinkName(personalInfo.getName());
-        clientExtendInfo
-                .setLinkMobileNumber(personalInfo.getLinkMobileNumber());
-        clientExtendInfoService.updateById(clientExtendInfo);
-        
         //调用数据持久层对实例进行持久化操作
         boolean flag = updateById(personalInfo);
         
@@ -200,9 +179,6 @@ public class PersonalInfoService {
         personalInfo.setLastName(personalInfo.getName()
                 .substring(1, personalInfo.getName().length()));
         
-        ClientExtendInfo clientExtendInfo = clientExtendInfoService
-                .findByClientId(personalInfo.getClientId());
-        
         //手机号验证
         Map<String, String> params = new HashMap<>();
         params.put("linkMobileNumber", personalInfo.getLinkMobileNumber());
@@ -212,8 +188,6 @@ public class PersonalInfoService {
             responseMap.put("msg", "该手机号码已注册!");
             return responseMap;
         }
-        exists = clientExtendInfoService.exists(params,
-                clientExtendInfo.getId());
         if (exists) {
             responseMap.put("success", false);
             responseMap.put("msg", "该手机号码已注册!");
@@ -228,11 +202,6 @@ public class PersonalInfoService {
             responseMap.put("msg", "该身份证已注册!");
             return responseMap;
         }
-        //客户扩展信息
-        clientExtendInfo.setLinkName(personalInfo.getName());
-        clientExtendInfo
-                .setLinkMobileNumber(personalInfo.getLinkMobileNumber());
-        clientExtendInfoService.updateById(clientExtendInfo);
         
         PersonalSummary psyItem = personalSummaryService
                 .findByPersonalId(personalInfo.getId());
@@ -605,8 +574,6 @@ public class PersonalInfoService {
         
         //根据ID查询 企业信息
         PersonalInfo personalInfo = findById(id);
-        //删除掉该企业的所有信息
-        clientExtendInfoService.deleteLogicById(personalInfo.getClientId());
         return true;
     }
     

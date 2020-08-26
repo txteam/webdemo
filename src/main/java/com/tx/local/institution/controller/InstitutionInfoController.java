@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -23,9 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.core.paged.model.PagedList;
-import com.tx.local.clientinfo.model.ClientExtendInfo;
-import com.tx.local.institution.model.CapacityTypeEnum;
-import com.tx.local.institution.model.InstitutionCapacity;
 import com.tx.local.institution.model.InstitutionInfo;
 import com.tx.local.institution.model.InstitutionTypeEnum;
 import com.tx.local.institution.service.InstitutionInfoService;
@@ -87,9 +83,6 @@ public class InstitutionInfoController {
         response.put("institutionInfo", institutionInfo);
         Map<String, Object> params = new HashMap<>();
         params.put("institutionId", institutionInfo.getId());
-        List<InstitutionCapacity> institutionCapacities = institutionCapacityService
-                .queryList(params);
-        response.put("institutionCapacities", institutionCapacities);
         return "institution/toQueryClientPage";
     }
     
@@ -173,8 +166,6 @@ public class InstitutionInfoController {
                 .findById(id);
         response.put("institutionInfo", institutionInfo);
         
-        response.put("types", CapacityTypeEnum.values());
-        
         return "institution/modifyInstitutionInfo";
     }
     
@@ -251,11 +242,6 @@ public class InstitutionInfoController {
         */
         
         String institutionId = request.getFirst("institutionId");
-        if (StringUtils.isNotBlank(institutionId)) {
-            List<ClientExtendInfo> clientList = clientExtendInfoService
-                    .getClientExtendListById(institutionId);
-            params.put("clients", clientList);
-        }
         
         PagedList<InstitutionInfo> resPagedList = this.institutionInfoService
                 .queryPagedList(params, pageIndex, pageSize);
@@ -264,19 +250,6 @@ public class InstitutionInfoController {
                 .queryList(new HashMap<>());
         Map<String, InstitutionInfo> mappedAdds = addsList.stream()
                 .collect(Collectors.toMap(InstitutionInfo::getId, (p) -> p));
-        
-        List<InstitutionInfo> resList = resPagedList.getList();
-        for (InstitutionInfo item : resList) {
-            if (mappedClis.containsKey(item.getClientId())) {
-                if (mappedAdds.containsKey(mappedClis.get(item.getClientId())
-                        .getInstitutionId())) {
-                    item.setInstitutionInfo(
-                            mappedAdds.get(mappedClis.get(item.getClientId())
-                                    .getInstitutionId()));
-                }
-            }
-        }
-        resPagedList.setList(resList);
         
         return resPagedList;
     }
@@ -403,11 +376,6 @@ public class InstitutionInfoController {
         }
         */
         String institutionId = (String) params.get("institutionId");
-        if (StringUtils.isNotBlank(institutionId)) {
-            List<ClientExtendInfo> clientList = clientExtendInfoService
-                    .getClientExtendListById(institutionId);
-            paramx.put("clients", clientList);
-        }
         paramx.put("isClientType", "isClientType");
         List<InstitutionInfo> list = this.institutionInfoService
                 .queryList(paramx);

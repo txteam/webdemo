@@ -1,3 +1,4 @@
+drop table if exists la_loanaccount2client;
 CREATE TABLE la_loanaccount2client (
   id varchar(64) not null,
   loanAccountId varchar(64) not null,

@@ -1,6 +1,7 @@
 drop table if exists la_daily_record;
 create table la_daily_record(
 	id varchar(64) not null,
+	loanAccountId varchar(64) not null,
 	creditInfoId varchar(64) not null,
 	clientId varchar(64),
 	clientAccountId varchar(64),

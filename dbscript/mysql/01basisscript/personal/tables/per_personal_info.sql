@@ -29,4 +29,4 @@ create table PER_PERSONAL_INFO(
 	primary key(id)
 );
 create unique index idx_per_personal_info_00 on PER_PERSONAL_INFO(clientId);
-create index idx_per_personal_info_00 on PER_PERSONAL_INFO(creditInfoId);
+create index idx_per_personal_info_01 on PER_PERSONAL_INFO(creditInfoId);

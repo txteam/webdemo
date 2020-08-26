@@ -19,5 +19,5 @@ create table la_exempt_record_entry(
 );
 create index idx_la_exempt_entry_00 on la_exempt_record_entry(tradingRecordId);
 create index idx_la_exempt_entry_01 on la_exempt_record_entry(loanAccountId);
-create index idx_la_exempt_entry_01 on la_exempt_record_entry(paymentScheduleEntryId);
-create index idx_la_exempt_entry_01 on la_exempt_record_entry(exemptRecordId);
+create index idx_la_exempt_entry_02 on la_exempt_record_entry(paymentScheduleEntryId);
+create index idx_la_exempt_entry_03 on la_exempt_record_entry(exemptRecordId);

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.basicdata.model.SexEnum;
-import com.tx.local.clientinfo.model.ClientExtendInfo;
 import com.tx.local.institution.model.InstitutionInfo;
 import com.tx.local.institution.service.InstitutionInfoService;
 import com.tx.local.personal.model.PersonalInfo;
@@ -181,25 +179,6 @@ public class PersonalInfoController {
         Map<String, InstitutionInfo> mappedAdds = addsList.stream()
                 .collect(Collectors.toMap(InstitutionInfo::getId, (p) -> p));
         
-        List<ClientExtendInfo> clisList = this.clientExtendInfoService
-                .queryList(new HashMap<>());
-        Map<String, ClientExtendInfo> mappedClis = clisList.stream()
-                .collect(Collectors.toMap(ClientExtendInfo::getClientId,
-                        (p) -> p));
-        
-        List<PersonalInfo> resList = resPagedList.getList();
-        for (PersonalInfo item : resList) {
-            if (mappedClis.containsKey(item.getClientId())) {
-                if (mappedAdds.containsKey(mappedClis.get(item.getClientId())
-                        .getInstitutionId())) {
-                    item.setInstitutionInfo(
-                            mappedAdds.get(mappedClis.get(item.getClientId())
-                                    .getInstitutionId()));
-                }
-            }
-        }
-        resPagedList.setList(resList);
-        
         return resPagedList;
     }
     
@@ -331,11 +310,6 @@ public class PersonalInfoController {
         }
         */
         String institutionId = (String) params.get("institutionId");
-        if (StringUtils.isNotBlank(institutionId)) {
-            List<ClientExtendInfo> clientList = clientExtendInfoService
-                    .getClientExtendListById(institutionId);
-            result.put("clients", clientList);
-        }
         
         result.put("operationStatus", true);
         List<PersonalInfo> list = personalInfoService.queryList(result);

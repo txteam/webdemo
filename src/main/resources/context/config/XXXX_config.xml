@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configs>
+	<catalog code="system.config" name="系统配置">
+		<config>
+			<name>操作人员默认密码</name>
+			<code>system.config.operator.default.password</code>
+			<value>123456</value>
+			<remark>系统新建操作人员的默认密码|重置密码</remark>
+		</config>
+		<config>
+			<name>客户默认密码</name>
+			<code>system.config.client.default.password</code>
+			<value>123456</value>
+			<remark>客户默认密码|重置密码</remark>
+		</config>
+	</catalog>
 	<catalog code="test1" name="测试全局配置项目组1">
 		<catalog name="测试全局配置项子组1">
 			<config modifyAble="true">

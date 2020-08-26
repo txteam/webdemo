@@ -1,3 +1,4 @@
+drop table if exists LA_TRANSFRER_REPAY_SETTING;
 create table LA_TRANSFRER_REPAY_SETTING(
     id varchar(64),
 	autoTransferAccountDate datetime not null,

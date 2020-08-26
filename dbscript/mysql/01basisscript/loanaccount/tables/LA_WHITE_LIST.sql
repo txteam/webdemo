@@ -1,6 +1,7 @@
 /*****************************************************************************
-			±í£ºLA_WHITE_LIST
+			ï¿½ï¿½LA_WHITE_LIST
 *****************************************************************************/
+drop table if exists LA_WHITE_LIST;
 create table LA_WHITE_LIST(
 	PHONENUMBER varchar(255),
 	CERTIFICATETYPE varchar(255),
@@ -19,7 +20,7 @@ create index idx_xxxx_xxxx on LA_WHITE_LIST(xxxx);
 create unique index idx_xxxx_xxxx on LA_WHITE_LIST(xxxx);
 */
 /*
-comment on table LA_WHITE_LIST is 'LA_WHITE_LISTÐÅÏ¢±í';
+comment on table LA_WHITE_LIST is 'LA_WHITE_LISTï¿½ï¿½Ï¢ï¿½ï¿½';
 comment on column LA_WHITE_LIST.PHONENUMBER is 'xxxx';
 comment on column LA_WHITE_LIST.CERTIFICATETYPE is 'xxxx';
 comment on column LA_WHITE_LIST.CLIENTNAME is 'xxxx';

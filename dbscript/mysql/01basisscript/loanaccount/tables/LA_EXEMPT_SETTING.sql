@@ -1,3 +1,4 @@
+drop table if exists la_exempt_setting;
 create table la_exempt_setting(
 	id varchar(64) not null,
 	createOperatorId varchar(64) not null,

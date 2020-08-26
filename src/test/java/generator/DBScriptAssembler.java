@@ -47,11 +47,11 @@ public class DBScriptAssembler {
     
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     
-    private static final String URL = "jdbc:mysql://120.24.75.25:3306/webdemo_new?useUnicode=true&characterEncoding=UTF-8";
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/webdemo?useUnicode=true&characterEncoding=UTF-8";
     
-    private static final String USERNAME = "pqy";
+    private static final String USERNAME = "root";
     
-    private static final String PASSWORD = "pqy";
+    private static final String PASSWORD = "root";
     
     public static void initTableDDLExecutor() {
         SimpleDataSourceFinder dataSourceFinder = new SimpleDataSourceFinder(
@@ -80,7 +80,7 @@ public class DBScriptAssembler {
         if (!scriptFile.exists()) {
             FileUtils.forceMkdirParent(scriptFile);
             scriptFile.createNewFile();
-        }else{
+        } else {
             scriptFile.delete();
             scriptFile.createNewFile();
         }
@@ -95,14 +95,17 @@ public class DBScriptAssembler {
         }
         
         //fw.append(tableDDLExecutor.);
-        Set<Class<? extends TableInitializer>> tableInitializerClasses = ClassScanUtils.scanByParentClass(TableInitializer.class, "com.tx");
+        Set<Class<? extends TableInitializer>> tableInitializerClasses = ClassScanUtils
+                .scanByParentClass(TableInitializer.class, "com.tx");
         Set<TableInitializer> tableInitializers = new HashSet<>();
-        for(Class<? extends TableInitializer> initializerClazz : tableInitializerClasses){
+        for (Class<? extends TableInitializer> initializerClazz : tableInitializerClasses) {
             try {
-                TableInitializer initializer = BeanUtils.instantiateClass(initializerClazz);
+                TableInitializer initializer = BeanUtils
+                        .instantiateClass(initializerClazz);
                 tableInitializers.add(initializer);
             } catch (BeanInstantiationException e) {
-                System.out.println("initializerClazz: " + initializerClazz.getName() + " 无法进行实例化，跳过.");
+                System.out.println("initializerClazz: "
+                        + initializerClazz.getName() + " 无法进行实例化，跳过.");
                 continue;
             }
         }

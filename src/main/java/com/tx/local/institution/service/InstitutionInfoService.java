@@ -56,7 +56,7 @@ public class InstitutionInfoService {
     private Logger logger = LoggerFactory
             .getLogger(InstitutionInfoService.class);
     
-    @Resource(name = "institutionInfoD++ao")
+    @Resource(name = "institutionInfoDao")
     private InstitutionInfoDao institutionInfoDao;
     
     @Resource(name = "institutionSummaryInfoService")
