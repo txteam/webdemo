@@ -4,7 +4,7 @@
  * 修改时间:  2019年12月4日
  * <修改描述:>
  */
-package builder;
+package generator;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import com.tx.core.util.FreeMarkerUtils;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class ProjectBuilder {
+public class NewProjectGenerator {
     
     /**
      * 项目构建类<br/>
@@ -41,7 +41,7 @@ public class ProjectBuilder {
      * @see [类、类#方法、类#成员]
      */
     public static void main(String[] args) throws IOException {
-        String projectName = "cunshop";
+        String projectName = "tbdemo";
         
         boolean overwrite = true;//如果存在是否抛出异常，需重构
         String workspace = "D:/develop/txworkspace";//目标项目目录
@@ -53,7 +53,7 @@ public class ProjectBuilder {
         
         //原项目路径
         String sourceProjectPath = org.springframework.util.StringUtils
-                .cleanPath(ProjectBuilder.class.getResource("/").getPath()
+                .cleanPath(NewProjectGenerator.class.getResource("/").getPath()
                         + "../..");
         //System.out.println(sourceProjectPath);
         ///D:/develop/txworkspace/webdemo
@@ -75,7 +75,7 @@ public class ProjectBuilder {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("project_name", projectName);
         params.put("project_description", projectName);
-        FreeMarkerUtils.fprint(ProjectBuilder.class,
+        FreeMarkerUtils.fprint(NewProjectGenerator.class,
                 "builder/pom.ftl",
                 params,
                 targetProjectFolder + "/pom.xml");
