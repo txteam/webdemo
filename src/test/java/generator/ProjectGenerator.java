@@ -40,7 +40,7 @@ public class ProjectGenerator {
      * @see [类、类#方法、类#成员]
      */
     public static void main(String[] args) throws IOException {
-        String projectName = "tbdemo";
+        String projectName = "wms";
         
         boolean overwrite = true;//如果存在是否抛出异常
         boolean clearBeforeBuild = true;
@@ -151,8 +151,8 @@ public class ProjectGenerator {
         baseModuleSet.add(new Module("springmvc", "/com/tx/local/springmvc"));//主框架中启动模块
         baseModuleSet.add(new Module("menu", "/com/tx/local/menu"));
         baseModuleSet.add(new Module("mainframe", "/com/tx/local/mainframe",
-                "/templates/mainframe", "/templates/rule", "/templates/portal",
-                "/templates/helper"));
+                "/templates/fragments", "/templates/mainframe",
+                "/templates/rule", "/templates/portal", "/templates/helper"));
         baseModuleSet.add(new Module("servicelog", "/com/tx/local/servicelog",
                 "/templates/servicelog"));
         

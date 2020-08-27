@@ -45,7 +45,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
         "com.tx.plugin", "com.tx.component.dynamictable",
         "com.tx.component.lock" })
 @EnableSwagger2
-public class XXXXBootApplication {
+public class WebdemoBootApplication {
     
     /**
      * 项目启动<br/>
@@ -57,7 +57,7 @@ public class XXXXBootApplication {
      * @see [类、类#方法、类#成员]
      */
     public static void main(String[] args) {
-        SpringApplication.run(XXXXBootApplication.class, args);
+        SpringApplication.run(WebdemoBootApplication.class, args);
     }
     
     /**
