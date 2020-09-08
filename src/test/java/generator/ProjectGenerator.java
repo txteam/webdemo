@@ -29,6 +29,18 @@ import com.tx.core.util.FreeMarkerUtils;
  * @since [产品/模块版本]
  */
 public class ProjectGenerator {
+    
+    /** 插件模块  */
+    public static Module PLUGIN_MODULE = new Module("plugin", "/com/tx/plugin",
+            "/templates/plugin");
+    
+    public static Module BOOT_MODULE = new Module("boot", "/com/tx/local/boot");
+    
+    public static Module SPRINGMVC_MODULE = new Module("springmvc",
+            "/com/tx/local/springmvc");
+    
+    public static Module MENU_MODULE = new Module("menu", "/com/tx/local/menu");
+    
     /**
      * 项目构建类<br/>
      * <功能详细描述>
@@ -40,7 +52,7 @@ public class ProjectGenerator {
      * @see [类、类#方法、类#成员]
      */
     public static void main(String[] args) throws IOException {
-        String projectName = "wms";
+        String projectName = "ism";
         
         boolean overwrite = true;//如果存在是否抛出异常
         boolean clearBeforeBuild = true;
@@ -177,6 +189,7 @@ public class ProjectGenerator {
         baseModuleSet.add(new Module("documentation",
                 "/com/tx/local/documentation", "/templates/documentation"));
         
+        //客户信息
         baseModuleSet.add(new Module("clientinfo", "/com/tx/local/clientinfo",
                 "/templates/clientinfo"));
         //登陆
@@ -190,27 +203,6 @@ public class ProjectGenerator {
                 System.out.println("copy module exception." + e.getMessage());
             }
         });
-        
-        //        //根据是否需要客户信息决定是否迁移
-        //        baseModuleSet.add("personal");
-        //        baseModuleSet.add("institution");
-        //        baseModuleSet.add("creditinfo");
-        //        
-        //        //拷贝项目文件
-        //        //写入src/main/java目录内容
-        //        File targetJavaFolder = new File(targetProjectFolder,
-        //                "src/main/java/" + packageName);
-        //        File sourceJavaFolder = new File(sourceProjectPath,
-        //                "src/main/java/" + packageName);
-        //        copySrcMainJava(sourceJavaFolder, targetJavaFolder, baseModuleSet);
-        //        
-        //        //写入src/test/java目录内容
-        //        baseModuleSet = new HashSet();
-        //        baseModuleSet.add("generator");
-        //        sourceJavaFolder = new File(sourceProjectPath, "src/test/java/");
-        //        targetJavaFolder = new File(targetProjectFolder, "src/test/java/");
-        //copyProjectFile1(sourceJavaFolder, targetJavaFolder, copySet);
-        
     }
     
     /**
@@ -261,6 +253,15 @@ public class ProjectGenerator {
                 });
     }
     
+    /**
+     * 定义模块<br/>
+     * <功能详细描述>
+     * 
+     * @author  PengQingyang
+     * @version  [版本号, 2020年9月8日]
+     * @see  [相关类/方法]
+     * @since  [产品/模块版本]
+     */
     private static class Module {
         
         private String module;
