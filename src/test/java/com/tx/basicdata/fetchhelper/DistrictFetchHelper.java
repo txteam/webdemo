@@ -117,11 +117,8 @@ public class DistrictFetchHelper {
             CloseableHttpClient httpclient = HttpClientUtils
                     .buildHttpClient(props);
             //用新的httpclient去取值
-            String htmlContent = HttpClientUtils.get(httpclient,
-                    url,
-                    null,
-                    "GBK",
-                    "GBK");
+            String htmlContent = HttpClientUtils
+                    .get(httpclient, url, null, "GBK", "GBK");
             return htmlContent;
         }
     }
@@ -181,20 +178,21 @@ public class DistrictFetchHelper {
             urlMap.put(district.getId(), urlTemp);
         }
         
-        for (int i = 0 ; i < dList.size() ; i++) {
+        for (int i = 0; i < dList.size(); i++) {
             District d = dList.get(i);
-            if(i < (dList.size() - 1)){
+            if (i < (dList.size() - 1)) {
                 District next = dList.get(i + 1);
-                if(districtMap.containsKey(next.getId())){
+                if (districtMap.containsKey(next.getId())) {
                     //如果有下一个数据存在说明该数据已经递归处理完毕
                     continue;
                 }
             }
-            if (!d.getName().equals("重庆市")) {
+            if (!d.getName().equals("重庆市") || !d.getName().equals("四川省")) {
                 continue;
             }
             parseChildDistrict(d,
-                    url.substring(0, url.lastIndexOf("/")) + "/" + urlMap.get(d.getId()),
+                    url.substring(0, url.lastIndexOf("/")) + "/"
+                            + urlMap.get(d.getId()),
                     paredUrlSet);
         }
     }
@@ -211,8 +209,8 @@ public class DistrictFetchHelper {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    private static void parseChildDistrict(District parent, String url, Set<String> paredUrlSet)
-            throws IOException {
+    private static void parseChildDistrict(District parent, String url,
+            Set<String> paredUrlSet) throws IOException {
         if (paredUrlSet.contains(url)) {
             return;
         }
@@ -283,23 +281,23 @@ public class DistrictFetchHelper {
             }
         }
         
-        for (int i = 0 ; i < dList.size() ; i++) {
+        for (int i = 0; i < dList.size(); i++) {
             District d = dList.get(i);
-            if(i < (dList.size() - 1)){
+            if (i < (dList.size() - 1)) {
                 District next = dList.get(i + 1);
-                if(districtMap.containsKey(next.getId())){
+                if (districtMap.containsKey(next.getId())) {
                     //如果有下一个数据存在说明该数据已经递归处理完毕
                     continue;
                 }
             }
             parseChildDistrict(d,
-                    url.substring(0, url.lastIndexOf("/")) + "/" + urlMap.get(d.getId()),
+                    url.substring(0, url.lastIndexOf("/")) + "/"
+                            + urlMap.get(d.getId()),
                     paredUrlSet);
         }
         
-        System.out.println("getTime:"
-                + (getStartTime - getEndTime) + "parseTime:"
-                + (parseStartTime - parseEndTime));
+        System.out.println("getTime:" + (getStartTime - getEndTime)
+                + "parseTime:" + (parseStartTime - parseEndTime));
     }
     
     private static District doBuildDistrict(District parent, String code,
@@ -392,7 +390,7 @@ public class DistrictFetchHelper {
             district.setPinyin(district.getPinyin().substring(0, 128));
         }
         
-        if(districtMap.containsKey(district.getId())){
+        if (districtMap.containsKey(district.getId())) {
             return districtMap.get(district.getId());
         }
         districtDao.insert(district);
