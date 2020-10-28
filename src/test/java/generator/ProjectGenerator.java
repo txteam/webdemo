@@ -116,7 +116,7 @@ public class ProjectGenerator {
             mainJavaFolder.mkdirs();
         }
         if (!mainResFolder.exists()) {
-            mainResFolder.mkdirs();//
+            mainResFolder.mkdirs();
         }
         if (!testJavaFolder.exists()) {
             testJavaFolder.mkdirs();
