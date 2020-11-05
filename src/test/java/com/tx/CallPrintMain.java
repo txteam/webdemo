@@ -17,7 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.print.Doc;
@@ -297,10 +298,12 @@ public class CallPrintMain {
         PrintService printService = PrintServiceLookup
                 .lookupDefaultPrintService();
         
-        String path = "E:\\jb\\533";
-        Collection<File> fs = FileUtils.listFiles(new File(path),
+        String path = "E:\\jb\\508-飘萍长安";
+        List<File> fs = new ArrayList<>(FileUtils.listFiles(new File(path),
                 new String[] { "png", "jpg", "gif", "pdf", "doc", "docx" },
-                true);
+                true));
+        Collections.sort(fs);
+        
         if (true) {
             for (File f : fs) {
                 System.out.println(f.getPath());
