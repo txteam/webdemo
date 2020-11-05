@@ -70,10 +70,7 @@ public class DistrictFetchHelper {
         DataSourceFinder finder = new SimpleDataSourceFinder(
                 "com.mysql.jdbc.Driver",
                 "jdbc:mysql://120.24.75.25:3306/fetch_data?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull",
-                //"jdbc:mysql://localhost:3306/fetch_data?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull",
-                "pqy", "pqy"
-        //"root", "root"
-        );
+                "pqy", "pqy");
         ds = finder.getDataSource();
         
         try {
@@ -99,8 +96,9 @@ public class DistrictFetchHelper {
     }
     
     public static void main(String[] args) throws IOException {
+        //
         fetchDistrict(
-                "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2019/index.html");//
+                "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2019/index.html");
     }
     
     private static String getHtml(String url) {
@@ -389,7 +387,6 @@ public class DistrictFetchHelper {
         if (district.getPinyin().length() > 128) {
             district.setPinyin(district.getPinyin().substring(0, 128));
         }
-        
         if (districtMap.containsKey(district.getId())) {
             return districtMap.get(district.getId());
         }

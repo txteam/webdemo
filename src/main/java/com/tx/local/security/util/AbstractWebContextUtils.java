@@ -82,7 +82,7 @@ public abstract class AbstractWebContextUtils {
         if (details instanceof OperatorUserDetails) {
             Operator operator = ((OperatorUserDetails) details).getOperator();
             return operator == null ? null : operator.getId();
-        } else if (details instanceof OperatorUserDetails) {
+        } else if (details instanceof ClientUserDetails) {
             Client client = ((ClientUserDetails) details).getClient();
             return client == null ? null : client.getId();
         } else {
@@ -108,7 +108,7 @@ public abstract class AbstractWebContextUtils {
         if (details instanceof OperatorUserDetails) {
             Operator operator = ((OperatorUserDetails) details).getOperator();
             return operator == null ? null : operator.getUsername();
-        } else if (details instanceof OperatorUserDetails) {
+        } else if (details instanceof ClientUserDetails) {
             Client client = ((ClientUserDetails) details).getClient();
             return client == null ? null : client.getUsername();
         } else {
@@ -133,7 +133,7 @@ public abstract class AbstractWebContextUtils {
         
         if (details instanceof OperatorUserDetails) {
             return UserTypeEnum.OPERATOR;
-        } else if (details instanceof OperatorUserDetails) {
+        } else if (details instanceof ClientUserDetails) {
             return UserTypeEnum.CLIENT;
         } else {
             return null;
