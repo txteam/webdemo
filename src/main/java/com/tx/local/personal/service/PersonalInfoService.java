@@ -32,7 +32,6 @@ import com.tx.local.clientinfo.service.ClientInfoService;
 import com.tx.local.personal.dao.PersonalInfoDao;
 import com.tx.local.personal.model.PersonalInfo;
 import com.tx.local.personal.model.PersonalSummary;
-import com.tx.local.security.service.ClientUserDetailsService;
 import com.tx.local.security.util.ClientWebContextUtils;
 import com.tx.local.security.util.WebContextUtils;
 
@@ -62,9 +61,6 @@ public class PersonalInfoService {
     
     @Resource(name = "personalSummaryService")
     private PersonalSummaryService personalSummaryService;
-    
-    @Resource(name = "clientUserDetailsService")
-    private ClientUserDetailsService clientUserDetailsService;
     
     /**
      * 新增personalInfoo实例<br/>
@@ -132,8 +128,8 @@ public class PersonalInfoService {
         //激活该客户
         this.clientInfoFacade.enableById(clientInfo.getId());
         //根据不同的客户类型 默认给该客户插入不同的角色权限
-        clientUserDetailsService.setClientUserRole(clientInfo.getId(),
-                clientInfo.getType());
+        //        clientUserDetailsService.setClientUserRole(clientInfo.getId(),
+        //                clientInfo.getType());
         
         //给前端用户返回的登录账号
         responseMap.put("msg", clientInfo.getCode());

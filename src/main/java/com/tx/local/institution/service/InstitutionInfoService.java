@@ -36,7 +36,6 @@ import com.tx.local.clientinfo.utils.ClientContextUtils;
 import com.tx.local.institution.dao.InstitutionInfoDao;
 import com.tx.local.institution.model.InstitutionInfo;
 import com.tx.local.institution.model.InstitutionSummaryInfo;
-import com.tx.local.security.service.ClientUserDetailsService;
 import com.tx.local.security.util.ClientWebContextUtils;
 import com.tx.local.security.util.WebContextUtils;
 
@@ -70,9 +69,6 @@ public class InstitutionInfoService {
     
     @Resource(name = "clientInfoService")
     private ClientInfoService clientInfoService;
-    
-    @Resource(name = "clientUserDetailsService")
-    private ClientUserDetailsService clientUserDetailsService;
     
     @Resource
     private ConfigContext configContext;
@@ -211,8 +207,8 @@ public class InstitutionInfoService {
         //激活该客户
         this.clientInfoFacade.enableById(clientInfo.getId());
         //根据不同的客户类型 默认给该客户插入不同的角色权限
-        clientUserDetailsService.setClientUserRole(clientInfo.getId(),
-                clientInfo.getType());
+        //        clientUserDetailsService.setClientUserRole(clientInfo.getId(),
+        //                clientInfo.getType());
         
         //给前端用户返回的登录账号
         responseMap.put("msg", clientInfo.getCode());

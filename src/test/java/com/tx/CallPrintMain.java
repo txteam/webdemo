@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.print.Doc;
 import javax.print.DocFlavor;
@@ -28,12 +29,10 @@ import javax.print.PrintException;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
-import javax.print.attribute.DocAttributeSet;
-import javax.print.attribute.HashDocAttributeSet;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
-import javax.print.attribute.standard.MediaName;
+import javax.print.attribute.standard.MediaSize;
 import javax.print.attribute.standard.Sides;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,8 +52,16 @@ import org.apache.poi.hwpf.converter.PicturesManager;
 import org.apache.poi.hwpf.converter.WordToHtmlConverter;
 import org.apache.poi.hwpf.usermodel.Picture;
 import org.apache.poi.hwpf.usermodel.PictureType;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamSource;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
+
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * <功能简述>
@@ -92,8 +99,8 @@ public class CallPrintMain {
         }
     }
     
-    public static void printPDF(File file, PrintService printService)
-            throws Exception {
+    public static void printPDF(String filename, File file,
+            PrintService printService) throws Exception {
         PDDocument document = null;
         try {
             document = PDDocument.load(file);
@@ -106,14 +113,64 @@ public class CallPrintMain {
             Book book = new Book();
             PageFormat pageFormat = new PageFormat();
             //设置打印方向
-            pageFormat.setOrientation(PageFormat.PORTRAIT);//纵向
+            if (filename.contains("短边")) {
+                pageFormat.setOrientation(PageFormat.LANDSCAPE);//横向
+            } else {
+                pageFormat.setOrientation(PageFormat.PORTRAIT);//纵向
+            }
             pageFormat.setPaper(getPaper());//设置纸张
             book.append(pdfPrintable, pageFormat, document.getNumberOfPages());
             printJob.setPageable(book);
             printJob.setCopies(1);//设置打印份数
             //添加打印属性
             HashPrintRequestAttributeSet pars = new HashPrintRequestAttributeSet();
-            pars.add(Sides.DUPLEX); //设置单双页
+            if (filename.contains("单面")) {
+                pars.add(Sides.ONE_SIDED); //设置单双页
+            } else {
+                pars.add(Sides.DUPLEX); //设置单双页
+            }
+            printJob.print(pars);
+        } finally {
+            if (document != null) {
+                try {
+                    document.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    
+    public static void printPDF(String filename, InputStream file,
+            PrintService printService) throws Exception {
+        PDDocument document = null;
+        try {
+            document = PDDocument.load(file);
+            PrinterJob printJob = PrinterJob.getPrinterJob();
+            printJob.setJobName(filename);
+            //设置纸张及缩放
+            PDFPrintable pdfPrintable = new PDFPrintable(document,
+                    Scaling.ACTUAL_SIZE);
+            //设置多页打印
+            Book book = new Book();
+            PageFormat pageFormat = new PageFormat();
+            //设置打印方向
+            if (filename.contains("短边")) {
+                pageFormat.setOrientation(PageFormat.LANDSCAPE);//横向
+            } else {
+                pageFormat.setOrientation(PageFormat.PORTRAIT);//纵向
+            }
+            pageFormat.setPaper(getPaper());//设置纸张
+            book.append(pdfPrintable, pageFormat, document.getNumberOfPages());
+            printJob.setPageable(book);
+            printJob.setCopies(1);//设置打印份数
+            //添加打印属性
+            HashPrintRequestAttributeSet pars = new HashPrintRequestAttributeSet();
+            if (filename.contains("单面")) {
+                pars.add(Sides.ONE_SIDED); //设置单双页
+            } else {
+                pars.add(Sides.DUPLEX); //设置单双页
+            }
             printJob.print(pars);
         } finally {
             if (document != null) {
@@ -145,6 +202,114 @@ public class CallPrintMain {
         return paper;
     }
     
+    /**
+     * 
+     * @param outPdfFilepath 生成pdf文件路径
+     * @param imageFiles 需要转换的图片File类Array,按array的顺序合成图片
+     */
+    public static ByteArrayOutputStream imagesToPdf(List<File> imageFiles)
+            throws Exception {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        // 第一步：创建一个document对象。
+        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+        document.setMargins(0, 0, 0, 0);
+        // 第二步：
+        // 创建一个PdfWriter实例，
+        PdfWriter.getInstance(document, outputStream);
+        
+        // 第三步：打开文档。
+        document.open();
+        // 第四步：在文档中增加图片。
+        for (File file : imageFiles) {
+            if (file.getName().toLowerCase().endsWith(".bmp")
+                    || file.getName().toLowerCase().endsWith(".jpg")
+                    || file.getName().toLowerCase().endsWith(".jpeg")
+                    || file.getName().toLowerCase().endsWith(".gif")
+                    || file.getName().toLowerCase().endsWith(".png")) {
+                String temp = file.getAbsolutePath();
+                Image img = Image.getInstance(temp);
+                img.setAlignment(Image.ALIGN_CENTER);
+                img.scaleAbsolute(597, 844);// 直接设定显示尺寸
+                // 根据图片大小设置页面，一定要先设置页面，再newPage（），否则无效
+                //document.setPageSize(new Rectangle(img.getWidth(), img.getHeight()));
+                document.setPageSize(new Rectangle(597, 844));
+                document.newPage();
+                document.add(img);
+            }
+        }
+        // 第五步：关闭文档。
+        document.close();
+        return outputStream;
+    }
+    
+    public static void printImages(String parentPath, List<File> files,
+            PrintService printService) throws Exception {
+        if (files == null) {
+            System.err.println("缺少打印文件");
+        }
+        
+        ByteArrayOutputStream outputStream = imagesToPdf(files);
+        InputStreamSource inputStreamSource = new ByteArrayResource(
+                outputStream.toByteArray());
+        printPDF(parentPath, inputStreamSource.getInputStream(), printService);
+        
+    }
+    // 传入文件和打印机名称
+    //    public static void printImages(List<File> files, PrintService printService,
+    //            String filenameExtension) throws PrintException {
+    //        if (files == null) {
+    //            System.err.println("缺少打印文件");
+    //        }
+    //        
+    //        InputStream fis = null;
+    //        try {
+    //            // 设置打印格式，如果未确定类型，可选择autosense
+    //            DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
+    //            switch (filenameExtension.toUpperCase()) {
+    //                case "PNG":
+    //                    flavor = DocFlavor.INPUT_STREAM.PNG;
+    //                    break;
+    //                case "GIF":
+    //                    flavor = DocFlavor.INPUT_STREAM.GIF;
+    //                    break;
+    //                case "JPG":
+    //                    flavor = DocFlavor.INPUT_STREAM.JPEG;
+    //                    break;
+    //                default:
+    //                    flavor = DocFlavor.INPUT_STREAM.JPEG;
+    //                    break;
+    //            }
+    //            Vector<InputStream> v = new Vector<InputStream>();
+    //            for (File file : files) {
+    //                v.add(new FileInputStream(file));
+    //            }
+    //            Enumeration<InputStream> en = v.elements();
+    //            fis = new SequenceInputStream(en);
+    //            
+    //            DocPrintJob job = printService.createPrintJob(); // 创建打印作业
+    //            // 设置打印参数
+    //            PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+    //            aset.add(new Copies(1)); //份数
+    //            aset.add(Sides.DUPLEX); //单双面
+    //            //aset.add(MediaSize.ISO.A4); //纸张
+    //            //WEWaset.add(Finishings.STAPLE); //装订
+    //            //定位打印服务
+    //            Doc doc = new SimpleDoc(fis, flavor, null);
+    //            job.print(doc, aset);
+    //        } catch (FileNotFoundException e1) {
+    //            e1.printStackTrace();
+    //        } finally {
+    //            // 关闭打印的文件流
+    //            if (fis != null) {
+    //                try {
+    //                    fis.close();
+    //                } catch (IOException e) {
+    //                    e.printStackTrace();
+    //                }
+    //            }
+    //        }
+    //    }
+    
     // 传入文件和打印机名称
     public static void printImage(File file, PrintService printService)
             throws PrintException {
@@ -174,9 +339,9 @@ public class CallPrintMain {
             // 设置打印参数
             PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
             aset.add(new Copies(1)); //份数
-            //aset.add(MediaSize.ISO.A4); //纸张
-            //WEWaset.add(Finishings.STAPLE);//装订
+            aset.add(MediaSize.ISO.A4); //纸张
             aset.add(Sides.DUPLEX);//单双面
+            //WEWaset.add(Finishings.STAPLE);//装订
             // 定位打印服务
             fis = new FileInputStream(file); // 构造待打印的文件流
             Doc doc = new SimpleDoc(fis, flavor, null);
@@ -298,61 +463,39 @@ public class CallPrintMain {
         PrintService printService = PrintServiceLookup
                 .lookupDefaultPrintService();
         
-        String path = "E:\\jb\\508-飘萍长安";
+        String path = "E:\\jb\\76-犯罪屋\\21-犯罪屋";
         List<File> fs = new ArrayList<>(FileUtils.listFiles(new File(path),
                 new String[] { "png", "jpg", "gif", "pdf", "doc", "docx" },
                 true));
         Collections.sort(fs);
         
-        if (true) {
-            for (File f : fs) {
+        MultiValueMap<String, File> imagesMultiMap = new LinkedMultiValueMap<>();
+        for (File f : fs) {
+            if ("PDF".equals(StringUtils.getFilenameExtension(f.getPath())
+                    .toUpperCase())) {
+                System.out.println("---- print task: ----");
                 System.out.println(f.getPath());
-                //                if ("pdf".equals(
-                //                        StringUtils.getFilenameExtension(f.getPath()))) {
-                //                    printPDF(f, printService);
-                //                } else {
-                //                    System.out.println(f.getPath());
-                //                    printImage(f, printService);
-                //                }
+                printPDF(f.getPath(), f, printService);
+            } else if ("JPG".equals(
+                    StringUtils.getFilenameExtension(f.getPath()).toUpperCase())
+                    || "PNG".equals(
+                            StringUtils.getFilenameExtension(f.getPath())
+                                    .toUpperCase())
+                    || "GIF".equals(
+                            StringUtils.getFilenameExtension(f.getPath())
+                                    .toUpperCase())) {
+                imagesMultiMap.add(f.getParentFile().getPath(), f);
             }
-            return;
+            //相同目录下面的进行组合以后再进行打印
         }
-        
-        // 构建打印请求属性集
-        HashPrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
-        // 设置打印格式，因为未确定类型，所以选择autosense
-        DocFlavor flavor = DocFlavor.INPUT_STREAM.PNG;
-        pras.add(MediaName.ISO_A4_TRANSPARENT);//A4纸张
-        //遍历
-        //PrintService printService[] = PrintServiceLookup.lookupPrintServices(flavor, pras); 
-        //   
-        //for (PrintService printService2 : printService) {
-        //  logger.info("本机可使用打印机列表：==================="+printService2);
-        //}
-        // 定位默认的打印服务
-        
-        System.out.println("打印工具选择打印机为：===================" + printService);
-        //            try {
-        //                DocPrintJob job = defaultService.createPrintJob(); // 创建打印作业
-        //                FileInputStream fis = new FileInputStream(file); // 构造待打印的文件流
-        //                DocAttributeSet das = new HashDocAttributeSet();
-        //                Doc doc = new SimpleDoc(fis, flavor, das);
-        //                job.print(doc, pras);
-        //            } catch (Exception e) {
-        //                e.printStackTrace();
-        //                logger.info("打印异常",e);
-        //               throw new Exception();
-        //            }
-        
-        try {
-            DocPrintJob job = printService.createPrintJob(); // 创建打印作业
-            FileInputStream fis = new FileInputStream(
-                    "d:\\Users\\PengQingyang\\Desktop\\吉普赛女郎之死\\组织者手册.docx"); // 构造待打印的文件流
-            DocAttributeSet das = new HashDocAttributeSet();
-            Doc doc = new SimpleDoc(fis, flavor, das);
-            job.print(doc, pras);
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (Entry<String, List<File>> entryTemp : imagesMultiMap.entrySet()) {
+            //相同目录下面的进行组合以后再进行打印
+            System.out.println("---- print task: ----" + entryTemp.getKey());
+            //
+            for (File f : entryTemp.getValue()) {
+                System.out.println(f.getPath());
+                printImages(entryTemp.getKey(), fs, printService);
+            }
         }
     }
 }
