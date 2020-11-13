@@ -70,7 +70,7 @@
 			<menu id="admin_role_catalog_manage_menu" text="角色分类" href="/admin/vciframe?src=/operatorRoleCatalog/toQueryTreeList" type="tab"></menu>
 			<menu id="admin_role_manage_menu" text="角色管理" href="/admin/vciframe?src=/operatorRole/toQueryList" type="tab"></menu>
 			<menu id="admin_operator_manage_menu" text="用户管理" href="/admin/vciframe?src=/operator/toQueryPagedList" type="tab"></menu>
-			<menu id="auth_manage_menu" text="权限管理" href="/operator/，3auth/toQueryAuthMain" type="tab"></menu>
+			<menu id="auth_manage_menu" text="权限管理" href="/operator/auth/toQueryAuthMain" type="tab"></menu>
 			<menu id="admin_operator_public_calendar_manage_menu" text="公共日程管理" href="/admin/vciframe?src=/operator/public/calendar" type="tab"></menu>
 			<menu id="notice_message_manage_menu" text="公告管理" href="/admin/vciframe?src=/noticeMessage/toQueryPagedList" type="tab"></menu>
 		</menu>

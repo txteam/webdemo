@@ -146,6 +146,8 @@ public class OperatorService implements InitializingBean {
             if (mp != null) {
                 operator.setOrganizationId(mp.getOrganizationId());
             }
+        } else {
+            operator.setMainPostId(null);
         }
         
         //调用数据持久层对实例进行持久化操作
@@ -490,7 +492,9 @@ public class OperatorService implements InitializingBean {
         //updateRowMap.put("usernameChangeCount", operator.getUsernameChangeCount());
         updateRowMap.put("name", operator.getName());
         updateRowMap.put("organizationId", operator.getOrganizationId());
-        updateRowMap.put("mainPostId", operator.getMainPostId());
+        updateRowMap.put("mainPostId",
+                StringUtils.isEmpty(operator.getMainPostId()) ? null
+                        : operator.getMainPostId());
         //updateRowMap.put("modifyAble", operator.isModifyAble());
         
         updateRowMap.put("lastUpdateDate", new Date());

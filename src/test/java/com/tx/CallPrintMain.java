@@ -463,7 +463,7 @@ public class CallPrintMain {
         PrintService printService = PrintServiceLookup
                 .lookupDefaultPrintService();
         
-        String path = "E:\\jb\\76-犯罪屋\\21-犯罪屋";
+        String path = "E:\\jb\\66-尸联航班\\128尸联航班\\剧本A4\\A第一 二幕\\乘务夏函";
         List<File> fs = new ArrayList<>(FileUtils.listFiles(new File(path),
                 new String[] { "png", "jpg", "gif", "pdf", "doc", "docx" },
                 true));
@@ -475,7 +475,7 @@ public class CallPrintMain {
                     .toUpperCase())) {
                 System.out.println("---- print task: ----");
                 System.out.println(f.getPath());
-                printPDF(f.getPath(), f, printService);
+                //printPDF(f.getPath(), f, printService);
             } else if ("JPG".equals(
                     StringUtils.getFilenameExtension(f.getPath()).toUpperCase())
                     || "PNG".equals(
@@ -491,11 +491,11 @@ public class CallPrintMain {
         for (Entry<String, List<File>> entryTemp : imagesMultiMap.entrySet()) {
             //相同目录下面的进行组合以后再进行打印
             System.out.println("---- print task: ----" + entryTemp.getKey());
-            //
+            System.out.println(entryTemp.getKey());
             for (File f : entryTemp.getValue()) {
                 System.out.println(f.getPath());
-                printImages(entryTemp.getKey(), fs, printService);
             }
+            printImages(entryTemp.getKey(), fs, printService);
         }
     }
 }

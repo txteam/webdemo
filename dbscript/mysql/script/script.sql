@@ -1,5 +1,61 @@
 -- tableInitializers: 
 -- tables
+-- ----------table:bd_plugin_instance---------- 
+
+
+-- initdata
+
+-- tables
+-- ----------table:table_sec_auth_type---------- 
+
+-- ----------table:sec_auth---------- 
+
+-- ----------table:sec_authref---------- 
+-- alter talbe sec_authref 
+ALTER TABLE sec_authref 
+   DROP INDEX IDX_PARENTID,
+   ADD COLUMN lastUpdateDate datetime(6) default now(6) not null,
+   ADD COLUMN createDate datetime(6) default now(6) not null,
+   ADD COLUMN createOperatorId varchar(64),
+   ADD COLUMN expiryDate datetime(6),
+   ADD COLUMN effectiveDate datetime(6) default now(6) not null,
+   ADD COLUMN lastUpdateOperatorId varchar(64),
+   MODIFY COLUMN configAble bit default 1,
+   MODIFY COLUMN name varchar(255),
+   MODIFY COLUMN authTypeId varchar(64),
+   ADD INDEX idx_authId (authId)
+;
+
+-- ----------table:table_sec_authref_his---------- 
+-- alter talbe sec_authref_his 
+ALTER TABLE sec_authref_his 
+   ADD COLUMN lastUpdateDate datetime(6) default now(6) not null,
+   ADD COLUMN createDate datetime(6) default now(6) not null,
+   ADD COLUMN createOperatorId varchar(64),
+   ADD COLUMN expiryDate datetime(6),
+   ADD COLUMN effectiveDate datetime(6) default now(6) not null,
+   ADD COLUMN lastUpdateOperatorId varchar(64),
+   MODIFY COLUMN configAble bit default 1,
+   MODIFY COLUMN name varchar(255),
+   MODIFY COLUMN authTypeId varchar(64)
+;
+
+
+-- initdata
+
+-- tables
+-- ----------table:bd_data_dict---------- 
+
+
+-- initdata
+
+-- tables
+-- ----------table:sec_jwt_signing_key---------- 
+
+
+-- initdata
+
+-- tables
 -- ----------bd_config_context---------- 
 
 -- ----------bd_config_context_his---------- 
@@ -8,31 +64,25 @@
 -- initdata
 
 -- tables
--- ----------table:bd_plugin_instance---------- 
+-- ----------table:QXB_ENTERPRISE---------- 
 
+-- ----------table:QXB_ENT_PARTNER---------- 
 
--- initdata
-
--- tables
 -- ----------table:QXB_ENT_BRANCHE---------- 
+
+-- ----------table:QXB_ENT_WEBSITE---------- 
+
+-- ----------table:QXB_ENT_ABNORMAL_ITEM---------- 
+
+-- ----------table:QXB_ENT_PAR_REAL_CAPI_ITEM---------- 
+
+-- ----------table:QXB_ENT_EMPLOYEE---------- 
 
 -- ----------table:QXB_ENT_CHANGE_RECORD---------- 
 
 -- ----------table:QXB_ENT_CONTACT---------- 
 
--- ----------table:QXB_ENT_WEBSITE---------- 
-
 -- ----------table:INS_SUMMARY_INFO---------- 
-
--- ----------table:QXB_ENT_PAR_REAL_CAPI_ITEM---------- 
-
--- ----------table:QXB_ENT_ABNORMAL_ITEM---------- 
-
--- ----------table:QXB_ENT_EMPLOYEE---------- 
-
--- ----------table:QXB_ENT_PARTNER---------- 
-
--- ----------table:QXB_ENTERPRISE---------- 
 
 -- ----------table:QXB_ENT_PAR_SHOULD_CAPI_ITEM---------- 
 
@@ -44,51 +94,55 @@
 -- initdata
 
 -- tables
--- ----------table:bd_data_dict---------- 
-
-
--- initdata
-
--- tables
--- ----------table:table_sec_auth_type---------- 
-
--- ----------table:sec_auth---------- 
-
--- ----------table:sec_authref---------- 
-
--- ----------table:table_sec_authref_his---------- 
-
-
--- initdata
-
--- tables
--- ----------table:LA_REQUEST_LOG---------- 
-
--- ----------table:CL_LOGIN_LOG---------- 
-
--- ----------table:oper_sec_operate_log---------- 
-
--- ----------table:CL_SEC_OPERATE_LOG---------- 
-
--- ----------table:OPER_LOGIN_LOG---------- 
-
-
--- initdata
-
--- tables
 -- ----------table:table_sec_role_type---------- 
 
 -- ----------table:table_sec_role---------- 
 
 -- ----------table:table_sec_roleref---------- 
+-- alter talbe sec_roleref 
+ALTER TABLE sec_roleref 
+   MODIFY COLUMN lastUpdateDate datetime(6) default now(6) not null,
+   MODIFY COLUMN createDate datetime(6) default now(6) not null
+;
 
 -- ----------table:table_sec_roleref_his---------- 
+-- alter talbe sec_roleref_his 
+ALTER TABLE sec_roleref_his 
+   DROP INDEX IDX_ROLEID,
+   DROP INDEX IDX_REF,
+   MODIFY COLUMN lastUpdateDate datetime(6) default now(6) not null,
+   MODIFY COLUMN createDate datetime(6) default now(6) not null
+;
 
 
 -- initdata
 
 -- tables
--- ----------table:sec_jwt_signing_key---------- 
+-- ----------table:oper_sec_operate_log---------- 
+
+-- ----------table:LA_REQUEST_LOG---------- 
+-- alter talbe LA_REQUEST_LOG 
+ALTER TABLE LA_REQUEST_LOG 
+   DROP INDEX IDX_LA_REQUEST_LOG_00,
+   ADD COLUMN remoteIpAddress varchar(64),
+   ADD COLUMN operatorUsername varchar(64) not null,
+   ADD COLUMN realIpAddress varchar(64),
+   ADD COLUMN forwardedIpAddress varchar(256),
+   MODIFY COLUMN loanAccountId varchar(64),
+   MODIFY COLUMN createDate datetime(6) not null,
+   MODIFY COLUMN loanAccountType varchar(64),
+   MODIFY COLUMN clientIpAddress varchar(64) not null,
+   MODIFY COLUMN message varchar(4000) not null,
+   MODIFY COLUMN operatorId varchar(64) not null,
+   MODIFY COLUMN remark varchar(500) not null,
+   MODIFY COLUMN requestId varchar(64)
+;
+
+-- ----------table:OPER_LOGIN_LOG---------- 
+
+-- ----------table:CL_LOGIN_LOG---------- 
+
+-- ----------table:CL_SEC_OPERATE_LOG---------- 
 
 
 -- initdata

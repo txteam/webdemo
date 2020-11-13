@@ -47,11 +47,11 @@ public class DBScriptAssembler {
     
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/webdemo?useUnicode=true&characterEncoding=UTF-8";
+    private static final String URL = "jdbc:mysql://120.24.75.25:3306/webdemo?useUnicode=true&characterEncoding=UTF-8";
     
-    private static final String USERNAME = "root";
+    private static final String USERNAME = "pqy";
     
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "pqy";
     
     public static void initTableDDLExecutor() {
         SimpleDataSourceFinder dataSourceFinder = new SimpleDataSourceFinder(
