@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tx.component.role.model.Role;
-import com.tx.local.security.model.RoleTypeEnum;
+import com.tx.security.model.OperatorRoleTypeEnum;
 
 import io.swagger.annotations.ApiModel;
 
@@ -228,6 +228,6 @@ public class OperatorRole implements Serializable, Role {
      */
     @JsonIgnore
     public String getRoleTypeId() {
-        return RoleTypeEnum.ROLE_TYPE_OPERATOR.getId();
+        return OperatorRoleTypeEnum.ROLE_TYPE_OPERATOR.getId();
     }
 }

@@ -27,11 +27,6 @@ import com.tx.component.role.model.Role;
 import com.tx.component.security.model.AuthAuthority;
 import com.tx.component.security.model.RoleAuthority;
 import com.tx.core.exceptions.util.AssertUtils;
-import com.tx.local.basicdata.model.UserTypeEnum;
-import com.tx.local.clientinfo.model.Client;
-import com.tx.local.operator.model.Operator;
-import com.tx.local.security.model.ClientUserDetails;
-import com.tx.local.security.model.OperatorUserDetails;
 
 /**
  * WebContext容器工具类<br/>
@@ -68,32 +63,6 @@ public abstract class AbstractWebContextUtils {
      * 获取当前操作人员的id
      * <功能详细描述>
      * @return [参数说明]
-     *
-     * @return String [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public static String getUserId() {
-        UserDetails details = getUserDetails();
-        if (null == details) {
-            return null;
-        }
-        
-        if (details instanceof OperatorUserDetails) {
-            Operator operator = ((OperatorUserDetails) details).getOperator();
-            return operator == null ? null : operator.getId();
-        } else if (details instanceof ClientUserDetails) {
-            Client client = ((ClientUserDetails) details).getClient();
-            return client == null ? null : client.getId();
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-     * 获取当前操作人员的id
-     * <功能详细描述>
-     * @return [参数说明]
      * 
      * @return String [返回类型说明]
      * @exception throws [异常类型] [异常说明]
@@ -105,39 +74,7 @@ public abstract class AbstractWebContextUtils {
             return null;
         }
         
-        if (details instanceof OperatorUserDetails) {
-            Operator operator = ((OperatorUserDetails) details).getOperator();
-            return operator == null ? null : operator.getUsername();
-        } else if (details instanceof ClientUserDetails) {
-            Client client = ((ClientUserDetails) details).getClient();
-            return client == null ? null : client.getUsername();
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-    * 获取当前操作人员的类型
-    * <功能详细描述>
-    * @return [参数说明]
-    *
-    * @return String [返回类型说明]
-    * @exception throws [异常类型] [异常说明]
-    * @see [类、类#方法、类#成员]
-    */
-    public static UserTypeEnum getUserType() {
-        UserDetails details = getUserDetails();
-        if (null == details) {
-            return null;
-        }
-        
-        if (details instanceof OperatorUserDetails) {
-            return UserTypeEnum.OPERATOR;
-        } else if (details instanceof ClientUserDetails) {
-            return UserTypeEnum.CLIENT;
-        } else {
-            return null;
-        }
+        return details.getUsername();
     }
     
     /**
@@ -269,12 +206,41 @@ public abstract class AbstractWebContextUtils {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    public static void putInSession(String attributeName, Object object) {
+    public static void setAttributeToSession(String attributeName,
+            Object object) {
         AssertUtils.notEmpty(attributeName, "attributeName is null");
         AssertUtils.notNull(object, "object is null");
         
         HttpSession session = getSession(true);
         session.setAttribute(attributeName, object);
+    }
+    
+    /**
+     * 从session中取值<br/>
+     * <功能详细描述>
+     * @param <T>
+     * @param attributeName
+     * @param type
+     * @return [参数说明]
+     * 
+     * @return T [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public static <T> T getAttributeFromSession(String attributeName,
+            Class<T> type) {
+        AssertUtils.notEmpty(attributeName, "attributeName is null");
+        AssertUtils.notNull(type, "type is null");
+        
+        HttpSession session = getSession(true);
+        Object obj = session.getAttribute(attributeName);
+        
+        AssertUtils.isInstanceOf(type,
+                obj,
+                "attributeName:{} is not instance of class:{}",
+                new Object[] { attributeName, type });
+        
+        return null;
     }
     
     /**

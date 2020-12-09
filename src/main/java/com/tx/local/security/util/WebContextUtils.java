@@ -12,7 +12,7 @@ import com.tx.component.security.context.SecurityContext;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRoleEnum;
 import com.tx.local.organization.model.Organization;
-import com.tx.local.security.model.OperatorUserDetails;
+import com.tx.security.model.OperatorUserDetails;
 
 /**
  * WebContext容器工具类<br/>

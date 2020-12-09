@@ -30,7 +30,7 @@ import com.tx.plugin.login.weibo.WBLoginPlugin;
  * @since  [产品/模块版本]
  */
 @Controller("admin.indexController")
-@RequestMapping(value = { "", "/admin", "/background" })
+@RequestMapping(value = { "" })
 public class IndexController {
     
     /**
@@ -42,12 +42,12 @@ public class IndexController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping(value = {"","/", "/index", "/index.html" })
+    @RequestMapping(value = { "/", "/index", "/index.html" })
     public String index() {
-        WebContextUtils.getSession().setAttribute(
-                SecurityConstants.ACCESS_DOMAIN_KEY,
-                SecurityConstants.ACCESS_DOMAIN_OPERATOR);
-        return "redirect:/admin/mainframe";
+        WebContextUtils.getSession()
+                .setAttribute(SecurityConstants.ACCESS_DOMAIN_KEY,
+                        SecurityConstants.ACCESS_DOMAIN_OPERATOR);
+        return "redirect:/mainframe";
     }
     
     /**
@@ -92,6 +92,6 @@ public class IndexController {
         //            response.put("qqLoginEnable", false);
         //        }
         response.put("registEnable", false);
-         return "mainframe/login";
+        return "mainframe/login";
     }
 }

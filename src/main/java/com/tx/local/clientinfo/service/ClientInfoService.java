@@ -13,8 +13,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.tx.local.security.util.ClientWebContextUtils;
-import com.tx.local.security.util.WebContextUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -39,6 +37,8 @@ import com.tx.local.clientinfo.dao.ClientInfoDao;
 import com.tx.local.clientinfo.model.ClientInfo;
 import com.tx.local.clientinfo.model.ClientSecOperateLog;
 import com.tx.local.clientinfo.model.ClientStatusEnum;
+import com.tx.local.security.util.WebContextUtils;
+import com.tx.security4client.util.ClientWebContextUtils;
 
 /**
  * ClientInfo的业务层[ClientInfoService]
@@ -56,8 +56,8 @@ public class ClientInfoService implements InitializingBean {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(ClientInfoService.class);
     
-    @Resource(name = "clientPasswordEncoder")
-    public PasswordEncoder clientPasswordEncoder;
+    @Resource(name = "passwordEncoder")
+    public PasswordEncoder passwordEncoder;
     
     @Resource(name = "clientInfoDao")
     private ClientInfoDao clientInfoDao;
@@ -140,7 +140,7 @@ public class ClientInfoService implements InitializingBean {
         }
         clientInfo.setLocked(false);
         clientInfo.setPassword(
-                this.clientPasswordEncoder.encode(clientInfo.getPassword()));
+                this.passwordEncoder.encode(clientInfo.getPassword()));
         
         //写入默认时间
         Date now = new Date();
@@ -250,15 +250,15 @@ public class ClientInfoService implements InitializingBean {
         //生成查询条件
         params = params == null ? new HashMap<String, Object>() : params;
         params.put("valid", valid);
-
+        
         String _vcid = "";
-        if(StringUtils.isNotBlank(WebContextUtils.getVcid())){
+        if (StringUtils.isNotBlank(WebContextUtils.getVcid())) {
             _vcid = WebContextUtils.getVcid();
         }
-        if(ClientWebContextUtils.getClient() != null){
+        if (ClientWebContextUtils.getClient() != null) {
             _vcid = ClientWebContextUtils.getClient().getVcid();
         }
-        if(!"PT".equals(_vcid)){
+        if (!"PT".equals(_vcid)) {
             params.put("vcid", _vcid);
         }
         
@@ -629,7 +629,7 @@ public class ClientInfoService implements InitializingBean {
         
         //需要更新的字段
         Date now = new Date();
-        String rawPwd = this.clientPasswordEncoder.encode(newPassword);
+        String rawPwd = this.passwordEncoder.encode(newPassword);
         
         updateRowMap.put("password", rawPwd);
         updateRowMap.put("historyPwd", client.getPassword());
@@ -670,7 +670,7 @@ public class ClientInfoService implements InitializingBean {
         if (client == null) {
             return false;
         }
-        String rawHisPwd = this.clientPasswordEncoder.encode(hisPassword);
+        String rawHisPwd = this.passwordEncoder.encode(hisPassword);
         if (StringUtils.equalsIgnoreCase(rawHisPwd, client.getPassword())) {
             return false;
         }
@@ -681,7 +681,7 @@ public class ClientInfoService implements InitializingBean {
         
         //需要更新的字段
         Date now = new Date();
-        String rawPwd = this.clientPasswordEncoder.encode(newPassword);
+        String rawPwd = this.passwordEncoder.encode(newPassword);
         updateRowMap.put("password", rawPwd);
         updateRowMap.put("pwdUpdateDate", now);
         updateRowMap.put("lastUpdateDate", now);
@@ -720,7 +720,7 @@ public class ClientInfoService implements InitializingBean {
         updateRowMap.put("pwdUpdateDate", null);
         updateRowMap.put("historyPwd", client.getPassword());
         
-        String rawPwd = this.clientPasswordEncoder
+        String rawPwd = this.passwordEncoder
                 .encode(this.defaultClientPassword);
         updateRowMap.put("password", rawPwd);
         updateRowMap.put("lastUpdateDate", now);

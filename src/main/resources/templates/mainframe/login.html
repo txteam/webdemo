@@ -124,11 +124,11 @@ $(document).ready(function() {
         	hideErrorMessage();
         	DialogUtils.loading();
 	        $formBody.ajaxSubmit({
-			    url:/*[[@{/operator/sign}]]*/'',
+			    url:/*[[@{/operator/login}]]*/'',
 			    success: function(data) {
 			    	DialogUtils.loading('close');
 					if(data.code == 0){
-						window.location.href = /*[[@{/admin/mainframe}]]*/'/' + data.data;
+						window.location.href = /*[[@{/mainframe}]]*/'/' + data.data;
 					}else{
 						showErrorMessage(data.message);
 					}

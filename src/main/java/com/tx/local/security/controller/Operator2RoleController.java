@@ -38,8 +38,8 @@ import com.tx.local.operator.service.OperatorService;
 import com.tx.local.organization.facade.OrganizationFacade;
 import com.tx.local.organization.facade.PostFacade;
 import com.tx.local.security.model.CheckAbleRole;
-import com.tx.local.security.model.RoleTypeEnum;
 import com.tx.local.security.util.WebContextUtils;
+import com.tx.security.model.OperatorRoleTypeEnum;
 
 /**
  * 人员对角色控制层<br/>
@@ -136,7 +136,7 @@ public class Operator2RoleController implements InitializingBean {
             @RequestParam("operatorId") String operatorId,
             @RequestParam() MultiValueMap<String, String> request) {
         List<CheckAbleRole> resList = roleRegistry
-                .queryList(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId())
+                .queryList(OperatorRoleTypeEnum.ROLE_TYPE_OPERATOR.getId())
                 .stream()
                 .map(role -> new CheckAbleRole(role))
                 .collect(Collectors.toList());

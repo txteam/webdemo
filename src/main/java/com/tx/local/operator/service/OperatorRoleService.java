@@ -37,8 +37,8 @@ import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.local.operator.dao.OperatorRoleDao;
 import com.tx.local.operator.model.OperatorRole;
-import com.tx.local.security.model.RoleTypeEnum;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
+import com.tx.security.model.OperatorRoleTypeEnum;
 
 /**
  * OperatorRole的业务层[OperatorRoleService]
@@ -95,7 +95,7 @@ public class OperatorRoleService implements InitializingBean, RoleManager {
     @Override
     public List<Role> queryRoleList(String... roleTypeIds) {
         List<String> roleTypeList = Arrays.asList(roleTypeIds);
-        if (!roleTypeList.contains(RoleTypeEnum.ROLE_TYPE_OPERATOR.getId())) {
+        if (!roleTypeList.contains(OperatorRoleTypeEnum.ROLE_TYPE_OPERATOR.getId())) {
             return new ArrayList<>();
         }
         List<Role> resList = queryList(true, (Map<String, Object>) null)

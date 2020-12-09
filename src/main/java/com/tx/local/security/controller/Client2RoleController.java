@@ -34,8 +34,8 @@ import com.tx.component.role.service.RoleRefService;
 import com.tx.component.security.context.SecurityContext;
 import com.tx.local.clientinfo.facade.ClientInfoFacade;
 import com.tx.local.security.model.CheckAbleRole;
-import com.tx.local.security.model.RoleTypeEnum;
 import com.tx.local.security.util.WebContextUtils;
+import com.tx.security4client.model.ClientRoleTypeEnum;
 
 /**
  * 人员对角色控制层<br/>
@@ -131,7 +131,7 @@ public class Client2RoleController implements InitializingBean {
             @RequestParam("clientId") String clientId,
             @RequestParam() MultiValueMap<String, String> request) {
         List<CheckAbleRole> resList = roleRegistry
-                .queryList(RoleTypeEnum.ROLE_TYPE_CLIENT_ENUM.getId())
+                .queryList(ClientRoleTypeEnum.ROLE_TYPE_CLIENT_ENUM.getId())
                 .stream()
                 .map(role -> new CheckAbleRole(role))
                 .collect(Collectors.toList());

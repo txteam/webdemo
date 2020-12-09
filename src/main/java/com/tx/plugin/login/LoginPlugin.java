@@ -32,6 +32,7 @@ public abstract class LoginPlugin<CONFIG extends LoginPluginConfig>
     protected Logger logger = LoggerFactory.getLogger(LoginPlugin.class);
     
     /**
+     * 插件类型<br/>
      * @return
      */
     @Override
@@ -40,7 +41,7 @@ public abstract class LoginPlugin<CONFIG extends LoginPluginConfig>
     }
     
     /**
-     * 登陆前置句柄
+     * 登陆前置句柄<br/>
      * <功能详细描述>
      * @param request
      * @return [参数说明]
@@ -100,22 +101,6 @@ public abstract class LoginPlugin<CONFIG extends LoginPluginConfig>
             HttpServletRequest request) throws SocialAuthorizeException;
     
     /**
-     * 获取用户第三方用户信息<br/>
-     * <功能详细描述>
-     * @param code
-     * @param state
-     * @param request
-     * @return
-     * @throws SocialAuthorizeException [参数说明]
-     * 
-     * @return LoginUserInfo [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    public abstract LoginUserInfo getUserInfo(LoginAccessToken token,
-            HttpServletRequest request) throws SocialAuthorizeException;
-    
-    /**
      * 获取用户在第三方的唯一键<br/>
      * <功能详细描述>
      * @param code
@@ -129,6 +114,22 @@ public abstract class LoginPlugin<CONFIG extends LoginPluginConfig>
      * @see [类、类#方法、类#成员]
      */
     public abstract String getUniqueId(LoginAccessToken token,
+            HttpServletRequest request) throws SocialAuthorizeException;
+    
+    /**
+     * 获取用户第三方用户信息<br/>
+     * <功能详细描述>
+     * @param code
+     * @param state
+     * @param request
+     * @return
+     * @throws SocialAuthorizeException [参数说明]
+     * 
+     * @return LoginUserInfo [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    public abstract LoginUserInfo getUserInfo(LoginAccessToken token,
             HttpServletRequest request) throws SocialAuthorizeException;
     
 }

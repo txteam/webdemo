@@ -33,19 +33,21 @@ public interface SecurityConstants {
     
     String ACCESS_DOMAIN_DEFAULT = "CLIENT";
     
+    /** 操作人员 */
     String ACCESS_DOMAIN_OPERATOR = "OPERATOR";
     
+    /** 客户信息 */
     String ACCESS_DOMAIN_CLIENT = "CLIENT";
     
     /** 操作员登陆界面验证码 */
-    String CAPTCHA_FOR_OPERATOR = "captcha_for_operator";
+    String CAPTCHA_FOR_OPERATOR = "captcha";
     
     /** 操作员登陆session中存储的验证码 */
-    String SESSION_CAPTCHA_FOR_OPERATOR = "session_captcha_for_operator";
+    String SESSION_CAPTCHA_FOR_OPERATOR = "session_captcha";
     
     /** 客户登陆界面验证码 */
-    String CAPTCHA_FOR_CLIENT = "captcha_for_client";
+    String CAPTCHA_FOR_CLIENT = "captcha";
     
     /** 客户登陆会话中存储的验证码 */
-    String SESSION_CAPTCHA_FOR_CLIENT = "session_captcha_for_client";
+    String SESSION_CAPTCHA_FOR_CLIENT = "session_captcha";
 }

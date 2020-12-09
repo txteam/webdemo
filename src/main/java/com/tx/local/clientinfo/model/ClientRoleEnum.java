@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.tx.component.role.model.Role;
 import com.tx.core.support.json.BaseEnum;
 import com.tx.core.support.json.BaseEnumJsonSerializer;
-import com.tx.local.security.model.RoleTypeEnum;
+import com.tx.security4client.model.ClientRoleTypeEnum;
 
 /**
  * 角色枚举<br/>
@@ -30,10 +30,12 @@ import com.tx.local.security.model.RoleTypeEnum;
 public enum ClientRoleEnum implements Serializable, Role, BaseEnum {
     
     /** 系统操作人员:所有操作人员，默认拥有该角色 */
-    CLIENT("CLIENT", "客户(企业工作台)", RoleTypeEnum.ROLE_TYPE_CLIENT_ENUM.getId()),
+    CLIENT("CLIENT", "客户(企业工作台)",
+            ClientRoleTypeEnum.ROLE_TYPE_CLIENT_ENUM.getId()),
     
     /** 系统管理员:默认拥有除超级管理员外的所有权限 */
-    CLIENT_ADMIN("CLIENT_ADMIN", "客户管理员(企业工作台)", RoleTypeEnum.ROLE_TYPE_CLIENT_ENUM.getId());
+    CLIENT_ADMIN("CLIENT_ADMIN", "客户管理员(企业工作台)",
+            ClientRoleTypeEnum.ROLE_TYPE_CLIENT.getId());
     
     /** 数据库中主键，系统启动后会进行写入 */
     private final String id;
@@ -54,6 +56,7 @@ public enum ClientRoleEnum implements Serializable, Role, BaseEnum {
     /**
      * @return 返回 id
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -61,6 +64,7 @@ public enum ClientRoleEnum implements Serializable, Role, BaseEnum {
     /**
      * @return 返回 name
      */
+    @Override
     public String getName() {
         return name;
     }

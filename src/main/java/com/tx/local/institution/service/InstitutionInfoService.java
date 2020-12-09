@@ -36,8 +36,8 @@ import com.tx.local.clientinfo.utils.ClientContextUtils;
 import com.tx.local.institution.dao.InstitutionInfoDao;
 import com.tx.local.institution.model.InstitutionInfo;
 import com.tx.local.institution.model.InstitutionSummaryInfo;
-import com.tx.local.security.util.ClientWebContextUtils;
 import com.tx.local.security.util.WebContextUtils;
+import com.tx.security4client.util.ClientWebContextUtils;
 
 /**
  * InstitutionInfo的业务层[InstitutionInfoService]

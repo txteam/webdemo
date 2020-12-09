@@ -19,42 +19,61 @@ import com.tx.component.basicdata.model.BasicDataEnum;
  */
 public enum FeeEnum implements BasicDataEnum {
     
+    /** 购置款 */
     GZK("GZK", "购置款"),
     
+    /** 保证金 */
     BZJ("BZJ", "保证金"),
     
+    /** 原贷款结欠金额 */
     YDKJQJE("YDKJQJE", "原贷款结欠金额"),
     
+    /** 投资阶段分润 */
     TZJDFR("TZJDFR", "投资阶段分润"),
     
+    /** 贷前考察 */
     DQKCF("DQKCF", "贷前考察"),
     
+    /** 一次性手续费 */
     YCXSXF("YCXSXF", "一次性手续费"),
     
+    /** 贷前延期费 */
     DQYQF("DQYQF", "贷前延期费"),
     
+    /** 扣款失败手续费 */
     KQSBSXF("KQSBSXF", "扣款失败手续费"),
     
+    /** 逾期利息 */
     YQLX("YQLX", "逾期利息"),
     
+    /** 管理费 */
     GLF("YCXSXF", "管理费"),
     
+    /** 利息 */
     LX("LX", "利息"),
     
+    /** 提前还款违约金 */
     TQHKWYJ("TQHKWYJ", "提前还款违约金"),
     
+    /** 体验金 */
     TYJ("TYJ", "体验金"),
     
+    /** 本金 */
     BJ("BJ", "本金"),
     
+    /** 贷后展期费 */
     DHZQF("DHZQF", "贷后展期费"),
     
+    /** 外包佣金 */
     WBYJ("WBYJ", "外包佣金"),
     
+    /** 调账金额 */
     TZJE("TZJE", "调账金额"),
     
+    /** 超额还款 */
     CEHK("CEHK", "超额还款"),
     
+    /** 注销后回款 */
     ZXHHK("ZXHHK", "注销后回款");
     
     /** 费用项关键字 */

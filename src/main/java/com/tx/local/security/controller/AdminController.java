@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.local.security.model.OperatorUserDetails;
 import com.tx.local.security.util.WebContextUtils;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
 import com.tx.local.vitualcenter.model.VirtualCenter;
+import com.tx.security.model.OperatorUserDetails;
 
 /**
  *  超级管理员控制层<br/>

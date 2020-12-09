@@ -205,26 +205,6 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
-feign:
-  local:
-    url: http://127.0.0.1:${app.server.port}/${app.server.contextPath}
-    module: ${app.server.name}
-  compression:
-    request:
-      enabled: true
-      mime-types:
-      - text/xml
-      - application/xml
-      - application/json
-      min-request-size: 2048
-    response:
-      enabled: true
-  # client:
-  #  config: 
-  httpclient:
-    enabled: true
-    connection-timeout: 10000
     
 tx:
   core:
@@ -261,3 +241,23 @@ tx:
       # enable: false
     # strategy:
       # enable: false
+
+feign:
+  local:
+    url: http://127.0.0.1:${app.server.port}/${app.server.contextPath}
+    module: ${app.server.name}
+  compression:
+    request:
+      enabled: true
+      mime-types:
+      - text/xml
+      - application/xml
+      - application/json
+      min-request-size: 2048
+    response:
+      enabled: true
+  # client:
+  #  config: 
+  httpclient:
+    enabled: true
+    connection-timeout: 10000

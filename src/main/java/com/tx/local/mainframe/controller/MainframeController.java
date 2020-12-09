@@ -29,9 +29,8 @@ import com.tx.local.security.util.WebContextUtils;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Controller("admin.MainframeController")
-@RequestMapping(value = { "/mainframe", "/admin/mainframe",
-        "/background/mainframe" })
+@Controller("local.MainframeController")
+@RequestMapping(value = { "/mainframe" })
 public class MainframeController {
     
     @Resource(name = "menuContext")
@@ -47,11 +46,11 @@ public class MainframeController {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping(value = { "","/" })
+    @RequestMapping(value = { "", "/" })
     public String toMainframe(Model model) {
-        WebContextUtils.getSession().setAttribute(
-                SecurityConstants.ACCESS_DOMAIN_KEY,
-                SecurityConstants.ACCESS_DOMAIN_OPERATOR);
+        WebContextUtils.getSession()
+                .setAttribute(SecurityConstants.ACCESS_DOMAIN_KEY,
+                        SecurityConstants.ACCESS_DOMAIN_OPERATOR);
         
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         model.addAttribute("now", df.format(new Date()));

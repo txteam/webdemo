@@ -1,5 +1,5 @@
 /*
- * 描          述:  <描述>
+` * 描          述:  <描述>
  * 修  改   人:  
  * 修改时间:  
  * <修改描述:>
@@ -56,7 +56,7 @@ public class OperatorService implements InitializingBean {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(OperatorService.class);
     
-    @Resource(name = "operatorPasswordEncoder")
+    @Resource
     public PasswordEncoder operatorPasswordEncoder;
     
     @Resource(name = "operatorDao")
@@ -777,14 +777,18 @@ public class OperatorService implements InitializingBean {
         Map<String, Object> updateRowMap = new HashMap<String, Object>();
         updateRowMap.put("id", id);
         
+        Operator oper = findById(id);
         updateRowMap.put("locked", true);
         updateRowMap.put("lastUpdateDate", new Date());
-        updateRowMap.put("pwdErrCount", 0);//锁定的时候，同事将密码错误次数重置为0
+        //updateRowMap.put("pwdErrCount", 0);//锁定的时候，同事将密码错误次数重置为0
         
         boolean flag = this.operatorDao.update(updateRowMap) > 0;
         
         //记录业务日志
+        //如果锁定用户在未登陆期间发生，需要明确写入客户的id
         ServiceLoggerUtils.log(OperSecOperateLog.builder()
+                .operatorId(id)
+                .operatorUsername(oper.getUsername())
                 .message(MessageUtils.format("锁定操作人员[{}].", id))
                 .build());
         

@@ -64,7 +64,6 @@ public abstract class AuthenticationUtils {
                 AuthenticationCredentialsNotFoundException.class)) {
             errorMessage = "用户授权不存在，非法授权或已过期授权，请重新登录.";
         }
-        
         return errorMessage;
     }
 }

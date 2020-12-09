@@ -13,7 +13,7 @@ import org.springframework.beans.InvalidPropertyException;
 import org.springframework.stereotype.Component;
 
 import com.tx.component.servicelogger.support.LogArgumentHandler;
-import com.tx.local.security.util.ClientWebContextUtils;
+import com.tx.security4client.util.ClientWebContextUtils;
 
 /**
  * 实现创建时间注入逻辑<br/>

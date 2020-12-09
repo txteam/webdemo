@@ -32,8 +32,8 @@ import com.tx.local.clientinfo.service.ClientInfoService;
 import com.tx.local.personal.dao.PersonalInfoDao;
 import com.tx.local.personal.model.PersonalInfo;
 import com.tx.local.personal.model.PersonalSummary;
-import com.tx.local.security.util.ClientWebContextUtils;
 import com.tx.local.security.util.WebContextUtils;
+import com.tx.security4client.util.ClientWebContextUtils;
 
 /**
  * PersonalInfo的业务层[PersonalInfoService]
