@@ -82,11 +82,17 @@ public class OperatorLoginFormAuthenticationProvider
                             "userDetails:{} should instance of OperatorUserDetails.",
                             new Object[] { userDetails }));
             OperatorUserDetails oud = (OperatorUserDetails) userDetails;
-            this.operatorService.updatePwdErrorCountById(
-                    oud.getOperator().getId(),
-                    oud.getOperator().getPwdErrCount() + 1);
+            
             if (oud.getOperator().getPwdErrCount() + 1 >= 3) {
-                this.operatorService.lockById(oud.getOperator().getId());
+                //如果错误次数已经大于3，则锁定用户
+                this.operatorService.updatePwdErrorCountById(oud.getOperator()
+                        .getId(), oud.getOperator().getPwdErrCount() + 1, true);
+            } else {
+                //更新密码错误次数
+                this.operatorService.updatePwdErrorCountById(
+                        oud.getOperator().getId(),
+                        oud.getOperator().getPwdErrCount() + 1,
+                        false);
             }
             
             throw new BadCredentialsException(messages.getMessage(

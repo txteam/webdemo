@@ -83,7 +83,7 @@ public class OperatorSecurityAuthenticationSuccessHandler
             PrintWriter out = response.getWriter();
             
             RemoteResult<String> result = RemoteResult
-                    .SUCCESS("/background/mainframe");
+                    .SUCCESS(getDefaultTargetUrl());
             result.setMessage("登录成功");
             out.write(JsonUtils.toJson(result));
             
@@ -112,10 +112,13 @@ public class OperatorSecurityAuthenticationSuccessHandler
         //如果用户密码错误次数>1，则重置密码错误次数为0
         OperatorUserDetails operUserDetail = (OperatorUserDetails) authentication
                 .getPrincipal();
+        
         Operator oper = operUserDetail.getOperator();
         if (oper.getPwdErrCount() > 0) {
             oper.setPwdErrCount(0);
-            //this.operatorService.updatePwdErrorCountById(oper.getId(), 0);
+            //更新用户错误次数
+            this.operatorService
+                    .updatePwdErrorCountById(oper.getId(), 0, false);
         }
     }
     

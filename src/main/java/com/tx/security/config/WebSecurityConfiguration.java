@@ -3,6 +3,9 @@ package com.tx.security.config;
 import java.util.Arrays;
 import java.util.Collections;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -50,7 +53,7 @@ import com.tx.security.strategy.OperatorSessionAuthenticationStrategy;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Order(value = 200)
+@Order(value = 300)
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -59,6 +62,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     /** 日志记录句柄 */
     protected static Logger logger = LoggerFactory
             .getLogger(WebSecurityConfiguration.class);
+    
+    @Resource
+    private DataSource datasource;
     
     private final String LOGOUT_URL = "/operator/logout";
     
@@ -97,12 +103,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/actuator/metrics/**",
                         "/actuator/httptrace/**",
                         "/actuator/redis/**");
-        
-        //swagger
-        web.ignoring().antMatchers("/swagger-ui.html", "/swagger**/**");
-        
         //druid
         web.ignoring().antMatchers("/druid/**", "/druid/**");
+        //swagger
+        web.ignoring().antMatchers("/swagger-ui.html", "/swagger**/**");
         
         //uploads
         //web.ignoring().antMatchers("uploads/**");
@@ -142,6 +146,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //第三方用户登陆
         http.addFilterBefore(operatorSocialAuthenticationProcessingFilter(),
                 UsernamePasswordAuthenticationFilter.class);
+        
+        //rememberMe的配置
+        http.rememberMe()
+                .userDetailsService(operatorUserDetailsService())
+                .authenticationSuccessHandler(successHandler())
+                .tokenRepository(tokenRepository);
         
         //logout配置
         http.logout()
@@ -245,6 +255,20 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+    
+    //    /**
+    //     * 持久化token
+    //     * 
+    //     * Security中，默认是使用PersistentTokenRepository的子类InMemoryTokenRepositoryImpl，将token放在内存中
+    //     * 如果使用JdbcTokenRepositoryImpl，会创建表persistent_logins，将token持久化到数据库
+    //     */
+    //    @Bean
+    //    public PersistentTokenRepository persistentTokenRepository() {
+    //        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+    //        tokenRepository.setDataSource(dataSource); // 设置数据源
+    //        //        tokenRepository.setCreateTableOnStartup(true); // 启动创建表，创建成功后注释掉
+    //        return tokenRepository;
+    //    }
     
     /**
      * 操作人员认证处理过滤器<br/>

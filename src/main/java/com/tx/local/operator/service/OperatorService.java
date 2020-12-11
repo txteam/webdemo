@@ -522,7 +522,8 @@ public class OperatorService implements InitializingBean {
      * @see [类、类#方法、类#成员]
      */
     @Transactional
-    public boolean updatePwdErrorCountById(String id, int errorCount) {
+    public boolean updatePwdErrorCountById(String id, int errorCount,
+            boolean locked) {
         //验证参数是否合法，必填字段是否填写
         AssertUtils.notEmpty(id, "id is empty.");
         
@@ -540,6 +541,7 @@ public class OperatorService implements InitializingBean {
         
         updateRowMap.put("pwdErrCount", errorCount);
         updateRowMap.put("lastUpdateDate", now);
+        updateRowMap.put("locked", locked);
         
         int updateRowCount = this.operatorDao.update(updateRowMap);
         
