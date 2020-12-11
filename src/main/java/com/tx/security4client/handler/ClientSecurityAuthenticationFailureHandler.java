@@ -43,6 +43,12 @@ public class ClientSecurityAuthenticationFailureHandler
         setDefaultFailureUrl("/client/login");
     }
     
+    /** <默认构造函数> */
+    public ClientSecurityAuthenticationFailureHandler(
+            String defaultFailureUrl) {
+        super(defaultFailureUrl);
+    }
+    
     /**
      * @param request
      * @param response

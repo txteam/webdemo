@@ -1,10 +1,10 @@
 /*
  * 描          述:  <描述>
  * 修  改   人:  Administrator
- * 修改时间:  2020年1月4日
+ * 修改时间:  2018年12月27日
  * <修改描述:>
  */
-package com.tx.local.operator.model;
+package com.tx.local.device.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,38 +13,39 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import com.tx.local.basicdata.model.AgentTypeEnum;
 
-import io.swagger.annotations.ApiModel;
-
 /**
- * 操作人员安全设备<br/>
+ * 设备绑定信息<br/>
  * <功能详细描述>
  * 
  * @author  Administrator
- * @version  [版本号, 2020年1月4日]
+ * @version  [版本号, 2018年12月27日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
 @Entity
-@Table(name = "oper_security_device")
-@ApiModel("操作人员安全设备")
-public class OperSecurityDevice implements Serializable {
+@Table(name = "sec_device_info", indexes = {
+        @Index(name = "idx_device_info_00", unique = true, columnList = "deviceId"),
+        @Index(name = "idx_device_info_01", unique = true, columnList = "signKey"),
+        @Index(name = "idx_device_info_02", columnList = "clientIpAddress"),
+        @Index(name = "idx_device_info_03", columnList = "createDate") })
+public class DeviceInfo implements Serializable {
     
     /** 注释内容 */
-    private static final long serialVersionUID = 4474844960117526016L;
+    private static final long serialVersionUID = -3702182890422456820L;
     
-    /** 主键 */
-    private String id;
-    
-    /** 操作人员id */
-    private String operatorId;
-    
-    //： 设备签名
-    @Column(nullable = false, length = 64)
-    private String token;
+    /** 设备绑定信息唯一键 */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
+    private Long id;
     
     //: 设备的唯一标识
     @Column(nullable = false, length = 64)
@@ -65,6 +66,10 @@ public class OperSecurityDevice implements Serializable {
     //远端调用ip地址
     @Column(nullable = true, length = 64)
     private String remoteIpAddress;
+    
+    //： 设备签名
+    @Column(nullable = false, length = 64)
+    private String signKey;
     
     //设备的国际移动设备身份码
     @Column(nullable = true, length = 64)
@@ -106,43 +111,15 @@ public class OperSecurityDevice implements Serializable {
     /**
      * @return 返回 id
      */
-    public String getId() {
+    public Long getId() {
         return id;
     }
     
     /**
      * @param 对id进行赋值
      */
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-    
-    /**
-     * @return 返回 operatorId
-     */
-    public String getOperatorId() {
-        return operatorId;
-    }
-    
-    /**
-     * @param 对operatorId进行赋值
-     */
-    public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId;
-    }
-    
-    /**
-     * @return 返回 token
-     */
-    public String getToken() {
-        return token;
-    }
-    
-    /**
-     * @param 对token进行赋值
-     */
-    public void setToken(String token) {
-        this.token = token;
     }
     
     /**
@@ -160,59 +137,17 @@ public class OperSecurityDevice implements Serializable {
     }
     
     /**
-     * @return 返回 clientIpAddress
+     * @return 返回 signKey
      */
-    public String getClientIpAddress() {
-        return clientIpAddress;
+    public String getSignKey() {
+        return signKey;
     }
     
     /**
-     * @param 对clientIpAddress进行赋值
+     * @param 对signKey进行赋值
      */
-    public void setClientIpAddress(String clientIpAddress) {
-        this.clientIpAddress = clientIpAddress;
-    }
-    
-    /**
-     * @return 返回 realIpAddress
-     */
-    public String getRealIpAddress() {
-        return realIpAddress;
-    }
-    
-    /**
-     * @param 对realIpAddress进行赋值
-     */
-    public void setRealIpAddress(String realIpAddress) {
-        this.realIpAddress = realIpAddress;
-    }
-    
-    /**
-     * @return 返回 forwardedIpAddress
-     */
-    public String getForwardedIpAddress() {
-        return forwardedIpAddress;
-    }
-    
-    /**
-     * @param 对forwardedIpAddress进行赋值
-     */
-    public void setForwardedIpAddress(String forwardedIpAddress) {
-        this.forwardedIpAddress = forwardedIpAddress;
-    }
-    
-    /**
-     * @return 返回 remoteIpAddress
-     */
-    public String getRemoteIpAddress() {
-        return remoteIpAddress;
-    }
-    
-    /**
-     * @param 对remoteIpAddress进行赋值
-     */
-    public void setRemoteIpAddress(String remoteIpAddress) {
-        this.remoteIpAddress = remoteIpAddress;
+    public void setSignKey(String signKey) {
+        this.signKey = signKey;
     }
     
     /**
@@ -272,34 +207,6 @@ public class OperSecurityDevice implements Serializable {
     }
     
     /**
-     * @return 返回 osAgentType
-     */
-    public AgentTypeEnum getOsAgentType() {
-        return osAgentType;
-    }
-    
-    /**
-     * @param 对osAgentType进行赋值
-     */
-    public void setOsAgentType(AgentTypeEnum osAgentType) {
-        this.osAgentType = osAgentType;
-    }
-    
-    /**
-     * @return 返回 osAgentVersion
-     */
-    public String getOsAgentVersion() {
-        return osAgentVersion;
-    }
-    
-    /**
-     * @param 对osAgentVersion进行赋值
-     */
-    public void setOsAgentVersion(String osAgentVersion) {
-        this.osAgentVersion = osAgentVersion;
-    }
-    
-    /**
      * @return 返回 bindingCount
      */
     public int getBindingCount() {
@@ -339,5 +246,89 @@ public class OperSecurityDevice implements Serializable {
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+    
+    /**
+     * @return 返回 clientIpAddress
+     */
+    public String getClientIpAddress() {
+        return clientIpAddress;
+    }
+    
+    /**
+     * @param 对clientIpAddress进行赋值
+     */
+    public void setClientIpAddress(String clientIpAddress) {
+        this.clientIpAddress = clientIpAddress;
+    }
+    
+    /**
+     * @return 返回 realIpAddress
+     */
+    public String getRealIpAddress() {
+        return realIpAddress;
+    }
+    
+    /**
+     * @param 对realIpAddress进行赋值
+     */
+    public void setRealIpAddress(String realIpAddress) {
+        this.realIpAddress = realIpAddress;
+    }
+    
+    /**
+     * @return 返回 forwardedIpAddress
+     */
+    public String getForwardedIpAddress() {
+        return forwardedIpAddress;
+    }
+    
+    /**
+     * @param 对forwardedIpAddress进行赋值
+     */
+    public void setForwardedIpAddress(String forwardedIpAddress) {
+        this.forwardedIpAddress = forwardedIpAddress;
+    }
+    
+    /**
+     * @return 返回 remoteIpAddress
+     */
+    public String getRemoteIpAddress() {
+        return remoteIpAddress;
+    }
+    
+    /**
+     * @param 对remoteIpAddress进行赋值
+     */
+    public void setRemoteIpAddress(String remoteIpAddress) {
+        this.remoteIpAddress = remoteIpAddress;
+    }
+    
+    /**
+     * @return 返回 osAgentType
+     */
+    public AgentTypeEnum getOsAgentType() {
+        return osAgentType;
+    }
+    
+    /**
+     * @param 对osAgentType进行赋值
+     */
+    public void setOsAgentType(AgentTypeEnum osAgentType) {
+        this.osAgentType = osAgentType;
+    }
+    
+    /**
+     * @return 返回 osAgentVersion
+     */
+    public String getOsAgentVersion() {
+        return osAgentVersion;
+    }
+    
+    /**
+     * @param 对osAgentVersion进行赋值
+     */
+    public void setOsAgentVersion(String osAgentVersion) {
+        this.osAgentVersion = osAgentVersion;
     }
 }

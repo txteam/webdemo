@@ -32,13 +32,16 @@ import com.tx.security.model.OperatorRoleTypeEnum;
 public enum OperatorRoleEnum implements Serializable, Role, BaseEnum {
     
     /** 系统操作人员:所有操作人员，默认拥有该角色 */
-    OPERATOR("OPERATOR", "系统操作人员", OperatorRoleTypeEnum.ROLE_TYPE_OPERATOR.getId()),
+    OPERATOR("OPERATOR", "系统操作人员",
+            OperatorRoleTypeEnum.ROLE_TYPE_OPERATOR_ENUM.getId()),
     
     /** 系统管理员:默认拥有除超级管理员外的所有权限 */
-    ADMIN("ADMIN", "系统管理员", OperatorRoleTypeEnum.ROLE_TYPE_OPERATOR_ENUM.getId()),
+    ADMIN("ADMIN", "系统管理员",
+            OperatorRoleTypeEnum.ROLE_TYPE_OPERATOR_ENUM.getId()),
     
     /** 系统超级管理员：默认拥有所有权限 */
-    SUPER_ADMIN("SUPER_ADMIN", "超级管理员", OperatorRoleTypeEnum.ROLE_TYPE_OPERATOR_ENUM.getId());
+    SUPER_ADMIN("SUPER_ADMIN", "超级管理员",
+            OperatorRoleTypeEnum.ROLE_TYPE_OPERATOR_ENUM.getId());
     
     /** 数据库中主键，系统启动后会进行写入 */
     private final String id;
@@ -59,6 +62,7 @@ public enum OperatorRoleEnum implements Serializable, Role, BaseEnum {
     /**
      * @return 返回 id
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -66,6 +70,7 @@ public enum OperatorRoleEnum implements Serializable, Role, BaseEnum {
     /**
      * @return 返回 name
      */
+    @Override
     public String getName() {
         return name;
     }

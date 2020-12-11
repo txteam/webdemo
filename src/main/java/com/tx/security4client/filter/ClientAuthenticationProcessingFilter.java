@@ -55,6 +55,12 @@ public class ClientAuthenticationProcessingFilter
         setFilterProcessesUrl("/client/sign");
     }
     
+    /** <默认构造函数> */
+    public ClientAuthenticationProcessingFilter(String loginProcessingUrl) {
+        super();
+        setFilterProcessesUrl(loginProcessingUrl);
+    }
+    
     /**
      * @param request
      * @param response

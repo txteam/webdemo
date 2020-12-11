@@ -8,7 +8,9 @@ package com.tx.security.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -148,15 +150,13 @@ public class OperatorUserDetailsService
                     operator.getMainPostId());
         }
         
-        //角色权限
-        boolean isSuperAdmin = false;
+        //加载操作人员所拥有的角色
+        //查询所拥有的角色
         List<RoleRef> roleRefList = this.roleRefService.queryListByRef(true,
                 RoleConstants.ROLEREFTYPE_OPERATOR,
                 operator.getId(),
                 null);
-        isSuperAdmin = isSuperAdmin(operator, roleRefList);
-        boolean isAdmin = isAdmin(operator, roleRefList);
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         //无论是否是超级管理员，都需要将其所拥有的角色进行加载
         roleRefList.stream()
                 .map(roleRefTemp -> roleRefTemp.getRoleId())
@@ -164,6 +164,7 @@ public class OperatorUserDetailsService
                 .stream()
                 .forEach(roleIdTemp -> {
                     Role role = roleRegistry.findById(roleIdTemp);
+                    //过滤掉不存在的角色
                     if (role == null) {
                         return;
                     }
@@ -171,16 +172,25 @@ public class OperatorUserDetailsService
                     refMap.add(AuthConstants.AUTHREFTYPE_ROLE, roleIdTemp);
                 });
         
+        //写入系统中预制的角色
+        //判断是否超级管理员
+        boolean isSuperAdmin = isSuperAdmin(operator, roleRefList);
+        //判断是否是系统管理员
+        boolean isAdmin = isAdmin(operator, roleRefList);
         if (isSuperAdmin) {
             //如果为超级管理员，则将超级管理员角色加入
             roles.add(roleRegistry
                     .findById(OperatorRoleEnum.SUPER_ADMIN.getId()));
         }
-        //所有的操作人员均拥有角色operator
+        if (isAdmin) {
+            //如果为系统管理员，则将系统管理员角色加入
+            roles.add(roleRegistry.findById(OperatorRoleEnum.ADMIN.getId()));
+        }
+        //所有的操作人员均拥有角色OPERATOR
         roles.add(roleRegistry.findById(OperatorRoleEnum.OPERATOR.getId()));
         
         //查询用户的权限：根据用户的所属组织，职位，角色查询
-        List<Auth> auths = new ArrayList<>();
+        Set<Auth> auths = new HashSet<>();
         if (isSuperAdmin || isAdmin) {
             //查询系统所有可授予的操作人员操作权限以及数据权限，当人员为超级管理员或系统管理员时，不再读取实际配置了哪些权限
             String[] authTypeIds = Arrays.asList(
@@ -190,6 +200,7 @@ public class OperatorUserDetailsService
                     .toArray(String[]::new);
             auths.addAll(this.authRegistry.queryList(authTypeIds));
         } else {
+            //查询所有系统配置的权限
             List<AuthRef> authRefList = this.authRefService
                     .queryListByRefMap(true, refMap);
             for (AuthRef arTemp : authRefList) {
@@ -200,8 +211,10 @@ public class OperatorUserDetailsService
                 auths.add(auth);
             }
         }
+        
+        //构建用户详情
         OperatorUserDetails userDetail = new OperatorUserDetails(operator,
-                roles, auths);
+                new ArrayList<>(roles), new ArrayList<>(auths));
         return userDetail;
     }
     
@@ -219,10 +232,14 @@ public class OperatorUserDetailsService
      */
     protected boolean isSuperAdmin(Operator operator,
             List<RoleRef> roleRefList) {
+        AssertUtils.notNull(operator, "operator is null.");
+        
+        //如果用户名为admin
         String username = operator.getUsername();
         if (StringUtils.equals(username, "admin")) {
             return true;
         }
+        //或者有这个角色
         for (RoleRef rf : roleRefList) {
             if (OperatorRoleEnum.SUPER_ADMIN.getId().equals(rf.getId())) {
                 return true;
@@ -244,6 +261,12 @@ public class OperatorUserDetailsService
      * @see [类、类#方法、类#成员]
      */
     protected boolean isAdmin(Operator operator, List<RoleRef> roleRefList) {
+        AssertUtils.notNull(operator, "operator is null.");
+        
+        //如果操作人员中的标志位信息为系统管理员
+        if (operator.isAdmin()) {
+            return true;
+        }
         for (RoleRef rf : roleRefList) {
             if (OperatorRoleEnum.ADMIN.getId().equals(rf.getRoleId())) {
                 return true;

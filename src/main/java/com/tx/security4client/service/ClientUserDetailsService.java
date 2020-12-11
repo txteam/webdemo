@@ -7,7 +7,9 @@
 package com.tx.security4client.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -25,6 +27,7 @@ import com.tx.component.role.service.RoleRefService;
 import com.tx.component.security.context.SecurityContext;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.clientinfo.model.ClientInfo;
+import com.tx.local.clientinfo.model.ClientRoleEnum;
 import com.tx.local.clientinfo.service.ClientInfoService;
 import com.tx.security4client.model.ClientUserDetails;
 
@@ -79,22 +82,6 @@ public class ClientUserDetailsService
         return userDetail;
     }
     
-    //    private UserDetails mockUser() {
-    //        ClientInfo user = new ClientInfo();
-    //        user.setUsername("test");
-    //        user.setPassword("E10ADC3949BA59ABBE56E057F20F883E");
-    //        user.setId("1");
-    //        user.setValid(true);
-    //        user.setLocked(false);
-    //        
-    //        Collection<GrantedAuthority> authorities = new HashSet<>();
-    //        authorities.add(new SimpleGrantedAuthority("ROLE_OPERATOR_ADMIN"));//用户所拥有的角色信息
-    //        //AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
-    //        
-    //        ClientUserDetails userDetail = new ClientUserDetails(user, authorities);
-    //        return userDetail;
-    //    }
-    
     /**
      * 根据用户id加载UserDetail对象<br/>
      * <功能详细描述>
@@ -128,13 +115,12 @@ public class ClientUserDetailsService
      * @see [类、类#方法、类#成员]
      */
     private ClientUserDetails loadUserDetailByClient(ClientInfo client) {
-        
+        //查询用户所拥有的角色
         List<RoleRef> roleRefList = this.roleRefService.queryListByRef(true,
                 RoleConstants.ROLEREFTYPE_CLIENT,
                 client.getId(),
                 null);
-        List<Role> roles = new ArrayList<>();
-        //无论是否是超级管理员，都需要将其所拥有的角色进行加载
+        Set<Role> roles = new HashSet<>();
         roleRefList.stream()
                 .map(roleRefTemp -> roleRefTemp.getRoleId())
                 .collect(Collectors.toSet())
@@ -146,9 +132,12 @@ public class ClientUserDetailsService
                     }
                     roles.add(role);
                 });
+        //加入默认的角色
+        roles.add(roleRegistry.findById(ClientRoleEnum.CLIENT.getId()));
         
-        ClientUserDetails userDetail = new ClientUserDetails(client, roles,
-                null);
+        //构造ClientUserDetail
+        ClientUserDetails userDetail = new ClientUserDetails(client,
+                new ArrayList<>(roles), null);
         return userDetail;
     }
 }

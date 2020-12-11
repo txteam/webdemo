@@ -56,7 +56,7 @@ public class ClientInfoService implements InitializingBean {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(ClientInfoService.class);
     
-    @Resource(name = "passwordEncoder")
+    @Resource
     public PasswordEncoder passwordEncoder;
     
     @Resource(name = "clientInfoDao")
@@ -720,8 +720,7 @@ public class ClientInfoService implements InitializingBean {
         updateRowMap.put("pwdUpdateDate", null);
         updateRowMap.put("historyPwd", client.getPassword());
         
-        String rawPwd = this.passwordEncoder
-                .encode(this.defaultClientPassword);
+        String rawPwd = this.passwordEncoder.encode(this.defaultClientPassword);
         updateRowMap.put("password", rawPwd);
         updateRowMap.put("lastUpdateDate", now);
         

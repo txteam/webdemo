@@ -1,19 +1,33 @@
 package com.tx.security4client.config;
 
+import java.util.Arrays;
+import java.util.Collections;
+
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.switchuser.SwitchUserFilter;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.accept.ContentNegotiationStrategy;
+import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 
 import com.tx.component.security.filter.SecurityThreadLocalResourceSupportFilter;
 import com.tx.local.clientinfo.model.ClientRoleEnum;
@@ -21,7 +35,6 @@ import com.tx.security.config.WebSecurityConfiguration;
 import com.tx.security4client.filter.ClientAuthenticationProcessingFilter;
 import com.tx.security4client.handler.ClientSecurityAuthenticationFailureHandler;
 import com.tx.security4client.handler.ClientSecurityAuthenticationSuccessHandler;
-import com.tx.security4client.model.ClientPasswordEncoder;
 import com.tx.security4client.provider.ClientAuthenticationProvider;
 import com.tx.security4client.provider.ClientSocialAuthenticationProvider;
 import com.tx.security4client.service.ClientUserDetailsService;
@@ -36,7 +49,7 @@ import com.tx.security4client.strategy.ClientSessionAuthenticationStrategy;
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-@Order(value = 201)
+@Order(value = 199)
 @AutoConfigureBefore(WebSecurityConfiguration.class)
 @Configuration
 public class ClientWebSecurityConfiguration
@@ -46,8 +59,21 @@ public class ClientWebSecurityConfiguration
     protected static Logger logger = LoggerFactory
             .getLogger(ClientWebSecurityConfiguration.class);
     
-    @Autowired
+    @Resource
     private AuthenticationManager authenticationManager;
+    
+    @Resource
+    private PasswordEncoder passwordEncoder;
+    
+    private final String LOGOUT_URL = "/client/logout";
+    
+    private final String LOGIN_URL = "/client/login";
+    
+    private final String LOGIN_PROCESSING_URL = "/client/client/login";
+    
+    //private final String SOCIAL_LOGIN_PROCESSING_URL = "/client/client/social/login";
+    
+    private final String TARGET_URL = "/client/mainframe";
     
     /**
      * httpSecurity配置
@@ -82,13 +108,13 @@ public class ClientWebSecurityConfiguration
         //logout配置
         //http.logout().disable();
         http.logout()
-                .logoutUrl("/client/logout")
-                .logoutSuccessUrl("/client/login");
+                .logoutUrl(this.LOGOUT_URL)
+                .logoutSuccessUrl(this.LOGIN_URL);
         
         //注册登录入口
-        //registerAuthenticationEntryPoint(http);
-        
-        //registerAccessDeniedHandler(http);
+        //注册认证用户，无权限的处理
+        http.exceptionHandling().accessDeniedPage(this.LOGIN_URL);
+        registerAuthenticationEntryPoint(http);
         
         //必须条件该过滤器，不然权限容器中线程变量逻辑会存在问题
         http.addFilterAfter(new SecurityThreadLocalResourceSupportFilter(),
@@ -97,14 +123,16 @@ public class ClientWebSecurityConfiguration
         //所有请求都允许访问
         //http.authorizeRequests().anyRequest().fullyAuthenticated();
         //首页允许
-        /*http.authorizeRequests()
-                .antMatchers("/client/**", "/client/index")
-                .permitAll();*/
+        http.authorizeRequests()
+                .antMatchers("/client/", "/client/index")
+                .permitAll();
+        //登陆
+        http.authorizeRequests()
+                .antMatchers(this.LOGIN_URL, this.LOGIN_PROCESSING_URL)
+                .permitAll();
+        
         //第三方用户登陆
         http.authorizeRequests().antMatchers("/client/social/**").permitAll();
-        //后台登陆页
-        http.authorizeRequests().antMatchers("/client/login").permitAll();
-        http.authorizeRequests().antMatchers("/client/sign").permitAll();
         
         //验证码
         http.authorizeRequests().antMatchers("/client/captcha/**").permitAll();
@@ -116,33 +144,50 @@ public class ClientWebSecurityConfiguration
     }
     
     /**
-     * 认证成功处理句柄<br/>
+     * 注册登录入口<br/>
      * <功能详细描述>
-     * @return [参数说明]
+     * @param http
+     * @throws Exception [参数说明]
      * 
-     * @return AuthenticationSuccessHandler [返回类型说明]
+     * @return void [返回类型说明]
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Bean("client.securityAuthenticationSuccessHandler")
-    public ClientSecurityAuthenticationSuccessHandler successHandler() {
-        ClientSecurityAuthenticationSuccessHandler handler = new ClientSecurityAuthenticationSuccessHandler();
-        return handler;
+    private void registerAuthenticationEntryPoint(HttpSecurity http)
+            throws Exception {
+        ContentNegotiationStrategy contentNegotiationStrategy = http
+                .getSharedObject(ContentNegotiationStrategy.class);
+        if (contentNegotiationStrategy == null) {
+            contentNegotiationStrategy = new HeaderContentNegotiationStrategy();
+        }
+        
+        MediaTypeRequestMatcher mediaMatcher = new MediaTypeRequestMatcher(
+                contentNegotiationStrategy, MediaType.APPLICATION_XHTML_XML,
+                new MediaType("image", "*"), MediaType.TEXT_HTML,
+                MediaType.TEXT_PLAIN);
+        mediaMatcher.setIgnoredMediaTypes(Collections.singleton(MediaType.ALL));
+        RequestMatcher notXRequestedWith = new NegatedRequestMatcher(
+                new RequestHeaderRequestMatcher("X-Requested-With",
+                        "XMLHttpRequest"));
+        RequestMatcher preferredMatcher = new AndRequestMatcher(
+                Arrays.asList(notXRequestedWith, mediaMatcher));
+        
+        //注入默认的认证入口，异常拦截器
+        http.exceptionHandling()
+                .defaultAuthenticationEntryPointFor(
+                        new LoginUrlAuthenticationEntryPoint(this.LOGIN_URL),
+                        preferredMatcher);
     }
     
     /**
-     * 认证失败处理句柄<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return AuthenticationFailureHandler [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
+     * @param auth
+     * @throws Exception
      */
-    @Bean("client.securityAuthenticationFailureHandler")
-    public ClientSecurityAuthenticationFailureHandler failureHandler() {
-        ClientSecurityAuthenticationFailureHandler handler = new ClientSecurityAuthenticationFailureHandler();
-        return handler;
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+        auth.authenticationProvider(clientAuthenticationProvider());
+        auth.authenticationProvider(clientSocialAuthenticationProvider());
     }
     
     /**
@@ -161,12 +206,44 @@ public class ClientWebSecurityConfiguration
     @Bean("client.authenticationProcessingFilter")
     public ClientAuthenticationProcessingFilter clientAuthenticationProcessingFilter()
             throws Exception {
-        ClientAuthenticationProcessingFilter filter = new ClientAuthenticationProcessingFilter();
+        ClientAuthenticationProcessingFilter filter = new ClientAuthenticationProcessingFilter(
+                this.LOGIN_PROCESSING_URL);
         filter.setAuthenticationSuccessHandler(successHandler());
         filter.setAuthenticationFailureHandler(failureHandler());
-        
         filter.setAuthenticationManager(this.authenticationManager);
         return filter;
+    }
+    
+    /**
+     * 认证成功处理句柄<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return AuthenticationSuccessHandler [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("client.securityAuthenticationSuccessHandler")
+    public ClientSecurityAuthenticationSuccessHandler successHandler() {
+        ClientSecurityAuthenticationSuccessHandler handler = new ClientSecurityAuthenticationSuccessHandler(
+                this.TARGET_URL);
+        return handler;
+    }
+    
+    /**
+     * 认证失败处理句柄<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return AuthenticationFailureHandler [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("client.securityAuthenticationFailureHandler")
+    public ClientSecurityAuthenticationFailureHandler failureHandler() {
+        ClientSecurityAuthenticationFailureHandler handler = new ClientSecurityAuthenticationFailureHandler(
+                this.LOGIN_URL);
+        return handler;
     }
     
     /**
@@ -182,21 +259,6 @@ public class ClientWebSecurityConfiguration
     public ClientSessionAuthenticationStrategy sessionStrategy() {
         ClientSessionAuthenticationStrategy strategy = new ClientSessionAuthenticationStrategy();
         return strategy;
-    }
-    
-    /**
-     * 操作人员密码验证器<br/>
-     * <功能详细描述>
-     * @return [参数说明]
-     * 
-     * @return PasswordEncoder [返回类型说明]
-     * @exception throws [异常类型] [异常说明]
-     * @see [类、类#方法、类#成员]
-     */
-    @Bean("clientPasswordEncoder")
-    public PasswordEncoder clientPasswordEncoder() {
-        PasswordEncoder encoder = new ClientPasswordEncoder();
-        return encoder;
     }
     
     /**
@@ -231,7 +293,7 @@ public class ClientWebSecurityConfiguration
         // 禁止隐藏用户未找到异常
         provider.setHideUserNotFoundExceptions(false);
         // 使用BCrypt进行密码的hash
-        provider.setPasswordEncoder(clientPasswordEncoder());
+        provider.setPasswordEncoder(this.passwordEncoder);
         return provider;
     }
     

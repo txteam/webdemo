@@ -60,13 +60,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected static Logger logger = LoggerFactory
             .getLogger(WebSecurityConfiguration.class);
     
-    private String loginProcessingUrl = "/operator/login";
+    private final String LOGOUT_URL = "/operator/logout";
     
-    private String socialLoginProcessingUrl = "/operator/social/login";
+    private final String LOGIN_URL = "/login";
     
-    private String defaultTargetUrl = "/mainframe";
+    private final String LOGIN_PROCESSING_URL = "/operator/login";
     
-    private String defaultFailureUrl = "/login";
+    private final String SOCIAL_LOGIN_PROCESSING_URL = "/operator/social/login";
+    
+    private final String TARGET_URL = "/mainframe";
     
     /**
      * webSecurity配置
@@ -142,11 +144,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 UsernamePasswordAuthenticationFilter.class);
         
         //logout配置
-        http.logout().logoutUrl("/operator/logout").logoutSuccessUrl("/login");
+        http.logout()
+                .logoutUrl(this.LOGOUT_URL)
+                .logoutSuccessUrl(this.LOGIN_URL);
         
         //注册登录入口
         //注册认证用户，无权限的处理
-        http.exceptionHandling().accessDeniedPage("/login");
+        http.exceptionHandling().accessDeniedPage(this.LOGIN_URL);
         registerAuthenticationEntryPoint(http);
         
         //必须条件该过滤器，不然权限容器中线程变量逻辑会存在问题
@@ -156,13 +160,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //允许兼容呈现
         http.authorizeRequests().antMatchers("/", "/index").permitAll();
         
-        //第三方用户登陆
-        http.authorizeRequests().antMatchers("/operator/social/**").permitAll();
-        //后台登陆页
+        //登陆
         http.authorizeRequests()
-                .antMatchers("/login", "/background/login", "/admin/login")
+                .antMatchers(this.LOGIN_URL, this.LOGIN_PROCESSING_URL)
                 .permitAll();
-        http.authorizeRequests().antMatchers("/operator/sign").permitAll();
+        //第三方用户登陆
+        http.authorizeRequests()
+                .antMatchers("/operator/social/login/**")
+                .permitAll();
         
         //验证码
         http.authorizeRequests().antMatchers("/captcha/**").permitAll();
@@ -173,7 +178,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/**").permitAll();
         //允许进入登陆页面
         http.authorizeRequests().antMatchers("/error/**").permitAll();
-        
         //其他
         http.authorizeRequests().antMatchers("/oauth/authorize").permitAll();
         
@@ -185,15 +189,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     
     /**
-    * 注册登录入口<br/>
-    * <功能详细描述>
-    * @param http
-    * @throws Exception [参数说明]
-    * 
-    * @return void [返回类型说明]
-    * @exception throws [异常类型] [异常说明]
-    * @see [类、类#方法、类#成员]
-    */
+     * 注册登录入口<br/>
+     * <功能详细描述>
+     * @param http
+     * @throws Exception [参数说明]
+     * 
+     * @return void [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
     private void registerAuthenticationEntryPoint(HttpSecurity http)
             throws Exception {
         ContentNegotiationStrategy contentNegotiationStrategy = http
@@ -214,10 +218,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 Arrays.asList(notXRequestedWith, mediaMatcher));
         
         //注入默认的认证入口，异常拦截器
-        http.exceptionHandling().accessDeniedPage("/wap/client/login");
         http.exceptionHandling()
                 .defaultAuthenticationEntryPointFor(
-                        new LoginUrlAuthenticationEntryPoint("/login"),
+                        new LoginUrlAuthenticationEntryPoint(this.LOGIN_URL),
                         preferredMatcher);
     }
     
@@ -256,15 +259,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Bean("operatorAuthenticationProcessingFilter")
+    @Bean("operator.authenticationProcessingFilter")
     public OperatorAuthenticationProcessingFilter operatorAuthenticationProcessingFilter()
             throws Exception {
         OperatorAuthenticationProcessingFilter filter = new OperatorAuthenticationProcessingFilter(
-                this.loginProcessingUrl);
-        filter.setAuthenticationSuccessHandler(
-                operatorSecurityAuthenticationSuccessHandler());
-        filter.setAuthenticationFailureHandler(
-                operatorSecurityAuthenticationFailureHandler());
+                this.LOGIN_PROCESSING_URL);
+        filter.setAuthenticationSuccessHandler(successHandler());
+        filter.setAuthenticationFailureHandler(failureHandler());
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
     }
@@ -283,11 +284,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public OperatorSocialAuthenticationProcessingFilter operatorSocialAuthenticationProcessingFilter()
             throws Exception {
         OperatorSocialAuthenticationProcessingFilter filter = new OperatorSocialAuthenticationProcessingFilter(
-                this.socialLoginProcessingUrl);
-        filter.setAuthenticationSuccessHandler(
-                operatorSecurityAuthenticationSuccessHandler());
-        filter.setAuthenticationFailureHandler(
-                operatorSecurityAuthenticationFailureHandler());
+                this.SOCIAL_LOGIN_PROCESSING_URL);
+        filter.setAuthenticationSuccessHandler(successHandler());
+        filter.setAuthenticationFailureHandler(failureHandler());
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
     }
@@ -302,9 +301,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * @see [类、类#方法、类#成员]
      */
     @Bean("operator.securityAuthenticationSuccessHandler")
-    public OperatorSecurityAuthenticationSuccessHandler operatorSecurityAuthenticationSuccessHandler() {
+    public OperatorSecurityAuthenticationSuccessHandler successHandler() {
         OperatorSecurityAuthenticationSuccessHandler handler = new OperatorSecurityAuthenticationSuccessHandler(
-                this.defaultTargetUrl);
+                this.TARGET_URL);
         return handler;
     }
     
@@ -318,9 +317,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * @see [类、类#方法、类#成员]
      */
     @Bean("operator.securityAuthenticationFailureHandler")
-    public OperatorSecurityAuthenticationFailureHandler operatorSecurityAuthenticationFailureHandler() {
+    public OperatorSecurityAuthenticationFailureHandler failureHandler() {
         OperatorSecurityAuthenticationFailureHandler handler = new OperatorSecurityAuthenticationFailureHandler(
-                this.defaultFailureUrl);
+                this.LOGIN_URL);
         return handler;
     }
     

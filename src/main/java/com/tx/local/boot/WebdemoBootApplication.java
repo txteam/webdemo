@@ -42,8 +42,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableAspectJAutoProxy()
 @EnableFeignClients(basePackages = { "com.tx.local" })
 @SpringBootApplication(scanBasePackages = { "com.tx.security", "com.tx.local",
-        "com.tx.plugin", "com.tx.component.dynamictable",
-        "com.tx.component.lock", "com.tx.client" })
+        "com.tx.front4client", "com.tx.security4client", "com.tx.plugin",
+        "com.tx.component.dynamictable", "com.tx.component.lock" })
 @EnableSwagger2
 public class WebdemoBootApplication {
     
