@@ -31,8 +31,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.util.Assert;
 
+import com.tx.component.security.exception.UserIdNotFoundException;
 import com.tx.core.exceptions.util.AssertUtils;
-import com.tx.plugin.login.exception.UserIdNotFoundException;
 import com.tx.security.model.OperatorSocialAuthenticationToken;
 import com.tx.security.service.OperatorUserDetailsService;
 
@@ -51,21 +51,29 @@ public class OperatorSocialAuthenticationProvider implements
     /** 日志句柄 */
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     
+    /** spring security message accessor */
     protected MessageSourceAccessor messages = SpringSecurityMessageSource
             .getAccessor();
     
+    /** user cache */
     private UserCache userCache = new NullUserCache();
     
+    /** 强制将principal转化为string */
     private boolean forcePrincipalAsString = false;
     
+    /** 是否隐藏用户不存在时抛出异常 */
     protected boolean hideUserNotFoundExceptions = true;
     
+    /** 前置检测 */
     private UserDetailsChecker preAuthenticationChecks = new DefaultPreAuthenticationChecks();
     
+    /** post检测 */
     private UserDetailsChecker postAuthenticationChecks = new DefaultPostAuthenticationChecks();
     
+    /** 授权转换 */
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
     
+    /** 操作人员用户详情业务层 */
     private OperatorUserDetailsService userDetailsService;
     
     /**
@@ -369,6 +377,7 @@ public class OperatorSocialAuthenticationProvider implements
      * @since  [产品/模块版本]
      */
     private class DefaultPreAuthenticationChecks implements UserDetailsChecker {
+        @Override
         public void check(UserDetails user) {
             if (!user.isAccountNonLocked()) {
                 logger.debug("User account is locked");
@@ -407,6 +416,7 @@ public class OperatorSocialAuthenticationProvider implements
      */
     private class DefaultPostAuthenticationChecks
             implements UserDetailsChecker {
+        @Override
         public void check(UserDetails user) {
             if (!user.isCredentialsNonExpired()) {
                 logger.debug("User account credentials have expired");

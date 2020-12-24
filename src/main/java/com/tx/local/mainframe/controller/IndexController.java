@@ -9,16 +9,15 @@ package com.tx.local.mainframe.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.tx.component.plugin.context.PluginContext;
 import com.tx.local.security.SecurityConstants;
+import com.tx.local.security.util.AuthenticationUtils;
 import com.tx.local.security.util.WebContextUtils;
-import com.tx.plugin.login.github.GHLoginPlugin;
-import com.tx.plugin.login.weibo.WBLoginPlugin;
 
 /**
  * 主框架页面逻辑层<br/>
@@ -67,9 +66,18 @@ public class IndexController {
             Exception e = (Exception) session
                     .getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
             if (e != null) {
-                error = true;
-                response.put("code", -1);
-                response.put("message", e.getMessage());
+                if (e instanceof AuthenticationException) {
+                    error = true;
+                    response.put("code", -1);
+                    response.put("message",
+                            AuthenticationUtils.loginErrorMessage(
+                                    (AuthenticationException) e));
+                } else {
+                    error = true;
+                    response.put("code", -1);
+                    response.put("message", e.getMessage());
+                }
+                session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
             }
         }
         
@@ -77,16 +85,16 @@ public class IndexController {
             response.put("code", 0);
             response.put("message", "");
         }
-        if (PluginContext.getContext()
-                .getConfig(WBLoginPlugin.class)
-                .isEnable()) {
-            response.put("wbLoginEnable", true);
-        }
-        if (PluginContext.getContext()
-                .getConfig(GHLoginPlugin.class)
-                .isEnable()) {
-            response.put("ghLoginEnable", true);
-        }
+        //        if (PluginContext.getContext()
+        //                .getConfig(WBLoginPlugin.class)
+        //                .isEnable()) {
+        //            response.put("wbLoginEnable", true);
+        //        }
+        //        if (PluginContext.getContext()
+        //                .getConfig(GHLoginPlugin.class)
+        //                .isEnable()) {
+        //            response.put("ghLoginEnable", true);
+        //        }
         //        if (false) {
         //            response.put("wxLoginEnable", false);
         //            response.put("qqLoginEnable", false);

@@ -120,20 +120,21 @@ $(document).ready(function() {
             });
             showErrorMessage(html);
         },
-        valid: function(){
+        valid: function(form){
         	hideErrorMessage();
         	DialogUtils.loading();
-	        $formBody.ajaxSubmit({
-			    url:/*[[@{/operator/login}]]*/'',
-			    success: function(data) {
-			    	DialogUtils.loading('close');
-					if(data.code == 0){
-						window.location.href = /*[[@{/mainframe}]]*/'/' + data.data;
-					}else{
-						showErrorMessage(data.message);
-					}
-			    }
-			});
+	        //$formBody.ajaxSubmit({
+			//    url:/*[[@{/operator/login}]]*/'',
+			//    success: function(data) {
+			//    	DialogUtils.loading('close');
+			//		if(data.code == 0){
+			//			window.location.href = /*[[@{/mainframe}]]*/'/' + data.data;
+			//		}else{
+			//			showErrorMessage(data.message);
+			//		}
+			//   }
+			//});
+	        form.submit();
 			return false;
 	    }
     });
@@ -156,7 +157,7 @@ $(document).ready(function() {
 	<div class="login" style="display: none;">
     	<!--loginbox start-->
         <div class="loginbox">
-        	<form id="loginform" name="loginform" method="post">
+        	<form id="loginform" name="loginform" method="post" th:action="@{/operator/login}">
 	        	<div class="loginleft">
 	        		<div class="text"><h2>系统管理员登陆</h2></div>
 	        	</div>
@@ -176,18 +177,18 @@ $(document).ready(function() {
 			                <ul class="userlogin">
 				                <li>
 				                	<p class="loginuser"><i class="iconfont">&#xe602;</i></p>
-				                	<cite><input name="username"  class="easyui-textbox" value="admin"  style="width:100%; height:40px;"></cite>
+				                	<cite><input name="username" class="easyui-textbox" data-rule="用户名:required;" value="admin"  style="width:100%; height:40px;"/></cite>
 				                </li>
 				                <li>
 				                	<p class="loginpassword"><i class="iconfont">&#xe616;</i></p>
-				                	<cite><input name="password"  class="easyui-passwordbox" value="123456" style="width:100%; height:40px;"></cite>
+				                	<cite><input name="password" class="easyui-passwordbox" data-rule="密码:required;" value="123456" style="width:100%; height:40px;"/></cite>
 				                </li>
 				                <li>
 				                	<a id="loginbtn" class="loginbtn" href="javascript:void(0);">登录</a>
 				                </li>
 				                <li style="display: block;">
 				                	<div class="forget-pw-wrap">
-				                		<em><input class="easyui-checkbox" type="checkbox" name="remember_me" value="0"></em><b>记住用户名密码</b>
+				                		<em><input class="easyui-checkbox" type="checkbox" name="remember-me" value="0"></em><b>记住用户名密码</b>
 					                	<span class="forget-pw-safe">
 											<a href="//passport.jd.com/uc/links?tag=safe" class="" target="_blank">忘记密码</a>
 										</span>
@@ -235,9 +236,9 @@ $(document).ready(function() {
 		            			<b class="weibo-icon"></b><span>微博</span></a>
 		            			<span class="line">|</span>
 		                  	</li>
-		                  	<li th:if="${wbLoginEnable}">
+		                  	<li th:if="${ghLoginEnable}">
 		            			<a href="javascript:void(0)" 
-		            				th:onclick="'window.location=\'' + @{/operator/social/toLogin/GH} + '\'+window.location.search;return false;'"
+		            				th:onclick="'window.location=\'' + @{/operator/social/login/GH} + '\'+window.location.search;return false;'"
 		            				class="pdl">
 		            			<b class="github-icon"></b><span>Github</span></a>
 		            			<span class="line">|</span>

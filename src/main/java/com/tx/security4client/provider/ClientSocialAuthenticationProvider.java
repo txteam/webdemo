@@ -31,8 +31,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.util.Assert;
 
+import com.tx.component.security.exception.UserIdNotFoundException;
 import com.tx.core.exceptions.util.AssertUtils;
-import com.tx.plugin.login.exception.UserIdNotFoundException;
 import com.tx.security4client.model.ClientSocialAuthenticationToken;
 import com.tx.security4client.service.ClientUserDetailsService;
 
@@ -369,6 +369,7 @@ public class ClientSocialAuthenticationProvider implements
      * @since  [产品/模块版本]
      */
     private class DefaultPreAuthenticationChecks implements UserDetailsChecker {
+        @Override
         public void check(UserDetails user) {
             if (!user.isAccountNonLocked()) {
                 logger.debug("User account is locked");
@@ -407,6 +408,7 @@ public class ClientSocialAuthenticationProvider implements
      */
     private class DefaultPostAuthenticationChecks
             implements UserDetailsChecker {
+        @Override
         public void check(UserDetails user) {
             if (!user.isCredentialsNonExpired()) {
                 logger.debug("User account credentials have expired");

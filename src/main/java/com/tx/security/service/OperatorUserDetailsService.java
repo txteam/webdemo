@@ -34,11 +34,11 @@ import com.tx.component.role.model.Role;
 import com.tx.component.role.model.RoleRef;
 import com.tx.component.role.service.RoleRefService;
 import com.tx.component.security.context.SecurityContext;
+import com.tx.component.security.exception.UserIdNotFoundException;
 import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.local.operator.model.Operator;
 import com.tx.local.operator.model.OperatorRoleEnum;
 import com.tx.local.operator.service.OperatorService;
-import com.tx.plugin.login.exception.UserIdNotFoundException;
 import com.tx.security.model.OperatorAuthTypeEnum;
 import com.tx.security.model.OperatorUserDetails;
 
@@ -119,8 +119,7 @@ public class OperatorUserDetailsService
         
         Operator operator = this.operatorService.findByUsername(username);
         if (operator == null) {
-            throw new UsernameNotFoundException(
-                    "Operator is not exsits.username:" + username);
+            throw new UsernameNotFoundException("用户名或密码错误.");
         }
         OperatorUserDetails userDetail = loadUserDetailByOperator(operator);
         return userDetail;

@@ -6,18 +6,19 @@
  */
 package com.tx.security4wapclient.provider;
 
-import com.tx.core.exceptions.util.AssertUtils;
-import com.tx.plugin.login.exception.UserIdNotFoundException;
-import com.tx.security4client.model.ClientSocialAuthenticationToken;
-import com.tx.security4client.service.ClientUserDetailsService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.SpringSecurityMessageSource;
@@ -29,6 +30,11 @@ import org.springframework.security.core.userdetails.UserDetailsChecker;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.util.Assert;
+
+import com.tx.component.security.exception.UserIdNotFoundException;
+import com.tx.core.exceptions.util.AssertUtils;
+import com.tx.security4client.model.ClientSocialAuthenticationToken;
+import com.tx.security4client.service.ClientUserDetailsService;
 
 /**
  * 操作人员认证处理器<br/>
@@ -363,6 +369,7 @@ public class WapClientSocialAuthenticationProvider implements
      * @since  [产品/模块版本]
      */
     private class DefaultPreAuthenticationChecks implements UserDetailsChecker {
+        @Override
         public void check(UserDetails user) {
             if (!user.isAccountNonLocked()) {
                 logger.debug("User account is locked");
@@ -401,6 +408,7 @@ public class WapClientSocialAuthenticationProvider implements
      */
     private class DefaultPostAuthenticationChecks
             implements UserDetailsChecker {
+        @Override
         public void check(UserDetails user) {
             if (!user.isCredentialsNonExpired()) {
                 logger.debug("User account credentials have expired");

@@ -152,15 +152,11 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>org.thymeleaf.extras</groupId> -->
-		<!-- <artifactId>thymeleaf-extras-springsecurity5</artifactId> -->
-		<!-- <version>3.0.4.RELEASE</version> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.security</groupId> -->
-		<!-- <artifactId>spring-security-jwt</artifactId> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-jwt</artifactId>
+			<version>1.0.9.RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
@@ -328,12 +324,6 @@
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
 
-		<!--<dependency> -->
-		<!--<groupId>com.gitee.sunchenbin.mybatis.actable</groupId> -->
-		<!--<artifactId>mybatis-enhance-actable</artifactId> -->
-		<!--<version>1.0.3</version> -->
-		<!--</dependency> -->
-
 
 		<!-- actuator是监控系统健康情况的工具,zuul上可以不进行配置 -->
 		<!-- <dependency> -->
@@ -347,13 +337,10 @@
 		<!--<optional>true</optional> -->
 		<!--&lt;!&ndash;<scope>true</scope>&ndash;&gt; -->
 		<!--</dependency> -->
-
 		<!--<dependency> -->
 		<!--<groupId>org.springframework.boot</groupId> -->
 		<!--<artifactId>spring-boot-loader</artifactId> -->
 		<!--</dependency> -->
-
-
 
 		<!-- test -->
 		<dependency>
@@ -361,17 +348,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-		</dependency>
-		<!--<dependency> -->
-		<!--<groupId>freemarker</groupId> -->
-		<!--<artifactId>freemarker</artifactId> -->
-		<!--<version>2.3.8</version> -->
-		<!--<scope>test</scope> -->
-		<!--</dependency> -->
 	</dependencies>
 
 	<profiles>

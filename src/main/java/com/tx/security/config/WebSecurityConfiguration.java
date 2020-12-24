@@ -2,12 +2,14 @@ package com.tx.security.config;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -35,12 +37,14 @@ import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 import com.tx.component.security.filter.SecurityThreadLocalResourceSupportFilter;
 import com.tx.local.operator.model.OperatorRoleEnum;
 import com.tx.security.filter.OperatorAuthenticationProcessingFilter;
-import com.tx.security.filter.OperatorSocialAuthenticationProcessingFilter;
 import com.tx.security.handler.OperatorSecurityAuthenticationFailureHandler;
 import com.tx.security.handler.OperatorSecurityAuthenticationSuccessHandler;
 import com.tx.security.model.DefaultPasswordEncoder;
 import com.tx.security.provider.OperatorLoginFormAuthenticationProvider;
 import com.tx.security.provider.OperatorSocialAuthenticationProvider;
+import com.tx.security.service.OperatorRememberMeServices;
+import com.tx.security.service.OperatorRememberMeTokenJwtService;
+import com.tx.security.service.OperatorRememberMeTokenRepository;
 import com.tx.security.service.OperatorUserDetailsService;
 import com.tx.security.strategy.OperatorSessionAuthenticationStrategy;
 
@@ -57,11 +61,18 @@ import com.tx.security.strategy.OperatorSessionAuthenticationStrategy;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter
+        implements InitializingBean {
     
     /** 日志记录句柄 */
     protected static Logger logger = LoggerFactory
             .getLogger(WebSecurityConfiguration.class);
+    
+    private static final String DEFAULT_REMEMBER_ME_NAME = "remember-me";
+    
+    private String rememberMeParameter = DEFAULT_REMEMBER_ME_NAME;
+    
+    private String rememberMeCookieName = DEFAULT_REMEMBER_ME_NAME;
     
     @Resource
     private DataSource datasource;
@@ -75,6 +86,22 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final String SOCIAL_LOGIN_PROCESSING_URL = "/operator/social/login";
     
     private final String TARGET_URL = "/mainframe";
+    
+    /** rememberMe token 有效时间 */
+    private int tokenValiditySeconds = 1000 * 60 * 60 * 24;
+    
+    private String rememberMeCookieDomain;
+    
+    private Boolean useSecureCookie;
+    
+    private Boolean alwaysRemember;
+    
+    /**
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+    }
     
     /**
      * webSecurity配置
@@ -144,14 +171,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(operatorAuthenticationProcessingFilter(),
                 UsernamePasswordAuthenticationFilter.class);
         //第三方用户登陆
-        http.addFilterBefore(operatorSocialAuthenticationProcessingFilter(),
-                UsernamePasswordAuthenticationFilter.class);
+        //        http.addFilterBefore(operatorSocialAuthenticationProcessingFilter(),
+        //                UsernamePasswordAuthenticationFilter.class);
         
         //rememberMe的配置
+        OperatorRememberMeServices rememberMeServices = rememberMeServices();
         http.rememberMe()
-                .userDetailsService(operatorUserDetailsService())
-                .authenticationSuccessHandler(successHandler())
-                .tokenRepository(tokenRepository);
+                .rememberMeServices(rememberMeServices)
+                .key(rememberMeServices.getKey())
+                .authenticationSuccessHandler(successHandler());
         
         //logout配置
         http.logout()
@@ -246,6 +274,74 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     
     /**
+     * 生成rememberMeServices
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return RememberMeServices [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("operator.rememberMeServices")
+    public OperatorRememberMeServices rememberMeServices() {
+        //创建rememberMeServices: 通过自定义实现覆写token生成规则
+        OperatorRememberMeServices tokenRememberMeServices = new OperatorRememberMeServices(
+                UUID.randomUUID().toString(), operatorUserDetailsService());
+        tokenRememberMeServices.setTokenRepository(rememberMeTokenRepository());
+        //写入token生成业务层
+        tokenRememberMeServices
+                .setRememberMeTokenJwtService(rememberMeTokenJwtService());
+        tokenRememberMeServices.setParameter(this.rememberMeParameter);
+        tokenRememberMeServices.setCookieName(this.rememberMeCookieName);
+        tokenRememberMeServices
+                .setTokenValiditySeconds(this.tokenValiditySeconds);
+        if (this.rememberMeCookieDomain != null) {
+            tokenRememberMeServices
+                    .setCookieDomain(this.rememberMeCookieDomain);
+        }
+        if (this.useSecureCookie != null) {
+            tokenRememberMeServices.setUseSecureCookie(this.useSecureCookie);
+        }
+        if (this.alwaysRemember != null) {
+            tokenRememberMeServices.setAlwaysRemember(this.alwaysRemember);
+        }
+        return tokenRememberMeServices;
+    }
+    
+    /**
+     * rememberMeTokenRepository<br/>
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return OperatorRememberMeTokenRepository [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("operator.rememberMeTokenRepository")
+    public OperatorRememberMeTokenRepository rememberMeTokenRepository() {
+        OperatorRememberMeTokenRepository repository = new OperatorRememberMeTokenRepository(
+                this.tokenValiditySeconds);
+        repository.setDataSource(this.datasource);
+        return repository;
+    }
+    
+    /**
+     * 操作人员RememberMeTokenJwtService
+     * <功能详细描述>
+     * @return [参数说明]
+     * 
+     * @return OperatorRememberMeTokenJwtService [返回类型说明]
+     * @exception throws [异常类型] [异常说明]
+     * @see [类、类#方法、类#成员]
+     */
+    @Bean("operator.rememberMeTokenJwtService")
+    public OperatorRememberMeTokenJwtService rememberMeTokenJwtService() {
+        OperatorRememberMeTokenJwtService jwtService = new OperatorRememberMeTokenJwtService();
+        jwtService.setSigningKey("secret");
+        return jwtService;
+    }
+    
+    /**
      * 认证Manager实例<br/>
      * @return
      * @throws Exception
@@ -255,20 +351,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-    
-    //    /**
-    //     * 持久化token
-    //     * 
-    //     * Security中，默认是使用PersistentTokenRepository的子类InMemoryTokenRepositoryImpl，将token放在内存中
-    //     * 如果使用JdbcTokenRepositoryImpl，会创建表persistent_logins，将token持久化到数据库
-    //     */
-    //    @Bean
-    //    public PersistentTokenRepository persistentTokenRepository() {
-    //        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
-    //        tokenRepository.setDataSource(dataSource); // 设置数据源
-    //        //        tokenRepository.setCreateTableOnStartup(true); // 启动创建表，创建成功后注释掉
-    //        return tokenRepository;
-    //    }
     
     /**
      * 操作人员认证处理过滤器<br/>
@@ -304,16 +386,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * @exception throws [异常类型] [异常说明]
      * @see [类、类#方法、类#成员]
      */
-    @Bean("operator.socialAuthenticationProcessingFilter")
-    public OperatorSocialAuthenticationProcessingFilter operatorSocialAuthenticationProcessingFilter()
-            throws Exception {
-        OperatorSocialAuthenticationProcessingFilter filter = new OperatorSocialAuthenticationProcessingFilter(
-                this.SOCIAL_LOGIN_PROCESSING_URL);
-        filter.setAuthenticationSuccessHandler(successHandler());
-        filter.setAuthenticationFailureHandler(failureHandler());
-        filter.setAuthenticationManager(authenticationManagerBean());
-        return filter;
-    }
+    //    @Bean("operator.socialAuthenticationProcessingFilter")
+    //    public OperatorSocialAuthenticationProcessingFilter operatorSocialAuthenticationProcessingFilter()
+    //            throws Exception {
+    //        OperatorSocialAuthenticationProcessingFilter filter = new OperatorSocialAuthenticationProcessingFilter(
+    //                this.SOCIAL_LOGIN_PROCESSING_URL);
+    //        filter.setAuthenticationSuccessHandler(successHandler());
+    //        filter.setAuthenticationFailureHandler(failureHandler());
+    //        filter.setAuthenticationManager(authenticationManagerBean());
+    //        return filter;
+    //    }
     
     /**
      * 认证成功处理句柄<br/>

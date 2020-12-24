@@ -21,16 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tx.component.plugin.context.PluginContext;
 import com.tx.core.paged.model.PagedList;
 import com.tx.local.clientinfo.model.ClientSocialAccount;
 import com.tx.local.clientinfo.model.ClientSocialAccountTypeEnum;
 import com.tx.local.clientinfo.service.ClientSocialAccountService;
-import com.tx.local.operator.model.OperSocialAccountTypeEnum;
-import com.tx.plugin.login.github.GHLoginPlugin;
-import com.tx.plugin.login.qq.QQLoginPlugin;
-import com.tx.plugin.login.weibo.WBLoginPlugin;
-import com.tx.plugin.login.weixin.WXLoginPlugin;
 
 /**
  * 客户第三方账户控制层<br/>
@@ -98,41 +92,41 @@ public class ClientSocialAccountController {
         Set<ClientSocialAccountTypeEnum> types = resList.stream()
                 .map(sa -> sa.getType())
                 .collect(Collectors.toSet());
-        if (PluginContext.getContext().getConfig(WXLoginPlugin.class).isEnable()
-                && !types.contains(OperSocialAccountTypeEnum.WX)) {
-            ClientSocialAccount osa = new ClientSocialAccount();
-            osa.setClientId(clientId);
-            osa.setType(ClientSocialAccountTypeEnum.WX);
-            resList.add(osa);
-        }
-        if (PluginContext.getContext().getConfig(QQLoginPlugin.class).isEnable()
-                && !types.contains(OperSocialAccountTypeEnum.QQ)) {
-            ClientSocialAccount osa = new ClientSocialAccount();
-            osa.setClientId(clientId);
-            osa.setType(ClientSocialAccountTypeEnum.QQ);
-            resList.add(osa);
-        }
-        if (PluginContext.getContext().getConfig(WBLoginPlugin.class).isEnable()
-                && !types.contains(OperSocialAccountTypeEnum.WB)) {
-            ClientSocialAccount osa = new ClientSocialAccount();
-            osa.setClientId(clientId);
-            osa.setType(ClientSocialAccountTypeEnum.WB);
-            resList.add(osa);
-        }
-        //if (PluginContext.getContext().getConfig(bdgi.class).isEnable() &&
-        //        !types.contains(OperSocialAccountTypeEnum.BD)) {
-        //    OperSocialAccount osa = new OperSocialAccount();
-        //    osa.setOperatorId(operatorId);
-        //    osa.setType(OperSocialAccountTypeEnum.BD);
-        //    resList.add(osa);
-        //}
-        if (PluginContext.getContext().getConfig(GHLoginPlugin.class).isEnable()
-                && !types.contains(OperSocialAccountTypeEnum.GH)) {
-            ClientSocialAccount osa = new ClientSocialAccount();
-            osa.setClientId(clientId);
-            osa.setType(ClientSocialAccountTypeEnum.GH);
-            resList.add(osa);
-        }
+        //        if (PluginContext.getContext().getConfig(WXLoginPlugin.class).isEnable()
+        //                && !types.contains(OperSocialAccountTypeEnum.WX)) {
+        //            ClientSocialAccount osa = new ClientSocialAccount();
+        //            osa.setClientId(clientId);
+        //            osa.setType(ClientSocialAccountTypeEnum.WX);
+        //            resList.add(osa);
+        //        }
+        //        if (PluginContext.getContext().getConfig(QQLoginPlugin.class).isEnable()
+        //                && !types.contains(OperSocialAccountTypeEnum.QQ)) {
+        //            ClientSocialAccount osa = new ClientSocialAccount();
+        //            osa.setClientId(clientId);
+        //            osa.setType(ClientSocialAccountTypeEnum.QQ);
+        //            resList.add(osa);
+        //        }
+        //        if (PluginContext.getContext().getConfig(WBLoginPlugin.class).isEnable()
+        //                && !types.contains(OperSocialAccountTypeEnum.WB)) {
+        //            ClientSocialAccount osa = new ClientSocialAccount();
+        //            osa.setClientId(clientId);
+        //            osa.setType(ClientSocialAccountTypeEnum.WB);
+        //            resList.add(osa);
+        //        }
+        //        //if (PluginContext.getContext().getConfig(bdgi.class).isEnable() &&
+        //        //        !types.contains(OperSocialAccountTypeEnum.BD)) {
+        //        //    OperSocialAccount osa = new OperSocialAccount();
+        //        //    osa.setOperatorId(operatorId);
+        //        //    osa.setType(OperSocialAccountTypeEnum.BD);
+        //        //    resList.add(osa);
+        //        //}
+        //        if (PluginContext.getContext().getConfig(GHLoginPlugin.class).isEnable()
+        //                && !types.contains(OperSocialAccountTypeEnum.GH)) {
+        //            ClientSocialAccount osa = new ClientSocialAccount();
+        //            osa.setClientId(clientId);
+        //            osa.setType(ClientSocialAccountTypeEnum.GH);
+        //            resList.add(osa);
+        //        }
         return resList;
     }
     

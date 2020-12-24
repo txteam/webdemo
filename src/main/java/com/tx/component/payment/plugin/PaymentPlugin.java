@@ -4,7 +4,7 @@
  * 修改时间:  2019年12月20日
  * <修改描述:>
  */
-package com.tx.plugin.payment;
+package com.tx.component.payment.plugin;
 
 import com.tx.component.plugin.context.Plugin;
 

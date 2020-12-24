@@ -41,6 +41,7 @@ import com.tx.core.springmvc.support.StringToDateConverter;
 
 /**
  * web配置器<br/>
+ * http://www.360doc.com/content/18/0210/13/16915_729134219.shtml  nginx  contextPath解决方案
  * <功能详细描述>
  * 
  * @author  zhangwei
@@ -168,7 +169,7 @@ public class SpringMVCConfiguration
      */
     @Bean("client.springResourceTemplateResolver")
     public SpringResourceTemplateResolver clientSpringResourceTemplateResolver() {
-        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver(){
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver() {
             /**
              * @param configuration
              * @param ownerTemplate
@@ -183,12 +184,15 @@ public class SpringMVCConfiguration
                     Map<String, Object> templateResolutionAttributes) {
                 RequestAttributes requestAttributes = RequestContextHolder
                         .getRequestAttributes();
-                if (requestAttributes == null || !ServletRequestAttributes.class.isInstance(requestAttributes)) {
+                if (requestAttributes == null || !ServletRequestAttributes.class
+                        .isInstance(requestAttributes)) {
                     //如果为空，或不是ServletRequestAttributes的实例，都不进行适配
                     return false;
                 }
-                HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-                if (request == null || !request.getServletPath().startsWith("/client/")) {
+                HttpServletRequest request = ((ServletRequestAttributes) requestAttributes)
+                        .getRequest();
+                if (request == null
+                        || !request.getServletPath().startsWith("/client/")) {
                     //如果为空，或servletPath不是以"/client/"开始的不进行匹配
                     return false;
                 }
@@ -222,7 +226,7 @@ public class SpringMVCConfiguration
      */
     @Bean("wapclient.springResourceTemplateResolver")
     public SpringResourceTemplateResolver wapclientSpringResourceTemplateResolver() {
-        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver(){
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver() {
             /**
              * @param configuration
              * @param ownerTemplate
@@ -237,12 +241,15 @@ public class SpringMVCConfiguration
                     Map<String, Object> templateResolutionAttributes) {
                 RequestAttributes requestAttributes = RequestContextHolder
                         .getRequestAttributes();
-                if (requestAttributes == null || !ServletRequestAttributes.class.isInstance(requestAttributes)) {
+                if (requestAttributes == null || !ServletRequestAttributes.class
+                        .isInstance(requestAttributes)) {
                     //如果为空，或不是ServletRequestAttributes的实例，都不进行适配
                     return false;
                 }
-                HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-                if (request == null || !request.getServletPath().startsWith("/wap/client/")) {
+                HttpServletRequest request = ((ServletRequestAttributes) requestAttributes)
+                        .getRequest();
+                if (request == null || !request.getServletPath()
+                        .startsWith("/wap/client/")) {
                     //如果为空，或servletPath不是以"/client/"开始的不进行匹配
                     return false;
                 }
