@@ -32,10 +32,10 @@ import com.tx.component.role.context.RoleRegistry;
 import com.tx.component.role.model.Role;
 import com.tx.component.role.service.RoleRefService;
 import com.tx.component.security.context.SecurityContext;
+import com.tx.front4client.security.model.ClientRoleTypeEnum;
 import com.tx.local.clientinfo.facade.ClientInfoFacade;
 import com.tx.local.security.model.CheckAbleRole;
 import com.tx.local.security.util.WebContextUtils;
-import com.tx.security4client.model.ClientRoleTypeEnum;
 
 /**
  * 人员对角色控制层<br/>

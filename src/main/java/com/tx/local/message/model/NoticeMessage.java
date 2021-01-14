@@ -75,7 +75,6 @@ public class NoticeMessage implements Serializable, JSONAttributesSupport {
     @Column(nullable = true, updatable = true, length = 4000)
     private String content;
     
-    
     private String linkUrl;
     
     /** 额外的参数 */
@@ -191,6 +190,7 @@ public class NoticeMessage implements Serializable, JSONAttributesSupport {
     /**
      * @return 返回 attributes
      */
+    @Override
     public String getAttributes() {
         return attributes;
     }
@@ -198,6 +198,7 @@ public class NoticeMessage implements Serializable, JSONAttributesSupport {
     /**
      * @param 对attributes进行赋值
      */
+    @Override
     public void setAttributes(String attributes) {
         this.attributes = attributes;
     }

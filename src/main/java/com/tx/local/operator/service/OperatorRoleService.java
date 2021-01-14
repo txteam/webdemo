@@ -37,8 +37,8 @@ import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
 import com.tx.local.operator.dao.OperatorRoleDao;
 import com.tx.local.operator.model.OperatorRole;
+import com.tx.local.security.model.OperatorRoleTypeEnum;
 import com.tx.local.vitualcenter.facade.VirtualCenterFacade;
-import com.tx.security.model.OperatorRoleTypeEnum;
 
 /**
  * OperatorRole的业务层[OperatorRoleService]

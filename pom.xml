@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.tx</groupId>
 		<artifactId>tx-parent</artifactId>
-		<version>4.0.x-SNAPSHOT</version>
+		<version>4.5.x-SNAPSHOT</version>
 	</parent>
 
 	<version>9.0.x-SNAPSHOT</version>
@@ -39,13 +39,11 @@
 		<!-- </exclusion> -->
 		<!-- </exclusions> -->
 		<!-- </dependency> -->
-
 		<!-- jwt -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-excelant</artifactId>
@@ -181,7 +179,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
 
 		<!-- srpingframework -->

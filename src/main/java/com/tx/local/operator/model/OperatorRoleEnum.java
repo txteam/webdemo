@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.tx.component.role.model.Role;
 import com.tx.core.support.json.BaseEnum;
 import com.tx.core.support.json.BaseEnumJsonSerializer;
-import com.tx.security.model.OperatorRoleTypeEnum;
+import com.tx.local.security.model.OperatorRoleTypeEnum;
 
 /**
  * 角色枚举<br/>

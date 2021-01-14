@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tx.component.role.model.Role;
-import com.tx.security.model.OperatorRoleTypeEnum;
+import com.tx.local.security.model.OperatorRoleTypeEnum;
 
 import io.swagger.annotations.ApiModel;
 

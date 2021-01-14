@@ -24,6 +24,7 @@ import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.front4client.security.util.ClientWebContextUtils;
 import com.tx.local.clientinfo.facade.ClientInfoFacade;
 import com.tx.local.clientinfo.model.ClientInfo;
 import com.tx.local.clientinfo.model.ClientStatusEnum;
@@ -33,7 +34,6 @@ import com.tx.local.personal.dao.PersonalInfoDao;
 import com.tx.local.personal.model.PersonalInfo;
 import com.tx.local.personal.model.PersonalSummary;
 import com.tx.local.security.util.WebContextUtils;
-import com.tx.security4client.util.ClientWebContextUtils;
 
 /**
  * PersonalInfo的业务层[PersonalInfoService]

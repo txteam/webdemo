@@ -26,7 +26,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 /**
  * 客户信息模块启动器<br/>
@@ -43,10 +43,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableScheduling
 @EnableAspectJAutoProxy()
 @EnableFeignClients(basePackages = { "com.tx.local" })
-@SpringBootApplication(scanBasePackages = { "com.tx.security", "com.tx.local",
-        "com.tx.front4client", "com.tx.security4client", "com.tx.plugin",
-        "com.tx.component.dynamictable", "com.tx.component.lock" })
-@EnableSwagger2
+//"com.tx.component.dynamictable", "com.tx.component.lock" "com.tx.front4client", "com.tx.security4client", "com.tx.plugin",
+@SpringBootApplication(scanBasePackages = { "com.tx.security", "com.tx.local" })
+@EnableSwagger2WebMvc
 public class WebdemoBootApplication {
     
     /**

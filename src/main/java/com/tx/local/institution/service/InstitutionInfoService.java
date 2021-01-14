@@ -26,6 +26,7 @@ import com.tx.core.exceptions.util.AssertUtils;
 import com.tx.core.paged.model.PagedList;
 import com.tx.core.querier.model.Querier;
 import com.tx.core.querier.model.QuerierBuilder;
+import com.tx.front4client.security.util.ClientWebContextUtils;
 import com.tx.local.clientinfo.dao.ClientInfoDao;
 import com.tx.local.clientinfo.facade.ClientInfoFacade;
 import com.tx.local.clientinfo.model.ClientInfo;
@@ -37,7 +38,6 @@ import com.tx.local.institution.dao.InstitutionInfoDao;
 import com.tx.local.institution.model.InstitutionInfo;
 import com.tx.local.institution.model.InstitutionSummaryInfo;
 import com.tx.local.security.util.WebContextUtils;
-import com.tx.security4client.util.ClientWebContextUtils;
 
 /**
  * InstitutionInfo的业务层[InstitutionInfoService]

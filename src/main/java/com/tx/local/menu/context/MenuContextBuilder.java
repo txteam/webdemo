@@ -1,5 +1,5 @@
 /*
- * 描          述:  <描述>
+     * 描          述:  <描述>
  * 修  改   人:  brady
  * 修改时间:  2013-8-22
  * <修改描述:>
@@ -243,14 +243,16 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         
         if (!StringUtils.isEmpty(menuConfig.getAuths())) {
             String[] auths = StringUtils.splitByWholeSeparatorPreserveAllTokens(
-                    menuConfig.getAuths(), ",");
+                    menuConfig.getAuths(),
+                    ",");
             if (!ArrayUtils.isEmpty(auths)) {
                 menu.setAuths(new HashSet<>(Arrays.asList(auths)));
             }
         }
         if (!StringUtils.isEmpty(menuConfig.getRoles())) {
             String[] rolse = StringUtils.splitByWholeSeparatorPreserveAllTokens(
-                    menuConfig.getRoles(), ",");
+                    menuConfig.getRoles(),
+                    ",");
             
             if (!ArrayUtils.isEmpty(rolse)) {
                 menu.setRoles(new HashSet<>(Arrays.asList(rolse)));
@@ -259,7 +261,8 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         if (!StringUtils.isEmpty(menuConfig.getAccess())) {
             String[] access = StringUtils
                     .splitByWholeSeparatorPreserveAllTokens(
-                            menuConfig.getAccess(), ",");
+                            menuConfig.getAccess(),
+                            ",");
             if (!ArrayUtils.isEmpty(access)) {
                 menu.setAccess(new HashSet<>(Arrays.asList(access)));
             }
@@ -320,14 +323,16 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         if (!StringUtils.isEmpty(catalogConfigTemp.getAuths())) {
             String[] authorities = StringUtils
                     .splitByWholeSeparatorPreserveAllTokens(
-                            catalogConfigTemp.getAuths(), ",");
+                            catalogConfigTemp.getAuths(),
+                            ",");
             if (!ArrayUtils.isEmpty(authorities)) {
                 catalog.setAuths(new HashSet<>(Arrays.asList(authorities)));
             }
         }
         if (!StringUtils.isEmpty(catalogConfigTemp.getRoles())) {
             String[] roles = StringUtils.splitByWholeSeparatorPreserveAllTokens(
-                    catalogConfigTemp.getRoles(), ",");
+                    catalogConfigTemp.getRoles(),
+                    ",");
             if (!ArrayUtils.isEmpty(roles)) {
                 catalog.setRoles(new HashSet<>(Arrays.asList(roles)));
             }
@@ -335,7 +340,8 @@ public abstract class MenuContextBuilder extends MenuContextConfigurator
         if (!StringUtils.isEmpty(catalogConfigTemp.getAccess())) {
             String[] access = StringUtils
                     .splitByWholeSeparatorPreserveAllTokens(
-                            catalogConfigTemp.getAccess(), ",");
+                            catalogConfigTemp.getAccess(),
+                            ",");
             if (!ArrayUtils.isEmpty(access)) {
                 catalog.setAccess(new HashSet<>(Arrays.asList(access)));
             }

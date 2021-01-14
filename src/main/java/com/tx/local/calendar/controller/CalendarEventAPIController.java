@@ -68,7 +68,7 @@ public class CalendarEventAPIController implements CalendarEventFacade {
      */
     @Override
     public boolean deleteById(
-    		@PathVariable(value = "id",required=true) String id) {
+            @PathVariable(value = "id", required = true) String id) {
         boolean flag = this.calendarEventService.deleteById(id);
         return flag;
     }
@@ -84,13 +84,13 @@ public class CalendarEventAPIController implements CalendarEventFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public boolean updateById(@PathVariable(value = "id",required=true) String id,
-    		@RequestBody CalendarEvent calendarEvent) {
-        boolean flag = this.calendarEventService.updateById(id,calendarEvent);
+    public boolean updateById(
+            @PathVariable(value = "id", required = true) String id,
+            @RequestBody CalendarEvent calendarEvent) {
+        boolean flag = this.calendarEventService.updateById(id, calendarEvent);
         return flag;
     }
     
-
     /**
      * 根据主键查询日程<br/>
      * <功能详细描述>
@@ -107,7 +107,7 @@ public class CalendarEventAPIController implements CalendarEventFacade {
         
         return res;
     }
-
+    
     /**
      * 查询日程实例列表<br/>
      * <功能详细描述>
@@ -119,13 +119,10 @@ public class CalendarEventAPIController implements CalendarEventFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public List<CalendarEvent> queryList(
-    		@RequestBody Querier querier
-    	) {
-        List<CalendarEvent> resList = this.calendarEventService.queryList(
-			querier         
-        );
-  
+    public List<CalendarEvent> queryList(@RequestBody Querier querier) {
+        List<CalendarEvent> resList = this.calendarEventService
+                .queryList(querier);
+        
         return resList;
     }
     
@@ -142,20 +139,15 @@ public class CalendarEventAPIController implements CalendarEventFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public PagedList<CalendarEvent> queryPagedList(
-			@RequestBody Querier querier,
-			@PathVariable(value = "pageNumber", required = true) int pageIndex,
-            @PathVariable(value = "pageSize", required = true) int pageSize
-    	) {
-        PagedList<CalendarEvent> resPagedList = this.calendarEventService.queryPagedList(
-			querier,
-			pageIndex,
-			pageSize
-        );
+    public PagedList<CalendarEvent> queryPagedList(@RequestBody Querier querier,
+            @PathVariable(value = "pageNumber", required = true) int pageIndex,
+            @PathVariable(value = "pageSize", required = true) int pageSize) {
+        PagedList<CalendarEvent> resPagedList = this.calendarEventService
+                .queryPagedList(querier, pageIndex, pageSize);
         return resPagedList;
     }
     
-	/**
+    /**
      * 查询日程数量<br/>
      * <功能详细描述>
      * @param querier
@@ -166,17 +158,15 @@ public class CalendarEventAPIController implements CalendarEventFacade {
      * @see [类、类#方法、类#成员]
      */
     @Override
-    public int count(
-            @RequestBody Querier querier) {
-        int count = this.calendarEventService.count(
-        	querier);
+    public int count(@RequestBody Querier querier) {
+        int count = this.calendarEventService.count(querier);
         
         return count;
     }
-
-	/**
+    
+    /**
      * 查询日程是否存在<br/>
-	 * @param excludeId
+     * @param excludeId
      * @param querier
      * @return [参数说明]
      * 

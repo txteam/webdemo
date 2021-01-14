@@ -38,8 +38,8 @@ import com.tx.local.operator.service.OperatorService;
 import com.tx.local.organization.facade.OrganizationFacade;
 import com.tx.local.organization.facade.PostFacade;
 import com.tx.local.security.model.CheckAbleRole;
+import com.tx.local.security.model.OperatorRoleTypeEnum;
 import com.tx.local.security.util.WebContextUtils;
-import com.tx.security.model.OperatorRoleTypeEnum;
 
 /**
  * 人员对角色控制层<br/>
